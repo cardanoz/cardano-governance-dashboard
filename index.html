@@ -451,8 +451,9 @@ function demoData() {
 // ════════════════════════════════════════════════════════════════
 function Avatar({ name, url, size=28 }) {
   const [err,setErr] = React.useState(false);
-  const ini = (name||"?").replace(/^drep1/,"").slice(0,2).toUpperCase();
-  const h = (name||"").split("").reduce((a,c)=>a+c.charCodeAt(0),0)%360;
+  const safeName = typeof name === "string" ? name : (name && typeof name === "object" ? (name["@value"] || JSON.stringify(name)) : "?");
+  const ini = safeName.replace(/^drep1/,"").slice(0,2).toUpperCase();
+  const h = safeName.split("").reduce((a,c)=>a+c.charCodeAt(0),0)%360;
   const validUrl = url && !err && !url.startsWith("data:") ? url : null;
   if(validUrl) return <img src={validUrl} alt="" onError={()=>setErr(true)}
     style={{width:size,height:size,borderRadius:"50%",objectFit:"cover",border:"2px solid var(--border2)",flexShrink:0}}/>;
