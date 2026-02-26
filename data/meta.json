@@ -1,10 +1,10 @@
 {
-  "updated_at": "2026-02-26T17:18:47.961Z",
-  "updated_ts": 1772126327961,
+  "updated_at": "2026-02-26T19:10:48.465Z",
+  "updated_ts": 1772133048465,
   "drep_count": 206,
   "proposal_count": 86,
-  "vote_count": 9934,
-  "api_calls": 1201,
-  "fetch_duration_ms": 43892,
+  "vote_count": 9935,
+  "api_calls": 1202,
+  "fetch_duration_ms": 37354,
   "max_votes": 120
 }
