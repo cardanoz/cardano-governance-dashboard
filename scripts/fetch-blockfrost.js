@@ -23,8 +23,8 @@ const BASE = "https://cardano-mainnet.blockfrost.io/api/v0";
 const PAGE_SIZE = 100;
 const CONCURRENT = 5;       // concurrent requests per batch
 const THROTTLE_MS = 110;    // ~9 req/sec (Blockfrost allows 10)
-const MAX_DREPS = 600;      // max DReps to fetch
-const MAX_PAGES = 20;       // max pages per paginated endpoint
+const MAX_DREPS = 2000;      // max DReps to fetch
+const MAX_PAGES = 30;       // max pages per paginated endpoint
 const DATA_DIR = path.resolve(__dirname, "..", "data");
 
 let apiCalls = 0;
