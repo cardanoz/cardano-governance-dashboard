@@ -240,6 +240,7 @@ function fmtAdaNum(ada) {
   return ada.toFixed(ada < 1 ? 4 : 1);
 }
 function shortId(id,n=8,m=5) { return !id ? "" : id.length<=n+m+3 ? id : id.slice(0,n)+"…"+id.slice(-m); }
+function safeName(v) { return typeof v === "string" ? v : (v && typeof v === "object" ? (v["@value"] || v.givenName || JSON.stringify(v)) : null); }
 function normalizeType(t) {
   const map = {
     // Blockfrost lowercase types
@@ -678,10 +679,10 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
     let r = [...dreps];
     if(minStake){const m=parseFloat(minStake)*1e6; r=r.filter(d=>Number(d.amount)>=m);}
     if(maxStake){const m=parseFloat(maxStake)*1e6; r=r.filter(d=>Number(d.amount)<=m);}
-    if(search){const q=search.toLowerCase(); r=r.filter(d=>(d.name&&d.name.toLowerCase().includes(q))||(d.drep_id&&d.drep_id.toLowerCase().includes(q)));}
+    if(search){const q=search.toLowerCase(); r=r.filter(d=>{const sn=safeName(d.name)||""; return sn.toLowerCase().includes(q)||(d.drep_id&&d.drep_id.toLowerCase().includes(q));});}
     if(sortBy==="stake_desc") r.sort((a,b)=>Number(b.amount)-Number(a.amount));
     else if(sortBy==="stake_asc") r.sort((a,b)=>Number(a.amount)-Number(b.amount));
-    else r.sort((a,b)=>(a.name||"zzz").localeCompare(b.name||"zzz"));
+    else r.sort((a,b)=>(safeName(a.name)||"zzz").localeCompare(safeName(b.name)||"zzz"));
     return r;
   },[dreps,minStake,maxStake,search,sortBy]);
 
@@ -712,7 +713,7 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
     const csvProps = mode === "visible" ? pgP : fProps;
     const hdr=["DRep ID","DRep Name","Stake (ADA)","Delegators",
       ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
-    const rows=csvDreps.map(d=>[d.drep_id,d.name||"",Math.round(Number(d.amount)/1e6),d.delegators||0,
+    const rows=csvDreps.map(d=>[d.drep_id,safeName(d.name)||"",Math.round(Number(d.amount)/1e6),d.delegators||0,
       ...csvProps.map(p=>{const v=gv(d.drep_id,p.proposal_id);const r=gr(d.drep_id,p.proposal_id);return v+(r?" [rationale]":"");})]);
     const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
     const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
@@ -786,10 +787,10 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
                     borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",minWidth:260,
                     boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
                     <div style={{display:"flex",alignItems:"center",gap:7}}>
-                      <Avatar name={d.name||d.drep_id} url={d.image_url}/>
+                      <Avatar name={safeName(d.name)||d.drep_id} url={d.image_url}/>
                       <div style={{minWidth:0,flex:1}}>
                         <div style={{fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}}>
-                          {d.name||shortId(d.drep_id)}</div>
+                          {safeName(d.name)||shortId(d.drep_id)}</div>
                         <div style={{fontSize:10,color:"var(--text2)",display:"flex",gap:5,flexWrap:"wrap"}}>
                           <span title={`${(Number(d.amount)/1e6).toLocaleString()} ADA`}>₳ {fmtAda(d.amount)}</span>
                           {d.delegators>0&&<span style={{fontSize:9,opacity:.7}}>({d.delegators.toLocaleString()} {T.delegators})</span>}
@@ -886,14 +887,14 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
   const filtered = React.useMemo(() => {
     if (!searchQ) return merged;
     const q = searchQ.toLowerCase();
-    return merged.filter(d => (d.name && d.name.toLowerCase().includes(q)) || d.drep_id.toLowerCase().includes(q));
+    return merged.filter(d => {const sn=safeName(d.name)||""; return sn.toLowerCase().includes(q) || d.drep_id.toLowerCase().includes(q);});
   }, [merged, searchQ]);
   const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
 
   function exportCSV() {
     const hdr = ["Rank","DRep ID","Name","Stake (ADA)","Eligible","Equal (ADA)","Prop (ADA)","Prop+Bonus (ADA)","Period Vote Rate %","Rationale Rate %","Vote Count","Overall Vote Rate %"];
-    const rows = merged.map(d => [d.rank, d.drep_id, d.name || "", Math.round(Number(d.amount) / 1e6),
+    const rows = merged.map(d => [d.rank, d.drep_id, safeName(d.name) || "", Math.round(Number(d.amount) / 1e6),
       d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2),
       d.periodVR != null ? d.periodVR.toFixed(1) : "", d.rationaleRate != null ? d.rationaleRate.toFixed(1) : "",
       voteData[d.drep_id] || "", totalActions > 0 ? ((voteData[d.drep_id] || 0) / totalActions * 100).toFixed(1) : ""]);
@@ -1001,9 +1002,9 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
                 return (
                   <tr key={d.drep_id} style={{opacity:d.eligible?1:0.35}}>
                     <td style={{...tdS(bg),color:"var(--text2)",width:32,fontSize:9}}>{d.rank}</td>
-                    <td style={{background:bg,padding:"3px 2px",borderBottom:"1px solid var(--border)",width:22}}><Avatar name={d.name||d.drep_id} url={d.image_url} size={18}/></td>
+                    <td style={{background:bg,padding:"3px 2px",borderBottom:"1px solid var(--border)",width:22}}><Avatar name={safeName(d.name)||d.drep_id} url={d.image_url} size={18}/></td>
                     <td style={{background:bg,padding:"4px 6px",borderBottom:"1px solid var(--border)",fontSize:10,fontWeight:600,maxWidth:120,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
-                      {d.name || shortId(d.drep_id)}</td>
+                      {safeName(d.name) || shortId(d.drep_id)}</td>
                     <td style={{...tdS(bg),fontSize:9}}>₳{fmtAda(d.amount)}</td>
                     <td style={{...tdS(bg),textAlign:"center",fontSize:9}}>
                       {d.eligible ? <span style={{color:"var(--yes)"}}>✓</span> : <span style={{color:"var(--text2)"}}>−</span>}</td>
