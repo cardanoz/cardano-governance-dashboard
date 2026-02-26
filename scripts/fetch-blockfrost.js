@@ -1,36 +1,22 @@
 #!/usr/bin/env node
-/**
- * Blockfrost Data Fetcher for Cardano DRep Governance Dashboard
- *
- * Fetches all DRep, proposal, and vote data from Blockfrost API
- * and saves as static JSON files for the dashboard to consume.
- *
- * Usage:
- *   BLOCKFROST_API_KEY=mainnetXXX node scripts/fetch-blockfrost.js
- *
- * Output: data/dreps.json, data/proposals.json, data/votes.json, data/meta.json
- */
-
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-// ─── Config ────────────────────────────────────────────────────
 const API_KEY = process.env.BLOCKFROST_API_KEY;
 if (!API_KEY) { console.error("ERROR: BLOCKFROST_API_KEY env var required"); process.exit(1); }
 
 const BASE = "https://cardano-mainnet.blockfrost.io/api/v0";
 const PAGE_SIZE = 100;
-const CONCURRENT = 5;       // concurrent requests per batch
-const THROTTLE_MS = 110;    // ~9 req/sec (Blockfrost allows 10)
-const MAX_DREPS = 2000;      // max DReps to fetch
-const MAX_PAGES = 30;       // max pages per paginated endpoint
+const CONCURRENT = 5;
+const THROTTLE_MS = 110;
+const MAX_PAGES = 30;
 const DATA_DIR = path.resolve(__dirname, "..", "data");
 
 let apiCalls = 0;
 let lastFetchTime = 0;
+let failedDetails = { notFound: 0, error: 0, reasons: {} };
 
-// ─── HTTP Helpers ──────────────────────────────────────────────
 function fetchJSON(urlPath) {
   return new Promise((resolve, reject) => {
     const url = `${BASE}${urlPath}`;
@@ -47,7 +33,7 @@ function fetchJSON(urlPath) {
         res.on("end", () => {
           if (res.statusCode === 404) return resolve(null);
           if (res.statusCode === 429) {
-            console.warn(`  Rate limited, waiting 2s...`);
+            console.warn("  Rate limited, waiting 2s...");
             setTimeout(() => fetchJSON(urlPath).then(resolve).catch(reject), 2000);
             return;
           }
@@ -69,6 +55,7 @@ async function fetchAllPages(urlPath, maxPages = MAX_PAGES) {
     if (!data || !Array.isArray(data) || data.length === 0) break;
     results.push(...data);
     if (data.length < PAGE_SIZE) break;
+    console.log(`  page ${page}: +${data.length} (total ${results.length})`);
   }
   return results;
 }
@@ -81,40 +68,51 @@ async function batchProcess(items, fn, batchSize = CONCURRENT) {
     batchResults.forEach(r => {
       if (r.status === "fulfilled" && r.value) results.push(r.value);
     });
-    if (i % (batchSize * 5) === 0 && i > 0) {
-      process.stdout.write(`  ${results.length}/${items.length}...\r`);
+    if (i % (batchSize * 10) === 0 && i > 0) {
+      console.log(`  ${results.length} ok / ${i + batchSize} processed (${failedDetails.notFound} 404, ${failedDetails.error} errors)`);
     }
   }
   return results;
 }
 
-// ─── Epoch → Timestamp ────────────────────────────────────────
 function epochToTimestamp(epoch) {
   return 1596059091 + (epoch - 208) * 432000;
 }
 
-// ─── Main Fetch Logic ──────────────────────────────────────────
 async function main() {
   const startTime = Date.now();
   console.log("=== Blockfrost Data Fetcher ===");
   console.log(`Time: ${new Date().toISOString()}`);
 
-  // 1. Fetch all DRep IDs
   console.log("\n[1/6] Fetching DRep IDs...");
   const drepIds = await fetchAllPages("/governance/dreps", MAX_PAGES);
-  console.log(`  Found ${drepIds.length} DRep IDs`);
+  console.log(`  Found ${drepIds.length} DRep IDs (will process ALL)`);
 
-  // 2. Fetch DRep details + metadata
+  // Sample: log first 5 DRep ID formats
+  drepIds.slice(0, 5).forEach((d, i) => console.log(`  sample[${i}]: ${d.drep_id?.slice(0, 30)}...`));
+
   console.log("\n[2/6] Fetching DRep details + metadata...");
-  const dreps = await batchProcess(drepIds.slice(0, MAX_DREPS), async (d) => {
-    const detail = await fetchJSON(`/governance/dreps/${d.drep_id}`);
-    if (!detail || detail.retired || detail.expired) return null;
+  const dreps = await batchProcess(drepIds, async (d) => {
+    let detail;
+    try {
+      detail = await fetchJSON(`/governance/dreps/${d.drep_id}`);
+    } catch (e) {
+      failedDetails.error++;
+      const key = e.message.slice(0, 40);
+      failedDetails.reasons[key] = (failedDetails.reasons[key] || 0) + 1;
+      return null;
+    }
+    if (!detail) {
+      failedDetails.notFound++;
+      return null;
+    }
     let name = null, image_url = null;
     try {
       const meta = await fetchJSON(`/governance/dreps/${d.drep_id}/metadata`);
       if (meta && meta.json_metadata) {
         const body = meta.json_metadata.body || meta.json_metadata;
-        name = body?.givenName || body?.name || null;
+        let rawName = body?.givenName || body?.name || null;
+        name = typeof rawName === "string" ? rawName : (rawName && typeof rawName === "object" ? (rawName["@value"] || JSON.stringify(rawName)) : null);
         image_url = body?.image?.contentUrl || null;
       }
     } catch (e) {}
@@ -123,19 +121,26 @@ async function main() {
       name,
       amount: detail.amount || "0",
       image_url,
-      delegators: 0,
-      last_active_epoch: detail.last_active_epoch || 0
+      delegators: detail.delegators_count || 0,
+      last_active_epoch: detail.active_epoch || 0,
+      active: detail.active !== false,
+      has_script: detail.has_script || false
     };
   });
   dreps.sort((a, b) => Number(b.amount) - Number(a.amount));
-  console.log(`  Got ${dreps.length} active DReps`);
+  console.log(`  Got ${dreps.length} DReps with details`);
+  console.log(`  Failed: ${failedDetails.notFound} not-found, ${failedDetails.error} errors`);
+  if (Object.keys(failedDetails.reasons).length > 0) {
+    console.log(`  Error reasons:`, JSON.stringify(failedDetails.reasons));
+  }
+  console.log(`  Top 10 by stake:`);
+  dreps.slice(0, 10).forEach((d, i) => console.log(`    ${i+1}. ${d.name || d.drep_id.slice(0,20)} = ${Math.round(Number(d.amount)/1e6)}M ADA`));
 
-  // 3. Fetch votes for each DRep
   console.log("\n[3/6] Fetching DRep votes...");
-  const voteMap = {};      // "drepId__txHash#certIdx" → "Yes"/"No"/"Abstain"
-  const proposalSet = {};  // "txHash#certIdx" → { tx_hash, cert_index }
+  const voteMap = {};
+  const proposalSet = {};
   const drepVoteCounts = {};
-  const drepVotedProposals = {}; // drepId → [propKey, ...]
+  const drepVotedProposals = {};
 
   await batchProcess(dreps, async (d) => {
     const votes = await fetchAllPages(`/governance/dreps/${d.drep_id}/votes`, 10);
@@ -164,7 +169,6 @@ async function main() {
   console.log(`  Collected ${Object.keys(voteMap).length} vote records`);
   console.log(`  Discovered ${Object.keys(proposalSet).length} unique proposals`);
 
-  // 4. Fetch proposal details + metadata
   console.log("\n[4/6] Fetching proposal details + metadata...");
   const propEntries = Object.entries(proposalSet);
   const proposals = await batchProcess(propEntries, async ([propKey, info]) => {
@@ -172,7 +176,6 @@ async function main() {
     try {
       const detail = await fetchJSON(`/governance/proposals/${info.tx_hash}/${info.cert_index}`);
       if (detail) {
-        // Normalize type
         const typeMap = {
           "treasury_withdrawals": "TreasuryWithdrawals",
           "hard_fork_initiation": "HardForkInitiation",
@@ -208,14 +211,12 @@ async function main() {
   proposals.sort((a, b) => (b.expiration || 0) - (a.expiration || 0));
   console.log(`  Got details for ${proposals.length} proposals`);
 
-  // 5. Build simulator data
   console.log("\n[5/6] Building simulator data...");
   const proposalExpirations = {};
   proposals.forEach(p => { proposalExpirations[p.proposal_id] = p.expiration || 0; });
   let maxVotes = 0;
   Object.values(drepVoteCounts).forEach(c => { if (c > maxVotes) maxVotes = c; });
 
-  // 6. Write output files
   console.log("\n[6/6] Writing JSON files...");
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
@@ -227,7 +228,9 @@ async function main() {
     vote_count: Object.keys(voteMap).length,
     api_calls: apiCalls,
     fetch_duration_ms: Date.now() - startTime,
-    max_votes: maxVotes
+    max_votes: maxVotes,
+    total_drep_ids: drepIds.length,
+    failed_details: failedDetails.notFound + failedDetails.error
   };
 
   fs.writeFileSync(path.join(DATA_DIR, "dreps.json"), JSON.stringify(dreps));
@@ -241,7 +244,6 @@ async function main() {
   }));
   fs.writeFileSync(path.join(DATA_DIR, "meta.json"), JSON.stringify(meta, null, 2));
 
-  // File sizes
   const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json"];
   files.forEach(f => {
     const size = fs.statSync(path.join(DATA_DIR, f)).size;
@@ -251,7 +253,6 @@ async function main() {
   console.log(`\n=== Done! ===`);
   console.log(`Total API calls: ${apiCalls}`);
   console.log(`Duration: ${((Date.now() - startTime) / 1000).toFixed(1)}s`);
-  console.log(`Data timestamp: ${meta.updated_at}`);
 }
 
 main().catch(e => {
