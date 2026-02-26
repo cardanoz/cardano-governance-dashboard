@@ -2,10 +2,8 @@ name: Update Governance Data
 
 on:
   schedule:
-    # Run every hour at minute 15
     - cron: '15 * * * *'
   workflow_dispatch:
-    # Allow manual trigger from GitHub UI
 
 permissions:
   contents: write
@@ -29,16 +27,9 @@ jobs:
           BLOCKFROST_API_KEY: ${{ secrets.BLOCKFROST_API_KEY }}
         run: node scripts/fetch-blockfrost.js
 
-      - name: Check for changes
-        id: changes
-        run: |
-          git diff --quiet data/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
-
       - name: Commit and push updated data
-        if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/
-          git commit -m "Update governance data $(date -u +'%Y-%m-%d %H:%M UTC')"
-          git push
+          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Update governance data $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
