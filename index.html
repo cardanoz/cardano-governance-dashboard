@@ -72,14 +72,15 @@ const LANG = {
     type_noconf:"No Confidence", type_cc:"Update CC", type_const:"New Constitution", type_info:"Info Action",
     attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
     delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
-    tab_dashboard:"Voting Dashboard", tab_cc:"CC Votes", tab_simulator:"Reward Simulator",
+    tab_dashboard:"DRep Votes", tab_cc:"CC Votes & Reward", tab_simulator:"Reward Simulator",
     cc_member:"CC Member", no_cc:"No CC votes found", cc_rationale:"Rationale",
     cc_expired_only:"Showing expired governance actions only (static data)",
     cc_ineligible:"N/A", cc_not_voted:"Not Voted",
-    cc_sim_title:"CC Reward Simulator", cc_sim_desc:"3 missed votes on eligible GAs = 0% reward",
+    cc_sim_title:"CC Reward Simulator", cc_sim_desc:"Missed votes reduce rewards",
     cc_sim_base:"Base reward per epoch (ADA)", cc_sim_eligible:"Eligible GAs", cc_sim_voted:"Voted",
     cc_sim_missed:"Missed", cc_sim_penalty:"Penalty", cc_sim_reward:"Est. Reward",
-    cc_sim_factor:"Reward Factor", cc_sim_note:"GAs where CC member cannot vote (N/A) are excluded from penalty calculation",
+    cc_sim_factor:"Reward Factor", cc_sim_note:"Eligible = all GAs in selected period. All CC members share the same denominator.",
+    cc_sim_penalty_label:"Penalty threshold", cc_sim_penalty_unit:"missed = 0%",
     sim_title:"DRep Reward Simulator", sim_subtitle:"Middle-Out mechanism comparison (process-first)",
     params:"Parameters", summary:"Summary",
     rank:"Rank", name:"Name", stake:"Stake", eligible:"Elig.",
@@ -124,14 +125,15 @@ const LANG = {
     type_noconf:"不信任", type_cc:"CC更新", type_const:"新憲法", type_info:"情報",
     attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
     delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
-    tab_dashboard:"投票ダッシュボード", tab_cc:"CC投票", tab_simulator:"報酬シミュレーター",
+    tab_dashboard:"DRep投票", tab_cc:"CC投票＆報酬", tab_simulator:"報酬シミュレーター",
     cc_member:"CC委員", no_cc:"CC投票データなし", cc_rationale:"根拠",
     cc_expired_only:"期限切れの一部のGAのみ表示しています（静的データ）",
     cc_ineligible:"対象外", cc_not_voted:"未投票",
-    cc_sim_title:"CC報酬シミュレーター", cc_sim_desc:"対象GAのうち3回未投票で報酬0%",
+    cc_sim_title:"CC報酬シミュレーター", cc_sim_desc:"未投票が報酬を減額",
     cc_sim_base:"1エポックあたり基本報酬 (ADA)", cc_sim_eligible:"対象GA", cc_sim_voted:"投票済",
     cc_sim_missed:"未投票", cc_sim_penalty:"ペナルティ", cc_sim_reward:"推定報酬",
-    cc_sim_factor:"報酬係数", cc_sim_note:"CC委員が投票対象外のGA（対象外）はペナルティ計算から除外されます",
+    cc_sim_factor:"報酬係数", cc_sim_note:"対象GA = 選択期間中の全GA。全CC委員で分母は共通です。",
+    cc_sim_penalty_label:"ペナルティ閾値", cc_sim_penalty_unit:"回未投票で0%",
     sim_title:"DRep報酬シミュレーター", sim_subtitle:"ミドルアウト方式比較（プロセスファースト）",
     params:"パラメータ", summary:"サマリー",
     rank:"順位", name:"名前", stake:"委任額", eligible:"対象",
@@ -816,8 +818,8 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   const [epTo,setEpTo] = React.useState("");
   const [pPage,setPPage] = React.useState(0);
   const [csvOpen,setCsvOpen] = React.useState(false);
-  const [ccTab,setCcTab] = React.useState("votes");
   const [ccBaseReward,setCcBaseReward] = React.useState(5000);
+  const [penaltyThreshold,setPenaltyThreshold] = React.useState(3);
   const PPP = 22;
 
   // Build set of proposal IDs that have at least one CC vote
@@ -870,17 +872,17 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   }
   function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
 
-  // CC Simulator data
+  // CC Simulator data — all members share same eligible count (total GAs in period)
   const simData = React.useMemo(()=>{
+    const totalEligible = fProps.length;
     return fMembers.map(cc=>{
-      const eligible = fProps.filter(p=>isEligible(cc.cc_id,p.proposal_id));
-      const voted = eligible.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]);
-      const missed = eligible.length - voted.length;
-      const factor = Math.max(0, 1 - missed/3);
+      const voted = fProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
+      const missed = totalEligible - voted;
+      const factor = Math.max(0, 1 - missed/penaltyThreshold);
       const reward = ccBaseReward * factor;
-      return {cc, eligible:eligible.length, voted:voted.length, missed, factor, reward};
+      return {cc, eligible:totalEligible, voted, missed, factor, reward};
     });
-  },[fMembers,fProps,ccVotes,ccBaseReward]);
+  },[fMembers,fProps,ccVotes,ccBaseReward,penaltyThreshold]);
 
   function exportCSV(mode){
     const csvProps = mode === "visible" ? pgP : fProps;
@@ -901,17 +903,7 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
 
   return (
     <div>
-      {/* CC data now fetched live from Koios API */}
-
-      {/* Sub-tabs: Votes / Simulator */}
-      <div style={{display:"flex",gap:4,marginBottom:12}}>
-        <button className={`tab-btn ${ccTab==="votes"?"active":""}`} onClick={()=>setCcTab("votes")}
-          style={{fontSize:11,padding:"5px 14px"}}>{T.tab_cc}</button>
-        <button className={`tab-btn ${ccTab==="simulator"?"active":""}`} onClick={()=>setCcTab("simulator")}
-          style={{fontSize:11,padding:"5px 14px"}}>{T.cc_sim_title}</button>
-      </div>
-
-      {ccTab==="votes" ? <>
+      {/* CC Votes + Reward Simulator (unified page) */}
       <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",marginBottom:12,display:"flex",flexWrap:"wrap",gap:8,alignItems:"flex-end"}}>
         {[
           {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>setSearch(e.target.value)} style={{...ist,width:150}}/>},
@@ -995,9 +987,8 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
           <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
         </div>
       </div>
-      </> : <>
-      {/* CC Reward Simulator */}
-      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:16,marginBottom:12}}>
+      {/* CC Reward Simulator — below votes table */}
+      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:16,marginTop:16}}>
         <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"center",marginBottom:12}}>
           <div>
             <div style={{fontSize:14,fontWeight:700,color:"var(--text)"}}>{T.cc_sim_title}</div>
@@ -1008,15 +999,27 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
             <input type="number" value={ccBaseReward} onChange={e=>setCcBaseReward(Number(e.target.value)||0)}
               style={{...ist,width:120}}/>
           </div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}>
+            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_penalty_label}</label>
+            <div style={{display:"flex",gap:4}}>
+              {[3,5,10].map(n=>(
+                <button key={n} onClick={()=>setPenaltyThreshold(n)}
+                  style={{padding:"5px 10px",borderRadius:6,fontSize:11,fontWeight:600,cursor:"pointer",
+                    border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
+                    background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
+                    color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Penalty explanation visual */}
-        <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap"}}>
-          {[0,1,2,3].map(m=>{const f=Math.max(0,1-m/3);const c=f>0.5?"#22c55e":f>0?"#f59e0b":"#ef4444";
-            return <div key={m} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 12px",textAlign:"center",minWidth:80}}>
+        <div style={{display:"flex",gap:6,marginBottom:16,flexWrap:"wrap"}}>
+          {Array.from({length:Math.min(penaltyThreshold+1,8)},(_,m)=>{const f=Math.max(0,1-m/penaltyThreshold);const c=f>0.5?"#22c55e":f>0?"#f59e0b":"#ef4444";
+            return <div key={m} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:70}}>
               <div style={{fontSize:9,color:"var(--text2)",marginBottom:2}}>{T.cc_sim_missed}: {m}</div>
-              <div style={{fontSize:18,fontWeight:700,color:c}}>{Math.round(f*100)}%</div>
-              <div style={{fontSize:9,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccBaseReward).toLocaleString()} ADA</div>
+              <div style={{fontSize:16,fontWeight:700,color:c}}>{Math.round(f*100)}%</div>
+              <div style={{fontSize:8,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccBaseReward).toLocaleString()} ADA</div>
             </div>;})}
         </div>
 
@@ -1042,11 +1045,11 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
                   <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12}}>{d.eligible}</td>
                   <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,color:"#22c55e",fontWeight:600}}>{d.voted}</td>
                   <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,
-                    color:d.missed===0?"var(--text2)":d.missed>=3?"#ef4444":"#f59e0b",fontWeight:d.missed>0?700:400}}>{d.missed}</td>
+                    color:d.missed===0?"var(--text2)":d.missed>=penaltyThreshold?"#ef4444":"#f59e0b",fontWeight:d.missed>0?700:400}}>{d.missed}</td>
                   <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)"}}>
                     <span style={{fontSize:13,fontWeight:700,color:fc}}>{Math.round(d.factor*100)}%</span>
                     <div style={{width:"100%",height:4,background:"rgba(255,255,255,.1)",borderRadius:2,marginTop:3}}>
-                      <div style={{width:`${d.factor*100}%`,height:"100%",background:fc,borderRadius:2,transition:"width .3s"}}/>
+                      <div style={{width:`${Math.max(0,d.factor)*100}%`,height:"100%",background:fc,borderRadius:2,transition:"width .3s"}}/>
                     </div>
                   </td>
                   <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:13,fontWeight:700,
@@ -1059,7 +1062,6 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
           ℹ {T.cc_sim_note}
         </div>
       </div>
-      </>}
     </div>
   );
 }
@@ -2208,9 +2210,9 @@ function App() {
       {/* Tab Bar */}
       <div className="tab-bar">
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
-        <button className={`tab-btn ${tab==="cc"?"active":""}`} onClick={()=>setTab("cc")}>{T.tab_cc}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
+        <button className={`tab-btn ${tab==="cc"?"active":""}`} onClick={()=>setTab("cc")}>{T.tab_cc}</button>
       </div>
 
       {tab === "dashboard" ? (
