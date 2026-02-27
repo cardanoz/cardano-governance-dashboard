@@ -70,7 +70,8 @@ const LANG = {
     type_noconf:"No Confidence", type_cc:"Update CC", type_const:"New Constitution", type_info:"Info Action",
     attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
     delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
-    tab_dashboard:"Voting Dashboard", tab_simulator:"Reward Simulator",
+    tab_dashboard:"Voting Dashboard", tab_cc:"CC Votes", tab_simulator:"Reward Simulator",
+    cc_member:"CC Member", no_cc:"No CC votes found", cc_rationale:"Rationale",
     sim_title:"DRep Reward Simulator", sim_subtitle:"Middle-Out mechanism comparison (process-first)",
     params:"Parameters", summary:"Summary",
     rank:"Rank", name:"Name", stake:"Stake", eligible:"Elig.",
@@ -109,7 +110,8 @@ const LANG = {
     type_noconf:"不信任", type_cc:"CC更新", type_const:"新憲法", type_info:"情報",
     attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
     delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
-    tab_dashboard:"投票ダッシュボード", tab_simulator:"報酬シミュレーター",
+    tab_dashboard:"投票ダッシュボード", tab_cc:"CC投票", tab_simulator:"報酬シミュレーター",
+    cc_member:"CC委員", no_cc:"CC投票データなし", cc_rationale:"根拠",
     sim_title:"DRep報酬シミュレーター", sim_subtitle:"ミドルアウト方式比較（プロセスファースト）",
     params:"パラメータ", summary:"サマリー",
     rank:"順位", name:"名前", stake:"委任額", eligible:"対象",
@@ -779,6 +781,143 @@ function DashboardTab({ dreps, proposals, votes, warnings, hasMore, pageLoading,
   );
 }
 
+// CC Votes Tab — Constitutional Committee voting matrix
+// ════════════════════════════════════════════════════════════════
+function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
+  const [search,setSearch] = React.useState("");
+  const [actType,setActType] = React.useState("all");
+  const [epFrom,setEpFrom] = React.useState("");
+  const [epTo,setEpTo] = React.useState("");
+  const [pPage,setPPage] = React.useState(0);
+  const [csvOpen,setCsvOpen] = React.useState(false);
+  const PPP = 20;
+
+  const fMembers = React.useMemo(()=>{
+    let r = [...ccMembers];
+    if(search){const q=search.toLowerCase(); r=r.filter(c=>(c.cc_id&&c.cc_id.toLowerCase().includes(q))||(c.name&&c.name.toLowerCase().includes(q)));}
+    r.sort((a,b)=>b.vote_count - a.vote_count);
+    return r;
+  },[ccMembers,search]);
+
+  const fProps = React.useMemo(()=>{
+    let r=[...proposals];
+    if(actType!=="all") r=r.filter(p=>p.proposal_type===actType);
+    if(epFrom) r=r.filter(p=>Number(p.epoch_no)>=parseInt(epFrom));
+    if(epTo) r=r.filter(p=>Number(p.epoch_no)<=parseInt(epTo));
+    return r;
+  },[proposals,actType,epFrom,epTo]);
+
+  const pgP=fProps.slice(pPage*PPP,(pPage+1)*PPP);
+  const tPP=Math.max(1,Math.ceil(fProps.length/PPP));
+  const actTypes=[...new Set(proposals.map(p=>p.proposal_type).filter(Boolean))];
+
+  function gv(ccId,pid){return ccVotes[`${ccId}__${pid}`]||"NotVoted";}
+  function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
+
+  function exportCSV(mode){
+    const csvProps = mode === "visible" ? pgP : fProps;
+    const hdr=["CC Member ID","Vote Count",
+      ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
+    const rows=fMembers.map(c=>[c.cc_id,c.vote_count,
+      ...csvProps.map(p=>{const v=gv(c.cc_id,p.proposal_id);const r=gr(c.cc_id,p.proposal_id);return v+(r?" [📎]":"");})]);
+    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob); const a=document.createElement("a");a.href=url;a.download=`cardano_cc_votes_${mode}.csv`;a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  const ist={padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
+
+  return (
+    <div>
+      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",marginBottom:12,display:"flex",flexWrap:"wrap",gap:8,alignItems:"flex-end"}}>
+        {[
+          {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>setSearch(e.target.value)} style={{...ist,width:150}}/>},
+          {l:T.filter_action_type,el:<select value={actType} onChange={e=>{setActType(e.target.value);setPPage(0)}} style={{...ist,minWidth:120}}>
+            <option value="all">{T.filter_all}</option>{actTypes.map(t=><option key={t} value={t}>{actionLabel(t,T)}</option>)}</select>},
+          {l:T.filter_epoch_from,el:<input type="number" placeholder="440" value={epFrom} onChange={e=>{setEpFrom(e.target.value);setPPage(0)}} style={{...ist,width:80}}/>},
+          {l:T.filter_epoch_to,el:<input type="number" placeholder="999" value={epTo} onChange={e=>{setEpTo(e.target.value);setPPage(0)}} style={{...ist,width:80}}/>},
+        ].map(({l,el},i)=>(<div key={i} style={{display:"flex",flexDirection:"column",gap:3}}>
+          <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",letterSpacing:".06em"}}>{l}</label>{el}</div>))}
+        <div style={{position:"relative",display:"inline-block"}}>
+          <button className="btn" onClick={()=>setCsvOpen(!csvOpen)}>📥 {T.csv_export} ▾</button>
+          {csvOpen && <div style={{position:"absolute",top:"100%",left:0,marginTop:4,background:"var(--bg3)",border:"1px solid var(--border2)",
+            borderRadius:6,overflow:"hidden",zIndex:50,minWidth:160,boxShadow:"0 8px 24px rgba(0,0,0,.5)"}}>
+            <button onClick={()=>{exportCSV("visible");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
+              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
+              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📄 {T.csv_visible}</button>
+            <button onClick={()=>{exportCSV("all");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
+              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
+              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📊 {T.csv_all}</button>
+          </div>}
+        </div>
+        <button className="btn" onClick={()=>{setSearch("");setActType("all");setEpFrom("");setEpTo("");setPPage(0)}}
+          style={{alignSelf:"flex-end",fontSize:11}}>{T.reset}</button>
+      </div>
+
+      <div style={{fontSize:11,color:"var(--text2)",marginBottom:8}}>
+        {T.showing}: {T.cc_member} {fMembers.length} × {T.subtitle_actions} {fProps.length}
+        <span style={{opacity:.6,marginLeft:6}}>📎 = {T.cc_rationale}</span>
+      </div>
+
+      <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+        <div style={{overflow:"auto",maxHeight:"calc(100vh - 360px)"}}>
+          <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*95+260}}>
+            <thead><tr>
+              <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:"8px 10px",textAlign:"left",
+                borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:10,fontWeight:700,
+                color:"var(--text2)",minWidth:260,textTransform:"uppercase",letterSpacing:".05em",
+                boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
+              {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
+                const shortTitle = p.title ? (p.title.length > 20 ? p.title.slice(0,20)+"…" : p.title) : "";
+                return(
+                <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"5px 3px",
+                  textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:600,minWidth:100,maxWidth:120,verticalAlign:"bottom"}}>
+                  <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}} title={p.title||p.proposal_id}>
+                    <span style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:7,fontWeight:700,
+                      textTransform:"uppercase",background:c+"15",color:c,border:`1px solid ${c}30`,lineHeight:1.6}}>{actionLabel(p.proposal_type,T)}</span>
+                    {shortTitle && <span style={{fontSize:8,color:"var(--text)",lineHeight:1.3,maxWidth:110,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{shortTitle}</span>}
+                    <span style={{fontSize:7,color:"var(--text2)",opacity:.6}} title={p.proposal_id}>{shortId(p.tx_hash||p.proposal_id,6,4)}</span>
+                  </div>
+                </th>);})}
+            </tr></thead>
+            <tbody>
+              {fMembers.map((cc,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
+                <tr key={cc.cc_id}>
+                  <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:"7px 8px",
+                    borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",minWidth:260,
+                    boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:7}}>
+                      <Avatar name={cc.name||cc.cc_id} url={null}/>
+                      <div style={{minWidth:0,flex:1}}>
+                        <div style={{fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}}>
+                          {cc.name||shortId(cc.cc_id)}</div>
+                        <div style={{fontSize:10,color:"var(--text2)"}}>{cc.vote_count} votes</div>
+                      </div>
+                    </div>
+                  </td>
+                  {pgP.map((p,ci)=>{const v=gv(cc.cc_id,p.proposal_id);const rUrl=gr(cc.cc_id,p.proposal_id);return(
+                    <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
+                      <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
+                        <VoteBadge vote={v} T={T}/>
+                        {rUrl && <div style={{marginTop:2}}><a href={rUrl} target="_blank" rel="noopener" style={{fontSize:8,color:"var(--accent2)"}} title={rUrl}>📎</a></div>}
+                      </div></td>
+                  );})}
+                </tr>
+              );})}
+              {fMembers.length===0&&<tr><td colSpan={pgP.length+1} style={{padding:40,textAlign:"center",color:"var(--text2)",fontSize:13}}>{T.no_cc}</td></tr>}
+            </tbody>
+          </table>
+        </div>
+        <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",padding:"8px 12px",
+          borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
+          <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Simulator Tab — Single table with 3 reward columns side by side
 // ════════════════════════════════════════════════════════════════
 function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, T }) {
@@ -1000,6 +1139,9 @@ function App() {
   const [allDreps,setAllDreps] = React.useState([]);
   const [proposals,setProposals] = React.useState([]);
   const [votes,setVotes] = React.useState({});
+  const [ccMembers,setCCMembers] = React.useState([]);
+  const [ccVotes,setCCVotes] = React.useState({});
+  const [ccRationales,setCCRationales] = React.useState({});
   const [loading,setLoading] = React.useState(true);
   const [pageLoading,setPageLoading] = React.useState(false);
   const [stage,setStage] = React.useState("");
@@ -1057,11 +1199,14 @@ function App() {
     const meta = await metaRes.json();
 
     setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes] = await Promise.all([
+    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes] = await Promise.all([
       fetch(base + "dreps.json"),
       fetch(base + "proposals.json"),
       fetch(base + "votes.json"),
-      fetch(base + "simulator.json")
+      fetch(base + "simulator.json"),
+      fetch(base + "cc-members.json").catch(() => null),
+      fetch(base + "cc-votes.json").catch(() => null),
+      fetch(base + "cc-rationales.json").catch(() => null)
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
@@ -1075,6 +1220,12 @@ function App() {
     setAllDreps(drepsData);
     setProposals(proposalsData);
     setVotes(votesData);
+    // Load CC data if available
+    try {
+      if (ccMembersRes && ccMembersRes.ok) setCCMembers(await ccMembersRes.json());
+      if (ccVotesRes && ccVotesRes.ok) setCCVotes(await ccVotesRes.json());
+      if (ccRatRes && ccRatRes.ok) setCCRationales(await ccRatRes.json());
+    } catch(e) { console.warn("CC data load error:", e); }
     setIsDemo(false);
     setHasMore(false);
     setDataSource("static");
@@ -1399,6 +1550,7 @@ function App() {
       {/* Tab Bar */}
       <div className="tab-bar">
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
+        <button className={`tab-btn ${tab==="cc"?"active":""}`} onClick={()=>setTab("cc")}>{T.tab_cc}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
       </div>
 
@@ -1406,6 +1558,9 @@ function App() {
         <DashboardTab dreps={dreps} proposals={proposals} votes={votes}
           warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
           loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
+      ) : tab === "cc" ? (
+        <CCVotesTab ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
+          proposals={proposals} T={T} />
       ) : (
         <SimulatorTab dreps={allDreps} voteData={voteData} totalActions={totalActions}
           periodVoteData={periodVoteData}
