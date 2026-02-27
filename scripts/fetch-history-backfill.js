@@ -177,7 +177,7 @@ async function main() {
       existingEpochs.add(epoch);
       newSnapshots++;
 
-      console.log(`    ${filtered.length} DReps, total ${(totalStake / 1e6).toFixed(0)}M ADA, top=${(filtered[0]?.amount / 1e6).toFixed(0)}M`);
+      console.log(`    ${filtered.length} DReps, total ${(totalStakeFromDreps / 1e6).toFixed(0)}M ADA, top=${(filtered[0]?.amount / 1e6).toFixed(0)}M`);
     } catch (e) {
       console.log(`    Error: ${e.message}`);
     }
