@@ -212,41 +212,59 @@ async function main() {
   console.log(`  Total votes: ${Object.keys(voteMap).length}`);
   console.log(`  Rationale URLs found: ${Object.keys(rationaleMap).length}`);
 
-  // Diagnostic: check available fields from different endpoints
-  console.log("\n  --- Diagnostic: Checking anchor availability ---");
-  if (dreps.length > 0) {
-    try {
-      const sampleVotes = await fetchJSON(`/governance/dreps/${dreps[0].drep_id}/votes?count=1&page=1`);
-      if (sampleVotes && sampleVotes[0]) {
-        console.log(`  DRep votes fields: ${Object.keys(sampleVotes[0]).join(", ")}`);
-        console.log(`  DRep votes sample: ${JSON.stringify(sampleVotes[0])}`);
+  // Diagnostic: check TX details and metadata for vote anchor data
+  // Use a known vote tx_hash collected during vote fetching
+  console.log("\n  --- Diagnostic: Checking TX-level anchor availability ---");
+  const sampleTxHash = (() => {
+    // Find a tx_hash from the freshly fetched votes
+    for (const d of dreps.slice(0, 10)) {
+      if (drepVotedProposals[d.drep_id] && drepVotedProposals[d.drep_id].length > 0) {
+        // We need the vote tx_hash, not the proposal tx_hash
+        // Re-fetch one vote to get the vote's own tx_hash
+        return d.drep_id;
       }
-    } catch (e) { console.log(`  DRep votes check failed: ${e.message}`); }
-  }
-  // Check proposal-level votes endpoint for anchor data
-  const samplePropKeys = Object.entries(proposalSet).slice(0, 1);
-  for (const [propKey, info] of samplePropKeys) {
+    }
+    return null;
+  })();
+  if (sampleTxHash) {
     try {
-      const propVotes = await fetchJSON(`/governance/proposals/${info.tx_hash}/${info.cert_index}/votes?count=1&page=1`);
-      if (propVotes && propVotes[0]) {
-        console.log(`  Proposal votes fields: ${Object.keys(propVotes[0]).join(", ")}`);
-        console.log(`  Proposal votes sample: ${JSON.stringify(propVotes[0])}`);
+      // Get a single vote record to find the vote tx_hash
+      const sv = await fetchJSON(`/governance/dreps/${sampleTxHash}/votes?count=3&page=1`);
+      if (sv && sv.length > 0) {
+        console.log(`  DRep vote fields: ${Object.keys(sv[0]).join(", ")}`);
+        // The tx_hash in vote record is the vote transaction hash
+        const voteTxHash = sv[0].tx_hash;
+        console.log(`  Vote tx_hash: ${voteTxHash}`);
+
+        // Check /txs/{hash} for governance fields
+        try {
+          const txDetail = await fetchJSON(`/txs/${voteTxHash}`);
+          if (txDetail) {
+            console.log(`  /txs/{hash} fields: ${Object.keys(txDetail).join(", ")}`);
+            // Log any governance-related values
+            for (const k of Object.keys(txDetail)) {
+              if (k.includes("gov") || k.includes("vote") || k.includes("anchor") || k.includes("cert")) {
+                console.log(`    ${k}: ${JSON.stringify(txDetail[k]).slice(0, 200)}`);
+              }
+            }
+          }
+        } catch (e) { console.log(`  /txs/{hash} failed: ${e.message}`); }
+
+        // Check /txs/{hash}/metadata
+        try {
+          const txMeta = await fetchJSON(`/txs/${voteTxHash}/metadata`);
+          console.log(`  /txs/{hash}/metadata: ${JSON.stringify(txMeta).slice(0, 500)}`);
+        } catch (e) { console.log(`  /txs/{hash}/metadata failed: ${e.message}`); }
+
+        // Check /txs/{hash}/cbor for raw data (might contain anchor)
+        try {
+          const txCerts = await fetchJSON(`/txs/${voteTxHash}/redeemers`);
+          console.log(`  /txs/{hash}/redeemers: ${JSON.stringify(txCerts).slice(0, 500)}`);
+        } catch (e) { console.log(`  /txs/{hash}/redeemers failed: ${e.message}`); }
       }
-    } catch (e) { console.log(`  Proposal votes check failed: ${e.message}`); }
-  }
-  // Check tx details for governance certificate anchor data
-  if (dreps.length > 0) {
-    try {
-      const sampleVotes = await fetchJSON(`/governance/dreps/${dreps[0].drep_id}/votes?count=1&page=1`);
-      if (sampleVotes && sampleVotes[0] && sampleVotes[0].tx_hash) {
-        const txDetail = await fetchJSON(`/txs/${sampleVotes[0].tx_hash}`);
-        if (txDetail) {
-          const govFields = Object.keys(txDetail).filter(k => k.includes("gov") || k.includes("vote") || k.includes("anchor") || k.includes("cert"));
-          console.log(`  TX detail fields: ${Object.keys(txDetail).join(", ")}`);
-          console.log(`  TX governance-related fields: ${govFields.join(", ") || "none"}`);
-        }
-      }
-    } catch (e) { console.log(`  TX detail check failed: ${e.message}`); }
+    } catch (e) { console.log(`  Diagnostic failed: ${e.message}`); }
+  } else {
+    console.log("  No sample vote tx_hash found for diagnostic");
   }
   console.log("  --- End diagnostic ---\n");
 
