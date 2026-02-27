@@ -81,7 +81,7 @@ const LANG = {
     cc_sim_missed:"Missed", cc_sim_penalty:"Penalty", cc_sim_reward:"Est. Reward",
     cc_sim_factor:"Reward Factor", cc_sim_note:"Eligible = all GAs in selected period. All CC members share the same denominator.",
     cc_sim_penalty_label:"Penalty threshold", cc_sim_penalty_unit:"missed = 0%",
-    cc_sim_epoch_from:"Sim. Epoch From", cc_sim_epoch_to:"Sim. Epoch To", cc_sim_ga_in_range:"GAs in range",
+    cc_sim_date_from:"Period From", cc_sim_date_to:"Period To", cc_sim_ga_in_range:"GAs in range",
     cc_rationale_loading:"Loading rationale...", cc_rationale_error:"Could not load rationale",
     cc_rationale_export:"Export Rationales CSV", cc_rationale_exporting:"Exporting...",
     sim_title:"DRep Reward Simulator", sim_subtitle:"Middle-Out mechanism comparison (process-first)",
@@ -137,7 +137,7 @@ const LANG = {
     cc_sim_missed:"未投票", cc_sim_penalty:"ペナルティ", cc_sim_reward:"推定報酬",
     cc_sim_factor:"報酬係数", cc_sim_note:"対象GA = 選択期間中の全GA。全CC委員で分母は共通です。",
     cc_sim_penalty_label:"ペナルティ閾値", cc_sim_penalty_unit:"回未投票で0%",
-    cc_sim_epoch_from:"シミュ. エポック開始", cc_sim_epoch_to:"シミュ. エポック終了", cc_sim_ga_in_range:"対象GA数",
+    cc_sim_date_from:"期間開始", cc_sim_date_to:"期間終了", cc_sim_ga_in_range:"対象GA数",
     cc_rationale_loading:"根拠を読込中...", cc_rationale_error:"根拠を読み込めませんでした",
     cc_rationale_export:"根拠一括CSV出力", cc_rationale_exporting:"出力中...",
     sim_title:"DRep報酬シミュレーター", sim_subtitle:"ミドルアウト方式比較（プロセスファースト）",
@@ -294,6 +294,22 @@ async function fetchRationaleText(url) {
     } catch { return text.slice(0, 2000); }
   } catch { return null; }
 }
+// Cardano epoch ↔ date conversion (Shelley era: epoch 208 = 2020-07-29T21:44:51Z, 5 days per epoch)
+const EPOCH_208_TS = 1596059091000; // ms
+const EPOCH_DURATION = 432000000; // 5 days in ms
+function epochToDate(epoch) { return new Date(EPOCH_208_TS + (epoch - 208) * EPOCH_DURATION); }
+function dateToEpoch(dateStr) { const d = new Date(dateStr + "T00:00:00Z"); return Math.floor((d.getTime() - EPOCH_208_TS) / EPOCH_DURATION) + 208; }
+function epochToDateStr(epoch) { const d = epochToDate(epoch); return d.toISOString().slice(0,10); }
+
+// CC term boundaries — minimum epoch for reward eligibility per member
+// All current CC members' term starts from the "Budget: ₳5M Loan" proposal (epoch 587)
+// except members who joined later (e.g., Curia replaced Atlantic Council)
+const CC_MIN_EPOCH = 587; // 90cf51…#0 — current CC term start
+const CC_MEMBER_START = {
+  "zwz2a08a8cqd": 597, // Cardano Curia — replaced Atlantic Council; first vote at "Reimburse Ikigai" (ep.597)
+};
+function ccMemberMinEpoch(ccId) { return CC_MEMBER_START[ccId] || CC_MIN_EPOCH; }
+
 function shortId(id,n=8,m=5) { return !id ? "" : id.length<=n+m+3 ? id : id.slice(0,n)+"…"+id.slice(-m); }
 function safeName(v) { return typeof v === "string" ? v : (v && typeof v === "object" ? (v["@value"] || v.givenName || JSON.stringify(v)) : null); }
 function normalizeType(t) {
@@ -849,8 +865,8 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   const [csvOpen,setCsvOpen] = React.useState(false);
   const [ccBaseReward,setCcBaseReward] = React.useState(5000);
   const [penaltyThreshold,setPenaltyThreshold] = React.useState(3);
-  const [simEpFrom,setSimEpFrom] = React.useState("");
-  const [simEpTo,setSimEpTo] = React.useState("");
+  const [simDateFrom,setSimDateFrom] = React.useState(epochToDateStr(CC_MIN_EPOCH));
+  const [simDateTo,setSimDateTo] = React.useState("");
   const [ratModal,setRatModal] = React.useState(null); // {ccName, proposalTitle, url, text, loading}
   const [ratExporting,setRatExporting] = React.useState(false);
   const PPP = 22;
@@ -905,25 +921,30 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   }
   function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
 
-  // Simulator-specific proposal filter (separate from vote table)
+  // Simulator-specific proposal filter (separate from vote table, date-based)
+  const simEpFrom = simDateFrom ? dateToEpoch(simDateFrom) : 0;
+  const simEpTo = simDateTo ? dateToEpoch(simDateTo) : 99999;
   const simProps = React.useMemo(()=>{
-    let r=[...ccProposals];
-    if(simEpFrom) r=r.filter(p=>Number(p.epoch_no)>=parseInt(simEpFrom));
-    if(simEpTo) r=r.filter(p=>Number(p.epoch_no)<=parseInt(simEpTo));
-    return r;
+    return ccProposals.filter(p=>{
+      const ep = Number(p.epoch_no);
+      return ep >= simEpFrom && ep <= simEpTo;
+    });
   },[ccProposals,simEpFrom,simEpTo]);
 
-  // CC Simulator data — all members share same eligible count (total GAs in period)
+  // CC Simulator data — per-member eligible count respects each member's start epoch
   const simData = React.useMemo(()=>{
-    const totalEligible = simProps.length;
     return fMembers.map(cc=>{
-      const voted = simProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
+      const memberMin = ccMemberMinEpoch(cc.cc_id);
+      const effectiveMin = Math.max(simEpFrom, memberMin);
+      const memberProps = simProps.filter(p=>Number(p.epoch_no) >= effectiveMin);
+      const totalEligible = memberProps.length;
+      const voted = memberProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
       const missed = totalEligible - voted;
       const factor = Math.max(0, 1 - missed/penaltyThreshold);
       const reward = ccBaseReward * factor;
       return {cc, eligible:totalEligible, voted, missed, factor, reward};
     });
-  },[fMembers,simProps,ccVotes,ccBaseReward,penaltyThreshold]);
+  },[fMembers,simProps,simEpFrom,ccVotes,ccBaseReward,penaltyThreshold]);
 
   function exportCSV(mode){
     const csvProps = mode === "visible" ? pgP : fProps;
@@ -1078,17 +1099,20 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
             <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{T.cc_sim_desc}</div>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:3}}>
-            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_epoch_from}</label>
-            <input type="number" placeholder="530" value={simEpFrom} onChange={e=>setSimEpFrom(e.target.value)}
-              style={{...ist,width:80}}/>
+            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_date_from}</label>
+            <input type="date" value={simDateFrom} min={epochToDateStr(CC_MIN_EPOCH)}
+              onChange={e=>setSimDateFrom(e.target.value)} style={{...ist,width:140}}/>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:3}}>
-            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_epoch_to}</label>
-            <input type="number" placeholder="999" value={simEpTo} onChange={e=>setSimEpTo(e.target.value)}
-              style={{...ist,width:80}}/>
+            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_date_to}</label>
+            <input type="date" value={simDateTo} min={epochToDateStr(CC_MIN_EPOCH)}
+              onChange={e=>setSimDateTo(e.target.value)} style={{...ist,width:140}}/>
           </div>
           <div style={{fontSize:10,color:"var(--accent)",alignSelf:"flex-end",padding:"5px 0"}}>
             {T.cc_sim_ga_in_range}: {simProps.length}
+            <span style={{marginLeft:8,fontSize:9,color:"var(--text2)"}}>
+              (ep.{simEpFrom}〜{simDateTo ? simEpTo : "…"})
+            </span>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:3}}>
             <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_base}</label>
