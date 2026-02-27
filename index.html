@@ -72,7 +72,7 @@ const LANG = {
     type_noconf:"No Confidence", type_cc:"Update CC", type_const:"New Constitution", type_info:"Info Action",
     attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
     delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
-    tab_dashboard:"DRep Votes", tab_cc:"CC Votes & Reward", tab_simulator:"DRep Reward Simulator",
+    tab_dashboard:"DRep Votes", tab_cc:"CC Votes", tab_simulator:"Reward Simulator",
     cc_member:"CC Member", no_cc:"No CC votes found", cc_rationale:"Rationale",
     cc_expired_only:"Showing expired governance actions only (static data)",
     cc_ineligible:"N/A", cc_not_voted:"Not Voted",
@@ -102,6 +102,10 @@ const LANG = {
     vote_ga_count:"GAs in range", vote_info:"GAs whose voting ended in this period",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API Stats", api_calls:"API calls", cached:"cached", loading_sim_votes:"Loading vote counts for simulator…",
+    sim_common_title:"Common Parameters", sim_gov_budget:"Total Governance Budget (ADA)",
+    sim_drep_cc_ratio:"DRep : CC Ratio", sim_period:"Reward Calculation Period",
+    sim_drep_section:"DRep Reward Simulator", sim_cc_section:"CC Reward Simulator",
+    sim_cc_max_budget:"CC Max Budget (before penalty)", sim_cc_actual_budget:"CC Actual (after penalty)",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
@@ -128,7 +132,7 @@ const LANG = {
     type_noconf:"不信任", type_cc:"CC更新", type_const:"新憲法", type_info:"情報",
     attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
     delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
-    tab_dashboard:"DRep投票", tab_cc:"CC投票＆報酬", tab_simulator:"DRep報酬シミュレーター",
+    tab_dashboard:"DRep投票", tab_cc:"CC投票", tab_simulator:"報酬シミュレーター",
     cc_member:"CC委員", no_cc:"CC投票データなし", cc_rationale:"根拠",
     cc_expired_only:"期限切れの一部のGAのみ表示しています（静的データ）",
     cc_ineligible:"対象外", cc_not_voted:"未投票",
@@ -158,6 +162,10 @@ const LANG = {
     vote_ga_count:"期間内GA数", vote_info:"投票期間終了日がこの範囲内のGA",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API統計", api_calls:"APIコール", cached:"キャッシュ", loading_sim_votes:"シミュレーター用投票数を取得中…",
+    sim_common_title:"共通パラメータ", sim_gov_budget:"ガバナンス報酬合計額 (ADA)",
+    sim_drep_cc_ratio:"DRep : CC 分配比率", sim_period:"報酬計算期間",
+    sim_drep_section:"DRep報酬シミュレーター", sim_cc_section:"CC報酬シミュレーター",
+    sim_cc_max_budget:"CC予算（最大・ペナルティ前）", sim_cc_actual_budget:"CC予算（実際・ペナルティ後）",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
@@ -863,10 +871,6 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   const [epTo,setEpTo] = React.useState("");
   const [pPage,setPPage] = React.useState(0);
   const [csvOpen,setCsvOpen] = React.useState(false);
-  const [ccBaseReward,setCcBaseReward] = React.useState(5000);
-  const [penaltyThreshold,setPenaltyThreshold] = React.useState(3);
-  const [simDateFrom,setSimDateFrom] = React.useState(epochToDateStr(CC_MIN_EPOCH));
-  const [simDateTo,setSimDateTo] = React.useState("");
   const [ratModal,setRatModal] = React.useState(null); // {ccName, proposalTitle, url, text, loading}
   const [ratExporting,setRatExporting] = React.useState(false);
   const PPP = 22;
@@ -920,36 +924,6 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
     return isEligible(ccId,pid) ? "NotVoted" : "Ineligible";
   }
   function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
-
-  // Current epoch (approximate)
-  const currentEpoch = React.useMemo(()=> Math.floor((Date.now() - EPOCH_208_TS) / EPOCH_DURATION) + 208, []);
-
-  // Simulator-specific proposal filter: date range + expired only (voting ended)
-  const simEpFrom = simDateFrom ? dateToEpoch(simDateFrom) : 0;
-  const simEpTo = simDateTo ? dateToEpoch(simDateTo) : 99999;
-  const simProps = React.useMemo(()=>{
-    return ccProposals.filter(p=>{
-      const ep = Number(p.epoch_no);
-      const expiry = Number(p.expiration || p.epoch_no);
-      return ep >= simEpFrom && ep <= simEpTo && expiry <= currentEpoch;
-    });
-  },[ccProposals,simEpFrom,simEpTo,currentEpoch]);
-
-  // CC Simulator data — per-member: all expired CC GAs in period, minus ineligible (by member start)
-  // Denominator = all simProps after member's start epoch (not using eligible_proposals which only has voted ones)
-  // Voted = proposals with an actual vote; Missed = denominator - voted
-  const simData = React.useMemo(()=>{
-    return fMembers.map(cc=>{
-      const memberMin = ccMemberMinEpoch(cc.cc_id);
-      const memberProps = simProps.filter(p=>Number(p.epoch_no) >= memberMin);
-      const totalEligible = memberProps.length;
-      const voted = memberProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
-      const missed = totalEligible - voted;
-      const factor = Math.max(0, 1 - missed/penaltyThreshold);
-      const reward = ccBaseReward * factor;
-      return {cc, eligible:totalEligible, voted, missed, factor, reward};
-    });
-  },[fMembers,simProps,ccVotes,ccBaseReward,penaltyThreshold]);
 
   function exportCSV(mode){
     const csvProps = mode === "visible" ? pgP : fProps;
@@ -1096,98 +1070,6 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
           <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
         </div>
       </div>
-      {/* CC Reward Simulator — below votes table */}
-      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:16,marginTop:16}}>
-        <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"center",marginBottom:12}}>
-          <div>
-            <div style={{fontSize:14,fontWeight:700,color:"var(--text)"}}>{T.cc_sim_title}</div>
-            <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{T.cc_sim_desc}</div>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",gap:3}}>
-            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_date_from}</label>
-            <input type="date" value={simDateFrom} min={epochToDateStr(CC_MIN_EPOCH)}
-              onChange={e=>setSimDateFrom(e.target.value)} style={{...ist,width:140}}/>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",gap:3}}>
-            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_date_to}</label>
-            <input type="date" value={simDateTo} min={epochToDateStr(CC_MIN_EPOCH)}
-              onChange={e=>setSimDateTo(e.target.value)} style={{...ist,width:140}}/>
-          </div>
-          <div style={{fontSize:10,color:"var(--accent)",alignSelf:"flex-end",padding:"5px 0"}}>
-            {T.cc_sim_ga_in_range}: {simProps.length}
-            <span style={{marginLeft:8,fontSize:9,color:"var(--text2)"}}>
-              (ep.{simEpFrom}〜{simDateTo ? simEpTo : "…"})
-            </span>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",gap:3}}>
-            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_base}</label>
-            <input type="number" value={ccBaseReward} onChange={e=>setCcBaseReward(Number(e.target.value)||0)}
-              style={{...ist,width:120}}/>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",gap:3}}>
-            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_penalty_label}</label>
-            <div style={{display:"flex",gap:4}}>
-              {[3,5,10].map(n=>(
-                <button key={n} onClick={()=>setPenaltyThreshold(n)}
-                  style={{padding:"5px 10px",borderRadius:6,fontSize:11,fontWeight:600,cursor:"pointer",
-                    border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
-                    background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
-                    color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Penalty explanation visual */}
-        <div style={{display:"flex",gap:6,marginBottom:16,flexWrap:"wrap"}}>
-          {Array.from({length:Math.min(penaltyThreshold+1,8)},(_,m)=>{const f=Math.max(0,1-m/penaltyThreshold);const c=f>0.5?"#22c55e":f>0?"#f59e0b":"#ef4444";
-            return <div key={m} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:70}}>
-              <div style={{fontSize:9,color:"var(--text2)",marginBottom:2}}>{T.cc_sim_missed}: {m}</div>
-              <div style={{fontSize:16,fontWeight:700,color:c}}>{Math.round(f*100)}%</div>
-              <div style={{fontSize:8,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccBaseReward).toLocaleString()} ADA</div>
-            </div>;})}
-        </div>
-
-        {/* Simulator table */}
-        <div style={{border:"1px solid var(--border)",borderRadius:8,overflow:"hidden"}}>
-          <table style={{borderCollapse:"collapse",width:"100%"}}>
-            <thead><tr style={{background:"var(--bg3)"}}>
-              {[T.cc_member,T.cc_sim_eligible,T.cc_sim_voted,T.cc_sim_missed,T.cc_sim_factor,T.cc_sim_reward].map((h,i)=>
-                <th key={i} style={{padding:"8px 10px",fontSize:10,fontWeight:700,color:"var(--text2)",textTransform:"uppercase",
-                  letterSpacing:".05em",textAlign:i===0?"left":"center",borderBottom:"2px solid var(--border)"}}>{h}</th>)}
-            </tr></thead>
-            <tbody>
-              {simData.map((d,ri)=>{
-                const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";
-                const fc=d.factor>0.5?"#22c55e":d.factor>0?"#f59e0b":"#ef4444";
-                return <tr key={d.cc.cc_id} style={{background:bg}}>
-                  <td style={{padding:"8px 10px",borderBottom:"1px solid var(--border)"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:7}}>
-                      <Avatar name={d.cc.name||d.cc.cc_id} url={null}/>
-                      <div><div style={{fontSize:11,fontWeight:600}}>{d.cc.name||shortId(d.cc.cc_id)}</div></div>
-                    </div>
-                  </td>
-                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12}}>{d.eligible}</td>
-                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,color:"#22c55e",fontWeight:600}}>{d.voted}</td>
-                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,
-                    color:d.missed===0?"var(--text2)":d.missed>=penaltyThreshold?"#ef4444":"#f59e0b",fontWeight:d.missed>0?700:400}}>{d.missed}</td>
-                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)"}}>
-                    <span style={{fontSize:13,fontWeight:700,color:fc}}>{Math.round(d.factor*100)}%</span>
-                    <div style={{width:"100%",height:4,background:"rgba(255,255,255,.1)",borderRadius:2,marginTop:3}}>
-                      <div style={{width:`${Math.max(0,d.factor)*100}%`,height:"100%",background:fc,borderRadius:2,transition:"width .3s"}}/>
-                    </div>
-                  </td>
-                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:13,fontWeight:700,
-                    color:fc}}>{d.reward>0?"₳"+Math.round(d.reward).toLocaleString():"₳0"}</td>
-                </tr>;})}
-            </tbody>
-          </table>
-        </div>
-        <div style={{fontSize:10,color:"var(--text2)",marginTop:8,opacity:.7}}>
-          ℹ {T.cc_sim_note}
-        </div>
-      </div>
-
       {/* Rationale Modal */}
       {ratModal && (
         <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
@@ -1730,20 +1612,40 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
 
 // Simulator Tab — Single table with 3 reward columns side by side
 // ════════════════════════════════════════════════════════════════
-function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, T }) {
+function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, ccMembers, ccVotes, proposals, T }) {
+  // ── Common parameters ──
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const [govBudget, setGovBudget] = React.useState(500000);
+  const [drepRatio, setDrepRatio] = React.useState(90);
+  const [periodFrom, setPeriodFrom] = React.useState(epochToDateStr(CC_MIN_EPOCH));
+  const [periodTo, setPeriodTo] = React.useState(todayStr);
+  const drepBudget = Math.round(govBudget * drepRatio / 100);
+  const ccBudgetTotal = Math.round(govBudget * (100 - drepRatio) / 100);
+
+  // ── Collapsible panels ──
+  const [showCommon, setShowCommon] = React.useState(true);
+  const [showDrep, setShowDrep] = React.useState(true);
+  const [showCC, setShowCC] = React.useState(true);
+
+  // ── DRep parameters ──
   const [K, setK] = React.useState(5);
   const [N, setN] = React.useState(100);
-  const [totalBudget, setTotalBudget] = React.useState(500000);
   const [b2, setB2] = React.useState(20000);
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const sixMonthsAgo = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
-  const [voteStart, setVoteStart] = React.useState(sixMonthsAgo);
-  const [voteEnd, setVoteEnd] = React.useState(todayStr);
   const [votePenaltyOn, setVotePenaltyOn] = React.useState(true);
   const [searchQ, setSearchQ] = React.useState("");
   const [page, setPage] = React.useState(0);
   const perPage = 50;
+  const totalBudget = drepBudget;
   const b1 = Math.max(0, totalBudget - b2);
+
+  // ── CC parameters ──
+  const ccMemberCount = ccMembers.length || 1;
+  const [ccBaseReward, setCcBaseReward] = React.useState(5000);
+  const [penaltyThreshold, setPenaltyThreshold] = React.useState(3);
+
+  // Use shared period for DRep vote penalty
+  const voteStart = periodFrom;
+  const voteEnd = periodTo;
 
   React.useEffect(() => {
     if (computePeriodVoteData && voteStart && voteEnd && !loadingVotes) {
@@ -1765,7 +1667,6 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
   const allResults = React.useMemo(() => calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData),
     [dreps, params, voteData, totalActions, periodVoteData]);
   const totalEligible = dreps.filter(d => Number(d.amount) > 0).length;
-  const budget = totalBudget;
 
   const MECHS = [
     { id:"mo_equal", l:T.mech_equal, d:T.desc_equal, c:"#14b8a6" },
@@ -1793,7 +1694,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
   const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
 
-  function exportCSV() {
+  function exportDrepCSV() {
     const hdr = ["Rank","DRep ID","Name","Stake (ADA)","Eligible","Equal (ADA)","Prop (ADA)","Prop+Bonus (ADA)","Period Vote Rate %","Vote Count","Overall Vote Rate %"];
     const rows = merged.map(d => [d.rank, d.drep_id, safeName(d.name) || "", Math.round(Number(d.amount) / 1e6),
       d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2),
@@ -1804,131 +1705,344 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
     const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "drep_rewards_comparison.csv"; a.click(); URL.revokeObjectURL(url);
   }
 
+  // ── CC Simulator logic ──
+  const ccProposalIds = React.useMemo(()=>{
+    const ids=new Set();
+    Object.keys(ccVotes).forEach(k=>{const pid=k.split("__")[1]; if(pid) ids.add(pid);});
+    return ids;
+  },[ccVotes]);
+
+  const ccProposals = React.useMemo(()=>{
+    return proposals.filter(p=>ccProposalIds.has(p.proposal_id));
+  },[proposals,ccProposalIds]);
+
+  const currentEpoch = React.useMemo(()=> Math.floor((Date.now() - EPOCH_208_TS) / EPOCH_DURATION) + 208, []);
+
+  const simEpFrom = periodFrom ? dateToEpoch(periodFrom) : 0;
+  const simEpTo = periodTo ? dateToEpoch(periodTo) : 99999;
+  const ccSimEpFrom = Math.max(simEpFrom, CC_MIN_EPOCH);
+
+  const simProps = React.useMemo(()=>{
+    return ccProposals.filter(p=>{
+      const ep = Number(p.epoch_no);
+      const expiry = Number(p.expiration || p.epoch_no);
+      return ep >= ccSimEpFrom && ep <= simEpTo && expiry <= currentEpoch;
+    });
+  },[ccProposals,ccSimEpFrom,simEpTo,currentEpoch]);
+
+  const ccFMembers = React.useMemo(()=>{
+    let r = [...ccMembers];
+    r.sort((a,b)=>b.vote_count - a.vote_count);
+    return r;
+  },[ccMembers]);
+
+  const simData = React.useMemo(()=>{
+    return ccFMembers.map(cc=>{
+      const memberMin = ccMemberMinEpoch(cc.cc_id);
+      const memberProps = simProps.filter(p=>Number(p.epoch_no) >= memberMin);
+      const totalEligible = memberProps.length;
+      const voted = memberProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
+      const missed = totalEligible - voted;
+      const factor = Math.max(0, 1 - missed/penaltyThreshold);
+      const reward = ccBaseReward * factor;
+      return {cc, eligible:totalEligible, voted, missed, factor, reward};
+    });
+  },[ccFMembers,simProps,ccVotes,ccBaseReward,penaltyThreshold]);
+
+  const ccMaxBudget = ccFMembers.length * ccBaseReward;
+  const ccActualBudget = simData.reduce((s,d) => s + d.reward, 0);
+
   const tdS = (bg) => ({background:bg, padding:"4px 6px", borderBottom:"1px solid var(--border)", fontSize:10, textAlign:"right"});
+  const ist = {padding:"5px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:11,outline:"none"};
+
+  // Collapsible section header helper
+  const SectionHeader = ({title, show, setShow, color, extra}) => (
+    <div onClick={()=>setShow(!show)} style={{cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",
+      padding:"8px 12px",background:color||"var(--bg3)",borderRadius:show?"8px 8px 0 0":"8px",
+      border:"1px solid var(--border)",borderBottom:show?"none":"1px solid var(--border)"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <span style={{fontSize:11,transition:"transform .2s",transform:show?"rotate(90deg)":"rotate(0deg)"}}>▶</span>
+        <span style={{fontSize:13,fontWeight:700}}>{title}</span>
+      </div>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        {extra}
+      </div>
+    </div>
+  );
 
   return (
     <div>
+      {/* ═══ Common Parameters ═══ */}
       <div style={{marginBottom:12}}>
-        <div className="card">
-          <h3 style={{fontSize:12,fontWeight:700,marginBottom:8}}>{T.params}</h3>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
-            <div>
-              <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
-              <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
-            </div>
-            <div>
-              <SliderParam label={T.mo_total} value={totalBudget} onChange={v => { setTotalBudget(v); if(b2>v) setB2(v); }} min={5000} max={500000} step={5000} suffix=" ADA" />
-              <SliderParam label={T.budget_b2} value={b2} onChange={v => setB2(Math.min(v, totalBudget))} min={0} max={totalBudget} step={2500} suffix=" ADA" />
-              <div style={{fontSize:9,color:"var(--text2)",marginTop:-6,marginBottom:4}}>Prop+Bonus: Base = ₳{Math.max(0, totalBudget - b2 * N).toLocaleString()} + ₳{b2.toLocaleString()}/人 × {N}人</div>
-            </div>
-            <div>
-              <div style={{marginBottom:8}}>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-                  <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.vote_penalty}</span>
-                  <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:5,overflow:"hidden"}}>
-                    <button onClick={()=>setVotePenaltyOn(true)}
-                      style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
-                        background:votePenaltyOn?"var(--accent)":"var(--bg3)",color:votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_on}</button>
-                    <button onClick={()=>setVotePenaltyOn(false)}
-                      style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
-                        background:!votePenaltyOn?"var(--accent)":"var(--bg3)",color:!votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_off}</button>
+        <SectionHeader title={T.sim_common_title} show={showCommon} setShow={setShowCommon}
+          color="rgba(59,130,246,.08)"
+          extra={<span style={{fontSize:10,color:"var(--text2)",fontWeight:400}}>
+            ₳{govBudget.toLocaleString()} · DRep {drepRatio}% / CC {100-drepRatio}%
+          </span>} />
+        {showCommon && (
+          <div style={{border:"1px solid var(--border)",borderTop:"none",borderRadius:"0 0 8px 8px",padding:14,background:"var(--bg2)"}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14,alignItems:"start"}}>
+              <div>
+                <SliderParam label={T.sim_gov_budget} value={govBudget} onChange={setGovBudget} min={50000} max={2000000} step={10000} suffix=" ADA" />
+                <div style={{display:"flex",gap:8,marginTop:4}}>
+                  <div style={{flex:1,background:"rgba(59,130,246,.08)",borderRadius:6,padding:"6px 8px",textAlign:"center"}}>
+                    <div style={{fontSize:8,color:"var(--text2)",textTransform:"uppercase",fontWeight:600}}>DRep</div>
+                    <div style={{fontSize:13,fontWeight:700,color:"#3b82f6"}}>₳{drepBudget.toLocaleString()}</div>
+                  </div>
+                  <div style={{flex:1,background:"rgba(245,158,11,.08)",borderRadius:6,padding:"6px 8px",textAlign:"center"}}>
+                    <div style={{fontSize:8,color:"var(--text2)",textTransform:"uppercase",fontWeight:600}}>CC</div>
+                    <div style={{fontSize:13,fontWeight:700,color:"#f59e0b"}}>₳{ccBudgetTotal.toLocaleString()}</div>
                   </div>
                 </div>
-                {votePenaltyOn && (<div>
-                  <div style={{display:"flex",gap:6,marginBottom:4}}>
-                    <div style={{flex:1}}>
-                      <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,display:"block",marginBottom:2}}>{T.vote_start}</label>
-                      <input type="date" value={voteStart} onChange={e=>setVoteStart(e.target.value)}
-                        style={{width:"100%",padding:"4px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,outline:"none"}} />
-                    </div>
-                    <div style={{flex:1}}>
-                      <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,display:"block",marginBottom:2}}>{T.vote_end}</label>
-                      <input type="date" value={voteEnd} onChange={e=>setVoteEnd(e.target.value)}
-                        style={{width:"100%",padding:"4px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,outline:"none"}} />
-                    </div>
+              </div>
+              <div>
+                <SliderParam label={T.sim_drep_cc_ratio} value={drepRatio} onChange={setDrepRatio} min={50} max={100} step={1} suffix="%" />
+                <div style={{fontSize:9,color:"var(--text2)",marginTop:-4}}>DRep {drepRatio}% : CC {100-drepRatio}%</div>
+              </div>
+              <div>
+                <div style={{fontSize:11,color:"var(--text2)",fontWeight:600,marginBottom:4}}>{T.sim_period}</div>
+                <div style={{display:"flex",gap:6,marginBottom:4}}>
+                  <div style={{flex:1}}>
+                    <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,display:"block",marginBottom:2}}>{T.vote_start}</label>
+                    <input type="date" value={periodFrom} min={epochToDateStr(CC_MIN_EPOCH)}
+                      onChange={e=>setPeriodFrom(e.target.value)}
+                      style={{width:"100%",padding:"4px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,outline:"none"}} />
                   </div>
-                  <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
-                </div>)}
+                  <div style={{flex:1}}>
+                    <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,display:"block",marginBottom:2}}>{T.vote_end}</label>
+                    <input type="date" value={periodTo}
+                      onChange={e=>setPeriodTo(e.target.value)}
+                      style={{width:"100%",padding:"4px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,outline:"none"}} />
+                  </div>
+                </div>
+                <div style={{fontSize:8,color:"var(--text2)"}}>
+                  Epoch {simEpFrom}〜{simEpTo} · CC: ep.{ccSimEpFrom}〜{simEpTo}
+                </div>
               </div>
             </div>
           </div>
-          <div style={{display:"flex",alignItems:"center",gap:12,marginTop:4,flexWrap:"wrap"}}>
-            <span style={{fontSize:9,color:"var(--text2)"}}>
-              Budget: ₳{budget.toLocaleString()} · DReps: {dreps.length} · Eligible: {totalEligible}
-              {votePenaltyOn ? ` · ⏱ Vote penalty ON (${gasInRange} GAs)` : " · ⏱ Vote penalty OFF"}
-            </span>
-            {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
-            {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
-            <button className="btn" onClick={()=>{ localStorage.removeItem(SIM_CACHE_KEY); window.location.reload(); }}
-              style={{fontSize:8,padding:"2px 6px",opacity:0.6}}>{T.clear_cache}</button>
+        )}
+      </div>
+
+      {/* ═══ DRep Reward Simulator ═══ */}
+      <div style={{marginBottom:12}}>
+        <SectionHeader title={T.sim_drep_section} show={showDrep} setShow={setShowDrep}
+          color="rgba(59,130,246,.05)"
+          extra={<span style={{fontSize:10,color:"#3b82f6",fontWeight:600}}>₳{drepBudget.toLocaleString()}</span>} />
+        {showDrep && (
+          <div style={{border:"1px solid var(--border)",borderTop:"none",borderRadius:"0 0 8px 8px",padding:14,background:"var(--bg2)"}}>
+            <div className="card" style={{marginBottom:12}}>
+              <h3 style={{fontSize:12,fontWeight:700,marginBottom:8}}>{T.params}</h3>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
+                <div>
+                  <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
+                  <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
+                </div>
+                <div>
+                  <SliderParam label={T.budget_b2} value={b2} onChange={v => setB2(Math.min(v, totalBudget))} min={0} max={totalBudget} step={2500} suffix=" ADA" />
+                  <div style={{fontSize:9,color:"var(--text2)",marginTop:-6,marginBottom:4}}>Prop+Bonus: Base = ₳{Math.max(0, totalBudget - b2 * N).toLocaleString()} + ₳{b2.toLocaleString()}/人 × {N}人</div>
+                </div>
+                <div>
+                  <div style={{marginBottom:8}}>
+                    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+                      <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.vote_penalty}</span>
+                      <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:5,overflow:"hidden"}}>
+                        <button onClick={()=>setVotePenaltyOn(true)}
+                          style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                            background:votePenaltyOn?"var(--accent)":"var(--bg3)",color:votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_on}</button>
+                        <button onClick={()=>setVotePenaltyOn(false)}
+                          style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                            background:!votePenaltyOn?"var(--accent)":"var(--bg3)",color:!votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_off}</button>
+                      </div>
+                    </div>
+                    {votePenaltyOn && (
+                      <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:12,marginTop:4,flexWrap:"wrap"}}>
+                <span style={{fontSize:9,color:"var(--text2)"}}>
+                  Budget: ₳{totalBudget.toLocaleString()} · DReps: {dreps.length} · Eligible: {totalEligible}
+                  {votePenaltyOn ? ` · Vote penalty ON (${gasInRange} GAs)` : " · Vote penalty OFF"}
+                </span>
+                {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
+                {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
+                <button className="btn" onClick={()=>{ localStorage.removeItem(SIM_CACHE_KEY); window.location.reload(); }}
+                  style={{fontSize:8,padding:"2px 6px",opacity:0.6}}>{T.clear_cache}</button>
+              </div>
+            </div>
+
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:8}}>
+              <input type="text" placeholder={T.search} value={searchQ} onChange={e => { setSearchQ(e.target.value); setPage(0); }}
+                style={{padding:"5px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:11,width:180,outline:"none"}} />
+              <div style={{display:"flex",gap:6,alignItems:"center"}}>
+                <span style={{fontSize:10,color:"var(--text2)"}}>{filtered.length} DReps</span>
+                <button className="btn" onClick={exportDrepCSV} style={{fontSize:9,padding:"4px 8px"}}>📥 CSV</button>
+              </div>
+            </div>
+
+            <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+              <div style={{overflow:"auto",maxHeight:"calc(100vh - 480px)"}}>
+                <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%"}}>
+                  <thead><tr>
+                    {[{t:T.rank,a:"right",w:32},{t:"",a:"left",w:22},{t:T.name,a:"left"},{t:T.stake,a:"right"}].map((h,i)=>(
+                      <th key={i} style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:h.a,
+                        borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap",width:h.w||"auto"}}>{h.t}</th>
+                    ))}
+                    <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"center",
+                      borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)"}}>Elig.</th>
+                    {MECHS.map(m=>(
+                      <th key={m.id} style={{position:"sticky",top:0,background:m.c+"15",padding:"5px 6px",textAlign:"right",
+                        borderBottom:`2px solid ${m.c}40`,fontSize:9,fontWeight:700,color:m.c,whiteSpace:"nowrap",minWidth:75}}>
+                        {m.l}</th>
+                    ))}
+                    <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
+                      borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>{T.vote_rate}</th>
+                  </tr></thead>
+                  <tbody>
+                    {pageData.map((d, ri) => {
+                      const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+                      const pvr = d.periodVR;
+                      return (
+                        <tr key={d.drep_id} style={{opacity:d.eligible?1:0.35}}>
+                          <td style={{...tdS(bg),color:"var(--text2)",width:32,fontSize:9}}>{d.rank}</td>
+                          <td style={{background:bg,padding:"3px 2px",borderBottom:"1px solid var(--border)",width:22}}><Avatar name={safeName(d.name)||d.drep_id} url={d.image_url} size={18}/></td>
+                          <td style={{background:bg,padding:"4px 6px",borderBottom:"1px solid var(--border)",fontSize:10,fontWeight:600,maxWidth:120,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                            {safeName(d.name) || shortId(d.drep_id)}</td>
+                          <td style={{...tdS(bg),fontSize:9}}>₳{fmtAda(d.amount)}</td>
+                          <td style={{...tdS(bg),textAlign:"center",fontSize:9}}>
+                            {d.eligible ? <span style={{color:"var(--yes)"}}>✓</span> : <span style={{color:"var(--text2)"}}>−</span>}</td>
+                          <td style={{...tdS(bg),fontWeight:600,color:d.r_equal>0?"#14b8a6":"var(--text2)",background:bg}}>
+                            {d.r_equal>0?"₳"+fmtAdaNum(d.r_equal):"−"}</td>
+                          <td style={{...tdS(bg),fontWeight:600,color:d.r_prop>0?"#f59e0b":"var(--text2)",background:bg}}>
+                            {d.r_prop>0?"₳"+fmtAdaNum(d.r_prop):"−"}</td>
+                          <td style={{...tdS(bg),fontWeight:600,color:d.r_bonus>0?"#a78bfa":"var(--text2)",background:bg}}>
+                            {d.r_bonus>0?"₳"+fmtAdaNum(d.r_bonus):"−"}</td>
+                          <td style={{...tdS(bg),fontSize:9}}>
+                            {pvr != null ? (<div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:3}}>
+                              <div style={{width:28,height:3,background:"var(--bg4)",borderRadius:2,overflow:"hidden"}}>
+                                <div style={{width:`${Math.min(pvr,100)}%`,height:"100%",background:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)",borderRadius:2}} /></div>
+                              <span style={{fontSize:8,color:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)"}}>{pvr.toFixed(0)}%</span></div>)
+                            : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:8,padding:"6px 12px",borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
+                <button className="btn" disabled={page===0} onClick={()=>setPage(page-1)} style={{padding:"2px 7px",fontSize:10,opacity:page===0?.3:1}}>←</button>
+                <span style={{fontSize:10}}>{page+1} / {totalPages}</span>
+                <button className="btn" disabled={page>=totalPages-1} onClick={()=>setPage(page+1)} style={{padding:"2px 7px",fontSize:10,opacity:page>=totalPages-1?.3:1}}>→</button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:8}}>
-        <input type="text" placeholder={T.search} value={searchQ} onChange={e => { setSearchQ(e.target.value); setPage(0); }}
-          style={{padding:"5px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:11,width:180,outline:"none"}} />
-        <div style={{display:"flex",gap:6,alignItems:"center"}}>
-          <span style={{fontSize:10,color:"var(--text2)"}}>{filtered.length} DReps</span>
-          <button className="btn" onClick={exportCSV} style={{fontSize:9,padding:"4px 8px"}}>📥 CSV</button>
-        </div>
-      </div>
+      {/* ═══ CC Reward Simulator ═══ */}
+      <div style={{marginBottom:12}}>
+        <SectionHeader title={T.sim_cc_section} show={showCC} setShow={setShowCC}
+          color="rgba(245,158,11,.05)"
+          extra={<span style={{fontSize:10,color:"#f59e0b",fontWeight:600}}>₳{ccBudgetTotal.toLocaleString()}</span>} />
+        {showCC && (
+          <div style={{border:"1px solid var(--border)",borderTop:"none",borderRadius:"0 0 8px 8px",padding:14,background:"var(--bg2)"}}>
+            {/* CC Parameters */}
+            <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"center",marginBottom:12}}>
+              <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_base}</label>
+                <input type="number" value={ccBaseReward} onChange={e=>setCcBaseReward(Number(e.target.value)||0)}
+                  style={{...ist,width:120}}/>
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_penalty_label}</label>
+                <div style={{display:"flex",gap:4}}>
+                  {[3,5,10].map(n=>(
+                    <button key={n} onClick={()=>setPenaltyThreshold(n)}
+                      style={{padding:"5px 10px",borderRadius:6,fontSize:11,fontWeight:600,cursor:"pointer",
+                        border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
+                        background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
+                        color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
+                  ))}
+                </div>
+              </div>
+              <div style={{fontSize:10,color:"var(--accent)",padding:"5px 0"}}>
+                {T.cc_sim_ga_in_range}: {simProps.length}
+                <span style={{marginLeft:8,fontSize:9,color:"var(--text2)"}}>
+                  (ep.{ccSimEpFrom}〜{simEpTo})
+                </span>
+              </div>
+            </div>
 
-      <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-        <div style={{overflow:"auto",maxHeight:"calc(100vh - 420px)"}}>
-          <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%"}}>
-            <thead><tr>
-              {[{t:T.rank,a:"right",w:32},{t:"",a:"left",w:22},{t:T.name,a:"left"},{t:T.stake,a:"right"}].map((h,i)=>(
-                <th key={i} style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:h.a,
-                  borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap",width:h.w||"auto"}}>{h.t}</th>
-              ))}
-              <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"center",
-                borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)"}}>Elig.</th>
-              {MECHS.map(m=>(
-                <th key={m.id} style={{position:"sticky",top:0,background:m.c+"15",padding:"5px 6px",textAlign:"right",
-                  borderBottom:`2px solid ${m.c}40`,fontSize:9,fontWeight:700,color:m.c,whiteSpace:"nowrap",minWidth:75}}>
-                  {m.l}</th>
-              ))}
-              <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
-                borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>{T.vote_rate}</th>
-            </tr></thead>
-            <tbody>
-              {pageData.map((d, ri) => {
-                const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
-                const pvr = d.periodVR;
-                return (
-                  <tr key={d.drep_id} style={{opacity:d.eligible?1:0.35}}>
-                    <td style={{...tdS(bg),color:"var(--text2)",width:32,fontSize:9}}>{d.rank}</td>
-                    <td style={{background:bg,padding:"3px 2px",borderBottom:"1px solid var(--border)",width:22}}><Avatar name={safeName(d.name)||d.drep_id} url={d.image_url} size={18}/></td>
-                    <td style={{background:bg,padding:"4px 6px",borderBottom:"1px solid var(--border)",fontSize:10,fontWeight:600,maxWidth:120,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
-                      {safeName(d.name) || shortId(d.drep_id)}</td>
-                    <td style={{...tdS(bg),fontSize:9}}>₳{fmtAda(d.amount)}</td>
-                    <td style={{...tdS(bg),textAlign:"center",fontSize:9}}>
-                      {d.eligible ? <span style={{color:"var(--yes)"}}>✓</span> : <span style={{color:"var(--text2)"}}>−</span>}</td>
-                    <td style={{...tdS(bg),fontWeight:600,color:d.r_equal>0?"#14b8a6":"var(--text2)",background:bg}}>
-                      {d.r_equal>0?"₳"+fmtAdaNum(d.r_equal):"−"}</td>
-                    <td style={{...tdS(bg),fontWeight:600,color:d.r_prop>0?"#f59e0b":"var(--text2)",background:bg}}>
-                      {d.r_prop>0?"₳"+fmtAdaNum(d.r_prop):"−"}</td>
-                    <td style={{...tdS(bg),fontWeight:600,color:d.r_bonus>0?"#a78bfa":"var(--text2)",background:bg}}>
-                      {d.r_bonus>0?"₳"+fmtAdaNum(d.r_bonus):"−"}</td>
-                    <td style={{...tdS(bg),fontSize:9}}>
-                      {pvr != null ? (<div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:3}}>
-                        <div style={{width:28,height:3,background:"var(--bg4)",borderRadius:2,overflow:"hidden"}}>
-                          <div style={{width:`${Math.min(pvr,100)}%`,height:"100%",background:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)",borderRadius:2}} /></div>
-                        <span style={{fontSize:8,color:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)"}}>{pvr.toFixed(0)}%</span></div>)
-                      : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-        <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:8,padding:"6px 12px",borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
-          <button className="btn" disabled={page===0} onClick={()=>setPage(page-1)} style={{padding:"2px 7px",fontSize:10,opacity:page===0?.3:1}}>←</button>
-          <span style={{fontSize:10}}>{page+1} / {totalPages}</span>
-          <button className="btn" disabled={page>=totalPages-1} onClick={()=>setPage(page+1)} style={{padding:"2px 7px",fontSize:10,opacity:page>=totalPages-1?.3:1}}>→</button>
-        </div>
+            {/* CC Budget summary: max vs actual */}
+            <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
+              <div style={{background:"rgba(245,158,11,.06)",border:"1px solid rgba(245,158,11,.2)",borderRadius:8,padding:"8px 14px",flex:1,minWidth:180}}>
+                <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:2}}>{T.sim_cc_max_budget}</div>
+                <div style={{fontSize:18,fontWeight:700,color:"#f59e0b"}}>₳{ccMaxBudget.toLocaleString()}</div>
+                <div style={{fontSize:9,color:"var(--text2)"}}>= ₳{ccBaseReward.toLocaleString()} × {ccFMembers.length} members</div>
+              </div>
+              <div style={{background:"rgba(34,197,94,.06)",border:"1px solid rgba(34,197,94,.2)",borderRadius:8,padding:"8px 14px",flex:1,minWidth:180}}>
+                <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:2}}>{T.sim_cc_actual_budget}</div>
+                <div style={{fontSize:18,fontWeight:700,color:"#22c55e"}}>₳{Math.round(ccActualBudget).toLocaleString()}</div>
+                <div style={{fontSize:9,color:"var(--text2)"}}>
+                  {ccMaxBudget > 0 ? `${Math.round(ccActualBudget / ccMaxBudget * 100)}% of max` : "—"}
+                  {ccMaxBudget > ccActualBudget ? ` · saved ₳${Math.round(ccMaxBudget - ccActualBudget).toLocaleString()}` : ""}
+                </div>
+              </div>
+            </div>
+
+            {/* Penalty explanation visual */}
+            <div style={{display:"flex",gap:6,marginBottom:16,flexWrap:"wrap"}}>
+              {Array.from({length:Math.min(penaltyThreshold+1,8)},(_,m)=>{const f=Math.max(0,1-m/penaltyThreshold);const c=f>0.5?"#22c55e":f>0?"#f59e0b":"#ef4444";
+                return <div key={m} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:70}}>
+                  <div style={{fontSize:9,color:"var(--text2)",marginBottom:2}}>{T.cc_sim_missed}: {m}</div>
+                  <div style={{fontSize:16,fontWeight:700,color:c}}>{Math.round(f*100)}%</div>
+                  <div style={{fontSize:8,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccBaseReward).toLocaleString()} ADA</div>
+                </div>;})}
+            </div>
+
+            {/* CC Simulator table */}
+            <div style={{border:"1px solid var(--border)",borderRadius:8,overflow:"hidden"}}>
+              <table style={{borderCollapse:"collapse",width:"100%"}}>
+                <thead><tr style={{background:"var(--bg3)"}}>
+                  {[T.cc_member,T.cc_sim_eligible,T.cc_sim_voted,T.cc_sim_missed,T.cc_sim_factor,T.cc_sim_reward].map((h,i)=>
+                    <th key={i} style={{padding:"8px 10px",fontSize:10,fontWeight:700,color:"var(--text2)",textTransform:"uppercase",
+                      letterSpacing:".05em",textAlign:i===0?"left":"center",borderBottom:"2px solid var(--border)"}}>{h}</th>)}
+                </tr></thead>
+                <tbody>
+                  {simData.map((d,ri)=>{
+                    const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";
+                    const fc=d.factor>0.5?"#22c55e":d.factor>0?"#f59e0b":"#ef4444";
+                    return <tr key={d.cc.cc_id} style={{background:bg}}>
+                      <td style={{padding:"8px 10px",borderBottom:"1px solid var(--border)"}}>
+                        <div style={{display:"flex",alignItems:"center",gap:7}}>
+                          <Avatar name={d.cc.name||d.cc.cc_id} url={null}/>
+                          <div><div style={{fontSize:11,fontWeight:600}}>{d.cc.name||shortId(d.cc.cc_id)}</div></div>
+                        </div>
+                      </td>
+                      <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12}}>{d.eligible}</td>
+                      <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,color:"#22c55e",fontWeight:600}}>{d.voted}</td>
+                      <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,
+                        color:d.missed===0?"var(--text2)":d.missed>=penaltyThreshold?"#ef4444":"#f59e0b",fontWeight:d.missed>0?700:400}}>{d.missed}</td>
+                      <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)"}}>
+                        <span style={{fontSize:13,fontWeight:700,color:fc}}>{Math.round(d.factor*100)}%</span>
+                        <div style={{width:"100%",height:4,background:"rgba(255,255,255,.1)",borderRadius:2,marginTop:3}}>
+                          <div style={{width:`${Math.max(0,d.factor)*100}%`,height:"100%",background:fc,borderRadius:2,transition:"width .3s"}}/>
+                        </div>
+                      </td>
+                      <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:13,fontWeight:700,
+                        color:fc}}>{d.reward>0?"₳"+Math.round(d.reward).toLocaleString():"₳0"}</td>
+                    </tr>;})}
+                </tbody>
+              </table>
+            </div>
+            <div style={{fontSize:10,color:"var(--text2)",marginTop:8,opacity:.7}}>
+              ℹ {T.cc_sim_note}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -2384,7 +2498,8 @@ function App() {
         <SimulatorTab dreps={allDreps} voteData={voteData} totalActions={totalActions}
           periodVoteData={periodVoteData}
           computePeriodVoteData={computePeriodVoteData} setPeriodVoteData={setPeriodVoteData}
-          loadingVotes={loadingVotes} progress={simProgress} T={T} />
+          loadingVotes={loadingVotes} progress={simProgress}
+          ccMembers={ccMembers} ccVotes={ccVotes} proposals={proposals} T={T} />
       )}
 
       <div style={{marginTop:12,textAlign:"center",color:"#333a4a",fontSize:10,lineHeight:1.8}}>
