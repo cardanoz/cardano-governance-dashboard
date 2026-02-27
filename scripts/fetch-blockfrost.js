@@ -401,6 +401,11 @@ async function main() {
     console.log(`  Response: ${Array.isArray(ccInfoRaw) ? "array[" + ccInfoRaw.length + "]" : typeof ccInfoRaw}, keys: ${ccInfo ? Object.keys(ccInfo).join(",") : "null"}`);
     if (ccInfo && ccInfo.members && ccInfo.members.length > 0) {
       console.log(`  Committee: quorum ${ccInfo.quorum_numerator}/${ccInfo.quorum_denominator}, ${ccInfo.members.length} members`);
+      // DEBUG: Show all member fields from first member
+      if (ccInfo.members[0]) {
+        console.log(`  Member[0] keys: ${Object.keys(ccInfo.members[0]).join(", ")}`);
+        console.log(`  Member[0] sample: ${JSON.stringify(ccInfo.members[0]).slice(0, 500)}`);
+      }
 
       // Build set of expired proposal IDs for cache checking
       const expiredProposalIds = new Set();
