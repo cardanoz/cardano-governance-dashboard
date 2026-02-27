@@ -743,10 +743,11 @@ This appendix sets forth guardrails for on-chain governance actions, including p
 
     // ====== UTIL COMPONENTS ======
     const Badge=({text,color})=><span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${color}`}>{text}</span>;
-    const Modal=({children,onClose,wide})=>(
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 fade-in" onClick={onClose}>
+    const Modal=({children,onClose,wide})=>ReactDOM.createPortal(
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 fade-in" onClick={onClose}>
         <div className={`bg-cardano-mid border border-gray-700 rounded-xl p-6 mx-4 max-h-[90vh] overflow-y-auto glow ${wide?'max-w-4xl w-full':'max-w-lg w-full'}`} onClick={e=>e.stopPropagation()}>{children}</div>
-      </div>
+      </div>,
+      document.body
     );
 
     // ====== INLINE COMMENT HIGHLIGHTS ======
