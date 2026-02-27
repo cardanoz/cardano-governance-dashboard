@@ -34,10 +34,46 @@ const DATA_DIR = path.resolve(__dirname, "..", "data");
 const CACHE_FILE = path.join(DATA_DIR, "vote-cache.json");
 const METADATA_CACHE_HOURS = 6;
 
+const KOIOS_BASE = "https://api.koios.rest/api/v1";
+
 let apiCalls = 0;
 let lastFetchTime = 0;
 
-// ─── HTTP ───────────────────────────────────────────────────
+// ─── Koios HTTP ─────────────────────────────────────────────
+function koiosGet(endpoint, params = {}) {
+  return new Promise((resolve, reject) => {
+    const wait = Math.max(0, THROTTLE_MS - (Date.now() - lastFetchTime));
+    setTimeout(() => {
+      lastFetchTime = Date.now();
+      apiCalls++;
+      const qs = Object.entries(params)
+        .filter(([, v]) => v !== undefined && v !== null)
+        .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+        .join("&");
+      const url = `${KOIOS_BASE}${endpoint}${qs ? "?" + qs : ""}`;
+      const req = https.get(url, {
+        headers: { "Accept": "application/json" },
+        timeout: 30000
+      }, (res) => {
+        let data = "";
+        res.on("data", c => data += c);
+        res.on("end", () => {
+          if (res.statusCode === 404) return resolve(null);
+          if (res.statusCode === 429) {
+            console.warn("  Koios rate limited, waiting 3s...");
+            return setTimeout(() => koiosGet(endpoint, params).then(resolve).catch(reject), 3000);
+          }
+          if (res.statusCode !== 200) return reject(new Error(`Koios HTTP ${res.statusCode}: ${data.slice(0, 200)}`));
+          try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+        });
+      });
+      req.on("error", reject);
+      req.on("timeout", () => { req.destroy(); reject(new Error("Timeout")); });
+    }, wait);
+  });
+}
+
+// ─── Blockfrost HTTP ────────────────────────────────────────
 function fetchJSON(urlPath) {
   return new Promise((resolve, reject) => {
     const wait = Math.max(0, THROTTLE_MS - (Date.now() - lastFetchTime));
@@ -131,12 +167,12 @@ async function main() {
   console.log(`Metadata cache: ${useMetadataCache ? `FRESH (${metaCacheAgeHours.toFixed(1)}h old)` : `STALE (${metaCacheAgeHours.toFixed(1)}h old, re-fetching)`}`);
 
   // ─── 1. DRep IDs ──────────────────────────────────────────
-  console.log("\n[1/7] Fetching DRep IDs...");
+  console.log("\n[1/8] Fetching DRep IDs...");
   const drepIds = await fetchAllPages("/governance/dreps", MAX_PAGES);
   console.log(`  Found ${drepIds.length} DRep IDs`);
 
   // ─── 2. DRep details + metadata ───────────────────────────
-  console.log(`\n[2/7] Fetching DRep details${useMetadataCache ? " (metadata from cache)" : " + metadata"}...`);
+  console.log(`\n[2/8] Fetching DRep details${useMetadataCache ? " (metadata from cache)" : " + metadata"}...`);
   const cachedMeta = cache.drepMetadata || {};
   const newDrepMetadata = {};
   let metadataFetchCount = 0;
@@ -173,7 +209,7 @@ async function main() {
   if (useMetadataCache) console.log(`  Metadata: ${Object.keys(cachedMeta).length} from cache, ${metadataFetchCount} fresh`);
 
   // ─── 3. DRep votes ────────────────────────────────────────
-  console.log("\n[3/7] Fetching DRep votes (incremental)...");
+  console.log("\n[3/8] Fetching DRep votes (incremental)...");
   const voteMap = {};
   const proposalSet = {};
   const drepVoteCounts = {};
@@ -212,7 +248,7 @@ async function main() {
   console.log(`  Fresh: ${freshVoteCount}, Total: ${Object.keys(voteMap).length}`);
 
   // ─── 4. Proposal details ──────────────────────────────────
-  console.log("\n[4/7] Fetching proposal details + metadata...");
+  console.log("\n[4/8] Fetching proposal details + metadata...");
   const cachedProposalIds = new Set(Object.keys(cache.proposals || {}));
   const newPropEntries = Object.entries(proposalSet).filter(([k]) => !cachedProposalIds.has(k));
   console.log(`  ${newPropEntries.length} new proposals (${cachedProposalIds.size} cached)`);
@@ -252,7 +288,7 @@ async function main() {
   proposals.forEach(p => { proposalExpirations[p.proposal_id] = p.expiration || 0; });
 
   // ─── 5. Build simulator data + update cache ───────────────
-  console.log("\n[5/7] Building simulator data + updating cache...");
+  console.log("\n[5/8] Building simulator data + updating cache...");
   let maxVotes = 0;
   Object.values(drepVoteCounts).forEach(c => { if (c > maxVotes) maxVotes = c; });
 
@@ -279,7 +315,7 @@ async function main() {
   });
 
   // ─── 6. Stake history snapshot ──────────────────────────────
-  console.log("\n[6/7] Updating stake history snapshot...");
+  console.log("\n[6/8] Updating stake history snapshot...");
   const HISTORY_FILE = path.join(DATA_DIR, "drep-history.json");
   let history = [];
   try {
@@ -311,8 +347,75 @@ async function main() {
   }
   fs.writeFileSync(HISTORY_FILE, JSON.stringify(history));
 
-  // ─── 7. Write output files ────────────────────────────────
-  console.log("\n[7/7] Writing JSON files...");
+  // ─── 7. CC (Constitutional Committee) data via Koios ───────
+  console.log("\n[7/8] Fetching CC data from Koios...");
+  let ccMembers = [];
+  let ccVoteMap = {};
+  let ccRationales = {};
+
+  try {
+    // 7a. Get committee info
+    const ccInfo = await koiosGet("/committee_info");
+    if (ccInfo && ccInfo.members && ccInfo.members.length > 0) {
+      console.log(`  Committee: quorum ${ccInfo.quorum_numerator}/${ccInfo.quorum_denominator}, ${ccInfo.members.length} members`);
+
+      // 7b. For each member, fetch votes
+      for (const member of ccInfo.members) {
+        const hotId = member.cc_hot_id || member.cc_hot_hex;
+        const coldId = member.cc_cold_id || member.cc_cold_hex;
+        if (!hotId) continue;
+
+        // Derive a short readable name from member data or use cold ID
+        const shortName = member.cc_cold_id
+          ? member.cc_cold_id.replace("cc_cold1", "").slice(0, 12)
+          : (coldId || hotId).slice(0, 16);
+
+        // Fetch votes for this member
+        let memberVotes = [];
+        try {
+          memberVotes = await koiosGet("/committee_votes", { _cc_hot_id: hotId }) || [];
+        } catch (e) {
+          console.log(`    Vote fetch error for ${shortName}: ${e.message}`);
+        }
+
+        const eligibleProposals = memberVotes.map(v => v.proposal_id || `${v.proposal_tx_hash}#${v.proposal_index}`);
+
+        ccMembers.push({
+          cc_id: shortName,
+          cc_hot_id: hotId,
+          cc_cold_id: coldId,
+          name: shortName,
+          vote_count: memberVotes.length,
+          eligible_proposals: eligibleProposals,
+          eligible_count: eligibleProposals.length,
+          status: member.status || "active",
+          expiration_epoch: member.expiration_epoch || null
+        });
+
+        // Build vote map: "cc_id__proposal_id" => "Yes"/"No"/"Abstain"
+        for (const v of memberVotes) {
+          const proposalId = v.proposal_id || `${v.proposal_tx_hash}#${v.proposal_index}`;
+          ccVoteMap[`${shortName}__${proposalId}`] = v.vote; // "Yes", "No", "Abstain"
+
+          // Extract rationale URL if available
+          if (v.meta_url) {
+            const rUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
+            if (rUrl) ccRationales[`${shortName}__${proposalId}`] = rUrl;
+          }
+        }
+
+        console.log(`    ${shortName}: ${memberVotes.length} votes`);
+      }
+      console.log(`  Total: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes, ${Object.keys(ccRationales).length} rationales`);
+    } else {
+      console.log("  No committee info from Koios, keeping existing static files");
+    }
+  } catch (e) {
+    console.log(`  Koios CC error: ${e.message} — keeping existing static files`);
+  }
+
+  // ─── 8. Write output files ────────────────────────────────
+  console.log("\n[8/8] Writing JSON files...");
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
   const meta = {
@@ -337,7 +440,15 @@ async function main() {
   }));
   fs.writeFileSync(path.join(DATA_DIR, "meta.json"), JSON.stringify(meta, null, 2));
 
-  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json"];
+  // Write CC data (only if Koios returned data, otherwise keep existing files)
+  if (ccMembers.length > 0) {
+    fs.writeFileSync(path.join(DATA_DIR, "cc-members.json"), JSON.stringify(ccMembers));
+    fs.writeFileSync(path.join(DATA_DIR, "cc-votes.json"), JSON.stringify(ccVoteMap));
+    fs.writeFileSync(path.join(DATA_DIR, "cc-rationales.json"), JSON.stringify(ccRationales));
+    console.log(`  CC: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes written`);
+  }
+
+  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json", "cc-members.json", "cc-votes.json", "cc-rationales.json"];
   files.forEach(f => {
     try { const size = fs.statSync(path.join(DATA_DIR, f)).size; console.log(`  ${f}: ${(size / 1024).toFixed(1)} KB`); } catch (e) {}
   });
