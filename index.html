@@ -482,16 +482,6 @@ function VoteBadge({ vote, hasRationale, rationaleUrl, T }) {
     NotVoted:{bg:"rgba(75,85,99,.06)",c:"#555e70",bc:"rgba(75,85,99,.12)",icon:"",l:"−"},
   };
   const s = m[vote]||m.NotVoted; const isVoted = vote && vote !== "NotVoted";
-  const popRef = React.useRef(null);
-  const onEnter = (e) => {
-    const pop = popRef.current; if(!pop) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    let left = r.left + r.width/2 - 190, top = r.top - 8;
-    if (left < 8) left = 8; if (left + 380 > window.innerWidth) left = window.innerWidth - 388;
-    pop.style.left = left + "px"; pop.style.bottom = "auto"; pop.style.top = "auto";
-    if (top > 200) { pop.style.bottom = (window.innerHeight - r.top + 6) + "px"; }
-    else { pop.style.top = (r.bottom + 6) + "px"; }
-  };
   const badge = (
     <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:2,
       padding:"3px 7px",borderRadius:5,fontSize:10,fontWeight:700,
@@ -500,18 +490,14 @@ function VoteBadge({ vote, hasRationale, rationaleUrl, T }) {
       {isVoted && hasRationale && <span style={{fontSize:8,marginLeft:2,opacity:.7}} title={T.has_rationale}>📎</span>}
     </div>
   );
-  if (!isVoted) return badge;
+  if (!isVoted || !hasRationale) return badge;
   return (
-    <div className="tooltip-container" onMouseEnter={onEnter}>{badge}
-      <div className="tooltip-popup" ref={popRef}>
-        <div style={{fontWeight:700,marginBottom:4,fontSize:12,color:s.c}}>{vote} {hasRationale ? `(${T.attached})` : ""}</div>
-        {hasRationale && rationaleUrl
-          ? <div><div style={{color:"var(--text2)",marginBottom:4}}>{T.rationale}:</div>
-              {rationaleUrl.startsWith("http")
-                ? <a href={rationaleUrl} target="_blank" rel="noopener" style={{fontSize:10,wordBreak:"break-all",color:"var(--accent2)"}}>{rationaleUrl.length>80?rationaleUrl.slice(0,80)+"…":rationaleUrl}</a>
-                : <div style={{fontSize:10,color:"var(--text)",maxHeight:150,overflow:"auto",lineHeight:1.5}}>{rationaleUrl.length>500?rationaleUrl.slice(0,500)+"…":rationaleUrl}</div>
-              }</div>
-          : <div style={{color:"var(--text2)"}}>{T.no_rationale}</div>}
+    <div className="tooltip-container">{badge}
+      <div className="tooltip-popup">
+        <div style={{fontWeight:700,marginBottom:4,fontSize:12,color:s.c}}>{vote} ({T.attached})</div>
+        {rationaleUrl && rationaleUrl.startsWith("http")
+          ? <a href={rationaleUrl} target="_blank" rel="noopener" style={{fontSize:10,wordBreak:"break-all",color:"var(--accent2)"}}>{rationaleUrl.length>80?rationaleUrl.slice(0,80)+"…":rationaleUrl}</a>
+          : <div style={{fontSize:10,color:"var(--text)",maxHeight:150,overflow:"auto",lineHeight:1.5}}>{rationaleUrl}</div>}
       </div>
     </div>
   );
@@ -1115,11 +1101,12 @@ function App() {
     const meta = await metaRes.json();
 
     setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes] = await Promise.all([
+    const [drepsRes, proposalsRes, votesRes, simRes, ratRes] = await Promise.all([
       fetch(base + "dreps.json"),
       fetch(base + "proposals.json"),
       fetch(base + "votes.json"),
-      fetch(base + "simulator.json")
+      fetch(base + "simulator.json"),
+      fetch(base + "rationales.json").catch(() => null)
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
@@ -1133,7 +1120,12 @@ function App() {
     setAllDreps(drepsData);
     setProposals(proposalsData);
     setVotes(votesData);
-    setRationales({});
+    // Load rationales from static data if available
+    let rationalesData = {};
+    if (ratRes && ratRes.ok) {
+      try { rationalesData = await ratRes.json(); } catch(e) {}
+    }
+    setRationales(rationalesData);
     setIsDemo(false);
     setHasMore(false);
     setDataSource("static");
@@ -1163,7 +1155,9 @@ function App() {
         window.__simVoteRaw = { proposalExpirations: flatExpirations, drepVotedProposals };
         setVoteData(vd);
         setTotalActions(maxVotes);
-        setRationaleData({});
+        // Load rationale stats from simulator data if available
+        const ratStats = simData.rationaleStats || {};
+        setRationaleData(ratStats);
         voteDataLoadedRef.current = true;
       } catch(e) { console.warn("Simulator data parse error:", e); }
     }
