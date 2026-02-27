@@ -1475,11 +1475,11 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
         {/* Projection slider */}
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <label style={{ fontSize: 11, color: "var(--text2)" }}>{lang === "ja" ? "予測:" : "Forecast:"}</label>
-          <input type="range" min={0} max={30} step={3} value={projEpochs}
+          <input type="range" min={0} max={220} step={1} value={projEpochs}
             onChange={e => setProjEpochs(Number(e.target.value))}
-            style={{ width: 80, accentColor: "var(--accent)" }} />
-          <span style={{ fontSize: 11, color: projEpochs > 0 ? "var(--accent2)" : "var(--text2)", minWidth: 50 }}>
-            {projEpochs > 0 ? `+${projEpochs} ep (${Math.round(projEpochs * 5)}${lang === "ja" ? "日" : "d"})` : "OFF"}
+            style={{ width: 120, accentColor: "var(--accent)" }} />
+          <span style={{ fontSize: 11, color: projEpochs > 0 ? "var(--accent2)" : "var(--text2)", minWidth: 70 }}>
+            {projEpochs > 0 ? (() => { const days = Math.round(projEpochs * 5); return days >= 365 ? `+${(days/365).toFixed(1)}${lang==="ja"?"年":"y"}` : days >= 30 ? `+${Math.round(days/30)}${lang==="ja"?"ヶ月":"mo"}` : `+${days}${lang==="ja"?"日":"d"}`; })() + ` (${projEpochs}ep)` : "OFF"}
           </span>
         </div>
         {/* Projection window (trend basis) — only show when projection is on */}
