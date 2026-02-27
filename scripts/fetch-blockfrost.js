@@ -3,19 +3,21 @@
  * Blockfrost Data Fetcher for Cardano DRep Governance Dashboard
  *
  * Caching strategy:
- *   - Expired proposal votes (DRep): cached permanently (immutable)
+ *   - Expired proposal votes (DRep + CC): cached permanently (immutable)
+ *   - Active proposal votes (DRep + CC): cached, overlaid with fresh data each run
  *   - DRep metadata (name, image): cached for 6 hours
- *   - DRep details (stake, delegators): always fresh
- *   - Active proposal votes: always fresh
+ *   - DRep details (stake, delegators): tiered refresh
+ *       - Top 300 by stake: every 2 hours
+ *       - Rest: every 12 hours
  *   - Expired proposal details: cached permanently
+ *   - CC members + votes: cached, refreshed each run
  *
  * Output: data/dreps.json, data/proposals.json, data/votes.json,
  *         data/simulator.json, data/meta.json,
  *         data/drep-history.json (accumulating stake snapshots),
  *         data/vote-cache.json (persistent cache)
  *
- * Note: CC (Constitutional Committee) vote data is maintained as static JSON files
- *       (cc-members.json, cc-votes.json, cc-rationales.json) and not fetched via API.
+ * CC (Constitutional Committee) data fetched via Koios API (committee_info, committee_votes).
  */
 
 const https = require("https");
@@ -136,11 +138,11 @@ function loadCache() {
   try {
     if (fs.existsSync(CACHE_FILE)) {
       const raw = JSON.parse(fs.readFileSync(CACHE_FILE, "utf8"));
-      console.log(`  Cache loaded: ${Object.keys(raw.expiredVotes || {}).length} expired DRep votes`);
+      console.log(`  Cache loaded: ${Object.keys(raw.expiredVotes || {}).length} expired + ${Object.keys(raw.activeVotes || {}).length} active DRep votes, ${Object.keys(raw.ccExpiredVotes || {}).length} expired + ${Object.keys(raw.ccActiveVotes || {}).length} active CC votes, ${Object.keys(raw.drepDetails || {}).length} cached details`);
       return raw;
     }
   } catch (e) { console.warn("  Cache load error:", e.message); }
-  return { expiredVotes: {}, proposals: {}, proposalDetails: [], drepMetadata: {}, drepMetadataUpdatedAt: 0 };
+  return { expiredVotes: {}, activeVotes: {}, proposals: {}, proposalDetails: [], drepMetadata: {}, drepMetadataUpdatedAt: 0, drepDetails: {}, drepStakeRank: [], ccExpiredVotes: {}, ccExpiredRationales: {}, ccActiveVotes: {}, ccActiveRationales: {}, ccMembers: [] };
 }
 
 function saveCache(cache) {
@@ -171,16 +173,45 @@ async function main() {
   const drepIds = await fetchAllPages("/governance/dreps", MAX_PAGES);
   console.log(`  Found ${drepIds.length} DRep IDs`);
 
-  // ─── 2. DRep details + metadata ───────────────────────────
-  console.log(`\n[2/8] Fetching DRep details${useMetadataCache ? " (metadata from cache)" : " + metadata"}...`);
+  // ─── 2. DRep details + metadata (tiered refresh) ─────────
+  console.log(`\n[2/8] Fetching DRep details (tiered)${useMetadataCache ? " + metadata from cache" : " + metadata"}...`);
   const cachedMeta = cache.drepMetadata || {};
+  const cachedDetails = cache.drepDetails || {};
+  const top300Set = new Set((cache.drepStakeRank || []).slice(0, 300));
+  const DETAIL_FRESH_TOP = 2 * 60 * 60 * 1000;    // 2h for top 300 by stake
+  const DETAIL_FRESH_REST = 12 * 60 * 60 * 1000;   // 12h for rest
+  const now = Date.now();
   const newDrepMetadata = {};
-  let metadataFetchCount = 0;
+  const newDrepDetails = {};
+  let metadataFetchCount = 0, detailFetchCount = 0, detailCacheCount = 0;
+
+  console.log(`  Tiered refresh: top ${top300Set.size} cached as priority (2h), rest 12h`);
 
   const dreps = await batchProcess(drepIds, async (d) => {
-    let detail;
-    try { detail = await fetchJSON(`/governance/dreps/${d.drep_id}`); } catch (e) { return null; }
-    if (!detail) return null;
+    // Tiered detail refresh: top 300 every 2h, rest every 12h
+    const cd = cachedDetails[d.drep_id];
+    const isTop = top300Set.has(d.drep_id);
+    const threshold = isTop ? DETAIL_FRESH_TOP : DETAIL_FRESH_REST;
+    const needsFresh = !cd || !cd.fetchedAt || (now - cd.fetchedAt) >= threshold;
+
+    let amount, delegators, lastActiveEpoch;
+    if (needsFresh) {
+      let detail;
+      try { detail = await fetchJSON(`/governance/dreps/${d.drep_id}`); } catch (e) { return null; }
+      if (!detail) return null;
+      amount = detail.amount || "0";
+      delegators = detail.delegators_count || 0;
+      lastActiveEpoch = detail.active_epoch || 0;
+      newDrepDetails[d.drep_id] = { amount, delegators, last_active_epoch: lastActiveEpoch, fetchedAt: now };
+      detailFetchCount++;
+    } else {
+      amount = cd.amount;
+      delegators = cd.delegators;
+      lastActiveEpoch = cd.last_active_epoch || 0;
+      newDrepDetails[d.drep_id] = cd; // preserve cache entry
+      detailCacheCount++;
+    }
+
     let name = null, image_url = null;
     if (useMetadataCache && cachedMeta[d.drep_id]) {
       name = cachedMeta[d.drep_id].name;
@@ -199,13 +230,13 @@ async function main() {
       newDrepMetadata[d.drep_id] = { name, image_url };
     }
     return {
-      drep_id: d.drep_id, name, amount: detail.amount || "0", image_url,
-      delegators: detail.delegators_count || 0,
-      last_active_epoch: detail.active_epoch || 0
+      drep_id: d.drep_id, name, amount, image_url,
+      delegators, last_active_epoch: lastActiveEpoch
     };
   }, "DReps");
   dreps.sort((a, b) => Number(b.amount) - Number(a.amount));
-  console.log(`  Got ${dreps.length} DReps`);
+  const newStakeRank = dreps.slice(0, 300).map(d => d.drep_id);
+  console.log(`  Got ${dreps.length} DReps (details: ${detailFetchCount} fresh, ${detailCacheCount} cached)`);
   if (useMetadataCache) console.log(`  Metadata: ${Object.keys(cachedMeta).length} from cache, ${metadataFetchCount} fresh`);
 
   // ─── 3. DRep votes ────────────────────────────────────────
@@ -219,10 +250,13 @@ async function main() {
   if (cache.expiredVotes) {
     Object.entries(cache.expiredVotes).forEach(([k, v]) => { voteMap[k] = v; cachedVoteCount++; });
   }
+  if (cache.activeVotes) {
+    Object.entries(cache.activeVotes).forEach(([k, v]) => { voteMap[k] = v; cachedVoteCount++; });
+  }
   if (cache.proposals) {
     Object.entries(cache.proposals).forEach(([k, v]) => { proposalSet[k] = v; });
   }
-  console.log(`  Restored ${cachedVoteCount} cached expired DRep votes`);
+  console.log(`  Restored ${cachedVoteCount} cached DRep votes (expired + active)`);
 
   await batchProcess(dreps, async (d) => {
     let votes;
@@ -293,26 +327,20 @@ async function main() {
   Object.values(drepVoteCounts).forEach(c => { if (c > maxVotes) maxVotes = c; });
 
   const expiredVotes = {};
+  const activeVotes = {};
   Object.entries(voteMap).forEach(([k, v]) => {
     const propKey = k.split("__")[1];
     const exp = proposalExpirations[propKey] || 0;
-    if (exp > 0 && exp < currentEpoch) expiredVotes[k] = v;
+    if (exp > 0 && exp < currentEpoch) {
+      expiredVotes[k] = v;
+    } else {
+      activeVotes[k] = v; // active or unknown expiration — cache for next run
+    }
   });
   const expiredProposalDetails = proposals.filter(p => p.expiration > 0 && p.expiration < currentEpoch);
-  console.log(`  Caching: ${Object.keys(expiredVotes).length} DRep votes, ${expiredProposalDetails.length} proposals`);
-
-  saveCache({
-    expiredVotes,
-    proposals: Object.fromEntries(Object.entries(proposalSet).filter(([k]) => {
-      const exp = proposalExpirations[k] || 0;
-      return exp > 0 && exp < currentEpoch;
-    })),
-    proposalDetails: expiredProposalDetails,
-    drepVoteCounts, drepVotedProposals,
-    drepMetadata: newDrepMetadata,
-    drepMetadataUpdatedAt: useMetadataCache ? cache.drepMetadataUpdatedAt : Date.now(),
-    currentEpoch
-  });
+  console.log(`  DRep vote cache: ${Object.keys(expiredVotes).length} expired (permanent), ${Object.keys(activeVotes).length} active`);
+  console.log(`  Proposal cache: ${expiredProposalDetails.length} expired proposals`);
+  // Note: saveCache moved to after CC section (step 7) to include all data
 
   // ─── 6. Stake history snapshot ──────────────────────────────
   console.log("\n[6/8] Updating stake history snapshot...");
@@ -353,6 +381,18 @@ async function main() {
   let ccVoteMap = {};
   let ccRationales = {};
 
+  // Load cached CC votes (expired + active)
+  const cachedCCExpired = cache.ccExpiredVotes || {};
+  const cachedCCActive = cache.ccActiveVotes || {};
+  const cachedCCRatExpired = cache.ccExpiredRationales || {};
+  const cachedCCRatActive = cache.ccActiveRationales || {};
+  Object.assign(ccVoteMap, cachedCCExpired, cachedCCActive);
+  Object.assign(ccRationales, cachedCCRatExpired, cachedCCRatActive);
+  let ccCachedCount = Object.keys(cachedCCExpired).length + Object.keys(cachedCCActive).length;
+  if (ccCachedCount > 0) {
+    console.log(`  Restored ${ccCachedCount} cached CC votes (${Object.keys(cachedCCExpired).length} expired, ${Object.keys(cachedCCActive).length} active)`);
+  }
+
   try {
     // 7a. Get committee info
     const ccInfoRaw = await koiosGet("/committee_info");
@@ -362,18 +402,26 @@ async function main() {
     if (ccInfo && ccInfo.members && ccInfo.members.length > 0) {
       console.log(`  Committee: quorum ${ccInfo.quorum_numerator}/${ccInfo.quorum_denominator}, ${ccInfo.members.length} members`);
 
+      // Build set of expired proposal IDs for cache checking
+      const expiredProposalIds = new Set();
+      proposals.forEach(p => {
+        if (p.expiration > 0 && p.expiration < currentEpoch) {
+          expiredProposalIds.add(p.proposal_id);
+        }
+      });
+
       // 7b. For each member, fetch votes
+      let ccFreshVoteCount = 0;
       for (const member of ccInfo.members) {
         const hotId = member.cc_hot_id || member.cc_hot_hex;
         const coldId = member.cc_cold_id || member.cc_cold_hex;
         if (!hotId) continue;
 
-        // Derive a short readable name from member data or use cold ID
         const shortName = member.cc_cold_id
           ? member.cc_cold_id.replace("cc_cold1", "").slice(0, 12)
           : (coldId || hotId).slice(0, 16);
 
-        // Fetch votes for this member
+        // Fetch votes for this member (Koios returns all votes)
         let memberVotes = [];
         try {
           memberVotes = await koiosGet("/committee_votes", { _cc_hot_id: hotId }) || [];
@@ -395,12 +443,12 @@ async function main() {
           expiration_epoch: member.expiration_epoch || null
         });
 
-        // Build vote map: "cc_id__proposal_id" => "Yes"/"No"/"Abstain"
+        // Build vote map (includes both cached expired + fresh active)
         for (const v of memberVotes) {
           const proposalId = v.proposal_id || `${v.proposal_tx_hash}#${v.proposal_index}`;
-          ccVoteMap[`${shortName}__${proposalId}`] = v.vote; // "Yes", "No", "Abstain"
+          ccVoteMap[`${shortName}__${proposalId}`] = v.vote;
+          ccFreshVoteCount++;
 
-          // Extract rationale URL if available
           if (v.meta_url) {
             const rUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
             if (rUrl) ccRationales[`${shortName}__${proposalId}`] = rUrl;
@@ -409,13 +457,58 @@ async function main() {
 
         console.log(`    ${shortName}: ${memberVotes.length} votes`);
       }
-      console.log(`  Total: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes, ${Object.keys(ccRationales).length} rationales`);
+      console.log(`  Total: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes (${ccCachedCount} cached, ${ccFreshVoteCount} fresh), ${Object.keys(ccRationales).length} rationales`);
     } else {
       console.log("  No committee info from Koios, keeping existing static files");
     }
   } catch (e) {
     console.log(`  Koios CC error: ${e.message} — keeping existing static files`);
   }
+
+  // Build CC vote cache (expired = permanent, active = refreshable)
+  const ccExpiredVotes = {};
+  const ccExpiredRationales = {};
+  const ccActiveVotes = {};
+  const ccActiveRationales = {};
+  Object.entries(ccVoteMap).forEach(([k, v]) => {
+    const propId = k.split("__")[1];
+    const exp = proposalExpirations[propId] || 0;
+    if (exp > 0 && exp < currentEpoch) {
+      ccExpiredVotes[k] = v;
+    } else {
+      ccActiveVotes[k] = v;
+    }
+  });
+  Object.entries(ccRationales).forEach(([k, v]) => {
+    const propId = k.split("__")[1];
+    const exp = proposalExpirations[propId] || 0;
+    if (exp > 0 && exp < currentEpoch) {
+      ccExpiredRationales[k] = v;
+    } else {
+      ccActiveRationales[k] = v;
+    }
+  });
+  console.log(`  CC vote cache: ${Object.keys(ccExpiredVotes).length} expired, ${Object.keys(ccActiveVotes).length} active`);
+
+  // ─── Save unified cache ────────────────────────────────────
+  saveCache({
+    expiredVotes,
+    activeVotes,
+    proposals: Object.fromEntries(Object.entries(proposalSet).filter(([k]) => {
+      const exp = proposalExpirations[k] || 0;
+      return exp > 0 && exp < currentEpoch;
+    })),
+    proposalDetails: expiredProposalDetails,
+    drepVoteCounts, drepVotedProposals,
+    drepMetadata: newDrepMetadata,
+    drepMetadataUpdatedAt: useMetadataCache ? cache.drepMetadataUpdatedAt : Date.now(),
+    drepDetails: newDrepDetails,
+    drepStakeRank: newStakeRank,
+    ccExpiredVotes, ccExpiredRationales,
+    ccActiveVotes, ccActiveRationales,
+    ccMembers,
+    currentEpoch
+  });
 
   // ─── 8. Write output files ────────────────────────────────
   console.log("\n[8/8] Writing JSON files...");
