@@ -200,14 +200,39 @@ async function main() {
 
   console.log(`  Tiered refresh: top ${top300Set.size} cached as priority (2h), rest 12h`);
 
-  const dreps = await batchProcess(drepIds, async (d) => {
-    // Tiered detail refresh: top 300 every 2h, rest every 12h
+  // Separate DReps into cached vs needs-fresh for fast path
+  const needsFreshIds = [];
+  const cachedDreps = [];
+  for (const d of drepIds) {
+    const cd = cachedDetails[d.drep_id];
+    const isTop = top300Set.has(d.drep_id);
+    const threshold = isTop ? DETAIL_FRESH_TOP : DETAIL_FRESH_REST;
+    const fresh = !cd || !cd.fetchedAt || (now - cd.fetchedAt) >= threshold;
+    const metaFresh = useMetadataCache && cachedMeta[d.drep_id];
+    if (!fresh && metaFresh) {
+      // Full cache hit — no API calls needed
+      const meta = cachedMeta[d.drep_id] || {};
+      newDrepDetails[d.drep_id] = cd;
+      newDrepMetadata[d.drep_id] = meta;
+      cachedDreps.push({
+        drep_id: d.drep_id, name: meta.name || null, amount: cd.amount || "0",
+        image_url: meta.image_url || null, delegators: cd.delegators || 0,
+        last_active_epoch: cd.last_active_epoch || 0
+      });
+      detailCacheCount++;
+    } else {
+      needsFreshIds.push(d);
+    }
+  }
+  console.log(`  Fast path: ${cachedDreps.length} fully cached, ${needsFreshIds.length} need API calls`);
+
+  // Only run batchProcess for DReps that need fresh data
+  const freshDreps = needsFreshIds.length > 0 ? await batchProcess(needsFreshIds, async (d) => {
+    let amount, delegators, lastActiveEpoch;
     const cd = cachedDetails[d.drep_id];
     const isTop = top300Set.has(d.drep_id);
     const threshold = isTop ? DETAIL_FRESH_TOP : DETAIL_FRESH_REST;
     const needsFresh = !cd || !cd.fetchedAt || (now - cd.fetchedAt) >= threshold;
-
-    let amount, delegators, lastActiveEpoch;
     if (needsFresh) {
       let detail;
       try { detail = await fetchJSON(`/governance/dreps/${d.drep_id}`); } catch (e) { return null; }
@@ -218,17 +243,13 @@ async function main() {
       newDrepDetails[d.drep_id] = { amount, delegators, last_active_epoch: lastActiveEpoch, fetchedAt: now };
       detailFetchCount++;
     } else {
-      amount = cd.amount;
-      delegators = cd.delegators;
-      lastActiveEpoch = cd.last_active_epoch || 0;
-      newDrepDetails[d.drep_id] = cd; // preserve cache entry
+      amount = cd.amount; delegators = cd.delegators; lastActiveEpoch = cd.last_active_epoch || 0;
+      newDrepDetails[d.drep_id] = cd;
       detailCacheCount++;
     }
-
     let name = null, image_url = null;
     if (useMetadataCache && cachedMeta[d.drep_id]) {
-      name = cachedMeta[d.drep_id].name;
-      image_url = cachedMeta[d.drep_id].image_url;
+      name = cachedMeta[d.drep_id].name; image_url = cachedMeta[d.drep_id].image_url;
       newDrepMetadata[d.drep_id] = cachedMeta[d.drep_id];
     } else {
       try {
@@ -242,11 +263,10 @@ async function main() {
       } catch (e) {}
       newDrepMetadata[d.drep_id] = { name, image_url };
     }
-    return {
-      drep_id: d.drep_id, name, amount, image_url,
-      delegators, last_active_epoch: lastActiveEpoch
-    };
-  }, "DReps");
+    return { drep_id: d.drep_id, name, amount, image_url, delegators, last_active_epoch: lastActiveEpoch };
+  }, "DReps") : [];
+
+  const dreps = [...cachedDreps, ...freshDreps];
   dreps.sort((a, b) => Number(b.amount) - Number(a.amount));
   const newStakeRank = dreps.slice(0, 300).map(d => d.drep_id);
   console.log(`  Got ${dreps.length} DReps (details: ${detailFetchCount} fresh, ${detailCacheCount} cached)`);
@@ -271,7 +291,12 @@ async function main() {
   }
   console.log(`  Restored ${cachedVoteCount} cached DRep votes (expired + active)`);
 
-  await batchProcess(dreps, async (d) => {
+  // Only fetch votes for DReps with non-zero stake (skip inactive/empty DReps)
+  const voteFetchDreps = dreps.filter(d => d.drep_id === "drep_always_no_confidence" || Number(d.amount) > 0);
+  const skippedZeroStake = dreps.length - voteFetchDreps.length;
+  console.log(`  Fetching votes for ${voteFetchDreps.length} active DReps (skipping ${skippedZeroStake} with 0 stake)`);
+
+  await batchProcess(voteFetchDreps, async (d) => {
     let votes;
     try { votes = await fetchAllPages(`/governance/dreps/${d.drep_id}/votes`, 10); } catch (e) { return null; }
     if (!votes || votes.length === 0) return null;
