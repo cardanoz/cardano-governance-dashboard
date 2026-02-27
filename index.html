@@ -935,11 +935,13 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
     });
   },[ccProposals,simEpFrom,simEpTo,currentEpoch]);
 
-  // CC Simulator data — per-member: only eligible GAs, respects member start epoch
+  // CC Simulator data — per-member: all expired CC GAs in period, minus ineligible (by member start)
+  // Denominator = all simProps after member's start epoch (not using eligible_proposals which only has voted ones)
+  // Voted = proposals with an actual vote; Missed = denominator - voted
   const simData = React.useMemo(()=>{
     return fMembers.map(cc=>{
-      // Only count proposals this member is eligible for
-      const memberProps = simProps.filter(p=>isEligible(cc.cc_id, p.proposal_id));
+      const memberMin = ccMemberMinEpoch(cc.cc_id);
+      const memberProps = simProps.filter(p=>Number(p.epoch_no) >= memberMin);
       const totalEligible = memberProps.length;
       const voted = memberProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
       const missed = totalEligible - voted;
