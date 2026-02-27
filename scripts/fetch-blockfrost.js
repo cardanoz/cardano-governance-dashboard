@@ -38,6 +38,19 @@ const METADATA_CACHE_HOURS = 6;
 
 const KOIOS_BASE = "https://api.koios.rest/api/v1";
 
+// CC member display names — keyed by shortHash (first 12 chars of cc_cold_id after "cc_cold1")
+// Update when CC membership changes (elections, resignations, etc.)
+const CC_NAMES = {
+  "zwz2a08a8cqd": "Cardano Curia",
+  "zwt49epsdedw": "Tingvard",
+  "zwwv8uu8vgl5": "Eastern Cardano Council",
+  "zvvcpkl3443y": "Ace Alliance",
+  "ztwq6mh5jkgw": "Cardano Japan Council",
+  "zgf5jdusmxcr": "Phil_uplc",
+  "zvt0am7zyhsx": "KtorZ",
+  // "____________": "Cardano Atlantic Council",  // add when visible in Koios
+};
+
 let apiCalls = 0;
 let lastFetchTime = 0;
 
@@ -422,16 +435,17 @@ async function main() {
         const coldId = member.cc_cold_id || member.cc_cold_hex;
         if (!hotId) continue;
 
-        const shortName = member.cc_cold_id
+        const shortHash = member.cc_cold_id
           ? member.cc_cold_id.replace("cc_cold1", "").slice(0, 12)
           : (coldId || hotId).slice(0, 16);
+        const displayName = CC_NAMES[shortHash] || shortHash;
 
         // Fetch votes for this member (Koios returns all votes)
         let memberVotes = [];
         try {
           memberVotes = await koiosGet("/committee_votes", { _cc_hot_id: hotId }) || [];
         } catch (e) {
-          console.log(`    Vote fetch error for ${shortName}: ${e.message}`);
+          console.log(`    Vote fetch error for ${shortHash}: ${e.message}`);
         }
 
         // Always use txHash#index format to match Blockfrost proposal IDs
@@ -441,10 +455,10 @@ async function main() {
         });
 
         ccMembers.push({
-          cc_id: shortName,
+          cc_id: shortHash,
           cc_hot_id: hotId,
           cc_cold_id: coldId,
-          name: shortName,
+          name: displayName,
           vote_count: memberVotes.length,
           eligible_proposals: eligibleProposals,
           eligible_count: eligibleProposals.length,
@@ -457,16 +471,16 @@ async function main() {
           const proposalId = (v.proposal_tx_hash != null && v.proposal_index != null)
             ? `${v.proposal_tx_hash}#${v.proposal_index}`
             : (v.proposal_id || "unknown");
-          ccVoteMap[`${shortName}__${proposalId}`] = v.vote;
+          ccVoteMap[`${shortHash}__${proposalId}`] = v.vote;
           ccFreshVoteCount++;
 
           if (v.meta_url) {
             const rUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
-            if (rUrl) ccRationales[`${shortName}__${proposalId}`] = rUrl;
+            if (rUrl) ccRationales[`${shortHash}__${proposalId}`] = rUrl;
           }
         }
 
-        console.log(`    ${shortName}: ${memberVotes.length} votes`);
+        console.log(`    ${displayName} (${shortHash}): ${memberVotes.length} votes`);
       }
       console.log(`  Total: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes (${ccCachedCount} cached, ${ccFreshVoteCount} fresh), ${Object.keys(ccRationales).length} rationales`);
     } else {
