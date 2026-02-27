@@ -288,19 +288,24 @@ async function main() {
 
   const hasEpoch = history.some(s => s.epoch === currentEpoch);
   if (!hasEpoch) {
-    const top50 = dreps.slice(0, 50).map(d => ({
+    // Exclude: drep_always_abstain, inactive (0 stake) DReps
+    // Include: drep_always_no_confidence (counts as real voting power)
+    const activeDreps = dreps.filter(d =>
+      d.drep_id !== "drep_always_abstain" && Number(d.amount) > 0
+    );
+    const top50 = activeDreps.slice(0, 50).map(d => ({
       id: d.drep_id, name: d.name, amount: d.amount, delegators: d.delegators
     }));
-    const totalStake = dreps.reduce((s, d) => s + Number(d.amount), 0);
+    const totalStake = activeDreps.reduce((s, d) => s + Number(d.amount), 0);
     history.push({
       epoch: currentEpoch,
       timestamp: Date.now(),
       total_stake: String(totalStake),
-      drep_count: dreps.length,
+      drep_count: activeDreps.length,
       top: top50
     });
     history.sort((a, b) => a.epoch - b.epoch);
-    console.log(`  Stake snapshot added: epoch ${currentEpoch}, ${dreps.length} DReps, total ${(totalStake / 1e6).toFixed(0)} ADA`);
+    console.log(`  Stake snapshot added: epoch ${currentEpoch}, ${activeDreps.length} active DReps (excl abstain+inactive), total ${(totalStake / 1e6).toFixed(0)} ADA`);
   } else {
     console.log(`  Epoch ${currentEpoch} already in history (${history.length} snapshots total)`);
   }

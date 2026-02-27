@@ -1068,187 +1068,509 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   );
 }
 
-// Stake History Tab — DRep stake over time with charts and tables
+// Stake History Tab — DRep stake distribution over time
 // ════════════════════════════════════════════════════════════════
-function StakeHistoryTab({ history, T, lang }) {
-  const [selectedDrep, setSelectedDrep] = React.useState(null);
-  const [showDrepPicker, setShowDrepPicker] = React.useState(false);
-  const [drepSearch, setDrepSearch] = React.useState("");
-  const totalChartRef = React.useRef(null);
-  const totalCanvasRef = React.useRef(null);
-  const drepChartRef = React.useRef(null);
-  const drepCanvasRef = React.useRef(null);
 
-  // Get all unique DReps across history
-  const allDreps = React.useMemo(() => {
-    const map = {};
-    history.forEach(s => {
-      (s.top || []).forEach(d => {
-        if (!map[d.id]) map[d.id] = d.name || d.id.slice(0,20)+"…";
+// Entity merge rules: group DReps that belong to same entity
+const ENTITY_MERGES = {
+  "Yoroi + EMURGO": d => d.name && (d.name.includes("Yoroi") || d.name === "EMURGO")
+};
+
+// Filter out auto-mechanism DReps and inactive from history snapshots
+function sanitizeHistory(history) {
+  return history.map(s => {
+    const filtered = (s.top || []).filter(d =>
+      d.id !== "drep_always_abstain" && Number(d.amount) > 0
+    );
+    const hadAbstain = (s.top || []).find(d => d.id === "drep_always_abstain");
+    const totalRaw = Number(s.total_stake);
+    const abstainAmt = hadAbstain ? Number(hadAbstain.amount) : 0;
+    const inactiveAmt = (s.top || []).filter(d => d.id !== "drep_always_abstain" && Number(d.amount) <= 0)
+      .reduce((sum, d) => sum + Number(d.amount), 0);
+    return {
+      ...s,
+      top: filtered,
+      total_stake: String(totalRaw - abstainAmt - inactiveAmt),
+      drep_count: filtered.length
+    };
+  });
+}
+
+function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
+  // Merge: sanitize stored history + append live DRep snapshot if newer
+  const history = React.useMemo(() => {
+    const base = sanitizeHistory(rawHistory);
+    if (!liveDreps || liveDreps.length === 0) return base;
+    // Build live snapshot from current dreps data
+    const active = liveDreps.filter(d => d.drep_id !== "drep_always_abstain" && Number(d.amount) > 0);
+    if (active.length === 0) return base;
+    const top50 = active.slice(0, 50).map(d => ({
+      id: d.drep_id, name: d.name, amount: d.amount, delegators: d.delegators
+    }));
+    const totalStake = active.reduce((s, d) => s + Number(d.amount), 0);
+    // Estimate current epoch from timestamp
+    const nowSec = Math.floor(Date.now() / 1000);
+    const currentEpoch = 208 + Math.floor((nowSec - 1596059091) / 432000);
+    // Only add if we don't already have this epoch
+    const lastEpoch = base.length > 0 ? base[base.length - 1].epoch : 0;
+    if (currentEpoch > lastEpoch) {
+      base.push({
+        epoch: currentEpoch, timestamp: Date.now(),
+        total_stake: String(totalStake), drep_count: active.length,
+        top: top50, live: true
       });
-    });
-    return Object.entries(map).sort((a,b) => a[1].localeCompare(b[1]));
-  }, [history]);
+    }
+    return base;
+  }, [rawHistory, liveDreps]);
+  const [topN, setTopN] = React.useState(10);
+  const [chartMode, setChartMode] = React.useState("ada"); // "ada" | "pct"
+  const [mergeEntities, setMergeEntities] = React.useState(false);
+  const [projEpochs, setProjEpochs] = React.useState(0); // 0 = off, else number of future epochs
+  const [projWindow, setProjWindow] = React.useState(5); // how many recent epochs to use for trend
+  const [displayRange, setDisplayRange] = React.useState("all"); // "1m" | "3m" | "6m" | "1y" | "2y" | "all"
+  const stackedRef = React.useRef(null);
+  const stackedCanvasRef = React.useRef(null);
+  const concRef = React.useRef(null);
+  const concCanvasRef = React.useRef(null);
 
-  // Total stake chart
-  React.useEffect(() => {
-    if (!totalCanvasRef.current || history.length === 0 || typeof Chart === "undefined") return;
-    if (totalChartRef.current) totalChartRef.current.destroy();
-    const labels = history.map(s => {
+  const COLORS = [
+    "#3b82f6","#f87171","#34d399","#fbbf24","#a78bfa",
+    "#fb923c","#38bdf8","#f472b6","#4ade80","#e879f9",
+    "#facc15","#2dd4bf","#818cf8","#fb7185","#22d3ee",
+    "#a3e635","#c084fc","#f97316","#67e8f9","#d946ef"
+  ];
+
+  // Filter history by display range
+  const rangedHistory = React.useMemo(() => {
+    if (displayRange === "all" || history.length === 0) return history;
+    const rangeMs = { "1m": 30, "3m": 90, "6m": 180, "1y": 365, "2y": 730 };
+    const days = rangeMs[displayRange] || Infinity;
+    const cutoff = Date.now() - days * 86400000;
+    const filtered = history.filter(s => {
+      const ts = s.timestamp || epochToTimestamp(s.epoch) * 1000;
+      return ts >= cutoff;
+    });
+    return filtered.length > 0 ? filtered : history.slice(-1); // at least 1 point
+  }, [history, displayRange]);
+
+  // Process history: optionally merge entities
+  const processedHistory = React.useMemo(() => {
+    if (!mergeEntities) return rangedHistory;
+    return rangedHistory.map(s => {
+      const top = [...(s.top || [])];
+      // For each merge rule, combine matching DReps
+      Object.entries(ENTITY_MERGES).forEach(([name, matchFn]) => {
+        const matching = top.filter(matchFn);
+        if (matching.length <= 1) return;
+        const mergedAmount = matching.reduce((sum, d) => sum + Number(d.amount), 0);
+        const mergedDelegators = matching.reduce((sum, d) => sum + (d.delegators || 0), 0);
+        const ids = matching.map(d => d.id);
+        // Remove all matching
+        for (let i = top.length - 1; i >= 0; i--) {
+          if (ids.includes(top[i].id)) top.splice(i, 1);
+        }
+        // Add merged entry
+        top.push({ id: "merged__" + name, name, amount: String(mergedAmount), delegators: mergedDelegators });
+      });
+      top.sort((a, b) => Number(b.amount) - Number(a.amount));
+      return { ...s, top };
+    });
+  }, [rangedHistory, mergeEntities]);
+
+  // Identify top N DReps by latest snapshot — sorted by stake descending
+  const topDreps = React.useMemo(() => {
+    if (processedHistory.length === 0) return [];
+    const latest = processedHistory[processedHistory.length - 1];
+    return (latest.top || []).slice(0, topN).map((d, i) => ({
+      id: d.id, name: d.name || d.id.slice(0, 16) + "…", color: COLORS[i % COLORS.length]
+    }));
+  }, [processedHistory, topN]);
+
+  // Simple trend projection: average per-epoch change over recent 'window' points, extended forward
+  function simpleProject(ys, window, offset) {
+    const w = Math.min(window, ys.length);
+    const recent = ys.slice(-w);
+    const n = recent.length;
+    if (n < 2) return recent[n - 1] || 0;
+    const avgChange = (recent[n - 1] - recent[0]) / (n - 1);
+    return recent[n - 1] + avgChange * offset;
+  }
+
+  const labels = React.useMemo(() => {
+    const base = processedHistory.map(s => {
       const ts = s.timestamp || epochToTimestamp(s.epoch) * 1000;
       const d = new Date(ts);
-      return `E${s.epoch} (${d.getMonth()+1}/${d.getDate()})`;
+      return `E${s.epoch} (${d.getMonth() + 1}/${d.getDate()})`;
     });
-    totalChartRef.current = new Chart(totalCanvasRef.current, {
+    if (projEpochs > 0 && processedHistory.length > 0) {
+      const lastEpoch = processedHistory[processedHistory.length - 1].epoch;
+      for (let j = 1; j <= projEpochs; j++) {
+        const fe = lastEpoch + j * 2;
+        const ts = epochToTimestamp(fe) * 1000;
+        const d = new Date(ts);
+        base.push(`E${fe} (${d.getMonth() + 1}/${d.getDate()}) ⟶`);
+      }
+    }
+    return base;
+  }, [processedHistory, projEpochs]);
+
+  // Stacked area chart — ADA or %, reversed order so largest on top
+  React.useEffect(() => {
+    if (!stackedCanvasRef.current || processedHistory.length === 0 || topDreps.length === 0 || typeof Chart === "undefined") return;
+    if (stackedRef.current) stackedRef.current.destroy();
+
+    const isPct = chartMode === "pct";
+    const nHist = processedHistory.length;
+    const nProj = projEpochs;
+
+    // Always compute projections in ADA first, then convert to % if needed
+    const reversedDreps = [...topDreps].reverse();
+
+    // Step 1: Build ADA series + ADA projections for each DRep
+    const adaSeries = {}; // drep.id → [ada values including proj]
+    reversedDreps.forEach(drep => {
+      const adaHist = processedHistory.map(s => {
+        const found = (s.top || []).find(d => d.id === drep.id);
+        return found ? Math.round(Number(found.amount) / 1e6) : 0;
+      });
+      const proj = [];
+      if (nProj > 0) { for (let j = 1; j <= nProj; j++) proj.push(Math.max(0, Math.round(simpleProject(adaHist, projWindow, j)))); }
+      adaSeries[drep.id] = [...adaHist, ...proj];
+    });
+
+    // Others ADA series
+    const othersAdaHist = processedHistory.map(s => {
+      const topSum = topDreps.reduce((sum, drep) => {
+        const found = (s.top || []).find(d => d.id === drep.id);
+        return sum + (found ? Number(found.amount) : 0);
+      }, 0);
+      return Math.round((Number(s.total_stake) - topSum) / 1e6);
+    });
+    const othersProj = [];
+    if (nProj > 0) { for (let j = 1; j <= nProj; j++) othersProj.push(Math.max(0, Math.round(simpleProject(othersAdaHist, projWindow, j)))); }
+    const othersAda = [...othersAdaHist, ...othersProj];
+
+    // Step 2: If % mode, compute totals per point then convert
+    const toDisplay = (adaArr, allAdaArrays) => {
+      if (!isPct) return adaArr;
+      return adaArr.map((v, i) => {
+        const total = allAdaArrays.reduce((s, a) => s + (a[i] || 0), 0);
+        return total > 0 ? (v / total * 100) : 0;
+      });
+    };
+    const allArrays = [...reversedDreps.map(d => adaSeries[d.id]), othersAda];
+
+    const datasets = reversedDreps.map((drep) => ({
+      label: drep.name,
+      data: toDisplay(adaSeries[drep.id], allArrays),
+      backgroundColor: drep.color + "cc", borderColor: drep.color,
+      borderWidth: 1, fill: true, tension: 0.3, pointRadius: 0,
+      segment: nProj > 0 ? { borderDash: ctx => ctx.p0DataIndex >= nHist - 1 ? [4, 4] : undefined } : undefined
+    }));
+
+    // Others goes first (bottom of stack) since we reversed the order
+    datasets.unshift({
+      label: lang === "ja" ? "その他" : "Others",
+      data: toDisplay(othersAda, allArrays),
+      backgroundColor: "rgba(75,85,99,0.5)", borderColor: "#4b5563",
+      borderWidth: 1, fill: true, tension: 0.3, pointRadius: 0,
+      segment: nProj > 0 ? { borderDash: ctx => ctx.p0DataIndex >= nHist - 1 ? [4, 4] : undefined } : undefined
+    });
+
+    // Projection boundary annotation
+    const projLine = nProj > 0 ? [{
+      type: "line", xMin: nHist - 0.5, xMax: nHist - 0.5,
+      borderColor: "rgba(255,255,255,0.3)", borderWidth: 2, borderDash: [6, 4],
+      label: { display: true, content: lang === "ja" ? "予測→" : "Projection→",
+        position: "start", color: "#8692ab", font: { size: 10 } }
+    }] : [];
+
+    stackedRef.current = new Chart(stackedCanvasRef.current, {
       type: "line",
-      data: {
-        labels,
-        datasets: [{
-          label: T.hist_total_stake,
-          data: history.map(s => Math.round(Number(s.total_stake) / 1e6)),
-          borderColor: "#3b82f6", backgroundColor: "rgba(59,130,246,0.1)",
-          fill: true, tension: 0.3, pointRadius: 4, pointHoverRadius: 6
-        }, {
-          label: T.hist_drep_count,
-          data: history.map(s => s.drep_count),
-          borderColor: "#34d399", backgroundColor: "transparent",
-          fill: false, tension: 0.3, pointRadius: 3, yAxisID: "y2"
-        }]
-      },
+      data: { labels, datasets },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: "#e8ecf4" } }, title: { display: true, text: T.hist_chart_total, color: "#e8ecf4", font: { size: 14 } } },
+        interaction: { mode: "index", intersect: false },
+        plugins: {
+          legend: { labels: { color: "#e8ecf4", font: { size: 10 }, boxWidth: 12, padding: 8 }, position: "bottom", maxHeight: 80,
+            // Reverse legend order so largest is first
+            reverse: true },
+          title: { display: true, text: isPct
+            ? (lang === "ja" ? "DRepステーク割合推移 (%)" : "DRep Stake Share Over Time (%)")
+            : (lang === "ja" ? "DRepステーク推移 (ADA)" : "DRep Stake Over Time (ADA)")
+              + (nProj > 0 ? (lang === "ja" ? " + 予測" : " + Projection") : ""),
+            color: "#e8ecf4", font: { size: 14 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const v = ctx.parsed.y;
+                const isProj = ctx.dataIndex >= nHist;
+                const prefix = isProj ? "📈 " : "";
+                return isPct
+                  ? `${prefix}${ctx.dataset.label}: ${v.toFixed(2)}%`
+                  : `${prefix}${ctx.dataset.label}: ${v >= 1e9 ? (v / 1e9).toFixed(2) + "B" : v >= 1e6 ? (v / 1e6).toFixed(2) + "M" : v >= 1e3 ? (v / 1e3).toFixed(0) + "K" : v} ADA`;
+              }
+            }
+          },
+          annotation: projLine.length > 0 ? { annotations: { projLine: projLine[0] } } : undefined
+        },
         scales: {
-          x: { ticks: { color: "#8692ab", maxRotation: 45 }, grid: { color: "#262f42" } },
-          y: { position: "left", ticks: { color: "#8692ab", callback: v => (v/1e9).toFixed(1)+"B" }, grid: { color: "#262f42" }, title: { display: true, text: "ADA", color: "#8692ab" } },
-          y2: { position: "right", ticks: { color: "#34d399" }, grid: { drawOnChartArea: false }, title: { display: true, text: T.hist_drep_count, color: "#34d399" } }
+          x: { ticks: { color: "#8692ab", maxRotation: 45, font: { size: 10 } }, grid: { color: "#262f42" } },
+          y: {
+            stacked: true,
+            ticks: { color: "#8692ab", callback: v => isPct ? v.toFixed(0) + "%" : (v >= 1e9 ? (v / 1e9).toFixed(1) + "B" : v >= 1e6 ? (v / 1e6).toFixed(0) + "M" : v) },
+            grid: { color: "#262f42" },
+            title: { display: true, text: isPct ? "%" : "ADA", color: "#8692ab" },
+            max: isPct ? 100 : undefined
+          }
         }
       }
     });
-    return () => { if (totalChartRef.current) totalChartRef.current.destroy(); };
-  }, [history, lang]);
+    return () => { if (stackedRef.current) stackedRef.current.destroy(); };
+  }, [processedHistory, topDreps, chartMode, projEpochs, projWindow, lang, labels]);
 
-  // Individual DRep chart
+  // Concentration chart (top 1/3/5/10 share %)
   React.useEffect(() => {
-    if (!drepCanvasRef.current || !selectedDrep || history.length === 0 || typeof Chart === "undefined") return;
-    if (drepChartRef.current) drepChartRef.current.destroy();
-    const labels = history.map(s => {
-      const ts = s.timestamp || epochToTimestamp(s.epoch) * 1000;
-      const d = new Date(ts);
-      return `E${s.epoch} (${d.getMonth()+1}/${d.getDate()})`;
-    });
-    const data = history.map(s => {
-      const found = (s.top || []).find(d => d.id === selectedDrep);
-      return found ? Math.round(Number(found.amount) / 1e6) : null;
-    });
-    const drepName = allDreps.find(([id]) => id === selectedDrep)?.[1] || selectedDrep.slice(0,20);
-    drepChartRef.current = new Chart(drepCanvasRef.current, {
+    if (!concCanvasRef.current || processedHistory.length === 0 || typeof Chart === "undefined") return;
+    if (concRef.current) concRef.current.destroy();
+    const nHist = processedHistory.length;
+
+    const makeShareData = (n) => {
+      // Project in ADA, then convert to %
+      const adaTopHist = processedHistory.map(s =>
+        Math.round((s.top || []).slice(0, n).reduce((sum, d) => sum + Number(d.amount), 0) / 1e6)
+      );
+      const adaTotalHist = processedHistory.map(s => Math.round(Number(s.total_stake) / 1e6));
+      let adaTop = [...adaTopHist], adaTotal = [...adaTotalHist];
+      if (projEpochs > 0) {
+        for (let j = 1; j <= projEpochs; j++) {
+          adaTop.push(Math.max(0, Math.round(simpleProject(adaTopHist, projWindow, j))));
+          adaTotal.push(Math.max(1, Math.round(simpleProject(adaTotalHist, projWindow, j))));
+        }
+      }
+      return adaTop.map((v, i) => adaTotal[i] > 0 ? (v / adaTotal[i] * 100) : 0);
+    };
+
+    concRef.current = new Chart(concCanvasRef.current, {
       type: "line",
       data: {
         labels,
-        datasets: [{
-          label: drepName,
-          data,
-          borderColor: "#fbbf24", backgroundColor: "rgba(251,191,36,0.1)",
-          fill: true, tension: 0.3, pointRadius: 4, spanGaps: true
-        }]
+        datasets: [
+          { label: "Top 1", data: makeShareData(1), borderColor: "#f87171", borderWidth: 2, fill: false, tension: 0.3, pointRadius: 3,
+            segment: projEpochs > 0 ? { borderDash: ctx => ctx.p0DataIndex >= nHist - 1 ? [4, 4] : undefined } : undefined },
+          { label: "Top 3", data: makeShareData(3), borderColor: "#fbbf24", borderWidth: 2, fill: false, tension: 0.3, pointRadius: 3,
+            segment: projEpochs > 0 ? { borderDash: ctx => ctx.p0DataIndex >= nHist - 1 ? [4, 4] : undefined } : undefined },
+          { label: "Top 5", data: makeShareData(5), borderColor: "#3b82f6", borderWidth: 2, fill: false, tension: 0.3, pointRadius: 3,
+            segment: projEpochs > 0 ? { borderDash: ctx => ctx.p0DataIndex >= nHist - 1 ? [4, 4] : undefined } : undefined },
+          { label: "Top 10", data: makeShareData(10), borderColor: "#34d399", borderWidth: 2, fill: false, tension: 0.3, pointRadius: 3,
+            segment: projEpochs > 0 ? { borderDash: ctx => ctx.p0DataIndex >= nHist - 1 ? [4, 4] : undefined } : undefined },
+          { label: "Top 20", data: makeShareData(20), borderColor: "#a78bfa", borderWidth: 2, fill: false, tension: 0.3, pointRadius: 3,
+            segment: projEpochs > 0 ? { borderDash: ctx => ctx.p0DataIndex >= nHist - 1 ? [4, 4] : undefined } : undefined },
+        ]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: "#e8ecf4" } }, title: { display: true, text: `${T.hist_chart_drep}: ${drepName}`, color: "#e8ecf4", font: { size: 14 } } },
+        plugins: {
+          legend: { labels: { color: "#e8ecf4", font: { size: 11 } }, position: "bottom" },
+          title: { display: true,
+            text: (lang === "ja" ? "ステーク集中度（上位N DRepの占有率 %）" : "Stake Concentration (Top N DRep Share %)")
+              + (projEpochs > 0 ? (lang === "ja" ? " + 予測" : " + Projection") : ""),
+            color: "#e8ecf4", font: { size: 14 } },
+          tooltip: { callbacks: { label: ctx => {
+            const isProj = ctx.dataIndex >= nHist;
+            return `${isProj ? "📈 " : ""}${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%`;
+          } } }
+        },
         scales: {
-          x: { ticks: { color: "#8692ab", maxRotation: 45 }, grid: { color: "#262f42" } },
-          y: { ticks: { color: "#8692ab", callback: v => v >= 1e9 ? (v/1e9).toFixed(1)+"B" : v >= 1e6 ? (v/1e6).toFixed(1)+"M" : v >= 1e3 ? (v/1e3).toFixed(0)+"K" : v }, grid: { color: "#262f42" }, title: { display: true, text: "ADA", color: "#8692ab" } }
+          x: { ticks: { color: "#8692ab", maxRotation: 45, font: { size: 10 } }, grid: { color: "#262f42" } },
+          y: { min: 0, max: 100, ticks: { color: "#8692ab", callback: v => v + "%" }, grid: { color: "#262f42" },
+            title: { display: true, text: lang === "ja" ? "占有率 (%)" : "Share (%)", color: "#8692ab" } }
         }
       }
     });
-    return () => { if (drepChartRef.current) drepChartRef.current.destroy(); };
-  }, [history, selectedDrep, lang]);
+    return () => { if (concRef.current) concRef.current.destroy(); };
+  }, [processedHistory, projEpochs, projWindow, lang, labels]);
 
   if (history.length === 0) {
-    return React.createElement("div", {style:{padding:32,textAlign:"center",color:"var(--text2)"}},
-      React.createElement("p", {style:{fontSize:16,marginBottom:8}}, T.hist_no_data)
-    );
+    return (<div style={{ padding: 32, textAlign: "center", color: "var(--text2)" }}>
+      <p style={{ fontSize: 16, marginBottom: 8 }}>{T.hist_no_data}</p>
+    </div>);
   }
 
   const fmtAda = (lovelace) => {
     const ada = Number(lovelace) / 1e6;
-    if (ada >= 1e9) return (ada/1e9).toFixed(2) + "B";
-    if (ada >= 1e6) return (ada/1e6).toFixed(2) + "M";
-    if (ada >= 1e3) return (ada/1e3).toFixed(0) + "K";
+    if (ada >= 1e9) return (ada / 1e9).toFixed(2) + "B";
+    if (ada >= 1e6) return (ada / 1e6).toFixed(2) + "M";
+    if (ada >= 1e3) return (ada / 1e3).toFixed(0) + "K";
     return ada.toFixed(0);
   };
   const fmtDate = (ts) => {
     const d = new Date(ts);
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   };
 
-  const filteredDreps = drepSearch
-    ? allDreps.filter(([id, name]) => name.toLowerCase().includes(drepSearch.toLowerCase()) || id.toLowerCase().includes(drepSearch.toLowerCase()))
-    : allDreps;
+  // Distribution table
+  const latest = processedHistory[processedHistory.length - 1];
+  const first = processedHistory[0];
+  const totalLatest = Number(latest.total_stake);
+  const totalFirst = Number(first.total_stake);
+  const distRows = (latest.top || []).slice(0, Math.max(topN, 20)).map((d, i) => {
+    const pctNow = totalLatest > 0 ? Number(d.amount) / totalLatest * 100 : 0;
+    const prev = (first.top || []).find(fd => fd.id === d.id);
+    const pctPrev = prev && totalFirst > 0 ? Number(prev.amount) / totalFirst * 100 : null;
+    const adaChange = prev ? (Number(d.amount) - Number(prev.amount)) / 1e6 : null;
+    const pctChange = pctPrev !== null ? pctNow - pctPrev : null;
+    return { rank: i + 1, name: d.name || d.id.slice(0, 16) + "…", id: d.id, amount: d.amount,
+      pctNow, pctPrev, adaChange, pctChange, delegators: d.delegators };
+  });
 
-  return React.createElement("div", {className:"card", style:{padding:20}},
-    // Header
-    React.createElement("h2", {style:{fontSize:18,fontWeight:700,marginBottom:4}}, T.hist_title),
-    React.createElement("p", {style:{color:"var(--text2)",fontSize:13,marginBottom:16}}, T.hist_desc + ` (${history.length} ${T.hist_snapshots})`),
+  const ist = { padding: "6px 10px", borderRadius: 6, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--text)", fontSize: 12, outline: "none" };
+  const btnStyle = (active) => ({ fontSize: 11, padding: "4px 12px", borderRadius: 6, border: "1px solid " + (active ? "var(--accent)" : "var(--border)"),
+    background: active ? "var(--accent)" : "var(--bg3)", color: active ? "#fff" : "var(--text2)", cursor: "pointer", fontWeight: active ? 600 : 400 });
+  const toggleStyle = (active) => ({ fontSize: 11, padding: "4px 10px", borderRadius: 6,
+    border: "1px solid " + (active ? "#fbbf24" : "var(--border)"),
+    background: active ? "rgba(251,191,36,0.15)" : "var(--bg3)",
+    color: active ? "#fbbf24" : "var(--text2)", cursor: "pointer" });
 
-    // Total stake chart
-    React.createElement("div", {style:{height:300,marginBottom:24,position:"relative"}},
-      React.createElement("canvas", {ref: totalCanvasRef})
-    ),
+  return (
+    <div>
+      {/* Header */}
+      <div className="card" style={{ padding: "16px 20px", marginBottom: 12 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{T.hist_title}</h2>
+        <p style={{ color: "var(--text2)", fontSize: 13, margin: 0 }}>
+          {T.hist_desc} ({history.length} {T.hist_snapshots}: E{history[0].epoch}–E{history[history.length - 1].epoch})
+          {history[history.length - 1].live && <span style={{ marginLeft: 8, padding: "1px 8px", borderRadius: 4, fontSize: 10, fontWeight: 700, background: "rgba(52,211,153,0.15)", color: "var(--yes)", border: "1px solid rgba(52,211,153,0.3)" }}>LIVE</span>}
+        </p>
+      </div>
 
-    // Individual DRep chart section
-    React.createElement("div", {style:{marginBottom:24}},
-      React.createElement("div", {style:{display:"flex",alignItems:"center",gap:8,marginBottom:12}},
-        React.createElement("span", {style:{fontWeight:600,fontSize:14}}, T.hist_chart_drep + ":"),
-        selectedDrep
-          ? React.createElement(React.Fragment, null,
-              React.createElement("span", {style:{color:"var(--accent2)"}}, allDreps.find(([id])=>id===selectedDrep)?.[1] || ""),
-              React.createElement("button", {onClick:()=>{setShowDrepPicker(true);setDrepSearch("");}, style:{fontSize:12,padding:"2px 8px",background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:4,color:"var(--text2)",cursor:"pointer"}}, T.hist_change)
-            )
-          : React.createElement("button", {onClick:()=>{setShowDrepPicker(true);setDrepSearch("");}, style:{fontSize:12,padding:"4px 12px",background:"var(--accent)",border:"none",borderRadius:4,color:"#fff",cursor:"pointer"}}, T.hist_select_drep)
-      ),
-      showDrepPicker && React.createElement("div", {style:{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:8,marginBottom:12,maxHeight:200,overflowY:"auto"}},
-        React.createElement("input", {type:"text",value:drepSearch,onChange:e=>setDrepSearch(e.target.value),placeholder:T.search,style:{width:"100%",padding:"4px 8px",marginBottom:6,background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:4,color:"var(--text)",fontSize:12}}),
-        filteredDreps.slice(0,20).map(([id,name]) =>
-          React.createElement("div", {key:id,onClick:()=>{setSelectedDrep(id);setShowDrepPicker(false);},style:{padding:"4px 8px",cursor:"pointer",borderRadius:4,fontSize:12,color: id===selectedDrep?"var(--accent2)":"var(--text)"}},
-            name, React.createElement("span",{style:{color:"var(--text2)",marginLeft:6,fontSize:10}}, id.slice(0,16)+"…")
-          )
-        )
-      ),
-      selectedDrep && React.createElement("div", {style:{height:250,position:"relative"}},
-        React.createElement("canvas", {ref: drepCanvasRef})
-      )
-    ),
+      {/* Controls */}
+      <div className="card" style={{ padding: "12px 20px", marginBottom: 12, display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
+        {/* Display range */}
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <label style={{ fontSize: 11, color: "var(--text2)" }}>{lang === "ja" ? "期間:" : "Range:"}</label>
+          {[["1m", "1M"], ["3m", "3M"], ["6m", "6M"], ["1y", "1Y"], ["2y", "2Y"], ["all", lang === "ja" ? "全期間" : "All"]].map(([val, lbl]) =>
+            <button key={val} onClick={() => setDisplayRange(val)} style={btnStyle(displayRange === val)}>{lbl}</button>
+          )}
+        </div>
+        <div style={{ width: 1, height: 24, background: "var(--border)" }}></div>
+        {/* ADA / % toggle */}
+        <div style={{ display: "flex", gap: 4 }}>
+          <button onClick={() => setChartMode("ada")} style={btnStyle(chartMode === "ada")}>ADA</button>
+          <button onClick={() => setChartMode("pct")} style={btnStyle(chartMode === "pct")}>%</button>
+        </div>
+        <div style={{ width: 1, height: 24, background: "var(--border)" }}></div>
+        {/* Top N */}
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          <label style={{ fontSize: 11, color: "var(--text2)" }}>Top N:</label>
+          <select value={topN} onChange={e => setTopN(Number(e.target.value))} style={{ ...ist, width: 55, padding: "3px 6px" }}>
+            {[5, 10, 15, 20].map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </div>
+        <div style={{ width: 1, height: 24, background: "var(--border)" }}></div>
+        {/* Merge toggle */}
+        <button onClick={() => setMergeEntities(!mergeEntities)} style={toggleStyle(mergeEntities)}>
+          {mergeEntities ? "✓ " : ""}{lang === "ja" ? "Yoroi+EMURGO 統合" : "Merge Yoroi+EMURGO"}
+        </button>
+        <div style={{ width: 1, height: 24, background: "var(--border)" }}></div>
+        {/* Projection slider */}
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <label style={{ fontSize: 11, color: "var(--text2)" }}>{lang === "ja" ? "予測:" : "Forecast:"}</label>
+          <input type="range" min={0} max={30} step={3} value={projEpochs}
+            onChange={e => setProjEpochs(Number(e.target.value))}
+            style={{ width: 80, accentColor: "var(--accent)" }} />
+          <span style={{ fontSize: 11, color: projEpochs > 0 ? "var(--accent2)" : "var(--text2)", minWidth: 50 }}>
+            {projEpochs > 0 ? `+${projEpochs} ep (${Math.round(projEpochs * 5)}${lang === "ja" ? "日" : "d"})` : "OFF"}
+          </span>
+        </div>
+        {/* Projection window (trend basis) — only show when projection is on */}
+        {projEpochs > 0 && <>
+          <div style={{ width: 1, height: 24, background: "var(--border)" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <label style={{ fontSize: 11, color: "var(--text2)" }}>{lang === "ja" ? "基準:" : "Basis:"}</label>
+            <select value={projWindow} onChange={e => setProjWindow(Number(e.target.value))} style={{ ...ist, width: 75, padding: "3px 6px" }}>
+              <option value={3}>{lang === "ja" ? "直近3" : "Last 3"}</option>
+              <option value={5}>{lang === "ja" ? "直近5" : "Last 5"}</option>
+              <option value={10}>{lang === "ja" ? "直近10" : "Last 10"}</option>
+              <option value={999}>{lang === "ja" ? "全期間" : "All"}</option>
+            </select>
+            <span style={{ fontSize: 10, color: "var(--text2)" }}>ep</span>
+          </div>
+        </>}
+      </div>
 
-    // Summary table
-    React.createElement("h3", {style:{fontSize:15,fontWeight:600,marginBottom:8}}, T.hist_top_dreps),
-    React.createElement("div", {style:{overflowX:"auto"}},
-      React.createElement("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:12}},
-        React.createElement("thead", null,
-          React.createElement("tr", {style:{borderBottom:"2px solid var(--border)"}},
-            React.createElement("th", {style:{textAlign:"left",padding:"6px 8px",color:"var(--text2)"}}, T.hist_epoch),
-            React.createElement("th", {style:{textAlign:"left",padding:"6px 8px",color:"var(--text2)"}}, T.hist_date),
-            React.createElement("th", {style:{textAlign:"right",padding:"6px 8px",color:"var(--text2)"}}, T.hist_total_stake),
-            React.createElement("th", {style:{textAlign:"right",padding:"6px 8px",color:"var(--text2)"}}, T.hist_drep_count),
-            React.createElement("th", {style:{textAlign:"left",padding:"6px 8px",color:"var(--text2)"}}, "Top 3")
-          )
-        ),
-        React.createElement("tbody", null,
-          [...history].reverse().map((s, i) => {
-            const ts = s.timestamp || epochToTimestamp(s.epoch) * 1000;
-            const top3 = (s.top || []).slice(0,3).map(d => d.name || d.id.slice(0,12)+"…").join(", ");
-            return React.createElement("tr", {key:s.epoch, style:{borderBottom:"1px solid var(--border)", background: i%2===0 ? "transparent" : "var(--bg2)"}},
-              React.createElement("td", {style:{padding:"6px 8px",fontWeight:500}}, "E" + s.epoch),
-              React.createElement("td", {style:{padding:"6px 8px",color:"var(--text2)"}}, fmtDate(ts)),
-              React.createElement("td", {style:{padding:"6px 8px",textAlign:"right",fontFamily:"monospace"}}, fmtAda(s.total_stake)),
-              React.createElement("td", {style:{padding:"6px 8px",textAlign:"right"}}, s.drep_count),
-              React.createElement("td", {style:{padding:"6px 8px",color:"var(--text2)",fontSize:11}}, top3)
-            );
-          })
-        )
-      )
-    )
+      {/* Stacked Area Chart */}
+      <div className="card" style={{ padding: "16px 20px", marginBottom: 12 }}>
+        <div style={{ height: 420, position: "relative" }}>
+          <canvas ref={stackedCanvasRef}></canvas>
+        </div>
+      </div>
+
+      {/* Concentration Chart */}
+      <div className="card" style={{ padding: "16px 20px", marginBottom: 12 }}>
+        <div style={{ height: 300, position: "relative" }}>
+          <canvas ref={concCanvasRef}></canvas>
+        </div>
+      </div>
+
+      {/* Distribution Table */}
+      <div className="card" style={{ padding: "16px 20px" }}>
+        <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+          {lang === "ja" ? `ステーク分布（最新 E${latest.epoch} vs 初回 E${first.epoch}）` : `Stake Distribution (Latest E${latest.epoch} vs First E${first.epoch})`}
+        </h3>
+        <p style={{ fontSize: 11, color: "var(--text2)", marginBottom: 10 }}>
+          {lang === "ja" ? `総ステーク: ${fmtAda(latest.total_stake)} ADA / DRep数: ${latest.drep_count}` : `Total: ${fmtAda(latest.total_stake)} ADA / DReps: ${latest.drep_count}`}
+          {mergeEntities && <span style={{ marginLeft: 8, color: "#fbbf24" }}>({lang === "ja" ? "エンティティ統合表示" : "Entities merged"})</span>}
+        </p>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+            <thead>
+              <tr style={{ borderBottom: "2px solid var(--border)" }}>
+                <th style={{ textAlign: "center", padding: "6px 6px", color: "var(--text2)", width: 30 }}>#</th>
+                <th style={{ textAlign: "left", padding: "6px 8px", color: "var(--text2)" }}>{lang === "ja" ? "DRep名" : "DRep"}</th>
+                <th style={{ textAlign: "right", padding: "6px 8px", color: "var(--text2)" }}>{lang === "ja" ? "ステーク(ADA)" : "Stake (ADA)"}</th>
+                <th style={{ textAlign: "right", padding: "6px 8px", color: "var(--text2)" }}>{lang === "ja" ? "割合" : "Share"}</th>
+                <th style={{ textAlign: "right", padding: "6px 8px", color: "var(--text2)" }}>{lang === "ja" ? "変化(ADA)" : "Δ ADA"}</th>
+                <th style={{ textAlign: "right", padding: "6px 8px", color: "var(--text2)" }}>{lang === "ja" ? "割合変化" : "Δ Share"}</th>
+                <th style={{ textAlign: "left", padding: "6px 8px", color: "var(--text2)", minWidth: 120 }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {distRows.map((r, i) => {
+                const changeColor = r.adaChange > 0 ? "var(--yes)" : r.adaChange < 0 ? "var(--no)" : "var(--text2)";
+                const pctChangeColor = r.pctChange > 0 ? "var(--yes)" : r.pctChange < 0 ? "var(--no)" : "var(--text2)";
+                const isMerged = r.id.startsWith("merged__");
+                return (
+                  <tr key={r.id} style={{ borderBottom: "1px solid var(--border)", background: i % 2 === 0 ? "transparent" : "var(--bg2)" }}>
+                    <td style={{ textAlign: "center", padding: "5px 6px", color: "var(--text2)", fontSize: 11 }}>{r.rank}</td>
+                    <td style={{ padding: "5px 8px" }}>
+                      <div style={{ fontWeight: 500, fontSize: 12 }}>
+                        {isMerged && <span style={{ color: "#fbbf24", marginRight: 4, fontSize: 10 }}>⊕</span>}
+                        {r.name}
+                      </div>
+                      {!isMerged && <div style={{ fontSize: 9, color: "var(--text2)", fontFamily: "monospace" }}>{r.id.slice(0, 24)}…</div>}
+                    </td>
+                    <td style={{ textAlign: "right", padding: "5px 8px", fontFamily: "monospace", fontSize: 12 }}>{fmtAda(r.amount)}</td>
+                    <td style={{ textAlign: "right", padding: "5px 8px", fontWeight: 600, color: "var(--accent2)" }}>{r.pctNow.toFixed(2)}%</td>
+                    <td style={{ textAlign: "right", padding: "5px 8px", fontFamily: "monospace", fontSize: 11, color: changeColor }}>
+                      {r.adaChange !== null ? (r.adaChange >= 0 ? "+" : "") + (Math.abs(r.adaChange) >= 1e6 ? (r.adaChange / 1e6).toFixed(1) + "M" : Math.abs(r.adaChange) >= 1e3 ? (r.adaChange / 1e3).toFixed(0) + "K" : r.adaChange.toFixed(0)) : "—"}
+                    </td>
+                    <td style={{ textAlign: "right", padding: "5px 8px", fontSize: 11, color: pctChangeColor }}>
+                      {r.pctChange !== null ? (r.pctChange >= 0 ? "+" : "") + r.pctChange.toFixed(2) + "pp" : "—"}
+                    </td>
+                    <td style={{ padding: "5px 8px" }}>
+                      <div style={{ background: "var(--bg4)", borderRadius: 3, height: 14, overflow: "hidden", position: "relative" }}>
+                        <div style={{ width: Math.min(r.pctNow * 2, 100) + "%", height: "100%", borderRadius: 3,
+                          background: i < 3 ? "var(--accent)" : i < 10 ? "var(--accent2)" : "var(--text2)", opacity: 0.7 }}></div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1903,7 +2225,7 @@ function App() {
         <CCVotesTab ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
           proposals={proposals} T={T} />
       ) : tab === "history" ? (
-        <StakeHistoryTab history={stakeHistory} T={T} lang={lang} />
+        <StakeHistoryTab history={stakeHistory} liveDreps={allDreps} T={T} lang={lang} />
       ) : (
         <SimulatorTab dreps={allDreps} voteData={voteData} totalActions={totalActions}
           periodVoteData={periodVoteData}
