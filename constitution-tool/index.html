@@ -10,6 +10,9 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/diff-match-patch/index.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <!-- bech32 conversion is handled by self-contained encoder below -->
   <script>
     tailwind.config = {
@@ -50,6 +53,33 @@
   <div id="root"></div>
   <script type="text/babel">
     const {useState,useEffect,useContext,createContext,useCallback,useReducer,useMemo,useRef} = React;
+
+    // ====== FIREBASE CONFIG ======
+    // ★ Fill in your Firebase project config here ★
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyBLmvGiU7WMjWuZBb2TeBOpMaOYoVQ0fJs",
+      authDomain: "cardano-constitution-too-fc6e3.firebaseapp.com",
+      databaseURL: "https://cardano-constitution-too-fc6e3-default-rtdb.firebaseio.com",
+      projectId: "cardano-constitution-too-fc6e3",
+      storageBucket: "cardano-constitution-too-fc6e3.firebasestorage.app",
+      messagingSenderId: "605836795672",
+      appId: "1:605836795672:web:34920edb047bfc71d8886d"
+    };
+
+    // Initialize Firebase
+    let firebaseApp = null;
+    let firebaseDB = null;
+    try {
+      if (FIREBASE_CONFIG.projectId !== 'your-project' && typeof firebase !== 'undefined') {
+        firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
+        firebaseDB = firebase.database();
+        console.log('[Firebase] Initialized successfully');
+      } else {
+        console.warn('[Firebase] Using localStorage fallback. Configure FIREBASE_CONFIG to enable shared data.');
+      }
+    } catch(e) {
+      console.error('[Firebase] Init failed:', e);
+    }
 
     // ====== i18n ======
     const I18N = {
@@ -230,14 +260,32 @@
     const GITHUB_MD = 'https://raw.githubusercontent.com/cardanoz/constitution/main/constitution-v24.md';
     const GITHUB_TXT = 'https://raw.githubusercontent.com/cardanoz/constitution/main/constitution-24-2.txt';
 
-    // ====== STORAGE ======
-    const DB = {
+    // ====== STORAGE (Firebase + localStorage hybrid) ======
+    const LS = {
       _g: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
       _s: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
-      wallet:      { get:()=>DB._g('ccat_w'),  set:v=>DB._s('ccat_w',v) },
-      initiatives: { get:()=>DB._g('ccat_i')||[], set:v=>DB._s('ccat_i',v) },
-      comments:    { get:()=>DB._g('ccat_c')||[], set:v=>DB._s('ccat_c',v) },
-      lang:        { get:()=>DB._g('ccat_lang')||'en', set:v=>DB._s('ccat_lang',v) },
+    };
+
+    const DB = {
+      // Wallet & lang are always local (per-browser)
+      wallet: { get:()=>LS._g('ccat_w'), set:v=>LS._s('ccat_w',v) },
+      lang:   { get:()=>LS._g('ccat_lang')||'en', set:v=>LS._s('ccat_lang',v) },
+
+      // Initiatives & comments: Firebase if available, localStorage fallback
+      initiatives: {
+        get: () => LS._g('ccat_i') || [],
+        set: (v) => {
+          LS._s('ccat_i', v);
+          if (firebaseDB) firebaseDB.ref('initiatives').set(v).catch(e => console.error('[Firebase] write initiatives:', e));
+        }
+      },
+      comments: {
+        get: () => LS._g('ccat_c') || [],
+        set: (v) => {
+          LS._s('ccat_c', v);
+          if (firebaseDB) firebaseDB.ref('comments').set(v).catch(e => console.error('[Firebase] write comments:', e));
+        }
+      },
     };
 
     // ====== CONTEXTS ======
@@ -513,9 +561,57 @@
     };
     const DataProvider = ({children}) => {
       const [s,dispatch] = useReducer(dataR,{initiatives:[],comments:[]});
-      useEffect(()=>{ dispatch({type:'INIT',payload:{initiatives:DB.initiatives.get(),comments:DB.comments.get()}}); },[]);
-      useEffect(()=>{ DB.initiatives.set(s.initiatives); },[s.initiatives]);
-      useEffect(()=>{ DB.comments.set(s.comments); },[s.comments]);
+      const initialized = useRef(false);
+      const skipNextSync = useRef({initiatives: false, comments: false});
+
+      // Initial load: from localStorage (instant), then Firebase overwrites if available
+      useEffect(()=>{
+        const localI = DB.initiatives.get();
+        const localC = DB.comments.get();
+        dispatch({type:'INIT',payload:{initiatives:localI,comments:localC}});
+
+        if (firebaseDB) {
+          // Listen for real-time changes from Firebase
+          firebaseDB.ref('initiatives').on('value', snap => {
+            const val = snap.val();
+            if (val && Array.isArray(val)) {
+              console.log('[Firebase] initiatives synced:', val.length);
+              LS._s('ccat_i', val); // update local cache
+              skipNextSync.current.initiatives = true;
+              dispatch({type:'INIT',payload:{initiatives:val, comments: LS._g('ccat_c') || []}});
+            }
+          });
+          firebaseDB.ref('comments').on('value', snap => {
+            const val = snap.val();
+            if (val && Array.isArray(val)) {
+              console.log('[Firebase] comments synced:', val.length);
+              LS._s('ccat_c', val); // update local cache
+              skipNextSync.current.comments = true;
+              dispatch({type:'INIT',payload:{initiatives: LS._g('ccat_i') || [], comments:val}});
+            }
+          });
+        }
+        initialized.current = true;
+        return () => {
+          if (firebaseDB) {
+            firebaseDB.ref('initiatives').off();
+            firebaseDB.ref('comments').off();
+          }
+        };
+      },[]);
+
+      // Persist on change (skip if change came from Firebase listener)
+      useEffect(()=>{
+        if (!initialized.current) return;
+        if (skipNextSync.current.initiatives) { skipNextSync.current.initiatives = false; return; }
+        DB.initiatives.set(s.initiatives);
+      },[s.initiatives]);
+      useEffect(()=>{
+        if (!initialized.current) return;
+        if (skipNextSync.current.comments) { skipNextSync.current.comments = false; return; }
+        DB.comments.set(s.comments);
+      },[s.comments]);
+
       return <DataCtx.Provider value={{...s,dispatch}}>{children}</DataCtx.Provider>;
     };
 
@@ -719,7 +815,11 @@ This appendix sets forth guardrails for on-chain governance actions, including p
             <div className="w-9 h-9 rounded-lg bg-cardano-blue flex items-center justify-center font-bold text-white">C</div>
             <div>
               <h1 className="text-lg font-bold text-white tracking-tight">{t(lang,'appTitle')}</h1>
-              <p className="text-[11px] text-gray-500">{t(lang,'appSub')}</p>
+              <p className="text-[11px] text-gray-500">{t(lang,'appSub')}
+                {firebaseDB
+                  ? <span className="ml-2 text-green-400">● Cloud Sync</span>
+                  : <span className="ml-2 text-yellow-400">● Local Only</span>}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-3">
