@@ -306,7 +306,7 @@ function epochToDateStr(epoch) { const d = epochToDate(epoch); return d.toISOStr
 // except members who joined later (e.g., Curia replaced Atlantic Council)
 const CC_MIN_EPOCH = 587; // 90cf51…#0 — current CC term start
 const CC_MEMBER_START = {
-  "zwz2a08a8cqd": 597, // Cardano Curia — replaced Atlantic Council; first vote at "Reimburse Ikigai" (ep.597)
+  "zvt0am7zyhsx": 604, // Cardano Curia — replaced Atlantic Council; first vote at ep.604
 };
 function ccMemberMinEpoch(ccId) { return CC_MEMBER_START[ccId] || CC_MIN_EPOCH; }
 

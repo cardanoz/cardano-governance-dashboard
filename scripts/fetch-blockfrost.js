@@ -41,14 +41,13 @@ const KOIOS_BASE = "https://api.koios.rest/api/v1";
 // CC member display names — keyed by shortHash (first 12 chars of cc_cold_id after "cc_cold1")
 // Update when CC membership changes (elections, resignations, etc.)
 const CC_NAMES = {
-  "zwz2a08a8cqd": "Cardano Curia",
-  "zwt49epsdedw": "Tingvard",
-  "zwwv8uu8vgl5": "Eastern Cardano Council",
-  "zvvcpkl3443y": "Ace Alliance",
-  "ztwq6mh5jkgw": "Cardano Japan Council",
-  "zgf5jdusmxcr": "Phil_uplc",
-  "zvt0am7zyhsx": "KtorZ",
-  // "____________": "Cardano Atlantic Council",  // add when visible in Koios
+  "zwz2a08a8cqd": "Eastern Cardano Council",  // exp 726, 2-year (also has old ICC-era votes)
+  "zwt49epsdedw": "Ace Alliance",              // exp 726, 2-year
+  "zvvcpkl3443y": "Tingvard",                  // exp 726, 2-year
+  "zwwv8uu8vgl5": "Cardano Japan Council",     // exp 653, 1-year
+  "zgf5jdusmxcr": "Phil_uplc",                 // exp 653, 1-year
+  "ztwq6mh5jkgw": "KtorZ",                    // exp 653, 1-year
+  "zvt0am7zyhsx": "Cardano Curia",             // exp 653, replaced Cardano Atlantic Council
 };
 
 let apiCalls = 0;
