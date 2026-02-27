@@ -153,12 +153,23 @@ async function main() {
         delegators: 0,
       }));
 
-      const totalStake = filtered.reduce((s, d) => s + d.amount, 0);
+      const totalStakeFromDreps = filtered.reduce((s, d) => s + d.amount, 0);
+
+      // Also fetch epoch summary for official total (includes pre-defined roles)
+      let officialTotal = totalStakeFromDreps;
+      let officialDrepCount = filtered.length;
+      try {
+        const summary = await koiosGet("/drep_epoch_summary", { _epoch_no: epoch });
+        if (summary && summary.length > 0) {
+          officialTotal = Number(summary[0].amount) || totalStakeFromDreps;
+          officialDrepCount = summary[0].dreps || filtered.length;
+        }
+      } catch (e) { /* use computed total */ }
 
       history.push({
         epoch,
         timestamp: epochToTimestamp(epoch),
-        total_stake: String(totalStake),
+        total_stake: String(totalStakeFromDreps), // excluding abstain
         drep_count: filtered.length,
         top: top50,
       });
