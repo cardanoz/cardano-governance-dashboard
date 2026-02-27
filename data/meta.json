@@ -1,10 +1,12 @@
 {
-  "updated_at": "2026-02-26T23:49:13.818Z",
-  "updated_ts": 1772149753818,
-  "drep_count": 422,
+  "updated_at": "2026-02-26T23:57:45.743Z",
+  "updated_ts": 1772150265743,
+  "drep_count": 1592,
   "proposal_count": 86,
-  "vote_count": 15096,
-  "api_calls": 2650,
-  "fetch_duration_ms": 108272,
-  "max_votes": 120
+  "vote_count": 17676,
+  "api_calls": 5082,
+  "fetch_duration_ms": 224843,
+  "max_votes": 120,
+  "total_drep_ids": 1592,
+  "failed_details": 0
 }
