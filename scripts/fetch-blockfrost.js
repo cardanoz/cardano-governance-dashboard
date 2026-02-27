@@ -57,6 +57,7 @@ let lastFetchTime = 0;
 
 // ─── Generic URL fetcher (IPFS, https, http) ─────────────────
 const IPFS_GATEWAYS = [
+  "https://ipfs.blockfrost.dev/ipfs/",
   "https://ipfs.io/ipfs/",
   "https://gateway.pinata.cloud/ipfs/",
   "https://cloudflare-ipfs.com/ipfs/",
@@ -64,9 +65,8 @@ const IPFS_GATEWAYS = [
 ];
 function resolveIpfsUrl(url, gatewayIdx = 0) {
   if (!url) return null;
-  const gw = IPFS_GATEWAYS[gatewayIdx] || IPFS_GATEWAYS[0];
-  if (url.startsWith("ipfs://")) return gw + url.slice(7);
-  if (url.startsWith("ipfs:")) return gw + url.slice(5);
+  const cid = extractIpfsCid(url);
+  if (cid) return (IPFS_GATEWAYS[gatewayIdx] || IPFS_GATEWAYS[0]) + cid;
   return url;
 }
 function fetchUrl(url, timeoutMs = 15000) {
@@ -97,24 +97,37 @@ function extractRationaleText(raw) {
     return raw.slice(0, 3000);
   }
 }
+// Extract IPFS CID from any URL or ipfs:// scheme
+function extractIpfsCid(url) {
+  if (!url) return null;
+  // ipfs://Qm... or ipfs:Qm...
+  if (url.startsWith("ipfs://")) return url.slice(7);
+  if (url.startsWith("ipfs:")) return url.slice(5);
+  // https://gateway.example.com/ipfs/Qm...
+  const m = url.match(/\/ipfs\/(Qm[a-zA-Z0-9]+|bafy[a-zA-Z0-9]+)/);
+  if (m) return m[1];
+  return null;
+}
 // Fetch rationale with IPFS gateway fallback
 async function fetchRationaleContent(url) {
-  const isIpfs = url && (url.startsWith("ipfs://") || url.startsWith("ipfs:"));
-  if (isIpfs) {
-    // Try multiple gateways
+  const cid = extractIpfsCid(url);
+  if (cid) {
+    // Try multiple IPFS gateways
     for (let i = 0; i < IPFS_GATEWAYS.length; i++) {
       try {
-        const resolved = resolveIpfsUrl(url, i);
-        const raw = await fetchUrl(resolved, 12000);
+        const resolved = IPFS_GATEWAYS[i] + cid;
+        const raw = await fetchUrl(resolved, 8000);
         const text = extractRationaleText(raw);
         if (text && text.length > 0) return { url: resolved, text: text.slice(0, 5000) };
-      } catch {}
+      } catch (e) {
+        // Continue to next gateway
+      }
     }
     return null;
   }
-  // Regular URL
+  // Non-IPFS URL (e.g. regular https link)
   try {
-    const raw = await fetchUrl(url, 12000);
+    const raw = await fetchUrl(url, 10000);
     const text = extractRationaleText(raw);
     if (text && text.length > 0) return { url, text: text.slice(0, 5000) };
   } catch {}
@@ -568,7 +581,11 @@ async function main() {
 
           if (v.meta_url) {
             const rUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
-            if (rUrl) ccRationales[`${shortHash}__${proposalId}`] = rUrl;
+            const rKey = `${shortHash}__${proposalId}`;
+            // Don't overwrite already-downloaded content (object with .text)
+            if (rUrl && !(typeof ccRationales[rKey] === "object" && ccRationales[rKey].text)) {
+              ccRationales[rKey] = rUrl;
+            }
           }
         }
 
@@ -608,37 +625,56 @@ async function main() {
   console.log(`  CC vote cache: ${Object.keys(ccExpiredVotes).length} expired, ${Object.keys(ccActiveVotes).length} active`);
 
   // ─── 7c. Download rationale content from IPFS/URLs ──────────
-  if (Object.keys(ccRationales).length > 0) {
-    console.log(`\n  Downloading ${Object.keys(ccRationales).length} rationale documents...`);
-    const ratEntries = Object.entries(ccRationales);
-    let downloaded = 0, failed = 0, cached = 0;
-    const ccRationaleContent = {};
+  // Generic batch downloader for rationale content (used for both CC and DRep)
+  async function downloadRationales(rationales, label) {
+    const entries = Object.entries(rationales);
+    const toDownload = [];
+    let cached = 0;
+    const result = {};
 
-    for (const [key, val] of ratEntries) {
-      // If already downloaded (has .text field from cache), skip
+    for (const [key, val] of entries) {
       if (typeof val === "object" && val.text) {
-        ccRationaleContent[key] = val;
+        result[key] = val;
         cached++;
-        continue;
+      } else {
+        toDownload.push([key, typeof val === "string" ? val : (val.url || String(val))]);
       }
-      const url = typeof val === "string" ? val : (val.url || val);
-      try {
-        const result = await fetchRationaleContent(url);
-        if (result) {
-          ccRationaleContent[key] = result;
-          downloaded++;
-        } else {
-          ccRationaleContent[key] = { url: resolveIpfsUrl(url), text: "" };
-          failed++;
-        }
-      } catch {
-        ccRationaleContent[key] = { url: resolveIpfsUrl(url), text: "" };
-        failed++;
-      }
-      // Small delay to avoid hammering IPFS gateways
-      await new Promise(r => setTimeout(r, 300));
     }
-    console.log(`  Rationales: ${downloaded} downloaded, ${cached} cached, ${failed} failed`);
+
+    if (toDownload.length === 0) {
+      console.log(`  ${label}: ${cached} cached, 0 to download`);
+      return result;
+    }
+    console.log(`  ${label}: downloading ${toDownload.length} (${cached} cached)...`);
+
+    let downloaded = 0, dlFailed = 0;
+    // Process in parallel batches of 5
+    const BATCH = 5;
+    for (let i = 0; i < toDownload.length; i += BATCH) {
+      const batch = toDownload.slice(i, i + BATCH);
+      const results = await Promise.all(batch.map(async ([key, url]) => {
+        try {
+          const r = await fetchRationaleContent(url);
+          if (r) return [key, r, true];
+          return [key, { url: resolveIpfsUrl(url), text: "" }, false];
+        } catch {
+          return [key, { url: resolveIpfsUrl(url), text: "" }, false];
+        }
+      }));
+      for (const [key, val, ok] of results) {
+        result[key] = val;
+        if (ok) downloaded++; else dlFailed++;
+      }
+      if ((i + BATCH) % 50 < BATCH) {
+        console.log(`    ${label} progress: ${Math.min(i + BATCH, toDownload.length)}/${toDownload.length} (${downloaded} ok, ${dlFailed} fail)`);
+      }
+    }
+    console.log(`  ${label}: ${downloaded} downloaded, ${cached} cached, ${dlFailed} failed`);
+    return result;
+  }
+
+  if (Object.keys(ccRationales).length > 0) {
+    const ccRationaleContent = await downloadRationales(ccRationales, "CC rationales");
     // Replace URL-only entries with content objects
     Object.assign(ccRationales, ccRationaleContent);
 
@@ -740,28 +776,10 @@ async function main() {
     console.log(`    DRep rationale fetch error: ${e.message}`);
   }
 
-  // Step 3: Download DRep rationale content (same as CC)
-  const drepRatUrlEntries = Object.entries(drepRationales).filter(([, v]) => typeof v === "string");
-  if (drepRatUrlEntries.length > 0) {
-    console.log(`\n  Downloading ${drepRatUrlEntries.length} DRep rationale documents...`);
-    let dlOk = 0, dlFail = 0;
-    for (const [key, url] of drepRatUrlEntries) {
-      try {
-        const result = await fetchRationaleContent(url);
-        if (result) {
-          drepRationales[key] = result;
-          dlOk++;
-        } else {
-          drepRationales[key] = { url: resolveIpfsUrl(url), text: "" };
-          dlFail++;
-        }
-      } catch {
-        drepRationales[key] = { url: resolveIpfsUrl(url), text: "" };
-        dlFail++;
-      }
-      await new Promise(r => setTimeout(r, 200));
-    }
-    console.log(`    DRep rationales: ${dlOk} downloaded, ${dlFail} failed, ${drepRatCachedCount} cached`);
+  // Step 3: Download DRep rationale content (reuse batch downloader)
+  if (Object.keys(drepRationales).length > 0) {
+    const drepRatContent = await downloadRationales(drepRationales, "DRep rationales");
+    Object.assign(drepRationales, drepRatContent);
   }
 
   // Build DRep rationale cache (expired = permanent)
