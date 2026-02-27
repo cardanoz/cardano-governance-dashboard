@@ -169,6 +169,12 @@
         save: 'Save',
         noToc: 'No table of contents available',
         selectTextFirst: 'Please select text in the constitution first, then click this button.',
+        exportData: 'Export Data',
+        importData: 'Import Data',
+        exportSuccess: 'Data exported successfully',
+        importSuccess: 'Data imported successfully! Page will reload.',
+        importConfirm: 'This will merge imported data with existing data. Continue?',
+        dataManagement: 'Data Management',
       },
       ja: {
         appTitle: 'Cardano 憲法改正補助ツール',
@@ -253,6 +259,12 @@
         save: '保存する',
         noToc: '目次を生成できません',
         selectTextFirst: 'まず憲法テキストの中からテキストを選択してください。',
+        exportData: 'データをエクスポート',
+        importData: 'データをインポート',
+        exportSuccess: 'データをエクスポートしました',
+        importSuccess: 'データをインポートしました。ページを再読み込みします。',
+        importConfirm: 'インポートしたデータを既存データとマージします。続行しますか？',
+        dataManagement: 'データ管理',
       }
     };
     const LangCtx = createContext();
@@ -562,47 +574,59 @@
         default: return s;
       }
     };
+    // Helper: Firebase converts empty arrays [] to null, and can return objects instead of arrays.
+    const fbToArray = (val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return val;
+      if (typeof val === 'object') return Object.values(val);
+      return [];
+    };
+    const fixComment = (c) => ({...c, decisions: Array.isArray(c.decisions) ? c.decisions : []});
+    const fixComments = (arr) => fbToArray(arr).map(fixComment);
+
     const DataProvider = ({children}) => {
       const [s,dispatch] = useReducer(dataR,{initiatives:[],comments:[]});
-      const initialized = useRef(false);
-      const skipNextSync = useRef({initiatives: false, comments: false});
+      // Track: 0=not loaded, 1=local loaded, 2=firebase loaded (or no firebase)
+      const readyRef = useRef(0);
+      const userActionRef = useRef(false); // true when dispatch came from user action
 
-      // Initial load: from localStorage (instant), then Firebase overwrites if available
+      // Wrap dispatch to track user vs sync actions
+      const userDispatch = useCallback((action) => {
+        userActionRef.current = true;
+        dispatch(action);
+      }, []);
+
+      // Initial load
       useEffect(()=>{
+        // Load from localStorage first (instant)
         const localI = DB.initiatives.get();
         const localC = DB.comments.get();
-        dispatch({type:'INIT',payload:{initiatives:localI,comments:localC}});
-
-        // Firebase converts empty arrays [] to null, and can return objects instead of arrays.
-        // This helper normalizes the data back to a proper array and ensures all nested arrays exist.
-        const fbToArray = (val) => {
-          if (!val) return [];
-          if (Array.isArray(val)) return val;
-          // Firebase may convert arrays to objects with numeric keys
-          if (typeof val === 'object') return Object.values(val);
-          return [];
-        };
-        const fixComment = (c) => ({...c, decisions: Array.isArray(c.decisions) ? c.decisions : []});
-        const fixComments = (arr) => fbToArray(arr).map(fixComment);
+        dispatch({type:'INIT',payload:{initiatives:localI,comments:fixComments(localC)}});
+        readyRef.current = 1;
 
         if (firebaseDB) {
+          let initCount = 0;
+          const checkReady = () => { initCount++; if(initCount >= 2) readyRef.current = 2; };
+
           // Listen for real-time changes from Firebase
           firebaseDB.ref('initiatives').on('value', snap => {
             const val = fbToArray(snap.val());
-            console.log('[Firebase] initiatives synced:', val.length);
-            LS._s('ccat_i', val);
-            skipNextSync.current.initiatives = true;
+            console.log('[Firebase] initiatives received:', val.length);
+            LS._s('ccat_i', val); // update local cache
             dispatch({type:'INIT',payload:{initiatives:val, comments: fixComments(LS._g('ccat_c'))}});
+            checkReady();
           });
           firebaseDB.ref('comments').on('value', snap => {
             const val = fixComments(snap.val());
-            console.log('[Firebase] comments synced:', val.length);
-            LS._s('ccat_c', val);
-            skipNextSync.current.comments = true;
+            console.log('[Firebase] comments received:', val.length);
+            LS._s('ccat_c', val); // update local cache
             dispatch({type:'INIT',payload:{initiatives: fbToArray(LS._g('ccat_i')), comments:val}});
+            checkReady();
           });
+        } else {
+          readyRef.current = 2; // no firebase, local is final
         }
-        initialized.current = true;
+
         return () => {
           if (firebaseDB) {
             firebaseDB.ref('initiatives').off();
@@ -611,19 +635,17 @@
         };
       },[]);
 
-      // Persist on change (skip if change came from Firebase listener)
+      // Persist on change — ONLY when triggered by user actions, never from Firebase sync
       useEffect(()=>{
-        if (!initialized.current) return;
-        if (skipNextSync.current.initiatives) { skipNextSync.current.initiatives = false; return; }
+        if (readyRef.current < 1) return; // not yet loaded
+        if (!userActionRef.current) return; // came from Firebase sync, skip
+        userActionRef.current = false;
+        console.log('[Persist] Saving initiatives:', s.initiatives.length, 'comments:', s.comments.length);
         DB.initiatives.set(s.initiatives);
-      },[s.initiatives]);
-      useEffect(()=>{
-        if (!initialized.current) return;
-        if (skipNextSync.current.comments) { skipNextSync.current.comments = false; return; }
         DB.comments.set(s.comments);
-      },[s.comments]);
+      },[s.initiatives, s.comments]);
 
-      return <DataCtx.Provider value={{...s,dispatch}}>{children}</DataCtx.Provider>;
+      return <DataCtx.Provider value={{...s,dispatch:userDispatch}}>{children}</DataCtx.Provider>;
     };
 
     // ====== CONSTITUTION LOADER ======
@@ -813,9 +835,65 @@ This appendix sets forth guardrails for on-chain governance actions, including p
       return <div ref={ref} className="prose-c max-w-none" dangerouslySetInnerHTML={{__html: highlightedHtml}} />;
     };
 
+    // ====== DATA EXPORT/IMPORT ======
+    const exportData = (initiatives, comments, lang) => {
+      const data = {
+        exportedAt: new Date().toISOString(),
+        version: '1.0',
+        initiatives: initiatives,
+        comments: comments,
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cardano-constitution-data-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    const importData = (dispatch, lang) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (!data.initiatives || !data.comments) {
+              alert('Invalid data file format.');
+              return;
+            }
+            if (!confirm(t(lang, 'importConfirm'))) return;
+
+            // Merge: add imported items that don't already exist (by id)
+            const existI = DB.initiatives.get();
+            const existC = fixComments(DB.comments.get());
+            const existIIds = new Set(existI.map(i=>i.id));
+            const existCIds = new Set(existC.map(c=>c.id));
+            const newI = [...existI, ...fbToArray(data.initiatives).filter(i => !existIIds.has(i.id))];
+            const newC = [...existC, ...fixComments(data.comments).filter(c => !existCIds.has(c.id))];
+
+            DB.initiatives.set(newI);
+            DB.comments.set(newC);
+            alert(t(lang, 'importSuccess'));
+            location.reload();
+          } catch(err) {
+            alert('Error reading file: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    };
+
     // ====== HEADER ======
     const Header = () => {
       const {wallet,avail,connect,disconnect,short,debug,scanWallets} = useContext(WalletCtx);
+      const {initiatives, comments, dispatch} = useContext(DataCtx);
       const [showM,setShowM] = useState(false);
       const [showDebug,setShowDebug] = useState(false);
       const lang = useLang();
@@ -835,6 +913,17 @@ This appendix sets forth guardrails for on-chain governance actions, including p
             </div>
           </div>
           <div className="flex items-center gap-3">
+            {/* Data management */}
+            <div className="flex items-center gap-1">
+              <button onClick={()=>exportData(initiatives,comments,lang)} title={t(lang,'exportData')}
+                className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-600 px-2 py-1.5 rounded-lg text-gray-300 transition">
+                ↓
+              </button>
+              <button onClick={()=>importData(dispatch,lang)} title={t(lang,'importData')}
+                className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-600 px-2 py-1.5 rounded-lg text-gray-300 transition">
+                ↑
+              </button>
+            </div>
             {/* Lang toggle */}
             <button onClick={()=>setLang(lang==='en'?'ja':'en')}
               className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-600 px-3 py-1.5 rounded-lg text-gray-300 transition font-medium">
