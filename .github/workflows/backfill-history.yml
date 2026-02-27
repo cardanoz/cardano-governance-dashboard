@@ -1,0 +1,38 @@
+name: Backfill DRep Stake History
+
+on:
+  workflow_dispatch:
+    inputs:
+      epochs:
+        description: 'Number of past epochs to fetch'
+        required: false
+        default: '10'
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run backfill script
+        env:
+          BLOCKFROST_API_KEY: ${{ secrets.BLOCKFROST_API_KEY }}
+        run: node scripts/fetch-history-backfill.js ${{ github.event.inputs.epochs }}
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Backfill DRep stake history (${{ github.event.inputs.epochs }} epochs)" && git push)
