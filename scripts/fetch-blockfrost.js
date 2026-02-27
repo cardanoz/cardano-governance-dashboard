@@ -50,8 +50,76 @@ const CC_NAMES = {
   "zvt0am7zyhsx": "Cardano Curia",             // exp 653, replaced Cardano Atlantic Council
 };
 
+const http = require("http");
+
 let apiCalls = 0;
 let lastFetchTime = 0;
+
+// ─── Generic URL fetcher (IPFS, https, http) ─────────────────
+const IPFS_GATEWAYS = [
+  "https://ipfs.io/ipfs/",
+  "https://gateway.pinata.cloud/ipfs/",
+  "https://cloudflare-ipfs.com/ipfs/",
+  "https://dweb.link/ipfs/",
+];
+function resolveIpfsUrl(url, gatewayIdx = 0) {
+  if (!url) return null;
+  const gw = IPFS_GATEWAYS[gatewayIdx] || IPFS_GATEWAYS[0];
+  if (url.startsWith("ipfs://")) return gw + url.slice(7);
+  if (url.startsWith("ipfs:")) return gw + url.slice(5);
+  return url;
+}
+function fetchUrl(url, timeoutMs = 15000) {
+  return new Promise((resolve, reject) => {
+    const mod = url.startsWith("http://") ? http : https;
+    const req = mod.get(url, { timeout: timeoutMs, headers: { "Accept": "application/json, text/plain, */*" } }, (res) => {
+      // Follow redirects
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        return fetchUrl(res.headers.location, timeoutMs).then(resolve).catch(reject);
+      }
+      if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode}`));
+      let data = "";
+      res.on("data", c => data += c);
+      res.on("end", () => resolve(data));
+    });
+    req.on("error", reject);
+    req.on("timeout", () => { req.destroy(); reject(new Error("Timeout")); });
+  });
+}
+// Extract readable text from rationale JSON (CIP-100 format)
+function extractRationaleText(raw) {
+  try {
+    const j = JSON.parse(raw);
+    const body = j.body || j;
+    return body.comment || body.rationale || body.summary || body.abstract ||
+      (typeof body === "string" ? body : JSON.stringify(body, null, 2));
+  } catch {
+    return raw.slice(0, 3000);
+  }
+}
+// Fetch rationale with IPFS gateway fallback
+async function fetchRationaleContent(url) {
+  const isIpfs = url && (url.startsWith("ipfs://") || url.startsWith("ipfs:"));
+  if (isIpfs) {
+    // Try multiple gateways
+    for (let i = 0; i < IPFS_GATEWAYS.length; i++) {
+      try {
+        const resolved = resolveIpfsUrl(url, i);
+        const raw = await fetchUrl(resolved, 12000);
+        const text = extractRationaleText(raw);
+        if (text && text.length > 0) return { url: resolved, text: text.slice(0, 5000) };
+      } catch {}
+    }
+    return null;
+  }
+  // Regular URL
+  try {
+    const raw = await fetchUrl(url, 12000);
+    const text = extractRationaleText(raw);
+    if (text && text.length > 0) return { url, text: text.slice(0, 5000) };
+  } catch {}
+  return null;
+}
 
 // ─── Koios HTTP ─────────────────────────────────────────────
 function koiosGet(endpoint, params = {}) {
@@ -539,6 +607,177 @@ async function main() {
   });
   console.log(`  CC vote cache: ${Object.keys(ccExpiredVotes).length} expired, ${Object.keys(ccActiveVotes).length} active`);
 
+  // ─── 7c. Download rationale content from IPFS/URLs ──────────
+  if (Object.keys(ccRationales).length > 0) {
+    console.log(`\n  Downloading ${Object.keys(ccRationales).length} rationale documents...`);
+    const ratEntries = Object.entries(ccRationales);
+    let downloaded = 0, failed = 0, cached = 0;
+    const ccRationaleContent = {};
+
+    for (const [key, val] of ratEntries) {
+      // If already downloaded (has .text field from cache), skip
+      if (typeof val === "object" && val.text) {
+        ccRationaleContent[key] = val;
+        cached++;
+        continue;
+      }
+      const url = typeof val === "string" ? val : (val.url || val);
+      try {
+        const result = await fetchRationaleContent(url);
+        if (result) {
+          ccRationaleContent[key] = result;
+          downloaded++;
+        } else {
+          ccRationaleContent[key] = { url: resolveIpfsUrl(url), text: "" };
+          failed++;
+        }
+      } catch {
+        ccRationaleContent[key] = { url: resolveIpfsUrl(url), text: "" };
+        failed++;
+      }
+      // Small delay to avoid hammering IPFS gateways
+      await new Promise(r => setTimeout(r, 300));
+    }
+    console.log(`  Rationales: ${downloaded} downloaded, ${cached} cached, ${failed} failed`);
+    // Replace URL-only entries with content objects
+    Object.assign(ccRationales, ccRationaleContent);
+
+    // Update cache rationale entries too
+    Object.entries(ccRationales).forEach(([k, v]) => {
+      const propId = k.split("__")[1];
+      const exp = proposalExpirations[propId] || 0;
+      if (exp > 0 && exp < currentEpoch) {
+        ccExpiredRationales[k] = v;
+      } else {
+        ccActiveRationales[k] = v;
+      }
+    });
+  }
+
+  // ─── 7d. DRep rationale URLs via Koios proposal_votes ────────
+  let drepRationales = {};
+  // Load cached DRep rationales
+  const cachedDrepRatExpired = cache.drepExpiredRationales || {};
+  const cachedDrepRatActive = cache.drepActiveRationales || {};
+  Object.assign(drepRationales, cachedDrepRatExpired, cachedDrepRatActive);
+  const drepRatCachedCount = Object.keys(drepRationales).length;
+  if (drepRatCachedCount > 0) {
+    console.log(`\n  Restored ${drepRatCachedCount} cached DRep rationales`);
+  }
+
+  try {
+    console.log("\n  Fetching DRep rationale URLs via Koios proposal_votes...");
+    // Step 1: Get proposal list from Koios to get bech32 IDs
+    let allKoiosProposals = [];
+    let offset = 0;
+    const PAGE = 500;
+    while (true) {
+      const page = await koiosGet("/proposal_list", { offset, limit: PAGE });
+      if (!page || page.length === 0) break;
+      allKoiosProposals = allKoiosProposals.concat(page);
+      if (page.length < PAGE) break;
+      offset += PAGE;
+    }
+    console.log(`    Koios proposal_list: ${allKoiosProposals.length} proposals`);
+
+    // Build mapping: txHash#certIndex → bech32 proposal_id
+    const bech32Map = {};
+    for (const kp of allKoiosProposals) {
+      if (kp.proposal_tx_hash && kp.proposal_index != null && kp.proposal_id) {
+        const key = `${kp.proposal_tx_hash}#${kp.proposal_index}`;
+        bech32Map[key] = kp.proposal_id;
+      }
+    }
+    console.log(`    Mapped ${Object.keys(bech32Map).length} proposals to bech32 IDs`);
+
+    // Step 2: For each proposal we know about, check if we already have all rationale URLs cached
+    // Only fetch proposal_votes for proposals where we might get new rationales
+    const propsToFetch = proposals.filter(p => {
+      const bech32Id = bech32Map[p.proposal_id];
+      if (!bech32Id) return false;
+      // Skip expired proposals where we already have cached rationales
+      const exp = p.expiration || 0;
+      if (exp > 0 && exp < currentEpoch && cachedDrepRatExpired[`__check__${p.proposal_id}`] !== undefined) return false;
+      return true;
+    });
+    console.log(`    Fetching votes for ${propsToFetch.length} proposals (${proposals.length - propsToFetch.length} fully cached)`);
+
+    let drepRatUrlCount = 0;
+    for (const p of propsToFetch) {
+      const bech32Id = bech32Map[p.proposal_id];
+      if (!bech32Id) continue;
+      try {
+        // Koios may paginate, fetch all pages
+        let allVotes = [];
+        let vOffset = 0;
+        while (true) {
+          const votes = await koiosGet("/proposal_votes", { _proposal_id: bech32Id, offset: vOffset, limit: 500 });
+          if (!votes || votes.length === 0) break;
+          allVotes = allVotes.concat(votes);
+          if (votes.length < 500) break;
+          vOffset += 500;
+        }
+        // Extract DRep votes with meta_url
+        for (const v of allVotes) {
+          if (v.voter_role === "DRep" && v.meta_url) {
+            const metaUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
+            if (metaUrl && v.voter_id) {
+              const key = `${v.voter_id}__${p.proposal_id}`;
+              // Don't overwrite already-downloaded content
+              if (!drepRationales[key] || typeof drepRationales[key] === "string") {
+                drepRationales[key] = metaUrl;
+                drepRatUrlCount++;
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.log(`    Error fetching votes for ${p.proposal_id.slice(0,16)}...: ${e.message}`);
+      }
+    }
+    console.log(`    Found ${drepRatUrlCount} new DRep rationale URLs`);
+  } catch (e) {
+    console.log(`    DRep rationale fetch error: ${e.message}`);
+  }
+
+  // Step 3: Download DRep rationale content (same as CC)
+  const drepRatUrlEntries = Object.entries(drepRationales).filter(([, v]) => typeof v === "string");
+  if (drepRatUrlEntries.length > 0) {
+    console.log(`\n  Downloading ${drepRatUrlEntries.length} DRep rationale documents...`);
+    let dlOk = 0, dlFail = 0;
+    for (const [key, url] of drepRatUrlEntries) {
+      try {
+        const result = await fetchRationaleContent(url);
+        if (result) {
+          drepRationales[key] = result;
+          dlOk++;
+        } else {
+          drepRationales[key] = { url: resolveIpfsUrl(url), text: "" };
+          dlFail++;
+        }
+      } catch {
+        drepRationales[key] = { url: resolveIpfsUrl(url), text: "" };
+        dlFail++;
+      }
+      await new Promise(r => setTimeout(r, 200));
+    }
+    console.log(`    DRep rationales: ${dlOk} downloaded, ${dlFail} failed, ${drepRatCachedCount} cached`);
+  }
+
+  // Build DRep rationale cache (expired = permanent)
+  const drepExpiredRationales = {};
+  const drepActiveRationales = {};
+  Object.entries(drepRationales).forEach(([k, v]) => {
+    const propId = k.split("__")[1];
+    const exp = proposalExpirations[propId] || 0;
+    if (exp > 0 && exp < currentEpoch) {
+      drepExpiredRationales[k] = v;
+    } else {
+      drepActiveRationales[k] = v;
+    }
+  });
+  console.log(`  DRep rationale cache: ${Object.keys(drepExpiredRationales).length} expired, ${Object.keys(drepActiveRationales).length} active`);
+
   // ─── Save unified cache ────────────────────────────────────
   saveCache({
     expiredVotes,
@@ -555,6 +794,7 @@ async function main() {
     drepStakeRank: newStakeRank,
     ccExpiredVotes, ccExpiredRationales,
     ccActiveVotes, ccActiveRationales,
+    drepExpiredRationales, drepActiveRationales,
     ccMembers,
     currentEpoch
   });
@@ -593,7 +833,13 @@ async function main() {
     console.log(`  CC: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes written`);
   }
 
-  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json", "cc-members.json", "cc-votes.json", "cc-rationales.json"];
+  // Write DRep rationales
+  if (Object.keys(drepRationales).length > 0) {
+    fs.writeFileSync(path.join(DATA_DIR, "drep-rationales.json"), JSON.stringify(drepRationales));
+    console.log(`  DRep rationales: ${Object.keys(drepRationales).length} written`);
+  }
+
+  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json", "cc-members.json", "cc-votes.json", "cc-rationales.json", "drep-rationales.json"];
   files.forEach(f => {
     try { const size = fs.statSync(path.join(DATA_DIR, f)).size; console.log(`  ${f}: ${(size / 1024).toFixed(1)} KB`); } catch (e) {}
   });

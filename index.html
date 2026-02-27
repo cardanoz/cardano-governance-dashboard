@@ -106,6 +106,7 @@ const LANG = {
     sim_drep_cc_ratio:"DRep : CC Ratio", sim_period:"Reward Calculation Period",
     sim_drep_section:"DRep Reward Simulator", sim_cc_section:"CC Reward Simulator",
     sim_cc_max_budget:"CC Max Budget (before penalty)", sim_cc_actual_budget:"CC Actual (after penalty)",
+    export_rationales:"Export Rationales CSV",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
@@ -166,6 +167,7 @@ const LANG = {
     sim_drep_cc_ratio:"DRep : CC 分配比率", sim_period:"報酬計算期間",
     sim_drep_section:"DRep報酬シミュレーター", sim_cc_section:"CC報酬シミュレーター",
     sim_cc_max_budget:"CC予算（最大・ペナルティ前）", sim_cc_actual_budget:"CC予算（実際・ペナルティ後）",
+    export_rationales:"投票根拠CSV出力",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
@@ -285,22 +287,6 @@ function resolveIpfsUrl(url) {
   if (url.startsWith("ipfs://")) return "https://ipfs.io/ipfs/" + url.slice(7);
   if (url.startsWith("ipfs:")) return "https://ipfs.io/ipfs/" + url.slice(5);
   return url;
-}
-// Fetch rationale JSON and extract readable text
-async function fetchRationaleText(url) {
-  const resolved = resolveIpfsUrl(url);
-  if (!resolved) return null;
-  try {
-    const r = await fetch(resolved, { signal: AbortSignal.timeout(10000) });
-    if (!r.ok) return null;
-    const text = await r.text();
-    try {
-      const j = JSON.parse(text);
-      const body = j.body || j;
-      return body.comment || body.rationale || body.summary || body.abstract ||
-        (typeof body === "string" ? body : JSON.stringify(body, null, 2));
-    } catch { return text.slice(0, 2000); }
-  } catch { return null; }
 }
 // Cardano epoch ↔ date conversion (Shelley era: epoch 208 = 2020-07-29T21:44:51Z, 5 days per epoch)
 const EPOCH_208_TS = 1596059091000; // ms
@@ -701,7 +687,7 @@ function calcProcessMetrics(results, totalEligible) {
 // ════════════════════════════════════════════════════════════════
 // Dashboard Tab
 // ════════════════════════════════════════════════════════════════
-function DashboardTab({ dreps, proposals, votes, warnings, hasMore, pageLoading, stage,
+function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMore, pageLoading, stage,
   loadMoreDreps, T, isDemo }) {
   const [search,setSearch] = React.useState("");
   const [minStake,setMinStake] = React.useState("");
@@ -740,7 +726,33 @@ function DashboardTab({ dreps, proposals, votes, warnings, hasMore, pageLoading,
   const tPP=Math.max(1,Math.ceil(fProps.length/PPP));
   const actTypes=[...new Set(proposals.map(p=>p.proposal_type).filter(Boolean))];
 
+  const [ratModal,setRatModal] = React.useState(null); // {name, proposalTitle, text}
+
   function gv(did,pid){return votes[`${did}__${pid}`]||"NotVoted";}
+  function getDrepRat(did,pid){
+    const r = drepRationales[`${did}__${pid}`];
+    if (!r) return null;
+    if (typeof r === "string") return { url: resolveIpfsUrl(r), text: "" };
+    return r;
+  }
+
+  function exportDrepRationalesCSV(){
+    const rows=[["DRep Name","DRep ID","Proposal","Vote","Rationale"]];
+    dreps.forEach(d=>{
+      proposals.forEach(p=>{
+        const v=gv(d.drep_id,p.proposal_id);
+        const rat=getDrepRat(d.drep_id,p.proposal_id);
+        if(rat&&rat.text){
+          rows.push([safeName(d.name)||d.drep_id, d.drep_id, p.title||p.proposal_id, v, rat.text.replace(/"/g,'""')]);
+        }
+      });
+    });
+    if(rows.length<=1){alert("No rationale data available.");return;}
+    const csv=rows.map(r=>r.map(c=>`"${c}"`).join(",")).join("\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    a.download="drep_rationales.csv";a.click();URL.revokeObjectURL(a.href);
+  }
 
   function handleDPageChange(newPage) {
     setDPage(newPage);
@@ -836,10 +848,13 @@ function DashboardTab({ dreps, proposals, votes, warnings, hasMore, pageLoading,
                       </div>
                     </div>
                   </td>
-                  {pgP.map((p,ci)=>{const v=gv(d.drep_id,p.proposal_id);return(
+                  {pgP.map((p,ci)=>{const v=gv(d.drep_id,p.proposal_id);const rat=getDrepRat(d.drep_id,p.proposal_id);return(
                     <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
-                      <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
+                      <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center",position:"relative"}}
+                        title={rat&&rat.text?rat.text.slice(0,300):undefined}>
                         <VoteBadge vote={v} T={T}/>
+                        {rat&&rat.text&&<div style={{marginTop:1}}><span style={{fontSize:7,color:"var(--yes)",cursor:"pointer"}}
+                          onClick={()=>setRatModal({name:safeName(d.name)||shortId(d.drep_id),proposalTitle:p.title||shortId(p.proposal_id),text:rat.text,url:rat.url})}>📎</span></div>}
                       </div></td>
                   );})}
                 </tr>
@@ -855,9 +870,45 @@ function DashboardTab({ dreps, proposals, votes, warnings, hasMore, pageLoading,
             {hasMore && <button className="btn btn-primary" onClick={loadMoreDreps} disabled={pageLoading}
               style={{fontSize:10,padding:"3px 10px"}}>{pageLoading?"⏳":"⬇"} {T.load_more}</button>}
           </div>
-          <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <button className="btn" style={{fontSize:10,padding:"3px 10px"}} onClick={exportDrepRationalesCSV}>📎 {T.export_rationales||"Export Rationales CSV"}</button>
+            <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
+          </div>
         </div>
       </div>
+
+      {/* DRep Rationale Modal */}
+      {ratModal && (
+        <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
+          display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
+          onClick={()=>setRatModal(null)}>
+          <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,maxWidth:700,width:"100%",
+            maxHeight:"80vh",display:"flex",flexDirection:"column",boxShadow:"0 20px 60px rgba(0,0,0,.5)"}}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+              <div>
+                <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{ratModal.name}</div>
+                <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{ratModal.proposalTitle}</div>
+              </div>
+              <button onClick={()=>setRatModal(null)} style={{background:"none",border:"none",color:"var(--text2)",fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
+            </div>
+            <div style={{padding:16,overflow:"auto",flex:1}}>
+              <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",fontSize:12,lineHeight:1.5,color:"var(--text)",
+                fontFamily:"inherit",margin:0}}>{ratModal.text}</pre>
+            </div>
+            <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
+              {ratModal.text && <button className="btn" style={{fontSize:11}} onClick={()=>{
+                const blob=new Blob([ratModal.text],{type:"text/plain"});
+                const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+                a.download=`rationale_${ratModal.name}_${(ratModal.proposalTitle||"").slice(0,30).replace(/[^a-zA-Z0-9]/g,"_")}.txt`;
+                a.click();URL.revokeObjectURL(a.href);
+              }}>⬇ Download</button>}
+              {ratModal.url && <a href={ratModal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 Source</a>}
+              <button onClick={()=>setRatModal(null)} className="btn" style={{fontSize:11}}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -923,7 +974,13 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
     if(v) return v;
     return isEligible(ccId,pid) ? "NotVoted" : "Ineligible";
   }
-  function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
+  // gr returns rationale entry: {url, text} or legacy string URL or null
+  function gr(ccId,pid){
+    const r = ccRationales[`${ccId}__${pid}`];
+    if (!r) return null;
+    if (typeof r === "string") return { url: resolveIpfsUrl(r), text: "" };
+    return r;
+  }
 
   function exportCSV(mode){
     const csvProps = mode === "visible" ? pgP : fProps;
@@ -937,28 +994,25 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
     URL.revokeObjectURL(url);
   }
 
-  async function showRationale(ccName, proposalTitle, url) {
-    const resolved = resolveIpfsUrl(url);
-    setRatModal({ ccName, proposalTitle, url: resolved, text: null, loading: true });
-    const text = await fetchRationaleText(url);
-    setRatModal(prev => prev ? { ...prev, text: text || T.cc_rationale_error, loading: false } : null);
+  function showRationale(ccName, proposalTitle, ratObj) {
+    // ratObj = {url, text} — pre-downloaded content
+    const url = ratObj.url || "";
+    const text = ratObj.text || T.cc_rationale_error;
+    setRatModal({ ccName, proposalTitle, url, text, loading: false });
   }
 
-  async function exportRationalesCSV() {
+  function exportRationalesCSV() {
     setRatExporting(true);
     const rows = [];
     for (const cc of fMembers) {
       for (const p of fProps) {
         const vote = ccVotes[`${cc.cc_id}__${p.proposal_id}`];
         if (!vote) continue;
-        const rUrl = gr(cc.cc_id, p.proposal_id);
-        let content = "";
-        if (rUrl) {
-          try { content = await fetchRationaleText(rUrl) || ""; } catch {}
-        }
+        const ratObj = gr(cc.cc_id, p.proposal_id);
+        const content = ratObj ? (ratObj.text || "").replace(/[\r\n]+/g, " ").slice(0, 5000) : "";
         rows.push([
           cc.name || cc.cc_id, p.proposal_id, p.title || "", p.proposal_type || "",
-          vote, rUrl ? resolveIpfsUrl(rUrl) : "", content.replace(/[\r\n]+/g, " ").slice(0, 5000)
+          vote, ratObj ? ratObj.url : "", content
         ]);
       }
     }
@@ -1051,12 +1105,12 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
                       </div>
                     </div>
                   </td>
-                  {pgP.map((p,ci)=>{const v=gv(cc.cc_id,p.proposal_id);const rUrl=gr(cc.cc_id,p.proposal_id);return(
+                  {pgP.map((p,ci)=>{const v=gv(cc.cc_id,p.proposal_id);const ratObj=gr(cc.cc_id,p.proposal_id);return(
                     <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
                       <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
                         {v==="Ineligible" ? <IneligibleBadge/> : <VoteBadge vote={v} T={T}/>}
-                        {rUrl && <div style={{marginTop:2}}><a href={resolveIpfsUrl(rUrl)} target="_blank" rel="noopener" style={{fontSize:8,color:"var(--accent2)",cursor:"pointer"}} title={resolveIpfsUrl(rUrl)}
-                          onClick={e=>{e.preventDefault();showRationale(cc.name||shortId(cc.cc_id),p.title||shortId(p.proposal_id),rUrl)}}>📎</a></div>}
+                        {ratObj && <div style={{marginTop:2}}><a href={ratObj.url||"#"} target="_blank" rel="noopener" style={{fontSize:8,color:ratObj.text?"var(--yes)":"var(--accent2)",cursor:"pointer"}} title={ratObj.text?(ratObj.text.slice(0,100)+"..."):(ratObj.url||"")}
+                          onClick={e=>{e.preventDefault();showRationale(cc.name||shortId(cc.cc_id),p.title||shortId(p.proposal_id),ratObj)}}>📎</a></div>}
                       </div></td>
                   );})}
                 </tr>
@@ -2066,6 +2120,7 @@ function App() {
   const [ccMembers,setCCMembers] = React.useState([]);
   const [ccVotes,setCCVotes] = React.useState({});
   const [ccRationales,setCCRationales] = React.useState({});
+  const [drepRationales,setDrepRationales] = React.useState({});
   const [stakeHistory,setStakeHistory] = React.useState([]);
   const [loading,setLoading] = React.useState(true);
   const [pageLoading,setPageLoading] = React.useState(false);
@@ -2124,7 +2179,7 @@ function App() {
     const meta = await metaRes.json();
 
     setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes] = await Promise.all([
+    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes, drepRatRes] = await Promise.all([
       fetch(base + "dreps.json"),
       fetch(base + "proposals.json"),
       fetch(base + "votes.json"),
@@ -2132,7 +2187,8 @@ function App() {
       fetch(base + "cc-members.json").catch(() => null),
       fetch(base + "cc-votes.json").catch(() => null),
       fetch(base + "cc-rationales.json").catch(() => null),
-      fetch(base + "drep-history.json").catch(() => null)
+      fetch(base + "drep-history.json").catch(() => null),
+      fetch(base + "drep-rationales.json").catch(() => null)
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
@@ -2152,6 +2208,10 @@ function App() {
       if (ccVotesRes && ccVotesRes.ok) setCCVotes(await ccVotesRes.json());
       if (ccRatRes && ccRatRes.ok) setCCRationales(await ccRatRes.json());
     } catch(e) { console.warn("CC data load error:", e); }
+    // Load DRep rationales if available
+    try {
+      if (drepRatRes && drepRatRes.ok) setDrepRationales(await drepRatRes.json());
+    } catch(e) { console.warn("DRep rationales load error:", e); }
     // Load stake history if available
     try {
       if (histRes && histRes.ok) setStakeHistory(await histRes.json());
@@ -2486,7 +2546,7 @@ function App() {
       </div>
 
       {tab === "dashboard" ? (
-        <DashboardTab dreps={dreps} proposals={proposals} votes={votes}
+        <DashboardTab dreps={dreps} proposals={proposals} votes={votes} drepRationales={drepRationales}
           warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
           loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
       ) : tab === "cc" ? (
