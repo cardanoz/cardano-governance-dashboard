@@ -11,6 +11,7 @@
  *
  * Output: data/dreps.json, data/proposals.json, data/votes.json,
  *         data/simulator.json, data/meta.json,
+ *         data/drep-history.json (accumulating stake snapshots),
  *         data/vote-cache.json (persistent cache)
  *
  * Note: CC (Constitutional Committee) vote data is maintained as static JSON files
@@ -130,12 +131,12 @@ async function main() {
   console.log(`Metadata cache: ${useMetadataCache ? `FRESH (${metaCacheAgeHours.toFixed(1)}h old)` : `STALE (${metaCacheAgeHours.toFixed(1)}h old, re-fetching)`}`);
 
   // ─── 1. DRep IDs ──────────────────────────────────────────
-  console.log("\n[1/6] Fetching DRep IDs...");
+  console.log("\n[1/7] Fetching DRep IDs...");
   const drepIds = await fetchAllPages("/governance/dreps", MAX_PAGES);
   console.log(`  Found ${drepIds.length} DRep IDs`);
 
   // ─── 2. DRep details + metadata ───────────────────────────
-  console.log(`\n[2/6] Fetching DRep details${useMetadataCache ? " (metadata from cache)" : " + metadata"}...`);
+  console.log(`\n[2/7] Fetching DRep details${useMetadataCache ? " (metadata from cache)" : " + metadata"}...`);
   const cachedMeta = cache.drepMetadata || {};
   const newDrepMetadata = {};
   let metadataFetchCount = 0;
@@ -172,7 +173,7 @@ async function main() {
   if (useMetadataCache) console.log(`  Metadata: ${Object.keys(cachedMeta).length} from cache, ${metadataFetchCount} fresh`);
 
   // ─── 3. DRep votes ────────────────────────────────────────
-  console.log("\n[3/6] Fetching DRep votes (incremental)...");
+  console.log("\n[3/7] Fetching DRep votes (incremental)...");
   const voteMap = {};
   const proposalSet = {};
   const drepVoteCounts = {};
@@ -211,7 +212,7 @@ async function main() {
   console.log(`  Fresh: ${freshVoteCount}, Total: ${Object.keys(voteMap).length}`);
 
   // ─── 4. Proposal details ──────────────────────────────────
-  console.log("\n[4/6] Fetching proposal details + metadata...");
+  console.log("\n[4/7] Fetching proposal details + metadata...");
   const cachedProposalIds = new Set(Object.keys(cache.proposals || {}));
   const newPropEntries = Object.entries(proposalSet).filter(([k]) => !cachedProposalIds.has(k));
   console.log(`  ${newPropEntries.length} new proposals (${cachedProposalIds.size} cached)`);
@@ -251,7 +252,7 @@ async function main() {
   proposals.forEach(p => { proposalExpirations[p.proposal_id] = p.expiration || 0; });
 
   // ─── 5. Build simulator data + update cache ───────────────
-  console.log("\n[5/6] Building simulator data + updating cache...");
+  console.log("\n[5/7] Building simulator data + updating cache...");
   let maxVotes = 0;
   Object.values(drepVoteCounts).forEach(c => { if (c > maxVotes) maxVotes = c; });
 
@@ -277,8 +278,36 @@ async function main() {
     currentEpoch
   });
 
-  // ─── 6. Write output files ────────────────────────────────
-  console.log("\n[6/6] Writing JSON files...");
+  // ─── 6. Stake history snapshot ──────────────────────────────
+  console.log("\n[6/7] Updating stake history snapshot...");
+  const HISTORY_FILE = path.join(DATA_DIR, "drep-history.json");
+  let history = [];
+  try {
+    if (fs.existsSync(HISTORY_FILE)) history = JSON.parse(fs.readFileSync(HISTORY_FILE, "utf8"));
+  } catch (e) { console.warn("  History load error:", e.message); history = []; }
+
+  const hasEpoch = history.some(s => s.epoch === currentEpoch);
+  if (!hasEpoch) {
+    const top50 = dreps.slice(0, 50).map(d => ({
+      id: d.drep_id, name: d.name, amount: d.amount, delegators: d.delegators
+    }));
+    const totalStake = dreps.reduce((s, d) => s + Number(d.amount), 0);
+    history.push({
+      epoch: currentEpoch,
+      timestamp: Date.now(),
+      total_stake: String(totalStake),
+      drep_count: dreps.length,
+      top: top50
+    });
+    history.sort((a, b) => a.epoch - b.epoch);
+    console.log(`  Stake snapshot added: epoch ${currentEpoch}, ${dreps.length} DReps, total ${(totalStake / 1e6).toFixed(0)} ADA`);
+  } else {
+    console.log(`  Epoch ${currentEpoch} already in history (${history.length} snapshots total)`);
+  }
+  fs.writeFileSync(HISTORY_FILE, JSON.stringify(history));
+
+  // ─── 7. Write output files ────────────────────────────────
+  console.log("\n[7/7] Writing JSON files...");
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
   const meta = {
@@ -303,7 +332,7 @@ async function main() {
   }));
   fs.writeFileSync(path.join(DATA_DIR, "meta.json"), JSON.stringify(meta, null, 2));
 
-  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json"];
+  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json"];
   files.forEach(f => {
     try { const size = fs.statSync(path.join(DATA_DIR, f)).size; console.log(`  ${f}: ${(size / 1024).toFixed(1)} KB`); } catch (e) {}
   });

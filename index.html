@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -101,6 +102,12 @@ const LANG = {
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
     api_key_required:"Blockfrost API key required",
+    tab_history:"Stake History",
+    hist_title:"DRep Stake History", hist_desc:"Tracking DRep voting power over time (snapshots captured each epoch)",
+    hist_total_stake:"Total Stake (ADA)", hist_drep_count:"DRep Count", hist_top_dreps:"Top DReps by Stake",
+    hist_epoch:"Epoch", hist_date:"Date", hist_no_data:"No history data yet. Snapshots are captured each epoch by the data fetcher.",
+    hist_chart_total:"Total DRep Stake Over Time", hist_chart_drep:"Individual DRep Stake",
+    hist_select_drep:"Select DRep to chart…", hist_change:"Change", hist_snapshots:"snapshots",
   },
   ja: {
     title:"DRep ガバナンス", subtitle_drep:"DRep", subtitle_actions:"アクション", subtitle_votes:"投票",
@@ -147,6 +154,12 @@ const LANG = {
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
     api_key_required:"Blockfrost APIキーが必要です",
+    tab_history:"ステーク推移",
+    hist_title:"DRepステーク推移", hist_desc:"DRep投票力の時系列推移（エポックごとにスナップショット記録）",
+    hist_total_stake:"総ステーク (ADA)", hist_drep_count:"DRep数", hist_top_dreps:"ステーク上位DRep",
+    hist_epoch:"エポック", hist_date:"日付", hist_no_data:"履歴データがまだありません。データ取得時にエポックごとにスナップショットが記録されます。",
+    hist_chart_total:"DRep総ステーク推移", hist_chart_drep:"個別DRepステーク推移",
+    hist_select_drep:"チャート表示するDRepを選択…", hist_change:"変更", hist_snapshots:"スナップショット",
   }
 };
 
@@ -1055,6 +1068,190 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   );
 }
 
+// Stake History Tab — DRep stake over time with charts and tables
+// ════════════════════════════════════════════════════════════════
+function StakeHistoryTab({ history, T, lang }) {
+  const [selectedDrep, setSelectedDrep] = React.useState(null);
+  const [showDrepPicker, setShowDrepPicker] = React.useState(false);
+  const [drepSearch, setDrepSearch] = React.useState("");
+  const totalChartRef = React.useRef(null);
+  const totalCanvasRef = React.useRef(null);
+  const drepChartRef = React.useRef(null);
+  const drepCanvasRef = React.useRef(null);
+
+  // Get all unique DReps across history
+  const allDreps = React.useMemo(() => {
+    const map = {};
+    history.forEach(s => {
+      (s.top || []).forEach(d => {
+        if (!map[d.id]) map[d.id] = d.name || d.id.slice(0,20)+"…";
+      });
+    });
+    return Object.entries(map).sort((a,b) => a[1].localeCompare(b[1]));
+  }, [history]);
+
+  // Total stake chart
+  React.useEffect(() => {
+    if (!totalCanvasRef.current || history.length === 0 || typeof Chart === "undefined") return;
+    if (totalChartRef.current) totalChartRef.current.destroy();
+    const labels = history.map(s => {
+      const ts = s.timestamp || epochToTimestamp(s.epoch) * 1000;
+      const d = new Date(ts);
+      return `E${s.epoch} (${d.getMonth()+1}/${d.getDate()})`;
+    });
+    totalChartRef.current = new Chart(totalCanvasRef.current, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: T.hist_total_stake,
+          data: history.map(s => Math.round(Number(s.total_stake) / 1e6)),
+          borderColor: "#3b82f6", backgroundColor: "rgba(59,130,246,0.1)",
+          fill: true, tension: 0.3, pointRadius: 4, pointHoverRadius: 6
+        }, {
+          label: T.hist_drep_count,
+          data: history.map(s => s.drep_count),
+          borderColor: "#34d399", backgroundColor: "transparent",
+          fill: false, tension: 0.3, pointRadius: 3, yAxisID: "y2"
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: "#e8ecf4" } }, title: { display: true, text: T.hist_chart_total, color: "#e8ecf4", font: { size: 14 } } },
+        scales: {
+          x: { ticks: { color: "#8692ab", maxRotation: 45 }, grid: { color: "#262f42" } },
+          y: { position: "left", ticks: { color: "#8692ab", callback: v => (v/1e9).toFixed(1)+"B" }, grid: { color: "#262f42" }, title: { display: true, text: "ADA", color: "#8692ab" } },
+          y2: { position: "right", ticks: { color: "#34d399" }, grid: { drawOnChartArea: false }, title: { display: true, text: T.hist_drep_count, color: "#34d399" } }
+        }
+      }
+    });
+    return () => { if (totalChartRef.current) totalChartRef.current.destroy(); };
+  }, [history, lang]);
+
+  // Individual DRep chart
+  React.useEffect(() => {
+    if (!drepCanvasRef.current || !selectedDrep || history.length === 0 || typeof Chart === "undefined") return;
+    if (drepChartRef.current) drepChartRef.current.destroy();
+    const labels = history.map(s => {
+      const ts = s.timestamp || epochToTimestamp(s.epoch) * 1000;
+      const d = new Date(ts);
+      return `E${s.epoch} (${d.getMonth()+1}/${d.getDate()})`;
+    });
+    const data = history.map(s => {
+      const found = (s.top || []).find(d => d.id === selectedDrep);
+      return found ? Math.round(Number(found.amount) / 1e6) : null;
+    });
+    const drepName = allDreps.find(([id]) => id === selectedDrep)?.[1] || selectedDrep.slice(0,20);
+    drepChartRef.current = new Chart(drepCanvasRef.current, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: drepName,
+          data,
+          borderColor: "#fbbf24", backgroundColor: "rgba(251,191,36,0.1)",
+          fill: true, tension: 0.3, pointRadius: 4, spanGaps: true
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: "#e8ecf4" } }, title: { display: true, text: `${T.hist_chart_drep}: ${drepName}`, color: "#e8ecf4", font: { size: 14 } } },
+        scales: {
+          x: { ticks: { color: "#8692ab", maxRotation: 45 }, grid: { color: "#262f42" } },
+          y: { ticks: { color: "#8692ab", callback: v => v >= 1e9 ? (v/1e9).toFixed(1)+"B" : v >= 1e6 ? (v/1e6).toFixed(1)+"M" : v >= 1e3 ? (v/1e3).toFixed(0)+"K" : v }, grid: { color: "#262f42" }, title: { display: true, text: "ADA", color: "#8692ab" } }
+        }
+      }
+    });
+    return () => { if (drepChartRef.current) drepChartRef.current.destroy(); };
+  }, [history, selectedDrep, lang]);
+
+  if (history.length === 0) {
+    return React.createElement("div", {style:{padding:32,textAlign:"center",color:"var(--text2)"}},
+      React.createElement("p", {style:{fontSize:16,marginBottom:8}}, T.hist_no_data)
+    );
+  }
+
+  const fmtAda = (lovelace) => {
+    const ada = Number(lovelace) / 1e6;
+    if (ada >= 1e9) return (ada/1e9).toFixed(2) + "B";
+    if (ada >= 1e6) return (ada/1e6).toFixed(2) + "M";
+    if (ada >= 1e3) return (ada/1e3).toFixed(0) + "K";
+    return ada.toFixed(0);
+  };
+  const fmtDate = (ts) => {
+    const d = new Date(ts);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  };
+
+  const filteredDreps = drepSearch
+    ? allDreps.filter(([id, name]) => name.toLowerCase().includes(drepSearch.toLowerCase()) || id.toLowerCase().includes(drepSearch.toLowerCase()))
+    : allDreps;
+
+  return React.createElement("div", {className:"card", style:{padding:20}},
+    // Header
+    React.createElement("h2", {style:{fontSize:18,fontWeight:700,marginBottom:4}}, T.hist_title),
+    React.createElement("p", {style:{color:"var(--text2)",fontSize:13,marginBottom:16}}, T.hist_desc + ` (${history.length} ${T.hist_snapshots})`),
+
+    // Total stake chart
+    React.createElement("div", {style:{height:300,marginBottom:24,position:"relative"}},
+      React.createElement("canvas", {ref: totalCanvasRef})
+    ),
+
+    // Individual DRep chart section
+    React.createElement("div", {style:{marginBottom:24}},
+      React.createElement("div", {style:{display:"flex",alignItems:"center",gap:8,marginBottom:12}},
+        React.createElement("span", {style:{fontWeight:600,fontSize:14}}, T.hist_chart_drep + ":"),
+        selectedDrep
+          ? React.createElement(React.Fragment, null,
+              React.createElement("span", {style:{color:"var(--accent2)"}}, allDreps.find(([id])=>id===selectedDrep)?.[1] || ""),
+              React.createElement("button", {onClick:()=>{setShowDrepPicker(true);setDrepSearch("");}, style:{fontSize:12,padding:"2px 8px",background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:4,color:"var(--text2)",cursor:"pointer"}}, T.hist_change)
+            )
+          : React.createElement("button", {onClick:()=>{setShowDrepPicker(true);setDrepSearch("");}, style:{fontSize:12,padding:"4px 12px",background:"var(--accent)",border:"none",borderRadius:4,color:"#fff",cursor:"pointer"}}, T.hist_select_drep)
+      ),
+      showDrepPicker && React.createElement("div", {style:{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:8,marginBottom:12,maxHeight:200,overflowY:"auto"}},
+        React.createElement("input", {type:"text",value:drepSearch,onChange:e=>setDrepSearch(e.target.value),placeholder:T.search,style:{width:"100%",padding:"4px 8px",marginBottom:6,background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:4,color:"var(--text)",fontSize:12}}),
+        filteredDreps.slice(0,20).map(([id,name]) =>
+          React.createElement("div", {key:id,onClick:()=>{setSelectedDrep(id);setShowDrepPicker(false);},style:{padding:"4px 8px",cursor:"pointer",borderRadius:4,fontSize:12,color: id===selectedDrep?"var(--accent2)":"var(--text)"}},
+            name, React.createElement("span",{style:{color:"var(--text2)",marginLeft:6,fontSize:10}}, id.slice(0,16)+"…")
+          )
+        )
+      ),
+      selectedDrep && React.createElement("div", {style:{height:250,position:"relative"}},
+        React.createElement("canvas", {ref: drepCanvasRef})
+      )
+    ),
+
+    // Summary table
+    React.createElement("h3", {style:{fontSize:15,fontWeight:600,marginBottom:8}}, T.hist_top_dreps),
+    React.createElement("div", {style:{overflowX:"auto"}},
+      React.createElement("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:12}},
+        React.createElement("thead", null,
+          React.createElement("tr", {style:{borderBottom:"2px solid var(--border)"}},
+            React.createElement("th", {style:{textAlign:"left",padding:"6px 8px",color:"var(--text2)"}}, T.hist_epoch),
+            React.createElement("th", {style:{textAlign:"left",padding:"6px 8px",color:"var(--text2)"}}, T.hist_date),
+            React.createElement("th", {style:{textAlign:"right",padding:"6px 8px",color:"var(--text2)"}}, T.hist_total_stake),
+            React.createElement("th", {style:{textAlign:"right",padding:"6px 8px",color:"var(--text2)"}}, T.hist_drep_count),
+            React.createElement("th", {style:{textAlign:"left",padding:"6px 8px",color:"var(--text2)"}}, "Top 3")
+          )
+        ),
+        React.createElement("tbody", null,
+          [...history].reverse().map((s, i) => {
+            const ts = s.timestamp || epochToTimestamp(s.epoch) * 1000;
+            const top3 = (s.top || []).slice(0,3).map(d => d.name || d.id.slice(0,12)+"…").join(", ");
+            return React.createElement("tr", {key:s.epoch, style:{borderBottom:"1px solid var(--border)", background: i%2===0 ? "transparent" : "var(--bg2)"}},
+              React.createElement("td", {style:{padding:"6px 8px",fontWeight:500}}, "E" + s.epoch),
+              React.createElement("td", {style:{padding:"6px 8px",color:"var(--text2)"}}, fmtDate(ts)),
+              React.createElement("td", {style:{padding:"6px 8px",textAlign:"right",fontFamily:"monospace"}}, fmtAda(s.total_stake)),
+              React.createElement("td", {style:{padding:"6px 8px",textAlign:"right"}}, s.drep_count),
+              React.createElement("td", {style:{padding:"6px 8px",color:"var(--text2)",fontSize:11}}, top3)
+            );
+          })
+        )
+      )
+    )
+  );
+}
+
 // Simulator Tab — Single table with 3 reward columns side by side
 // ════════════════════════════════════════════════════════════════
 function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, T }) {
@@ -1279,6 +1476,7 @@ function App() {
   const [ccMembers,setCCMembers] = React.useState([]);
   const [ccVotes,setCCVotes] = React.useState({});
   const [ccRationales,setCCRationales] = React.useState({});
+  const [stakeHistory,setStakeHistory] = React.useState([]);
   const [loading,setLoading] = React.useState(true);
   const [pageLoading,setPageLoading] = React.useState(false);
   const [stage,setStage] = React.useState("");
@@ -1336,14 +1534,15 @@ function App() {
     const meta = await metaRes.json();
 
     setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes] = await Promise.all([
+    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes] = await Promise.all([
       fetch(base + "dreps.json"),
       fetch(base + "proposals.json"),
       fetch(base + "votes.json"),
       fetch(base + "simulator.json"),
       fetch(base + "cc-members.json").catch(() => null),
       fetch(base + "cc-votes.json").catch(() => null),
-      fetch(base + "cc-rationales.json").catch(() => null)
+      fetch(base + "cc-rationales.json").catch(() => null),
+      fetch(base + "drep-history.json").catch(() => null)
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
@@ -1363,6 +1562,10 @@ function App() {
       if (ccVotesRes && ccVotesRes.ok) setCCVotes(await ccVotesRes.json());
       if (ccRatRes && ccRatRes.ok) setCCRationales(await ccRatRes.json());
     } catch(e) { console.warn("CC data load error:", e); }
+    // Load stake history if available
+    try {
+      if (histRes && histRes.ok) setStakeHistory(await histRes.json());
+    } catch(e) { console.warn("History data load error:", e); }
     setIsDemo(false);
     setHasMore(false);
     setDataSource("static");
@@ -1689,6 +1892,7 @@ function App() {
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
         <button className={`tab-btn ${tab==="cc"?"active":""}`} onClick={()=>setTab("cc")}>{T.tab_cc}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
+        <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
       </div>
 
       {tab === "dashboard" ? (
@@ -1698,6 +1902,8 @@ function App() {
       ) : tab === "cc" ? (
         <CCVotesTab ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
           proposals={proposals} T={T} />
+      ) : tab === "history" ? (
+        <StakeHistoryTab history={stakeHistory} T={T} lang={lang} />
       ) : (
         <SimulatorTab dreps={allDreps} voteData={voteData} totalActions={totalActions}
           periodVoteData={periodVoteData}
