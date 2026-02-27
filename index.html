@@ -73,6 +73,12 @@ const LANG = {
     delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
     tab_dashboard:"Voting Dashboard", tab_cc:"CC Votes", tab_simulator:"Reward Simulator",
     cc_member:"CC Member", no_cc:"No CC votes found", cc_rationale:"Rationale",
+    cc_expired_only:"Showing expired governance actions only (static data)",
+    cc_ineligible:"N/A", cc_not_voted:"Not Voted",
+    cc_sim_title:"CC Reward Simulator", cc_sim_desc:"3 missed votes on eligible GAs = 0% reward",
+    cc_sim_base:"Base reward per epoch (ADA)", cc_sim_eligible:"Eligible GAs", cc_sim_voted:"Voted",
+    cc_sim_missed:"Missed", cc_sim_penalty:"Penalty", cc_sim_reward:"Est. Reward",
+    cc_sim_factor:"Reward Factor", cc_sim_note:"GAs where CC member cannot vote (N/A) are excluded from penalty calculation",
     sim_title:"DRep Reward Simulator", sim_subtitle:"Middle-Out mechanism comparison (process-first)",
     params:"Parameters", summary:"Summary",
     rank:"Rank", name:"Name", stake:"Stake", eligible:"Elig.",
@@ -113,6 +119,12 @@ const LANG = {
     delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
     tab_dashboard:"投票ダッシュボード", tab_cc:"CC投票", tab_simulator:"報酬シミュレーター",
     cc_member:"CC委員", no_cc:"CC投票データなし", cc_rationale:"根拠",
+    cc_expired_only:"期限切れの一部のGAのみ表示しています（静的データ）",
+    cc_ineligible:"対象外", cc_not_voted:"未投票",
+    cc_sim_title:"CC報酬シミュレーター", cc_sim_desc:"対象GAのうち3回未投票で報酬0%",
+    cc_sim_base:"1エポックあたり基本報酬 (ADA)", cc_sim_eligible:"対象GA", cc_sim_voted:"投票済",
+    cc_sim_missed:"未投票", cc_sim_penalty:"ペナルティ", cc_sim_reward:"推定報酬",
+    cc_sim_factor:"報酬係数", cc_sim_note:"CC委員が投票対象外のGA（対象外）はペナルティ計算から除外されます",
     sim_title:"DRep報酬シミュレーター", sim_subtitle:"ミドルアウト方式比較（プロセスファースト）",
     params:"パラメータ", summary:"サマリー",
     rank:"順位", name:"名前", stake:"委任額", eligible:"対象",
@@ -791,7 +803,32 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   const [epTo,setEpTo] = React.useState("");
   const [pPage,setPPage] = React.useState(0);
   const [csvOpen,setCsvOpen] = React.useState(false);
-  const PPP = 20;
+  const [ccTab,setCcTab] = React.useState("votes");
+  const [ccBaseReward,setCcBaseReward] = React.useState(5000);
+  const PPP = 22;
+
+  // Build set of proposal IDs that have at least one CC vote
+  const ccProposalIds = React.useMemo(()=>{
+    const ids=new Set();
+    Object.keys(ccVotes).forEach(k=>{const pid=k.split("__")[1]; if(pid) ids.add(pid);});
+    return ids;
+  },[ccVotes]);
+
+  // Filter proposals to only those with CC votes (expired only)
+  const ccProposals = React.useMemo(()=>{
+    return proposals.filter(p=>ccProposalIds.has(p.proposal_id));
+  },[proposals,ccProposalIds]);
+
+  // Build eligibility map: which CC member is eligible for which proposal
+  const eligibleMap = React.useMemo(()=>{
+    const m={};
+    ccMembers.forEach(cc=>{
+      if(cc.eligible_proposals){
+        cc.eligible_proposals.forEach(pid=>{m[`${cc.cc_id}__${pid}`]=true;});
+      }
+    });
+    return m;
+  },[ccMembers]);
 
   const fMembers = React.useMemo(()=>{
     let r = [...ccMembers];
@@ -801,25 +838,42 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   },[ccMembers,search]);
 
   const fProps = React.useMemo(()=>{
-    let r=[...proposals];
+    let r=[...ccProposals];
     if(actType!=="all") r=r.filter(p=>p.proposal_type===actType);
     if(epFrom) r=r.filter(p=>Number(p.epoch_no)>=parseInt(epFrom));
     if(epTo) r=r.filter(p=>Number(p.epoch_no)<=parseInt(epTo));
     return r;
-  },[proposals,actType,epFrom,epTo]);
+  },[ccProposals,actType,epFrom,epTo]);
 
   const pgP=fProps.slice(pPage*PPP,(pPage+1)*PPP);
   const tPP=Math.max(1,Math.ceil(fProps.length/PPP));
-  const actTypes=[...new Set(proposals.map(p=>p.proposal_type).filter(Boolean))];
+  const actTypes=[...new Set(ccProposals.map(p=>p.proposal_type).filter(Boolean))];
 
-  function gv(ccId,pid){return ccVotes[`${ccId}__${pid}`]||"NotVoted";}
+  function isEligible(ccId,pid){return !!eligibleMap[`${ccId}__${pid}`];}
+  function gv(ccId,pid){
+    const v=ccVotes[`${ccId}__${pid}`];
+    if(v) return v;
+    return isEligible(ccId,pid) ? "NotVoted" : "Ineligible";
+  }
   function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
+
+  // CC Simulator data
+  const simData = React.useMemo(()=>{
+    return fMembers.map(cc=>{
+      const eligible = fProps.filter(p=>isEligible(cc.cc_id,p.proposal_id));
+      const voted = eligible.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]);
+      const missed = eligible.length - voted.length;
+      const factor = Math.max(0, 1 - missed/3);
+      const reward = ccBaseReward * factor;
+      return {cc, eligible:eligible.length, voted:voted.length, missed, factor, reward};
+    });
+  },[fMembers,fProps,ccVotes,ccBaseReward]);
 
   function exportCSV(mode){
     const csvProps = mode === "visible" ? pgP : fProps;
-    const hdr=["CC Member ID","Vote Count",
+    const hdr=["CC Member ID","Name","Vote Count",
       ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
-    const rows=fMembers.map(c=>[c.cc_id,c.vote_count,
+    const rows=fMembers.map(c=>[c.cc_id,c.name||"",c.vote_count,
       ...csvProps.map(p=>{const v=gv(c.cc_id,p.proposal_id);const r=gr(c.cc_id,p.proposal_id);return v+(r?" [📎]":"");})]);
     const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
     const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
@@ -829,8 +883,26 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
 
   const ist={padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
 
+  function IneligibleBadge(){return <span style={{display:"inline-block",padding:"2px 8px",borderRadius:6,fontSize:9,fontWeight:600,
+    background:"rgba(100,100,100,.15)",color:"rgba(160,160,160,.7)",border:"1px solid rgba(100,100,100,.2)"}}>—</span>;}
+
   return (
     <div>
+      {/* Notice: expired GAs only */}
+      <div style={{background:"rgba(255,180,0,.08)",border:"1px solid rgba(255,180,0,.2)",borderRadius:8,padding:"8px 12px",marginBottom:12,
+        fontSize:11,color:"#e0a020",display:"flex",alignItems:"center",gap:6}}>
+        <span style={{fontSize:14}}>⚠</span> {T.cc_expired_only}
+      </div>
+
+      {/* Sub-tabs: Votes / Simulator */}
+      <div style={{display:"flex",gap:4,marginBottom:12}}>
+        <button className={`tab-btn ${ccTab==="votes"?"active":""}`} onClick={()=>setCcTab("votes")}
+          style={{fontSize:11,padding:"5px 14px"}}>{T.tab_cc}</button>
+        <button className={`tab-btn ${ccTab==="simulator"?"active":""}`} onClick={()=>setCcTab("simulator")}
+          style={{fontSize:11,padding:"5px 14px"}}>{T.cc_sim_title}</button>
+      </div>
+
+      {ccTab==="votes" ? <>
       <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",marginBottom:12,display:"flex",flexWrap:"wrap",gap:8,alignItems:"flex-end"}}>
         {[
           {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>setSearch(e.target.value)} style={{...ist,width:150}}/>},
@@ -858,11 +930,10 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
 
       <div style={{fontSize:11,color:"var(--text2)",marginBottom:8}}>
         {T.showing}: {T.cc_member} {fMembers.length} × {T.subtitle_actions} {fProps.length}
-        <span style={{opacity:.6,marginLeft:6}}>📎 = {T.cc_rationale}</span>
       </div>
 
       <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-        <div style={{overflow:"auto",maxHeight:"calc(100vh - 360px)"}}>
+        <div style={{overflow:"auto",maxHeight:"calc(100vh - 420px)"}}>
           <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*95+260}}>
             <thead><tr>
               <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:"8px 10px",textAlign:"left",
@@ -893,14 +964,14 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
                       <div style={{minWidth:0,flex:1}}>
                         <div style={{fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}}>
                           {cc.name||shortId(cc.cc_id)}</div>
-                        <div style={{fontSize:10,color:"var(--text2)"}}>{cc.vote_count} votes</div>
+                        <div style={{fontSize:10,color:"var(--text2)"}}>{cc.vote_count} / {cc.eligible_count||"?"} votes</div>
                       </div>
                     </div>
                   </td>
                   {pgP.map((p,ci)=>{const v=gv(cc.cc_id,p.proposal_id);const rUrl=gr(cc.cc_id,p.proposal_id);return(
                     <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
                       <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
-                        <VoteBadge vote={v} T={T}/>
+                        {v==="Ineligible" ? <IneligibleBadge/> : <VoteBadge vote={v} T={T}/>}
                         {rUrl && <div style={{marginTop:2}}><a href={rUrl} target="_blank" rel="noopener" style={{fontSize:8,color:"var(--accent2)"}} title={rUrl}>📎</a></div>}
                       </div></td>
                   );})}
@@ -915,6 +986,71 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
           <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
         </div>
       </div>
+      </> : <>
+      {/* CC Reward Simulator */}
+      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:16,marginBottom:12}}>
+        <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"center",marginBottom:12}}>
+          <div>
+            <div style={{fontSize:14,fontWeight:700,color:"var(--text)"}}>{T.cc_sim_title}</div>
+            <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{T.cc_sim_desc}</div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}>
+            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_base}</label>
+            <input type="number" value={ccBaseReward} onChange={e=>setCcBaseReward(Number(e.target.value)||0)}
+              style={{...ist,width:120}}/>
+          </div>
+        </div>
+
+        {/* Penalty explanation visual */}
+        <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap"}}>
+          {[0,1,2,3].map(m=>{const f=Math.max(0,1-m/3);const c=f>0.5?"#22c55e":f>0?"#f59e0b":"#ef4444";
+            return <div key={m} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 12px",textAlign:"center",minWidth:80}}>
+              <div style={{fontSize:9,color:"var(--text2)",marginBottom:2}}>{T.cc_sim_missed}: {m}</div>
+              <div style={{fontSize:18,fontWeight:700,color:c}}>{Math.round(f*100)}%</div>
+              <div style={{fontSize:9,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccBaseReward).toLocaleString()} ADA</div>
+            </div>;})}
+        </div>
+
+        {/* Simulator table */}
+        <div style={{border:"1px solid var(--border)",borderRadius:8,overflow:"hidden"}}>
+          <table style={{borderCollapse:"collapse",width:"100%"}}>
+            <thead><tr style={{background:"var(--bg3)"}}>
+              {[T.cc_member,T.cc_sim_eligible,T.cc_sim_voted,T.cc_sim_missed,T.cc_sim_factor,T.cc_sim_reward].map((h,i)=>
+                <th key={i} style={{padding:"8px 10px",fontSize:10,fontWeight:700,color:"var(--text2)",textTransform:"uppercase",
+                  letterSpacing:".05em",textAlign:i===0?"left":"center",borderBottom:"2px solid var(--border)"}}>{h}</th>)}
+            </tr></thead>
+            <tbody>
+              {simData.map((d,ri)=>{
+                const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";
+                const fc=d.factor>0.5?"#22c55e":d.factor>0?"#f59e0b":"#ef4444";
+                return <tr key={d.cc.cc_id} style={{background:bg}}>
+                  <td style={{padding:"8px 10px",borderBottom:"1px solid var(--border)"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:7}}>
+                      <Avatar name={d.cc.name||d.cc.cc_id} url={null}/>
+                      <div><div style={{fontSize:11,fontWeight:600}}>{d.cc.name||shortId(d.cc.cc_id)}</div></div>
+                    </div>
+                  </td>
+                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12}}>{d.eligible}</td>
+                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,color:"#22c55e",fontWeight:600}}>{d.voted}</td>
+                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:12,
+                    color:d.missed===0?"var(--text2)":d.missed>=3?"#ef4444":"#f59e0b",fontWeight:d.missed>0?700:400}}>{d.missed}</td>
+                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)"}}>
+                    <span style={{fontSize:13,fontWeight:700,color:fc}}>{Math.round(d.factor*100)}%</span>
+                    <div style={{width:"100%",height:4,background:"rgba(255,255,255,.1)",borderRadius:2,marginTop:3}}>
+                      <div style={{width:`${d.factor*100}%`,height:"100%",background:fc,borderRadius:2,transition:"width .3s"}}/>
+                    </div>
+                  </td>
+                  <td style={{padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)",fontSize:13,fontWeight:700,
+                    color:fc}}>{d.reward>0?"₳"+Math.round(d.reward).toLocaleString():"₳0"}</td>
+                </tr>;})}
+            </tbody>
+          </table>
+        </div>
+        <div style={{fontSize:10,color:"var(--text2)",marginTop:8,opacity:.7}}>
+          ℹ {T.cc_sim_note}
+        </div>
+      </div>
+      </>}
     </div>
   );
 }
