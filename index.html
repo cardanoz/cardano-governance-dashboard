@@ -901,11 +901,7 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
 
   return (
     <div>
-      {/* Notice: expired GAs only */}
-      <div style={{background:"rgba(255,180,0,.08)",border:"1px solid rgba(255,180,0,.2)",borderRadius:8,padding:"8px 12px",marginBottom:12,
-        fontSize:11,color:"#e0a020",display:"flex",alignItems:"center",gap:6}}>
-        <span style={{fontSize:14}}>⚠</span> {T.cc_expired_only}
-      </div>
+      {/* CC data now fetched live from Koios API */}
 
       {/* Sub-tabs: Votes / Simulator */}
       <div style={{display:"flex",gap:4,marginBottom:12}}>

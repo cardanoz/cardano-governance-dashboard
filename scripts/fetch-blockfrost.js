@@ -429,7 +429,11 @@ async function main() {
           console.log(`    Vote fetch error for ${shortName}: ${e.message}`);
         }
 
-        const eligibleProposals = memberVotes.map(v => v.proposal_id || `${v.proposal_tx_hash}#${v.proposal_index}`);
+        // Always use txHash#index format to match Blockfrost proposal IDs
+        const eligibleProposals = memberVotes.map(v => {
+          if (v.proposal_tx_hash != null && v.proposal_index != null) return `${v.proposal_tx_hash}#${v.proposal_index}`;
+          return v.proposal_id || "unknown";
+        });
 
         ccMembers.push({
           cc_id: shortName,
@@ -443,9 +447,11 @@ async function main() {
           expiration_epoch: member.expiration_epoch || null
         });
 
-        // Build vote map (includes both cached expired + fresh active)
+        // Build vote map — use txHash#index format to match Blockfrost proposals
         for (const v of memberVotes) {
-          const proposalId = v.proposal_id || `${v.proposal_tx_hash}#${v.proposal_index}`;
+          const proposalId = (v.proposal_tx_hash != null && v.proposal_index != null)
+            ? `${v.proposal_tx_hash}#${v.proposal_index}`
+            : (v.proposal_id || "unknown");
           ccVoteMap[`${shortName}__${proposalId}`] = v.vote;
           ccFreshVoteCount++;
 
