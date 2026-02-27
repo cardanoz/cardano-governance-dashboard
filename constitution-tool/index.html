@@ -9,7 +9,9 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>var module = {};</script>
   <script src="https://cdn.jsdelivr.net/npm/diff-match-patch/index.js"></script>
+  <script>if(module.exports) window.diff_match_patch = module.exports;</script>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
@@ -555,7 +557,7 @@
         case 'DEL_I': return {...s, initiatives:s.initiatives.filter(i=>i.id!==a.id), comments:s.comments.filter(c=>c.initiativeId!==a.id)};
         case 'ADD_C': return {...s, comments:[...s.comments,{...a.payload,id:crypto.randomUUID(),createdAt:Date.now(),status:'pending',decisions:[]}]};
         case 'DEL_C': return {...s, comments:s.comments.filter(c=>c.id!==a.id)};
-        case 'DECIDE_C': return {...s, comments:s.comments.map(c=>c.id===a.id?{...c, status:a.action, decisions:[...c.decisions,{action:a.action,reason:a.reason,by:a.by,at:Date.now()}]}:c)};
+        case 'DECIDE_C': return {...s, comments:s.comments.map(c=>c.id===a.id?{...c, status:a.action, decisions:[...(c.decisions||[]),{action:a.action,reason:a.reason,by:a.by,at:Date.now()}]}:c)};
         default: return s;
       }
     };
@@ -570,25 +572,33 @@
         const localC = DB.comments.get();
         dispatch({type:'INIT',payload:{initiatives:localI,comments:localC}});
 
+        // Firebase converts empty arrays [] to null, and can return objects instead of arrays.
+        // This helper normalizes the data back to a proper array and ensures all nested arrays exist.
+        const fbToArray = (val) => {
+          if (!val) return [];
+          if (Array.isArray(val)) return val;
+          // Firebase may convert arrays to objects with numeric keys
+          if (typeof val === 'object') return Object.values(val);
+          return [];
+        };
+        const fixComment = (c) => ({...c, decisions: Array.isArray(c.decisions) ? c.decisions : []});
+        const fixComments = (arr) => fbToArray(arr).map(fixComment);
+
         if (firebaseDB) {
           // Listen for real-time changes from Firebase
           firebaseDB.ref('initiatives').on('value', snap => {
-            const val = snap.val();
-            if (val && Array.isArray(val)) {
-              console.log('[Firebase] initiatives synced:', val.length);
-              LS._s('ccat_i', val); // update local cache
-              skipNextSync.current.initiatives = true;
-              dispatch({type:'INIT',payload:{initiatives:val, comments: LS._g('ccat_c') || []}});
-            }
+            const val = fbToArray(snap.val());
+            console.log('[Firebase] initiatives synced:', val.length);
+            LS._s('ccat_i', val);
+            skipNextSync.current.initiatives = true;
+            dispatch({type:'INIT',payload:{initiatives:val, comments: fixComments(LS._g('ccat_c'))}});
           });
           firebaseDB.ref('comments').on('value', snap => {
-            const val = snap.val();
-            if (val && Array.isArray(val)) {
-              console.log('[Firebase] comments synced:', val.length);
-              LS._s('ccat_c', val); // update local cache
-              skipNextSync.current.comments = true;
-              dispatch({type:'INIT',payload:{initiatives: LS._g('ccat_i') || [], comments:val}});
-            }
+            const val = fixComments(snap.val());
+            console.log('[Firebase] comments synced:', val.length);
+            LS._s('ccat_c', val);
+            skipNextSync.current.comments = true;
+            dispatch({type:'INIT',payload:{initiatives: fbToArray(LS._g('ccat_i')), comments:val}});
           });
         }
         initialized.current = true;
@@ -1188,11 +1198,11 @@ This appendix sets forth guardrails for on-chain governance actions, including p
           {/* Reason */}
           {c.reason&&<div><p className="text-xs text-gray-500 mb-1">{t(lang,'reason')}:</p><p className="text-sm text-gray-300">{c.reason}</p></div>}
           {/* Decision history */}
-          {c.decisions?.length>0&&(
+          {(c.decisions||[]).length>0&&(
             <details className="text-xs">
-              <summary className="text-purple-400 cursor-pointer hover:text-purple-300">{t(lang,'history')} ({c.decisions.length})</summary>
+              <summary className="text-purple-400 cursor-pointer hover:text-purple-300">{t(lang,'history')} ({(c.decisions||[]).length})</summary>
               <div className="mt-2 space-y-1">
-                {c.decisions.map((d,i)=>(
+                {(c.decisions||[]).map((d,i)=>(
                   <div key={i} className={`p-2 rounded text-xs ${d.action==='accept'?'bg-green-900/10 text-green-300':'bg-red-900/10 text-red-300'}`}>
                     <span className="font-medium">{d.action==='accept'?t(lang,'accepted'):t(lang,'rejected')}</span>
                     {d.reason&&<span className="text-gray-400"> — {d.reason}</span>}
