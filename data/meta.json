@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-02-27T09:59:57.818Z",
-  "updated_ts": 1772186397818,
+  "updated_at": "2026-02-27T13:24:01.553Z",
+  "updated_ts": 1772198641553,
   "drep_count": 1593,
   "proposal_count": 86,
-  "vote_count": 17676,
-  "api_calls": 1222,
-  "fetch_duration_ms": 109679,
+  "vote_count": 17678,
+  "api_calls": 2820,
+  "fetch_duration_ms": 118836,
   "max_votes": 120,
   "current_epoch": 615,
   "cached_expired_votes": 17408,
-  "metadata_from_cache": true
+  "metadata_from_cache": false
 }
