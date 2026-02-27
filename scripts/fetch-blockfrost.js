@@ -2,12 +2,16 @@
 /**
  * Blockfrost Data Fetcher for Cardano DRep Governance Dashboard
  *
- * Incremental caching: expired proposals' votes are cached and not re-fetched.
- * (Votes during active voting period are always re-fetched since they can change.)
+ * Caching strategy:
+ *   - Expired proposal votes: cached permanently (immutable after voting period ends)
+ *   - DRep metadata (name, image): cached for 6 hours (rarely changes)
+ *   - DRep details (stake, delegators): always fresh (changes with delegation)
+ *   - Active proposal votes: always fresh (can change during voting period)
+ *   - Expired proposal details: cached permanently
  *
  * Output: data/dreps.json, data/proposals.json, data/votes.json,
  *         data/simulator.json, data/meta.json,
- *         data/vote-cache.json (persistent cache for expired proposals)
+ *         data/vote-cache.json (persistent cache)
  */
 
 const https = require("https");
@@ -24,6 +28,7 @@ const THROTTLE_MS = 110;
 const MAX_PAGES = 30;
 const DATA_DIR = path.resolve(__dirname, "..", "data");
 const CACHE_FILE = path.join(DATA_DIR, "vote-cache.json");
+const METADATA_CACHE_HOURS = 6;
 
 let apiCalls = 0;
 let lastFetchTime = 0;
@@ -91,11 +96,11 @@ function loadCache() {
   try {
     if (fs.existsSync(CACHE_FILE)) {
       const raw = JSON.parse(fs.readFileSync(CACHE_FILE, "utf8"));
-      console.log(`  Cache loaded: ${Object.keys(raw.expiredVotes || {}).length} expired votes cached`);
+      console.log(`  Cache loaded: ${Object.keys(raw.expiredVotes || {}).length} expired votes, ${Object.keys(raw.drepMetadata || {}).length} DRep metadata entries`);
       return raw;
     }
   } catch (e) { console.warn("  Cache load error:", e.message); }
-  return { expiredVotes: {}, proposals: {}, proposalDetails: [] };
+  return { expiredVotes: {}, proposals: {}, proposalDetails: [], drepMetadata: {}, drepMetadataUpdatedAt: 0 };
 }
 
 function saveCache(cache) {
@@ -118,26 +123,50 @@ async function main() {
   const currentEpoch = latestBlock ? latestBlock.epoch : 999;
   console.log(`Current epoch: ${currentEpoch}`);
 
+  // Check if metadata cache is still fresh
+  const metaCacheAge = Date.now() - (cache.drepMetadataUpdatedAt || 0);
+  const metaCacheAgeHours = metaCacheAge / (1000 * 60 * 60);
+  const useMetadataCache = metaCacheAgeHours < METADATA_CACHE_HOURS && Object.keys(cache.drepMetadata || {}).length > 0;
+  console.log(`Metadata cache: ${useMetadataCache ? `FRESH (${metaCacheAgeHours.toFixed(1)}h old, reusing)` : `STALE or empty (${metaCacheAgeHours.toFixed(1)}h old, re-fetching)`}`);
+
   // 1. DRep IDs
   console.log("\n[1/6] Fetching DRep IDs...");
   const drepIds = await fetchAllPages("/governance/dreps", MAX_PAGES);
   console.log(`  Found ${drepIds.length} DRep IDs`);
 
-  // 2. DRep details + metadata
-  console.log("\n[2/6] Fetching DRep details + metadata...");
+  // 2. DRep details (stake = always fresh) + metadata (name/image = cached 6h)
+  console.log(`\n[2/6] Fetching DRep details${useMetadataCache ? " (metadata from cache)" : " + metadata"}...`);
+  const cachedMeta = cache.drepMetadata || {};
+  const newDrepMetadata = {};
+  let metadataFetchCount = 0;
+
   const dreps = await batchProcess(drepIds, async (d) => {
+    // Always fetch detail for fresh stake amount
     let detail;
     try { detail = await fetchJSON(`/governance/dreps/${d.drep_id}`); } catch (e) { return null; }
     if (!detail) return null;
+
     let name = null, image_url = null;
-    try {
-      const meta = await fetchJSON(`/governance/dreps/${d.drep_id}/metadata`);
-      if (meta && meta.json_metadata) {
-        const body = meta.json_metadata.body || meta.json_metadata;
-        name = safeName(body?.givenName || body?.name || null);
-        image_url = body?.image?.contentUrl || null;
-      }
-    } catch (e) {}
+
+    if (useMetadataCache && cachedMeta[d.drep_id]) {
+      // Use cached metadata
+      name = cachedMeta[d.drep_id].name;
+      image_url = cachedMeta[d.drep_id].image_url;
+      newDrepMetadata[d.drep_id] = cachedMeta[d.drep_id];
+    } else {
+      // Fetch fresh metadata
+      try {
+        const meta = await fetchJSON(`/governance/dreps/${d.drep_id}/metadata`);
+        if (meta && meta.json_metadata) {
+          const body = meta.json_metadata.body || meta.json_metadata;
+          name = safeName(body?.givenName || body?.name || null);
+          image_url = body?.image?.contentUrl || null;
+        }
+        metadataFetchCount++;
+      } catch (e) {}
+      newDrepMetadata[d.drep_id] = { name, image_url };
+    }
+
     return {
       drep_id: d.drep_id, name, amount: detail.amount || "0", image_url,
       delegators: detail.delegators_count || 0,
@@ -146,17 +175,20 @@ async function main() {
   }, "DReps");
   dreps.sort((a, b) => Number(b.amount) - Number(a.amount));
   console.log(`  Got ${dreps.length} DReps`);
+  if (useMetadataCache) {
+    console.log(`  Metadata: ${Object.keys(cachedMeta).length} from cache, ${metadataFetchCount} fresh`);
+  }
   console.log(`  Top 5:`, dreps.slice(0, 5).map(d => `${d.name || d.drep_id.slice(0, 15)}(${Math.round(Number(d.amount)/1e6)}M)`).join(", "));
 
-  // 3. Fetch votes (incremental: only re-fetch active proposal votes)
+  // 3. Fetch votes (incremental: expired votes cached, active always re-fetched)
   console.log("\n[3/6] Fetching DRep votes (incremental)...");
-  const voteMap = {};        // "drepId__propKey" → "Yes"/"No"/"Abstain"
-  const proposalSet = {};    // "propKey" → { tx_hash, cert_index }
+  const voteMap = {};
+  const proposalSet = {};
   const drepVoteCounts = {};
   const drepVotedProposals = {};
   let cachedVoteCount = 0, freshVoteCount = 0;
 
-  // Restore cached expired votes (these are final and won't change)
+  // Restore cached expired votes (final, won't change)
   if (cache.expiredVotes) {
     Object.entries(cache.expiredVotes).forEach(([k, v]) => { voteMap[k] = v; cachedVoteCount++; });
   }
@@ -196,7 +228,7 @@ async function main() {
   console.log(`  Fresh votes fetched: ${freshVoteCount}`);
   console.log(`  Total votes: ${Object.keys(voteMap).length}`);
 
-  // 4. Fetch proposal details + metadata
+  // 4. Fetch proposal details + metadata (cached proposals skipped)
   console.log("\n[4/6] Fetching proposal details + metadata...");
   const cachedProposalIds = new Set(Object.keys(cache.proposals || {}));
   const newPropEntries = Object.entries(proposalSet).filter(([k]) => !cachedProposalIds.has(k));
@@ -212,7 +244,6 @@ async function main() {
     "info_action": "InfoAction"
   };
 
-  // Merge cached + new proposals
   const allProposals = {};
   if (cache.proposalDetails) {
     cache.proposalDetails.forEach(p => { allProposals[p.proposal_id] = p; });
@@ -253,7 +284,7 @@ async function main() {
   let maxVotes = 0;
   Object.values(drepVoteCounts).forEach(c => { if (c > maxVotes) maxVotes = c; });
 
-  // Cache only expired proposal votes (voting period ended = immutable)
+  // Cache expired proposal votes (immutable)
   const expiredVotes = {};
   Object.entries(voteMap).forEach(([k, v]) => {
     const propKey = k.split("__")[1];
@@ -261,7 +292,7 @@ async function main() {
     if (exp > 0 && exp < currentEpoch) { expiredVotes[k] = v; }
   });
   const expiredProposalDetails = proposals.filter(p => p.expiration > 0 && p.expiration < currentEpoch);
-  console.log(`  Caching: ${Object.keys(expiredVotes).length} expired votes, ${expiredProposalDetails.length} expired proposals`);
+  console.log(`  Caching: ${Object.keys(expiredVotes).length} expired votes, ${expiredProposalDetails.length} expired proposals, ${Object.keys(newDrepMetadata).length} DRep metadata`);
 
   saveCache({
     expiredVotes,
@@ -272,6 +303,8 @@ async function main() {
     proposalDetails: expiredProposalDetails,
     drepVoteCounts,
     drepVotedProposals,
+    drepMetadata: newDrepMetadata,
+    drepMetadataUpdatedAt: useMetadataCache ? cache.drepMetadataUpdatedAt : Date.now(),
     currentEpoch
   });
 
@@ -289,7 +322,8 @@ async function main() {
     fetch_duration_ms: Date.now() - startTime,
     max_votes: maxVotes,
     current_epoch: currentEpoch,
-    cached_expired_votes: Object.keys(expiredVotes).length
+    cached_expired_votes: Object.keys(expiredVotes).length,
+    metadata_from_cache: useMetadataCache
   };
 
   fs.writeFileSync(path.join(DATA_DIR, "dreps.json"), JSON.stringify(dreps));
@@ -309,7 +343,8 @@ async function main() {
   });
 
   console.log(`\n=== Done! ===`);
-  console.log(`API calls: ${apiCalls} (saved ~${cachedVoteCount} cached expired votes)`);
+  console.log(`API calls: ${apiCalls}${useMetadataCache ? " (metadata from cache, saved ~" + Object.keys(cachedMeta).length + " calls)" : ""}`);
+  console.log(`Expired vote cache: saved ~${cachedVoteCount} vote lookups`);
   console.log(`Duration: ${((Date.now() - startTime) / 1000).toFixed(1)}s`);
 }
 
