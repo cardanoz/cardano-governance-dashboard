@@ -7,9 +7,9 @@
  * DRep names resolved via Blockfrost metadata API.
  *
  * Usage:
- *   BLOCKFROST_API_KEY=mainnetXXX node scripts/fetch-history-backfill.js [epochs]
+ *   BLOCKFROST_API_KEY=mainnetXXX node scripts/fetch-history-backfill.js [epochs|all]
  *
- * Default: last 10 epochs
+ * Default: last 10 epochs. Use "all" for all epochs since Conway HF (epoch 530).
  */
 
 const https = require("https");
@@ -23,7 +23,10 @@ const BLOCKFROST_BASE = "https://cardano-mainnet.blockfrost.io/api/v0";
 const KOIOS_BASE = "https://api.koios.rest/api/v1";
 const DATA_DIR = path.resolve(__dirname, "..", "data");
 const HISTORY_FILE = path.join(DATA_DIR, "drep-history.json");
-const NUM_EPOCHS = parseInt(process.argv[2]) || 10;
+const CONWAY_START_EPOCH = 530; // Conway Hard Fork — DRep governance began
+const ARG = process.argv[2] || "10";
+const FETCH_ALL = ARG.toLowerCase() === "all";
+const NUM_EPOCHS = FETCH_ALL ? 9999 : (parseInt(ARG) || 10);
 const TOP_N = 50;
 const THROTTLE_MS = 150;
 
@@ -97,13 +100,14 @@ function epochToTimestamp(epoch) {
 
 // ─── Main ────────────────────────────────────────────────────
 async function main() {
-  console.log(`Backfilling DRep stake history for last ${NUM_EPOCHS} epochs`);
-  console.log(`Using Koios API: ${KOIOS_BASE}/drep_voting_power_history\n`);
-
   // 1. Get current epoch from Blockfrost
   const latestBlock = await blockfrostGet("/blocks/latest");
   const currentEpoch = latestBlock.epoch;
-  console.log(`Current epoch: ${currentEpoch}`);
+  const startEpoch = FETCH_ALL ? CONWAY_START_EPOCH : Math.max(CONWAY_START_EPOCH, currentEpoch - NUM_EPOCHS + 1);
+  const totalToFetch = currentEpoch - startEpoch + 1;
+
+  console.log(`Backfilling DRep stake history: E${startEpoch}–E${currentEpoch} (${totalToFetch} epochs${FETCH_ALL ? ", ALL since Conway" : ""})`);
+  console.log(`Using Koios API: ${KOIOS_BASE}/drep_voting_power_history\n`);
 
   // 2. Load existing history
   let history = [];
@@ -113,9 +117,6 @@ async function main() {
   } catch (e) { history = []; }
   const existingEpochs = new Set(history.map(s => s.epoch));
   console.log(`Existing snapshots: ${history.length}\n`);
-
-  // 3. Fetch each epoch from Koios
-  const startEpoch = currentEpoch - NUM_EPOCHS + 1;
   let newSnapshots = 0;
 
   for (let epoch = startEpoch; epoch <= currentEpoch; epoch++) {

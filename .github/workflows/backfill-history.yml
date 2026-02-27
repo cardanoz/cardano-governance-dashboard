@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       epochs:
-        description: 'Number of past epochs to fetch'
+        description: 'Number of past epochs to fetch, or "all" for everything since Conway HF (E530)'
         required: false
-        default: '10'
+        default: 'all'
 
 permissions:
   contents: write
@@ -14,7 +14,7 @@ permissions:
 jobs:
   backfill:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repository
