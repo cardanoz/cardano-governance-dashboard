@@ -86,15 +86,49 @@ function fetchUrl(url, timeoutMs = 15000) {
     req.on("timeout", () => { req.destroy(); reject(new Error("Timeout")); });
   });
 }
-// Extract readable text from rationale JSON (CIP-100 format)
+// Extract readable text from rationale JSON (CIP-100 / CIP-136 format)
+// CIP-136 CC vote fields: summary, rationaleStatement, precedentDiscussion, counterargumentDiscussion, conclusion, internalVote
+// CIP-100 general fields: comment, rationale, summary, abstract, motivation
 function extractRationaleText(raw) {
   try {
     const j = JSON.parse(raw);
     const body = j.body || j;
-    return body.comment || body.rationale || body.summary || body.abstract ||
-      (typeof body === "string" ? body : JSON.stringify(body, null, 2));
+    if (typeof body === "string") return body;
+
+    // Collect all meaningful text fields in order
+    const sections = [];
+    const fieldOrder = [
+      ["summary", "Summary"],
+      ["abstract", "Abstract"],
+      ["motivation", "Motivation"],
+      ["rationale", "Rationale"],
+      ["rationaleStatement", "Rationale Statement"],
+      ["precedentDiscussion", "Precedent Discussion"],
+      ["counterargumentDiscussion", "Counterargument Discussion"],
+      ["conclusion", "Conclusion"],
+      ["internalVote", "Internal Vote"],
+      ["comment", "Comment"],
+    ];
+    for (const [key, label] of fieldOrder) {
+      const val = body[key];
+      if (val && typeof val === "string" && val.trim()) {
+        sections.push(`[${label}]\n${val.trim()}`);
+      } else if (val && typeof val === "object") {
+        // Handle @value or nested structure
+        const txt = val["@value"] || (Array.isArray(val) ? val.map(v => typeof v === "string" ? v : (v["@value"] || "")).join("\n") : JSON.stringify(val));
+        if (txt && txt.trim()) sections.push(`[${label}]\n${txt.trim()}`);
+      }
+    }
+    // If we found structured fields, join them
+    if (sections.length > 0) return sections.join("\n\n");
+    // Fallback: any text-like fields
+    const anyText = Object.entries(body)
+      .filter(([k, v]) => typeof v === "string" && v.trim() && !k.startsWith("@"))
+      .map(([k, v]) => `[${k}]\n${v.trim()}`).join("\n\n");
+    if (anyText) return anyText;
+    return JSON.stringify(body, null, 2);
   } catch {
-    return raw.slice(0, 3000);
+    return raw.slice(0, 5000);
   }
 }
 // Extract IPFS CID from any URL or ipfs:// scheme
@@ -118,7 +152,7 @@ async function fetchRationaleContent(url) {
         const resolved = IPFS_GATEWAYS[i] + cid;
         const raw = await fetchUrl(resolved, 8000);
         const text = extractRationaleText(raw);
-        if (text && text.length > 0) return { url: resolved, text: text.slice(0, 5000) };
+        if (text && text.length > 0) return { url: resolved, text: text.slice(0, 15000) };
       } catch (e) {
         // Continue to next gateway
       }
@@ -129,7 +163,7 @@ async function fetchRationaleContent(url) {
   try {
     const raw = await fetchUrl(url, 10000);
     const text = extractRationaleText(raw);
-    if (text && text.length > 0) return { url, text: text.slice(0, 5000) };
+    if (text && text.length > 0) return { url, text: text.slice(0, 15000) };
   } catch {}
   return null;
 }
@@ -505,7 +539,21 @@ async function main() {
   const cachedCCRatExpired = cache.ccExpiredRationales || {};
   const cachedCCRatActive = cache.ccActiveRationales || {};
   Object.assign(ccVoteMap, cachedCCExpired, cachedCCActive);
-  Object.assign(ccRationales, cachedCCRatExpired, cachedCCRatActive);
+  const refreshRationales = process.env.REFRESH_RATIONALES === "1";
+  if (refreshRationales) {
+    console.log("  REFRESH_RATIONALES=1: forcing re-download of all rationale content");
+    // Keep only URLs, strip cached text so everything gets re-downloaded
+    const stripText = (obj) => {
+      const out = {};
+      for (const [k, v] of Object.entries(obj)) {
+        out[k] = typeof v === "object" && v.url ? v.url : v;
+      }
+      return out;
+    };
+    Object.assign(ccRationales, stripText(cachedCCRatExpired), stripText(cachedCCRatActive));
+  } else {
+    Object.assign(ccRationales, cachedCCRatExpired, cachedCCRatActive);
+  }
   let ccCachedCount = Object.keys(cachedCCExpired).length + Object.keys(cachedCCActive).length;
   if (ccCachedCount > 0) {
     console.log(`  Restored ${ccCachedCount} cached CC votes (${Object.keys(cachedCCExpired).length} expired, ${Object.keys(cachedCCActive).length} active)`);
@@ -648,8 +696,8 @@ async function main() {
     console.log(`  ${label}: downloading ${toDownload.length} (${cached} cached)...`);
 
     let downloaded = 0, dlFailed = 0;
-    // Process in parallel batches of 5
-    const BATCH = 5;
+    // Process in parallel batches of 10
+    const BATCH = 10;
     for (let i = 0; i < toDownload.length; i += BATCH) {
       const batch = toDownload.slice(i, i + BATCH);
       const results = await Promise.all(batch.map(async ([key, url]) => {
@@ -695,7 +743,18 @@ async function main() {
   // Load cached DRep rationales
   const cachedDrepRatExpired = cache.drepExpiredRationales || {};
   const cachedDrepRatActive = cache.drepActiveRationales || {};
-  Object.assign(drepRationales, cachedDrepRatExpired, cachedDrepRatActive);
+  if (refreshRationales) {
+    const stripText = (obj) => {
+      const out = {};
+      for (const [k, v] of Object.entries(obj)) {
+        out[k] = typeof v === "object" && v.url ? v.url : v;
+      }
+      return out;
+    };
+    Object.assign(drepRationales, stripText(cachedDrepRatExpired), stripText(cachedDrepRatActive));
+  } else {
+    Object.assign(drepRationales, cachedDrepRatExpired, cachedDrepRatActive);
+  }
   const drepRatCachedCount = Object.keys(drepRationales).length;
   if (drepRatCachedCount > 0) {
     console.log(`\n  Restored ${drepRatCachedCount} cached DRep rationales`);

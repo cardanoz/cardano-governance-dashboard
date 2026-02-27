@@ -11,7 +11,7 @@ permissions:
 jobs:
   fetch-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -25,6 +25,7 @@ jobs:
       - name: Fetch data from Blockfrost
         env:
           BLOCKFROST_API_KEY: ${{ secrets.BLOCKFROST_API_KEY }}
+          REFRESH_RATIONALES: "1"
         run: node scripts/fetch-blockfrost.js
 
       - name: Commit and push updated data

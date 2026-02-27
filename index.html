@@ -107,6 +107,8 @@ const LANG = {
     sim_drep_section:"DRep Reward Simulator", sim_cc_section:"CC Reward Simulator",
     sim_cc_max_budget:"CC Max Budget (before penalty)", sim_cc_actual_budget:"CC Actual (after penalty)",
     export_rationales:"Export Rationales CSV",
+    share_url:"Share", share_copied:"Copied!",
+    export_proposal_rationales:"Export DRep rationales for this proposal",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
@@ -168,6 +170,8 @@ const LANG = {
     sim_drep_section:"DRep報酬シミュレーター", sim_cc_section:"CC報酬シミュレーター",
     sim_cc_max_budget:"CC予算（最大・ペナルティ前）", sim_cc_actual_budget:"CC予算（実際・ペナルティ後）",
     export_rationales:"投票根拠CSV出力",
+    share_url:"共有", share_copied:"コピーしました！",
+    export_proposal_rationales:"この提案のDRep投票根拠を出力",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
@@ -288,6 +292,50 @@ function resolveIpfsUrl(url) {
   if (url.startsWith("ipfs:")) return "https://ipfs.io/ipfs/" + url.slice(5);
   return url;
 }
+// ─── URL Hash State Sharing ──────────────────────────────────
+// Parse URL hash fragment into key-value params
+function parseHash() {
+  const h = window.location.hash.slice(1);
+  if (!h) return {};
+  const p = {};
+  try { new URLSearchParams(h).forEach((v, k) => { p[k] = v; }); } catch {}
+  return p;
+}
+// Global hash state store — tracks current values across all components
+const _hs = {};
+// Update URL hash from global state (uses replaceState, no page reload)
+function syncHash() {
+  const entries = Object.entries(_hs).filter(([, v]) => v !== undefined && v !== null && v !== "");
+  if (entries.length === 0) { window.history.replaceState(null, "", window.location.pathname); return; }
+  window.history.replaceState(null, "", "#" + new URLSearchParams(entries).toString());
+}
+// Coerce string value to match default value's type
+function coerceVal(s, def) {
+  if (typeof def === "number") { const n = Number(s); return isNaN(n) ? def : n; }
+  if (typeof def === "boolean") return s === "true" || s === "1";
+  return s;
+}
+// Custom hook: useState synced to URL hash
+// Returns [value, setter] — same API as useState
+function useHashState(key, defaultVal) {
+  const initHash = React.useMemo(() => parseHash(), []);
+  const initVal = initHash[key] !== undefined ? coerceVal(initHash[key], defaultVal) : defaultVal;
+  const [val, setVal] = React.useState(initVal);
+  // Initialize global store
+  React.useEffect(() => {
+    if (String(initVal) !== String(defaultVal)) _hs[key] = String(initVal);
+  }, []);
+  const setter = React.useCallback((newVal) => {
+    setVal(prev => {
+      const v = typeof newVal === "function" ? newVal(prev) : newVal;
+      if (String(v) === String(defaultVal)) { delete _hs[key]; } else { _hs[key] = String(v); }
+      syncHash();
+      return v;
+    });
+  }, [key, defaultVal]);
+  return [val, setter];
+}
+
 // Cardano epoch ↔ date conversion (Shelley era: epoch 208 = 2020-07-29T21:44:51Z, 5 days per epoch)
 const EPOCH_208_TS = 1596059091000; // ms
 const EPOCH_DURATION = 432000000; // 5 days in ms
@@ -684,20 +732,34 @@ function calcProcessMetrics(results, totalEligible) {
   return { D, P, C, eligible: eligibleCount, gini, minR, maxR, avgR, medR, totalReward };
 }
 
+// ─── Share Button ─────────────────────────────────────────────
+function ShareButton({ T }) {
+  const [copied, setCopied] = React.useState(false);
+  return React.createElement("button", {
+    className: "btn",
+    onClick: () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        setCopied(true); setTimeout(() => setCopied(false), 2000);
+      });
+    },
+    style: { fontSize: 11, padding: "4px 12px", gap: 4, display: "inline-flex", alignItems: "center" }
+  }, copied ? "✓ " + (T.share_copied || "Copied!") : "🔗 " + (T.share_url || "Share"));
+}
+
 // ════════════════════════════════════════════════════════════════
 // Dashboard Tab
 // ════════════════════════════════════════════════════════════════
 function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMore, pageLoading, stage,
   loadMoreDreps, T, isDemo }) {
-  const [search,setSearch] = React.useState("");
-  const [minStake,setMinStake] = React.useState("");
-  const [maxStake,setMaxStake] = React.useState("");
-  const [actType,setActType] = React.useState("all");
-  const [epFrom,setEpFrom] = React.useState("");
-  const [epTo,setEpTo] = React.useState("");
-  const [sortBy,setSortBy] = React.useState("stake_desc");
-  const [dPage,setDPage] = React.useState(0);
-  const [pPage,setPPage] = React.useState(0);
+  const [search,setSearch] = useHashState("d_search","");
+  const [minStake,setMinStake] = useHashState("d_minStake","");
+  const [maxStake,setMaxStake] = useHashState("d_maxStake","");
+  const [actType,setActType] = useHashState("d_actType","all");
+  const [epFrom,setEpFrom] = useHashState("d_epFrom","");
+  const [epTo,setEpTo] = useHashState("d_epTo","");
+  const [sortBy,setSortBy] = useHashState("d_sort","stake_desc");
+  const [dPage,setDPage] = useHashState("d_dp",0);
+  const [pPage,setPPage] = useHashState("d_pp",0);
   const [csvOpen,setCsvOpen] = React.useState(false);
   const DPP = 100, PPP = 20;
 
@@ -752,6 +814,23 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
     const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
     const a=document.createElement("a");a.href=URL.createObjectURL(blob);
     a.download="drep_rationales.csv";a.click();URL.revokeObjectURL(a.href);
+  }
+
+  function exportProposalRationales(proposal){
+    const rows=[["DRep Name","DRep ID","Vote","Rationale"]];
+    dreps.forEach(d=>{
+      const v=gv(d.drep_id,proposal.proposal_id);
+      const rat=getDrepRat(d.drep_id,proposal.proposal_id);
+      if(rat&&rat.text){
+        rows.push([safeName(d.name)||d.drep_id, d.drep_id, v, rat.text.replace(/"/g,'""')]);
+      }
+    });
+    if(rows.length<=1){alert("No rationale data for this proposal.");return;}
+    const csv=rows.map(r=>r.map(c=>`"${c}"`).join(",")).join("\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    const fname=(proposal.title||proposal.proposal_id||"proposal").slice(0,40).replace(/[^a-zA-Z0-9_\-]/g,"_");
+    a.download=`drep_rationales_${fname}.csv`;a.click();URL.revokeObjectURL(a.href);
   }
 
   function handleDPageChange(newPage) {
@@ -826,7 +905,11 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                     <span style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:7,fontWeight:700,
                       textTransform:"uppercase",background:c+"15",color:c,border:`1px solid ${c}30`,lineHeight:1.6}}>{actionLabel(p.proposal_type,T)}</span>
                     {shortTitle && <span style={{fontSize:8,color:"var(--text)",lineHeight:1.3,maxWidth:110,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{shortTitle}</span>}
-                    <span style={{fontSize:7,color:"var(--text2)",opacity:.6}} title={p.proposal_id}>{shortId(p.tx_hash||p.proposal_id,6,4)}</span>
+                    <span style={{display:"flex",alignItems:"center",gap:2,justifyContent:"center"}}>
+                      <span style={{fontSize:7,color:"var(--text2)",opacity:.6}} title={p.proposal_id}>{shortId(p.tx_hash||p.proposal_id,6,4)}</span>
+                      <span style={{fontSize:9,cursor:"pointer",opacity:.7}} title={T.export_proposal_rationales||"Export DRep rationales for this proposal"}
+                        onClick={()=>exportProposalRationales(p)}>📎</span>
+                    </span>
                   </div>
                 </th>);})}
             </tr></thead>
@@ -916,11 +999,11 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
 // CC Votes Tab — Constitutional Committee voting matrix
 // ════════════════════════════════════════════════════════════════
 function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
-  const [search,setSearch] = React.useState("");
-  const [actType,setActType] = React.useState("all");
-  const [epFrom,setEpFrom] = React.useState("");
-  const [epTo,setEpTo] = React.useState("");
-  const [pPage,setPPage] = React.useState(0);
+  const [search,setSearch] = useHashState("cc_search","");
+  const [actType,setActType] = useHashState("cc_type","all");
+  const [epFrom,setEpFrom] = useHashState("cc_epFrom","");
+  const [epTo,setEpTo] = useHashState("cc_epTo","");
+  const [pPage,setPPage] = useHashState("cc_pp",0);
   const [csvOpen,setCsvOpen] = React.useState(false);
   const [ratModal,setRatModal] = React.useState(null); // {ccName, proposalTitle, url, text, loading}
   const [ratExporting,setRatExporting] = React.useState(false);
@@ -1212,12 +1295,12 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
     }
     return base;
   }, [rawHistory, liveDreps]);
-  const [topN, setTopN] = React.useState(10);
-  const [chartMode, setChartMode] = React.useState("ada"); // "ada" | "pct"
-  const [mergeEntities, setMergeEntities] = React.useState(false);
-  const [projEpochs, setProjEpochs] = React.useState(0); // 0 = off, else number of future epochs
-  const [projWindow, setProjWindow] = React.useState(5); // how many recent epochs to use for trend
-  const [displayRange, setDisplayRange] = React.useState("all"); // "1m" | "3m" | "6m" | "1y" | "2y" | "all"
+  const [topN, setTopN] = useHashState("h_topN",10);
+  const [chartMode, setChartMode] = useHashState("h_mode","ada"); // "ada" | "pct"
+  const [mergeEntities, setMergeEntities] = useHashState("h_merge",false);
+  const [projEpochs, setProjEpochs] = useHashState("h_proj",0); // 0 = off, else number of future epochs
+  const [projWindow, setProjWindow] = useHashState("h_projW",5); // how many recent epochs to use for trend
+  const [displayRange, setDisplayRange] = useHashState("h_range","all"); // "1m" | "3m" | "6m" | "1y" | "2y" | "all"
   const stackedRef = React.useRef(null);
   const stackedCanvasRef = React.useRef(null);
   const concRef = React.useRef(null);
@@ -1669,33 +1752,33 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
 function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, ccMembers, ccVotes, proposals, T }) {
   // ── Common parameters ──
   const todayStr = new Date().toISOString().slice(0, 10);
-  const [govBudget, setGovBudget] = React.useState(500000);
-  const [drepRatio, setDrepRatio] = React.useState(90);
-  const [periodFrom, setPeriodFrom] = React.useState(epochToDateStr(CC_MIN_EPOCH));
-  const [periodTo, setPeriodTo] = React.useState(todayStr);
+  const [govBudget, setGovBudget] = useHashState("s_budget",500000);
+  const [drepRatio, setDrepRatio] = useHashState("s_ratio",90);
+  const [periodFrom, setPeriodFrom] = useHashState("s_from",epochToDateStr(CC_MIN_EPOCH));
+  const [periodTo, setPeriodTo] = useHashState("s_to",todayStr);
   const drepBudget = Math.round(govBudget * drepRatio / 100);
   const ccBudgetTotal = Math.round(govBudget * (100 - drepRatio) / 100);
 
   // ── Collapsible panels ──
-  const [showCommon, setShowCommon] = React.useState(true);
-  const [showDrep, setShowDrep] = React.useState(true);
-  const [showCC, setShowCC] = React.useState(true);
+  const [showCommon, setShowCommon] = useHashState("s_showC",true);
+  const [showDrep, setShowDrep] = useHashState("s_showD",true);
+  const [showCC, setShowCC] = useHashState("s_showCC",true);
 
   // ── DRep parameters ──
-  const [K, setK] = React.useState(5);
-  const [N, setN] = React.useState(100);
-  const [b2, setB2] = React.useState(20000);
-  const [votePenaltyOn, setVotePenaltyOn] = React.useState(true);
-  const [searchQ, setSearchQ] = React.useState("");
-  const [page, setPage] = React.useState(0);
+  const [K, setK] = useHashState("s_K",5);
+  const [N, setN] = useHashState("s_N",100);
+  const [b2, setB2] = useHashState("s_b2",20000);
+  const [votePenaltyOn, setVotePenaltyOn] = useHashState("s_penalty",true);
+  const [searchQ, setSearchQ] = useHashState("s_q","");
+  const [page, setPage] = useHashState("s_p",0);
   const perPage = 50;
   const totalBudget = drepBudget;
   const b1 = Math.max(0, totalBudget - b2);
 
   // ── CC parameters ──
   const ccMemberCount = ccMembers.length || 1;
-  const [ccBaseReward, setCcBaseReward] = React.useState(5000);
-  const [penaltyThreshold, setPenaltyThreshold] = React.useState(3);
+  const [ccBaseReward, setCcBaseReward] = useHashState("s_ccBase",5000);
+  const [penaltyThreshold, setPenaltyThreshold] = useHashState("s_ccPen",3);
 
   // Use shared period for DRep vote penalty
   const voteStart = periodFrom;
@@ -2106,9 +2189,9 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
 // Main App (Tab Controller + Shared Data)
 // ════════════════════════════════════════════════════════════════
 function App() {
-  const [lang,setLang] = React.useState("en");
+  const [lang,setLang] = useHashState("lang","en");
   const T = LANG[lang];
-  const [tab,setTab] = React.useState("dashboard");
+  const [tab,setTab] = useHashState("tab","dashboard");
   const [apiKey, setApiKey] = React.useState(getBfKey());
   const [apiKeyInput, setApiKeyInput] = React.useState(getBfKey());
 
@@ -2538,11 +2621,12 @@ function App() {
       </div>
 
       {/* Tab Bar */}
-      <div className="tab-bar">
+      <div className="tab-bar" style={{display:"flex",alignItems:"center",gap:0}}>
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <button className={`tab-btn ${tab==="cc"?"active":""}`} onClick={()=>setTab("cc")}>{T.tab_cc}</button>
+        <div style={{marginLeft:"auto"}}><ShareButton T={T}/></div>
       </div>
 
       {tab === "dashboard" ? (
