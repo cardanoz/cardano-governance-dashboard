@@ -355,7 +355,10 @@ async function main() {
 
   try {
     // 7a. Get committee info
-    const ccInfo = await koiosGet("/committee_info");
+    const ccInfoRaw = await koiosGet("/committee_info");
+    // Koios returns array — unwrap first element
+    const ccInfo = Array.isArray(ccInfoRaw) ? ccInfoRaw[0] : ccInfoRaw;
+    console.log(`  Response: ${Array.isArray(ccInfoRaw) ? "array[" + ccInfoRaw.length + "]" : typeof ccInfoRaw}, keys: ${ccInfo ? Object.keys(ccInfo).join(",") : "null"}`);
     if (ccInfo && ccInfo.members && ccInfo.members.length > 0) {
       console.log(`  Committee: quorum ${ccInfo.quorum_numerator}/${ccInfo.quorum_denominator}, ${ccInfo.members.length} members`);
 
