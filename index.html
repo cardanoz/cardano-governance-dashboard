@@ -921,22 +921,25 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   }
   function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
 
-  // Simulator-specific proposal filter (separate from vote table, date-based)
+  // Current epoch (approximate)
+  const currentEpoch = React.useMemo(()=> Math.floor((Date.now() - EPOCH_208_TS) / EPOCH_DURATION) + 208, []);
+
+  // Simulator-specific proposal filter: date range + expired only (voting ended)
   const simEpFrom = simDateFrom ? dateToEpoch(simDateFrom) : 0;
   const simEpTo = simDateTo ? dateToEpoch(simDateTo) : 99999;
   const simProps = React.useMemo(()=>{
     return ccProposals.filter(p=>{
       const ep = Number(p.epoch_no);
-      return ep >= simEpFrom && ep <= simEpTo;
+      const expiry = Number(p.expiration || p.epoch_no);
+      return ep >= simEpFrom && ep <= simEpTo && expiry <= currentEpoch;
     });
-  },[ccProposals,simEpFrom,simEpTo]);
+  },[ccProposals,simEpFrom,simEpTo,currentEpoch]);
 
-  // CC Simulator data — per-member eligible count respects each member's start epoch
+  // CC Simulator data — per-member: only eligible GAs, respects member start epoch
   const simData = React.useMemo(()=>{
     return fMembers.map(cc=>{
-      const memberMin = ccMemberMinEpoch(cc.cc_id);
-      const effectiveMin = Math.max(simEpFrom, memberMin);
-      const memberProps = simProps.filter(p=>Number(p.epoch_no) >= effectiveMin);
+      // Only count proposals this member is eligible for
+      const memberProps = simProps.filter(p=>isEligible(cc.cc_id, p.proposal_id));
       const totalEligible = memberProps.length;
       const voted = memberProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
       const missed = totalEligible - voted;
@@ -944,7 +947,7 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
       const reward = ccBaseReward * factor;
       return {cc, eligible:totalEligible, voted, missed, factor, reward};
     });
-  },[fMembers,simProps,simEpFrom,ccVotes,ccBaseReward,penaltyThreshold]);
+  },[fMembers,simProps,ccVotes,ccBaseReward,penaltyThreshold]);
 
   function exportCSV(mode){
     const csvProps = mode === "visible" ? pgP : fProps;
