@@ -72,7 +72,7 @@ const LANG = {
     type_noconf:"No Confidence", type_cc:"Update CC", type_const:"New Constitution", type_info:"Info Action",
     attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
     delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
-    tab_dashboard:"DRep Votes", tab_cc:"CC Votes & Reward", tab_simulator:"Reward Simulator",
+    tab_dashboard:"DRep Votes", tab_cc:"CC Votes & Reward", tab_simulator:"DRep Reward Simulator",
     cc_member:"CC Member", no_cc:"No CC votes found", cc_rationale:"Rationale",
     cc_expired_only:"Showing expired governance actions only (static data)",
     cc_ineligible:"N/A", cc_not_voted:"Not Voted",
@@ -81,6 +81,9 @@ const LANG = {
     cc_sim_missed:"Missed", cc_sim_penalty:"Penalty", cc_sim_reward:"Est. Reward",
     cc_sim_factor:"Reward Factor", cc_sim_note:"Eligible = all GAs in selected period. All CC members share the same denominator.",
     cc_sim_penalty_label:"Penalty threshold", cc_sim_penalty_unit:"missed = 0%",
+    cc_sim_epoch_from:"Sim. Epoch From", cc_sim_epoch_to:"Sim. Epoch To", cc_sim_ga_in_range:"GAs in range",
+    cc_rationale_loading:"Loading rationale...", cc_rationale_error:"Could not load rationale",
+    cc_rationale_export:"Export Rationales CSV", cc_rationale_exporting:"Exporting...",
     sim_title:"DRep Reward Simulator", sim_subtitle:"Middle-Out mechanism comparison (process-first)",
     params:"Parameters", summary:"Summary",
     rank:"Rank", name:"Name", stake:"Stake", eligible:"Elig.",
@@ -103,7 +106,7 @@ const LANG = {
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
     api_key_required:"Blockfrost API key required",
-    tab_history:"Stake History",
+    tab_history:"Stake Analytics",
     hist_title:"DRep Stake History", hist_desc:"Tracking DRep voting power over time (snapshots captured each epoch)",
     hist_total_stake:"Total Stake (ADA)", hist_drep_count:"DRep Count", hist_top_dreps:"Top DReps by Stake",
     hist_epoch:"Epoch", hist_date:"Date", hist_no_data:"No history data yet. Snapshots are captured each epoch by the data fetcher.",
@@ -125,7 +128,7 @@ const LANG = {
     type_noconf:"不信任", type_cc:"CC更新", type_const:"新憲法", type_info:"情報",
     attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
     delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
-    tab_dashboard:"DRep投票", tab_cc:"CC投票＆報酬", tab_simulator:"報酬シミュレーター",
+    tab_dashboard:"DRep投票", tab_cc:"CC投票＆報酬", tab_simulator:"DRep報酬シミュレーター",
     cc_member:"CC委員", no_cc:"CC投票データなし", cc_rationale:"根拠",
     cc_expired_only:"期限切れの一部のGAのみ表示しています（静的データ）",
     cc_ineligible:"対象外", cc_not_voted:"未投票",
@@ -134,6 +137,9 @@ const LANG = {
     cc_sim_missed:"未投票", cc_sim_penalty:"ペナルティ", cc_sim_reward:"推定報酬",
     cc_sim_factor:"報酬係数", cc_sim_note:"対象GA = 選択期間中の全GA。全CC委員で分母は共通です。",
     cc_sim_penalty_label:"ペナルティ閾値", cc_sim_penalty_unit:"回未投票で0%",
+    cc_sim_epoch_from:"シミュ. エポック開始", cc_sim_epoch_to:"シミュ. エポック終了", cc_sim_ga_in_range:"対象GA数",
+    cc_rationale_loading:"根拠を読込中...", cc_rationale_error:"根拠を読み込めませんでした",
+    cc_rationale_export:"根拠一括CSV出力", cc_rationale_exporting:"出力中...",
     sim_title:"DRep報酬シミュレーター", sim_subtitle:"ミドルアウト方式比較（プロセスファースト）",
     params:"パラメータ", summary:"サマリー",
     rank:"順位", name:"名前", stake:"委任額", eligible:"対象",
@@ -156,7 +162,7 @@ const LANG = {
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
     api_key_required:"Blockfrost APIキーが必要です",
-    tab_history:"ステーク推移",
+    tab_history:"ステーク分析・予測",
     hist_title:"DRepステーク推移", hist_desc:"DRep投票力の時系列推移（エポックごとにスナップショット記録）",
     hist_total_stake:"総ステーク (ADA)", hist_drep_count:"DRep数", hist_top_dreps:"ステーク上位DRep",
     hist_epoch:"エポック", hist_date:"日付", hist_no_data:"履歴データがまだありません。データ取得時にエポックごとにスナップショットが記録されます。",
@@ -264,6 +270,29 @@ function fmtAdaNum(ada) {
   if(ada>=1e6) return (ada/1e6).toFixed(2)+"M";
   if(ada>=1e3) return (ada/1e3).toFixed(1)+"K";
   return ada.toFixed(ada < 1 ? 4 : 1);
+}
+// IPFS URL resolver — convert ipfs:// to gateway URL
+function resolveIpfsUrl(url) {
+  if (!url) return null;
+  if (url.startsWith("ipfs://")) return "https://ipfs.io/ipfs/" + url.slice(7);
+  if (url.startsWith("ipfs:")) return "https://ipfs.io/ipfs/" + url.slice(5);
+  return url;
+}
+// Fetch rationale JSON and extract readable text
+async function fetchRationaleText(url) {
+  const resolved = resolveIpfsUrl(url);
+  if (!resolved) return null;
+  try {
+    const r = await fetch(resolved, { signal: AbortSignal.timeout(10000) });
+    if (!r.ok) return null;
+    const text = await r.text();
+    try {
+      const j = JSON.parse(text);
+      const body = j.body || j;
+      return body.comment || body.rationale || body.summary || body.abstract ||
+        (typeof body === "string" ? body : JSON.stringify(body, null, 2));
+    } catch { return text.slice(0, 2000); }
+  } catch { return null; }
 }
 function shortId(id,n=8,m=5) { return !id ? "" : id.length<=n+m+3 ? id : id.slice(0,n)+"…"+id.slice(-m); }
 function safeName(v) { return typeof v === "string" ? v : (v && typeof v === "object" ? (v["@value"] || v.givenName || JSON.stringify(v)) : null); }
@@ -820,6 +849,10 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   const [csvOpen,setCsvOpen] = React.useState(false);
   const [ccBaseReward,setCcBaseReward] = React.useState(5000);
   const [penaltyThreshold,setPenaltyThreshold] = React.useState(3);
+  const [simEpFrom,setSimEpFrom] = React.useState("");
+  const [simEpTo,setSimEpTo] = React.useState("");
+  const [ratModal,setRatModal] = React.useState(null); // {ccName, proposalTitle, url, text, loading}
+  const [ratExporting,setRatExporting] = React.useState(false);
   const PPP = 22;
 
   // Build set of proposal IDs that have at least one CC vote
@@ -872,17 +905,25 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
   }
   function gr(ccId,pid){return ccRationales[`${ccId}__${pid}`]||null;}
 
+  // Simulator-specific proposal filter (separate from vote table)
+  const simProps = React.useMemo(()=>{
+    let r=[...ccProposals];
+    if(simEpFrom) r=r.filter(p=>Number(p.epoch_no)>=parseInt(simEpFrom));
+    if(simEpTo) r=r.filter(p=>Number(p.epoch_no)<=parseInt(simEpTo));
+    return r;
+  },[ccProposals,simEpFrom,simEpTo]);
+
   // CC Simulator data — all members share same eligible count (total GAs in period)
   const simData = React.useMemo(()=>{
-    const totalEligible = fProps.length;
+    const totalEligible = simProps.length;
     return fMembers.map(cc=>{
-      const voted = fProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
+      const voted = simProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
       const missed = totalEligible - voted;
       const factor = Math.max(0, 1 - missed/penaltyThreshold);
       const reward = ccBaseReward * factor;
       return {cc, eligible:totalEligible, voted, missed, factor, reward};
     });
-  },[fMembers,fProps,ccVotes,ccBaseReward,penaltyThreshold]);
+  },[fMembers,simProps,ccVotes,ccBaseReward,penaltyThreshold]);
 
   function exportCSV(mode){
     const csvProps = mode === "visible" ? pgP : fProps;
@@ -894,6 +935,40 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
     const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
     const url=URL.createObjectURL(blob); const a=document.createElement("a");a.href=url;a.download=`cardano_cc_votes_${mode}.csv`;a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function showRationale(ccName, proposalTitle, url) {
+    const resolved = resolveIpfsUrl(url);
+    setRatModal({ ccName, proposalTitle, url: resolved, text: null, loading: true });
+    const text = await fetchRationaleText(url);
+    setRatModal(prev => prev ? { ...prev, text: text || T.cc_rationale_error, loading: false } : null);
+  }
+
+  async function exportRationalesCSV() {
+    setRatExporting(true);
+    const rows = [];
+    for (const cc of fMembers) {
+      for (const p of fProps) {
+        const vote = ccVotes[`${cc.cc_id}__${p.proposal_id}`];
+        if (!vote) continue;
+        const rUrl = gr(cc.cc_id, p.proposal_id);
+        let content = "";
+        if (rUrl) {
+          try { content = await fetchRationaleText(rUrl) || ""; } catch {}
+        }
+        rows.push([
+          cc.name || cc.cc_id, p.proposal_id, p.title || "", p.proposal_type || "",
+          vote, rUrl ? resolveIpfsUrl(rUrl) : "", content.replace(/[\r\n]+/g, " ").slice(0, 5000)
+        ]);
+      }
+    }
+    const hdr = ["CC Member", "Proposal ID", "Title", "Type", "Vote", "Rationale URL", "Rationale Content"];
+    const csv = [hdr, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "cc_rationales.csv"; a.click();
+    URL.revokeObjectURL(url);
+    setRatExporting(false);
   }
 
   const ist={padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
@@ -923,6 +998,13 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
             <button onClick={()=>{exportCSV("all");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
               border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
               onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📊 {T.csv_all}</button>
+            <div style={{borderTop:"1px solid var(--border)"}}></div>
+            <button onClick={()=>{exportRationalesCSV();setCsvOpen(false)}} disabled={ratExporting}
+              style={{display:"block",width:"100%",padding:"8px 12px",
+              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit",
+              opacity:ratExporting?0.5:1}}
+              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>
+              📝 {ratExporting ? T.cc_rationale_exporting : T.cc_rationale_export}</button>
           </div>}
         </div>
         <button className="btn" onClick={()=>{setSearch("");setActType("all");setEpFrom("");setEpTo("");setPPage(0)}}
@@ -973,7 +1055,8 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
                     <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
                       <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
                         {v==="Ineligible" ? <IneligibleBadge/> : <VoteBadge vote={v} T={T}/>}
-                        {rUrl && <div style={{marginTop:2}}><a href={rUrl} target="_blank" rel="noopener" style={{fontSize:8,color:"var(--accent2)"}} title={rUrl}>📎</a></div>}
+                        {rUrl && <div style={{marginTop:2}}><a href={resolveIpfsUrl(rUrl)} target="_blank" rel="noopener" style={{fontSize:8,color:"var(--accent2)",cursor:"pointer"}} title={resolveIpfsUrl(rUrl)}
+                          onClick={e=>{e.preventDefault();showRationale(cc.name||shortId(cc.cc_id),p.title||shortId(p.proposal_id),rUrl)}}>📎</a></div>}
                       </div></td>
                   );})}
                 </tr>
@@ -993,6 +1076,19 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
           <div>
             <div style={{fontSize:14,fontWeight:700,color:"var(--text)"}}>{T.cc_sim_title}</div>
             <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{T.cc_sim_desc}</div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}>
+            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_epoch_from}</label>
+            <input type="number" placeholder="530" value={simEpFrom} onChange={e=>setSimEpFrom(e.target.value)}
+              style={{...ist,width:80}}/>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:3}}>
+            <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_epoch_to}</label>
+            <input type="number" placeholder="999" value={simEpTo} onChange={e=>setSimEpTo(e.target.value)}
+              style={{...ist,width:80}}/>
+          </div>
+          <div style={{fontSize:10,color:"var(--accent)",alignSelf:"flex-end",padding:"5px 0"}}>
+            {T.cc_sim_ga_in_range}: {simProps.length}
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:3}}>
             <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_base}</label>
@@ -1062,6 +1158,37 @@ function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
           ℹ {T.cc_sim_note}
         </div>
       </div>
+
+      {/* Rationale Modal */}
+      {ratModal && (
+        <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
+          display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
+          onClick={()=>setRatModal(null)}>
+          <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,maxWidth:700,width:"100%",
+            maxHeight:"80vh",display:"flex",flexDirection:"column",boxShadow:"0 20px 60px rgba(0,0,0,.5)"}}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+              <div>
+                <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{ratModal.ccName}</div>
+                <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{ratModal.proposalTitle}</div>
+              </div>
+              <button onClick={()=>setRatModal(null)} style={{background:"none",border:"none",color:"var(--text2)",fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
+            </div>
+            <div style={{padding:16,overflow:"auto",flex:1}}>
+              {ratModal.loading ? (
+                <div style={{textAlign:"center",padding:30,color:"var(--text2)"}}>{T.cc_rationale_loading}</div>
+              ) : (
+                <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",fontSize:12,lineHeight:1.5,color:"var(--text)",
+                  fontFamily:"inherit",margin:0}}>{ratModal.text}</pre>
+              )}
+            </div>
+            <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
+              {ratModal.url && <a href={ratModal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 {T.cc_rationale || "Open URL"}</a>}
+              <button onClick={()=>setRatModal(null)} className="btn" style={{fontSize:11}}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
