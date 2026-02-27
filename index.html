@@ -66,7 +66,6 @@ const LANG = {
     filter_all:"All", filter_epoch_from:"Epoch From", filter_epoch_to:"Epoch To", filter_sort:"Sort",
     sort_stake_desc:"Stake ↓", sort_stake_asc:"Stake ↑", sort_name:"Name A→Z", reset:"Reset",
     showing:"Showing", csv_export:"Export CSV", no_dreps:"No DReps match your filters",
-    rationale:"Vote Rationale", no_rationale:"No rationale attached", has_rationale:"Has rationale",
     drep_col:"DRep", type_param:"Param Change", type_hardfork:"Hard Fork", type_treasury:"Treasury",
     type_noconf:"No Confidence", type_cc:"Update CC", type_const:"New Constitution", type_info:"Info Action",
     attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
@@ -88,7 +87,6 @@ const LANG = {
     vote_start:"Start date", vote_end:"End date", vote_penalty:"Vote-rate penalty",
     vote_penalty_on:"ON", vote_penalty_off:"OFF",
     vote_ga_count:"GAs in range", vote_info:"GAs whose voting ended in this period",
-    rationale_penalty:"No-rationale penalty (%)",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API Stats", api_calls:"API calls", cached:"cached", loading_sim_votes:"Loading vote counts for simulator…",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
@@ -107,7 +105,6 @@ const LANG = {
     filter_all:"すべて", filter_epoch_from:"Epochから", filter_epoch_to:"Epochまで", filter_sort:"ソート",
     sort_stake_desc:"ステーク ↓", sort_stake_asc:"ステーク ↑", sort_name:"名前 A→Z", reset:"リセット",
     showing:"表示", csv_export:"CSV出力", no_dreps:"該当するDRepが見つかりません",
-    rationale:"投票根拠", no_rationale:"投票根拠なし", has_rationale:"根拠あり",
     drep_col:"DRep", type_param:"パラメータ変更", type_hardfork:"ハードフォーク", type_treasury:"トレジャリー",
     type_noconf:"不信任", type_cc:"CC更新", type_const:"新憲法", type_info:"情報",
     attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
@@ -129,7 +126,6 @@ const LANG = {
     vote_start:"開始日", vote_end:"終了日", vote_penalty:"投票率ペナルティ",
     vote_penalty_on:"ON", vote_penalty_off:"OFF",
     vote_ga_count:"期間内GA数", vote_info:"投票期間終了日がこの範囲内のGA",
-    rationale_penalty:"根拠なしペナルティ（%）",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API統計", api_calls:"APIコール", cached:"キャッシュ", loading_sim_votes:"シミュレーター用投票数を取得中…",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
@@ -442,9 +438,9 @@ function demoData() {
     proposal_id:`${hex(64)}#0`, proposal_type:types[rnd(types.length)], epoch_no:530+rnd(85),
     title:"", tx_hash:hex(64), cert_index:0, expiration:540+rnd(80)
   }));
-  const choices = ["Yes","No","Abstain"]; const vm={}, rm={};
-  dreps.forEach(d=>props.forEach(p=>{ if(Math.random()>.35){ const k=`${d.drep_id}__${p.proposal_id}`; vm[k]=choices[rnd(3)]; if(Math.random()>.5) rm[k]=`https://ipfs.io/ipfs/Qm${hex(44)}`; }}));
-  return { dreps, proposals:props, votes:vm, rationales:rm };
+  const choices = ["Yes","No","Abstain"]; const vm={};
+  dreps.forEach(d=>props.forEach(p=>{ if(Math.random()>.35){ const k=`${d.drep_id}__${p.proposal_id}`; vm[k]=choices[rnd(3)]; }}));
+  return { dreps, proposals:props, votes:vm };
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -474,31 +470,19 @@ function PaginationBar({ label, page, setPage, total }) {
   );
 }
 
-function VoteBadge({ vote, hasRationale, rationaleUrl, T }) {
+function VoteBadge({ vote, T }) {
   const m = {
     Yes:{bg:"rgba(52,211,153,.12)",c:"#34d399",bc:"rgba(52,211,153,.25)",icon:"✓",l:"YES"},
     No:{bg:"rgba(248,113,113,.12)",c:"#f87171",bc:"rgba(248,113,113,.25)",icon:"✗",l:"NO"},
     Abstain:{bg:"rgba(251,191,36,.12)",c:"#fbbf24",bc:"rgba(251,191,36,.25)",icon:"−",l:"ABSTAIN"},
     NotVoted:{bg:"rgba(75,85,99,.06)",c:"#555e70",bc:"rgba(75,85,99,.12)",icon:"",l:"−"},
   };
-  const s = m[vote]||m.NotVoted; const isVoted = vote && vote !== "NotVoted";
-  const badge = (
+  const s = m[vote]||m.NotVoted;
+  return (
     <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:2,
       padding:"3px 7px",borderRadius:5,fontSize:10,fontWeight:700,
       background:s.bg,color:s.c,border:`1px solid ${s.bc}`,minWidth:52,letterSpacing:".05em",lineHeight:1.4}}>
       {s.icon && <span style={{fontSize:11}}>{s.icon}</span>}{s.l}
-      {isVoted && hasRationale && <span style={{fontSize:8,marginLeft:2,opacity:.7}} title={T.has_rationale}>📎</span>}
-    </div>
-  );
-  if (!isVoted || !hasRationale) return badge;
-  return (
-    <div className="tooltip-container">{badge}
-      <div className="tooltip-popup">
-        <div style={{fontWeight:700,marginBottom:4,fontSize:12,color:s.c}}>{vote} ({T.attached})</div>
-        {rationaleUrl && rationaleUrl.startsWith("http")
-          ? <a href={rationaleUrl} target="_blank" rel="noopener" style={{fontSize:10,wordBreak:"break-all",color:"var(--accent2)"}}>{rationaleUrl.length>80?rationaleUrl.slice(0,80)+"…":rationaleUrl}</a>
-          : <div style={{fontSize:10,color:"var(--text)",maxHeight:150,overflow:"auto",lineHeight:1.5}}>{rationaleUrl}</div>}
-      </div>
     </div>
   );
 }
@@ -538,7 +522,7 @@ function WarningBanner({ warnings, T }) {
 
 // Reward Calculation Models (3 mechanisms, computed simultaneously)
 // ════════════════════════════════════════════════════════════════
-function calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData, rationaleData) {
+function calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData) {
   const n = dreps.length;
   if (n === 0) return { mo_equal:[], mo_prop:[], mo_bonus:[] };
   const budget = params.totalBudget;
@@ -564,21 +548,8 @@ function calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData
     });
   }
 
-  function applyRationaleAdjustment(tagged, rewards) {
-    if (!rationaleData || (params.rationaleBonus === 0 && params.rationalePenalty === 0)) return rewards;
-    return rewards.map((r, i) => {
-      if (r === 0) return 0;
-      const rd = rationaleData[tagged[i].drep_id];
-      if (!rd || rd.total === 0) return r * (1 - params.rationalePenalty / 100);
-      const rationaleRate = rd.withRationale / rd.total;
-      const factor = 1 + (params.rationaleBonus / 100) * rationaleRate - (params.rationalePenalty / 100) * (1 - rationaleRate);
-      return r * Math.max(0, factor);
-    });
-  }
-
   function adjustAndNormalize(tagged, rewards) {
     let adj = applyPeriodVotePenalty(tagged, rewards);
-    adj = applyRationaleAdjustment(tagged, adj);
     const total = adj.reduce((a, b) => a + b, 0);
     if (total > 0) adj = adj.map(r => r * budget / total);
     return tagged.map((d, i) => ({ ...d, reward: adj[i] }));
@@ -647,7 +618,7 @@ function calcProcessMetrics(results, totalEligible) {
 // ════════════════════════════════════════════════════════════════
 // Dashboard Tab
 // ════════════════════════════════════════════════════════════════
-function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, pageLoading, stage,
+function DashboardTab({ dreps, proposals, votes, warnings, hasMore, pageLoading, stage,
   loadMoreDreps, T, isDemo }) {
   const [search,setSearch] = React.useState("");
   const [minStake,setMinStake] = React.useState("");
@@ -687,7 +658,6 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
   const actTypes=[...new Set(proposals.map(p=>p.proposal_type).filter(Boolean))];
 
   function gv(did,pid){return votes[`${did}__${pid}`]||"NotVoted";}
-  function gr(did,pid){return rationales[`${did}__${pid}`]||null;}
 
   function handleDPageChange(newPage) {
     setDPage(newPage);
@@ -700,7 +670,7 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
     const hdr=["DRep ID","DRep Name","Stake (ADA)","Delegators",
       ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
     const rows=csvDreps.map(d=>[d.drep_id,safeName(d.name)||"",Math.round(Number(d.amount)/1e6),d.delegators||0,
-      ...csvProps.map(p=>{const v=gv(d.drep_id,p.proposal_id);const r=gr(d.drep_id,p.proposal_id);return v+(r?" [rationale]":"");})]);
+      ...csvProps.map(p=>{const v=gv(d.drep_id,p.proposal_id);return v;})]);
     const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
     const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
     const url=URL.createObjectURL(blob); const a=document.createElement("a");a.href=url;a.download=`cardano_drep_votes_${mode}.csv`;a.click();
@@ -741,7 +711,6 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
 
       <div style={{fontSize:11,color:"var(--text2)",marginBottom:8}}>
         {T.showing}: {T.subtitle_drep} {fDreps.length}{hasMore?"+":""} × {T.subtitle_actions} {fProps.length}
-        <span style={{opacity:.6,marginLeft:6}}>📎 = {T.has_rationale}</span>
         {pageLoading && <span style={{marginLeft:8,color:"var(--accent2)"}}>⏳ {stage}</span>}
       </div>
 
@@ -784,10 +753,10 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
                       </div>
                     </div>
                   </td>
-                  {pgP.map((p,ci)=>{const v=gv(d.drep_id,p.proposal_id);const rUrl=gr(d.drep_id,p.proposal_id);return(
+                  {pgP.map((p,ci)=>{const v=gv(d.drep_id,p.proposal_id);return(
                     <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
                       <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
-                        <VoteBadge vote={v} hasRationale={!!rUrl} rationaleUrl={rUrl} T={T}/>
+                        <VoteBadge vote={v} T={T}/>
                       </div></td>
                   );})}
                 </tr>
@@ -812,7 +781,7 @@ function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, 
 
 // Simulator Tab — Single table with 3 reward columns side by side
 // ════════════════════════════════════════════════════════════════
-function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationaleData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, T }) {
+function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, T }) {
   const [K, setK] = React.useState(5);
   const [N, setN] = React.useState(100);
   const [totalBudget, setTotalBudget] = React.useState(500000);
@@ -822,7 +791,6 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
   const [voteStart, setVoteStart] = React.useState(sixMonthsAgo);
   const [voteEnd, setVoteEnd] = React.useState(todayStr);
   const [votePenaltyOn, setVotePenaltyOn] = React.useState(true);
-  const [rationalePenalty, setRationalePenalty] = React.useState(0);
   const [searchQ, setSearchQ] = React.useState("");
   const [page, setPage] = React.useState(0);
   const perPage = 50;
@@ -842,11 +810,11 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
   }, [periodVoteData]);
 
   const params = React.useMemo(() => ({
-    K, N, totalBudget, b1, b2, votePeriod: votePenaltyOn ? 1 : 0, votePenaltyOn, rationaleBonus: 0, rationalePenalty
-  }), [K, N, totalBudget, b1, b2, votePenaltyOn, rationalePenalty]);
+    K, N, totalBudget, b1, b2, votePeriod: votePenaltyOn ? 1 : 0, votePenaltyOn
+  }), [K, N, totalBudget, b1, b2, votePenaltyOn]);
 
-  const allResults = React.useMemo(() => calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData, rationaleData),
-    [dreps, params, voteData, totalActions, periodVoteData, rationaleData]);
+  const allResults = React.useMemo(() => calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData),
+    [dreps, params, voteData, totalActions, periodVoteData]);
   const totalEligible = dreps.filter(d => Number(d.amount) > 0).length;
   const budget = totalBudget;
 
@@ -865,10 +833,8 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
       r_bonus: bo[i]?.reward || 0,
       periodVR: periodVoteData && periodVoteData[d.drep_id]
         ? (periodVoteData[d.drep_id].actionsInPeriod > 0 ? periodVoteData[d.drep_id].votesInPeriod / periodVoteData[d.drep_id].actionsInPeriod * 100 : 0) : null,
-      rationaleRate: rationaleData && rationaleData[d.drep_id]
-        ? (rationaleData[d.drep_id].total > 0 ? rationaleData[d.drep_id].withRationale / rationaleData[d.drep_id].total * 100 : 0) : null,
     }));
-  }, [allResults, periodVoteData, rationaleData]);
+  }, [allResults, periodVoteData]);
 
   const filtered = React.useMemo(() => {
     if (!searchQ) return merged;
@@ -879,10 +845,10 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
 
   function exportCSV() {
-    const hdr = ["Rank","DRep ID","Name","Stake (ADA)","Eligible","Equal (ADA)","Prop (ADA)","Prop+Bonus (ADA)","Period Vote Rate %","Rationale Rate %","Vote Count","Overall Vote Rate %"];
+    const hdr = ["Rank","DRep ID","Name","Stake (ADA)","Eligible","Equal (ADA)","Prop (ADA)","Prop+Bonus (ADA)","Period Vote Rate %","Vote Count","Overall Vote Rate %"];
     const rows = merged.map(d => [d.rank, d.drep_id, safeName(d.name) || "", Math.round(Number(d.amount) / 1e6),
       d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2),
-      d.periodVR != null ? d.periodVR.toFixed(1) : "", d.rationaleRate != null ? d.rationaleRate.toFixed(1) : "",
+      d.periodVR != null ? d.periodVR.toFixed(1) : "",
       voteData[d.drep_id] || "", totalActions > 0 ? ((voteData[d.drep_id] || 0) / totalActions * 100).toFixed(1) : ""]);
     const csv = [hdr, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
     const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
@@ -935,14 +901,12 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
                   <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
                 </div>)}
               </div>
-              <SliderParam label={T.rationale_penalty} value={rationalePenalty} onChange={setRationalePenalty} min={0} max={100} step={5} suffix="%" />
             </div>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:12,marginTop:4,flexWrap:"wrap"}}>
             <span style={{fontSize:9,color:"var(--text2)"}}>
               Budget: ₳{budget.toLocaleString()} · DReps: {dreps.length} · Eligible: {totalEligible}
               {votePenaltyOn ? ` · ⏱ Vote penalty ON (${gasInRange} GAs)` : " · ⏱ Vote penalty OFF"}
-              {rationalePenalty > 0 ? ` · 📎 No rationale: -${rationalePenalty}%` : ""}
             </span>
             {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
             {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
@@ -978,13 +942,11 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
               ))}
               <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
                 borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>{T.vote_rate}</th>
-              <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
-                borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>📎 Rate</th>
             </tr></thead>
             <tbody>
               {pageData.map((d, ri) => {
                 const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
-                const pvr = d.periodVR; const rr = d.rationaleRate;
+                const pvr = d.periodVR;
                 return (
                   <tr key={d.drep_id} style={{opacity:d.eligible?1:0.35}}>
                     <td style={{...tdS(bg),color:"var(--text2)",width:32,fontSize:9}}>{d.rank}</td>
@@ -1005,10 +967,6 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationale
                         <div style={{width:28,height:3,background:"var(--bg4)",borderRadius:2,overflow:"hidden"}}>
                           <div style={{width:`${Math.min(pvr,100)}%`,height:"100%",background:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)",borderRadius:2}} /></div>
                         <span style={{fontSize:8,color:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)"}}>{pvr.toFixed(0)}%</span></div>)
-                      : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
-                    </td>
-                    <td style={{...tdS(bg),fontSize:9}}>
-                      {rr != null ? (<span style={{fontSize:8,color:rr>70?"var(--yes)":rr>30?"var(--abstain)":"var(--no)"}}>{rr.toFixed(0)}%</span>)
                       : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
                     </td>
                   </tr>
@@ -1042,7 +1000,6 @@ function App() {
   const [allDreps,setAllDreps] = React.useState([]);
   const [proposals,setProposals] = React.useState([]);
   const [votes,setVotes] = React.useState({});
-  const [rationales,setRationales] = React.useState({});
   const [loading,setLoading] = React.useState(true);
   const [pageLoading,setPageLoading] = React.useState(false);
   const [stage,setStage] = React.useState("");
@@ -1053,7 +1010,6 @@ function App() {
   const [voteData, setVoteData] = React.useState({});
   const [totalActions, setTotalActions] = React.useState(0);
   const [periodVoteData, setPeriodVoteData] = React.useState({});
-  const [rationaleData, setRationaleData] = React.useState({});
   const [loadingVotes, setLoadingVotes] = React.useState(false);
   const [simProgress, setSimProgress] = React.useState("");
   const [apiStats, setApiStats] = React.useState({calls:0,cached:0});
@@ -1088,7 +1044,7 @@ function App() {
 
   function loadDemo() {
     const d = demoData();
-    setDreps(d.dreps); setAllDreps(d.dreps); setProposals(d.proposals); setVotes(d.votes); setRationales(d.rationales);
+    setDreps(d.dreps); setAllDreps(d.dreps); setProposals(d.proposals); setVotes(d.votes);
     setIsDemo(true); setLoading(false); setError(null); setWarnings([]); setHasMore(false);
   }
 
@@ -1101,12 +1057,11 @@ function App() {
     const meta = await metaRes.json();
 
     setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes, ratRes] = await Promise.all([
+    const [drepsRes, proposalsRes, votesRes, simRes] = await Promise.all([
       fetch(base + "dreps.json"),
       fetch(base + "proposals.json"),
       fetch(base + "votes.json"),
-      fetch(base + "simulator.json"),
-      fetch(base + "rationales.json").catch(() => null)
+      fetch(base + "simulator.json")
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
@@ -1120,12 +1075,6 @@ function App() {
     setAllDreps(drepsData);
     setProposals(proposalsData);
     setVotes(votesData);
-    // Load rationales from static data if available
-    let rationalesData = {};
-    if (ratRes && ratRes.ok) {
-      try { rationalesData = await ratRes.json(); } catch(e) {}
-    }
-    setRationales(rationalesData);
     setIsDemo(false);
     setHasMore(false);
     setDataSource("static");
@@ -1155,9 +1104,6 @@ function App() {
         window.__simVoteRaw = { proposalExpirations: flatExpirations, drepVotedProposals };
         setVoteData(vd);
         setTotalActions(maxVotes);
-        // Load rationale stats from simulator data if available
-        const ratStats = simData.rationaleStats || {};
-        setRationaleData(ratStats);
         voteDataLoadedRef.current = true;
       } catch(e) { console.warn("Simulator data parse error:", e); }
     }
@@ -1190,7 +1136,7 @@ function App() {
       setHasMore(!reachedEnd);
 
       setStage(T.loading_votes);
-      const { vm, rm, gaMap, totalVotes } = await fetchVotesForDreps(uniqueDreps, addLog, setStage, T.loading_votes);
+      const { vm, gaMap, totalVotes } = await fetchVotesForDreps(uniqueDreps, addLog, setStage, T.loading_votes);
       gaMapRef.current = { ...gaMap };
 
       // Enrich proposals with type + title from Blockfrost
@@ -1201,7 +1147,7 @@ function App() {
       allProposals.sort((a,b) => (b.expiration || 0) - (a.expiration || 0));
 
       setDreps(uniqueDreps); setAllDreps(uniqueDreps);
-      setProposals(allProposals); setVotes(vm); setRationales(rm);
+      setProposals(allProposals); setVotes(vm);
       setWarnings([]); setLoading(false);
     } catch(e) { setError(e.message); setLoading(false); }
   }
@@ -1219,7 +1165,7 @@ function App() {
       const existingIds = new Set(dreps.map(d => d.drep_id));
       const newDreps = chunk.filter(d => !existingIds.has(d.drep_id));
       setStage(T.loading_votes);
-      const { vm: newVm, rm: newRm, gaMap: newGaMap } = await fetchVotesForDreps(newDreps, addLog, setStage, T.loading_votes);
+      const { vm: newVm, gaMap: newGaMap } = await fetchVotesForDreps(newDreps, addLog, setStage, T.loading_votes);
       Object.assign(gaMapRef.current, newGaMap);
 
       // Enrich new proposals
@@ -1234,7 +1180,7 @@ function App() {
         const extra = newDreps.filter(d=>!ids.has(d.drep_id));
         const all = [...prev, ...extra]; all.sort((a,b)=>Number(b.amount)-Number(a.amount)); return all;
       });
-      setProposals(allProposals); setVotes(prev => ({...prev, ...newVm})); setRationales(prev => ({...prev, ...newRm}));
+      setProposals(allProposals); setVotes(prev => ({...prev, ...newVm}));
     } catch(e) { addLog("ERROR", e.message); }
     setPageLoading(false);
   }
@@ -1260,13 +1206,13 @@ function App() {
     voteDataLoadedRef.current = true;
 
     const cached = loadSimCache();
-    if (cached && cached.vd && cached.rd && cached.proposalExpirations && cached.drepVotedProposals) {
+    if (cached && cached.vd && cached.proposalExpirations && cached.drepVotedProposals) {
       setSimProgress("Restoring cached vote data…");
       setLoadingVotes(true);
       const drepVotedProposals = {};
       Object.entries(cached.drepVotedProposals).forEach(([id, arr]) => { drepVotedProposals[id] = new Set(arr); });
       window.__simVoteRaw = { proposalExpirations: cached.proposalExpirations, drepVotedProposals };
-      setVoteData(cached.vd); setTotalActions(cached.maxVotes); setRationaleData(cached.rd);
+      setVoteData(cached.vd); setTotalActions(cached.maxVotes);
       setLoadingVotes(false);
       setSimProgress(`Cached: ${Object.keys(cached.vd).length} DReps (${Math.round((Date.now() - cached.ts) / 60000)}min ago)`);
       return;
@@ -1275,7 +1221,7 @@ function App() {
     setLoadingVotes(true);
     const toFetch = allDreps.slice(0, 200);
     setSimProgress(`Vote data: 0/${toFetch.length}`);
-    const vd = {}, rd = {};
+    const vd = {};
     let maxVotes = 0;
     const proposalExpirations = {}; // propKey → expiration epoch
     const drepVotedProposals = {}; // drepId → Set<propKey>
@@ -1296,15 +1242,13 @@ function App() {
             }
           }
         });
-        // Blockfrost doesn't provide rationale info in vote records
-        return { id: d.drep_id, count: votes.length, withRationale: 0, votedProposals };
+        return { id: d.drep_id, count: votes.length, votedProposals };
       }));
       results.forEach(r => {
         if (r.status === "fulfilled") {
-          const { id, count, withRationale, votedProposals } = r.value;
+          const { id, count, votedProposals } = r.value;
           vd[id] = count;
           if (count > maxVotes) maxVotes = count;
-          rd[id] = { withRationale, total: count };
           drepVotedProposals[id] = votedProposals;
         }
       });
@@ -1335,9 +1279,9 @@ function App() {
     // Save to cache
     const serialDrepProps = {};
     Object.entries(drepVotedProposals).forEach(([id, s]) => { serialDrepProps[id] = [...s]; });
-    saveSimCache({ vd, rd, maxVotes, proposalExpirations: flatExpirations, drepVotedProposals: serialDrepProps });
+    saveSimCache({ vd, maxVotes, proposalExpirations: flatExpirations, drepVotedProposals: serialDrepProps });
 
-    setVoteData(vd); setTotalActions(maxVotes); setRationaleData(rd);
+    setVoteData(vd); setTotalActions(maxVotes);
     setLoadingVotes(false);
     setSimProgress(`${Object.keys(vd).length} DReps loaded & cached`);
   }
@@ -1459,12 +1403,12 @@ function App() {
       </div>
 
       {tab === "dashboard" ? (
-        <DashboardTab dreps={dreps} proposals={proposals} votes={votes} rationales={rationales}
+        <DashboardTab dreps={dreps} proposals={proposals} votes={votes}
           warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
           loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
       ) : (
         <SimulatorTab dreps={allDreps} voteData={voteData} totalActions={totalActions}
-          periodVoteData={periodVoteData} rationaleData={rationaleData}
+          periodVoteData={periodVoteData}
           computePeriodVoteData={computePeriodVoteData} setPeriodVoteData={setPeriodVoteData}
           loadingVotes={loadingVotes} progress={simProgress} T={T} />
       )}
