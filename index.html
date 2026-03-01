@@ -109,6 +109,7 @@ const LANG = {
     export_rationales:"Export Rationales CSV",
     share_url:"Share", share_copied:"Copied!",
     export_proposal_rationales:"Export DRep rationales for this proposal",
+    constitution_tool:"Constitution",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
@@ -172,6 +173,7 @@ const LANG = {
     export_rationales:"投票根拠CSV出力",
     share_url:"共有", share_copied:"コピーしました！",
     export_proposal_rationales:"この提案のDRep投票根拠を出力",
+    constitution_tool:"憲法ツール",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
@@ -2626,7 +2628,14 @@ function App() {
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <button className={`tab-btn ${tab==="cc"?"active":""}`} onClick={()=>setTab("cc")}>{T.tab_cc}</button>
-        <div style={{marginLeft:"auto"}}><ShareButton T={T}/></div>
+        <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
+          <a href="https://adatool.net/constitution-tool/" target="_blank" rel="noopener"
+            style={{fontSize:10,color:"var(--text2)",textDecoration:"none",opacity:.6,padding:"4px 8px",
+              borderRadius:6,border:"1px solid var(--border)",transition:"opacity .2s"}}
+            onMouseEnter={e=>e.target.style.opacity="1"} onMouseLeave={e=>e.target.style.opacity=".6"}
+          >📜 {T.constitution_tool||"Constitution"}</a>
+          <ShareButton T={T}/>
+        </div>
       </div>
 
       {tab === "dashboard" ? (
