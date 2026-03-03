@@ -893,7 +893,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const [spoGaFilter, setSpoGaFilter] = React.useState("");
   const [spoGaVoteFilter, setSpoGaVoteFilter] = React.useState("not_voted");
   const [spoPage, setSpoPage] = React.useState(0);
-  const [spoDrepFilter, setSpoDrepFilter] = React.useState("all"); // all | auto_abstain | auto_nc | drep | none
+  const [spoDrepFilter, setSpoDrepFilter] = React.useState("all"); // all | auto_abstain | auto_nc | custom_drep
   const [zoom,setZoom] = useHashState("d_zm",80); // 50-150 %
   const [drepFull,setDrepFull] = React.useState(false); // fullscreen expand for DRep table
   const drepScrollRef = React.useRef(null);
@@ -1288,8 +1288,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         else if (spoFilter === "auto_nc") spoList = spoList.filter(p => p.isAutoNoConf);
         if (spoDrepFilter === "auto_abstain") spoList = spoList.filter(p => p.isAutoAbstain);
         else if (spoDrepFilter === "auto_nc") spoList = spoList.filter(p => p.isAutoNoConf);
-        else if (spoDrepFilter === "drep") spoList = spoList.filter(p => p.pledge_drep && !p.isAutoAbstain && !p.isAutoNoConf);
-        else if (spoDrepFilter === "none") spoList = spoList.filter(p => !p.pledge_drep);
+        else if (spoDrepFilter === "custom_drep") spoList = spoList.filter(p => p.pledge_drep && !p.isAutoAbstain && !p.isAutoNoConf);
         if (spoGaFilter) {
           const gaProp = pgP.find(p => p.proposal_id === spoGaFilter);
           if (gaProp) spoList = spoList.filter(pool => {
@@ -1338,7 +1337,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           <span style={{fontSize:8,color:"var(--text2)",margin:"0 2px"}}>|</span>
           <span style={{fontSize:8,color:"var(--text2)"}}>DRep:</span>
           <div style={{display:"flex",gap:3}}>
-            {[["all","All"],["auto_abstain","A-Abs"],["auto_nc","A-NC"],["drep","DRep"],["none","None"]].map(([k,label])=>
+            {[["all","All"],["auto_abstain","A-Abs"],["auto_nc","A-NC"],["custom_drep","DRep委任"]].map(([k,label])=>
               <button key={k} onClick={()=>{setSpoDrepFilter(k);setSpoPage(0);}} style={spoFBtnS(spoDrepFilter===k)}>{label}</button>)}
           </div>
           <input type="text" placeholder="Search…" value={spoSearchQ}
@@ -1364,12 +1363,12 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           <div ref={spoScrollRef} onScroll={()=>syncScroll(spoScrollRef,drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:"calc(40vh - 60px)"}}>
             <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(70*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
-                <th onClick={()=>toggleSpoSort("ticker")} style={{cursor:"pointer",position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",
+                <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",
                   padding:`${Math.round(6*zoom/100)}px ${Math.round(8*zoom/100)}px`,textAlign:"left",
                   borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:Math.round(9*zoom/100),fontWeight:700,
                   color:"var(--text2)",minWidth:Math.round(260*zoom/100),boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
-                  {T.spo_ticker}{spoSortArrow("ticker")}
-                  <span style={{fontSize:7,marginLeft:4,fontWeight:400}}>{T.spo_stake}{spoSortArrow("stake")}</span>
+                  <span onClick={()=>toggleSpoSort("ticker")} style={{cursor:"pointer"}}>{T.spo_ticker}{spoSortArrow("ticker")}</span>
+                  <span onClick={()=>toggleSpoSort("stake")} style={{cursor:"pointer",fontSize:7,marginLeft:6,fontWeight:400,padding:"1px 3px",borderRadius:3,background:spoSortKey==="stake"?"rgba(59,130,246,.15)":"transparent"}}>{T.spo_stake}{spoSortArrow("stake")}</span>
                 </th>
                 {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);const inelig=SPO_INELIGIBLE.includes(p.proposal_type);
                   return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,
@@ -1383,7 +1382,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
               <tbody>
                 {spoPageData.map((pool,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
                   <tr key={pool.pool_id}>
-                    <td onClick={()=>toggleSpoSort("stake")} style={{cursor:"pointer",position:"sticky",left:0,zIndex:10,background:bg,
+                    <td style={{position:"sticky",left:0,zIndex:10,background:bg,
                       padding:`${Math.round(5*zoom/100)}px ${Math.round(8*zoom/100)}px`,
                       borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",
                       boxShadow:"4px 0 8px rgba(0,0,0,.3)",fontSize:Math.round(11*zoom/100),fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:Math.round(180*zoom/100)}}
