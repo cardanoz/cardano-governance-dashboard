@@ -113,6 +113,7 @@ const LANG = {
     budget_b2:"Bonus / person", budget_b2_mode_ada:"ADA", budget_b2_mode_pct:"% of budget",
     vote_start:"Start date", vote_end:"End date", vote_penalty:"Vote-rate adjustment",
     vote_penalty_on:"Apply", vote_penalty_off:"Skip",
+    rationale_adj:"Rationale adjustment", rationale_rate:"Rat%",
     vote_ga_count:"GAs in range", vote_info:"GAs whose voting ended in this period",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API Stats", api_calls:"API calls", cached:"cached", loading_sim_votes:"Loading vote counts for simulator…",
@@ -182,6 +183,7 @@ const LANG = {
     budget_b2:"1人あたりボーナス", budget_b2_mode_ada:"ADA", budget_b2_mode_pct:"% 比率",
     vote_start:"開始日", vote_end:"終了日", vote_penalty:"投票率補正",
     vote_penalty_on:"適用", vote_penalty_off:"なし",
+    rationale_adj:"根拠添付補正", rationale_rate:"根拠%",
     vote_ga_count:"期間内GA数", vote_info:"投票期間終了日がこの範囲内のGA",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API統計", api_calls:"APIコール", cached:"キャッシュ", loading_sim_votes:"シミュレーター用投票数を取得中…",
@@ -745,13 +747,22 @@ function calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData
   }
 
   function applyPeriodVotePenalty(tagged, rewards) {
-    if (!params.votePenaltyOn || !periodVoteData) return rewards;
+    if (!periodVoteData) return rewards;
     return rewards.map((r, i) => {
       if (r === 0) return 0;
       const pd = periodVoteData[tagged[i].drep_id];
       if (!pd || pd.actionsInPeriod === 0) return 0;
-      const voteRate = pd.votesInPeriod / pd.actionsInPeriod;
-      return r * voteRate;
+      let factor = 1;
+      // Vote-rate adjustment
+      if (params.votePenaltyOn) {
+        factor *= pd.votesInPeriod / pd.actionsInPeriod;
+      }
+      // Rationale adjustment: blend between 1.0 (no effect) and rationaleRate
+      if (params.rationaleWeight > 0 && pd.votesInPeriod > 0) {
+        const ratRate = pd.rationalesInPeriod / pd.votesInPeriod;
+        factor *= 1 - params.rationaleWeight * (1 - ratRate);
+      }
+      return r * factor;
     });
   }
 
@@ -1754,6 +1765,7 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
   const [b2Mode, setB2Mode] = useHashState("s_b2m","ada");
   const b2Eff = b2Mode === "pct" ? (N > 0 ? Math.round(drepBudget * b2Pct / 100 / N) : 0) : b2;
   const [votePenaltyOn, setVotePenaltyOn] = useHashState("s_penalty",true);
+  const [rationaleWeight, setRationaleWeight] = useHashState("s_ratW",0);
   const [searchQ, setSearchQ] = useHashState("s_q","");
   const [page, setPage] = useHashState("s_p",0);
   const perPage = 50;
@@ -1778,8 +1790,8 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
   }, [periodVoteData]);
 
   const params = React.useMemo(() => ({
-    K, N, totalBudget: drepBudget, b1, b2: b2Eff, votePeriod: votePenaltyOn ? 1 : 0, votePenaltyOn
-  }), [K, N, drepBudget, b1, b2Eff, votePenaltyOn]);
+    K, N, totalBudget: drepBudget, b1, b2: b2Eff, votePeriod: votePenaltyOn ? 1 : 0, votePenaltyOn, rationaleWeight: rationaleWeight / 100
+  }), [K, N, drepBudget, b1, b2Eff, votePenaltyOn, rationaleWeight]);
 
   const allResults = React.useMemo(() => calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData),
     [dreps, params, voteData, totalActions, periodVoteData]);
@@ -1800,6 +1812,8 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
       r_bonus: bo[i]?.reward || 0,
       periodVR: periodVoteData && periodVoteData[d.drep_id]
         ? (periodVoteData[d.drep_id].actionsInPeriod > 0 ? periodVoteData[d.drep_id].votesInPeriod / periodVoteData[d.drep_id].actionsInPeriod * 100 : 0) : null,
+      periodRR: periodVoteData && periodVoteData[d.drep_id] && periodVoteData[d.drep_id].votesInPeriod > 0
+        ? periodVoteData[d.drep_id].rationalesInPeriod / periodVoteData[d.drep_id].votesInPeriod * 100 : null,
     }));
   }, [allResults, periodVoteData]);
 
@@ -1812,10 +1826,11 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
 
   function exportDrepCSV() {
-    const hdr = ["Rank","DRep ID","Name","Stake (ADA)","Eligible","Equal (ADA)","Prop (ADA)","Prop+Bonus (ADA)","Period Vote Rate %","Vote Count","Overall Vote Rate %"];
+    const hdr = ["Rank","DRep ID","Name","Stake (ADA)","Eligible","Equal (ADA)","Prop (ADA)","Prop+Bonus (ADA)","Period Vote Rate %","Rationale Rate %","Vote Count","Overall Vote Rate %"];
     const rows = merged.map(d => [d.rank, d.drep_id, safeName(d.name) || "", Math.round(Number(d.amount) / 1e6),
       d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2),
       d.periodVR != null ? d.periodVR.toFixed(1) : "",
+      d.periodRR != null ? d.periodRR.toFixed(1) : "",
       voteData[d.drep_id] || "", totalActions > 0 ? ((voteData[d.drep_id] || 0) / totalActions * 100).toFixed(1) : ""]);
     downloadCSV(buildCSV(hdr, rows), "drep_rewards_comparison.csv");
   }
@@ -1956,7 +1971,7 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
           <div style={{background:"rgba(59,130,246,.04)",border:"1px solid rgba(59,130,246,.12)",borderRadius:8,padding:"10px 12px"}}>
             <div style={{fontSize:10,fontWeight:700,color:"#3b82f6",marginBottom:8}}>DRep</div>
             {/* Common to all 3 mechanisms */}
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:8}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8,marginBottom:8}}>
               <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
               <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
               <div>
@@ -1975,6 +1990,7 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
                   <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
                 )}
               </div>
+              <SliderParam label={T.rationale_adj} value={rationaleWeight} onChange={setRationaleWeight} min={0} max={100} step={5} suffix="%" />
             </div>
             {/* Prop+Bonus only */}
             <div style={{borderTop:"1px solid rgba(59,130,246,.12)",paddingTop:8}}>
@@ -2069,6 +2085,8 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
                     ))}
                     <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
                       borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>{T.vote_rate}</th>
+                    {rationaleWeight>0 && <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
+                      borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>{T.rationale_rate}</th>}
                   </tr></thead>
                   <tbody>
                     {pageData.map((d, ri) => {
@@ -2096,6 +2114,13 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
                               <span style={{fontSize:8,color:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)"}}>{pvr.toFixed(0)}%</span></div>)
                             : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
                           </td>
+                          {rationaleWeight>0 && <td style={{...tdS(bg),fontSize:9}}>
+                            {d.periodRR != null ? (<div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:3}}>
+                              <div style={{width:28,height:3,background:"var(--bg4)",borderRadius:2,overflow:"hidden"}}>
+                                <div style={{width:`${Math.min(d.periodRR,100)}%`,height:"100%",background:d.periodRR>80?"var(--yes)":d.periodRR>50?"var(--abstain)":"var(--no)",borderRadius:2}} /></div>
+                              <span style={{fontSize:8,color:d.periodRR>80?"var(--yes)":d.periodRR>50?"var(--abstain)":"var(--no)"}}>{d.periodRR.toFixed(0)}%</span></div>)
+                            : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
+                          </td>}
                         </tr>
                       );
                     })}
@@ -2520,9 +2545,14 @@ function App() {
     const actionsInPeriod = proposalsInRange.size;
     const result = {};
     Object.entries(drepVotedProposals).forEach(([drepId, votedSet]) => {
-      let votesInPeriod = 0;
-      proposalsInRange.forEach(propKey => { if (votedSet.has(propKey)) votesInPeriod++; });
-      result[drepId] = { votesInPeriod, actionsInPeriod };
+      let votesInPeriod = 0, rationalesInPeriod = 0;
+      proposalsInRange.forEach(propKey => {
+        if (votedSet.has(propKey)) {
+          votesInPeriod++;
+          if (drepRationales[`${drepId}__${propKey}`]) rationalesInPeriod++;
+        }
+      });
+      result[drepId] = { votesInPeriod, actionsInPeriod, rationalesInPeriod };
     });
     return result;
   }
