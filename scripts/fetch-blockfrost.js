@@ -1136,7 +1136,24 @@ async function main() {
       const drepCount = Object.values(addrToDrep).filter(v => v).length;
       console.log(`  Delegation results: ${Object.keys(addrToDrep).length} addresses checked, ${drepCount} have DRep delegation`);
 
-      // Step 4: Build pool info map
+      // Step 4: Fetch active_stake via /pool_info in batches
+      const poolBech32s = registeredPools.map(p => p.pool_id_bech32).filter(Boolean);
+      const poolStakeMap = {};
+      const POOL_BATCH = 50;
+      console.log(`  Fetching pool stake info for ${poolBech32s.length} pools...`);
+      for (let i = 0; i < poolBech32s.length; i += POOL_BATCH) {
+        const batch = poolBech32s.slice(i, i + POOL_BATCH);
+        try {
+          const data = await koiosPost("/pool_info", { _pool_bech32_ids: batch });
+          if (data) data.forEach(p => {
+            if (p.pool_id_bech32) poolStakeMap[p.pool_id_bech32] = p.active_stake || p.live_stake || "0";
+          });
+        } catch (e) { console.log(`    pool_info batch error: ${e.message}`); }
+        if ((i + POOL_BATCH) % 500 < POOL_BATCH) console.log(`    Pool stake: ${Math.min(i + POOL_BATCH, poolBech32s.length)}/${poolBech32s.length}`);
+      }
+      console.log(`  Pool stake info: ${Object.keys(poolStakeMap).length} pools with data`);
+
+      // Step 5: Build pool info map
       registeredPools.forEach(p => {
         const poolId = p.pool_id_bech32;
         if (!poolId) return;
@@ -1144,7 +1161,7 @@ async function main() {
           ticker: p.ticker || "",
           reward_addr: p.reward_addr || "",
           pledge_drep: addrToDrep[p.reward_addr] || null,
-          active_stake: p.active_stake || p.live_stake || "0"
+          active_stake: poolStakeMap[poolId] || "0"
         };
       });
       console.log(`  SPO pool info built: ${Object.keys(spoPoolInfo).length} pools`);
