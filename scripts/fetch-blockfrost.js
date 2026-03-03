@@ -1088,13 +1088,15 @@ async function main() {
       const rewardAddrs = [...new Set(registeredPools.map(p => p.reward_addr).filter(Boolean))];
       console.log(`  Checking DRep delegation for ${rewardAddrs.length} reward addresses...`);
       const addrToDrep = {};
-      for (let i = 0; i < rewardAddrs.length; i += 500) {
-        const batch = rewardAddrs.slice(i, i + 500);
+      // Koios POST body limit is 5120 bytes; stake addresses ~63 chars each → max ~50 per batch
+      const ACCT_BATCH = 50;
+      for (let i = 0; i < rewardAddrs.length; i += ACCT_BATCH) {
+        const batch = rewardAddrs.slice(i, i + ACCT_BATCH);
         try {
           const data = await koiosPost("/account_info", { _stake_addresses: batch });
           if (data) data.forEach(a => { if (a.stake_address) addrToDrep[a.stake_address] = a.delegated_drep || null; });
         } catch (e) { console.log(`    account_info batch error: ${e.message}`); }
-        if ((i + 500) % 2000 < 500) console.log(`    Delegation check: ${Math.min(i + 500, rewardAddrs.length)}/${rewardAddrs.length}`);
+        if ((i + ACCT_BATCH) % 500 < ACCT_BATCH) console.log(`    Delegation check: ${Math.min(i + ACCT_BATCH, rewardAddrs.length)}/${rewardAddrs.length}`);
       }
 
       // Step 4: Build pool info map
