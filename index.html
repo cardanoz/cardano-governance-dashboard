@@ -2006,7 +2006,7 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
               </div>
               {b2Mode === "ada" ? (
                 <React.Fragment>
-                  <input type="number" value={b2} onChange={e=>setB2(Math.min(Number(e.target.value),drepBudget))} min={0} max={Math.round(drepBudget/N)} step={1000}
+                  <input type="number" value={b2} onChange={e=>setB2(Math.min(Number(e.target.value),drepBudget))} min={0} max={Math.round(drepBudget/N)} step={100}
                     style={{width:80,textAlign:"right",padding:"2px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10}} />
                   <span style={{fontSize:8,color:"var(--text2)"}}>ADA</span>
                 </React.Fragment>
