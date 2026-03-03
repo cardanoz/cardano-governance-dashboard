@@ -1742,7 +1742,7 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
   const todayStr = new Date().toISOString().slice(0, 10);
   const [govBudget, setGovBudget] = useHashState("s_budget",500000);
   const [distPerYear, setDistPerYear] = useHashState("s_dist",2);
-  const [drepRatio, setDrepRatio] = useHashState("s_ratio",90);
+  const [drepRatio, setDrepRatio] = useHashState("s_ratio",60);
   const [periodFrom, setPeriodFrom] = useHashState("s_from",epochToDateStr(CC_MIN_EPOCH));
   const [periodTo, setPeriodTo] = useHashState("s_to",todayStr);
   const perDist = distPerYear > 0 ? Math.round(govBudget / distPerYear) : govBudget;
@@ -1992,56 +1992,52 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
               </div>
               <SliderParam label={T.rationale_adj} value={rationaleWeight} onChange={setRationaleWeight} min={0} max={100} step={5} suffix="%" />
             </div>
-            {/* Prop+Bonus only */}
-            <div style={{borderTop:"1px solid rgba(59,130,246,.12)",paddingTop:8}}>
-              <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}>
-                <span style={{fontSize:9,fontWeight:700,color:"#a78bfa",background:"rgba(167,139,250,.1)",padding:"1px 6px",borderRadius:4}}>{T.mech_bonus}</span>
-                <span style={{fontSize:9,color:"var(--text2)"}}>{T.budget_b2}</span>
-                <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:4,overflow:"hidden",marginLeft:"auto"}}>
-                  <button onClick={()=>setB2Mode("ada")}
-                    style={{padding:"1px 6px",fontSize:8,fontWeight:600,border:"none",cursor:"pointer",
-                      background:b2Mode==="ada"?"var(--accent)":"var(--bg3)",color:b2Mode==="ada"?"#fff":"var(--text2)"}}>{T.budget_b2_mode_ada}</button>
-                  <button onClick={()=>setB2Mode("pct")}
-                    style={{padding:"1px 6px",fontSize:8,fontWeight:600,border:"none",cursor:"pointer",
-                      background:b2Mode==="pct"?"var(--accent)":"var(--bg3)",color:b2Mode==="pct"?"#fff":"var(--text2)"}}>{T.budget_b2_mode_pct}</button>
-                </div>
+            {/* Prop+Bonus only — compact */}
+            <div style={{borderTop:"1px solid rgba(59,130,246,.12)",paddingTop:6,display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+              <span style={{fontSize:9,fontWeight:700,color:"#a78bfa",background:"rgba(167,139,250,.1)",padding:"1px 6px",borderRadius:4}}>{T.mech_bonus}</span>
+              <span style={{fontSize:9,color:"var(--text2)"}}>{T.budget_b2}</span>
+              <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:4,overflow:"hidden"}}>
+                <button onClick={()=>setB2Mode("ada")}
+                  style={{padding:"1px 6px",fontSize:8,fontWeight:600,border:"none",cursor:"pointer",
+                    background:b2Mode==="ada"?"var(--accent)":"var(--bg3)",color:b2Mode==="ada"?"#fff":"var(--text2)"}}>{T.budget_b2_mode_ada}</button>
+                <button onClick={()=>setB2Mode("pct")}
+                  style={{padding:"1px 6px",fontSize:8,fontWeight:600,border:"none",cursor:"pointer",
+                    background:b2Mode==="pct"?"var(--accent)":"var(--bg3)",color:b2Mode==="pct"?"#fff":"var(--text2)"}}>{T.budget_b2_mode_pct}</button>
               </div>
               {b2Mode === "ada" ? (
-                <div>
-                  <SliderParam label="" value={b2} onChange={v => setB2(Math.min(v, drepBudget))} min={0} max={Math.round(drepBudget/N)} step={1000} suffix=" ADA" />
-                  <div style={{fontSize:8,color:"var(--text2)",marginTop:-6}}>
-                    Prop ₳{Math.max(0, drepBudget - b2Eff * N).toLocaleString()} + Bonus ₳{b2Eff.toLocaleString()}/人 × {N} = ₳{(b2Eff*N).toLocaleString()}
-                    {drepBudget > 0 ? ` (${Math.round(b2Eff*N/drepBudget*100)}%)` : ""}
-                  </div>
-                </div>
+                <React.Fragment>
+                  <input type="number" value={b2} onChange={e=>setB2(Math.min(Number(e.target.value),drepBudget))} min={0} max={Math.round(drepBudget/N)} step={1000}
+                    style={{width:80,textAlign:"right",padding:"2px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10}} />
+                  <span style={{fontSize:8,color:"var(--text2)"}}>ADA</span>
+                </React.Fragment>
               ) : (
-                <div>
-                  <SliderParam label="" value={b2Pct} onChange={v => setB2Pct(Math.min(v, 80))} min={0} max={80} step={5} suffix="%" />
-                  <div style={{fontSize:8,color:"var(--text2)",marginTop:-6}}>
-                    Prop ₳{Math.max(0, drepBudget - b2Eff * N).toLocaleString()} ({100-b2Pct}%) + Bonus ₳{b2Eff.toLocaleString()}/人 × {N} = ₳{(b2Eff*N).toLocaleString()}
-                    ({b2Pct}%)
-                  </div>
-                </div>
+                <React.Fragment>
+                  <input type="number" value={b2Pct} onChange={e=>setB2Pct(Math.min(Number(e.target.value),80))} min={0} max={80} step={5}
+                    style={{width:50,textAlign:"right",padding:"2px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10}} />
+                  <span style={{fontSize:8,color:"var(--text2)"}}>%</span>
+                </React.Fragment>
               )}
+              <span style={{fontSize:8,color:"var(--text2)",marginLeft:"auto"}}>
+                Prop ₳{Math.max(0, drepBudget - b2Eff * N).toLocaleString()} + Bonus ₳{b2Eff.toLocaleString()}/人×{N}
+                {drepBudget > 0 ? ` (${Math.round(b2Eff*N/drepBudget*100)}%)` : ""}
+              </span>
             </div>
           </div>
           {/* ── CC params ── */}
-          <div style={{background:"rgba(245,158,11,.04)",border:"1px solid rgba(245,158,11,.12)",borderRadius:8,padding:"10px 12px"}}>
-            <div style={{fontSize:10,fontWeight:700,color:"#f59e0b",marginBottom:8}}>CC</div>
-            <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-              <span style={{fontSize:10,color:"var(--text2)",fontWeight:600}}>{T.cc_sim_penalty_label}:</span>
-              {[3,5,10].map(n=>(
-                <button key={n} onClick={()=>setPenaltyThreshold(n)}
-                  style={{padding:"2px 7px",borderRadius:4,fontSize:9,fontWeight:600,cursor:"pointer",
-                    border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
-                    background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
-                    color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
-              ))}
-            </div>
-            <div style={{fontSize:9,color:"var(--text2)",marginTop:8}}>
+          <div style={{background:"rgba(245,158,11,.04)",border:"1px solid rgba(245,158,11,.12)",borderRadius:8,padding:"8px 12px",display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+            <span style={{fontSize:10,fontWeight:700,color:"#f59e0b"}}>CC</span>
+            <span style={{fontSize:9,color:"var(--text2)",fontWeight:600}}>{T.cc_sim_penalty_label}:</span>
+            {[3,5,10].map(n=>(
+              <button key={n} onClick={()=>setPenaltyThreshold(n)}
+                style={{padding:"2px 7px",borderRadius:4,fontSize:9,fontWeight:600,cursor:"pointer",
+                  border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
+                  background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
+                  color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
+            ))}
+            <span style={{fontSize:8,color:"var(--text2)",marginLeft:"auto"}}>
               ₳{ccPerMember.toLocaleString()}/{T.sim_per_member}
               {adaPrice.usd>0?` (${fmtFiat(ccPerMember,adaPrice.usd,"$")})`:""} · {ccFMembers.length} members · {simProps.length} GAs
-            </div>
+            </span>
           </div>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:8,marginTop:6,flexWrap:"wrap"}}>
