@@ -1044,6 +1044,34 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
     downloadCSV(buildCSV(hdr, rows), "cc_rationales.csv");
   }
 
+  function exportSpoVotesCSV(){
+    const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
+    const poolIds = new Set();
+    Object.keys(spoVotes||{}).forEach(k => poolIds.add(k.split("__")[0]));
+    Object.keys(spoPoolInfo||{}).forEach(id => poolIds.add(id));
+    const pools = [...poolIds].map(pid => {
+      const info = (spoPoolInfo||{})[pid]||{};
+      const v = {}; let vc = 0;
+      fProps.forEach(p => { const vote = (spoVotes||{})[`${pid}__${p.proposal_id}`]; if(vote){v[p.proposal_id]=vote;vc++;} });
+      return { pool_id:pid, ticker:info.ticker||"", pledge_drep:info.pledge_drep||null, active_stake:info.active_stake||"0",
+        votes:v, voteCount:vc, isAA:info.pledge_drep==="drep_always_abstain", isNC:info.pledge_drep==="drep_always_no_confidence" };
+    }).sort((a,b) => Number(b.active_stake)-Number(a.active_stake));
+    const hdr = ["Pool ID","Ticker","Active Stake (ADA)","Reward DRep",
+      ...fProps.map(p => `[${p.proposal_type}] ${(p.title||shortId(p.proposal_id)).slice(0,40)}`)];
+    const rows = pools.map(pool => [pool.pool_id, pool.ticker, Math.round(Number(pool.active_stake)/1e6),
+      pool.isAA?"Auto-Abstain":pool.isNC?"Auto-NoConfidence":pool.pledge_drep||"",
+      ...fProps.map(p => {
+        if(SPO_INELIG.includes(p.proposal_type)) return "N/A";
+        const ex = pool.votes[p.proposal_id];
+        if(ex) return ex;
+        if(p.proposal_type==="HardForkInitiation") return "NotVoted";
+        if(pool.isAA) return "Abstain (auto)";
+        if(pool.isNC) return p.proposal_type==="NoConfidence"?"Yes (auto)":"Abstain (auto)";
+        return "NotVoted";
+      })]);
+    downloadCSV(buildCSV(hdr, rows), "spo_votes.csv");
+  }
+
   const ist=INPUT_STYLE;
 
   return (
@@ -1075,6 +1103,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
               {icon:"📝",label:"DRep Rationales",fn:exportDrepRationalesCSV},
               {icon:"🏛",label:"CC Votes",fn:exportCCVotesCSV,disabled:!(ccMembers&&ccMembers.length)},
               {icon:"📝",label:"CC Rationales",fn:exportCCRationalesCSV,disabled:!(ccMembers&&ccMembers.length)},
+              {icon:"🏊",label:"SPO Votes",fn:exportSpoVotesCSV,disabled:!Object.keys(spoPoolInfo||{}).length},
             ].map((item,idx)=><button key={idx} onClick={()=>{item.fn();setCsvOpen(false)}} disabled={item.disabled}
               style={{display:"block",width:"100%",padding:"8px 12px",
               border:"none",borderTop:idx>0?"1px solid var(--border)":"none",background:"transparent",
@@ -1312,15 +1341,6 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         const fmtStake = (s) => { const a = Number(s)/1e6; return a>=1e9?(a/1e9).toFixed(1)+"B":a>=1e6?(a/1e6).toFixed(1)+"M":a>=1e3?(a/1e3).toFixed(0)+"K":Math.round(a).toLocaleString(); };
         const spoFBtnS = (active) => ({fontSize:8,padding:"2px 6px",borderRadius:4,cursor:"pointer",border:active?"1px solid var(--accent)":"1px solid var(--border)",background:active?"rgba(59,130,246,.12)":"var(--bg)",color:active?"var(--accent)":"var(--text2)"});
 
-        function exportSpoCSV() {
-          const hdr = ["Pool ID","Ticker","Active Stake (ADA)","Reward DRep",
-            ...pgP.map(p => `[${p.proposal_type}] ${(p.title||shortId(p.proposal_id)).slice(0,40)}`)];
-          const rows = spoList.map(pool => [pool.pool_id, pool.ticker, Math.round(Number(pool.active_stake)/1e6),
-            pool.isAutoAbstain?"Auto-Abstain":pool.isAutoNoConf?"Auto-NoConfidence":pool.pledge_drep||"",
-            ...pgP.map(p => { const ev = getSpoEffVote(pool, p); return ev.vote === "Ineligible" ? "N/A" : ev.vote + (ev.type==="auto"?" (auto)":""); })]);
-          downloadCSV(buildCSV(hdr, rows), "spo_votes.csv");
-        }
-
         return (
       <div style={{marginBottom:12}}>
         <button onClick={()=>setSpoOpen(!spoOpen)}
@@ -1343,7 +1363,6 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           <input type="text" placeholder="Search…" value={spoSearchQ}
             onChange={e=>{setSpoSearchQ(e.target.value);setSpoPage(0);}}
             style={{padding:"2px 5px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:9,width:100,outline:"none"}} />
-          <button className="btn" onClick={exportSpoCSV} style={{fontSize:8,padding:"2px 6px"}}>📥 CSV</button>
           {/* Per-GA filter */}
           <span style={{fontSize:8,color:"var(--text2)",margin:"0 2px"}}>|</span>
           <span style={{fontSize:8,color:"var(--text2)"}}>GA:</span>
@@ -1948,306 +1967,6 @@ const SectionHeader = ({title, show, setShow, color, extra}) => (
   </div>
 );
 
-// SPO Votes Tab
-// ════════════════════════════════════════════════════════════════
-function SpoTab({ proposals, spoVotes, spoPoolInfo, spoLoading, spoProgress, T }) {
-  const [searchQ, setSearchQ] = React.useState("");
-  const [page, setPage] = React.useState(0);
-  const [spoFilter, setSpoFilter] = React.useState("all"); // all | voted | not_voted | auto_abstain | auto_nc
-  const [sortKey, setSortKey] = React.useState("stake"); // stake | ticker | votes
-  const [sortDir, setSortDir] = React.useState("desc"); // asc | desc
-  const [gaFilter, setGaFilter] = React.useState(""); // proposal_id to filter by vote status for that GA
-  const [gaVoteFilter, setGaVoteFilter] = React.useState("not_voted"); // not_voted | yes | no | abstain
-  const perPage = 100;
-
-  const toggleSort = (key) => {
-    if (sortKey === key) setSortDir(d => d === "asc" ? "desc" : "asc");
-    else { setSortKey(key); setSortDir(key === "ticker" ? "asc" : "desc"); }
-    setPage(0);
-  };
-  const sortArrow = (key) => sortKey === key ? (sortDir === "asc" ? " ▲" : " ▼") : "";
-
-  // All proposals (SPOs can vote on all types)
-  const spoProps = React.useMemo(() =>
-    proposals.filter(p => p.proposal_type)
-      .sort((a,b) => (b.epoch_no||0) - (a.epoch_no||0)),
-    [proposals]
-  );
-
-  // Build list of all registered pools with their vote data
-  const poolList = React.useMemo(() => {
-    const poolIds = new Set();
-    Object.keys(spoVotes).forEach(k => poolIds.add(k.split("__")[0]));
-    Object.keys(spoPoolInfo).forEach(id => poolIds.add(id));
-
-    return [...poolIds].map(poolId => {
-      const info = spoPoolInfo[poolId] || {};
-      const votes = {};
-      let voteCount = 0;
-      spoProps.forEach(p => {
-        const v = spoVotes[`${poolId}__${p.proposal_id}`];
-        if (v) { votes[p.proposal_id] = v; voteCount++; }
-      });
-      return {
-        pool_id: poolId,
-        ticker: info.ticker || "",
-        name: info.name || "",
-        pledge_drep: info.pledge_drep || null,
-        active_stake: info.active_stake || "0",
-        votes,
-        voteCount,
-        isAutoAbstain: info.pledge_drep === "drep_always_abstain",
-        isAutoNoConf: info.pledge_drep === "drep_always_no_confidence"
-      };
-    });
-  }, [spoVotes, spoPoolInfo, spoProps]);
-
-  // Get effective vote for display
-  function getEffectiveVote(pool, proposal) {
-    const explicit = pool.votes[proposal.proposal_id];
-    if (explicit) return { vote: explicit, type: "explicit" };
-    if (proposal.proposal_type === "HardForkInitiation") return { vote: "NotVoted", type: "none" };
-    if (pool.isAutoAbstain) return { vote: "Abstain", type: "auto" };
-    if (pool.isAutoNoConf) {
-      return proposal.proposal_type === "NoConfidence"
-        ? { vote: "Yes", type: "auto" }
-        : { vote: "Abstain", type: "auto" };
-    }
-    if (pool.pledge_drep) return { vote: "NotVoted", type: "delegated" };
-    return { vote: "NotVoted", type: "none" };
-  }
-
-  // Apply search + filter + sort
-  const filtered = React.useMemo(() => {
-    let list = [...poolList];
-    // Text search
-    if (searchQ) {
-      const q = searchQ.toLowerCase();
-      list = list.filter(p =>
-        (p.ticker && p.ticker.toLowerCase().includes(q)) ||
-        (p.name && p.name.toLowerCase().includes(q)) ||
-        p.pool_id.toLowerCase().includes(q)
-      );
-    }
-    // Category filter
-    if (spoFilter === "voted") list = list.filter(p => p.voteCount > 0);
-    else if (spoFilter === "not_voted") list = list.filter(p => p.voteCount === 0);
-    else if (spoFilter === "auto_abstain") list = list.filter(p => p.isAutoAbstain);
-    else if (spoFilter === "auto_nc") list = list.filter(p => p.isAutoNoConf);
-    // Per-GA vote filter
-    if (gaFilter) {
-      const gaProp = spoProps.find(p => p.proposal_id === gaFilter);
-      if (gaProp) {
-        list = list.filter(pool => {
-          const ev = getEffectiveVote(pool, gaProp);
-          if (gaVoteFilter === "not_voted") return ev.vote === "NotVoted";
-          if (gaVoteFilter === "yes") return ev.vote === "Yes";
-          if (gaVoteFilter === "no") return ev.vote === "No";
-          if (gaVoteFilter === "abstain") return ev.vote === "Abstain";
-          return true;
-        });
-      }
-    }
-    // Sort
-    const dir = sortDir === "asc" ? 1 : -1;
-    list.sort((a, b) => {
-      if (sortKey === "stake") return dir * (Number(a.active_stake) - Number(b.active_stake));
-      if (sortKey === "ticker") return dir * (a.ticker || a.pool_id).localeCompare(b.ticker || b.pool_id);
-      if (sortKey === "votes") return dir * (a.voteCount - b.voteCount);
-      return 0;
-    });
-    return list;
-  }, [poolList, searchQ, spoFilter, sortKey, sortDir, gaFilter, gaVoteFilter, spoProps]);
-
-  const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-
-  // CSV Export
-  function exportSpoCSV() {
-    const hdr = ["Pool ID", "Ticker", "Active Stake (ADA)", T.spo_pledge_drep,
-      ...spoProps.map(p => { const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
-    const rows = filtered.map(pool => [
-      pool.pool_id,
-      pool.ticker,
-      Math.round(Number(pool.active_stake) / 1e6),
-      pool.isAutoAbstain ? "Auto-Abstain" : pool.isAutoNoConf ? "Auto-NoConfidence" : pool.pledge_drep || "",
-      ...spoProps.map(p => {
-        const ev = getEffectiveVote(pool, p);
-        return ev.vote + (ev.type === "auto" ? " (auto)" : "");
-      })
-    ]);
-    downloadCSV(buildCSV(hdr, rows), "spo_votes.csv");
-  }
-
-  const formatStake = (s) => {
-    const ada = Number(s) / 1e6;
-    if (ada >= 1e9) return (ada/1e9).toFixed(1)+"B";
-    if (ada >= 1e6) return (ada/1e6).toFixed(1)+"M";
-    if (ada >= 1e3) return (ada/1e3).toFixed(0)+"K";
-    return Math.round(ada).toLocaleString();
-  };
-
-  const tdS = (bg) => ({background:bg, padding:"2px 4px", borderBottom:"1px solid var(--border)", fontSize:9, textAlign:"right"});
-  const filterBtnS = (active) => ({fontSize:8,padding:"2px 6px",borderRadius:4,cursor:"pointer",
-    border:active?"1px solid var(--accent)":"1px solid var(--border)",
-    background:active?"rgba(59,130,246,.12)":"var(--bg)",color:active?"var(--accent)":"var(--text2)"});
-  const sortableThS = {cursor:"pointer",userSelect:"none"};
-
-  if (spoProps.length === 0 && !spoLoading) {
-    return <div className="card" style={{textAlign:"center",padding:40,color:"var(--text2)"}}>{T.spo_no_eligible}</div>;
-  }
-
-  return (
-    <div>
-      <div className="card" style={{marginBottom:8}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:6}}>
-          <div>
-            <span style={{fontSize:13,fontWeight:700}}>{T.tab_spo}</span>
-            <span style={{fontSize:10,color:"var(--text2)",marginLeft:8}}>
-              {spoProps.length} proposals · {T.spo_total_pools}: {filtered.length.toLocaleString()}
-              {Object.keys(spoVotes).length > 0 && ` · ${T.spo_vote_count}: ${Object.keys(spoVotes).length}`}
-            </span>
-          </div>
-          <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
-            {spoLoading && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {spoProgress}</span>}
-            {!spoLoading && spoProgress && <span style={{fontSize:8,color:"var(--text2)"}}>{spoProgress}</span>}
-            <div style={{display:"flex",gap:3}}>
-              {[["all",T.spo_filter_all],["voted",T.spo_filter_voted],["not_voted",T.spo_filter_not_voted],
-                ["auto_abstain",T.spo_filter_auto_abstain],["auto_nc",T.spo_filter_auto_nc]].map(([k,label])=>
-                <button key={k} onClick={()=>{setSpoFilter(k);setPage(0);}} style={filterBtnS(spoFilter===k)}>{label}</button>
-              )}
-            </div>
-            <input type="text" placeholder="Search ticker/pool…" value={searchQ}
-              onChange={e => { setSearchQ(e.target.value); setPage(0); }}
-              style={{padding:"3px 6px",borderRadius:5,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,width:140,outline:"none"}} />
-            <button className="btn" onClick={exportSpoCSV} style={{fontSize:9,padding:"2px 8px"}} title={T.spo_csv_export}>📥 CSV</button>
-          </div>
-        </div>
-        {/* Per-GA vote filter */}
-        <div style={{display:"flex",alignItems:"center",gap:6,marginTop:6,flexWrap:"wrap"}}>
-          <span style={{fontSize:9,color:"var(--text2)"}}>GA Filter:</span>
-          <select value={gaFilter} onChange={e => { setGaFilter(e.target.value); setPage(0); }}
-            style={{fontSize:9,padding:"2px 4px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",maxWidth:200}}>
-            <option value="">— {T.spo_filter_all} —</option>
-            {spoProps.map(p => (
-              <option key={p.proposal_id} value={p.proposal_id}>
-                [{(p.proposal_type||"").replace("Initiation","").replace("Withdrawals","")}] {p.title ? p.title.slice(0,30) : shortId(p.proposal_id)}
-              </option>
-            ))}
-          </select>
-          {gaFilter && (
-            <div style={{display:"flex",gap:3}}>
-              {[["not_voted","Not Voted"],["yes","Yes"],["no","No"],["abstain","Abstain"]].map(([k,label])=>
-                <button key={k} onClick={()=>{setGaVoteFilter(k);setPage(0);}} style={filterBtnS(gaVoteFilter===k)}>{label}</button>
-              )}
-            </div>
-          )}
-          {gaFilter && <span style={{fontSize:9,color:"var(--accent)"}}>{filtered.length} pools</span>}
-        </div>
-      </div>
-
-      {spoLoading && Object.keys(spoVotes).length === 0 ? (
-        <div className="card" style={{textAlign:"center",padding:40}}>
-          <div style={{fontSize:12,color:"var(--accent2)",marginBottom:8}}>⏳ {spoProgress || T.spo_loading}</div>
-        </div>
-      ) : (
-        <div style={{border:"1px solid var(--border)",borderRadius:8,overflow:"hidden",background:"var(--bg2)"}}>
-          <div style={{overflow:"auto",maxHeight:"calc(100vh - 320px)"}}>
-            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%"}}>
-              <thead><tr>
-                <th style={{position:"sticky",top:0,left:0,zIndex:2,background:"var(--bg3)",padding:"3px 4px",textAlign:"right",
-                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",width:28}}>#</th>
-                <th onClick={()=>toggleSort("ticker")} style={{...sortableThS,position:"sticky",top:0,background:"var(--bg3)",padding:"3px 4px",textAlign:"left",
-                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:70}}>
-                  {T.spo_ticker}{sortArrow("ticker")}</th>
-                <th onClick={()=>toggleSort("stake")} style={{...sortableThS,position:"sticky",top:0,background:"var(--bg3)",padding:"3px 4px",textAlign:"right",
-                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:55}}>
-                  {T.spo_stake}{sortArrow("stake")}</th>
-                <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"3px 4px",textAlign:"center",
-                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:50}}>{T.spo_pledge_drep}</th>
-                <th onClick={()=>toggleSort("votes")} style={{...sortableThS,position:"sticky",top:0,background:"var(--bg3)",padding:"3px 4px",textAlign:"center",
-                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:30}}>
-                  Votes{sortArrow("votes")}</th>
-                {spoProps.map(p => {
-                  const ac = actionColor(p.proposal_type);
-                  const shortType = (p.proposal_type||"").replace("Initiation","").replace("Withdrawals","");
-                  const isGaFiltered = gaFilter === p.proposal_id;
-                  return (
-                    <th key={p.proposal_id} onClick={()=>{setGaFilter(gaFilter===p.proposal_id?"":p.proposal_id);setPage(0);}}
-                      style={{...sortableThS,position:"sticky",top:0,background:isGaFiltered?ac+"35":ac+"15",padding:"2px 3px",textAlign:"center",
-                      borderBottom:`2px solid ${isGaFiltered?ac:ac+"40"}`,fontSize:7,fontWeight:700,color:ac,
-                      minWidth:50,maxWidth:80,outline:isGaFiltered?`2px solid ${ac}`:"none"}} title={`${p.proposal_type}: ${p.title || p.proposal_id}\nClick to filter by this GA`}>
-                      <div style={{fontSize:6,opacity:.8,textTransform:"uppercase",letterSpacing:".3px"}}>{shortType}</div>
-                      <div style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontSize:7}}>
-                        {p.title ? (p.title.length > 10 ? p.title.slice(0,10)+"…" : p.title) : shortId(p.proposal_id)}
-                      </div>
-                    </th>
-                  );
-                })}
-              </tr></thead>
-              <tbody>
-                {pageData.map((pool, ri) => {
-                  const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
-                  return (
-                    <tr key={pool.pool_id}>
-                      <td style={{...tdS(bg),color:"var(--text2)",fontSize:8,width:28}}>{page*perPage+ri+1}</td>
-                      <td style={{...tdS(bg),textAlign:"left",fontWeight:600,maxWidth:100,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}
-                        title={pool.pool_id}>
-                        {pool.ticker || shortId(pool.pool_id)}
-                      </td>
-                      <td style={{...tdS(bg),textAlign:"right",fontSize:8,color:"var(--text2)"}}
-                        title={`${Math.round(Number(pool.active_stake)/1e6).toLocaleString()} ADA`}>
-                        {formatStake(pool.active_stake)}
-                      </td>
-                      <td style={{...tdS(bg),textAlign:"center",fontSize:7}}>
-                        {pool.isAutoAbstain ? (
-                          <span style={{color:"#fbbf24",fontWeight:600}} title="drep_always_abstain">A-Abs</span>
-                        ) : pool.isAutoNoConf ? (
-                          <span style={{color:"#dc2626",fontWeight:600}} title="drep_always_no_confidence">A-NC</span>
-                        ) : pool.pledge_drep ? (
-                          <span style={{color:"var(--text2)"}} title={pool.pledge_drep}>DRep</span>
-                        ) : (
-                          <span style={{color:"var(--text2)",opacity:.4}}>−</span>
-                        )}
-                      </td>
-                      <td style={{...tdS(bg),textAlign:"center",fontSize:8,color:"var(--text2)"}}>{pool.voteCount}</td>
-                      {spoProps.map(p => {
-                        const ev = getEffectiveVote(pool, p);
-                        const isAuto = ev.type === "auto";
-                        const s = VOTE_STYLES[ev.vote] || VOTE_STYLES.NotVoted;
-                        const isGaFiltered = gaFilter === p.proposal_id;
-                        return (
-                          <td key={p.proposal_id} style={{...tdS(isGaFiltered?"rgba(59,130,246,.06)":bg),textAlign:"center",padding:"1px 2px"}}>
-                            <div style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:7,fontWeight:600,
-                              background:s.bg,color:s.c,border:`1px solid ${s.bc}`,
-                              opacity:isAuto?0.5:1,fontStyle:isAuto?"italic":"normal"}}
-                              title={isAuto ? T.spo_auto_abstain : ev.type === "delegated" ? "Delegated to DRep" : ""}>
-                              {s.icon}{s.l}{isAuto ? "*" : ""}
-                            </div>
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:8,padding:"4px 8px",borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
-            <button className="btn" disabled={page===0} onClick={()=>setPage(page-1)} style={{padding:"1px 6px",fontSize:9,opacity:page===0?.3:1}}>←</button>
-            <span style={{fontSize:9}}>{page+1} / {totalPages}</span>
-            <button className="btn" disabled={page>=totalPages-1} onClick={()=>setPage(page+1)} style={{padding:"1px 6px",fontSize:9,opacity:page>=totalPages-1?.3:1}}>→</button>
-          </div>
-        </div>
-      )}
-      {spoProps.some(p => p.proposal_type === "HardForkInitiation") && (
-        <div style={{fontSize:8,color:"var(--text2)",marginTop:6,textAlign:"center"}}>
-          * = {T.spo_auto_abstain} · ⚠ {T.spo_hardfork_note}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // Simulator Tab — Single table with 3 reward columns side by side
 // ════════════════════════════════════════════════════════════════
@@ -2745,8 +2464,6 @@ function App() {
   // SPO state
   const [spoVotes, setSpoVotes] = React.useState({});     // {poolId__propKey: "Yes"/"No"/"Abstain"}
   const [spoPoolInfo, setSpoPoolInfo] = React.useState({}); // {poolId: {ticker, name, pledge_drep}}
-  const [spoLoading, setSpoLoading] = React.useState(false);
-  const [spoProgress, setSpoProgress] = React.useState("");
   const spoLoadedRef = React.useRef(false);
 
   const loadedPageRef = React.useRef(1);
