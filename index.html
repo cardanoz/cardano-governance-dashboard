@@ -116,12 +116,14 @@ const LANG = {
     vote_ga_count:"GAs in range", vote_info:"GAs whose voting ended in this period",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API Stats", api_calls:"API calls", cached:"cached", loading_sim_votes:"Loading vote counts for simulator…",
-    sim_common_title:"Common Parameters", sim_gov_budget:"Annual Governance Budget (ADA)",
+    sim_common_title:"Budget Overview", sim_gov_budget:"Annual Governance Budget (ADA)",
     sim_dist_per_year:"Distributions / Year", sim_per_dist:"Per Distribution",
     sim_drep_cc_ratio:"DRep : CC Ratio", sim_period:"Reward Calculation Period",
     sim_cc_per_member:"Per CC Member",
     sim_drep_section:"DRep Reward Simulator", sim_cc_section:"CC Reward Simulator",
     sim_cc_max_budget:"CC Max Budget (before penalty)", sim_cc_actual_budget:"CC Actual (after penalty)",
+    sim_annual:"Annual", sim_per_distribution:"Per Distribution", sim_per_member:"Per Member",
+    sim_pool:"Pool",
     export_rationales:"Export Rationales CSV",
     share_url:"Share", share_copied:"Copied!",
     export_proposal_rationales:"Export DRep rationales for this proposal",
@@ -183,12 +185,14 @@ const LANG = {
     vote_ga_count:"期間内GA数", vote_info:"投票期間終了日がこの範囲内のGA",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API統計", api_calls:"APIコール", cached:"キャッシュ", loading_sim_votes:"シミュレーター用投票数を取得中…",
-    sim_common_title:"共通パラメータ", sim_gov_budget:"年間ガバナンス予算 (ADA)",
+    sim_common_title:"予算概要", sim_gov_budget:"年間ガバナンス予算 (ADA)",
     sim_dist_per_year:"年間配布回数", sim_per_dist:"1回あたり配布額",
     sim_drep_cc_ratio:"DRep : CC 分配比率", sim_period:"報酬計算期間",
     sim_cc_per_member:"CC 1人あたり",
     sim_drep_section:"DRep報酬シミュレーター", sim_cc_section:"CC報酬シミュレーター",
     sim_cc_max_budget:"CC予算（最大・ペナルティ前）", sim_cc_actual_budget:"CC予算（実際・ペナルティ後）",
+    sim_annual:"年間", sim_per_distribution:"1回あたり", sim_per_member:"1人あたり",
+    sim_pool:"配分",
     export_rationales:"投票根拠CSV出力",
     share_url:"共有", share_copied:"コピーしました！",
     export_proposal_rationales:"この提案のDRep投票根拠を出力",
@@ -1732,6 +1736,8 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
   const perDist = distPerYear > 0 ? Math.round(govBudget / distPerYear) : govBudget;
   const drepBudget = Math.round(perDist * drepRatio / 100);
   const ccBudgetTotal = Math.round(perDist * (100 - drepRatio) / 100);
+  const drepAnnual = Math.round(govBudget * drepRatio / 100);
+  const ccAnnual = Math.round(govBudget * (100 - drepRatio) / 100);
   const adaPrice = useAdaPrice();
 
   // ── Collapsible panels ──
@@ -1751,7 +1757,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
 
   // ── CC parameters ──
   const ccMemberCount = ccMembers.length || 1;
-  const [ccBaseReward, setCcBaseReward] = useHashState("s_ccBase",5000);
+  const ccPerMember = ccMemberCount > 0 ? Math.round(ccBudgetTotal / ccMemberCount) : 0;
   const [penaltyThreshold, setPenaltyThreshold] = useHashState("s_ccPen",3);
 
   React.useEffect(() => {
@@ -1843,12 +1849,12 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
       const voted = memberProps.filter(p=>ccVotes[`${cc.cc_id}__${p.proposal_id}`]).length;
       const missed = totalEligible - voted;
       const factor = Math.max(0, 1 - missed/penaltyThreshold);
-      const reward = ccBaseReward * factor;
+      const reward = ccPerMember * factor;
       return {cc, eligible:totalEligible, voted, missed, factor, reward};
     });
-  },[ccFMembers,simProps,ccVotes,ccBaseReward,penaltyThreshold]);
+  },[ccFMembers,simProps,ccVotes,ccPerMember,penaltyThreshold]);
 
-  const ccMaxBudget = ccFMembers.length * ccBaseReward;
+  const ccMaxBudget = ccFMembers.length * ccPerMember;
   const ccActualBudget = simData.reduce((s,d) => s + d.reward, 0);
 
   const tdS = (bg) => ({background:bg, padding:"4px 6px", borderBottom:"1px solid var(--border)", fontSize:10, textAlign:"right"});
@@ -1856,7 +1862,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
 
   return (
     <div>
-      {/* ═══ Common Parameters ═══ */}
+      {/* ═══ Budget Overview ═══ */}
       <div style={{marginBottom:12}}>
         <SectionHeader title={T.sim_common_title} show={showCommon} setShow={setShowCommon}
           color="rgba(59,130,246,.08)"
@@ -1865,46 +1871,56 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
           </span>} />
         {showCommon && (
           <div style={{border:"1px solid var(--border)",borderTop:"none",borderRadius:"0 0 8px 8px",padding:14,background:"var(--bg2)"}}>
-            {/* Row 1: Annual Budget → Distributions/Year → Per Distribution */}
-            <div style={{display:"grid",gridTemplateColumns:"1fr auto 1fr auto 1fr",gap:10,alignItems:"end",marginBottom:14}}>
-              <div>
-                <SliderParam label={T.sim_gov_budget} value={govBudget} onChange={setGovBudget} min={50000} max={5000000} step={10000} suffix=" ADA" />
-                {adaPrice.usd > 0 && <div style={{fontSize:9,color:"var(--text2)",marginTop:-8}}>
-                  ≈ {fmtFiat(govBudget, adaPrice.usd, "$")} / {fmtFiat(govBudget, adaPrice.jpy, "¥")}
-                </div>}
-              </div>
-              <div style={{fontSize:16,color:"var(--text2)",paddingBottom:14}}>÷</div>
-              <div>
-                <SliderParam label={T.sim_dist_per_year} value={distPerYear} onChange={v=>setDistPerYear(Math.max(1,v))} min={1} max={12} step={1} suffix="x" />
-              </div>
-              <div style={{fontSize:16,color:"var(--text2)",paddingBottom:14}}>=</div>
-              <div style={{background:"rgba(59,130,246,.06)",border:"1px solid rgba(59,130,246,.15)",borderRadius:8,padding:"10px 12px",textAlign:"center"}}>
-                <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:3}}>{T.sim_per_dist}</div>
-                <div style={{fontSize:18,fontWeight:700,color:"var(--accent)"}}>₳{perDist.toLocaleString()}</div>
-                {adaPrice.usd > 0 && <div style={{fontSize:9,color:"var(--text2)",marginTop:2}}>
-                  {fmtFiat(perDist, adaPrice.usd, "$")} / {fmtFiat(perDist, adaPrice.jpy, "¥")}
-                </div>}
+            {/* 3 inputs in a row */}
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:14}}>
+              <SliderParam label={T.sim_gov_budget} value={govBudget} onChange={setGovBudget} min={50000} max={5000000} step={10000} suffix=" ADA" />
+              <SliderParam label={T.sim_dist_per_year} value={distPerYear} onChange={v=>setDistPerYear(Math.max(1,v))} min={1} max={12} step={1} suffix="x" />
+              <SliderParam label={T.sim_drep_cc_ratio} value={drepRatio} onChange={setDrepRatio} min={50} max={100} step={1} suffix="%" />
+            </div>
+            {/* Summary table */}
+            <div style={{border:"1px solid var(--border)",borderRadius:8,overflow:"hidden",marginBottom:14}}>
+              <table style={{borderCollapse:"collapse",width:"100%"}}>
+                <thead><tr style={{background:"var(--bg3)"}}>
+                  <th style={{padding:"6px 10px",fontSize:9,fontWeight:700,color:"var(--text2)",textAlign:"left",borderBottom:"2px solid var(--border)"}}>{T.sim_pool}</th>
+                  {[T.sim_annual,T.sim_per_distribution,T.sim_per_member].map((h,i)=>(
+                    <th key={i} colSpan={2} style={{padding:"6px 10px",fontSize:9,fontWeight:700,color:"var(--text2)",textAlign:"center",borderBottom:"2px solid var(--border)"}}>{h}</th>
+                  ))}
+                </tr>
+                <tr style={{background:"var(--bg3)"}}>
+                  <th style={{padding:"3px 10px",fontSize:8,color:"var(--text2)",textAlign:"left",borderBottom:"1px solid var(--border)"}}></th>
+                  {["ADA","USD","ADA","USD","ADA","USD"].map((h,i)=>(
+                    <th key={i} style={{padding:"3px 6px",fontSize:8,fontWeight:600,color:"var(--text2)",textAlign:"right",borderBottom:"1px solid var(--border)"}}>{h}</th>
+                  ))}
+                </tr></thead>
+                <tbody>
+                  <tr style={{background:"var(--bg2)"}}>
+                    <td style={{padding:"8px 10px",fontSize:11,fontWeight:700,color:"#3b82f6",borderBottom:"1px solid var(--border)"}}>DRep ({drepRatio}%)</td>
+                    <td style={{padding:"8px 6px",fontSize:12,fontWeight:700,textAlign:"right",color:"#3b82f6",borderBottom:"1px solid var(--border)"}}>₳{drepAnnual.toLocaleString()}</td>
+                    <td style={{padding:"8px 6px",fontSize:10,textAlign:"right",color:"var(--text2)",borderBottom:"1px solid var(--border)"}}>{fmtFiat(drepAnnual,adaPrice.usd,"$")}</td>
+                    <td style={{padding:"8px 6px",fontSize:12,fontWeight:700,textAlign:"right",color:"#3b82f6",borderBottom:"1px solid var(--border)"}}>₳{drepBudget.toLocaleString()}</td>
+                    <td style={{padding:"8px 6px",fontSize:10,textAlign:"right",color:"var(--text2)",borderBottom:"1px solid var(--border)"}}>{fmtFiat(drepBudget,adaPrice.usd,"$")}</td>
+                    <td colSpan={2} style={{padding:"8px 6px",fontSize:10,textAlign:"center",color:"var(--text2)",borderBottom:"1px solid var(--border)"}}>—</td>
+                  </tr>
+                  <tr style={{background:"rgba(255,255,255,.01)"}}>
+                    <td style={{padding:"8px 10px",fontSize:11,fontWeight:700,color:"#f59e0b",borderBottom:"1px solid var(--border)"}}>CC ({100-drepRatio}%)</td>
+                    <td style={{padding:"8px 6px",fontSize:12,fontWeight:700,textAlign:"right",color:"#f59e0b",borderBottom:"1px solid var(--border)"}}>₳{ccAnnual.toLocaleString()}</td>
+                    <td style={{padding:"8px 6px",fontSize:10,textAlign:"right",color:"var(--text2)",borderBottom:"1px solid var(--border)"}}>{fmtFiat(ccAnnual,adaPrice.usd,"$")}</td>
+                    <td style={{padding:"8px 6px",fontSize:12,fontWeight:700,textAlign:"right",color:"#f59e0b",borderBottom:"1px solid var(--border)"}}>₳{ccBudgetTotal.toLocaleString()}</td>
+                    <td style={{padding:"8px 6px",fontSize:10,textAlign:"right",color:"var(--text2)",borderBottom:"1px solid var(--border)"}}>{fmtFiat(ccBudgetTotal,adaPrice.usd,"$")}</td>
+                    <td style={{padding:"8px 6px",fontSize:12,fontWeight:700,textAlign:"right",color:"#f59e0b",borderBottom:"1px solid var(--border)"}}>₳{ccPerMember.toLocaleString()}</td>
+                    <td style={{padding:"8px 6px",fontSize:10,textAlign:"right",color:"var(--text2)",borderBottom:"1px solid var(--border)"}}>{fmtFiat(ccPerMember,adaPrice.usd,"$")}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style={{padding:"4px 10px",background:"var(--bg3)",fontSize:8,color:"var(--text2)"}}>
+                CC: {ccMemberCount} members · 1 ADA ≈ {adaPrice.usd > 0 ? "$"+adaPrice.usd.toFixed(3) : "—"}
               </div>
             </div>
-            {/* Row 2: DRep:CC Ratio + Period + Results */}
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14,alignItems:"start"}}>
-              <div>
-                <SliderParam label={T.sim_drep_cc_ratio} value={drepRatio} onChange={setDrepRatio} min={50} max={100} step={1} suffix="%" />
-                <div style={{fontSize:9,color:"var(--text2)",marginTop:-4}}>DRep {drepRatio}% : CC {100-drepRatio}%</div>
-                <div style={{display:"flex",gap:8,marginTop:8}}>
-                  <div style={{flex:1,background:"rgba(59,130,246,.08)",borderRadius:6,padding:"6px 8px",textAlign:"center"}}>
-                    <div style={{fontSize:8,color:"var(--text2)",textTransform:"uppercase",fontWeight:600}}>DRep</div>
-                    <div style={{fontSize:13,fontWeight:700,color:"#3b82f6"}}>₳{drepBudget.toLocaleString()}</div>
-                  </div>
-                  <div style={{flex:1,background:"rgba(245,158,11,.08)",borderRadius:6,padding:"6px 8px",textAlign:"center"}}>
-                    <div style={{fontSize:8,color:"var(--text2)",textTransform:"uppercase",fontWeight:600}}>CC</div>
-                    <div style={{fontSize:13,fontWeight:700,color:"#f59e0b"}}>₳{ccBudgetTotal.toLocaleString()}</div>
-                  </div>
-                </div>
-              </div>
-              <div>
+            {/* Period */}
+            <div style={{display:"flex",gap:12,alignItems:"end"}}>
+              <div style={{flex:1}}>
                 <div style={{fontSize:11,color:"var(--text2)",fontWeight:600,marginBottom:4}}>{T.sim_period}</div>
-                <div style={{display:"flex",gap:6,marginBottom:4}}>
+                <div style={{display:"flex",gap:6}}>
                   <div style={{flex:1}}>
                     <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,display:"block",marginBottom:2}}>{T.vote_start}</label>
                     <input type="date" value={periodFrom} min={epochToDateStr(CC_MIN_EPOCH)}
@@ -1918,17 +1934,9 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
                       style={{width:"100%",padding:"4px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,outline:"none"}} />
                   </div>
                 </div>
-                <div style={{fontSize:8,color:"var(--text2)"}}>
-                  Epoch {simEpFrom}〜{simEpTo} · CC: ep.{ccSimEpFrom}〜{simEpTo}
-                </div>
               </div>
-              <div style={{background:"rgba(245,158,11,.06)",border:"1px solid rgba(245,158,11,.15)",borderRadius:8,padding:"10px 12px",textAlign:"center"}}>
-                <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:3}}>{T.sim_cc_per_member}</div>
-                <div style={{fontSize:18,fontWeight:700,color:"#f59e0b"}}>₳{(ccMemberCount>0?Math.round(ccBudgetTotal/ccMemberCount):0).toLocaleString()}</div>
-                {adaPrice.usd > 0 && <div style={{fontSize:9,color:"var(--text2)",marginTop:2}}>
-                  {fmtFiat(ccMemberCount>0?ccBudgetTotal/ccMemberCount:0, adaPrice.usd, "$")} / {fmtFiat(ccMemberCount>0?ccBudgetTotal/ccMemberCount:0, adaPrice.jpy, "¥")}
-                </div>}
-                <div style={{fontSize:8,color:"var(--text2)",marginTop:3}}>({ccMemberCount} members)</div>
+              <div style={{fontSize:8,color:"var(--text2)",paddingBottom:2}}>
+                Epoch {simEpFrom}〜{simEpTo} · CC: ep.{ccSimEpFrom}〜{simEpTo}
               </div>
             </div>
           </div>
@@ -1976,8 +1984,9 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
               </div>
               <div style={{display:"flex",alignItems:"center",gap:12,marginTop:4,flexWrap:"wrap"}}>
                 <span style={{fontSize:9,color:"var(--text2)"}}>
-                  Budget: ₳{drepBudget.toLocaleString()} · DReps: {dreps.length} · Eligible: {totalEligible}
+                  Budget: ₳{drepBudget.toLocaleString()}{adaPrice.usd>0?` (${fmtFiat(drepBudget,adaPrice.usd,"$")})`:""} · DReps: {dreps.length} · Eligible: {totalEligible}
                   {votePenaltyOn ? ` · Vote penalty ON (${gasInRange} GAs)` : " · Vote penalty OFF"}
+                  {distPerYear>1?` · yr: ₳${drepAnnual.toLocaleString()}`:""}
                 </span>
                 {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
                 {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
@@ -2065,11 +2074,6 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
             {/* CC Parameters */}
             <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"center",marginBottom:12}}>
               <div style={{display:"flex",flexDirection:"column",gap:3}}>
-                <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_base}</label>
-                <input type="number" value={ccBaseReward} onChange={e=>setCcBaseReward(Number(e.target.value)||0)}
-                  style={{...INPUT_STYLE,width:120}}/>
-              </div>
-              <div style={{display:"flex",flexDirection:"column",gap:3}}>
                 <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_penalty_label}</label>
                 <div style={{display:"flex",gap:4}}>
                   {[3,5,10].map(n=>(
@@ -2084,7 +2088,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
               <div style={{fontSize:10,color:"var(--accent)",padding:"5px 0"}}>
                 {T.cc_sim_ga_in_range}: {simProps.length}
                 <span style={{marginLeft:8,fontSize:9,color:"var(--text2)"}}>
-                  (ep.{ccSimEpFrom}〜{simEpTo})
+                  (ep.{ccSimEpFrom}〜{simEpTo}) · ₳{ccPerMember.toLocaleString()}/{T.sim_per_member}
                 </span>
               </div>
             </div>
@@ -2094,7 +2098,8 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
               <div style={{background:"rgba(245,158,11,.06)",border:"1px solid rgba(245,158,11,.2)",borderRadius:8,padding:"8px 14px",flex:1,minWidth:180}}>
                 <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:2}}>{T.sim_cc_max_budget}</div>
                 <div style={{fontSize:18,fontWeight:700,color:"#f59e0b"}}>₳{ccMaxBudget.toLocaleString()}</div>
-                <div style={{fontSize:9,color:"var(--text2)"}}>= ₳{ccBaseReward.toLocaleString()} × {ccFMembers.length} members</div>
+                <div style={{fontSize:9,color:"var(--text2)"}}>= ₳{ccPerMember.toLocaleString()} × {ccFMembers.length} members
+                  {adaPrice.usd > 0 ? ` · ${fmtFiat(ccMaxBudget,adaPrice.usd,"$")}` : ""}</div>
               </div>
               <div style={{background:"rgba(34,197,94,.06)",border:"1px solid rgba(34,197,94,.2)",borderRadius:8,padding:"8px 14px",flex:1,minWidth:180}}>
                 <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:2}}>{T.sim_cc_actual_budget}</div>
@@ -2102,6 +2107,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
                 <div style={{fontSize:9,color:"var(--text2)"}}>
                   {ccMaxBudget > 0 ? `${Math.round(ccActualBudget / ccMaxBudget * 100)}% of max` : "—"}
                   {ccMaxBudget > ccActualBudget ? ` · saved ₳${Math.round(ccMaxBudget - ccActualBudget).toLocaleString()}` : ""}
+                  {adaPrice.usd > 0 ? ` · ${fmtFiat(ccActualBudget,adaPrice.usd,"$")}` : ""}
                 </div>
               </div>
             </div>
@@ -2112,7 +2118,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
                 return <div key={m} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:70}}>
                   <div style={{fontSize:9,color:"var(--text2)",marginBottom:2}}>{T.cc_sim_missed}: {m}</div>
                   <div style={{fontSize:16,fontWeight:700,color:c}}>{Math.round(f*100)}%</div>
-                  <div style={{fontSize:8,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccBaseReward).toLocaleString()} ADA</div>
+                  <div style={{fontSize:8,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccPerMember).toLocaleString()} ADA</div>
                 </div>;})}
             </div>
 
@@ -2145,7 +2151,11 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
                           <div style={{width:`${Math.max(0,d.factor)*100}%`,height:"100%",background:fc,borderRadius:2,transition:"width .3s"}}/>
                         </div>
                       </td>
-                      <td style={{...ccTd,fontSize:13,fontWeight:700,color:fc}}>{d.reward>0?"₳"+Math.round(d.reward).toLocaleString():"₳0"}</td>
+                      <td style={{...ccTd,color:fc}}>
+                        <div style={{fontSize:13,fontWeight:700}}>{d.reward>0?"₳"+Math.round(d.reward).toLocaleString():"₳0"}</div>
+                        {d.reward>0 && adaPrice.usd>0 && <div style={{fontSize:8,color:"var(--text2)"}}>{fmtFiat(d.reward,adaPrice.usd,"$")}
+                          {distPerYear>1 ? ` · yr: ₳${Math.round(d.reward*distPerYear).toLocaleString()} ${fmtFiat(d.reward*distPerYear,adaPrice.usd,"$")}` : ""}</div>}
+                      </td>
                     </tr>;})}
                 </tbody>
               </table>
