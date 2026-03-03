@@ -599,85 +599,6 @@ async function enrichProposals(gaMap, addLog, setStage) {
 }
 
 // ════════════════════════════════════════════════════════════════
-// SPO Vote Fetching (via Koios — efficient bulk query)
-// ════════════════════════════════════════════════════════════════
-const KOIOS_URL = "https://api.koios.rest/api/v1";
-
-async function koiosFetchJSON(path, opts={}) {
-  const url = `${KOIOS_URL}${path}`;
-  const cacheKey = opts.body ? url + "|" + opts.body : url;
-  const cached = _cache.get(cacheKey);
-  if (cached && Date.now() - cached.ts < CACHE_TTL) { _cacheHits++; return cached.data; }
-  const now = Date.now();
-  const wait = Math.max(0, 100 - (now - _lastFetch));
-  if (wait > 0) await new Promise(r => setTimeout(r, wait));
-  _lastFetch = Date.now();
-  _apiCalls++;
-  const headers = { "Accept": "application/json" };
-  if (opts.body) headers["Content-Type"] = "application/json";
-  const r = await timedFetch(url, { method: opts.body ? "POST" : "GET", headers, body: opts.body || undefined }, 60000);
-  if (!r.ok) throw new Error(`Koios HTTP ${r.status}`);
-  const data = await r.json();
-  _cache.set(cacheKey, { data, ts: Date.now() });
-  return data;
-}
-
-// Koios paginated GET (offset-based)
-async function koiosFetchAll(path, maxItems=5000) {
-  const results = [];
-  for (let offset = 0; offset < maxItems; offset += 1000) {
-    const sep = path.includes("?") ? "&" : "?";
-    const data = await koiosFetchJSON(`${path}${sep}offset=${offset}&limit=1000`);
-    if (!data || data.length === 0) break;
-    results.push(...data);
-    if (data.length < 1000) break;
-  }
-  return results;
-}
-
-// Fetch SPO votes for a specific proposal via Koios
-async function fetchSpoVotesForProposal(txHash, certIdx) {
-  try {
-    const data = await koiosFetchAll(`/proposal_votes?_proposal_tx_hash=${txHash}&_proposal_index=${certIdx}`);
-    if (!data) return [];
-    return data.filter(v => v.voter_role === "SPO");
-  } catch(e) {
-    console.warn("Koios SPO vote fetch failed:", e);
-    return [];
-  }
-}
-
-// Fetch registered pool list with reward_addr and ticker from Koios
-async function fetchAllPools(onProgress) {
-  const results = [];
-  for (let offset = 0; ; offset += 1000) {
-    if (onProgress) onProgress(`Pools: ${results.length}…`);
-    const data = await koiosFetchJSON(`/pool_list?offset=${offset}&limit=1000`);
-    if (!data || data.length === 0) break;
-    results.push(...data);
-    if (data.length < 1000) break;
-  }
-  return results;
-}
-
-// Fetch DRep delegation for multiple stake addresses via Koios POST
-async function fetchAccountsDrepBulk(stakeAddrs) {
-  if (!stakeAddrs.length) return [];
-  const results = [];
-  // Koios POST /account_info accepts array of stake addresses
-  for (let i = 0; i < stakeAddrs.length; i += 500) {
-    const batch = stakeAddrs.slice(i, i + 500);
-    try {
-      const data = await koiosFetchJSON("/account_info", {
-        body: JSON.stringify({ _stake_addresses: batch })
-      });
-      if (data) results.push(...data);
-    } catch(e) { console.warn("Koios account_info batch failed:", e); }
-  }
-  return results;
-}
-
-// ════════════════════════════════════════════════════════════════
 // Demo Data
 // ════════════════════════════════════════════════════════════════
 function demoData() {
@@ -2529,66 +2450,8 @@ function App() {
   // Try static data first, then Blockfrost API, then show key setup
   React.useEffect(()=>{ loadStatic().catch(() => { if (getBfKey()) loadLive(); else setLoading(false); }); },[]);
 
-  // ── SPO data lazy-load when tab selected ──
-  React.useEffect(() => {
-    if (tab !== "spo" || spoLoadedRef.current || proposals.length === 0) return;
-    spoLoadedRef.current = true;
-    (async () => {
-      setSpoLoading(true);
-      try {
-        // Step 1: Filter SPO-eligible proposals
-        const spoProps = proposals.filter(p => SPO_ELIGIBLE_TYPES.has(p.proposal_type));
-        if (spoProps.length === 0) { setSpoLoading(false); setSpoProgress("No eligible proposals"); return; }
-
-        // Step 2: Fetch votes per proposal (Koios)
-        const vm = {};
-        for (let i = 0; i < spoProps.length; i++) {
-          const p = spoProps[i];
-          setSpoProgress(`Votes: ${i+1}/${spoProps.length} (${p.title || shortId(p.proposal_id)})`);
-          const spoV = await fetchSpoVotesForProposal(p.tx_hash, p.cert_index);
-          spoV.forEach(v => {
-            const pid = p.proposal_id;
-            let vote = (v.vote || "").charAt(0).toUpperCase() + (v.vote || "").slice(1).toLowerCase();
-            if (!["Yes","No","Abstain"].includes(vote)) return;
-            vm[`${v.voter_id}__${pid}`] = vote;
-          });
-        }
-        setSpoVotes(vm);
-
-        // Step 3: Fetch all registered pools (ticker, reward_addr)
-        setSpoProgress("Loading pool list…");
-        const pools = await fetchAllPools(msg => setSpoProgress(msg));
-        const registeredPools = pools.filter(p => p.pool_status === "registered");
-
-        // Step 4: Collect unique reward addresses and fetch DRep delegation
-        const rewardAddrs = [...new Set(registeredPools.map(p => p.reward_addr).filter(Boolean))];
-        setSpoProgress(`Checking delegation for ${rewardAddrs.length} addresses…`);
-        const acctInfos = await fetchAccountsDrepBulk(rewardAddrs);
-        const addrToDrep = {};
-        acctInfos.forEach(a => { if (a.stake_address) addrToDrep[a.stake_address] = a.delegated_drep || null; });
-
-        // Step 5: Build pool info map
-        const infoMap = {};
-        registeredPools.forEach(p => {
-          const poolId = p.pool_id_bech32;
-          if (!poolId) return;
-          infoMap[poolId] = {
-            ticker: p.ticker || "",
-            name: p.pool_group || "",
-            reward_addr: p.reward_addr || "",
-            pledge_drep: addrToDrep[p.reward_addr] || null,
-            active_stake: p.active_stake || "0"
-          };
-        });
-        setSpoPoolInfo(infoMap);
-        setSpoProgress(`${Object.keys(vm).length} votes from ${new Set(Object.keys(vm).map(k=>k.split("__")[0])).size} SPOs`);
-      } catch(e) {
-        console.error("SPO load error:", e);
-        setSpoProgress("Error: " + e.message);
-      }
-      setSpoLoading(false);
-    })();
-  }, [tab, proposals]);
+  // ── SPO data: loaded from static JSON in loadStatic() ──
+  // spoLoadedRef is set to true when static data is loaded; no live Koios fallback needed
 
   React.useEffect(() => {
     const interval = setInterval(() => setApiStats(getApiStats()), 2000);
@@ -2621,7 +2484,7 @@ function App() {
     const meta = await metaRes.json();
 
     setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes, drepRatRes] = await Promise.all([
+    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes, drepRatRes, spoVotesRes, spoPoolsRes] = await Promise.all([
       fetch(base + "dreps.json"),
       fetch(base + "proposals.json"),
       fetch(base + "votes.json"),
@@ -2630,7 +2493,9 @@ function App() {
       fetch(base + "cc-votes.json").catch(() => null),
       fetch(base + "cc-rationales.json").catch(() => null),
       fetch(base + "drep-history.json").catch(() => null),
-      fetch(base + "drep-rationales.json").catch(() => null)
+      fetch(base + "drep-rationales.json").catch(() => null),
+      fetch(base + "spo-votes.json").catch(() => null),
+      fetch(base + "spo-pools.json").catch(() => null)
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
@@ -2654,6 +2519,12 @@ function App() {
     try {
       if (drepRatRes && drepRatRes.ok) setDrepRationales(await drepRatRes.json());
     } catch(e) { console.warn("DRep rationales load error:", e); }
+    // Load SPO data if available
+    try {
+      if (spoVotesRes && spoVotesRes.ok) setSpoVotes(await spoVotesRes.json());
+      if (spoPoolsRes && spoPoolsRes.ok) setSpoPoolInfo(await spoPoolsRes.json());
+      if (spoVotesRes && spoVotesRes.ok) spoLoadedRef.current = true;
+    } catch(e) { console.warn("SPO data load error:", e); }
     // Load stake history if available
     try {
       if (histRes && histRes.ok) setStakeHistory(await histRes.json());

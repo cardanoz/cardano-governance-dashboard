@@ -980,6 +980,116 @@ async function main() {
   });
   console.log(`  DRep rationale cache: ${Object.keys(drepExpiredRationales).length} expired, ${Object.keys(drepActiveRationales).length} active`);
 
+  // ─── 7e. SPO votes + pool info (Koios) ─────────────────────
+  console.log("\n  [SPO] Fetching SPO votes + pool info via Koios...");
+  const SPO_ELIGIBLE_TYPES = new Set(["NoConfidence","UpdateCommittee","ParameterChange","HardForkInitiation"]);
+  const spoEligibleProposals = proposals.filter(p => SPO_ELIGIBLE_TYPES.has(p.proposal_type));
+  console.log(`  SPO-eligible proposals: ${spoEligibleProposals.length} / ${proposals.length}`);
+
+  let spoVoteMap = {};
+  let spoPoolInfo = {};
+
+  // Load cached SPO data
+  const cachedSpoVotes = cache.spoVoteMap || {};
+  const cachedSpoPoolInfo = cache.spoPoolInfo || {};
+  const SPO_FRESH_MS = 3 * 3600000; // 3 hours
+  const lastSpoFetch = cache.lastSpoFetchAt || 0;
+  const spoFresh = (now - lastSpoFetch) < SPO_FRESH_MS;
+
+  if (spoFresh) {
+    spoVoteMap = cachedSpoVotes;
+    spoPoolInfo = cachedSpoPoolInfo;
+    console.log(`  SPO data CACHED (${((now - lastSpoFetch) / 60000).toFixed(0)}min old): ${Object.keys(spoVoteMap).length} votes, ${Object.keys(spoPoolInfo).length} pools`);
+  } else if (spoEligibleProposals.length === 0) {
+    console.log(`  No SPO-eligible proposals, skipping`);
+  } else {
+    try {
+      // Use bech32Map (already built/cached) to get proposal bech32 IDs
+      const spoBech32Map = cache.bech32Map || {};
+
+      // Step 1: Fetch SPO votes per eligible proposal
+      let spoVoteCount = 0;
+      for (let i = 0; i < spoEligibleProposals.length; i++) {
+        const p = spoEligibleProposals[i];
+        const bech32Id = spoBech32Map[p.proposal_id];
+        if (!bech32Id) {
+          console.log(`    No bech32 ID for ${p.proposal_id.slice(0,16)}…, skipping`);
+          continue;
+        }
+        try {
+          let allVotes = [];
+          let vOffset = 0;
+          while (true) {
+            const votes = await koiosGet("/proposal_votes", { _proposal_id: bech32Id, offset: vOffset, limit: 500 });
+            if (!votes || votes.length === 0) break;
+            allVotes = allVotes.concat(votes);
+            if (votes.length < 500) break;
+            vOffset += 500;
+          }
+          const spoVotes = allVotes.filter(v => v.voter_role === "SPO");
+          for (const v of spoVotes) {
+            let vote = (v.vote || "").charAt(0).toUpperCase() + (v.vote || "").slice(1).toLowerCase();
+            if (!["Yes","No","Abstain"].includes(vote)) continue;
+            spoVoteMap[`${v.voter_id}__${p.proposal_id}`] = vote;
+            spoVoteCount++;
+          }
+          console.log(`    [${i+1}/${spoEligibleProposals.length}] ${p.proposal_id.slice(0,16)}…: ${spoVotes.length} SPO votes`);
+        } catch (e) {
+          console.log(`    Error fetching SPO votes for ${p.proposal_id.slice(0,16)}…: ${e.message}`);
+        }
+      }
+      console.log(`  SPO votes: ${spoVoteCount} total from ${new Set(Object.keys(spoVoteMap).map(k=>k.split("__")[0])).size} pools`);
+
+      // Step 2: Fetch all registered pools (ticker, reward_addr)
+      console.log("  Fetching pool list from Koios...");
+      let allPools = [];
+      let poolOffset = 0;
+      while (true) {
+        const page = await koiosGet("/pool_list", { offset: poolOffset, limit: 1000 });
+        if (!page || page.length === 0) break;
+        allPools = allPools.concat(page);
+        if (page.length < 1000) break;
+        poolOffset += 1000;
+        if (poolOffset % 5000 === 0) console.log(`    Pools: ${allPools.length}...`);
+      }
+      const registeredPools = allPools.filter(p => p.pool_status === "registered");
+      console.log(`  Pools: ${registeredPools.length} registered / ${allPools.length} total`);
+
+      // Step 3: Bulk-check DRep delegation for pledge addresses
+      const rewardAddrs = [...new Set(registeredPools.map(p => p.reward_addr).filter(Boolean))];
+      console.log(`  Checking DRep delegation for ${rewardAddrs.length} reward addresses...`);
+      const addrToDrep = {};
+      for (let i = 0; i < rewardAddrs.length; i += 500) {
+        const batch = rewardAddrs.slice(i, i + 500);
+        try {
+          const data = await koiosPost("/account_info", { _stake_addresses: batch });
+          if (data) data.forEach(a => { if (a.stake_address) addrToDrep[a.stake_address] = a.delegated_drep || null; });
+        } catch (e) { console.log(`    account_info batch error: ${e.message}`); }
+        if ((i + 500) % 2000 < 500) console.log(`    Delegation check: ${Math.min(i + 500, rewardAddrs.length)}/${rewardAddrs.length}`);
+      }
+
+      // Step 4: Build pool info map
+      registeredPools.forEach(p => {
+        const poolId = p.pool_id_bech32;
+        if (!poolId) return;
+        spoPoolInfo[poolId] = {
+          ticker: p.ticker || "",
+          reward_addr: p.reward_addr || "",
+          pledge_drep: addrToDrep[p.reward_addr] || null
+        };
+      });
+      console.log(`  SPO pool info built: ${Object.keys(spoPoolInfo).length} pools`);
+    } catch (e) {
+      console.log(`  SPO data fetch error: ${e.message}`);
+      // Fall back to cached data if available
+      if (Object.keys(cachedSpoVotes).length > 0) {
+        spoVoteMap = cachedSpoVotes;
+        spoPoolInfo = cachedSpoPoolInfo;
+        console.log(`  Falling back to cached SPO data: ${Object.keys(spoVoteMap).length} votes`);
+      }
+    }
+  }
+
   // ─── Save unified cache ────────────────────────────────────
   saveCache({
     expiredVotes,
@@ -998,6 +1108,8 @@ async function main() {
     ccActiveVotes, ccActiveRationales,
     drepExpiredRationales, drepActiveRationales,
     bech32Map: cache.bech32Map || {},
+    spoVoteMap, spoPoolInfo,
+    lastSpoFetchAt: spoFresh ? lastSpoFetch : now,
     ccMembers,
     currentEpoch,
     lastVoteFetchAt: votesFresh ? lastVoteFetch : now,
@@ -1022,7 +1134,10 @@ async function main() {
     metadata_from_cache: useMetadataCache,
     stake_source: "koios_live",
     votes_from_cache: votesFresh,
-    cc_from_cache: ccFresh
+    cc_from_cache: ccFresh,
+    spo_from_cache: spoFresh,
+    spo_vote_count: Object.keys(spoVoteMap).length,
+    spo_pool_count: Object.keys(spoPoolInfo).length
   };
 
   fs.writeFileSync(path.join(DATA_DIR, "dreps.json"), JSON.stringify(dreps));
@@ -1041,13 +1156,20 @@ async function main() {
     console.log(`  CC: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes written`);
   }
 
+  // Write SPO data
+  if (Object.keys(spoVoteMap).length > 0) {
+    fs.writeFileSync(path.join(DATA_DIR, "spo-votes.json"), JSON.stringify(spoVoteMap));
+    fs.writeFileSync(path.join(DATA_DIR, "spo-pools.json"), JSON.stringify(spoPoolInfo));
+    console.log(`  SPO: ${Object.keys(spoVoteMap).length} votes, ${Object.keys(spoPoolInfo).length} pools written`);
+  }
+
   // Write DRep rationales
   if (Object.keys(drepRationales).length > 0) {
     fs.writeFileSync(path.join(DATA_DIR, "drep-rationales.json"), JSON.stringify(drepRationales));
     console.log(`  DRep rationales: ${Object.keys(drepRationales).length} written`);
   }
 
-  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json", "cc-members.json", "cc-votes.json", "cc-rationales.json", "drep-rationales.json"];
+  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json", "cc-members.json", "cc-votes.json", "cc-rationales.json", "drep-rationales.json", "spo-votes.json", "spo-pools.json"];
   files.forEach(f => {
     try { const size = fs.statSync(path.join(DATA_DIR, f)).size; console.log(`  ${f}: ${(size / 1024).toFixed(1)} KB`); } catch (e) {}
   });
