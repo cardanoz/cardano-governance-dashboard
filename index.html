@@ -606,17 +606,17 @@ function PaginationBar({ label, page, setPage, total }) {
 
 function VoteBadge({ vote, T }) {
   const m = {
-    Yes:{bg:"rgba(52,211,153,.12)",c:"#34d399",bc:"rgba(52,211,153,.25)",icon:"✓",l:"YES"},
-    No:{bg:"rgba(248,113,113,.12)",c:"#f87171",bc:"rgba(248,113,113,.25)",icon:"✗",l:"NO"},
-    Abstain:{bg:"rgba(251,191,36,.12)",c:"#fbbf24",bc:"rgba(251,191,36,.25)",icon:"−",l:"ABSTAIN"},
+    Yes:{bg:"rgba(52,211,153,.12)",c:"#34d399",bc:"rgba(52,211,153,.25)",icon:"✓",l:"Y"},
+    No:{bg:"rgba(248,113,113,.12)",c:"#f87171",bc:"rgba(248,113,113,.25)",icon:"✗",l:"N"},
+    Abstain:{bg:"rgba(251,191,36,.12)",c:"#fbbf24",bc:"rgba(251,191,36,.25)",icon:"−",l:"A"},
     NotVoted:{bg:"rgba(75,85,99,.06)",c:"#555e70",bc:"rgba(75,85,99,.12)",icon:"",l:"−"},
   };
   const s = m[vote]||m.NotVoted;
   return (
-    <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:2,
-      padding:"3px 7px",borderRadius:5,fontSize:10,fontWeight:700,
-      background:s.bg,color:s.c,border:`1px solid ${s.bc}`,minWidth:52,letterSpacing:".05em",lineHeight:1.4}}>
-      {s.icon && <span style={{fontSize:11}}>{s.icon}</span>}{s.l}
+    <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:1,
+      padding:"2px 5px",borderRadius:4,fontSize:8,fontWeight:700,
+      background:s.bg,color:s.c,border:`1px solid ${s.bc}`,minWidth:28,letterSpacing:".03em",lineHeight:1.2}}>
+      {s.icon && <span style={{fontSize:9}}>{s.icon}</span>}{s.l}
     </div>
   );
 }
@@ -782,6 +782,16 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const [drepOpen,setDrepOpen] = useHashState("d_do",true);
   const [ccOpen,setCcOpen] = useHashState("d_co",true);
   const [zoom,setZoom] = useHashState("d_zm",100); // 50-150 %
+  const [drepFull,setDrepFull] = React.useState(false); // fullscreen expand for DRep table
+  const drepScrollRef = React.useRef(null);
+  const ccScrollRef = React.useRef(null);
+  const scrollSyncLock = React.useRef(false);
+  const syncScroll = React.useCallback((source, target) => {
+    if (scrollSyncLock.current) return;
+    scrollSyncLock.current = true;
+    if (target.current) target.current.scrollLeft = source.current.scrollLeft;
+    requestAnimationFrame(() => { scrollSyncLock.current = false; });
+  }, []);
   const DPP = 100, PPP = 20;
 
   const fDreps = React.useMemo(()=>{
@@ -903,6 +913,35 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
     URL.revokeObjectURL(url);
   }
 
+  function exportCCVotesCSV(){
+    const csvProps = fProps;
+    const members = ccMembers||[];
+    const hdr=["CC Member ID","Name","Vote Count",
+      ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
+    const rows=members.map(c=>[c.cc_id,c.name||"",c.vote_count,
+      ...csvProps.map(p=>{const v=ccGv(c.cc_id,p.proposal_id);const r=ccGr(c.cc_id,p.proposal_id);return v+(r?" [📎]":"");})]);
+    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="cc_votes.csv";a.click();URL.revokeObjectURL(a.href);
+  }
+
+  function exportCCRationalesCSV(){
+    const rows=[];
+    for(const cc of (ccMembers||[])){
+      for(const p of fProps){
+        const vote=(ccVotes||{})[`${cc.cc_id}__${p.proposal_id}`];
+        if(!vote) continue;
+        const ratObj=ccGr(cc.cc_id,p.proposal_id);
+        const content=ratObj?(ratObj.text||"").replace(/[\r\n]+/g," ").slice(0,5000):"";
+        rows.push([cc.name||cc.cc_id,p.proposal_id,p.title||"",p.proposal_type||"",vote,ratObj?ratObj.url:"",content]);
+      }
+    }
+    const hdr=["CC Member","Proposal ID","Title","Type","Vote","Rationale URL","Rationale Content"];
+    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="cc_rationales.csv";a.click();URL.revokeObjectURL(a.href);
+  }
+
   const ist={padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
 
   return (
@@ -929,13 +968,19 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         <div style={{position:"relative",display:"inline-block"}}>
           <button className="btn" onClick={()=>setCsvOpen(!csvOpen)}>📥 {T.csv_export} ▾</button>
           {csvOpen && <div style={{position:"absolute",top:"100%",left:0,marginTop:4,background:"var(--bg3)",border:"1px solid var(--border2)",
-            borderRadius:6,overflow:"hidden",zIndex:50,minWidth:160,boxShadow:"0 8px 24px rgba(0,0,0,.5)"}}>
-            <button onClick={()=>{exportCSV("visible");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
-              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
-              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📄 {T.csv_visible}</button>
-            <button onClick={()=>{exportCSV("all");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
-              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
-              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📊 {T.csv_all}</button>
+            borderRadius:6,overflow:"hidden",zIndex:50,minWidth:220,boxShadow:"0 8px 24px rgba(0,0,0,.5)"}}>
+            {[
+              {icon:"👥",label:"DRep Votes",fn:()=>exportCSV("all")},
+              {icon:"📝",label:"DRep Rationales",fn:exportDrepRationalesCSV},
+              {icon:"🏛",label:"CC Votes",fn:exportCCVotesCSV,disabled:!(ccMembers&&ccMembers.length)},
+              {icon:"📝",label:"CC Rationales",fn:exportCCRationalesCSV,disabled:!(ccMembers&&ccMembers.length)},
+            ].map((item,idx)=><button key={idx} onClick={()=>{item.fn();setCsvOpen(false)}} disabled={item.disabled}
+              style={{display:"block",width:"100%",padding:"8px 12px",
+              border:"none",borderTop:idx>0?"1px solid var(--border)":"none",background:"transparent",
+              color:item.disabled?"var(--text2)":"var(--text)",fontSize:11,cursor:item.disabled?"default":"pointer",
+              textAlign:"left",fontFamily:"inherit",opacity:item.disabled?.4:1}}
+              onMouseEnter={e=>{if(!item.disabled)e.target.style.background="var(--bg4)"}}
+              onMouseLeave={e=>e.target.style.background="transparent"}>{item.icon} {item.label}</button>)}
           </div>}
         </div>
         <button className="btn" onClick={()=>{setSearch("");setMinStake("");setMaxStake("");setActType("all");setEpFrom("");setEpTo("");setSortBy("stake_desc");setDPage(0);setPPage(0)}}
@@ -959,15 +1004,19 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
       </div>
 
       {/* ═══ DRep Votes Section (top) ═══ */}
-      <div style={{marginBottom:12}}>
-        <button onClick={()=>setDrepOpen(!drepOpen)}
-          style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",marginBottom:drepOpen?6:0,display:"flex",alignItems:"center",gap:6}}>
-          <span style={{fontSize:12,color:"var(--text2)"}}>{drepOpen?"▼":"▶"}</span>
-          <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>👥 {T.drep_section_title||"DRep Votes"} ({fDreps.length}{hasMore?"+":""})</span>
-        </button>
+      <div style={drepFull?{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9998,background:"var(--bg)",padding:12,display:"flex",flexDirection:"column"}:{marginBottom:12}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:drepOpen?6:0}}>
+          <button onClick={()=>setDrepOpen(!drepOpen)}
+            style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",display:"flex",alignItems:"center",gap:6}}>
+            <span style={{fontSize:12,color:"var(--text2)"}}>{drepOpen?"▼":"▶"}</span>
+            <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>👥 {T.drep_section_title||"DRep Votes"} ({fDreps.length}{hasMore?"+":""})</span>
+          </button>
+          {drepOpen && <button className="btn" onClick={()=>setDrepFull(!drepFull)}
+            style={{fontSize:10,padding:"2px 8px",marginLeft:"auto"}}>{drepFull?"⊗":"⤢"}</button>}
+        </div>
         {drepOpen && (
-        <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-          <div style={{overflow:"auto",maxHeight:ccOpen?"calc(50vh - 120px)":"calc(100vh - 300px)"}}>
+        <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)",flex:drepFull?1:undefined,display:drepFull?"flex":undefined,flexDirection:drepFull?"column":undefined}}>
+          <div ref={drepScrollRef} onScroll={()=>syncScroll(drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:drepFull?"none":ccOpen?"calc(60vh - 120px)":"calc(100vh - 300px)",flex:drepFull?1:undefined}}>
             <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(95*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
                 <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(8*zoom/100)}px ${Math.round(10*zoom/100)}px`,textAlign:"left",
@@ -1032,7 +1081,6 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                 style={{fontSize:10,padding:"3px 10px"}}>{pageLoading?"⏳":"⬇"} {T.load_more}</button>}
             </div>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <button className="btn" style={{fontSize:10,padding:"3px 10px"}} onClick={exportDrepRationalesCSV}>📎 {T.export_rationales||"Export Rationales CSV"}</button>
               <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
             </div>
           </div>
@@ -1050,15 +1098,15 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         </button>
         {ccOpen && (
         <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-          <div style={{overflow:"auto",maxHeight:drepOpen?"calc(40vh - 60px)":"calc(100vh - 300px)"}}>
-            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(80*zoom/100)+Math.round(180*zoom/100),fontSize:Math.round(14*zoom/100)}}>
+          <div ref={ccScrollRef} onScroll={()=>syncScroll(ccScrollRef,drepScrollRef)} style={{overflow:"auto",maxHeight:drepOpen?"calc(40vh - 60px)":"calc(100vh - 300px)"}}>
+            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(95*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
                 <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(6*zoom/100)}px ${Math.round(8*zoom/100)}px`,textAlign:"left",
                   borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:Math.round(9*zoom/100),fontWeight:700,
-                  color:"var(--text2)",minWidth:Math.round(180*zoom/100),boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
+                  color:"var(--text2)",minWidth:Math.round(260*zoom/100),boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
                 {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
                   return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:`${Math.round(4*zoom/100)}px ${Math.round(2*zoom/100)}px`,
-                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:Math.round(8*zoom/100),fontWeight:600,minWidth:Math.round(80*zoom/100)}}>
+                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:Math.round(8*zoom/100),fontWeight:600,minWidth:Math.round(95*zoom/100),maxWidth:Math.round(120*zoom/100)}}>
                     <span style={{display:"inline-block",padding:"1px 3px",borderRadius:3,fontSize:Math.round(7*zoom/100),fontWeight:700,
                       background:c+"15",color:c,border:`1px solid ${c}30`}}>{actionLabel(p.proposal_type,T)}</span>
                   </th>;})}
