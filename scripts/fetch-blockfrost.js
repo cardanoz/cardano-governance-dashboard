@@ -478,7 +478,12 @@ async function main() {
   // ─── 3. DRep votes (3h cache) ────────────────────────────
   const VOTE_FRESH_MS = 3 * 60 * 60 * 1000;  // 3h between full vote refreshes
   const lastVoteFetch = cache.lastVoteFetchAt || 0;
-  const votesFresh = (now - lastVoteFetch) < VOTE_FRESH_MS;
+  let votesFresh = (now - lastVoteFetch) < VOTE_FRESH_MS;
+  // Safeguard: if cache has no active proposals, force a full refresh
+  if (votesFresh && (!cache.activeProposalDetails || cache.activeProposalDetails.length === 0)) {
+    console.log("  ⚠ No active proposals in cache — forcing vote refresh to discover new proposals");
+    votesFresh = false;
+  }
   console.log(`\n[3/8] DRep votes ${votesFresh ? "(CACHED — " + ((now - lastVoteFetch) / 60000).toFixed(0) + "min old, next refresh in " + ((VOTE_FRESH_MS - (now - lastVoteFetch)) / 60000).toFixed(0) + "min)" : "(refreshing)"}...`);
 
   const voteMap = {};
