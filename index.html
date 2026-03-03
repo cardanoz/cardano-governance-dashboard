@@ -133,6 +133,12 @@ const LANG = {
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
     api_key_required:"Blockfrost API key required",
+    tab_spo:"SPO Votes",
+    spo_pool:"Pool", spo_ticker:"Ticker", spo_pledge_drep:"Pledge DRep",
+    spo_loading:"Loading SPO votes…", spo_auto_abstain:"Auto-Abstain",
+    spo_no_eligible:"No SPO-eligible governance actions found",
+    spo_hardfork_note:"Hard Fork: explicit vote required (no default)",
+    spo_voted:"Voted", spo_total_pools:"Total Pools", spo_vote_count:"Votes",
     tab_history:"Stake Analytics",
     hist_title:"DRep Stake History", hist_desc:"Tracking DRep voting power over time (snapshots captured each epoch)",
     hist_total_stake:"Total Stake (ADA)", hist_drep_count:"DRep Count", hist_top_dreps:"Top DReps by Stake",
@@ -203,6 +209,12 @@ const LANG = {
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
     api_key_required:"Blockfrost APIキーが必要です",
+    tab_spo:"SPO投票",
+    spo_pool:"プール", spo_ticker:"ティッカー", spo_pledge_drep:"誓約DRep委任先",
+    spo_loading:"SPO投票を読み込み中…", spo_auto_abstain:"自動棄権",
+    spo_no_eligible:"SPO投票対象のガバナンスアクションがありません",
+    spo_hardfork_note:"Hard Fork: 明示投票必須（デフォルトなし）",
+    spo_voted:"投票済", spo_total_pools:"プール数", spo_vote_count:"投票数",
     tab_history:"ステーク分析・予測",
     hist_title:"DRepステーク推移", hist_desc:"DRep投票力の時系列推移（エポックごとにスナップショット記録）",
     hist_total_stake:"総ステーク (ADA)", hist_drep_count:"DRep数", hist_top_dreps:"ステーク上位DRep",
@@ -427,6 +439,9 @@ function calcGini(values) {
   return (2 * giniSum) / (n * sum) - (n + 1) / n;
 }
 
+// SPO can only vote on these governance action types
+const SPO_ELIGIBLE_TYPES = new Set(["NoConfidence","UpdateCommittee","ParameterChange","HardForkInitiation"]);
+
 const ACTION_COLORS = {
   ParameterChange:"#8b5cf6", HardForkInitiation:"#ef4444", TreasuryWithdrawals:"#f59e0b",
   NoConfidence:"#dc2626", UpdateCommittee:"#06b6d4", NewConstitution:"#10b981", InfoAction:"#6366f1"
@@ -581,6 +596,85 @@ async function enrichProposals(gaMap, addLog, setStage) {
       } catch(e) {}
     }));
   }
+}
+
+// ════════════════════════════════════════════════════════════════
+// SPO Vote Fetching (via Koios — efficient bulk query)
+// ════════════════════════════════════════════════════════════════
+const KOIOS_URL = "https://api.koios.rest/api/v1";
+
+async function koiosFetchJSON(path, opts={}) {
+  const url = `${KOIOS_URL}${path}`;
+  const cacheKey = opts.body ? url + "|" + opts.body : url;
+  const cached = _cache.get(cacheKey);
+  if (cached && Date.now() - cached.ts < CACHE_TTL) { _cacheHits++; return cached.data; }
+  const now = Date.now();
+  const wait = Math.max(0, 100 - (now - _lastFetch));
+  if (wait > 0) await new Promise(r => setTimeout(r, wait));
+  _lastFetch = Date.now();
+  _apiCalls++;
+  const headers = { "Accept": "application/json" };
+  if (opts.body) headers["Content-Type"] = "application/json";
+  const r = await timedFetch(url, { method: opts.body ? "POST" : "GET", headers, body: opts.body || undefined }, 60000);
+  if (!r.ok) throw new Error(`Koios HTTP ${r.status}`);
+  const data = await r.json();
+  _cache.set(cacheKey, { data, ts: Date.now() });
+  return data;
+}
+
+// Koios paginated GET (offset-based)
+async function koiosFetchAll(path, maxItems=5000) {
+  const results = [];
+  for (let offset = 0; offset < maxItems; offset += 1000) {
+    const sep = path.includes("?") ? "&" : "?";
+    const data = await koiosFetchJSON(`${path}${sep}offset=${offset}&limit=1000`);
+    if (!data || data.length === 0) break;
+    results.push(...data);
+    if (data.length < 1000) break;
+  }
+  return results;
+}
+
+// Fetch SPO votes for a specific proposal via Koios
+async function fetchSpoVotesForProposal(txHash, certIdx) {
+  try {
+    const data = await koiosFetchAll(`/proposal_votes?_proposal_tx_hash=${txHash}&_proposal_index=${certIdx}`);
+    if (!data) return [];
+    return data.filter(v => v.voter_role === "SPO");
+  } catch(e) {
+    console.warn("Koios SPO vote fetch failed:", e);
+    return [];
+  }
+}
+
+// Fetch registered pool list with reward_addr and ticker from Koios
+async function fetchAllPools(onProgress) {
+  const results = [];
+  for (let offset = 0; ; offset += 1000) {
+    if (onProgress) onProgress(`Pools: ${results.length}…`);
+    const data = await koiosFetchJSON(`/pool_list?offset=${offset}&limit=1000`);
+    if (!data || data.length === 0) break;
+    results.push(...data);
+    if (data.length < 1000) break;
+  }
+  return results;
+}
+
+// Fetch DRep delegation for multiple stake addresses via Koios POST
+async function fetchAccountsDrepBulk(stakeAddrs) {
+  if (!stakeAddrs.length) return [];
+  const results = [];
+  // Koios POST /account_info accepts array of stake addresses
+  for (let i = 0; i < stakeAddrs.length; i += 500) {
+    const batch = stakeAddrs.slice(i, i + 500);
+    try {
+      const data = await koiosFetchJSON("/account_info", {
+        body: JSON.stringify({ _stake_addresses: batch })
+      });
+      if (data) results.push(...data);
+    } catch(e) { console.warn("Koios account_info batch failed:", e); }
+  }
+  return results;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1734,6 +1828,195 @@ const SectionHeader = ({title, show, setShow, color, extra}) => (
   </div>
 );
 
+// SPO Votes Tab
+// ════════════════════════════════════════════════════════════════
+function SpoTab({ proposals, spoVotes, spoPoolInfo, spoLoading, spoProgress, T }) {
+  const [searchQ, setSearchQ] = React.useState("");
+  const [page, setPage] = React.useState(0);
+  const perPage = 100;
+
+  // SPO-eligible proposals only
+  const spoProps = React.useMemo(() =>
+    proposals.filter(p => SPO_ELIGIBLE_TYPES.has(p.proposal_type))
+      .sort((a,b) => (b.epoch_no||0) - (a.epoch_no||0)),
+    [proposals]
+  );
+
+  // Build list of all registered pools with their vote data
+  const poolList = React.useMemo(() => {
+    const poolIds = new Set();
+    // Add all pools that voted
+    Object.keys(spoVotes).forEach(k => poolIds.add(k.split("__")[0]));
+    // Add all registered pools from poolInfo
+    Object.keys(spoPoolInfo).forEach(id => poolIds.add(id));
+
+    return [...poolIds].map(poolId => {
+      const info = spoPoolInfo[poolId] || {};
+      const votes = {};
+      let voteCount = 0;
+      spoProps.forEach(p => {
+        const v = spoVotes[`${poolId}__${p.proposal_id}`];
+        if (v) { votes[p.proposal_id] = v; voteCount++; }
+      });
+      return {
+        pool_id: poolId,
+        ticker: info.ticker || "",
+        name: info.name || "",
+        pledge_drep: info.pledge_drep || null,
+        active_stake: info.active_stake || "0",
+        votes,
+        voteCount,
+        isAutoAbstain: info.pledge_drep === "drep_always_abstain",
+        isAutoNoConf: info.pledge_drep === "drep_always_no_confidence"
+      };
+    }).sort((a, b) => {
+      // SPOs that voted come first, then by vote count desc, then by ticker
+      if (b.voteCount !== a.voteCount) return b.voteCount - a.voteCount;
+      return (a.ticker || a.pool_id).localeCompare(b.ticker || b.pool_id);
+    });
+  }, [spoVotes, spoPoolInfo, spoProps]);
+
+  const filtered = React.useMemo(() => {
+    if (!searchQ) return poolList;
+    const q = searchQ.toLowerCase();
+    return poolList.filter(p =>
+      (p.ticker && p.ticker.toLowerCase().includes(q)) ||
+      (p.name && p.name.toLowerCase().includes(q)) ||
+      p.pool_id.toLowerCase().includes(q)
+    );
+  }, [poolList, searchQ]);
+
+  const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+
+  // Get effective vote for display
+  function getEffectiveVote(pool, proposal) {
+    const explicit = pool.votes[proposal.proposal_id];
+    if (explicit) return { vote: explicit, type: "explicit" };
+    // Hard Fork: no default vote
+    if (proposal.proposal_type === "HardForkInitiation") return { vote: "NotVoted", type: "none" };
+    // Auto-abstain delegation
+    if (pool.isAutoAbstain) return { vote: "Abstain", type: "auto" };
+    // Auto no-confidence delegation: Yes on NoConfidence, Abstain on others
+    if (pool.isAutoNoConf) {
+      return proposal.proposal_type === "NoConfidence"
+        ? { vote: "Yes", type: "auto" }
+        : { vote: "Abstain", type: "auto" };
+    }
+    // Has some other DRep delegation → that DRep's vote counts, but we don't know it
+    if (pool.pledge_drep) return { vote: "NotVoted", type: "delegated" };
+    return { vote: "NotVoted", type: "none" };
+  }
+
+  const tdS = (bg) => ({background:bg, padding:"2px 4px", borderBottom:"1px solid var(--border)", fontSize:9, textAlign:"right"});
+
+  if (spoProps.length === 0 && !spoLoading) {
+    return <div className="card" style={{textAlign:"center",padding:40,color:"var(--text2)"}}>{T.spo_no_eligible}</div>;
+  }
+
+  return (
+    <div>
+      <div className="card" style={{marginBottom:8}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:6}}>
+          <div>
+            <span style={{fontSize:13,fontWeight:700}}>{T.tab_spo}</span>
+            <span style={{fontSize:10,color:"var(--text2)",marginLeft:8}}>
+              {spoProps.length} proposals · {T.spo_total_pools}: {filtered.length.toLocaleString()}
+              {Object.keys(spoVotes).length > 0 && ` · ${T.spo_vote_count}: ${Object.keys(spoVotes).length}`}
+            </span>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            {spoLoading && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {spoProgress}</span>}
+            {!spoLoading && spoProgress && <span style={{fontSize:8,color:"var(--text2)"}}>{spoProgress}</span>}
+            <input type="text" placeholder="Search ticker/pool…" value={searchQ}
+              onChange={e => { setSearchQ(e.target.value); setPage(0); }}
+              style={{padding:"3px 6px",borderRadius:5,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,width:140,outline:"none"}} />
+          </div>
+        </div>
+      </div>
+
+      {spoLoading && Object.keys(spoVotes).length === 0 ? (
+        <div className="card" style={{textAlign:"center",padding:40}}>
+          <div style={{fontSize:12,color:"var(--accent2)",marginBottom:8}}>⏳ {spoProgress || T.spo_loading}</div>
+        </div>
+      ) : (
+        <div style={{border:"1px solid var(--border)",borderRadius:8,overflow:"hidden",background:"var(--bg2)"}}>
+          <div style={{overflow:"auto",maxHeight:"calc(100vh - 280px)"}}>
+            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%"}}>
+              <thead><tr>
+                <th style={{position:"sticky",top:0,left:0,zIndex:2,background:"var(--bg3)",padding:"3px 4px",textAlign:"right",
+                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",width:28}}>#</th>
+                <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"3px 4px",textAlign:"left",
+                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:70}}>{T.spo_ticker}</th>
+                <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"3px 4px",textAlign:"center",
+                  borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:50}}>{T.spo_pledge_drep}</th>
+                {spoProps.map(p => (
+                  <th key={p.proposal_id} style={{position:"sticky",top:0,background:actionColor(p.proposal_type)+"15",padding:"3px 4px",textAlign:"center",
+                    borderBottom:`2px solid ${actionColor(p.proposal_type)}40`,fontSize:7,fontWeight:700,color:actionColor(p.proposal_type),
+                    whiteSpace:"nowrap",minWidth:55,maxWidth:90,overflow:"hidden",textOverflow:"ellipsis"}}
+                    title={p.title || p.proposal_id}>
+                    {p.title ? (p.title.length > 12 ? p.title.slice(0,12)+"…" : p.title) : shortId(p.proposal_id)}
+                  </th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {pageData.map((pool, ri) => {
+                  const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+                  return (
+                    <tr key={pool.pool_id}>
+                      <td style={{...tdS(bg),color:"var(--text2)",fontSize:8,width:28}}>{page*perPage+ri+1}</td>
+                      <td style={{...tdS(bg),textAlign:"left",fontWeight:600,maxWidth:100,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}
+                        title={pool.pool_id}>
+                        {pool.ticker || shortId(pool.pool_id)}
+                      </td>
+                      <td style={{...tdS(bg),textAlign:"center",fontSize:7}}>
+                        {pool.isAutoAbstain ? (
+                          <span style={{color:"#fbbf24",fontWeight:600}} title="drep_always_abstain">A-Abs</span>
+                        ) : pool.isAutoNoConf ? (
+                          <span style={{color:"#dc2626",fontWeight:600}} title="drep_always_no_confidence">A-NC</span>
+                        ) : pool.pledge_drep ? (
+                          <span style={{color:"var(--text2)"}} title={pool.pledge_drep}>DRep</span>
+                        ) : (
+                          <span style={{color:"var(--text2)",opacity:.4}}>−</span>
+                        )}
+                      </td>
+                      {spoProps.map(p => {
+                        const ev = getEffectiveVote(pool, p);
+                        const isAuto = ev.type === "auto";
+                        const s = VOTE_STYLES[ev.vote] || VOTE_STYLES.NotVoted;
+                        return (
+                          <td key={p.proposal_id} style={{...tdS(bg),textAlign:"center",padding:"1px 2px"}}>
+                            <div style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:7,fontWeight:600,
+                              background:s.bg,color:s.c,border:`1px solid ${s.bc}`,
+                              opacity:isAuto?0.5:1,fontStyle:isAuto?"italic":"normal"}}
+                              title={isAuto ? T.spo_auto_abstain : ev.type === "delegated" ? "Delegated to DRep" : ""}>
+                              {s.icon}{s.l}{isAuto ? "*" : ""}
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:8,padding:"4px 8px",borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
+            <button className="btn" disabled={page===0} onClick={()=>setPage(page-1)} style={{padding:"1px 6px",fontSize:9,opacity:page===0?.3:1}}>←</button>
+            <span style={{fontSize:9}}>{page+1} / {totalPages}</span>
+            <button className="btn" disabled={page>=totalPages-1} onClick={()=>setPage(page+1)} style={{padding:"1px 6px",fontSize:9,opacity:page>=totalPages-1?.3:1}}>→</button>
+          </div>
+        </div>
+      )}
+      {spoProps.some(p => p.proposal_type === "HardForkInitiation") && (
+        <div style={{fontSize:8,color:"var(--text2)",marginTop:6,textAlign:"center"}}>
+          * = {T.spo_auto_abstain} · ⚠ {T.spo_hardfork_note}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Simulator Tab — Single table with 3 reward columns side by side
 // ════════════════════════════════════════════════════════════════
 function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, ccMembers, ccVotes, proposals, T }) {
@@ -2227,6 +2510,13 @@ function App() {
   const [simProgress, setSimProgress] = React.useState("");
   const [apiStats, setApiStats] = React.useState({calls:0,cached:0});
 
+  // SPO state
+  const [spoVotes, setSpoVotes] = React.useState({});     // {poolId__propKey: "Yes"/"No"/"Abstain"}
+  const [spoPoolInfo, setSpoPoolInfo] = React.useState({}); // {poolId: {ticker, name, pledge_drep}}
+  const [spoLoading, setSpoLoading] = React.useState(false);
+  const [spoProgress, setSpoProgress] = React.useState("");
+  const spoLoadedRef = React.useRef(false);
+
   const loadedPageRef = React.useRef(1);
   const gaMapRef = React.useRef({});
   const allDrepsLoadedRef = React.useRef(false);
@@ -2238,6 +2528,67 @@ function App() {
 
   // Try static data first, then Blockfrost API, then show key setup
   React.useEffect(()=>{ loadStatic().catch(() => { if (getBfKey()) loadLive(); else setLoading(false); }); },[]);
+
+  // ── SPO data lazy-load when tab selected ──
+  React.useEffect(() => {
+    if (tab !== "spo" || spoLoadedRef.current || proposals.length === 0) return;
+    spoLoadedRef.current = true;
+    (async () => {
+      setSpoLoading(true);
+      try {
+        // Step 1: Filter SPO-eligible proposals
+        const spoProps = proposals.filter(p => SPO_ELIGIBLE_TYPES.has(p.proposal_type));
+        if (spoProps.length === 0) { setSpoLoading(false); setSpoProgress("No eligible proposals"); return; }
+
+        // Step 2: Fetch votes per proposal (Koios)
+        const vm = {};
+        for (let i = 0; i < spoProps.length; i++) {
+          const p = spoProps[i];
+          setSpoProgress(`Votes: ${i+1}/${spoProps.length} (${p.title || shortId(p.proposal_id)})`);
+          const spoV = await fetchSpoVotesForProposal(p.tx_hash, p.cert_index);
+          spoV.forEach(v => {
+            const pid = p.proposal_id;
+            let vote = (v.vote || "").charAt(0).toUpperCase() + (v.vote || "").slice(1).toLowerCase();
+            if (!["Yes","No","Abstain"].includes(vote)) return;
+            vm[`${v.voter_id}__${pid}`] = vote;
+          });
+        }
+        setSpoVotes(vm);
+
+        // Step 3: Fetch all registered pools (ticker, reward_addr)
+        setSpoProgress("Loading pool list…");
+        const pools = await fetchAllPools(msg => setSpoProgress(msg));
+        const registeredPools = pools.filter(p => p.pool_status === "registered");
+
+        // Step 4: Collect unique reward addresses and fetch DRep delegation
+        const rewardAddrs = [...new Set(registeredPools.map(p => p.reward_addr).filter(Boolean))];
+        setSpoProgress(`Checking delegation for ${rewardAddrs.length} addresses…`);
+        const acctInfos = await fetchAccountsDrepBulk(rewardAddrs);
+        const addrToDrep = {};
+        acctInfos.forEach(a => { if (a.stake_address) addrToDrep[a.stake_address] = a.delegated_drep || null; });
+
+        // Step 5: Build pool info map
+        const infoMap = {};
+        registeredPools.forEach(p => {
+          const poolId = p.pool_id_bech32;
+          if (!poolId) return;
+          infoMap[poolId] = {
+            ticker: p.ticker || "",
+            name: p.pool_group || "",
+            reward_addr: p.reward_addr || "",
+            pledge_drep: addrToDrep[p.reward_addr] || null,
+            active_stake: p.active_stake || "0"
+          };
+        });
+        setSpoPoolInfo(infoMap);
+        setSpoProgress(`${Object.keys(vm).length} votes from ${new Set(Object.keys(vm).map(k=>k.split("__")[0])).size} SPOs`);
+      } catch(e) {
+        console.error("SPO load error:", e);
+        setSpoProgress("Error: " + e.message);
+      }
+      setSpoLoading(false);
+    })();
+  }, [tab, proposals]);
 
   React.useEffect(() => {
     const interval = setInterval(() => setApiStats(getApiStats()), 2000);
@@ -2636,6 +2987,7 @@ function App() {
       {/* Tab Bar */}
       <div className="tab-bar" style={{display:"flex",alignItems:"center",gap:0}}>
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
+        <button className={`tab-btn ${tab==="spo"?"active":""}`} onClick={()=>setTab("spo")}>{T.tab_spo}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
@@ -2653,6 +3005,9 @@ function App() {
           ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
           warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
           loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
+      ) : tab === "spo" ? (
+        <SpoTab proposals={proposals} spoVotes={spoVotes} spoPoolInfo={spoPoolInfo}
+          spoLoading={spoLoading} spoProgress={spoProgress} T={T} />
       ) : tab === "history" ? (
         <StakeHistoryTab history={stakeHistory} liveDreps={allDreps} T={T} lang={lang} />
       ) : (
@@ -2664,7 +3019,7 @@ function App() {
       )}
 
       <div style={{marginTop:12,textAlign:"center",color:"#333a4a",fontSize:10,lineHeight:1.8}}>
-        Data: <a href="https://blockfrost.io" target="_blank">Blockfrost.io</a>
+        Data: <a href="https://blockfrost.io" target="_blank">Blockfrost.io</a> · <a href="https://koios.rest" target="_blank">Koios</a>
         {dataSource === "static" && " (cached)"} ·
         <a href="https://github.com/Cerkoryn/ExcludeKPayN" target="_blank">ExcludeKPayN (Middle-Out)</a> ·
         Process-first framework (<a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694" target="_blank">CIP-1694</a>)
