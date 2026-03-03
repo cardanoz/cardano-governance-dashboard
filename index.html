@@ -604,14 +604,61 @@ function PaginationBar({ label, page, setPage, total }) {
   );
 }
 
-function VoteBadge({ vote, T }) {
-  const m = {
-    Yes:{bg:"rgba(52,211,153,.12)",c:"#34d399",bc:"rgba(52,211,153,.25)",icon:"✓",l:"Y"},
-    No:{bg:"rgba(248,113,113,.12)",c:"#f87171",bc:"rgba(248,113,113,.25)",icon:"✗",l:"N"},
-    Abstain:{bg:"rgba(251,191,36,.12)",c:"#fbbf24",bc:"rgba(251,191,36,.25)",icon:"−",l:"A"},
-    NotVoted:{bg:"rgba(75,85,99,.06)",c:"#555e70",bc:"rgba(75,85,99,.12)",icon:"",l:"−"},
-  };
-  const s = m[vote]||m.NotVoted;
+// ─── Shared constants (hoisted outside components to avoid re-creation) ───
+const VOTE_STYLES = {
+  Yes:{bg:"rgba(52,211,153,.12)",c:"#34d399",bc:"rgba(52,211,153,.25)",icon:"✓",l:"Y"},
+  No:{bg:"rgba(248,113,113,.12)",c:"#f87171",bc:"rgba(248,113,113,.25)",icon:"✗",l:"N"},
+  Abstain:{bg:"rgba(251,191,36,.12)",c:"#fbbf24",bc:"rgba(251,191,36,.25)",icon:"−",l:"A"},
+  NotVoted:{bg:"rgba(75,85,99,.06)",c:"#555e70",bc:"rgba(75,85,99,.12)",icon:"",l:"−"},
+};
+const INPUT_STYLE = {padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
+
+function downloadCSV(csv, filename) {
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function buildCSV(headers, rows) {
+  return [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+}
+
+function RationaleModal({ modal, onClose, T }) {
+  if (!modal) return null;
+  return (
+    <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
+      display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
+      onClick={onClose}>
+      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,maxWidth:700,width:"100%",
+        maxHeight:"80vh",display:"flex",flexDirection:"column",boxShadow:"0 20px 60px rgba(0,0,0,.5)"}}
+        onClick={e=>e.stopPropagation()}>
+        <div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+          <div>
+            <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{modal.name}</div>
+            <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{modal.proposalTitle}</div>
+          </div>
+          <button onClick={onClose} style={{background:"none",border:"none",color:"var(--text2)",fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
+        </div>
+        <div style={{padding:16,overflow:"auto",flex:1}}>
+          {modal.loading ? (
+            <div style={{textAlign:"center",padding:30,color:"var(--text2)"}}>{T.cc_rationale_loading}</div>
+          ) : (
+            <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",fontSize:12,lineHeight:1.5,color:"var(--text)",fontFamily:"inherit",margin:0}}>{modal.text}</pre>
+          )}
+        </div>
+        <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
+          {modal.text && modal.onDownload && <button className="btn" style={{fontSize:11}} onClick={modal.onDownload}>⬇ Download</button>}
+          {modal.url && <a href={modal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 Source</a>}
+          <button onClick={onClose} className="btn" style={{fontSize:11}}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VoteBadge({ vote }) {
+  const s = VOTE_STYLES[vote]||VOTE_STYLES.NotVoted;
   return (
     <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:1,
       padding:"2px 5px",borderRadius:4,fontSize:8,fontWeight:700,
@@ -861,38 +908,32 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   }
 
   function exportDrepRationalesCSV(){
-    const rows=[["DRep Name","DRep ID","Proposal","Vote","Rationale"]];
+    const hdr=["DRep Name","DRep ID","Proposal","Vote","Rationale"];
+    const rows=[];
     dreps.forEach(d=>{
       proposals.forEach(p=>{
         const v=gv(d.drep_id,p.proposal_id);
         const rat=getDrepRat(d.drep_id,p.proposal_id);
         if(rat&&rat.text){
-          rows.push([safeName(d.name)||d.drep_id, d.drep_id, p.title||p.proposal_id, v, rat.text.replace(/"/g,'""')]);
+          rows.push([safeName(d.name)||d.drep_id, d.drep_id, p.title||p.proposal_id, v, rat.text]);
         }
       });
     });
-    if(rows.length<=1){alert("No rationale data available.");return;}
-    const csv=rows.map(r=>r.map(c=>`"${c}"`).join(",")).join("\n");
-    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-    a.download="drep_rationales.csv";a.click();URL.revokeObjectURL(a.href);
+    if(rows.length===0){alert("No rationale data available.");return;}
+    downloadCSV(buildCSV(hdr, rows), "drep_rationales.csv");
   }
 
   function exportProposalRationales(proposal){
-    const rows=[["DRep Name","DRep ID","Vote","Rationale"]];
+    const hdr=["DRep Name","DRep ID","Vote","Rationale"];
+    const rows=[];
     dreps.forEach(d=>{
       const v=gv(d.drep_id,proposal.proposal_id);
       const rat=getDrepRat(d.drep_id,proposal.proposal_id);
-      if(rat&&rat.text){
-        rows.push([safeName(d.name)||d.drep_id, d.drep_id, v, rat.text.replace(/"/g,'""')]);
-      }
+      if(rat&&rat.text){ rows.push([safeName(d.name)||d.drep_id, d.drep_id, v, rat.text]); }
     });
-    if(rows.length<=1){alert("No rationale data for this proposal.");return;}
-    const csv=rows.map(r=>r.map(c=>`"${c}"`).join(",")).join("\n");
-    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    if(rows.length===0){alert("No rationale data for this proposal.");return;}
     const fname=(proposal.title||proposal.proposal_id||"proposal").slice(0,40).replace(/[^a-zA-Z0-9_\-]/g,"_");
-    a.download=`drep_rationales_${fname}.csv`;a.click();URL.revokeObjectURL(a.href);
+    downloadCSV(buildCSV(hdr, rows), `drep_rationales_${fname}.csv`);
   }
 
   function handleDPageChange(newPage) {
@@ -906,26 +947,21 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
     const hdr=["DRep ID","DRep Name","Stake (ADA)","Delegators",
       ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
     const rows=csvDreps.map(d=>[d.drep_id,safeName(d.name)||"",Math.round(Number(d.amount)/1e6),d.delegators||0,
-      ...csvProps.map(p=>{const v=gv(d.drep_id,p.proposal_id);return v;})]);
-    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
-    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-    const url=URL.createObjectURL(blob); const a=document.createElement("a");a.href=url;a.download=`cardano_drep_votes_${mode}.csv`;a.click();
-    URL.revokeObjectURL(url);
+      ...csvProps.map(p=>gv(d.drep_id,p.proposal_id))]);
+    downloadCSV(buildCSV(hdr, rows), `cardano_drep_votes_${mode}.csv`);
   }
 
   function exportCCVotesCSV(){
-    const csvProps = fProps;
     const members = ccMembers||[];
     const hdr=["CC Member ID","Name","Vote Count",
-      ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
+      ...fProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
     const rows=members.map(c=>[c.cc_id,c.name||"",c.vote_count,
-      ...csvProps.map(p=>{const v=ccGv(c.cc_id,p.proposal_id);const r=ccGr(c.cc_id,p.proposal_id);return v+(r?" [📎]":"");})]);
-    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
-    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="cc_votes.csv";a.click();URL.revokeObjectURL(a.href);
+      ...fProps.map(p=>{const v=ccGv(c.cc_id,p.proposal_id);const r=ccGr(c.cc_id,p.proposal_id);return v+(r?" [📎]":"");})]);
+    downloadCSV(buildCSV(hdr, rows), "cc_votes.csv");
   }
 
   function exportCCRationalesCSV(){
+    const hdr=["CC Member","Proposal ID","Title","Type","Vote","Rationale URL","Rationale Content"];
     const rows=[];
     for(const cc of (ccMembers||[])){
       for(const p of fProps){
@@ -936,13 +972,10 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         rows.push([cc.name||cc.cc_id,p.proposal_id,p.title||"",p.proposal_type||"",vote,ratObj?ratObj.url:"",content]);
       }
     }
-    const hdr=["CC Member","Proposal ID","Title","Type","Vote","Rationale URL","Rationale Content"];
-    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
-    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="cc_rationales.csv";a.click();URL.revokeObjectURL(a.href);
+    downloadCSV(buildCSV(hdr, rows), "cc_rationales.csv");
   }
 
-  const ist={padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
+  const ist=INPUT_STYLE;
 
   return (
     <div>
@@ -1062,7 +1095,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                       <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
                         <div className="vote-cell" style={{padding:`${Math.round(5*zoom/100)}px ${Math.round(3*zoom/100)}px`,textAlign:"center",position:"relative",display:"flex",alignItems:"center",justifyContent:"center",gap:zoom<80?2:0,flexDirection:zoom<80?"row":"column"}}
                           title={rat&&rat.text?rat.text.slice(0,300):undefined}>
-                          <VoteBadge vote={v} T={T}/>
+                          <VoteBadge vote={v}/>
                           {rat&&rat.text&&<span style={{fontSize:Math.max(6,Math.round(7*zoom/100)),color:"var(--yes)",cursor:"pointer",lineHeight:1}}
                             onClick={()=>setRatModal({name:safeName(d.name)||shortId(d.drep_id),proposalTitle:p.title||shortId(p.proposal_id),text:rat.text,url:rat.url})}>📎</span>}
                         </div></td>
@@ -1122,7 +1155,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                     {pgP.map((p,ci)=>{const v=ccGv(cc.cc_id,p.proposal_id);const ratObj=ccGr(cc.cc_id,p.proposal_id);return(
                       <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
                         <div className="vote-cell" style={{padding:`${Math.round(3*zoom/100)}px ${Math.round(2*zoom/100)}px`,textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",gap:zoom<80?2:0,flexDirection:zoom<80?"row":"column"}}>
-                          {v==="Ineligible" ? <span style={{fontSize:Math.round(8*zoom/100),color:"var(--text2)"}}>—</span> : <VoteBadge vote={v} T={T}/>}
+                          {v==="Ineligible" ? <span style={{fontSize:Math.round(8*zoom/100),color:"var(--text2)"}}>—</span> : <VoteBadge vote={v}/>}
                           {ratObj && <a href="#" style={{fontSize:Math.max(6,Math.round(7*zoom/100)),color:ratObj.text?"var(--yes)":"var(--accent2)",lineHeight:1}}
                             onClick={e=>{e.preventDefault();setCcRatModal({ccName:cc.name||cc.cc_id,proposalTitle:p.title||shortId(p.proposal_id),url:ratObj.url||"",text:ratObj.text||T.cc_rationale_error,loading:false})}}>📎</a>}
                         </div></td>
@@ -1138,308 +1171,17 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
       )}
 
       {/* CC Rationale Modal */}
-      {ccRatModal && (
-        <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
-          display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
-          onClick={()=>setCcRatModal(null)}>
-          <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,maxWidth:700,width:"100%",
-            maxHeight:"80vh",display:"flex",flexDirection:"column",boxShadow:"0 20px 60px rgba(0,0,0,.5)"}}
-            onClick={e=>e.stopPropagation()}>
-            <div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-              <div>
-                <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{ccRatModal.ccName}</div>
-                <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{ccRatModal.proposalTitle}</div>
-              </div>
-              <button onClick={()=>setCcRatModal(null)} style={{background:"none",border:"none",color:"var(--text2)",fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
-            </div>
-            <div style={{padding:16,overflow:"auto",flex:1}}>
-              <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",fontSize:12,lineHeight:1.5,color:"var(--text)",fontFamily:"inherit",margin:0}}>{ccRatModal.text}</pre>
-            </div>
-            <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
-              {ccRatModal.url && <a href={ccRatModal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 Source</a>}
-              <button onClick={()=>setCcRatModal(null)} className="btn" style={{fontSize:11}}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <RationaleModal modal={ccRatModal ? {name:ccRatModal.ccName,proposalTitle:ccRatModal.proposalTitle,text:ccRatModal.text,url:ccRatModal.url} : null}
+        onClose={()=>setCcRatModal(null)} T={T}/>
 
       {/* DRep Rationale Modal */}
-      {ratModal && (
-        <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
-          display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
-          onClick={()=>setRatModal(null)}>
-          <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,maxWidth:700,width:"100%",
-            maxHeight:"80vh",display:"flex",flexDirection:"column",boxShadow:"0 20px 60px rgba(0,0,0,.5)"}}
-            onClick={e=>e.stopPropagation()}>
-            <div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-              <div>
-                <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{ratModal.name}</div>
-                <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{ratModal.proposalTitle}</div>
-              </div>
-              <button onClick={()=>setRatModal(null)} style={{background:"none",border:"none",color:"var(--text2)",fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
-            </div>
-            <div style={{padding:16,overflow:"auto",flex:1}}>
-              <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",fontSize:12,lineHeight:1.5,color:"var(--text)",
-                fontFamily:"inherit",margin:0}}>{ratModal.text}</pre>
-            </div>
-            <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
-              {ratModal.text && <button className="btn" style={{fontSize:11}} onClick={()=>{
-                const blob=new Blob([ratModal.text],{type:"text/plain"});
-                const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-                a.download=`rationale_${ratModal.name}_${(ratModal.proposalTitle||"").slice(0,30).replace(/[^a-zA-Z0-9]/g,"_")}.txt`;
-                a.click();URL.revokeObjectURL(a.href);
-              }}>⬇ Download</button>}
-              {ratModal.url && <a href={ratModal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 Source</a>}
-              <button onClick={()=>setRatModal(null)} className="btn" style={{fontSize:11}}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// CC Votes Tab — Constitutional Committee voting matrix
-// ════════════════════════════════════════════════════════════════
-function CCVotesTab({ ccMembers, ccVotes, ccRationales, proposals, T }) {
-  const [search,setSearch] = useHashState("cc_search","");
-  const [actType,setActType] = useHashState("cc_type","all");
-  const [epFrom,setEpFrom] = useHashState("cc_epFrom","");
-  const [epTo,setEpTo] = useHashState("cc_epTo","");
-  const [pPage,setPPage] = useHashState("cc_pp",0);
-  const [csvOpen,setCsvOpen] = React.useState(false);
-  const [ratModal,setRatModal] = React.useState(null); // {ccName, proposalTitle, url, text, loading}
-  const [ratExporting,setRatExporting] = React.useState(false);
-  const PPP = 22;
-
-  // Build set of proposal IDs that have at least one CC vote
-  const ccProposalIds = React.useMemo(()=>{
-    const ids=new Set();
-    Object.keys(ccVotes).forEach(k=>{const pid=k.split("__")[1]; if(pid) ids.add(pid);});
-    return ids;
-  },[ccVotes]);
-
-  // Filter proposals to only those with CC votes (expired only)
-  const ccProposals = React.useMemo(()=>{
-    return proposals.filter(p=>ccProposalIds.has(p.proposal_id));
-  },[proposals,ccProposalIds]);
-
-  // Build eligibility map: which CC member is eligible for which proposal
-  const eligibleMap = React.useMemo(()=>{
-    const m={};
-    ccMembers.forEach(cc=>{
-      if(cc.eligible_proposals){
-        cc.eligible_proposals.forEach(pid=>{m[`${cc.cc_id}__${pid}`]=true;});
-      }
-    });
-    return m;
-  },[ccMembers]);
-
-  const fMembers = React.useMemo(()=>{
-    let r = [...ccMembers];
-    if(search){const q=search.toLowerCase(); r=r.filter(c=>(c.cc_id&&c.cc_id.toLowerCase().includes(q))||(c.name&&c.name.toLowerCase().includes(q)));}
-    r.sort((a,b)=>b.vote_count - a.vote_count);
-    return r;
-  },[ccMembers,search]);
-
-  const fProps = React.useMemo(()=>{
-    let r=[...ccProposals];
-    if(actType!=="all") r=r.filter(p=>p.proposal_type===actType);
-    if(epFrom) r=r.filter(p=>Number(p.epoch_no)>=parseInt(epFrom));
-    if(epTo) r=r.filter(p=>Number(p.epoch_no)<=parseInt(epTo));
-    return r;
-  },[ccProposals,actType,epFrom,epTo]);
-
-  const pgP=fProps.slice(pPage*PPP,(pPage+1)*PPP);
-  const tPP=Math.max(1,Math.ceil(fProps.length/PPP));
-  const actTypes=[...new Set(ccProposals.map(p=>p.proposal_type).filter(Boolean))];
-
-  function isEligible(ccId,pid){return !!eligibleMap[`${ccId}__${pid}`];}
-  function gv(ccId,pid){
-    const v=ccVotes[`${ccId}__${pid}`];
-    if(v) return v;
-    return isEligible(ccId,pid) ? "NotVoted" : "Ineligible";
-  }
-  // gr returns rationale entry: {url, text} or legacy string URL or null
-  function gr(ccId,pid){
-    const r = ccRationales[`${ccId}__${pid}`];
-    if (!r) return null;
-    if (typeof r === "string") return { url: resolveIpfsUrl(r), text: "" };
-    return r;
-  }
-
-  function exportCSV(mode){
-    const csvProps = mode === "visible" ? pgP : fProps;
-    const hdr=["CC Member ID","Name","Vote Count",
-      ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
-    const rows=fMembers.map(c=>[c.cc_id,c.name||"",c.vote_count,
-      ...csvProps.map(p=>{const v=gv(c.cc_id,p.proposal_id);const r=gr(c.cc_id,p.proposal_id);return v+(r?" [📎]":"");})]);
-    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
-    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-    const url=URL.createObjectURL(blob); const a=document.createElement("a");a.href=url;a.download=`cardano_cc_votes_${mode}.csv`;a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function showRationale(ccName, proposalTitle, ratObj) {
-    // ratObj = {url, text} — pre-downloaded content
-    const url = ratObj.url || "";
-    const text = ratObj.text || T.cc_rationale_error;
-    setRatModal({ ccName, proposalTitle, url, text, loading: false });
-  }
-
-  function exportRationalesCSV() {
-    setRatExporting(true);
-    const rows = [];
-    for (const cc of fMembers) {
-      for (const p of fProps) {
-        const vote = ccVotes[`${cc.cc_id}__${p.proposal_id}`];
-        if (!vote) continue;
-        const ratObj = gr(cc.cc_id, p.proposal_id);
-        const content = ratObj ? (ratObj.text || "").replace(/[\r\n]+/g, " ").slice(0, 5000) : "";
-        rows.push([
-          cc.name || cc.cc_id, p.proposal_id, p.title || "", p.proposal_type || "",
-          vote, ratObj ? ratObj.url : "", content
-        ]);
-      }
-    }
-    const hdr = ["CC Member", "Proposal ID", "Title", "Type", "Vote", "Rationale URL", "Rationale Content"];
-    const csv = [hdr, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
-    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href = url; a.download = "cc_rationales.csv"; a.click();
-    URL.revokeObjectURL(url);
-    setRatExporting(false);
-  }
-
-  const ist={padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
-
-  function IneligibleBadge(){return <span style={{display:"inline-block",padding:"2px 8px",borderRadius:6,fontSize:9,fontWeight:600,
-    background:"rgba(100,100,100,.15)",color:"rgba(160,160,160,.7)",border:"1px solid rgba(100,100,100,.2)"}}>—</span>;}
-
-  return (
-    <div>
-      {/* CC Votes + Reward Simulator (unified page) */}
-      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",marginBottom:12,display:"flex",flexWrap:"wrap",gap:8,alignItems:"flex-end"}}>
-        {[
-          {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>setSearch(e.target.value)} style={{...ist,width:150}}/>},
-          {l:T.filter_action_type,el:<select value={actType} onChange={e=>{setActType(e.target.value);setPPage(0)}} style={{...ist,minWidth:120}}>
-            <option value="all">{T.filter_all}</option>{actTypes.map(t=><option key={t} value={t}>{actionLabel(t,T)}</option>)}</select>},
-          {l:T.filter_epoch_from,el:<input type="number" placeholder="440" value={epFrom} onChange={e=>{setEpFrom(e.target.value);setPPage(0)}} style={{...ist,width:80}}/>},
-          {l:T.filter_epoch_to,el:<input type="number" placeholder="999" value={epTo} onChange={e=>{setEpTo(e.target.value);setPPage(0)}} style={{...ist,width:80}}/>},
-        ].map(({l,el},i)=>(<div key={i} style={{display:"flex",flexDirection:"column",gap:3}}>
-          <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",letterSpacing:".06em"}}>{l}</label>{el}</div>))}
-        <div style={{position:"relative",display:"inline-block"}}>
-          <button className="btn" onClick={()=>setCsvOpen(!csvOpen)}>📥 {T.csv_export} ▾</button>
-          {csvOpen && <div style={{position:"absolute",top:"100%",left:0,marginTop:4,background:"var(--bg3)",border:"1px solid var(--border2)",
-            borderRadius:6,overflow:"hidden",zIndex:50,minWidth:160,boxShadow:"0 8px 24px rgba(0,0,0,.5)"}}>
-            <button onClick={()=>{exportCSV("visible");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
-              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
-              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📄 {T.csv_visible}</button>
-            <button onClick={()=>{exportCSV("all");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
-              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
-              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📊 {T.csv_all}</button>
-            <div style={{borderTop:"1px solid var(--border)"}}></div>
-            <button onClick={()=>{exportRationalesCSV();setCsvOpen(false)}} disabled={ratExporting}
-              style={{display:"block",width:"100%",padding:"8px 12px",
-              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit",
-              opacity:ratExporting?0.5:1}}
-              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>
-              📝 {ratExporting ? T.cc_rationale_exporting : T.cc_rationale_export}</button>
-          </div>}
-        </div>
-        <button className="btn" onClick={()=>{setSearch("");setActType("all");setEpFrom("");setEpTo("");setPPage(0)}}
-          style={{alignSelf:"flex-end",fontSize:11}}>{T.reset}</button>
-      </div>
-
-      <div style={{fontSize:11,color:"var(--text2)",marginBottom:8}}>
-        {T.showing}: {T.cc_member} {fMembers.length} × {T.subtitle_actions} {fProps.length}
-      </div>
-
-      <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-        <div style={{overflow:"auto",maxHeight:"calc(100vh - 420px)"}}>
-          <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*95+260}}>
-            <thead><tr>
-              <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:"8px 10px",textAlign:"left",
-                borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:10,fontWeight:700,
-                color:"var(--text2)",minWidth:260,textTransform:"uppercase",letterSpacing:".05em",
-                boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
-              {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
-                const shortTitle = p.title ? (p.title.length > 20 ? p.title.slice(0,20)+"…" : p.title) : "";
-                return(
-                <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"5px 3px",
-                  textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:600,minWidth:100,maxWidth:120,verticalAlign:"bottom"}}>
-                  <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}} title={p.title||p.proposal_id}>
-                    <span style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:7,fontWeight:700,
-                      textTransform:"uppercase",background:c+"15",color:c,border:`1px solid ${c}30`,lineHeight:1.6}}>{actionLabel(p.proposal_type,T)}</span>
-                    {shortTitle && <span style={{fontSize:8,color:"var(--text)",lineHeight:1.3,maxWidth:110,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{shortTitle}</span>}
-                    <span style={{fontSize:7,color:"var(--text2)",opacity:.6}} title={p.proposal_id}>{shortId(p.tx_hash||p.proposal_id,6,4)}</span>
-                  </div>
-                </th>);})}
-            </tr></thead>
-            <tbody>
-              {fMembers.map((cc,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
-                <tr key={cc.cc_id}>
-                  <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:"7px 8px",
-                    borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",minWidth:260,
-                    boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:7}}>
-                      <Avatar name={cc.name||cc.cc_id} url={null}/>
-                      <div style={{minWidth:0,flex:1}}>
-                        <div style={{fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}}>
-                          {cc.name||shortId(cc.cc_id)}</div>
-                        <div style={{fontSize:10,color:"var(--text2)"}}>{cc.vote_count} / {cc.eligible_count||"?"} votes</div>
-                      </div>
-                    </div>
-                  </td>
-                  {pgP.map((p,ci)=>{const v=gv(cc.cc_id,p.proposal_id);const ratObj=gr(cc.cc_id,p.proposal_id);return(
-                    <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
-                      <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
-                        {v==="Ineligible" ? <IneligibleBadge/> : <VoteBadge vote={v} T={T}/>}
-                        {ratObj && <div style={{marginTop:2}}><a href={ratObj.url||"#"} target="_blank" rel="noopener" style={{fontSize:8,color:ratObj.text?"var(--yes)":"var(--accent2)",cursor:"pointer"}} title={ratObj.text?(ratObj.text.slice(0,100)+"..."):(ratObj.url||"")}
-                          onClick={e=>{e.preventDefault();showRationale(cc.name||shortId(cc.cc_id),p.title||shortId(p.proposal_id),ratObj)}}>📎</a></div>}
-                      </div></td>
-                  );})}
-                </tr>
-              );})}
-              {fMembers.length===0&&<tr><td colSpan={pgP.length+1} style={{padding:40,textAlign:"center",color:"var(--text2)",fontSize:13}}>{T.no_cc}</td></tr>}
-            </tbody>
-          </table>
-        </div>
-        <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",padding:"8px 12px",
-          borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
-          <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
-        </div>
-      </div>
-      {/* Rationale Modal */}
-      {ratModal && (
-        <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
-          display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
-          onClick={()=>setRatModal(null)}>
-          <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,maxWidth:700,width:"100%",
-            maxHeight:"80vh",display:"flex",flexDirection:"column",boxShadow:"0 20px 60px rgba(0,0,0,.5)"}}
-            onClick={e=>e.stopPropagation()}>
-            <div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-              <div>
-                <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{ratModal.ccName}</div>
-                <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{ratModal.proposalTitle}</div>
-              </div>
-              <button onClick={()=>setRatModal(null)} style={{background:"none",border:"none",color:"var(--text2)",fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
-            </div>
-            <div style={{padding:16,overflow:"auto",flex:1}}>
-              {ratModal.loading ? (
-                <div style={{textAlign:"center",padding:30,color:"var(--text2)"}}>{T.cc_rationale_loading}</div>
-              ) : (
-                <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",fontSize:12,lineHeight:1.5,color:"var(--text)",
-                  fontFamily:"inherit",margin:0}}>{ratModal.text}</pre>
-              )}
-            </div>
-            <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
-              {ratModal.url && <a href={ratModal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 {T.cc_rationale || "Open URL"}</a>}
-              <button onClick={()=>setRatModal(null)} className="btn" style={{fontSize:11}}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <RationaleModal modal={ratModal ? {...ratModal, onDownload: ratModal.text ? ()=>{
+        const blob=new Blob([ratModal.text],{type:"text/plain"});
+        const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+        a.download=`rationale_${ratModal.name}_${(ratModal.proposalTitle||"").slice(0,30).replace(/[^a-zA-Z0-9]/g,"_")}.txt`;
+        a.click();URL.revokeObjectURL(a.href);
+      } : null} : null}
+        onClose={()=>setRatModal(null)} T={T}/>
     </div>
   );
 }
@@ -1773,13 +1515,6 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
     </div>);
   }
 
-  const fmtAda = (lovelace) => {
-    const ada = Number(lovelace) / 1e6;
-    if (ada >= 1e9) return (ada / 1e9).toFixed(2) + "B";
-    if (ada >= 1e6) return (ada / 1e6).toFixed(2) + "M";
-    if (ada >= 1e3) return (ada / 1e3).toFixed(0) + "K";
-    return ada.toFixed(0);
-  };
   const fmtDate = (ts) => {
     const d = new Date(ts);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -1800,7 +1535,7 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
       pctNow, pctPrev, adaChange, pctChange, delegators: d.delegators };
   });
 
-  const ist = { padding: "6px 10px", borderRadius: 6, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--text)", fontSize: 12, outline: "none" };
+  const ist = INPUT_STYLE;
   const btnStyle = (active) => ({ fontSize: 11, padding: "4px 12px", borderRadius: 6, border: "1px solid " + (active ? "var(--accent)" : "var(--border)"),
     background: active ? "var(--accent)" : "var(--bg3)", color: active ? "#fff" : "var(--text2)", cursor: "pointer", fontWeight: active ? 600 : 400 });
   const toggleStyle = (active) => ({ fontSize: 11, padding: "4px 10px", borderRadius: 6,
@@ -2040,9 +1775,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
       d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2),
       d.periodVR != null ? d.periodVR.toFixed(1) : "",
       voteData[d.drep_id] || "", totalActions > 0 ? ((voteData[d.drep_id] || 0) / totalActions * 100).toFixed(1) : ""]);
-    const csv = [hdr, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
-    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "drep_rewards_comparison.csv"; a.click(); URL.revokeObjectURL(url);
+    downloadCSV(buildCSV(hdr, rows), "drep_rewards_comparison.csv");
   }
 
   // ── CC Simulator logic ──
