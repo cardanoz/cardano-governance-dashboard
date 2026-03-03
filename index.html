@@ -852,7 +852,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
     return r;
   },[dreps,minStake,maxStake,search,sortBy]);
 
-  const totalStake = React.useMemo(()=>dreps.reduce((s,d)=>s+Number(d.amount),0),[dreps]);
+  const totalStake = React.useMemo(()=>dreps.filter(d=>d.drep_id!=="drep_always_abstain"&&Number(d.amount)>0).reduce((s,d)=>s+Number(d.amount),0),[dreps]);
 
   const fProps = React.useMemo(()=>{
     let r=[...proposals];
