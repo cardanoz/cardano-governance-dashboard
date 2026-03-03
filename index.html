@@ -133,7 +133,7 @@ const LANG = {
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
     api_key_required:"Blockfrost API key required",
-    tab_spo:"SPO Votes",
+    tab_spo:"SPO Vote",
     spo_pool:"Pool", spo_ticker:"Ticker", spo_pledge_drep:"Pledge DRep",
     spo_loading:"Loading SPO votes…", spo_auto_abstain:"Auto-Abstain",
     spo_no_eligible:"No SPO-eligible governance actions found",
@@ -209,7 +209,7 @@ const LANG = {
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
     api_key_required:"Blockfrost APIキーが必要です",
-    tab_spo:"SPO投票",
+    tab_spo:"SPO Vote",
     spo_pool:"プール", spo_ticker:"ティッカー", spo_pledge_drep:"誓約DRep委任先",
     spo_loading:"SPO投票を読み込み中…", spo_auto_abstain:"自動棄権",
     spo_no_eligible:"SPO投票対象のガバナンスアクションがありません",
@@ -2987,10 +2987,15 @@ function App() {
       {/* Tab Bar */}
       <div className="tab-bar" style={{display:"flex",alignItems:"center",gap:0}}>
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
-        <button className={`tab-btn ${tab==="spo"?"active":""}`} onClick={()=>setTab("spo")}>{T.tab_spo}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
+          <button onClick={()=>setTab("spo")}
+            style={{fontSize:9,padding:"3px 7px",borderRadius:5,border:tab==="spo"?"1px solid var(--accent)":"1px solid var(--border)",
+              background:tab==="spo"?"rgba(59,130,246,.12)":"var(--bg)",color:tab==="spo"?"var(--accent)":"var(--text2)",
+              cursor:"pointer",opacity:.7,transition:"opacity .2s"}}
+            onMouseEnter={e=>e.target.style.opacity="1"} onMouseLeave={e=>e.target.style.opacity=".7"}
+          >{T.tab_spo} (β)</button>
           <a href="https://adatool.net/constitution-tool/" target="_blank" rel="noopener"
             style={{fontSize:10,color:"var(--text2)",textDecoration:"none",opacity:.6,padding:"4px 8px",
               borderRadius:6,border:"1px solid var(--border)",transition:"opacity .2s"}}
