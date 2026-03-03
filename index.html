@@ -886,6 +886,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const [drepOpen,setDrepOpen] = useHashState("d_do",true);
   const [ccOpen,setCcOpen] = useHashState("d_co",true);
   const [spoOpen,setSpoOpen] = useHashState("d_so",true);
+  const [spoFull,setSpoFull] = React.useState(false);
   const [spoSearchQ, setSpoSearchQ] = React.useState("");
   const [spoSortKey, setSpoSortKey] = React.useState("stake");
   const [spoSortDir, setSpoSortDir] = React.useState("desc");
@@ -1342,12 +1343,16 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         const spoFBtnS = (active) => ({fontSize:8,padding:"2px 6px",borderRadius:4,cursor:"pointer",border:active?"1px solid var(--accent)":"1px solid var(--border)",background:active?"rgba(59,130,246,.12)":"var(--bg)",color:active?"var(--accent)":"var(--text2)"});
 
         return (
-      <div style={{marginBottom:12}}>
+      <div style={spoFull?{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9998,background:"var(--bg)",padding:12,display:"flex",flexDirection:"column"}:{marginBottom:12}}>
+        <div style={{display:"flex",alignItems:"center",gap:6}}>
         <button onClick={()=>setSpoOpen(!spoOpen)}
           style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",marginBottom:spoOpen?6:0,display:"flex",alignItems:"center",gap:6}}>
           <span style={{fontSize:12,color:"var(--text2)"}}>{spoOpen?"▼":"▶"}</span>
           <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>🏊 {T.tab_spo} ({spoList.length.toLocaleString()})</span>
         </button>
+          {spoOpen && <button className="btn" onClick={()=>setSpoFull(!spoFull)}
+            style={{fontSize:11,padding:"3px 10px",marginLeft:"auto",background:spoFull?"var(--accent)":"var(--bg3)",color:spoFull?"#fff":"var(--text)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>{spoFull?"⊗ Close":"⤢ Expand"}</button>}
+        </div>
         {spoOpen && (<>
         <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:6,flexWrap:"wrap"}}>
           <div style={{display:"flex",gap:3}}>
@@ -1378,8 +1383,8 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
               <button key={k} onClick={()=>{setSpoGaVoteFilter(k);setSpoPage(0);}} style={spoFBtnS(spoGaVoteFilter===k)}>{label}</button>)}
           </div>}
         </div>
-        <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-          <div ref={spoScrollRef} onScroll={()=>syncScroll(spoScrollRef,drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:"calc(40vh - 60px)"}}>
+        <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)",flex:spoFull?1:undefined,display:spoFull?"flex":undefined,flexDirection:spoFull?"column":undefined}}>
+          <div ref={spoScrollRef} onScroll={()=>syncScroll(spoScrollRef,drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:spoFull?"none":"calc(40vh - 60px)",flex:spoFull?1:undefined}}>
             <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(70*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
                 <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",
