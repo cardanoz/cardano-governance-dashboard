@@ -872,79 +872,90 @@ async function main() {
     console.log(`\n  Restored ${drepRatCachedCount} cached DRep rationales`);
   }
 
-  try {
-    console.log("\n  Fetching DRep rationale URLs via Koios proposal_votes...");
-    // Step 1: Get proposal list from Koios to get bech32 IDs
-    let allKoiosProposals = [];
-    let offset = 0;
-    const PAGE = 500;
-    while (true) {
-      const page = await koiosGet("/proposal_list", { offset, limit: PAGE });
-      if (!page || page.length === 0) break;
-      allKoiosProposals = allKoiosProposals.concat(page);
-      if (page.length < PAGE) break;
-      offset += PAGE;
-    }
-    console.log(`    Koios proposal_list: ${allKoiosProposals.length} proposals`);
+  // Skip entirely when votes are cached (no new votes = no new rationale URLs)
+  if (votesFresh) {
+    console.log("\n  DRep rationale URLs: SKIPPED (votes cached, no new rationales possible)");
+  } else {
+    try {
+      console.log("\n  Fetching DRep rationale URLs via Koios proposal_votes...");
 
-    // Build mapping: txHash#certIndex → bech32 proposal_id
-    const bech32Map = {};
-    for (const kp of allKoiosProposals) {
-      if (kp.proposal_tx_hash && kp.proposal_index != null && kp.proposal_id) {
-        const key = `${kp.proposal_tx_hash}#${kp.proposal_index}`;
-        bech32Map[key] = kp.proposal_id;
-      }
-    }
-    console.log(`    Mapped ${Object.keys(bech32Map).length} proposals to bech32 IDs`);
+      // Only fetch for ACTIVE proposals (expired rationales are immutable)
+      const activeProposals = proposals.filter(p => {
+        const exp = p.expiration || 0;
+        return !(exp > 0 && exp < currentEpoch);
+      });
+      const skippedExpired = proposals.length - activeProposals.length;
 
-    // Step 2: For each proposal we know about, check if we already have all rationale URLs cached
-    // Only fetch proposal_votes for proposals where we might get new rationales
-    const propsToFetch = proposals.filter(p => {
-      const bech32Id = bech32Map[p.proposal_id];
-      if (!bech32Id) return false;
-      // Skip expired proposals where we already have cached rationales
-      const exp = p.expiration || 0;
-      if (exp > 0 && exp < currentEpoch && cachedDrepRatExpired[`__check__${p.proposal_id}`] !== undefined) return false;
-      return true;
-    });
-    console.log(`    Fetching votes for ${propsToFetch.length} proposals (${proposals.length - propsToFetch.length} fully cached)`);
-
-    let drepRatUrlCount = 0;
-    for (const p of propsToFetch) {
-      const bech32Id = bech32Map[p.proposal_id];
-      if (!bech32Id) continue;
-      try {
-        // Koios may paginate, fetch all pages
-        let allVotes = [];
-        let vOffset = 0;
-        while (true) {
-          const votes = await koiosGet("/proposal_votes", { _proposal_id: bech32Id, offset: vOffset, limit: 500 });
-          if (!votes || votes.length === 0) break;
-          allVotes = allVotes.concat(votes);
-          if (votes.length < 500) break;
-          vOffset += 500;
-        }
-        // Extract DRep votes with meta_url
-        for (const v of allVotes) {
-          if (v.voter_role === "DRep" && v.meta_url) {
-            const metaUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
-            if (metaUrl && v.voter_id) {
-              const key = `${v.voter_id}__${p.proposal_id}`;
-              // Don't overwrite already-downloaded content
-              if (!drepRationales[key] || typeof drepRationales[key] === "string") {
-                drepRationales[key] = metaUrl;
-                drepRatUrlCount++;
-              }
+      if (activeProposals.length === 0) {
+        console.log(`    No active proposals to fetch rationales for (${skippedExpired} expired, cached)`);
+      } else {
+        // Use cached bech32Map if available, otherwise fetch /proposal_list
+        let bech32Map = cache.bech32Map || {};
+        const cachedMapSize = Object.keys(bech32Map).length;
+        // Check if any active proposals are missing from the cached map
+        const missingFromMap = activeProposals.filter(p => !bech32Map[p.proposal_id]);
+        if (missingFromMap.length > 0 || cachedMapSize === 0) {
+          console.log(`    Refreshing bech32Map (${missingFromMap.length} proposals missing from ${cachedMapSize} cached entries)`);
+          let allKoiosProposals = [];
+          let offset = 0;
+          const PAGE = 500;
+          while (true) {
+            const page = await koiosGet("/proposal_list", { offset, limit: PAGE });
+            if (!page || page.length === 0) break;
+            allKoiosProposals = allKoiosProposals.concat(page);
+            if (page.length < PAGE) break;
+            offset += PAGE;
+          }
+          for (const kp of allKoiosProposals) {
+            if (kp.proposal_tx_hash && kp.proposal_index != null && kp.proposal_id) {
+              bech32Map[`${kp.proposal_tx_hash}#${kp.proposal_index}`] = kp.proposal_id;
             }
           }
+        } else {
+          console.log(`    bech32Map: using ${cachedMapSize} cached entries`);
         }
-      } catch (e) {
-        console.log(`    Error fetching votes for ${p.proposal_id.slice(0,16)}...: ${e.message}`);
+
+        const propsToFetch = activeProposals.filter(p => bech32Map[p.proposal_id]);
+        console.log(`    Active proposals: ${propsToFetch.length} to fetch (${skippedExpired} expired skipped)`);
+
+        let drepRatUrlCount = 0;
+        for (const p of propsToFetch) {
+          const bech32Id = bech32Map[p.proposal_id];
+          if (!bech32Id) continue;
+          try {
+            let allVotes = [];
+            let vOffset = 0;
+            while (true) {
+              const votes = await koiosGet("/proposal_votes", { _proposal_id: bech32Id, offset: vOffset, limit: 500 });
+              if (!votes || votes.length === 0) break;
+              allVotes = allVotes.concat(votes);
+              if (votes.length < 500) break;
+              vOffset += 500;
+            }
+            for (const v of allVotes) {
+              if (v.voter_role === "DRep" && v.meta_url) {
+                const metaUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
+                if (metaUrl && v.voter_id) {
+                  const key = `${v.voter_id}__${p.proposal_id}`;
+                  if (!drepRationales[key] || typeof drepRationales[key] === "string") {
+                    drepRationales[key] = metaUrl;
+                    drepRatUrlCount++;
+                  }
+                }
+              }
+            }
+          } catch (e) {
+            console.log(`    Error fetching votes for ${p.proposal_id.slice(0,16)}...: ${e.message}`);
+          }
+        }
+        console.log(`    Found ${drepRatUrlCount} new DRep rationale URLs`);
+
+        // Save bech32Map to cache for future runs
+        cache.bech32Map = bech32Map;
       }
+    } catch (e) {
+      console.log(`    DRep rationale fetch error: ${e.message}`);
     }
-    console.log(`    Found ${drepRatUrlCount} new DRep rationale URLs`);
-  } catch (e) {
-    console.log(`    DRep rationale fetch error: ${e.message}`);
   }
 
   // Step 3: Download DRep rationale content (reuse batch downloader)
@@ -984,6 +995,7 @@ async function main() {
     ccExpiredVotes, ccExpiredRationales,
     ccActiveVotes, ccActiveRationales,
     drepExpiredRationales, drepActiveRationales,
+    bech32Map: cache.bech32Map || {},
     ccMembers,
     currentEpoch,
     lastVoteFetchAt: votesFresh ? lastVoteFetch : now,
