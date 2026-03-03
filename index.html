@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cardano DRep Governance Dashboard</title>
+<title>adatool gov dashboard</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230a0d13'/%3E%3Ccircle cx='32' cy='28' r='14' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M32 18v20M24 28h16' stroke='url(%23g)' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='28' r='4' fill='url(%23g)'/%3E%3Cpath d='M20 48h24M24 52h16' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' opacity='.5'/%3E%3C/svg%3E"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -47,6 +47,19 @@ input[type=number]{-moz-appearance:textfield}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
 input[type=range]{-webkit-appearance:none;background:var(--bg);height:6px;border-radius:3px;outline:none;width:100%}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg)}
+@media(max-width:768px){
+  body{font-size:13px}
+  .tab-bar{flex-wrap:wrap;gap:1px}
+  .tab-btn{padding:6px 8px;font-size:11px}
+  .card{padding:10px}
+  .tooltip-popup{max-width:280px;min-width:180px}
+}
+@media(max-width:480px){
+  body{font-size:12px}
+  .tab-btn{padding:5px 6px;font-size:10px}
+  .card{padding:8px;border-radius:8px}
+  .btn{padding:5px 10px;font-size:11px}
+}
 </style>
 </head>
 <body>
@@ -58,7 +71,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 // ════════════════════════════════════════════════════════════════
 const LANG = {
   en: {
-    title:"DRep Governance", subtitle_drep:"DReps", subtitle_actions:"Actions", subtitle_votes:"Votes",
+    title:"Gov Dashboard", subtitle_drep:"DReps", subtitle_actions:"Actions", subtitle_votes:"Votes",
     loading:"Loading…", loading_dreps:"Fetching DReps…", loading_votes:"Fetching vote data…",
     loading_proposals:"Fetching proposal details…",
     error_title:"Data Fetch Error", retry:"Retry", demo_btn:"Use Demo Data",
@@ -72,7 +85,8 @@ const LANG = {
     type_noconf:"No Confidence", type_cc:"Update CC", type_const:"New Constitution", type_info:"Info Action",
     attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
     delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
-    tab_dashboard:"DRep Votes", tab_cc:"CC Votes", tab_simulator:"Reward Simulator",
+    tab_dashboard:"Votes", tab_simulator:"Reward Simulator",
+    filter_collapse:"Filters", cc_section_title:"CC Votes", drep_section_title:"DRep Votes",
     cc_member:"CC Member", no_cc:"No CC votes found", cc_rationale:"Rationale",
     cc_expired_only:"Showing expired governance actions only (static data)",
     cc_ineligible:"N/A", cc_not_voted:"Not Voted",
@@ -122,7 +136,7 @@ const LANG = {
     hist_select_drep:"Select DRep to chart…", hist_change:"Change", hist_snapshots:"snapshots",
   },
   ja: {
-    title:"DRep ガバナンス", subtitle_drep:"DRep", subtitle_actions:"アクション", subtitle_votes:"投票",
+    title:"ガバナンスダッシュボード", subtitle_drep:"DRep", subtitle_actions:"アクション", subtitle_votes:"投票",
     loading:"読み込み中…", loading_dreps:"DRep一覧を取得中…", loading_votes:"投票データを取得中…",
     loading_proposals:"プロポーザル詳細を取得中…",
     error_title:"データ取得エラー", retry:"再試行", demo_btn:"デモデータで表示",
@@ -136,7 +150,8 @@ const LANG = {
     type_noconf:"不信任", type_cc:"CC更新", type_const:"新憲法", type_info:"情報",
     attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
     delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
-    tab_dashboard:"DRep投票", tab_cc:"CC投票", tab_simulator:"報酬シミュレーター",
+    tab_dashboard:"投票", tab_simulator:"報酬シミュレーター",
+    filter_collapse:"フィルター", cc_section_title:"CC投票", drep_section_title:"DRep投票",
     cc_member:"CC委員", no_cc:"CC投票データなし", cc_rationale:"根拠",
     cc_expired_only:"期限切れの一部のGAのみ表示しています（静的データ）",
     cc_ineligible:"対象外", cc_not_voted:"未投票",
@@ -752,7 +767,7 @@ function ShareButton({ T }) {
 // Dashboard Tab
 // ════════════════════════════════════════════════════════════════
 function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMore, pageLoading, stage,
-  loadMoreDreps, T, isDemo }) {
+  loadMoreDreps, T, isDemo, ccMembers, ccVotes, ccRationales }) {
   const [search,setSearch] = useHashState("d_search","");
   const [minStake,setMinStake] = useHashState("d_minStake","");
   const [maxStake,setMaxStake] = useHashState("d_maxStake","");
@@ -763,6 +778,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const [dPage,setDPage] = useHashState("d_dp",0);
   const [pPage,setPPage] = useHashState("d_pp",0);
   const [csvOpen,setCsvOpen] = React.useState(false);
+  const [filtersOpen,setFiltersOpen] = useHashState("d_fo",true);
   const DPP = 100, PPP = 20;
 
   const fDreps = React.useMemo(()=>{
@@ -791,6 +807,37 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const actTypes=[...new Set(proposals.map(p=>p.proposal_type).filter(Boolean))];
 
   const [ratModal,setRatModal] = React.useState(null); // {name, proposalTitle, text}
+
+  // CC vote logic (merged from CCVotesTab)
+  const ccProposalIds = React.useMemo(()=>{
+    const ids=new Set();
+    Object.keys(ccVotes||{}).forEach(k=>{const pid=k.split("__")[1]; if(pid) ids.add(pid);});
+    return ids;
+  },[ccVotes]);
+
+  const eligibleMap = React.useMemo(()=>{
+    const m={};
+    (ccMembers||[]).forEach(cc=>{
+      if(cc.eligible_proposals){
+        cc.eligible_proposals.forEach(pid=>{m[`${cc.cc_id}__${pid}`]=true;});
+      }
+    });
+    return m;
+  },[ccMembers]);
+
+  function ccGv(ccId,pid){
+    const v=(ccVotes||{})[`${ccId}__${pid}`];
+    if(v) return v;
+    return eligibleMap[`${ccId}__${pid}`] ? "NotVoted" : "Ineligible";
+  }
+  function ccGr(ccId,pid){
+    const r = (ccRationales||{})[`${ccId}__${pid}`];
+    if (!r) return null;
+    if (typeof r === "string") return { url: resolveIpfsUrl(r), text: "" };
+    return r;
+  }
+
+  const [ccRatModal,setCcRatModal] = React.useState(null);
 
   function gv(did,pid){return votes[`${did}__${pid}`]||"NotVoted";}
   function getDrepRat(did,pid){
@@ -858,6 +905,13 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   return (
     <div>
       <WarningBanner warnings={warnings} T={T}/>
+      {/* Collapsible filter toggle */}
+      <button className="btn" onClick={() => setFiltersOpen(!filtersOpen)}
+        style={{marginBottom:8,fontSize:11,display:"flex",alignItems:"center",gap:4}}>
+        {filtersOpen ? "▼" : "▶"} {T.filter_collapse || "Filters"}
+      </button>
+
+      {filtersOpen && (
       <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",marginBottom:12,display:"flex",flexWrap:"wrap",gap:8,alignItems:"flex-end"}}>
         {[
           {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>{setSearch(e.target.value);setDPage(0)}} style={{...ist,width:150}}/>},
@@ -884,11 +938,81 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         <button className="btn" onClick={()=>{setSearch("");setMinStake("");setMaxStake("");setActType("all");setEpFrom("");setEpTo("");setSortBy("stake_desc");setDPage(0);setPPage(0)}}
           style={{alignSelf:"flex-end",fontSize:11}}>{T.reset}</button>
       </div>
+      )}
 
       <div style={{fontSize:11,color:"var(--text2)",marginBottom:8}}>
         {T.showing}: {T.subtitle_drep} {fDreps.length}{hasMore?"+":""} × {T.subtitle_actions} {fProps.length}
         {pageLoading && <span style={{marginLeft:8,color:"var(--accent2)"}}>⏳ {stage}</span>}
       </div>
+
+      {/* CC Votes Section */}
+      {(ccMembers||[]).length > 0 && pgP.length > 0 && (
+        <div className="card" style={{marginBottom:12}}>
+          <div style={{fontSize:13,fontWeight:700,marginBottom:8,color:"var(--accent2)"}}>
+            🏛 {T.cc_section_title || "CC Votes"} ({(ccMembers||[]).length})
+          </div>
+          <div style={{overflow:"auto",maxHeight:300}}>
+            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*80+180}}>
+              <thead><tr>
+                <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:"6px 8px",textAlign:"left",
+                  borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:9,fontWeight:700,
+                  color:"var(--text2)",minWidth:180,boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
+                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
+                  return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"4px 2px",
+                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:600,minWidth:80}}>
+                    <span style={{display:"inline-block",padding:"1px 3px",borderRadius:3,fontSize:7,fontWeight:700,
+                      background:c+"15",color:c,border:`1px solid ${c}30`}}>{actionLabel(p.proposal_type,T)}</span>
+                  </th>;})}
+              </tr></thead>
+              <tbody>
+                {(ccMembers||[]).map((cc,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
+                  <tr key={cc.cc_id}>
+                    <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:"5px 8px",
+                      borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",
+                      boxShadow:"4px 0 8px rgba(0,0,0,.3)",fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:180}}>
+                      {cc.name||shortId(cc.cc_id)}
+                    </td>
+                    {pgP.map((p,ci)=>{const v=ccGv(cc.cc_id,p.proposal_id);const ratObj=ccGr(cc.cc_id,p.proposal_id);return(
+                      <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
+                        <div className="vote-cell" style={{padding:"3px 2px",textAlign:"center"}}>
+                          {v==="Ineligible" ? <span style={{fontSize:8,color:"var(--text2)"}}>—</span> : <VoteBadge vote={v} T={T}/>}
+                          {ratObj && <a href="#" style={{fontSize:7,color:ratObj.text?"var(--yes)":"var(--accent2)"}}
+                            onClick={e=>{e.preventDefault();setCcRatModal({ccName:cc.name||cc.cc_id,proposalTitle:p.title||shortId(p.proposal_id),url:ratObj.url||"",text:ratObj.text||T.cc_rationale_error,loading:false})}}>📎</a>}
+                        </div></td>
+                    );})}
+                  </tr>
+                );})}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* CC Rationale Modal */}
+      {ccRatModal && (
+        <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9999,background:"rgba(0,0,0,.7)",
+          display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
+          onClick={()=>setCcRatModal(null)}>
+          <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,maxWidth:700,width:"100%",
+            maxHeight:"80vh",display:"flex",flexDirection:"column",boxShadow:"0 20px 60px rgba(0,0,0,.5)"}}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+              <div>
+                <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{ccRatModal.ccName}</div>
+                <div style={{fontSize:11,color:"var(--text2)",marginTop:2}}>{ccRatModal.proposalTitle}</div>
+              </div>
+              <button onClick={()=>setCcRatModal(null)} style={{background:"none",border:"none",color:"var(--text2)",fontSize:18,cursor:"pointer",padding:"0 4px"}}>✕</button>
+            </div>
+            <div style={{padding:16,overflow:"auto",flex:1}}>
+              <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",fontSize:12,lineHeight:1.5,color:"var(--text)",fontFamily:"inherit",margin:0}}>{ccRatModal.text}</pre>
+            </div>
+            <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
+              {ccRatModal.url && <a href={ccRatModal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 Source</a>}
+              <button onClick={()=>setCcRatModal(null)} className="btn" style={{fontSize:11}}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
         <div style={{overflow:"auto",maxHeight:"calc(100vh - 360px)"}}>
@@ -2557,7 +2681,7 @@ function App() {
   if (!apiKey && !loading && !isDemo && dataSource !== "static") {
     return (
       <div className="fade-in" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
-        <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Cardano <span style={{color:"var(--accent)"}}>Governance</span></div>
+        <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>adatool <span style={{color:"var(--accent)"}}>gov</span></div>
         <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,padding:24,maxWidth:440,width:"100%"}}>
           <h2 style={{fontSize:16,fontWeight:700,marginBottom:8}}>{T.api_key}</h2>
           <p style={{fontSize:12,color:"var(--text2)",marginBottom:16}}>
@@ -2577,7 +2701,7 @@ function App() {
 
   if(loading) return (
     <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
-      <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Cardano <span style={{color:"var(--accent)"}}>Governance</span></div>
+      <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>adatool <span style={{color:"var(--accent)"}}>gov</span></div>
       <div className="loader"><span/><span/><span/></div>
       <div style={{color:"var(--text2)",fontSize:13}}>{stage}</div>
     </div>
@@ -2600,7 +2724,7 @@ function App() {
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10,marginBottom:10}}>
         <div>
-          <h1 style={{fontSize:19,fontWeight:800,letterSpacing:"-.02em"}}>Cardano <span style={{color:"var(--accent)"}}>{T.title}</span></h1>
+          <h1 style={{fontSize:19,fontWeight:800,letterSpacing:"-.02em"}}>adatool <span style={{color:"var(--accent)"}}>gov</span></h1>
           <div style={{color:"var(--text2)",fontSize:11,marginTop:2,display:"flex",gap:10,flexWrap:"wrap"}}>
             <span>{T.subtitle_drep}: {dreps.length}{hasMore?"+":""}</span>
             <span>{T.subtitle_actions}: {proposals.length}</span>
@@ -2627,7 +2751,6 @@ function App() {
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
-        <button className={`tab-btn ${tab==="cc"?"active":""}`} onClick={()=>setTab("cc")}>{T.tab_cc}</button>
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
           <a href="https://adatool.net/constitution-tool/" target="_blank" rel="noopener"
             style={{fontSize:10,color:"var(--text2)",textDecoration:"none",opacity:.6,padding:"4px 8px",
@@ -2640,11 +2763,9 @@ function App() {
 
       {tab === "dashboard" ? (
         <DashboardTab dreps={dreps} proposals={proposals} votes={votes} drepRationales={drepRationales}
+          ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
           warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
           loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
-      ) : tab === "cc" ? (
-        <CCVotesTab ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
-          proposals={proposals} T={T} />
       ) : tab === "history" ? (
         <StakeHistoryTab history={stakeHistory} liveDreps={allDreps} T={T} lang={lang} />
       ) : (
