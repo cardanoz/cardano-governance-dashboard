@@ -1946,7 +1946,7 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
         )}
       </div>
 
-      {pageLoading && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
+      {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
 
       {/* ═══ DRep Reward Simulator ═══ */}
       <div style={{marginBottom:12}}>
