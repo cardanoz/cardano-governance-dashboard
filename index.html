@@ -1300,7 +1300,7 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang }) {
   const [topN, setTopN] = useHashState("h_topN",10);
   const [chartMode, setChartMode] = useHashState("h_mode","ada"); // "ada" | "pct"
   const [mergeEntities, setMergeEntities] = useHashState("h_merge",false);
-  const [projEpochs, setProjEpochs] = useHashState("h_proj",0); // 0 = off, else number of future epochs
+  const [projEpochs, setProjEpochs] = useHashState("h_proj",36); // default: 36 epochs ≈ 6 months forecast
   const [projWindow, setProjWindow] = useHashState("h_projW",5); // how many recent epochs to use for trend
   const [displayRange, setDisplayRange] = useHashState("h_range","all"); // "1m" | "3m" | "6m" | "1y" | "2y" | "all"
   const stackedRef = React.useRef(null);

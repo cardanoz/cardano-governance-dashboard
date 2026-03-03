@@ -6,9 +6,10 @@
  *   - Expired proposal votes (DRep + CC): cached permanently (immutable)
  *   - Active proposal votes (DRep + CC): cached, overlaid with fresh data each run
  *   - DRep metadata (name, image): cached for 6 hours
- *   - DRep details (stake, delegators): tiered refresh
- *       - Top 300 by stake: every 2 hours
- *       - Rest: every 12 hours
+ *   - DRep live stake (via Koios /drep_info): tiered refresh
+ *       - Top 100 by stake: every 1 hour
+ *       - Rest: every 6 hours
+ *   - DRep votes: every 3 hours (cached between runs)
  *   - Expired proposal details: cached permanently
  *   - CC members + votes: cached, refreshed each run
  *
@@ -202,6 +203,47 @@ function koiosGet(endpoint, params = {}) {
   });
 }
 
+// ─── Koios POST (for bulk endpoints like /drep_info) ────────
+function koiosPost(endpoint, body) {
+  return new Promise((resolve, reject) => {
+    const wait = Math.max(0, THROTTLE_MS - (Date.now() - lastFetchTime));
+    setTimeout(() => {
+      lastFetchTime = Date.now();
+      apiCalls++;
+      const url = new URL(`${KOIOS_BASE}${endpoint}`);
+      const postData = JSON.stringify(body);
+      const req = https.request({
+        hostname: url.hostname,
+        port: url.port || 443,
+        path: url.pathname,
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(postData)
+        },
+        timeout: 60000
+      }, (res) => {
+        let data = "";
+        res.on("data", c => data += c);
+        res.on("end", () => {
+          if (res.statusCode === 404) return resolve(null);
+          if (res.statusCode === 429) {
+            console.warn("  Koios rate limited, waiting 3s...");
+            return setTimeout(() => koiosPost(endpoint, body).then(resolve).catch(reject), 3000);
+          }
+          if (res.statusCode !== 200) return reject(new Error(`Koios POST ${res.statusCode}: ${data.slice(0, 300)}`));
+          try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+        });
+      });
+      req.on("error", reject);
+      req.on("timeout", () => { req.destroy(); reject(new Error("Timeout")); });
+      req.write(postData);
+      req.end();
+    }, wait);
+  });
+}
+
 // ─── Blockfrost HTTP ────────────────────────────────────────
 function fetchJSON(urlPath) {
   return new Promise((resolve, reject) => {
@@ -269,7 +311,7 @@ function loadCache() {
       return raw;
     }
   } catch (e) { console.warn("  Cache load error:", e.message); }
-  return { expiredVotes: {}, activeVotes: {}, proposals: {}, proposalDetails: [], drepMetadata: {}, drepMetadataUpdatedAt: 0, drepDetails: {}, drepStakeRank: [], ccExpiredVotes: {}, ccExpiredRationales: {}, ccActiveVotes: {}, ccActiveRationales: {}, ccMembers: [] };
+  return { expiredVotes: {}, activeVotes: {}, proposals: {}, proposalDetails: [], drepMetadata: {}, drepMetadataUpdatedAt: 0, drepDetails: {}, drepStakeRank: [], ccExpiredVotes: {}, ccExpiredRationales: {}, ccActiveVotes: {}, ccActiveRationales: {}, ccMembers: [], lastVoteFetchAt: 0, lastCCFetchAt: 0 };
 }
 
 function saveCache(cache) {
@@ -300,72 +342,101 @@ async function main() {
   const drepIds = await fetchAllPages("/governance/dreps", MAX_PAGES);
   console.log(`  Found ${drepIds.length} DRep IDs`);
 
-  // ─── 2. DRep details + metadata (tiered refresh) ─────────
-  console.log(`\n[2/8] Fetching DRep details (tiered)${useMetadataCache ? " + metadata from cache" : " + metadata"}...`);
+  // ─── 2. DRep live stakes (Koios) + metadata (Blockfrost) ──
+  console.log(`\n[2/8] Fetching DRep live stakes (tiered) + metadata...`);
   const cachedMeta = cache.drepMetadata || {};
   const cachedDetails = cache.drepDetails || {};
-  const top300Set = new Set((cache.drepStakeRank || []).slice(0, 300));
-  const DETAIL_FRESH_TOP = 2 * 60 * 60 * 1000;    // 2h for top 300 by stake
-  const DETAIL_FRESH_REST = 12 * 60 * 60 * 1000;   // 12h for rest
+  const top100Set = new Set((cache.drepStakeRank || []).slice(0, 100));
+  const DETAIL_FRESH_TOP = 1 * 60 * 60 * 1000;    // 1h for top 100 by stake
+  const DETAIL_FRESH_REST = 6 * 60 * 60 * 1000;    // 6h for rest
   const now = Date.now();
   const newDrepMetadata = {};
   const newDrepDetails = {};
   let metadataFetchCount = 0, detailFetchCount = 0, detailCacheCount = 0;
 
-  console.log(`  Tiered refresh: top ${top300Set.size} cached as priority (2h), rest 12h`);
+  console.log(`  Tiered refresh: top ${top100Set.size} priority (1h), rest 6h`);
 
-  // Separate DReps into cached vs needs-fresh for fast path
-  const needsFreshIds = [];
+  // Separate DReps into needs-stake-refresh vs fully-cached
+  const needsStakeIds = [];
   const cachedDreps = [];
   for (const d of drepIds) {
     const cd = cachedDetails[d.drep_id];
-    const isTop = top300Set.has(d.drep_id);
+    const isTop = top100Set.has(d.drep_id);
     const threshold = isTop ? DETAIL_FRESH_TOP : DETAIL_FRESH_REST;
-    const fresh = !cd || !cd.fetchedAt || (now - cd.fetchedAt) >= threshold;
-    const metaFresh = useMetadataCache && cachedMeta[d.drep_id];
-    if (!fresh && metaFresh) {
-      // Full cache hit — no API calls needed
-      const meta = cachedMeta[d.drep_id] || {};
+    const needsRefresh = !cd || !cd.fetchedAt || (now - cd.fetchedAt) >= threshold;
+    if (!needsRefresh) {
       newDrepDetails[d.drep_id] = cd;
-      newDrepMetadata[d.drep_id] = meta;
-      cachedDreps.push({
-        drep_id: d.drep_id, name: meta.name || null, amount: cd.amount || "0",
-        image_url: meta.image_url || null, delegators: cd.delegators || 0,
-        last_active_epoch: cd.last_active_epoch || 0
-      });
       detailCacheCount++;
     } else {
-      needsFreshIds.push(d);
+      needsStakeIds.push(d);
     }
   }
-  console.log(`  Fast path: ${cachedDreps.length} fully cached, ${needsFreshIds.length} need API calls`);
+  console.log(`  Live stake: ${needsStakeIds.length} need refresh, ${detailCacheCount} cached`);
 
-  // Only run batchProcess for DReps that need fresh data
-  const freshDreps = needsFreshIds.length > 0 ? await batchProcess(needsFreshIds, async (d) => {
-    let amount, delegators, lastActiveEpoch;
-    const cd = cachedDetails[d.drep_id];
-    const isTop = top300Set.has(d.drep_id);
-    const threshold = isTop ? DETAIL_FRESH_TOP : DETAIL_FRESH_REST;
-    const needsFresh = !cd || !cd.fetchedAt || (now - cd.fetchedAt) >= threshold;
-    if (needsFresh) {
-      let detail;
-      try { detail = await fetchJSON(`/governance/dreps/${d.drep_id}`); } catch (e) { return null; }
-      if (!detail) return null;
-      amount = detail.amount || "0";
-      delegators = detail.delegators_count || 0;
-      lastActiveEpoch = detail.active_epoch || 0;
-      newDrepDetails[d.drep_id] = { amount, delegators, last_active_epoch: lastActiveEpoch, fetchedAt: now };
-      detailFetchCount++;
-    } else {
-      amount = cd.amount; delegators = cd.delegators; lastActiveEpoch = cd.last_active_epoch || 0;
-      newDrepDetails[d.drep_id] = cd;
-      detailCacheCount++;
+  // Bulk fetch live stakes from Koios /drep_info (POST, batches of 50)
+  if (needsStakeIds.length > 0) {
+    const KOIOS_BATCH = 50;
+    const allIds = needsStakeIds.map(d => d.drep_id);
+    let koiosSuccess = 0, koiosFail = 0;
+    for (let i = 0; i < allIds.length; i += KOIOS_BATCH) {
+      const batch = allIds.slice(i, i + KOIOS_BATCH);
+      try {
+        const result = await koiosPost("/drep_info", { _drep_ids: batch });
+        if (Array.isArray(result)) {
+          for (const info of result) {
+            const id = info.drep_id;
+            if (!id) continue;
+            // Prefer live_delegated_stake, fall back to amount or active_delegated_stake
+            const liveStake = info.live_delegated_stake || info.amount || info.active_delegated_stake || "0";
+            const delegators = info.live_delegators_count || info.delegators_count || 0;
+            newDrepDetails[id] = {
+              amount: String(liveStake),
+              delegators: delegators,
+              last_active_epoch: info.active_epoch_no || 0,
+              fetchedAt: now,
+              source: "koios_live"
+            };
+            koiosSuccess++;
+          }
+        }
+      } catch (e) {
+        console.log(`    Koios /drep_info batch error (offset ${i}): ${e.message}`);
+        koiosFail += batch.length;
+      }
+      if (i > 0 && i % (KOIOS_BATCH * 5) === 0) {
+        console.log(`    Live stake progress: ${i}/${allIds.length}...`);
+      }
     }
-    let name = null, image_url = null;
-    if (useMetadataCache && cachedMeta[d.drep_id]) {
-      name = cachedMeta[d.drep_id].name; image_url = cachedMeta[d.drep_id].image_url;
-      newDrepMetadata[d.drep_id] = cachedMeta[d.drep_id];
-    } else {
+    detailFetchCount = koiosSuccess;
+    console.log(`  Koios live stake: ${koiosSuccess} fetched, ${koiosFail} failed`);
+
+    // Fallback: for any DReps not returned by Koios, try Blockfrost
+    const missingIds = needsStakeIds.filter(d => !newDrepDetails[d.drep_id]);
+    if (missingIds.length > 0) {
+      console.log(`  Fallback: ${missingIds.length} DReps via Blockfrost...`);
+      const fallbackDreps = await batchProcess(missingIds, async (d) => {
+        let detail;
+        try { detail = await fetchJSON(`/governance/dreps/${d.drep_id}`); } catch (e) { return null; }
+        if (!detail) return null;
+        newDrepDetails[d.drep_id] = {
+          amount: detail.amount || "0",
+          delegators: detail.delegators_count || 0,
+          last_active_epoch: detail.active_epoch || 0,
+          fetchedAt: now,
+          source: "blockfrost"
+        };
+        return d;
+      }, "Fallback");
+      console.log(`  Blockfrost fallback: ${fallbackDreps.length} fetched`);
+    }
+  }
+
+  // Metadata: keep Blockfrost metadata with 6h cache
+  const needsMetaIds = drepIds.filter(d => !(useMetadataCache && cachedMeta[d.drep_id]));
+  if (needsMetaIds.length > 0) {
+    console.log(`  Metadata: ${needsMetaIds.length} need fetch, ${drepIds.length - needsMetaIds.length} cached`);
+    await batchProcess(needsMetaIds, async (d) => {
+      let name = null, image_url = null;
       try {
         const meta = await fetchJSON(`/governance/dreps/${d.drep_id}/metadata`);
         if (meta && meta.json_metadata) {
@@ -376,18 +447,40 @@ async function main() {
         metadataFetchCount++;
       } catch (e) {}
       newDrepMetadata[d.drep_id] = { name, image_url };
+      return d;
+    }, "Meta");
+  }
+  // Copy cached metadata
+  for (const d of drepIds) {
+    if (!newDrepMetadata[d.drep_id] && cachedMeta[d.drep_id]) {
+      newDrepMetadata[d.drep_id] = cachedMeta[d.drep_id];
     }
-    return { drep_id: d.drep_id, name, amount, image_url, delegators, last_active_epoch: lastActiveEpoch };
-  }, "DReps") : [];
+  }
 
-  const dreps = [...cachedDreps, ...freshDreps];
+  // Build DRep array
+  const dreps = drepIds.map(d => {
+    const det = newDrepDetails[d.drep_id] || cachedDetails[d.drep_id] || {};
+    const meta = newDrepMetadata[d.drep_id] || {};
+    return {
+      drep_id: d.drep_id,
+      name: meta.name || null,
+      amount: det.amount || "0",
+      image_url: meta.image_url || null,
+      delegators: det.delegators || 0,
+      last_active_epoch: det.last_active_epoch || 0
+    };
+  }).filter(d => d.drep_id);
   dreps.sort((a, b) => Number(b.amount) - Number(a.amount));
-  const newStakeRank = dreps.slice(0, 300).map(d => d.drep_id);
-  console.log(`  Got ${dreps.length} DReps (details: ${detailFetchCount} fresh, ${detailCacheCount} cached)`);
+  const newStakeRank = dreps.slice(0, 100).map(d => d.drep_id);
+  console.log(`  Got ${dreps.length} DReps (stakes: ${detailFetchCount} fresh, ${detailCacheCount} cached)`);
   if (useMetadataCache) console.log(`  Metadata: ${Object.keys(cachedMeta).length} from cache, ${metadataFetchCount} fresh`);
 
-  // ─── 3. DRep votes ────────────────────────────────────────
-  console.log("\n[3/8] Fetching DRep votes (incremental)...");
+  // ─── 3. DRep votes (3h cache) ────────────────────────────
+  const VOTE_FRESH_MS = 3 * 60 * 60 * 1000;  // 3h between full vote refreshes
+  const lastVoteFetch = cache.lastVoteFetchAt || 0;
+  const votesFresh = (now - lastVoteFetch) < VOTE_FRESH_MS;
+  console.log(`\n[3/8] DRep votes ${votesFresh ? "(CACHED — " + ((now - lastVoteFetch) / 60000).toFixed(0) + "min old, next refresh in " + ((VOTE_FRESH_MS - (now - lastVoteFetch)) / 60000).toFixed(0) + "min)" : "(refreshing)"}...`);
+
   const voteMap = {};
   const proposalSet = {};
   const drepVoteCounts = {};
@@ -403,8 +496,20 @@ async function main() {
   if (cache.proposals) {
     Object.entries(cache.proposals).forEach(([k, v]) => { proposalSet[k] = v; });
   }
+  // Restore cached vote counts and voted proposals for skip-runs
+  if (votesFresh && cache.drepVoteCounts) Object.assign(drepVoteCounts, cache.drepVoteCounts);
+  if (votesFresh && cache.drepVotedProposals) Object.assign(drepVotedProposals, cache.drepVotedProposals);
   console.log(`  Restored ${cachedVoteCount} cached DRep votes (expired + active)`);
 
+  const typeMap = {
+    "treasury_withdrawals": "TreasuryWithdrawals", "hard_fork_initiation": "HardForkInitiation",
+    "parameter_change": "ParameterChange", "no_confidence": "NoConfidence",
+    "update_committee": "UpdateCommittee", "new_constitution": "NewConstitution", "info_action": "InfoAction"
+  };
+  const allProposals = {};
+  if (cache.proposalDetails) cache.proposalDetails.forEach(p => { allProposals[p.proposal_id] = p; });
+
+  if (!votesFresh) {
   // Only fetch votes for DReps with non-zero stake (skip inactive/empty DReps)
   const voteFetchDreps = dreps.filter(d => d.drep_id === "drep_always_no_confidence" || Number(d.amount) > 0);
   const skippedZeroStake = dreps.length - voteFetchDreps.length;
@@ -439,15 +544,6 @@ async function main() {
   const newPropEntries = Object.entries(proposalSet).filter(([k]) => !cachedProposalIds.has(k));
   console.log(`  ${newPropEntries.length} new proposals (${cachedProposalIds.size} cached)`);
 
-  const typeMap = {
-    "treasury_withdrawals": "TreasuryWithdrawals", "hard_fork_initiation": "HardForkInitiation",
-    "parameter_change": "ParameterChange", "no_confidence": "NoConfidence",
-    "update_committee": "UpdateCommittee", "new_constitution": "NewConstitution", "info_action": "InfoAction"
-  };
-
-  const allProposals = {};
-  if (cache.proposalDetails) cache.proposalDetails.forEach(p => { allProposals[p.proposal_id] = p; });
-
   const newProposals = await batchProcess(newPropEntries, async ([propKey, info]) => {
     let proposal_type = "", title = "", expiration = 0;
     try {
@@ -465,6 +561,11 @@ async function main() {
     return { proposal_id: propKey, tx_hash: info.tx_hash, cert_index: info.cert_index, proposal_type, title, expiration, epoch_no: expiration };
   }, "Props");
   newProposals.forEach(p => { allProposals[p.proposal_id] = p; });
+
+  } else {
+    // Votes cached — skip vote + proposal fetch
+    console.log("\n[4/8] Proposal details (using cache)...");
+  } // end if (!votesFresh)
 
   const proposals = Object.values(allProposals);
   proposals.sort((a, b) => (b.expiration || 0) - (a.expiration || 0));
@@ -527,8 +628,12 @@ async function main() {
   }
   fs.writeFileSync(HISTORY_FILE, JSON.stringify(history));
 
-  // ─── 7. CC (Constitutional Committee) data via Koios ───────
-  console.log("\n[7/8] Fetching CC data from Koios...");
+  // ─── 7. CC (Constitutional Committee) data via Koios (3h cache) ──
+  const CC_FRESH_MS = 3 * 60 * 60 * 1000;  // 3h between CC refreshes
+  const lastCCFetch = cache.lastCCFetchAt || 0;
+  const ccFresh = (now - lastCCFetch) < CC_FRESH_MS;
+  console.log(`\n[7/8] CC data ${ccFresh ? "(CACHED — " + ((now - lastCCFetch) / 60000).toFixed(0) + "min old)" : "(refreshing)"}...`);
+
   let ccMembers = [];
   let ccVoteMap = {};
   let ccRationales = {};
@@ -559,6 +664,11 @@ async function main() {
     console.log(`  Restored ${ccCachedCount} cached CC votes (${Object.keys(cachedCCExpired).length} expired, ${Object.keys(cachedCCActive).length} active)`);
   }
 
+  if (ccFresh && cache.ccMembers && cache.ccMembers.length > 0) {
+    // Use cached CC data
+    ccMembers = cache.ccMembers;
+    console.log(`  Using cached CC: ${ccMembers.length} members, ${Object.keys(ccVoteMap).length} votes`);
+  } else {
   try {
     // 7a. Get committee info
     const ccInfoRaw = await koiosGet("/committee_info");
@@ -645,7 +755,9 @@ async function main() {
     }
   } catch (e) {
     console.log(`  Koios CC error: ${e.message} — keeping existing static files`);
+    if (cache.ccMembers && cache.ccMembers.length > 0) ccMembers = cache.ccMembers;
   }
+  } // end if (!ccFresh)
 
   // Build CC vote cache (expired = permanent, active = refreshable)
   const ccExpiredVotes = {};
@@ -873,7 +985,9 @@ async function main() {
     ccActiveVotes, ccActiveRationales,
     drepExpiredRationales, drepActiveRationales,
     ccMembers,
-    currentEpoch
+    currentEpoch,
+    lastVoteFetchAt: votesFresh ? lastVoteFetch : now,
+    lastCCFetchAt: ccFresh ? lastCCFetch : now
   });
 
   // ─── 8. Write output files ────────────────────────────────
@@ -891,7 +1005,10 @@ async function main() {
     max_votes: maxVotes,
     current_epoch: currentEpoch,
     cached_expired_votes: Object.keys(expiredVotes).length,
-    metadata_from_cache: useMetadataCache
+    metadata_from_cache: useMetadataCache,
+    stake_source: "koios_live",
+    votes_from_cache: votesFresh,
+    cc_from_cache: ccFresh
   };
 
   fs.writeFileSync(path.join(DATA_DIR, "dreps.json"), JSON.stringify(dreps));
