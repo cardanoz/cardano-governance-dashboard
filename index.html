@@ -1725,7 +1725,8 @@ const SectionHeader = ({title, show, setShow, color, extra}) => (
 
 // Simulator Tab — Single table with 3 reward columns side by side
 // ════════════════════════════════════════════════════════════════
-function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, ccMembers, ccVotes, proposals, T }) {
+function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, ccMembers, ccVotes, proposals, T }) {
+  const dreps = React.useMemo(()=>rawDreps.filter(d=>d.drep_id!=="drep_always_abstain"&&d.drep_id!=="drep_always_no_confidence"),[rawDreps]);
   // ── Common parameters ──
   const todayStr = new Date().toISOString().slice(0, 10);
   const [govBudget, setGovBudget] = useHashState("s_budget",500000);
