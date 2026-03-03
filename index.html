@@ -111,8 +111,8 @@ const LANG = {
     mo_k:"K (exclude top)", mo_n:"N (pay next)",
     mo_total:"Total budget (ADA)",
     budget_b2:"Fixed bonus / person (ADA)",
-    vote_start:"Start date", vote_end:"End date", vote_penalty:"Vote-rate penalty",
-    vote_penalty_on:"ON", vote_penalty_off:"OFF",
+    vote_start:"Start date", vote_end:"End date", vote_penalty:"Vote-rate adjustment",
+    vote_penalty_on:"Apply", vote_penalty_off:"Skip",
     vote_ga_count:"GAs in range", vote_info:"GAs whose voting ended in this period",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API Stats", api_calls:"API calls", cached:"cached", loading_sim_votes:"Loading vote counts for simulator…",
@@ -180,8 +180,8 @@ const LANG = {
     mo_k:"K（上位除外数）", mo_n:"N（支払対象数）",
     mo_total:"総予算（ADA）",
     budget_b2:"一人あたり固定ボーナス（ADA）",
-    vote_start:"開始日", vote_end:"終了日", vote_penalty:"投票率ペナルティ",
-    vote_penalty_on:"ON", vote_penalty_off:"OFF",
+    vote_start:"開始日", vote_end:"終了日", vote_penalty:"投票率補正",
+    vote_penalty_on:"適用", vote_penalty_off:"なし",
     vote_ga_count:"期間内GA数", vote_info:"投票期間終了日がこの範囲内のGA",
     metric_d:"D", metric_p:"P", metric_c:"C",
     api_stats:"API統計", api_calls:"APIコール", cached:"キャッシュ", loading_sim_votes:"シミュレーター用投票数を取得中…",
@@ -1944,64 +1944,62 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
 
       {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
 
-      {/* ═══ Simulation Parameters (DRep + CC combined) ═══ */}
+      {/* ═══ Simulation Parameters (DRep + CC) ═══ */}
       <div className="card" style={{marginBottom:12}}>
         <h3 style={{fontSize:12,fontWeight:700,marginBottom:8}}>{T.params}</h3>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:10}}>
-          <div>
-            <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
-            <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
-          </div>
-          <div>
-            <SliderParam label={T.budget_b2} value={b2} onChange={v => setB2(Math.min(v, drepBudget))} min={0} max={drepBudget} step={2500} suffix=" ADA" />
-            <div style={{fontSize:9,color:"var(--text2)",marginTop:-6,marginBottom:4}}>Base = ₳{Math.max(0, drepBudget - b2 * N).toLocaleString()} + ₳{b2.toLocaleString()}/人 × {N}人</div>
-          </div>
-          <div>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-              <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.vote_penalty}</span>
-              <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:5,overflow:"hidden"}}>
-                <button onClick={()=>setVotePenaltyOn(true)}
-                  style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
-                    background:votePenaltyOn?"var(--accent)":"var(--bg3)",color:votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_on}</button>
-                <button onClick={()=>setVotePenaltyOn(false)}
-                  style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
-                    background:!votePenaltyOn?"var(--accent)":"var(--bg3)",color:!votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_off}</button>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+          {/* ── DRep params ── */}
+          <div style={{background:"rgba(59,130,246,.04)",border:"1px solid rgba(59,130,246,.12)",borderRadius:8,padding:"10px 12px"}}>
+            <div style={{fontSize:10,fontWeight:700,color:"#3b82f6",marginBottom:8}}>DRep</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+              <div>
+                <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
+                <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
+              </div>
+              <div>
+                <SliderParam label={T.budget_b2} value={b2} onChange={v => setB2(Math.min(v, drepBudget))} min={0} max={drepBudget} step={2500} suffix=" ADA" />
+                <div style={{fontSize:8,color:"var(--text2)",marginTop:-6,marginBottom:6}}>Base ₳{Math.max(0, drepBudget - b2 * N).toLocaleString()} + ₳{b2.toLocaleString()}/人×{N}</div>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                  <span style={{fontSize:10,color:"var(--text2)",fontWeight:600}}>{T.vote_penalty}</span>
+                  <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:5,overflow:"hidden"}}>
+                    <button onClick={()=>setVotePenaltyOn(true)}
+                      style={{padding:"2px 7px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                        background:votePenaltyOn?"var(--accent)":"var(--bg3)",color:votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_on}</button>
+                    <button onClick={()=>setVotePenaltyOn(false)}
+                      style={{padding:"2px 7px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                        background:!votePenaltyOn?"var(--accent)":"var(--bg3)",color:!votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_off}</button>
+                  </div>
+                </div>
+                {votePenaltyOn && (
+                  <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)",marginTop:3}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
+                )}
               </div>
             </div>
-            {votePenaltyOn && (
-              <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
-            )}
           </div>
-          <div>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-              <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.cc_sim_penalty_label}</span>
-            </div>
-            <div style={{display:"flex",gap:3}}>
+          {/* ── CC params ── */}
+          <div style={{background:"rgba(245,158,11,.04)",border:"1px solid rgba(245,158,11,.12)",borderRadius:8,padding:"10px 12px"}}>
+            <div style={{fontSize:10,fontWeight:700,color:"#f59e0b",marginBottom:8}}>CC</div>
+            <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+              <span style={{fontSize:10,color:"var(--text2)",fontWeight:600}}>{T.cc_sim_penalty_label}:</span>
               {[3,5,10].map(n=>(
                 <button key={n} onClick={()=>setPenaltyThreshold(n)}
-                  style={{padding:"3px 8px",borderRadius:4,fontSize:9,fontWeight:600,cursor:"pointer",
+                  style={{padding:"2px 7px",borderRadius:4,fontSize:9,fontWeight:600,cursor:"pointer",
                     border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
                     background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
                     color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
               ))}
             </div>
+            <div style={{fontSize:9,color:"var(--text2)",marginTop:8}}>
+              ₳{ccPerMember.toLocaleString()}/{T.sim_per_member}
+              {adaPrice.usd>0?` (${fmtFiat(ccPerMember,adaPrice.usd,"$")})`:""} · {ccFMembers.length} members · {simProps.length} GAs
+            </div>
           </div>
         </div>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginTop:6,flexWrap:"wrap"}}>
-          <span style={{fontSize:9,color:"var(--text2)"}}>
-            DRep: ₳{drepBudget.toLocaleString()}{adaPrice.usd>0?` (${fmtFiat(drepBudget,adaPrice.usd,"$")})`:""}
-            · {dreps.length} DReps · {totalEligible} eligible
-            {votePenaltyOn ? ` · penalty ON (${gasInRange} GAs)` : " · penalty OFF"}
-          </span>
-          <span style={{fontSize:9,color:"var(--text2)"}}>
-            CC: ₳{ccPerMember.toLocaleString()}/{T.sim_per_member}
-            {adaPrice.usd>0?` (${fmtFiat(ccPerMember,adaPrice.usd,"$")})`:""}
-            · {ccFMembers.length} members · {simProps.length} GAs
-          </span>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginTop:6,flexWrap:"wrap"}}>
           {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
           {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
           <button className="btn" onClick={()=>{ localStorage.removeItem(SIM_CACHE_KEY); window.location.reload(); }}
-            style={{fontSize:8,padding:"2px 6px",opacity:0.6}}>{T.clear_cache}</button>
+            style={{fontSize:8,padding:"2px 6px",opacity:0.6,marginLeft:"auto"}}>{T.clear_cache}</button>
         </div>
       </div>
 
