@@ -1023,7 +1023,21 @@ async function main() {
   const cachedSpoPoolInfo = cache.spoPoolInfo || {};
   const SPO_FRESH_MS = 3 * 3600000; // 3 hours
   const lastSpoFetch = cache.lastSpoFetchAt || 0;
-  const spoFresh = (now - lastSpoFetch) < SPO_FRESH_MS;
+  let spoFresh = (now - lastSpoFetch) < SPO_FRESH_MS;
+
+  // Safeguard: if cached SPO data doesn't cover most proposals, force refresh
+  if (spoFresh && spoEligibleProposals.length > 0) {
+    const cachedSpoProps = new Set(Object.keys(cachedSpoVotes).map(k => k.split("__")[1]));
+    if (cachedSpoProps.size < spoEligibleProposals.length / 2) {
+      console.log(`  ⚠ SPO cache has votes for only ${cachedSpoProps.size}/${spoEligibleProposals.length} proposals — forcing refresh`);
+      spoFresh = false;
+    }
+  }
+  // Also refresh SPO when votes were refreshed (new proposals may exist)
+  if (spoFresh && !votesFresh) {
+    console.log("  ⚠ Votes were refreshed this run — also refreshing SPO data");
+    spoFresh = false;
+  }
 
   if (spoFresh) {
     spoVoteMap = cachedSpoVotes;
