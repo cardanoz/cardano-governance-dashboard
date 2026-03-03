@@ -86,7 +86,7 @@ const LANG = {
     attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
     delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
     tab_dashboard:"Votes", tab_simulator:"Reward Simulator",
-    filter_collapse:"Filters", cc_section_title:"CC Votes", drep_section_title:"DRep Votes",
+    filter_collapse:"Filters", cc_section_title:"CC Votes", drep_section_title:"DRep Votes", zoom_label:"Size",
     cc_member:"CC Member", no_cc:"No CC votes found", cc_rationale:"Rationale",
     cc_expired_only:"Showing expired governance actions only (static data)",
     cc_ineligible:"N/A", cc_not_voted:"Not Voted",
@@ -151,7 +151,7 @@ const LANG = {
     attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
     delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
     tab_dashboard:"投票", tab_simulator:"報酬シミュレーター",
-    filter_collapse:"フィルター", cc_section_title:"CC投票", drep_section_title:"DRep投票",
+    filter_collapse:"フィルター", cc_section_title:"CC投票", drep_section_title:"DRep投票", zoom_label:"サイズ",
     cc_member:"CC委員", no_cc:"CC投票データなし", cc_rationale:"根拠",
     cc_expired_only:"期限切れの一部のGAのみ表示しています（静的データ）",
     cc_ineligible:"対象外", cc_not_voted:"未投票",
@@ -779,6 +779,9 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const [pPage,setPPage] = useHashState("d_pp",0);
   const [csvOpen,setCsvOpen] = React.useState(false);
   const [filtersOpen,setFiltersOpen] = useHashState("d_fo",true);
+  const [drepOpen,setDrepOpen] = useHashState("d_do",true);
+  const [ccOpen,setCcOpen] = useHashState("d_co",true);
+  const [zoom,setZoom] = useHashState("d_zm",100); // 50-150 %
   const DPP = 100, PPP = 20;
 
   const fDreps = React.useMemo(()=>{
@@ -940,43 +943,139 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
       </div>
       )}
 
-      <div style={{fontSize:11,color:"var(--text2)",marginBottom:8}}>
-        {T.showing}: {T.subtitle_drep} {fDreps.length}{hasMore?"+":""} × {T.subtitle_actions} {fProps.length}
-        {pageLoading && <span style={{marginLeft:8,color:"var(--accent2)"}}>⏳ {stage}</span>}
+      {/* Zoom slider + summary bar */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,flexWrap:"wrap",gap:6}}>
+        <div style={{fontSize:11,color:"var(--text2)"}}>
+          {T.showing}: {T.subtitle_drep} {fDreps.length}{hasMore?"+":""} × {T.subtitle_actions} {fProps.length}
+          {pageLoading && <span style={{marginLeft:8,color:"var(--accent2)"}}>⏳ {stage}</span>}
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:6}}>
+          <label style={{fontSize:10,color:"var(--text2)"}}>{T.zoom_label||"Size"}:</label>
+          <input type="range" min={50} max={150} step={10} value={zoom}
+            onChange={e=>setZoom(Number(e.target.value))}
+            style={{width:80,accentColor:"var(--accent)"}} />
+          <span style={{fontSize:10,color:"var(--text2)",minWidth:28}}>{zoom}%</span>
+        </div>
       </div>
 
-      {/* CC Votes Section */}
-      {(ccMembers||[]).length > 0 && pgP.length > 0 && (
-        <div className="card" style={{marginBottom:12}}>
-          <div style={{fontSize:13,fontWeight:700,marginBottom:8,color:"var(--accent2)"}}>
-            🏛 {T.cc_section_title || "CC Votes"} ({(ccMembers||[]).length})
-          </div>
-          <div style={{overflow:"auto",maxHeight:300}}>
-            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*80+180}}>
+      {/* ═══ DRep Votes Section (top) ═══ */}
+      <div style={{marginBottom:12}}>
+        <button onClick={()=>setDrepOpen(!drepOpen)}
+          style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",marginBottom:drepOpen?6:0,display:"flex",alignItems:"center",gap:6}}>
+          <span style={{fontSize:12,color:"var(--text2)"}}>{drepOpen?"▼":"▶"}</span>
+          <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>👥 {T.drep_section_title||"DRep Votes"} ({fDreps.length}{hasMore?"+":""})</span>
+        </button>
+        {drepOpen && (
+        <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+          <div style={{overflow:"auto",maxHeight:ccOpen?"calc(50vh - 120px)":"calc(100vh - 300px)"}}>
+            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(95*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
-                <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:"6px 8px",textAlign:"left",
-                  borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:9,fontWeight:700,
-                  color:"var(--text2)",minWidth:180,boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
+                <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(8*zoom/100)}px ${Math.round(10*zoom/100)}px`,textAlign:"left",
+                  borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:Math.round(10*zoom/100),fontWeight:700,
+                  color:"var(--text2)",minWidth:Math.round(260*zoom/100),textTransform:"uppercase",letterSpacing:".05em",
+                  boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.drep_col}</th>
                 {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
-                  return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"4px 2px",
-                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:600,minWidth:80}}>
-                    <span style={{display:"inline-block",padding:"1px 3px",borderRadius:3,fontSize:7,fontWeight:700,
+                  const shortTitle = p.title ? (p.title.length > 20 ? p.title.slice(0,20)+"…" : p.title) : "";
+                  return(
+                  <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:`${Math.round(5*zoom/100)}px ${Math.round(3*zoom/100)}px`,
+                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:Math.round(9*zoom/100),fontWeight:600,minWidth:Math.round(95*zoom/100),maxWidth:Math.round(120*zoom/100),verticalAlign:"bottom"}}>
+                    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:zoom<80?0:2}} title={p.title||p.proposal_id}>
+                      <span style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:Math.round(7*zoom/100),fontWeight:700,
+                        textTransform:"uppercase",background:c+"15",color:c,border:`1px solid ${c}30`,lineHeight:1.6}}>{actionLabel(p.proposal_type,T)}</span>
+                      {zoom>=80&&shortTitle && <span style={{fontSize:Math.round(8*zoom/100),color:"var(--text)",lineHeight:1.3,maxWidth:Math.round(110*zoom/100),overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{shortTitle}</span>}
+                      <span style={{display:"flex",alignItems:"center",gap:2,justifyContent:"center"}}>
+                        <span style={{fontSize:Math.round(7*zoom/100),color:"var(--text2)",opacity:.6}} title={p.proposal_id}>{shortId(p.tx_hash||p.proposal_id,6,4)}</span>
+                        <span style={{fontSize:Math.round(9*zoom/100),cursor:"pointer",opacity:.7}} title={T.export_proposal_rationales||"Export DRep rationales for this proposal"}
+                          onClick={()=>exportProposalRationales(p)}>📎</span>
+                      </span>
+                    </div>
+                  </th>);})}
+              </tr></thead>
+              <tbody>
+                {pgD.map((d,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
+                  <tr key={d.drep_id}>
+                    <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:`${Math.round(7*zoom/100)}px ${Math.round(8*zoom/100)}px`,
+                      borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",minWidth:Math.round(260*zoom/100),
+                      boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
+                      <div style={{display:"flex",alignItems:"center",gap:Math.round(7*zoom/100)}}>
+                        {zoom>=70&&<Avatar name={safeName(d.name)||d.drep_id} url={d.image_url}/>}
+                        <div style={{minWidth:0,flex:1}}>
+                          <div style={{fontSize:Math.round(11*zoom/100),fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:Math.round(150*zoom/100)}}>
+                            {safeName(d.name)||shortId(d.drep_id)}</div>
+                          <div style={{fontSize:Math.round(10*zoom/100),color:"var(--text2)",display:"flex",gap:5,flexWrap:"wrap"}}>
+                            <span title={`${(Number(d.amount)/1e6).toLocaleString()} ADA`}>₳ {fmtAda(d.amount)}</span>
+                            {zoom>=80&&d.delegators>0&&<span style={{fontSize:Math.round(9*zoom/100),opacity:.7}}>({d.delegators.toLocaleString()} {T.delegators})</span>}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    {pgP.map((p,ci)=>{const v=gv(d.drep_id,p.proposal_id);const rat=getDrepRat(d.drep_id,p.proposal_id);return(
+                      <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
+                        <div className="vote-cell" style={{padding:`${Math.round(5*zoom/100)}px ${Math.round(3*zoom/100)}px`,textAlign:"center",position:"relative",display:"flex",alignItems:"center",justifyContent:"center",gap:zoom<80?2:0,flexDirection:zoom<80?"row":"column"}}
+                          title={rat&&rat.text?rat.text.slice(0,300):undefined}>
+                          <VoteBadge vote={v} T={T}/>
+                          {rat&&rat.text&&<span style={{fontSize:Math.max(6,Math.round(7*zoom/100)),color:"var(--yes)",cursor:"pointer",lineHeight:1}}
+                            onClick={()=>setRatModal({name:safeName(d.name)||shortId(d.drep_id),proposalTitle:p.title||shortId(p.proposal_id),text:rat.text,url:rat.url})}>📎</span>}
+                        </div></td>
+                    );})}
+                  </tr>
+                );})}
+                {pgD.length===0&&<tr><td colSpan={pgP.length+1} style={{padding:40,textAlign:"center",color:"var(--text2)",fontSize:13}}>{T.no_dreps}</td></tr>}
+              </tbody>
+            </table>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",
+            borderTop:"1px solid var(--border)",background:"var(--bg3)",flexWrap:"wrap",gap:6}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <PaginationBar label={T.subtitle_drep} page={dPage} setPage={handleDPageChange} total={hasMore?tDP+1:tDP}/>
+              {hasMore && <button className="btn btn-primary" onClick={loadMoreDreps} disabled={pageLoading}
+                style={{fontSize:10,padding:"3px 10px"}}>{pageLoading?"⏳":"⬇"} {T.load_more}</button>}
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <button className="btn" style={{fontSize:10,padding:"3px 10px"}} onClick={exportDrepRationalesCSV}>📎 {T.export_rationales||"Export Rationales CSV"}</button>
+              <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
+            </div>
+          </div>
+        </div>
+        )}
+      </div>
+
+      {/* ═══ CC Votes Section (bottom) ═══ */}
+      {(ccMembers||[]).length > 0 && pgP.length > 0 && (
+      <div style={{marginBottom:12}}>
+        <button onClick={()=>setCcOpen(!ccOpen)}
+          style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",marginBottom:ccOpen?6:0,display:"flex",alignItems:"center",gap:6}}>
+          <span style={{fontSize:12,color:"var(--text2)"}}>{ccOpen?"▼":"▶"}</span>
+          <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>🏛 {T.cc_section_title||"CC Votes"} ({(ccMembers||[]).length})</span>
+        </button>
+        {ccOpen && (
+        <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+          <div style={{overflow:"auto",maxHeight:drepOpen?"calc(40vh - 60px)":"calc(100vh - 300px)"}}>
+            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(80*zoom/100)+Math.round(180*zoom/100),fontSize:Math.round(14*zoom/100)}}>
+              <thead><tr>
+                <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(6*zoom/100)}px ${Math.round(8*zoom/100)}px`,textAlign:"left",
+                  borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:Math.round(9*zoom/100),fontWeight:700,
+                  color:"var(--text2)",minWidth:Math.round(180*zoom/100),boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
+                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
+                  return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:`${Math.round(4*zoom/100)}px ${Math.round(2*zoom/100)}px`,
+                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:Math.round(8*zoom/100),fontWeight:600,minWidth:Math.round(80*zoom/100)}}>
+                    <span style={{display:"inline-block",padding:"1px 3px",borderRadius:3,fontSize:Math.round(7*zoom/100),fontWeight:700,
                       background:c+"15",color:c,border:`1px solid ${c}30`}}>{actionLabel(p.proposal_type,T)}</span>
                   </th>;})}
               </tr></thead>
               <tbody>
                 {(ccMembers||[]).map((cc,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
                   <tr key={cc.cc_id}>
-                    <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:"5px 8px",
+                    <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:`${Math.round(5*zoom/100)}px ${Math.round(8*zoom/100)}px`,
                       borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",
-                      boxShadow:"4px 0 8px rgba(0,0,0,.3)",fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:180}}>
+                      boxShadow:"4px 0 8px rgba(0,0,0,.3)",fontSize:Math.round(11*zoom/100),fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:Math.round(180*zoom/100)}}>
                       {cc.name||shortId(cc.cc_id)}
                     </td>
                     {pgP.map((p,ci)=>{const v=ccGv(cc.cc_id,p.proposal_id);const ratObj=ccGr(cc.cc_id,p.proposal_id);return(
                       <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
-                        <div className="vote-cell" style={{padding:"3px 2px",textAlign:"center"}}>
-                          {v==="Ineligible" ? <span style={{fontSize:8,color:"var(--text2)"}}>—</span> : <VoteBadge vote={v} T={T}/>}
-                          {ratObj && <a href="#" style={{fontSize:7,color:ratObj.text?"var(--yes)":"var(--accent2)"}}
+                        <div className="vote-cell" style={{padding:`${Math.round(3*zoom/100)}px ${Math.round(2*zoom/100)}px`,textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",gap:zoom<80?2:0,flexDirection:zoom<80?"row":"column"}}>
+                          {v==="Ineligible" ? <span style={{fontSize:Math.round(8*zoom/100),color:"var(--text2)"}}>—</span> : <VoteBadge vote={v} T={T}/>}
+                          {ratObj && <a href="#" style={{fontSize:Math.max(6,Math.round(7*zoom/100)),color:ratObj.text?"var(--yes)":"var(--accent2)",lineHeight:1}}
                             onClick={e=>{e.preventDefault();setCcRatModal({ccName:cc.name||cc.cc_id,proposalTitle:p.title||shortId(p.proposal_id),url:ratObj.url||"",text:ratObj.text||T.cc_rationale_error,loading:false})}}>📎</a>}
                         </div></td>
                     );})}
@@ -986,6 +1085,8 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
             </table>
           </div>
         </div>
+        )}
+      </div>
       )}
 
       {/* CC Rationale Modal */}
@@ -1013,78 +1114,6 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           </div>
         </div>
       )}
-
-      <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-        <div style={{overflow:"auto",maxHeight:"calc(100vh - 360px)"}}>
-          <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*95+260}}>
-            <thead><tr>
-              <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:"8px 10px",textAlign:"left",
-                borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:10,fontWeight:700,
-                color:"var(--text2)",minWidth:260,textTransform:"uppercase",letterSpacing:".05em",
-                boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.drep_col}</th>
-              {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
-                const shortTitle = p.title ? (p.title.length > 20 ? p.title.slice(0,20)+"…" : p.title) : "";
-                return(
-                <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"5px 3px",
-                  textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:600,minWidth:100,maxWidth:120,verticalAlign:"bottom"}}>
-                  <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}} title={p.title||p.proposal_id}>
-                    <span style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:7,fontWeight:700,
-                      textTransform:"uppercase",background:c+"15",color:c,border:`1px solid ${c}30`,lineHeight:1.6}}>{actionLabel(p.proposal_type,T)}</span>
-                    {shortTitle && <span style={{fontSize:8,color:"var(--text)",lineHeight:1.3,maxWidth:110,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{shortTitle}</span>}
-                    <span style={{display:"flex",alignItems:"center",gap:2,justifyContent:"center"}}>
-                      <span style={{fontSize:7,color:"var(--text2)",opacity:.6}} title={p.proposal_id}>{shortId(p.tx_hash||p.proposal_id,6,4)}</span>
-                      <span style={{fontSize:9,cursor:"pointer",opacity:.7}} title={T.export_proposal_rationales||"Export DRep rationales for this proposal"}
-                        onClick={()=>exportProposalRationales(p)}>📎</span>
-                    </span>
-                  </div>
-                </th>);})}
-            </tr></thead>
-            <tbody>
-              {pgD.map((d,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
-                <tr key={d.drep_id}>
-                  <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:"7px 8px",
-                    borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",minWidth:260,
-                    boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:7}}>
-                      <Avatar name={safeName(d.name)||d.drep_id} url={d.image_url}/>
-                      <div style={{minWidth:0,flex:1}}>
-                        <div style={{fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}}>
-                          {safeName(d.name)||shortId(d.drep_id)}</div>
-                        <div style={{fontSize:10,color:"var(--text2)",display:"flex",gap:5,flexWrap:"wrap"}}>
-                          <span title={`${(Number(d.amount)/1e6).toLocaleString()} ADA`}>₳ {fmtAda(d.amount)}</span>
-                          {d.delegators>0&&<span style={{fontSize:9,opacity:.7}}>({d.delegators.toLocaleString()} {T.delegators})</span>}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  {pgP.map((p,ci)=>{const v=gv(d.drep_id,p.proposal_id);const rat=getDrepRat(d.drep_id,p.proposal_id);return(
-                    <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
-                      <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center",position:"relative"}}
-                        title={rat&&rat.text?rat.text.slice(0,300):undefined}>
-                        <VoteBadge vote={v} T={T}/>
-                        {rat&&rat.text&&<div style={{marginTop:1}}><span style={{fontSize:7,color:"var(--yes)",cursor:"pointer"}}
-                          onClick={()=>setRatModal({name:safeName(d.name)||shortId(d.drep_id),proposalTitle:p.title||shortId(p.proposal_id),text:rat.text,url:rat.url})}>📎</span></div>}
-                      </div></td>
-                  );})}
-                </tr>
-              );})}
-              {pgD.length===0&&<tr><td colSpan={pgP.length+1} style={{padding:40,textAlign:"center",color:"var(--text2)",fontSize:13}}>{T.no_dreps}</td></tr>}
-            </tbody>
-          </table>
-        </div>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",
-          borderTop:"1px solid var(--border)",background:"var(--bg3)",flexWrap:"wrap",gap:6}}>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <PaginationBar label={T.subtitle_drep} page={dPage} setPage={handleDPageChange} total={hasMore?tDP+1:tDP}/>
-            {hasMore && <button className="btn btn-primary" onClick={loadMoreDreps} disabled={pageLoading}
-              style={{fontSize:10,padding:"3px 10px"}}>{pageLoading?"⏳":"⬇"} {T.load_more}</button>}
-          </div>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <button className="btn" style={{fontSize:10,padding:"3px 10px"}} onClick={exportDrepRationalesCSV}>📎 {T.export_rationales||"Export Rationales CSV"}</button>
-            <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
-          </div>
-        </div>
-      </div>
 
       {/* DRep Rationale Modal */}
       {ratModal && (
