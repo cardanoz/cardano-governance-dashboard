@@ -842,7 +842,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const DPP = 100, PPP = 20;
 
   const fDreps = React.useMemo(()=>{
-    let r = dreps.filter(d=>d.drep_id!=="drep_always_abstain");
+    let r = dreps.filter(d=>d.drep_id!=="drep_always_abstain"&&d.drep_id!=="drep_always_no_confidence");
     if(minStake){const m=parseFloat(minStake)*1e6; r=r.filter(d=>Number(d.amount)>=m);}
     if(maxStake){const m=parseFloat(maxStake)*1e6; r=r.filter(d=>Number(d.amount)<=m);}
     if(search){const q=search.toLowerCase(); r=r.filter(d=>{const sn=safeName(d.name)||""; return sn.toLowerCase().includes(q)||(d.drep_id&&d.drep_id.toLowerCase().includes(q));});}
@@ -852,7 +852,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
     return r;
   },[dreps,minStake,maxStake,search,sortBy]);
 
-  const totalStake = React.useMemo(()=>dreps.filter(d=>d.drep_id!=="drep_always_abstain"&&Number(d.amount)>0).reduce((s,d)=>s+Number(d.amount),0),[dreps]);
+  const totalStake = React.useMemo(()=>dreps.filter(d=>d.drep_id!=="drep_always_abstain"&&d.drep_id!=="drep_always_no_confidence"&&Number(d.amount)>0).reduce((s,d)=>s+Number(d.amount),0),[dreps]);
 
   const fProps = React.useMemo(()=>{
     let r=[...proposals];
