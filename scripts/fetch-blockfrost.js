@@ -508,6 +508,7 @@ async function main() {
   };
   const allProposals = {};
   if (cache.proposalDetails) cache.proposalDetails.forEach(p => { allProposals[p.proposal_id] = p; });
+  if (cache.activeProposalDetails) cache.activeProposalDetails.forEach(p => { allProposals[p.proposal_id] = p; });
 
   if (!votesFresh) {
   // Only fetch votes for DReps with non-zero stake (skip inactive/empty DReps)
@@ -591,8 +592,9 @@ async function main() {
     }
   });
   const expiredProposalDetails = proposals.filter(p => p.expiration > 0 && p.expiration < currentEpoch);
+  const activeProposalDetails = proposals.filter(p => !(p.expiration > 0 && p.expiration < currentEpoch));
   console.log(`  DRep vote cache: ${Object.keys(expiredVotes).length} expired (permanent), ${Object.keys(activeVotes).length} active`);
-  console.log(`  Proposal cache: ${expiredProposalDetails.length} expired proposals`);
+  console.log(`  Proposal cache: ${expiredProposalDetails.length} expired, ${activeProposalDetails.length} active proposals`);
   // Note: saveCache moved to after CC section (step 7) to include all data
 
   // ─── 6. Stake history snapshot ──────────────────────────────
@@ -1094,11 +1096,9 @@ async function main() {
   saveCache({
     expiredVotes,
     activeVotes,
-    proposals: Object.fromEntries(Object.entries(proposalSet).filter(([k]) => {
-      const exp = proposalExpirations[k] || 0;
-      return exp > 0 && exp < currentEpoch;
-    })),
+    proposals: { ...proposalSet },
     proposalDetails: expiredProposalDetails,
+    activeProposalDetails,
     drepVoteCounts, drepVotedProposals,
     drepMetadata: newDrepMetadata,
     drepMetadataUpdatedAt: useMetadataCache ? cache.drepMetadataUpdatedAt : Date.now(),
