@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>adatool gov dashboard</title>
+<title>Adatool Gov - Cardano Governance Dashboard</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230a0d13'/%3E%3Ccircle cx='32' cy='28' r='14' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M32 18v20M24 28h16' stroke='url(%23g)' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='28' r='4' fill='url(%23g)'/%3E%3Cpath d='M20 48h24M24 52h16' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' opacity='.5'/%3E%3C/svg%3E"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -828,7 +828,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const [filtersOpen,setFiltersOpen] = useHashState("d_fo",true);
   const [drepOpen,setDrepOpen] = useHashState("d_do",true);
   const [ccOpen,setCcOpen] = useHashState("d_co",true);
-  const [zoom,setZoom] = useHashState("d_zm",100); // 50-150 %
+  const [zoom,setZoom] = useHashState("d_zm",80); // 50-150 %
   const [drepFull,setDrepFull] = React.useState(false); // fullscreen expand for DRep table
   const drepScrollRef = React.useRef(null);
   const ccScrollRef = React.useRef(null);
@@ -842,7 +842,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const DPP = 100, PPP = 20;
 
   const fDreps = React.useMemo(()=>{
-    let r = [...dreps];
+    let r = dreps.filter(d=>d.drep_id!=="drep_always_abstain");
     if(minStake){const m=parseFloat(minStake)*1e6; r=r.filter(d=>Number(d.amount)>=m);}
     if(maxStake){const m=parseFloat(maxStake)*1e6; r=r.filter(d=>Number(d.amount)<=m);}
     if(search){const q=search.toLowerCase(); r=r.filter(d=>{const sn=safeName(d.name)||""; return sn.toLowerCase().includes(q)||(d.drep_id&&d.drep_id.toLowerCase().includes(q));});}
@@ -982,14 +982,13 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   return (
     <div>
       <WarningBanner warnings={warnings} T={T}/>
-      {/* Collapsible filter toggle */}
-      <button className="btn" onClick={() => setFiltersOpen(!filtersOpen)}
-        style={{marginBottom:8,fontSize:11,display:"flex",alignItems:"center",gap:4}}>
-        {filtersOpen ? "▼" : "▶"} {T.filter_collapse || "Filters"}
-      </button>
-
-      {filtersOpen && (
+      {/* Collapsible filter panel */}
       <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",marginBottom:12,display:"flex",flexWrap:"wrap",gap:8,alignItems:"flex-end"}}>
+        <button className="btn" onClick={() => setFiltersOpen(!filtersOpen)}
+          style={{fontSize:11,display:"flex",alignItems:"center",gap:4,alignSelf:"flex-end"}}>
+          {filtersOpen ? "▼" : "▶"} {T.filter_collapse || "Filters"}
+        </button>
+      {filtersOpen && (<React.Fragment>
         {[
           {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>{setSearch(e.target.value);setDPage(0)}} style={{...ist,width:150}}/>},
           {l:T.filter_min_stake,el:<input type="number" placeholder="1000000" value={minStake} onChange={e=>{setMinStake(e.target.value);setDPage(0)}} style={{...ist,width:110}}/>},
@@ -1020,22 +1019,15 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         </div>
         <button className="btn" onClick={()=>{setSearch("");setMinStake("");setMaxStake("");setActType("all");setEpFrom("");setEpTo("");setSortBy("stake_desc");setDPage(0);setPPage(0)}}
           style={{alignSelf:"flex-end",fontSize:11}}>{T.reset}</button>
-      </div>
-      )}
-
-      {/* Zoom slider + summary bar */}
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,flexWrap:"wrap",gap:6}}>
-        <div style={{fontSize:11,color:"var(--text2)"}}>
-          {T.showing}: {T.subtitle_drep} {fDreps.length}{hasMore?"+":""} × {T.subtitle_actions} {fProps.length}
-          {pageLoading && <span style={{marginLeft:8,color:"var(--accent2)"}}>⏳ {stage}</span>}
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:6}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,marginLeft:"auto"}}>
           <label style={{fontSize:10,color:"var(--text2)"}}>{T.zoom_label||"Size"}:</label>
           <input type="range" min={50} max={150} step={10} value={zoom}
             onChange={e=>setZoom(Number(e.target.value))}
             style={{width:80,accentColor:"var(--accent)"}} />
           <span style={{fontSize:10,color:"var(--text2)",minWidth:28}}>{zoom}%</span>
         </div>
+      </React.Fragment>)}
+      {pageLoading && <span style={{fontSize:11,color:"var(--accent2)"}}>⏳ {stage}</span>}
       </div>
 
       {/* ═══ DRep Votes Section (top) ═══ */}
@@ -1047,11 +1039,11 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
             <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>👥 {T.drep_section_title||"DRep Votes"} ({fDreps.length}{hasMore?"+":""})</span>
           </button>
           {drepOpen && <button className="btn" onClick={()=>setDrepFull(!drepFull)}
-            style={{fontSize:10,padding:"2px 8px",marginLeft:"auto"}}>{drepFull?"⊗":"⤢"}</button>}
+            style={{fontSize:11,padding:"3px 10px",marginLeft:"auto",background:drepFull?"var(--accent)":"var(--bg3)",color:drepFull?"#fff":"var(--text)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>{drepFull?"⊗ Close":"⤢ Expand"}</button>}
         </div>
         {drepOpen && (
         <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)",flex:drepFull?1:undefined,display:drepFull?"flex":undefined,flexDirection:drepFull?"column":undefined}}>
-          <div ref={drepScrollRef} onScroll={()=>syncScroll(drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:drepFull?"none":ccOpen?"calc(60vh - 120px)":"calc(100vh - 300px)",flex:drepFull?1:undefined}}>
+          <div ref={drepScrollRef} onScroll={()=>syncScroll(drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:drepFull?"none":ccOpen?"calc(80vh - 120px)":"calc(100vh - 200px)",flex:drepFull?1:undefined}}>
             <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(70*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
                 <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(8*zoom/100)}px ${Math.round(10*zoom/100)}px`,textAlign:"left",
@@ -2495,7 +2487,7 @@ function App() {
   if (!apiKey && !loading && !isDemo && dataSource !== "static") {
     return (
       <div className="fade-in" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
-        <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>adatool <span style={{color:"var(--accent)"}}>gov</span></div>
+        <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Adatool <span style={{color:"var(--accent)"}}>Gov</span></div>
         <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,padding:24,maxWidth:440,width:"100%"}}>
           <h2 style={{fontSize:16,fontWeight:700,marginBottom:8}}>{T.api_key}</h2>
           <p style={{fontSize:12,color:"var(--text2)",marginBottom:16}}>
@@ -2515,7 +2507,7 @@ function App() {
 
   if(loading) return (
     <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
-      <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>adatool <span style={{color:"var(--accent)"}}>gov</span></div>
+      <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Adatool <span style={{color:"var(--accent)"}}>Gov</span></div>
       <div className="loader"><span/><span/><span/></div>
       <div style={{color:"var(--text2)",fontSize:13}}>{stage}</div>
     </div>
@@ -2537,9 +2529,9 @@ function App() {
     <div className="fade-in" style={{minHeight:"100vh",padding:"14px 18px",maxWidth:1900,margin:"0 auto"}}>
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10,marginBottom:10}}>
-        <div>
-          <h1 style={{fontSize:19,fontWeight:800,letterSpacing:"-.02em"}}>adatool <span style={{color:"var(--accent)"}}>gov</span></h1>
-          <div style={{color:"var(--text2)",fontSize:11,marginTop:2,display:"flex",gap:10,flexWrap:"wrap"}}>
+        <div style={{display:"flex",alignItems:"baseline",gap:14,flexWrap:"wrap"}}>
+          <h1 style={{fontSize:19,fontWeight:800,letterSpacing:"-.02em",margin:0}}>Adatool <span style={{color:"var(--accent)"}}>Gov</span></h1>
+          <div style={{color:"var(--text2)",fontSize:11,display:"flex",gap:10,flexWrap:"wrap",alignItems:"center"}}>
             <span>{T.subtitle_drep}: {dreps.length}{hasMore?"+":""}</span>
             <span>{T.subtitle_actions}: {proposals.length}</span>
             <span style={{color:"var(--border2)"}}>{T.api_stats}: {apiStats.calls} {T.api_calls} / {apiStats.cached} {T.cached}</span>
