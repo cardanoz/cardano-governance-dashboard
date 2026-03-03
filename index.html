@@ -1858,7 +1858,6 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
   const ccActualBudget = simData.reduce((s,d) => s + d.reward, 0);
 
   const tdS = (bg) => ({background:bg, padding:"4px 6px", borderBottom:"1px solid var(--border)", fontSize:10, textAlign:"right"});
-  const ccTd = {padding:"8px 10px",textAlign:"center",borderBottom:"1px solid var(--border)"};
 
   return (
     <div>
@@ -1945,6 +1944,67 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
 
       {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
 
+      {/* ═══ Simulation Parameters (DRep + CC combined) ═══ */}
+      <div className="card" style={{marginBottom:12}}>
+        <h3 style={{fontSize:12,fontWeight:700,marginBottom:8}}>{T.params}</h3>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:10}}>
+          <div>
+            <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
+            <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
+          </div>
+          <div>
+            <SliderParam label={T.budget_b2} value={b2} onChange={v => setB2(Math.min(v, drepBudget))} min={0} max={drepBudget} step={2500} suffix=" ADA" />
+            <div style={{fontSize:9,color:"var(--text2)",marginTop:-6,marginBottom:4}}>Base = ₳{Math.max(0, drepBudget - b2 * N).toLocaleString()} + ₳{b2.toLocaleString()}/人 × {N}人</div>
+          </div>
+          <div>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+              <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.vote_penalty}</span>
+              <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:5,overflow:"hidden"}}>
+                <button onClick={()=>setVotePenaltyOn(true)}
+                  style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                    background:votePenaltyOn?"var(--accent)":"var(--bg3)",color:votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_on}</button>
+                <button onClick={()=>setVotePenaltyOn(false)}
+                  style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                    background:!votePenaltyOn?"var(--accent)":"var(--bg3)",color:!votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_off}</button>
+              </div>
+            </div>
+            {votePenaltyOn && (
+              <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
+            )}
+          </div>
+          <div>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+              <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.cc_sim_penalty_label}</span>
+            </div>
+            <div style={{display:"flex",gap:3}}>
+              {[3,5,10].map(n=>(
+                <button key={n} onClick={()=>setPenaltyThreshold(n)}
+                  style={{padding:"3px 8px",borderRadius:4,fontSize:9,fontWeight:600,cursor:"pointer",
+                    border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
+                    background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
+                    color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginTop:6,flexWrap:"wrap"}}>
+          <span style={{fontSize:9,color:"var(--text2)"}}>
+            DRep: ₳{drepBudget.toLocaleString()}{adaPrice.usd>0?` (${fmtFiat(drepBudget,adaPrice.usd,"$")})`:""}
+            · {dreps.length} DReps · {totalEligible} eligible
+            {votePenaltyOn ? ` · penalty ON (${gasInRange} GAs)` : " · penalty OFF"}
+          </span>
+          <span style={{fontSize:9,color:"var(--text2)"}}>
+            CC: ₳{ccPerMember.toLocaleString()}/{T.sim_per_member}
+            {adaPrice.usd>0?` (${fmtFiat(ccPerMember,adaPrice.usd,"$")})`:""}
+            · {ccFMembers.length} members · {simProps.length} GAs
+          </span>
+          {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
+          {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
+          <button className="btn" onClick={()=>{ localStorage.removeItem(SIM_CACHE_KEY); window.location.reload(); }}
+            style={{fontSize:8,padding:"2px 6px",opacity:0.6}}>{T.clear_cache}</button>
+        </div>
+      </div>
+
       {/* ═══ DRep Reward Simulator ═══ */}
       <div style={{marginBottom:12}}>
         <SectionHeader title={T.sim_drep_section} show={showDrep} setShow={setShowDrep}
@@ -1952,49 +2012,6 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
           extra={<span style={{fontSize:10,color:"#3b82f6",fontWeight:600}}>₳{drepBudget.toLocaleString()}</span>} />
         {showDrep && (
           <div style={{border:"1px solid var(--border)",borderTop:"none",borderRadius:"0 0 8px 8px",padding:14,background:"var(--bg2)"}}>
-            <div className="card" style={{marginBottom:12}}>
-              <h3 style={{fontSize:12,fontWeight:700,marginBottom:8}}>{T.params}</h3>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
-                <div>
-                  <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
-                  <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
-                </div>
-                <div>
-                  <SliderParam label={T.budget_b2} value={b2} onChange={v => setB2(Math.min(v, drepBudget))} min={0} max={drepBudget} step={2500} suffix=" ADA" />
-                  <div style={{fontSize:9,color:"var(--text2)",marginTop:-6,marginBottom:4}}>Prop+Bonus: Base = ₳{Math.max(0, drepBudget - b2 * N).toLocaleString()} + ₳{b2.toLocaleString()}/人 × {N}人</div>
-                </div>
-                <div>
-                  <div style={{marginBottom:8}}>
-                    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-                      <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.vote_penalty}</span>
-                      <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:5,overflow:"hidden"}}>
-                        <button onClick={()=>setVotePenaltyOn(true)}
-                          style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
-                            background:votePenaltyOn?"var(--accent)":"var(--bg3)",color:votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_on}</button>
-                        <button onClick={()=>setVotePenaltyOn(false)}
-                          style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
-                            background:!votePenaltyOn?"var(--accent)":"var(--bg3)",color:!votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_off}</button>
-                      </div>
-                    </div>
-                    {votePenaltyOn && (
-                      <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:12,marginTop:4,flexWrap:"wrap"}}>
-                <span style={{fontSize:9,color:"var(--text2)"}}>
-                  Budget: ₳{drepBudget.toLocaleString()}{adaPrice.usd>0?` (${fmtFiat(drepBudget,adaPrice.usd,"$")})`:""} · DReps: {dreps.length} · Eligible: {totalEligible}
-                  {votePenaltyOn ? ` · Vote penalty ON (${gasInRange} GAs)` : " · Vote penalty OFF"}
-                  {distPerYear>1?` · yr: ₳${drepAnnual.toLocaleString()}`:""}
-                </span>
-                {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
-                {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
-                <button className="btn" onClick={()=>{ localStorage.removeItem(SIM_CACHE_KEY); window.location.reload(); }}
-                  style={{fontSize:8,padding:"2px 6px",opacity:0.6}}>{T.clear_cache}</button>
-              </div>
-            </div>
-
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:8}}>
               <input type="text" placeholder={T.search} value={searchQ} onChange={e => { setSearchQ(e.target.value); setPage(0); }}
                 style={{padding:"5px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:11,width:180,outline:"none"}} />
@@ -2068,100 +2085,54 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
       <div style={{marginBottom:12}}>
         <SectionHeader title={T.sim_cc_section} show={showCC} setShow={setShowCC}
           color="rgba(245,158,11,.05)"
-          extra={<span style={{fontSize:10,color:"#f59e0b",fontWeight:600}}>₳{ccBudgetTotal.toLocaleString()}</span>} />
+          extra={<span style={{fontSize:10,color:"#f59e0b",fontWeight:600}}>₳{ccBudgetTotal.toLocaleString()} · {ccFMembers.length} members</span>} />
         {showCC && (
           <div style={{border:"1px solid var(--border)",borderTop:"none",borderRadius:"0 0 8px 8px",padding:14,background:"var(--bg2)"}}>
-            {/* CC Parameters */}
-            <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"center",marginBottom:12}}>
-              <div style={{display:"flex",flexDirection:"column",gap:3}}>
-                <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase"}}>{T.cc_sim_penalty_label}</label>
-                <div style={{display:"flex",gap:4}}>
-                  {[3,5,10].map(n=>(
-                    <button key={n} onClick={()=>setPenaltyThreshold(n)}
-                      style={{padding:"5px 10px",borderRadius:6,fontSize:11,fontWeight:600,cursor:"pointer",
-                        border:penaltyThreshold===n?"2px solid var(--accent)":"1px solid var(--border)",
-                        background:penaltyThreshold===n?"rgba(59,130,246,.15)":"var(--bg)",
-                        color:penaltyThreshold===n?"var(--accent)":"var(--text2)"}}>{n} {T.cc_sim_penalty_unit}</button>
+            <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+              <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%"}}>
+                <thead><tr>
+                  {[{t:T.cc_member,a:"left"},{t:T.cc_sim_eligible,a:"center"},{t:T.cc_sim_voted,a:"center"},{t:T.cc_sim_missed,a:"center"},{t:T.cc_sim_factor,a:"center"},{t:T.cc_sim_reward+" (1x)",a:"right"},{t:T.cc_sim_reward+` (${distPerYear}x/yr)`,a:"right"}].map((h,i)=>(
+                    <th key={i} style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:h.a,
+                      borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>{h.t}</th>
                   ))}
-                </div>
-              </div>
-              <div style={{fontSize:10,color:"var(--accent)",padding:"5px 0"}}>
-                {T.cc_sim_ga_in_range}: {simProps.length}
-                <span style={{marginLeft:8,fontSize:9,color:"var(--text2)"}}>
-                  (ep.{ccSimEpFrom}〜{simEpTo}) · ₳{ccPerMember.toLocaleString()}/{T.sim_per_member}
-                </span>
-              </div>
-            </div>
-
-            {/* CC Budget summary: max vs actual */}
-            <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
-              <div style={{background:"rgba(245,158,11,.06)",border:"1px solid rgba(245,158,11,.2)",borderRadius:8,padding:"8px 14px",flex:1,minWidth:180}}>
-                <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:2}}>{T.sim_cc_max_budget}</div>
-                <div style={{fontSize:18,fontWeight:700,color:"#f59e0b"}}>₳{ccMaxBudget.toLocaleString()}</div>
-                <div style={{fontSize:9,color:"var(--text2)"}}>= ₳{ccPerMember.toLocaleString()} × {ccFMembers.length} members
-                  {adaPrice.usd > 0 ? ` · ${fmtFiat(ccMaxBudget,adaPrice.usd,"$")}` : ""}</div>
-              </div>
-              <div style={{background:"rgba(34,197,94,.06)",border:"1px solid rgba(34,197,94,.2)",borderRadius:8,padding:"8px 14px",flex:1,minWidth:180}}>
-                <div style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",marginBottom:2}}>{T.sim_cc_actual_budget}</div>
-                <div style={{fontSize:18,fontWeight:700,color:"#22c55e"}}>₳{Math.round(ccActualBudget).toLocaleString()}</div>
-                <div style={{fontSize:9,color:"var(--text2)"}}>
-                  {ccMaxBudget > 0 ? `${Math.round(ccActualBudget / ccMaxBudget * 100)}% of max` : "—"}
-                  {ccMaxBudget > ccActualBudget ? ` · saved ₳${Math.round(ccMaxBudget - ccActualBudget).toLocaleString()}` : ""}
-                  {adaPrice.usd > 0 ? ` · ${fmtFiat(ccActualBudget,adaPrice.usd,"$")}` : ""}
-                </div>
-              </div>
-            </div>
-
-            {/* Penalty explanation visual */}
-            <div style={{display:"flex",gap:6,marginBottom:16,flexWrap:"wrap"}}>
-              {Array.from({length:Math.min(penaltyThreshold+1,8)},(_,m)=>{const f=Math.max(0,1-m/penaltyThreshold);const c=f>0.5?"#22c55e":f>0?"#f59e0b":"#ef4444";
-                return <div key={m} style={{background:"var(--bg3)",border:"1px solid var(--border)",borderRadius:8,padding:"6px 10px",textAlign:"center",minWidth:70}}>
-                  <div style={{fontSize:9,color:"var(--text2)",marginBottom:2}}>{T.cc_sim_missed}: {m}</div>
-                  <div style={{fontSize:16,fontWeight:700,color:c}}>{Math.round(f*100)}%</div>
-                  <div style={{fontSize:8,color:"var(--text2)"}}>{m===0?"—":"−"+Math.round((1-f)*ccPerMember).toLocaleString()} ADA</div>
-                </div>;})}
-            </div>
-
-            {/* CC Simulator table */}
-            <div style={{border:"1px solid var(--border)",borderRadius:8,overflow:"hidden"}}>
-              <table style={{borderCollapse:"collapse",width:"100%"}}>
-                <thead><tr style={{background:"var(--bg3)"}}>
-                  {[T.cc_member,T.cc_sim_eligible,T.cc_sim_voted,T.cc_sim_missed,T.cc_sim_factor,T.cc_sim_reward].map((h,i)=>
-                    <th key={i} style={{padding:"8px 10px",fontSize:10,fontWeight:700,color:"var(--text2)",textTransform:"uppercase",
-                      letterSpacing:".05em",textAlign:i===0?"left":"center",borderBottom:"2px solid var(--border)"}}>{h}</th>)}
                 </tr></thead>
                 <tbody>
                   {simData.map((d,ri)=>{
                     const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";
                     const fc=d.factor>0.5?"#22c55e":d.factor>0?"#f59e0b":"#ef4444";
-                    return <tr key={d.cc.cc_id} style={{background:bg}}>
-                      <td style={{...ccTd,textAlign:"left"}}>
-                        <div style={{display:"flex",alignItems:"center",gap:7}}>
-                          <Avatar name={d.cc.name||d.cc.cc_id} url={null}/>
-                          <div style={{fontSize:11,fontWeight:600}}>{d.cc.name||shortId(d.cc.cc_id)}</div>
+                    const rw = Math.round(d.reward);
+                    const rwYr = rw * distPerYear;
+                    return <tr key={d.cc.cc_id}>
+                      <td style={{...tdS(bg),textAlign:"left",fontWeight:600}}>
+                        <div style={{display:"flex",alignItems:"center",gap:5}}>
+                          <Avatar name={d.cc.name||d.cc.cc_id} url={null} size={18}/>
+                          <span>{d.cc.name||shortId(d.cc.cc_id)}</span>
                         </div>
                       </td>
-                      <td style={{...ccTd,fontSize:12}}>{d.eligible}</td>
-                      <td style={{...ccTd,fontSize:12,color:"#22c55e",fontWeight:600}}>{d.voted}</td>
-                      <td style={{...ccTd,fontSize:12,
+                      <td style={{...tdS(bg),textAlign:"center"}}>{d.eligible}</td>
+                      <td style={{...tdS(bg),textAlign:"center",color:"#22c55e",fontWeight:600}}>{d.voted}</td>
+                      <td style={{...tdS(bg),textAlign:"center",
                         color:d.missed===0?"var(--text2)":d.missed>=penaltyThreshold?"#ef4444":"#f59e0b",fontWeight:d.missed>0?700:400}}>{d.missed}</td>
-                      <td style={ccTd}>
-                        <span style={{fontSize:13,fontWeight:700,color:fc}}>{Math.round(d.factor*100)}%</span>
-                        <div style={{width:"100%",height:4,background:"rgba(255,255,255,.1)",borderRadius:2,marginTop:3}}>
-                          <div style={{width:`${Math.max(0,d.factor)*100}%`,height:"100%",background:fc,borderRadius:2,transition:"width .3s"}}/>
-                        </div>
+                      <td style={{...tdS(bg),textAlign:"center",color:fc,fontWeight:600}}>{Math.round(d.factor*100)}%</td>
+                      <td style={{...tdS(bg),fontWeight:600,color:fc}}>
+                        {rw>0?"₳"+rw.toLocaleString():"₳0"}
+                        {rw>0&&adaPrice.usd>0&&<span style={{fontWeight:400,color:"var(--text2)",marginLeft:4}}>{fmtFiat(rw,adaPrice.usd,"$")}</span>}
                       </td>
-                      <td style={{...ccTd,color:fc}}>
-                        <div style={{fontSize:13,fontWeight:700}}>{d.reward>0?"₳"+Math.round(d.reward).toLocaleString():"₳0"}</div>
-                        {d.reward>0 && adaPrice.usd>0 && <div style={{fontSize:8,color:"var(--text2)"}}>{fmtFiat(d.reward,adaPrice.usd,"$")}
-                          {distPerYear>1 ? ` · yr: ₳${Math.round(d.reward*distPerYear).toLocaleString()} ${fmtFiat(d.reward*distPerYear,adaPrice.usd,"$")}` : ""}</div>}
+                      <td style={{...tdS(bg),fontWeight:600,color:fc}}>
+                        {rwYr>0?"₳"+rwYr.toLocaleString():"₳0"}
+                        {rwYr>0&&adaPrice.usd>0&&<span style={{fontWeight:400,color:"var(--text2)",marginLeft:4}}>{fmtFiat(rwYr,adaPrice.usd,"$")}</span>}
                       </td>
                     </tr>;})}
                 </tbody>
               </table>
             </div>
-            <div style={{fontSize:10,color:"var(--text2)",marginTop:8,opacity:.7}}>
-              ℹ {T.cc_sim_note}
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6}}>
+              <span style={{fontSize:8,color:"var(--text2)",opacity:.7}}>ℹ {T.cc_sim_note}</span>
+              <span style={{fontSize:8,color:"var(--text2)"}}>
+                {T.sim_cc_actual_budget}: ₳{Math.round(ccActualBudget).toLocaleString()}
+                {ccMaxBudget>0?` (${Math.round(ccActualBudget/ccMaxBudget*100)}%)`:""} / Max ₳{ccMaxBudget.toLocaleString()}
+                {ccMaxBudget>ccActualBudget?` · saved ₳${Math.round(ccMaxBudget-ccActualBudget).toLocaleString()}`:""}
+              </span>
             </div>
           </div>
         )}
