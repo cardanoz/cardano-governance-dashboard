@@ -544,6 +544,28 @@ async function main() {
   }, "Votes");
   console.log(`  Fresh: ${freshVoteCount}, Total: ${Object.keys(voteMap).length}`);
 
+  // ─── 3b. Discover all proposals via Blockfrost listing ─────
+  // DRep votes only discover proposals that have been voted on.
+  // Fetch the full proposal listing to catch new/unvoted proposals.
+  console.log("  Discovering all proposals via /governance/proposals...");
+  try {
+    const allGovProposals = await fetchAllPages("/governance/proposals", 20);
+    let discoveredNew = 0;
+    for (const gp of allGovProposals) {
+      const txHash = gp.tx_hash || "";
+      const certIdx = gp.cert_index != null ? gp.cert_index : (gp.index != null ? gp.index : -1);
+      if (!txHash) continue;
+      const propKey = `${txHash}#${certIdx}`;
+      if (!proposalSet[propKey]) {
+        proposalSet[propKey] = { tx_hash: txHash, cert_index: certIdx };
+        discoveredNew++;
+      }
+    }
+    console.log(`  Blockfrost proposal listing: ${allGovProposals.length} total, ${discoveredNew} new (not found via DRep votes)`);
+  } catch (e) {
+    console.log(`  Proposal listing error: ${e.message}`);
+  }
+
   // ─── 4. Proposal details ──────────────────────────────────
   console.log("\n[4/8] Fetching proposal details + metadata...");
   const cachedProposalIds = new Set(Object.keys(cache.proposals || {}));
@@ -989,8 +1011,8 @@ async function main() {
 
   // ─── 7e. SPO votes + pool info (Koios) ─────────────────────
   console.log("\n  [SPO] Fetching SPO votes + pool info via Koios...");
-  const SPO_ELIGIBLE_TYPES = new Set(["NoConfidence","UpdateCommittee","ParameterChange","HardForkInitiation"]);
-  const spoEligibleProposals = proposals.filter(p => SPO_ELIGIBLE_TYPES.has(p.proposal_type));
+  // SPOs can vote on all governance action types
+  const spoEligibleProposals = proposals.filter(p => p.proposal_type);
   console.log(`  SPO-eligible proposals: ${spoEligibleProposals.length} / ${proposals.length}`);
 
   let spoVoteMap = {};

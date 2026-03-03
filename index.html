@@ -439,8 +439,7 @@ function calcGini(values) {
   return (2 * giniSum) / (n * sum) - (n + 1) / n;
 }
 
-// SPO can only vote on these governance action types
-const SPO_ELIGIBLE_TYPES = new Set(["NoConfidence","UpdateCommittee","ParameterChange","HardForkInitiation"]);
+// SPOs can vote on all governance action types
 
 const ACTION_COLORS = {
   ParameterChange:"#8b5cf6", HardForkInitiation:"#ef4444", TreasuryWithdrawals:"#f59e0b",
@@ -1756,9 +1755,9 @@ function SpoTab({ proposals, spoVotes, spoPoolInfo, spoLoading, spoProgress, T }
   const [page, setPage] = React.useState(0);
   const perPage = 100;
 
-  // SPO-eligible proposals only
+  // All proposals (SPOs can vote on all types)
   const spoProps = React.useMemo(() =>
-    proposals.filter(p => SPO_ELIGIBLE_TYPES.has(p.proposal_type))
+    proposals.filter(p => p.proposal_type)
       .sort((a,b) => (b.epoch_no||0) - (a.epoch_no||0)),
     [proposals]
   );
@@ -1871,14 +1870,20 @@ function SpoTab({ proposals, spoVotes, spoPoolInfo, spoLoading, spoProgress, T }
                   borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:70}}>{T.spo_ticker}</th>
                 <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"3px 4px",textAlign:"center",
                   borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",minWidth:50}}>{T.spo_pledge_drep}</th>
-                {spoProps.map(p => (
-                  <th key={p.proposal_id} style={{position:"sticky",top:0,background:actionColor(p.proposal_type)+"15",padding:"3px 4px",textAlign:"center",
-                    borderBottom:`2px solid ${actionColor(p.proposal_type)}40`,fontSize:7,fontWeight:700,color:actionColor(p.proposal_type),
-                    whiteSpace:"nowrap",minWidth:55,maxWidth:90,overflow:"hidden",textOverflow:"ellipsis"}}
-                    title={p.title || p.proposal_id}>
-                    {p.title ? (p.title.length > 12 ? p.title.slice(0,12)+"…" : p.title) : shortId(p.proposal_id)}
-                  </th>
-                ))}
+                {spoProps.map(p => {
+                  const ac = actionColor(p.proposal_type);
+                  const shortType = (p.proposal_type||"").replace("Initiation","").replace("Withdrawals","");
+                  return (
+                    <th key={p.proposal_id} style={{position:"sticky",top:0,background:ac+"15",padding:"2px 3px",textAlign:"center",
+                      borderBottom:`2px solid ${ac}40`,fontSize:7,fontWeight:700,color:ac,
+                      minWidth:50,maxWidth:80}} title={`${p.proposal_type}: ${p.title || p.proposal_id}`}>
+                      <div style={{fontSize:6,opacity:.8,textTransform:"uppercase",letterSpacing:".3px"}}>{shortType}</div>
+                      <div style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontSize:7}}>
+                        {p.title ? (p.title.length > 10 ? p.title.slice(0,10)+"…" : p.title) : shortId(p.proposal_id)}
+                      </div>
+                    </th>
+                  );
+                })}
               </tr></thead>
               <tbody>
                 {pageData.map((pool, ri) => {
