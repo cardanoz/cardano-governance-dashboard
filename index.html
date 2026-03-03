@@ -871,7 +871,7 @@ function ShareButton({ T }) {
 // Dashboard Tab
 // ════════════════════════════════════════════════════════════════
 function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMore, pageLoading, stage,
-  loadMoreDreps, T, isDemo, ccMembers, ccVotes, ccRationales }) {
+  loadMoreDreps, T, isDemo, ccMembers, ccVotes, ccRationales, spoVotes, spoPoolInfo }) {
   const [search,setSearch] = useHashState("d_search","");
   const [minStake,setMinStake] = useHashState("d_minStake","");
   const [maxStake,setMaxStake] = useHashState("d_maxStake","");
@@ -885,15 +885,25 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   const [filtersOpen,setFiltersOpen] = useHashState("d_fo",true);
   const [drepOpen,setDrepOpen] = useHashState("d_do",true);
   const [ccOpen,setCcOpen] = useHashState("d_co",true);
+  const [spoOpen,setSpoOpen] = useHashState("d_so",true);
+  const [spoSearchQ, setSpoSearchQ] = React.useState("");
+  const [spoSortKey, setSpoSortKey] = React.useState("stake");
+  const [spoSortDir, setSpoSortDir] = React.useState("desc");
+  const [spoFilter, setSpoFilter] = React.useState("all");
+  const [spoGaFilter, setSpoGaFilter] = React.useState("");
+  const [spoGaVoteFilter, setSpoGaVoteFilter] = React.useState("not_voted");
+  const [spoPage, setSpoPage] = React.useState(0);
+  const [spoDrepFilter, setSpoDrepFilter] = React.useState("all"); // all | auto_abstain | auto_nc | drep | none
   const [zoom,setZoom] = useHashState("d_zm",80); // 50-150 %
   const [drepFull,setDrepFull] = React.useState(false); // fullscreen expand for DRep table
   const drepScrollRef = React.useRef(null);
   const ccScrollRef = React.useRef(null);
+  const spoScrollRef = React.useRef(null);
   const scrollSyncLock = React.useRef(false);
-  const syncScroll = React.useCallback((source, target) => {
+  const syncScroll = React.useCallback((source, ...targets) => {
     if (scrollSyncLock.current) return;
     scrollSyncLock.current = true;
-    if (target.current) target.current.scrollLeft = source.current.scrollLeft;
+    targets.forEach(t => { if (t.current) t.current.scrollLeft = source.current.scrollLeft; });
     requestAnimationFrame(() => { scrollSyncLock.current = false; });
   }, []);
   const DPP = 100, PPP = 20;
@@ -1101,7 +1111,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         </div>
         {drepOpen && (
         <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)",flex:drepFull?1:undefined,display:drepFull?"flex":undefined,flexDirection:drepFull?"column":undefined}}>
-          <div ref={drepScrollRef} onScroll={()=>syncScroll(drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:drepFull?"none":ccOpen?"calc(80vh - 120px)":"calc(100vh - 200px)",flex:drepFull?1:undefined}}>
+          <div ref={drepScrollRef} onScroll={()=>syncScroll(drepScrollRef,ccScrollRef,spoScrollRef)} style={{overflow:"auto",maxHeight:drepFull?"none":ccOpen?"calc(80vh - 120px)":"calc(100vh - 200px)",flex:drepFull?1:undefined}}>
             <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(70*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
                 <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(8*zoom/100)}px ${Math.round(10*zoom/100)}px`,textAlign:"left",
@@ -1185,15 +1195,17 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         </button>
         {ccOpen && (
         <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
-          <div ref={ccScrollRef} onScroll={()=>syncScroll(ccScrollRef,drepScrollRef)} style={{overflow:"auto",maxHeight:drepOpen?"calc(40vh - 60px)":"calc(100vh - 300px)"}}>
+          <div ref={ccScrollRef} onScroll={()=>syncScroll(ccScrollRef,drepScrollRef,spoScrollRef)} style={{overflow:"auto",maxHeight:drepOpen?"calc(40vh - 60px)":"calc(100vh - 300px)"}}>
             <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(70*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
               <thead><tr>
                 <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(6*zoom/100)}px ${Math.round(8*zoom/100)}px`,textAlign:"left",
                   borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:Math.round(9*zoom/100),fontWeight:700,
                   color:"var(--text2)",minWidth:Math.round(260*zoom/100),boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
-                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
-                  return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"4px 2px",
-                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:600,minWidth:Math.round(70*zoom/100),maxWidth:Math.round(90*zoom/100)}}>
+                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);const ccInelig=p.proposal_type==="UpdateCommittee";
+                  return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,
+                    background:ccInelig?"rgba(128,128,128,.1)":"var(--bg3)",padding:"4px 2px",
+                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:600,
+                    minWidth:Math.round(70*zoom/100),maxWidth:Math.round(90*zoom/100),opacity:ccInelig?.35:1}}>
                     <span style={{display:"inline-block",padding:"1px 3px",borderRadius:3,fontSize:7,fontWeight:700,
                       background:c+"15",color:c,border:`1px solid ${c}30`}}>{actionLabel(p.proposal_type,T)}</span>
                   </th>;})}
@@ -1206,7 +1218,10 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                       boxShadow:"4px 0 8px rgba(0,0,0,.3)",fontSize:Math.round(11*zoom/100),fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:Math.round(180*zoom/100)}}>
                       {cc.name||shortId(cc.cc_id)}
                     </td>
-                    {pgP.map((p,ci)=>{const v=ccGv(cc.cc_id,p.proposal_id);const ratObj=ccGr(cc.cc_id,p.proposal_id);return(
+                    {pgP.map((p,ci)=>{const ccInelig=p.proposal_type==="UpdateCommittee";
+                      if(ccInelig) return <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)",background:"rgba(128,128,128,.06)"}}>
+                        <div style={{textAlign:"center",fontSize:8,color:"var(--text2)",opacity:.3}}>—</div></td>;
+                      const v=ccGv(cc.cc_id,p.proposal_id);const ratObj=ccGr(cc.cc_id,p.proposal_id);return(
                       <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
                         <div className="vote-cell" style={{padding:`${Math.round(3*zoom/100)}px ${Math.round(2*zoom/100)}px`,textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",gap:2,flexDirection:"row"}}>
                           {v==="Ineligible" ? <span style={{fontSize:8,color:"var(--text2)"}}>—</span> : <VoteBadge vote={v}/>}
@@ -1223,6 +1238,186 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         )}
       </div>
       )}
+
+      {/* ═══ SPO Votes Section (below CC) ═══ */}
+      {pgP.length > 0 && Object.keys(spoPoolInfo||{}).length > 0 && (()=>{
+        const SPO_INELIGIBLE = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
+        const spoPerPage = 100;
+        const toggleSpoSort = (key) => {
+          if (spoSortKey === key) setSpoSortDir(d => d === "asc" ? "desc" : "asc");
+          else { setSpoSortKey(key); setSpoSortDir(key === "ticker" ? "asc" : "desc"); }
+          setSpoPage(0);
+        };
+        const spoSortArrow = (key) => spoSortKey === key ? (spoSortDir === "asc" ? " ▲" : " ▼") : "";
+
+        function getSpoEffVote(pool, proposal) {
+          const explicit = pool.votes[proposal.proposal_id];
+          if (explicit) return { vote: explicit, type: "explicit" };
+          if (SPO_INELIGIBLE.includes(proposal.proposal_type)) return { vote: "Ineligible", type: "ineligible" };
+          if (proposal.proposal_type === "HardForkInitiation") return { vote: "NotVoted", type: "none" };
+          if (pool.isAutoAbstain) return { vote: "Abstain", type: "auto" };
+          if (pool.isAutoNoConf) {
+            return proposal.proposal_type === "NoConfidence" ? { vote: "Yes", type: "auto" } : { vote: "Abstain", type: "auto" };
+          }
+          if (pool.pledge_drep) return { vote: "NotVoted", type: "delegated" };
+          return { vote: "NotVoted", type: "none" };
+        }
+
+        const poolIds = new Set();
+        Object.keys(spoVotes||{}).forEach(k => poolIds.add(k.split("__")[0]));
+        Object.keys(spoPoolInfo||{}).forEach(id => poolIds.add(id));
+        const allPools = [...poolIds].map(poolId => {
+          const info = (spoPoolInfo||{})[poolId] || {};
+          const votes = {};
+          let voteCount = 0;
+          pgP.forEach(p => {
+            const v = (spoVotes||{})[`${poolId}__${p.proposal_id}`];
+            if (v) { votes[p.proposal_id] = v; voteCount++; }
+          });
+          return { pool_id: poolId, ticker: info.ticker || "", pledge_drep: info.pledge_drep || null,
+            active_stake: info.active_stake || "0", votes, voteCount,
+            isAutoAbstain: info.pledge_drep === "drep_always_abstain",
+            isAutoNoConf: info.pledge_drep === "drep_always_no_confidence" };
+        });
+
+        let spoList = [...allPools];
+        if (spoSearchQ) { const q = spoSearchQ.toLowerCase(); spoList = spoList.filter(p => (p.ticker && p.ticker.toLowerCase().includes(q)) || p.pool_id.toLowerCase().includes(q)); }
+        if (spoFilter === "voted") spoList = spoList.filter(p => p.voteCount > 0);
+        else if (spoFilter === "not_voted") spoList = spoList.filter(p => p.voteCount === 0);
+        else if (spoFilter === "auto_abstain") spoList = spoList.filter(p => p.isAutoAbstain);
+        else if (spoFilter === "auto_nc") spoList = spoList.filter(p => p.isAutoNoConf);
+        if (spoDrepFilter === "auto_abstain") spoList = spoList.filter(p => p.isAutoAbstain);
+        else if (spoDrepFilter === "auto_nc") spoList = spoList.filter(p => p.isAutoNoConf);
+        else if (spoDrepFilter === "drep") spoList = spoList.filter(p => p.pledge_drep && !p.isAutoAbstain && !p.isAutoNoConf);
+        else if (spoDrepFilter === "none") spoList = spoList.filter(p => !p.pledge_drep);
+        if (spoGaFilter) {
+          const gaProp = pgP.find(p => p.proposal_id === spoGaFilter);
+          if (gaProp) spoList = spoList.filter(pool => {
+            const ev = getSpoEffVote(pool, gaProp);
+            if (spoGaVoteFilter === "not_voted") return ev.vote === "NotVoted";
+            if (spoGaVoteFilter === "yes") return ev.vote === "Yes";
+            if (spoGaVoteFilter === "no") return ev.vote === "No";
+            if (spoGaVoteFilter === "abstain") return ev.vote === "Abstain";
+            return true;
+          });
+        }
+        const dir = spoSortDir === "asc" ? 1 : -1;
+        spoList.sort((a, b) => {
+          if (spoSortKey === "stake") return dir * (Number(a.active_stake) - Number(b.active_stake));
+          if (spoSortKey === "ticker") return dir * (a.ticker || a.pool_id).localeCompare(b.ticker || b.pool_id);
+          if (spoSortKey === "votes") return dir * (a.voteCount - b.voteCount);
+          return 0;
+        });
+        const spoPageData = spoList.slice(spoPage * spoPerPage, (spoPage + 1) * spoPerPage);
+        const spoTotalPages = Math.max(1, Math.ceil(spoList.length / spoPerPage));
+        const fmtStake = (s) => { const a = Number(s)/1e6; return a>=1e9?(a/1e9).toFixed(1)+"B":a>=1e6?(a/1e6).toFixed(1)+"M":a>=1e3?(a/1e3).toFixed(0)+"K":Math.round(a).toLocaleString(); };
+        const spoFBtnS = (active) => ({fontSize:8,padding:"2px 6px",borderRadius:4,cursor:"pointer",border:active?"1px solid var(--accent)":"1px solid var(--border)",background:active?"rgba(59,130,246,.12)":"var(--bg)",color:active?"var(--accent)":"var(--text2)"});
+
+        function exportSpoCSV() {
+          const hdr = ["Pool ID","Ticker","Active Stake (ADA)","Reward DRep",
+            ...pgP.map(p => `[${p.proposal_type}] ${(p.title||shortId(p.proposal_id)).slice(0,40)}`)];
+          const rows = spoList.map(pool => [pool.pool_id, pool.ticker, Math.round(Number(pool.active_stake)/1e6),
+            pool.isAutoAbstain?"Auto-Abstain":pool.isAutoNoConf?"Auto-NoConfidence":pool.pledge_drep||"",
+            ...pgP.map(p => { const ev = getSpoEffVote(pool, p); return ev.vote === "Ineligible" ? "N/A" : ev.vote + (ev.type==="auto"?" (auto)":""); })]);
+          downloadCSV(buildCSV(hdr, rows), "spo_votes.csv");
+        }
+
+        return (
+      <div style={{marginBottom:12}}>
+        <button onClick={()=>setSpoOpen(!spoOpen)}
+          style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",marginBottom:spoOpen?6:0,display:"flex",alignItems:"center",gap:6}}>
+          <span style={{fontSize:12,color:"var(--text2)"}}>{spoOpen?"▼":"▶"}</span>
+          <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>🏊 {T.tab_spo} ({spoList.length.toLocaleString()})</span>
+        </button>
+        {spoOpen && (<>
+        <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:6,flexWrap:"wrap"}}>
+          <div style={{display:"flex",gap:3}}>
+            {[["all",T.spo_filter_all],["voted",T.spo_filter_voted],["not_voted",T.spo_filter_not_voted]].map(([k,label])=>
+              <button key={k} onClick={()=>{setSpoFilter(k);setSpoPage(0);}} style={spoFBtnS(spoFilter===k)}>{label}</button>)}
+          </div>
+          <span style={{fontSize:8,color:"var(--text2)",margin:"0 2px"}}>|</span>
+          <span style={{fontSize:8,color:"var(--text2)"}}>DRep:</span>
+          <div style={{display:"flex",gap:3}}>
+            {[["all","All"],["auto_abstain","A-Abs"],["auto_nc","A-NC"],["drep","DRep"],["none","None"]].map(([k,label])=>
+              <button key={k} onClick={()=>{setSpoDrepFilter(k);setSpoPage(0);}} style={spoFBtnS(spoDrepFilter===k)}>{label}</button>)}
+          </div>
+          <input type="text" placeholder="Search…" value={spoSearchQ}
+            onChange={e=>{setSpoSearchQ(e.target.value);setSpoPage(0);}}
+            style={{padding:"2px 5px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:9,width:100,outline:"none"}} />
+          <button className="btn" onClick={exportSpoCSV} style={{fontSize:8,padding:"2px 6px"}}>📥 CSV</button>
+          {/* Per-GA filter */}
+          <span style={{fontSize:8,color:"var(--text2)",margin:"0 2px"}}>|</span>
+          <span style={{fontSize:8,color:"var(--text2)"}}>GA:</span>
+          <select value={spoGaFilter} onChange={e=>{setSpoGaFilter(e.target.value);setSpoPage(0);}}
+            style={{fontSize:8,padding:"1px 3px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",maxWidth:150}}>
+            <option value="">—</option>
+            {pgP.filter(p=>!SPO_INELIGIBLE.includes(p.proposal_type)).map(p=>(
+              <option key={p.proposal_id} value={p.proposal_id}>[{(p.proposal_type||"").replace("Initiation","").replace("Withdrawals","")}] {(p.title||shortId(p.proposal_id)).slice(0,25)}</option>
+            ))}
+          </select>
+          {spoGaFilter && <div style={{display:"flex",gap:3}}>
+            {[["not_voted","Not Voted"],["yes","Yes"],["no","No"],["abstain","Abstain"]].map(([k,label])=>
+              <button key={k} onClick={()=>{setSpoGaVoteFilter(k);setSpoPage(0);}} style={spoFBtnS(spoGaVoteFilter===k)}>{label}</button>)}
+          </div>}
+        </div>
+        <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+          <div ref={spoScrollRef} onScroll={()=>syncScroll(spoScrollRef,drepScrollRef,ccScrollRef)} style={{overflow:"auto",maxHeight:"calc(40vh - 60px)"}}>
+            <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*Math.round(70*zoom/100)+Math.round(260*zoom/100),fontSize:Math.round(14*zoom/100)}}>
+              <thead><tr>
+                <th onClick={()=>toggleSpoSort("ticker")} style={{cursor:"pointer",position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",
+                  padding:`${Math.round(6*zoom/100)}px ${Math.round(8*zoom/100)}px`,textAlign:"left",
+                  borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:Math.round(9*zoom/100),fontWeight:700,
+                  color:"var(--text2)",minWidth:Math.round(260*zoom/100),boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
+                  {T.spo_ticker}{spoSortArrow("ticker")}
+                  <span style={{fontSize:7,marginLeft:4,fontWeight:400}}>{T.spo_stake}{spoSortArrow("stake")}</span>
+                </th>
+                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);const inelig=SPO_INELIGIBLE.includes(p.proposal_type);
+                  return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,
+                    background:inelig?"rgba(128,128,128,.1)":"var(--bg3)",padding:"4px 2px",
+                    textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:600,
+                    minWidth:Math.round(70*zoom/100),maxWidth:Math.round(90*zoom/100),opacity:inelig?.35:1}}>
+                    <span style={{display:"inline-block",padding:"1px 3px",borderRadius:3,fontSize:7,fontWeight:700,
+                      background:c+"15",color:c,border:`1px solid ${c}30`}}>{actionLabel(p.proposal_type,T)}</span>
+                  </th>;})}
+              </tr></thead>
+              <tbody>
+                {spoPageData.map((pool,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
+                  <tr key={pool.pool_id}>
+                    <td onClick={()=>toggleSpoSort("stake")} style={{cursor:"pointer",position:"sticky",left:0,zIndex:10,background:bg,
+                      padding:`${Math.round(5*zoom/100)}px ${Math.round(8*zoom/100)}px`,
+                      borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",
+                      boxShadow:"4px 0 8px rgba(0,0,0,.3)",fontSize:Math.round(11*zoom/100),fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:Math.round(180*zoom/100)}}
+                      title={pool.pool_id}>
+                      <span>{pool.ticker||shortId(pool.pool_id)}</span>
+                      <span style={{fontSize:Math.round(8*zoom/100),color:"var(--text2)",marginLeft:6}}
+                        title={`${Math.round(Number(pool.active_stake)/1e6).toLocaleString()} ADA`}>{fmtStake(pool.active_stake)}</span>
+                      <span style={{fontSize:Math.round(7*zoom/100),marginLeft:4,color:pool.isAutoAbstain?"#fbbf24":pool.isAutoNoConf?"#dc2626":pool.pledge_drep?"var(--text2)":"transparent",fontWeight:600}}>
+                        {pool.isAutoAbstain?"A-Abs":pool.isAutoNoConf?"A-NC":pool.pledge_drep?"DRep":"−"}
+                      </span>
+                    </td>
+                    {pgP.map((p,ci)=>{
+                      const inelig = SPO_INELIGIBLE.includes(p.proposal_type);
+                      if (inelig) return <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)",background:"rgba(128,128,128,.06)"}}>
+                        <div style={{textAlign:"center",fontSize:8,color:"var(--text2)",opacity:.3}}>—</div></td>;
+                      const ev = getSpoEffVote(pool, p);
+                      const isAuto = ev.type === "auto";
+                      return <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
+                        <div className="vote-cell" style={{padding:`${Math.round(3*zoom/100)}px ${Math.round(2*zoom/100)}px`,textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                          <VoteBadge vote={ev.vote}/>{isAuto && <span style={{fontSize:6,opacity:.5}}>*</span>}
+                        </div></td>;
+                    })}
+                  </tr>);})}
+              </tbody>
+            </table>
+          </div>
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:8,padding:"4px 8px",borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
+            <button className="btn" disabled={spoPage===0} onClick={()=>setSpoPage(spoPage-1)} style={{padding:"1px 6px",fontSize:9,opacity:spoPage===0?.3:1}}>←</button>
+            <span style={{fontSize:9}}>{spoPage+1} / {spoTotalPages}</span>
+            <button className="btn" disabled={spoPage>=spoTotalPages-1} onClick={()=>setSpoPage(spoPage+1)} style={{padding:"1px 6px",fontSize:9,opacity:spoPage>=spoTotalPages-1?.3:1}}>→</button>
+          </div>
+        </div>
+        </>)}
+      </div>);})()}
 
       {/* CC Rationale Modal */}
       <RationaleModal modal={ccRatModal ? {name:ccRatModal.ccName,proposalTitle:ccRatModal.proposalTitle,text:ccRatModal.text,url:ccRatModal.url} : null}
@@ -2979,12 +3174,6 @@ function App() {
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
-          <button onClick={()=>setTab("spo")}
-            style={{fontSize:9,padding:"3px 7px",borderRadius:5,border:tab==="spo"?"1px solid var(--accent)":"1px solid var(--border)",
-              background:tab==="spo"?"rgba(59,130,246,.12)":"var(--bg)",color:tab==="spo"?"var(--accent)":"var(--text2)",
-              cursor:"pointer",opacity:.7,transition:"opacity .2s"}}
-            onMouseEnter={e=>e.target.style.opacity="1"} onMouseLeave={e=>e.target.style.opacity=".7"}
-          >{T.tab_spo} (β)</button>
           <a href="https://adatool.net/constitution-tool/" target="_blank" rel="noopener"
             style={{fontSize:10,color:"var(--text2)",textDecoration:"none",opacity:.6,padding:"4px 8px",
               borderRadius:6,border:"1px solid var(--border)",transition:"opacity .2s"}}
@@ -2997,11 +3186,9 @@ function App() {
       {tab === "dashboard" ? (
         <DashboardTab dreps={dreps} proposals={proposals} votes={votes} drepRationales={drepRationales}
           ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
+          spoVotes={spoVotes} spoPoolInfo={spoPoolInfo}
           warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
           loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
-      ) : tab === "spo" ? (
-        <SpoTab proposals={proposals} spoVotes={spoVotes} spoPoolInfo={spoPoolInfo}
-          spoLoading={spoLoading} spoProgress={spoProgress} T={T} />
       ) : tab === "history" ? (
         <StakeHistoryTab history={stakeHistory} liveDreps={allDreps} T={T} lang={lang} />
       ) : (
