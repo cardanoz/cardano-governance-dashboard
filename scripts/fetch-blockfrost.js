@@ -1143,7 +1143,8 @@ async function main() {
         spoPoolInfo[poolId] = {
           ticker: p.ticker || "",
           reward_addr: p.reward_addr || "",
-          pledge_drep: addrToDrep[p.reward_addr] || null
+          pledge_drep: addrToDrep[p.reward_addr] || null,
+          active_stake: p.active_stake || p.live_stake || "0"
         };
       });
       console.log(`  SPO pool info built: ${Object.keys(spoPoolInfo).length} pools`);
