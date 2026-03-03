@@ -365,8 +365,10 @@ function useAdaPrice() {
     if (Date.now() - _adaPriceCache.ts < 600000 && _adaPriceCache.usd > 0) { setP(_adaPriceCache); return; }
     fetch("https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd,jpy")
       .then(r => r.json()).then(d => {
-        const v = { usd: d.cardano.usd, jpy: d.cardano.jpy, ts: Date.now() };
-        _adaPriceCache = v; setP(v);
+        if (d && d.cardano) {
+          const v = { usd: d.cardano.usd || 0, jpy: d.cardano.jpy || 0, ts: Date.now() };
+          _adaPriceCache = v; setP(v);
+        }
       }).catch(() => {});
   }, []);
   return p;
@@ -1008,8 +1010,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           style={{fontSize:11,display:"flex",alignItems:"center",gap:4,alignSelf:"flex-end"}}>
           {filtersOpen ? "▼" : "▶"} {T.filter_collapse || "Filters"}
         </button>
-      {filtersOpen && (<React.Fragment>
-        {[
+        {filtersOpen && [
           {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>{setSearch(e.target.value);setDPage(0)}} style={{...ist,width:150}}/>},
           {l:T.filter_min_stake,el:<input type="number" placeholder="1000000" value={minStake} onChange={e=>{setMinStake(e.target.value);setDPage(0)}} style={{...ist,width:110}}/>},
           {l:T.filter_max_stake,el:<input type="number" placeholder="999999999" value={maxStake} onChange={e=>{setMaxStake(e.target.value);setDPage(0)}} style={{...ist,width:110}}/>},
@@ -1019,6 +1020,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
             <option value="stake_desc">{T.sort_stake_desc}</option><option value="stake_asc">{T.sort_stake_asc}</option><option value="name_asc">{T.sort_name}</option></select>},
         ].map(({l,el},i)=>(<div key={i} style={{display:"flex",flexDirection:"column",gap:3}}>
           <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",letterSpacing:".06em"}}>{l}</label>{el}</div>))}
+        {filtersOpen && (
         <div style={{position:"relative",display:"inline-block"}}>
           <button className="btn" onClick={()=>setCsvOpen(!csvOpen)}>📥 {T.csv_export} ▾</button>
           {csvOpen && <div style={{position:"absolute",top:"100%",left:0,marginTop:4,background:"var(--bg3)",border:"1px solid var(--border2)",
@@ -1036,18 +1038,19 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
               onMouseEnter={e=>{if(!item.disabled)e.target.style.background="var(--bg4)"}}
               onMouseLeave={e=>e.target.style.background="transparent"}>{item.icon} {item.label}</button>)}
           </div>}
-        </div>
+        </div>)}
+        {filtersOpen && (
         <button className="btn" onClick={()=>{setSearch("");setMinStake("");setMaxStake("");setActType("all");setEpFrom("");setEpTo("");setSortBy("stake_desc");setDPage(0);setPPage(0)}}
-          style={{alignSelf:"flex-end",fontSize:11}}>{T.reset}</button>
+          style={{alignSelf:"flex-end",fontSize:11}}>{T.reset}</button>)}
+        {filtersOpen && (
         <div style={{display:"flex",alignItems:"center",gap:6,marginLeft:"auto"}}>
           <label style={{fontSize:10,color:"var(--text2)"}}>{T.zoom_label||"Size"}:</label>
           <input type="range" min={50} max={150} step={10} value={zoom}
             onChange={e=>setZoom(Number(e.target.value))}
             style={{width:80,accentColor:"var(--accent)"}} />
           <span style={{fontSize:10,color:"var(--text2)",minWidth:28}}>{zoom}%</span>
-        </div>
-      </React.Fragment>)}
-      {pageLoading && <span style={{fontSize:11,color:"var(--accent2)"}}>⏳ {stage}</span>}
+        </div>)}
+        {pageLoading && <span style={{fontSize:11,color:"var(--accent2)"}}>⏳ {stage}</span>}
       </div>
 
       {/* ═══ DRep Votes Section (top) ═══ */}
@@ -1937,12 +1940,13 @@ function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, computePe
                   {fmtFiat(ccMemberCount>0?ccBudgetTotal/ccMemberCount:0, adaPrice.usd, "$")} / {fmtFiat(ccMemberCount>0?ccBudgetTotal/ccMemberCount:0, adaPrice.jpy, "¥")}
                 </div>}
                 <div style={{fontSize:8,color:"var(--text2)",marginTop:3}}>({ccMemberCount} members)</div>
-                </div>
               </div>
             </div>
           </div>
         )}
       </div>
+
+      {pageLoading && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
 
       {/* ═══ DRep Reward Simulator ═══ */}
       <div style={{marginBottom:12}}>
