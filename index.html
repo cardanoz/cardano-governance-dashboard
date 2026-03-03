@@ -1760,7 +1760,7 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
   // ── DRep parameters ──
   const [K, setK] = useHashState("s_K",5);
   const [N, setN] = useHashState("s_N",100);
-  const [b2, setB2] = useHashState("s_b2",20000);
+  const [b2, setB2] = useHashState("s_b2",1000);
   const [b2Pct, setB2Pct] = useHashState("s_b2p",30);
   const [b2Mode, setB2Mode] = useHashState("s_b2m","ada");
   const b2Eff = b2Mode === "pct" ? (N > 0 ? Math.round(drepBudget * b2Pct / 100 / N) : 0) : b2;
