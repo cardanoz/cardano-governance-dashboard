@@ -741,7 +741,7 @@ async function main() {
             const rUrl = typeof v.meta_url === "object" ? v.meta_url.url : v.meta_url;
             const rKey = `${shortHash}__${proposalId}`;
             // Don't overwrite already-downloaded content (object with .text)
-            if (rUrl && !(typeof ccRationales[rKey] === "object" && ccRationales[rKey].text)) {
+            if (rUrl && !(typeof ccRationales[rKey] === "object" && "text" in ccRationales[rKey])) {
               ccRationales[rKey] = rUrl;
             }
           }
@@ -793,10 +793,12 @@ async function main() {
     const result = {};
 
     for (const [key, val] of entries) {
-      if (typeof val === "object" && val.text) {
+      if (typeof val === "object" && "text" in val) {
+        // Already downloaded (or attempted) — keep as-is, don't re-download
         result[key] = val;
         cached++;
       } else {
+        // String URL or {url} without text → needs downloading
         toDownload.push([key, typeof val === "string" ? val : (val.url || String(val))]);
       }
     }
