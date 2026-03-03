@@ -1033,8 +1033,28 @@ async function main() {
     console.log(`  No SPO-eligible proposals, skipping`);
   } else {
     try {
-      // Use bech32Map (already built/cached) to get proposal bech32 IDs
-      const spoBech32Map = cache.bech32Map || {};
+      // Ensure bech32Map has all proposals — refresh if any are missing
+      let spoBech32Map = cache.bech32Map || {};
+      const missingBech32 = spoEligibleProposals.filter(p => !spoBech32Map[p.proposal_id]);
+      if (missingBech32.length > 0 || Object.keys(spoBech32Map).length === 0) {
+        console.log(`  Refreshing bech32Map for SPO (${missingBech32.length} proposals missing)...`);
+        let allKP = [];
+        let kOff = 0;
+        while (true) {
+          const page = await koiosGet("/proposal_list", { offset: kOff, limit: 500 });
+          if (!page || page.length === 0) break;
+          allKP = allKP.concat(page);
+          if (page.length < 500) break;
+          kOff += 500;
+        }
+        for (const kp of allKP) {
+          if (kp.proposal_tx_hash && kp.proposal_index != null && kp.proposal_id) {
+            spoBech32Map[`${kp.proposal_tx_hash}#${kp.proposal_index}`] = kp.proposal_id;
+          }
+        }
+        cache.bech32Map = spoBech32Map;
+        console.log(`  bech32Map updated: ${Object.keys(spoBech32Map).length} entries`);
+      }
 
       // Step 1: Fetch SPO votes per eligible proposal
       let spoVoteCount = 0;
@@ -1098,6 +1118,9 @@ async function main() {
         } catch (e) { console.log(`    account_info batch error: ${e.message}`); }
         if ((i + ACCT_BATCH) % 500 < ACCT_BATCH) console.log(`    Delegation check: ${Math.min(i + ACCT_BATCH, rewardAddrs.length)}/${rewardAddrs.length}`);
       }
+
+      const drepCount = Object.values(addrToDrep).filter(v => v).length;
+      console.log(`  Delegation results: ${Object.keys(addrToDrep).length} addresses checked, ${drepCount} have DRep delegation`);
 
       // Step 4: Build pool info map
       registeredPools.forEach(p => {
