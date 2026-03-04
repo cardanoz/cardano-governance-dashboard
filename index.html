@@ -1148,99 +1148,6 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         {pageLoading && <span style={{fontSize:11,color:"var(--accent2)"}}>⏳ {stage}</span>}
       </div>
 
-      {/* ═══ Proposal Status Summary ═══ */}
-      {(() => {
-        const ps = govInfo && govInfo.proposalSummaries;
-        const pp = govInfo && govInfo.protocolParams;
-        if (!ps || !pp || fProps.length === 0) return null;
-        const currentEpoch = pp.epoch || 0;
-        const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
-        const CC_INELIG = ["UpdateCommittee"];
-        // Map proposal type to DRep threshold
-        const drepThreshold = (t) => {
-          if(t==="NoConfidence") return Number(pp.dvt_motion_no_confidence)||0.67;
-          if(t==="UpdateCommittee") return Number(pp.dvt_committee_normal)||0.67;
-          if(t==="NewConstitution") return Number(pp.dvt_update_to_constitution)||0.75;
-          if(t==="HardForkInitiation") return Number(pp.dvt_hard_fork_initiation)||0.6;
-          if(t==="TreasuryWithdrawals") return Number(pp.dvt_treasury_withdrawal)||0.67;
-          if(t==="ParameterChange") return Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0)||0.67;
-          if(t==="InfoAction") return 0.51;
-          return 0.67;
-        };
-        const spoThreshold = (t) => {
-          if(SPO_INELIG.includes(t)) return null;
-          if(t==="NoConfidence") return Number(pp.pvt_motion_no_confidence)||0.51;
-          if(t==="HardForkInitiation") return Number(pp.pvt_hard_fork_initiation)||0.51;
-          if(t==="ParameterChange") return Number(pp.pvt_p_p_security_group)||0.51;
-          if(t==="InfoAction") return 0.51;
-          return 0.51;
-        };
-        const ccThreshold = (t) => {
-          if(CC_INELIG.includes(t)) return null;
-          return Number(pp.dvt_committee_normal)||0.67;
-        };
-        // Small approval bar
-        const ApprovalBar = ({yes,no,abstain,threshold,label}) => {
-          const total = yes+no+abstain;
-          const voted = yes+no;
-          if(total===0 && threshold===null) return React.createElement("span",{style:{fontSize:9,color:"var(--text2)"}},T.summary_na||"N/A");
-          const pct = voted>0 ? yes/voted : 0;
-          const pctStr = voted>0 ? (pct*100).toFixed(0)+"%" : "—";
-          const met = threshold!==null && pct >= threshold;
-          const barBg = met ? "rgba(52,211,153,.25)" : "rgba(248,113,113,.15)";
-          const barFill = met ? "#34d399" : "#f87171";
-          return React.createElement("div",{style:{display:"flex",alignItems:"center",gap:4,minWidth:0},title:`${label}: ${pctStr} (${T.summary_threshold||"Threshold"}: ${threshold!==null?(threshold*100).toFixed(0)+"%":"N/A"})`},
-            React.createElement("span",{style:{fontSize:8,color:"var(--text2)",minWidth:28,textAlign:"right"}},label),
-            React.createElement("div",{style:{position:"relative",width:48,height:8,background:barBg,borderRadius:4,overflow:"hidden",flexShrink:0}},
-              React.createElement("div",{style:{position:"absolute",left:0,top:0,bottom:0,width:(Math.min(pct,1)*100)+"%",background:barFill,borderRadius:4}}),
-              threshold!==null && React.createElement("div",{style:{position:"absolute",left:(threshold*100)+"%",top:-1,bottom:-1,width:1,background:"#fff",opacity:.7}})
-            ),
-            React.createElement("span",{style:{fontSize:9,fontWeight:600,color:met?"#34d399":"#f87171",minWidth:24}},pctStr)
-          );
-        };
-        return React.createElement("div",{style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"8px 10px",marginBottom:10,overflow:"hidden"}},
-          React.createElement("div",{style:{fontSize:11,fontWeight:700,color:"var(--accent2)",marginBottom:6}},
-            "📊 ",T.summary_proposal_status||"Proposal Status"," (",pgP.length,")"),
-          React.createElement("div",{style:{display:"flex",flexWrap:"wrap",gap:6}},
-            ...pgP.slice(0,PPP).map(p => {
-              const s = ps[p.proposal_id];
-              if(!s) return null;
-              const isExpired = p.expiration && currentEpoch > p.expiration;
-              const dt = drepThreshold(p.proposal_type);
-              const st = spoThreshold(p.proposal_type);
-              const ct = ccThreshold(p.proposal_type);
-              const dTotal = s.drep.yes+s.drep.no+s.drep.abstain;
-              const dVoted = s.drep.yes+s.drep.no;
-              const dPct = dVoted>0?s.drep.yes/dVoted:0;
-              const ccVoted = s.cc.yes+s.cc.no;
-              const ccPct = ccVoted>0?s.cc.yes/ccVoted:0;
-              const sVoted = s.spo.yes+s.spo.no;
-              const sPct = sVoted>0?s.spo.yes/sVoted:0;
-              const drepMet = dPct>=dt;
-              const ccMet = ct===null || (ccVoted>0 && ccPct>=ct);
-              const spoMet = st===null || (sVoted>0 && sPct>=st);
-              const allMet = drepMet && ccMet && spoMet && dVoted>0;
-              const typeColor = ACTION_COLORS[p.proposal_type]||"#888";
-              return React.createElement("div",{key:p.proposal_id,
-                style:{background:"var(--bg3)",border:"1px solid var(--border2)",borderRadius:8,padding:"6px 8px",
-                  minWidth:180,maxWidth:240,flex:"1 1 200px",opacity:isExpired?.6:1}},
-                React.createElement("div",{style:{display:"flex",alignItems:"center",gap:4,marginBottom:4}},
-                  React.createElement("span",{style:{fontSize:8,padding:"1px 5px",borderRadius:4,background:typeColor+"22",color:typeColor,fontWeight:600}},
-                    actionLabel(p.proposal_type,T)),
-                  isExpired && React.createElement("span",{style:{fontSize:7,padding:"1px 4px",borderRadius:3,background:"#666",color:"#ccc"}},"Expired"),
-                  !isExpired && allMet && React.createElement("span",{style:{fontSize:7,padding:"1px 4px",borderRadius:3,background:"#34d39922",color:"#34d399"}},"✓")
-                ),
-                React.createElement("div",{style:{fontSize:9,color:"var(--text)",marginBottom:4,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},
-                  title:p.title||p.proposal_id}, p.title ? p.title.slice(0,35)+(p.title.length>35?"…":"") : shortId(p.proposal_id)),
-                React.createElement(ApprovalBar,{yes:s.drep.yes,no:s.drep.no,abstain:s.drep.abstain,threshold:dt,label:"DRep"}),
-                React.createElement(ApprovalBar,{yes:s.cc.yes,no:s.cc.no,abstain:s.cc.abstain,threshold:ct,label:"CC"}),
-                React.createElement(ApprovalBar,{yes:s.spo.yes,no:s.spo.no,abstain:s.spo.abstain,threshold:st,label:"SPO"})
-              );
-            })
-          )
-        );
-      })()}
-
       {/* ═══ DRep Votes Section (top) ═══ */}
       <div style={drepFull?{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9998,background:"var(--bg)",padding:12,display:"flex",flexDirection:"column"}:{marginBottom:12}}>
         <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:drepOpen?6:0}}>
@@ -1263,6 +1170,28 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                   boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.drep_col}</th>
                 {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
                   const shortTitle = p.title ? (p.title.length > 30 ? p.title.slice(0,30)+"…" : p.title) : "";
+                  // Proposal approval mini-bars
+                  const ps = govInfo && govInfo.proposalSummaries && govInfo.proposalSummaries[p.proposal_id];
+                  const pp = govInfo && govInfo.protocolParams;
+                  const _miniBar = (yes,no,thr,label,clr) => {
+                    if(thr===null) return null;
+                    const voted=yes+no; const pct=voted>0?yes/voted:0; const met=pct>=thr;
+                    const pctS=voted>0?(pct*100).toFixed(0)+"%":"—";
+                    return React.createElement("div",{key:label,style:{display:"flex",alignItems:"center",gap:1},
+                      title:`${label}: ${pctS} / ${(thr*100).toFixed(0)}%`},
+                      React.createElement("span",{style:{fontSize:5,color:clr,minWidth:12,textAlign:"right",lineHeight:1}},label),
+                      React.createElement("div",{style:{position:"relative",width:24,height:3,background:"rgba(255,255,255,.08)",borderRadius:2,overflow:"hidden"}},
+                        React.createElement("div",{style:{position:"absolute",left:0,top:0,bottom:0,width:(Math.min(pct,1)*100)+"%",background:met?"#34d399":"#f87171",borderRadius:2}}),
+                        React.createElement("div",{style:{position:"absolute",left:(thr*100)+"%",top:0,bottom:0,width:1,background:"rgba(255,255,255,.5)"}})
+                      ),
+                      React.createElement("span",{style:{fontSize:5,fontWeight:600,color:met?"#34d399":"#f87171",minWidth:14,lineHeight:1}},pctS)
+                    );
+                  };
+                  const SPO_IN = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
+                  const CC_IN = ["UpdateCommittee"];
+                  const _dt = pp ? (p.proposal_type==="NoConfidence"?Number(pp.dvt_motion_no_confidence)||.67:p.proposal_type==="UpdateCommittee"?Number(pp.dvt_committee_normal)||.67:p.proposal_type==="NewConstitution"?Number(pp.dvt_update_to_constitution)||.75:p.proposal_type==="HardForkInitiation"?Number(pp.dvt_hard_fork_initiation)||.6:p.proposal_type==="TreasuryWithdrawals"?Number(pp.dvt_treasury_withdrawal)||.67:p.proposal_type==="ParameterChange"?Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0)||.67:p.proposal_type==="InfoAction"?.51:.67) : .67;
+                  const _st = SPO_IN.includes(p.proposal_type)?null:(pp?(p.proposal_type==="NoConfidence"?Number(pp.pvt_motion_no_confidence)||.51:p.proposal_type==="HardForkInitiation"?Number(pp.pvt_hard_fork_initiation)||.51:.51):.51);
+                  const _ct = CC_IN.includes(p.proposal_type)?null:(pp?Number(pp.dvt_committee_normal)||.67:.67);
                   return(
                   <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"4px 2px",
                     textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:600,minWidth:Math.round(70*zoom/100),maxWidth:Math.round(90*zoom/100),verticalAlign:"bottom"}}>
@@ -1276,6 +1205,11 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         <span style={{fontSize:8,cursor:"pointer",opacity:.7}} title={T.export_proposal_rationales||"Export DRep rationales for this proposal"}
                           onClick={()=>exportProposalRationales(p)}>📎</span>
                       </span>
+                      {ps && React.createElement("div",{style:{display:"flex",flexDirection:"column",gap:0,marginTop:1,width:"100%"}},
+                        _miniBar(ps.drep.yes,ps.drep.no,_dt,"D","#8b5cf6"),
+                        _miniBar(ps.cc.yes,ps.cc.no,_ct,"C","#f59e0b"),
+                        _miniBar(ps.spo.yes,ps.spo.no,_st,"S","#06b6d4")
+                      )}
                     </div>
                   </th>);})}
               </tr></thead>
