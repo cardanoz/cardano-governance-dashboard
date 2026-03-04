@@ -142,7 +142,17 @@ const LANG = {
     spo_no_eligible:"No SPO-eligible governance actions found",
     spo_hardfork_note:"Hard Fork: explicit vote required (no default)",
     spo_voted:"Voted", spo_total_pools:"Total Pools", spo_vote_count:"Votes",
-    tab_history:"Stake Analytics",
+    tab_history:"Stake Analytics", tab_govdata:"Gov Data (β)",
+    gov_treasury:"Treasury", gov_reserves:"Reserves", gov_supply:"Circulating Supply",
+    gov_live_stake:"Live Stake", gov_active_stake:"Active Stake",
+    gov_protocol_params:"Protocol Parameters", gov_governance_thresholds:"Governance Thresholds",
+    gov_drep_threshold:"DRep Threshold", gov_spo_threshold:"SPO Threshold", gov_cc_threshold:"CC Threshold",
+    gov_deposits:"Deposits & Costs", gov_block_limits:"Block & Tx Limits", gov_economic:"Economic Parameters",
+    gov_governance_settings:"Governance Settings", gov_epoch:"Epoch",
+    summary_approval:"Approval", summary_yes:"Yes", summary_no:"No", summary_abstain:"Abstain",
+    summary_threshold:"Threshold", summary_drep:"DRep", summary_cc:"CC", summary_spo:"SPO",
+    summary_active:"Active", summary_expired:"Expired", summary_ratified:"Ratified",
+    summary_na:"N/A", summary_proposal_status:"Proposal Status",
     hist_title:"DRep Stake History", hist_desc:"Tracking DRep voting power over time (snapshots captured each epoch)",
     hist_total_stake:"Total Stake (ADA)", hist_drep_count:"DRep Count", hist_top_dreps:"Top DReps by Stake",
     hist_epoch:"Epoch", hist_date:"Date", hist_no_data:"No history data yet. Snapshots are captured each epoch by the data fetcher.",
@@ -221,7 +231,17 @@ const LANG = {
     spo_no_eligible:"SPO投票対象のガバナンスアクションがありません",
     spo_hardfork_note:"Hard Fork: 明示投票必須（デフォルトなし）",
     spo_voted:"投票済", spo_total_pools:"プール数", spo_vote_count:"投票数",
-    tab_history:"ステーク分析・予測",
+    tab_history:"ステーク分析・予測", tab_govdata:"ガバナンスデータ (β)",
+    gov_treasury:"トレジャリー", gov_reserves:"リザーブ", gov_supply:"流通量",
+    gov_live_stake:"ライブステーク", gov_active_stake:"アクティブステーク",
+    gov_protocol_params:"プロトコルパラメータ", gov_governance_thresholds:"ガバナンス閾値",
+    gov_drep_threshold:"DRep閾値", gov_spo_threshold:"SPO閾値", gov_cc_threshold:"CC閾値",
+    gov_deposits:"デポジット・コスト", gov_block_limits:"ブロック・Tx制限", gov_economic:"経済パラメータ",
+    gov_governance_settings:"ガバナンス設定", gov_epoch:"エポック",
+    summary_approval:"承認率", summary_yes:"賛成", summary_no:"反対", summary_abstain:"棄権",
+    summary_threshold:"閾値", summary_drep:"DRep", summary_cc:"CC", summary_spo:"SPO",
+    summary_active:"アクティブ", summary_expired:"期限切れ", summary_ratified:"批准済",
+    summary_na:"対象外", summary_proposal_status:"提案ステータス",
     hist_title:"DRepステーク推移", hist_desc:"DRep投票力の時系列推移（エポックごとにスナップショット記録）",
     hist_total_stake:"総ステーク (ADA)", hist_drep_count:"DRep数", hist_top_dreps:"ステーク上位DRep",
     hist_epoch:"エポック", hist_date:"日付", hist_no_data:"履歴データがまだありません。データ取得時にエポックごとにスナップショットが記録されます。",
@@ -871,7 +891,7 @@ function ShareButton({ T }) {
 // Dashboard Tab
 // ════════════════════════════════════════════════════════════════
 function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMore, pageLoading, stage,
-  loadMoreDreps, T, isDemo, ccMembers, ccVotes, ccRationales, spoVotes, spoPoolInfo }) {
+  loadMoreDreps, T, isDemo, ccMembers, ccVotes, ccRationales, spoVotes, spoPoolInfo, govInfo }) {
   const [search,setSearch] = useHashState("d_search","");
   const [minStake,setMinStake] = useHashState("d_minStake","");
   const [maxStake,setMaxStake] = useHashState("d_maxStake","");
@@ -1127,6 +1147,99 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         </div>)}
         {pageLoading && <span style={{fontSize:11,color:"var(--accent2)"}}>⏳ {stage}</span>}
       </div>
+
+      {/* ═══ Proposal Status Summary ═══ */}
+      {(() => {
+        const ps = govInfo && govInfo.proposalSummaries;
+        const pp = govInfo && govInfo.protocolParams;
+        if (!ps || !pp || fProps.length === 0) return null;
+        const currentEpoch = pp.epoch || 0;
+        const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
+        const CC_INELIG = ["UpdateCommittee"];
+        // Map proposal type to DRep threshold
+        const drepThreshold = (t) => {
+          if(t==="NoConfidence") return Number(pp.dvt_motion_no_confidence)||0.67;
+          if(t==="UpdateCommittee") return Number(pp.dvt_committee_normal)||0.67;
+          if(t==="NewConstitution") return Number(pp.dvt_update_to_constitution)||0.75;
+          if(t==="HardForkInitiation") return Number(pp.dvt_hard_fork_initiation)||0.6;
+          if(t==="TreasuryWithdrawals") return Number(pp.dvt_treasury_withdrawal)||0.67;
+          if(t==="ParameterChange") return Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0)||0.67;
+          if(t==="InfoAction") return 0.51;
+          return 0.67;
+        };
+        const spoThreshold = (t) => {
+          if(SPO_INELIG.includes(t)) return null;
+          if(t==="NoConfidence") return Number(pp.pvt_motion_no_confidence)||0.51;
+          if(t==="HardForkInitiation") return Number(pp.pvt_hard_fork_initiation)||0.51;
+          if(t==="ParameterChange") return Number(pp.pvt_p_p_security_group)||0.51;
+          if(t==="InfoAction") return 0.51;
+          return 0.51;
+        };
+        const ccThreshold = (t) => {
+          if(CC_INELIG.includes(t)) return null;
+          return Number(pp.dvt_committee_normal)||0.67;
+        };
+        // Small approval bar
+        const ApprovalBar = ({yes,no,abstain,threshold,label}) => {
+          const total = yes+no+abstain;
+          const voted = yes+no;
+          if(total===0 && threshold===null) return React.createElement("span",{style:{fontSize:9,color:"var(--text2)"}},T.summary_na||"N/A");
+          const pct = voted>0 ? yes/voted : 0;
+          const pctStr = voted>0 ? (pct*100).toFixed(0)+"%" : "—";
+          const met = threshold!==null && pct >= threshold;
+          const barBg = met ? "rgba(52,211,153,.25)" : "rgba(248,113,113,.15)";
+          const barFill = met ? "#34d399" : "#f87171";
+          return React.createElement("div",{style:{display:"flex",alignItems:"center",gap:4,minWidth:0},title:`${label}: ${pctStr} (${T.summary_threshold||"Threshold"}: ${threshold!==null?(threshold*100).toFixed(0)+"%":"N/A"})`},
+            React.createElement("span",{style:{fontSize:8,color:"var(--text2)",minWidth:28,textAlign:"right"}},label),
+            React.createElement("div",{style:{position:"relative",width:48,height:8,background:barBg,borderRadius:4,overflow:"hidden",flexShrink:0}},
+              React.createElement("div",{style:{position:"absolute",left:0,top:0,bottom:0,width:(Math.min(pct,1)*100)+"%",background:barFill,borderRadius:4}}),
+              threshold!==null && React.createElement("div",{style:{position:"absolute",left:(threshold*100)+"%",top:-1,bottom:-1,width:1,background:"#fff",opacity:.7}})
+            ),
+            React.createElement("span",{style:{fontSize:9,fontWeight:600,color:met?"#34d399":"#f87171",minWidth:24}},pctStr)
+          );
+        };
+        return React.createElement("div",{style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"8px 10px",marginBottom:10,overflow:"hidden"}},
+          React.createElement("div",{style:{fontSize:11,fontWeight:700,color:"var(--accent2)",marginBottom:6}},
+            "📊 ",T.summary_proposal_status||"Proposal Status"," (",pgP.length,")"),
+          React.createElement("div",{style:{display:"flex",flexWrap:"wrap",gap:6}},
+            ...pgP.slice(0,PPP).map(p => {
+              const s = ps[p.proposal_id];
+              if(!s) return null;
+              const isExpired = p.expiration && currentEpoch > p.expiration;
+              const dt = drepThreshold(p.proposal_type);
+              const st = spoThreshold(p.proposal_type);
+              const ct = ccThreshold(p.proposal_type);
+              const dTotal = s.drep.yes+s.drep.no+s.drep.abstain;
+              const dVoted = s.drep.yes+s.drep.no;
+              const dPct = dVoted>0?s.drep.yes/dVoted:0;
+              const ccVoted = s.cc.yes+s.cc.no;
+              const ccPct = ccVoted>0?s.cc.yes/ccVoted:0;
+              const sVoted = s.spo.yes+s.spo.no;
+              const sPct = sVoted>0?s.spo.yes/sVoted:0;
+              const drepMet = dPct>=dt;
+              const ccMet = ct===null || (ccVoted>0 && ccPct>=ct);
+              const spoMet = st===null || (sVoted>0 && sPct>=st);
+              const allMet = drepMet && ccMet && spoMet && dVoted>0;
+              const typeColor = ACTION_COLORS[p.proposal_type]||"#888";
+              return React.createElement("div",{key:p.proposal_id,
+                style:{background:"var(--bg3)",border:"1px solid var(--border2)",borderRadius:8,padding:"6px 8px",
+                  minWidth:180,maxWidth:240,flex:"1 1 200px",opacity:isExpired?.6:1}},
+                React.createElement("div",{style:{display:"flex",alignItems:"center",gap:4,marginBottom:4}},
+                  React.createElement("span",{style:{fontSize:8,padding:"1px 5px",borderRadius:4,background:typeColor+"22",color:typeColor,fontWeight:600}},
+                    actionLabel(p.proposal_type,T)),
+                  isExpired && React.createElement("span",{style:{fontSize:7,padding:"1px 4px",borderRadius:3,background:"#666",color:"#ccc"}},"Expired"),
+                  !isExpired && allMet && React.createElement("span",{style:{fontSize:7,padding:"1px 4px",borderRadius:3,background:"#34d39922",color:"#34d399"}},"✓")
+                ),
+                React.createElement("div",{style:{fontSize:9,color:"var(--text)",marginBottom:4,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},
+                  title:p.title||p.proposal_id}, p.title ? p.title.slice(0,35)+(p.title.length>35?"…":"") : shortId(p.proposal_id)),
+                React.createElement(ApprovalBar,{yes:s.drep.yes,no:s.drep.no,abstain:s.drep.abstain,threshold:dt,label:"DRep"}),
+                React.createElement(ApprovalBar,{yes:s.cc.yes,no:s.cc.no,abstain:s.cc.abstain,threshold:ct,label:"CC"}),
+                React.createElement(ApprovalBar,{yes:s.spo.yes,no:s.spo.no,abstain:s.spo.abstain,threshold:st,label:"SPO"})
+              );
+            })
+          )
+        );
+      })()}
 
       {/* ═══ DRep Votes Section (top) ═══ */}
       <div style={drepFull?{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9998,background:"var(--bg)",padding:12,display:"flex",flexDirection:"column"}:{marginBottom:12}}>
@@ -2433,6 +2546,122 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
 }
 
 // ════════════════════════════════════════════════════════════════
+// Governance Data Tab (β) — Treasury, Protocol Params, Network Info
+// ════════════════════════════════════════════════════════════════
+function GovernanceDataTab({ govInfo, T }) {
+  if (!govInfo) return React.createElement("div",{style:{padding:40,textAlign:"center",color:"var(--text2)"}},
+    "Governance data not available. Data will appear after the next data update.");
+  const net = govInfo.network || {};
+  const pp = govInfo.protocolParams || {};
+  const fmtL = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(2)+"B":n>=1e6?(n/1e6).toFixed(2)+"M":n>=1e3?(n/1e3).toFixed(1)+"K":n.toFixed(0); };
+  const fmtAda = (v) => "₳ "+fmtL(v);
+  const pctStr = (v) => v!==undefined&&v!==null ? (Number(v)*100).toFixed(0)+"%" : "—";
+
+  const Section = ({title,children}) => React.createElement("div",{
+    style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:10}},
+    React.createElement("div",{style:{fontSize:13,fontWeight:700,color:"var(--accent2)",marginBottom:8}},title),
+    children);
+
+  const Row = ({label,value,sub}) => React.createElement("div",{
+    style:{display:"flex",justifyContent:"space-between",alignItems:"baseline",padding:"3px 0",borderBottom:"1px solid var(--border)"}},
+    React.createElement("span",{style:{fontSize:11,color:"var(--text2)"}},label),
+    React.createElement("div",{style:{textAlign:"right"}},
+      React.createElement("span",{style:{fontSize:12,fontWeight:600,color:"var(--text)"}},value),
+      sub && React.createElement("div",{style:{fontSize:9,color:"var(--text2)"}},sub)));
+
+  const ThresholdRow = ({label,drep,spo,cc}) => React.createElement("div",{
+    style:{display:"grid",gridTemplateColumns:"1fr 60px 60px 60px",gap:4,padding:"3px 0",borderBottom:"1px solid var(--border)",alignItems:"center"}},
+    React.createElement("span",{style:{fontSize:11,color:"var(--text2)"}},label),
+    React.createElement("span",{style:{fontSize:11,fontWeight:600,color:"#8b5cf6",textAlign:"center"}},drep),
+    React.createElement("span",{style:{fontSize:11,fontWeight:600,color:"#06b6d4",textAlign:"center"}},spo||"—"),
+    React.createElement("span",{style:{fontSize:11,fontWeight:600,color:"#f59e0b",textAlign:"center"}},cc));
+
+  return React.createElement("div",{style:{maxWidth:900,margin:"0 auto"}},
+    // Network Overview
+    React.createElement(Section,{title:"🏦 "+(T.gov_treasury||"Treasury")+" & "+(T.gov_supply||"Supply")},
+      React.createElement("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:8,marginBottom:4}},
+        ...[
+          {label:T.gov_treasury||"Treasury",value:fmtAda(net.supply_treasury),color:"#f59e0b"},
+          {label:T.gov_reserves||"Reserves",value:fmtAda(net.supply_reserves),color:"#8b5cf6"},
+          {label:T.gov_supply||"Circulating",value:fmtAda(net.supply_circulating),color:"#06b6d4"},
+          {label:T.gov_live_stake||"Live Stake",value:fmtAda(net.stake_live),color:"#34d399"},
+          {label:T.gov_active_stake||"Active Stake",value:fmtAda(net.stake_active),color:"#14b8a6"},
+        ].map(({label,value,color},i) => React.createElement("div",{key:i,
+          style:{background:"var(--bg3)",borderRadius:8,padding:"10px 12px",borderLeft:`3px solid ${color}`}},
+          React.createElement("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},label),
+          React.createElement("div",{style:{fontSize:16,fontWeight:700,color}},value)))
+      ),
+      React.createElement("div",{style:{fontSize:9,color:"var(--text2)",textAlign:"right",marginTop:4}},
+        (T.gov_epoch||"Epoch")+": "+pp.epoch)
+    ),
+
+    // Governance Thresholds
+    React.createElement(Section,{title:"⚖️ "+(T.gov_governance_thresholds||"Governance Thresholds")},
+      React.createElement("div",{style:{display:"grid",gridTemplateColumns:"1fr 60px 60px 60px",gap:4,padding:"4px 0",marginBottom:4}},
+        React.createElement("span",{style:{fontSize:9,color:"var(--text2)",fontWeight:600}},"Action Type"),
+        React.createElement("span",{style:{fontSize:9,color:"#8b5cf6",textAlign:"center",fontWeight:600}},T.summary_drep||"DRep"),
+        React.createElement("span",{style:{fontSize:9,color:"#06b6d4",textAlign:"center",fontWeight:600}},T.summary_spo||"SPO"),
+        React.createElement("span",{style:{fontSize:9,color:"#f59e0b",textAlign:"center",fontWeight:600}},T.summary_cc||"CC")),
+      React.createElement(ThresholdRow,{label:T.type_noconf||"No Confidence",drep:pctStr(pp.dvt_motion_no_confidence),spo:pctStr(pp.pvt_motion_no_confidence),cc:"—"}),
+      React.createElement(ThresholdRow,{label:T.type_cc||"Update CC",drep:pctStr(pp.dvt_committee_normal),spo:pctStr(pp.pvt_committee_normal),cc:"—"}),
+      React.createElement(ThresholdRow,{label:T.type_const||"New Constitution",drep:pctStr(pp.dvt_update_to_constitution),spo:"—",cc:pctStr(pp.dvt_committee_normal)}),
+      React.createElement(ThresholdRow,{label:T.type_hardfork||"Hard Fork",drep:pctStr(pp.dvt_hard_fork_initiation),spo:pctStr(pp.pvt_hard_fork_initiation),cc:pctStr(pp.dvt_committee_normal)}),
+      React.createElement(ThresholdRow,{label:T.type_treasury||"Treasury",drep:pctStr(pp.dvt_treasury_withdrawal),spo:"—",cc:pctStr(pp.dvt_committee_normal)}),
+      React.createElement(ThresholdRow,{label:T.type_param||"Param Change",drep:"67%*",spo:pctStr(pp.pvt_p_p_security_group),cc:pctStr(pp.dvt_committee_normal)}),
+      React.createElement(ThresholdRow,{label:T.type_info||"Info Action",drep:"51%",spo:"51%",cc:"51%"}),
+      React.createElement("div",{style:{fontSize:8,color:"var(--text2)",marginTop:4}},
+        "* ParameterChange DRep thresholds vary by group: Network="+pctStr(pp.dvt_p_p_network_group)+
+        ", Economic="+pctStr(pp.dvt_p_p_economic_group)+", Technical="+pctStr(pp.dvt_p_p_technical_group)+
+        ", Governance="+pctStr(pp.dvt_p_p_gov_group))
+    ),
+
+    // Deposits & Costs
+    React.createElement(Section,{title:"💰 "+(T.gov_deposits||"Deposits & Costs")},
+      React.createElement(Row,{label:"DRep Deposit",value:fmtAda(pp.drep_deposit)}),
+      React.createElement(Row,{label:"Gov Action Deposit",value:fmtAda(pp.gov_action_deposit)}),
+      React.createElement(Row,{label:"Pool Deposit",value:fmtAda(pp.pool_deposit)}),
+      React.createElement(Row,{label:"Key Deposit",value:fmtAda(pp.key_deposit)}),
+      React.createElement(Row,{label:"Min Pool Cost",value:fmtAda(pp.min_pool_cost)}),
+      React.createElement(Row,{label:"Coins per UTxO byte",value:fmtAda(pp.coins_per_utxo_size)})
+    ),
+
+    // Governance Settings
+    React.createElement(Section,{title:"🏛 "+(T.gov_governance_settings||"Governance Settings")},
+      React.createElement(Row,{label:"Gov Action Lifetime",value:pp.gov_action_lifetime+" epochs"}),
+      React.createElement(Row,{label:"DRep Activity",value:pp.drep_activity+" epochs"}),
+      React.createElement(Row,{label:"CC Min Size",value:String(pp.committee_min_size||"—")}),
+      React.createElement(Row,{label:"CC Max Term Length",value:(pp.committee_max_term_length||"—")+" epochs"}),
+      React.createElement(Row,{label:"Protocol Version",value:"v"+pp.protocol_major_ver+"."+pp.protocol_minor_ver})
+    ),
+
+    // Block & Tx Limits
+    React.createElement(Section,{title:"📦 "+(T.gov_block_limits||"Block & Tx Limits")},
+      React.createElement(Row,{label:"Max Block Size",value:(Number(pp.max_block_size)/1024).toFixed(0)+" KB"}),
+      React.createElement(Row,{label:"Max Tx Size",value:(Number(pp.max_tx_size)/1024).toFixed(0)+" KB"}),
+      React.createElement(Row,{label:"Max Block Header",value:pp.max_block_header_size+" bytes"}),
+      React.createElement(Row,{label:"Max Tx Execution Memory",value:pp.max_tx_ex_mem?Number(pp.max_tx_ex_mem).toLocaleString():"—"}),
+      React.createElement(Row,{label:"Max Tx Execution Steps",value:pp.max_tx_ex_steps?Number(pp.max_tx_ex_steps).toLocaleString():"—"}),
+      React.createElement(Row,{label:"Max Block Execution Memory",value:pp.max_block_ex_mem?Number(pp.max_block_ex_mem).toLocaleString():"—"}),
+      React.createElement(Row,{label:"Max Block Execution Steps",value:pp.max_block_ex_steps?Number(pp.max_block_ex_steps).toLocaleString():"—"}),
+      React.createElement(Row,{label:"Max Collateral Inputs",value:String(pp.max_collateral_inputs||"—")}),
+      React.createElement(Row,{label:"Max Value Size",value:pp.max_val_size?Number(pp.max_val_size).toLocaleString()+" bytes":"—"})
+    ),
+
+    // Economic Parameters
+    React.createElement(Section,{title:"📈 "+(T.gov_economic||"Economic Parameters")},
+      React.createElement(Row,{label:"Min Fee A (per byte)",value:String(pp.min_fee_a||"—")}),
+      React.createElement(Row,{label:"Min Fee B (constant)",value:String(pp.min_fee_b||"—")}),
+      React.createElement(Row,{label:"Price Memory",value:String(pp.price_mem||"—")}),
+      React.createElement(Row,{label:"Price Step",value:String(pp.price_step||"—")}),
+      React.createElement(Row,{label:"a0 (Pool Influence)",value:String(pp.a0||"—")}),
+      React.createElement(Row,{label:"ρ (Monetary Expansion)",value:String(pp.rho||"—")}),
+      React.createElement(Row,{label:"τ (Treasury Cut)",value:String(pp.tau||"—")}),
+      React.createElement(Row,{label:"Collateral %",value:pp.collateral_percent?pp.collateral_percent+"%":"—"})
+    )
+  );
+}
+
+// ════════════════════════════════════════════════════════════════
 // Main App (Tab Controller + Shared Data)
 // ════════════════════════════════════════════════════════════════
 function App() {
@@ -2469,6 +2698,8 @@ function App() {
   // SPO state
   const [spoVotes, setSpoVotes] = React.useState({});     // {poolId__propKey: "Yes"/"No"/"Abstain"}
   const [spoPoolInfo, setSpoPoolInfo] = React.useState({}); // {poolId: {ticker, name, pledge_drep}}
+  // Governance data state
+  const [govInfo, setGovInfo] = React.useState(null); // {network, protocolParams, proposalSummaries}
   const spoLoadedRef = React.useRef(false);
 
   const loadedPageRef = React.useRef(1);
@@ -2518,7 +2749,7 @@ function App() {
     const v = "?v=" + (meta.updated_ts || Date.now());
 
     setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes, drepRatRes, spoVotesRes, spoPoolsRes] = await Promise.all([
+    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes, drepRatRes, spoVotesRes, spoPoolsRes, govInfoRes] = await Promise.all([
       fetch(base + "dreps.json" + v),
       fetch(base + "proposals.json" + v),
       fetch(base + "votes.json" + v),
@@ -2529,7 +2760,8 @@ function App() {
       fetch(base + "drep-history.json" + v).catch(() => null),
       fetch(base + "drep-rationales.json" + v).catch(() => null),
       fetch(base + "spo-votes.json" + v).catch(() => null),
-      fetch(base + "spo-pools.json" + v).catch(() => null)
+      fetch(base + "spo-pools.json" + v).catch(() => null),
+      fetch(base + "governance-info.json" + v).catch(() => null)
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
@@ -2559,6 +2791,10 @@ function App() {
       if (spoPoolsRes && spoPoolsRes.ok) setSpoPoolInfo(await spoPoolsRes.json());
       if (spoVotesRes && spoVotesRes.ok) spoLoadedRef.current = true;
     } catch(e) { console.warn("SPO data load error:", e); }
+    // Load governance info if available
+    try {
+      if (govInfoRes && govInfoRes.ok) setGovInfo(await govInfoRes.json());
+    } catch(e) { console.warn("Governance info load error:", e); }
     // Load stake history if available
     try {
       if (histRes && histRes.ok) setStakeHistory(await histRes.json());
@@ -2894,6 +3130,8 @@ function App() {
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
+        <button className={`tab-btn ${tab==="govdata"?"active":""}`} onClick={()=>setTab("govdata")}
+          style={{fontSize:10,padding:"6px 10px",opacity:tab==="govdata"?1:.7}}>{T.tab_govdata||"Gov Data (β)"}</button>
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
           <a href="https://adatool.net/constitution-tool/" target="_blank" rel="noopener"
             style={{fontSize:10,color:"var(--text2)",textDecoration:"none",opacity:.6,padding:"4px 8px",
@@ -2904,10 +3142,12 @@ function App() {
         </div>
       </div>
 
-      {tab === "dashboard" ? (
+      {tab === "govdata" ? (
+        <GovernanceDataTab govInfo={govInfo} T={T} />
+      ) : tab === "dashboard" ? (
         <DashboardTab dreps={dreps} proposals={proposals} votes={votes} drepRationales={drepRationales}
           ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
-          spoVotes={spoVotes} spoPoolInfo={spoPoolInfo}
+          spoVotes={spoVotes} spoPoolInfo={spoPoolInfo} govInfo={govInfo}
           warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
           loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
       ) : tab === "history" ? (

@@ -16,9 +16,12 @@
  * Output: data/dreps.json, data/proposals.json, data/votes.json,
  *         data/simulator.json, data/meta.json,
  *         data/drep-history.json (accumulating stake snapshots),
- *         data/vote-cache.json (persistent cache)
+ *         data/vote-cache.json (persistent cache),
+ *         data/protocol-params.json (governance thresholds + network parameters),
+ *         data/governance-info.json (network info + proposal voting summaries)
  *
  * CC (Constitutional Committee) data fetched via Koios API (committee_info, committee_votes).
+ * SPO (Stake Pool Operator) data fetched via Koios API (proposal_votes, pool_list, pool_info).
  */
 
 const https = require("https");
@@ -338,12 +341,12 @@ async function main() {
   console.log(`Metadata cache: ${useMetadataCache ? `FRESH (${metaCacheAgeHours.toFixed(1)}h old)` : `STALE (${metaCacheAgeHours.toFixed(1)}h old, re-fetching)`}`);
 
   // ─── 1. DRep IDs ──────────────────────────────────────────
-  console.log("\n[1/8] Fetching DRep IDs...");
+  console.log("\n[1/9] Fetching DRep IDs...");
   const drepIds = await fetchAllPages("/governance/dreps", MAX_PAGES);
   console.log(`  Found ${drepIds.length} DRep IDs`);
 
   // ─── 2. DRep live stakes (Koios) + metadata (Blockfrost) ──
-  console.log(`\n[2/8] Fetching DRep live stakes (tiered) + metadata...`);
+  console.log(`\n[2/9] Fetching DRep live stakes (tiered) + metadata...`);
   const cachedMeta = cache.drepMetadata || {};
   const cachedDetails = cache.drepDetails || {};
   const top100Set = new Set((cache.drepStakeRank || []).slice(0, 100));
@@ -518,7 +521,7 @@ async function main() {
     console.log("  ⚠ No active proposals in cache — forcing vote refresh to discover new proposals");
     votesFresh = false;
   }
-  console.log(`\n[3/8] DRep votes ${votesFresh ? "(CACHED — " + ((now - lastVoteFetch) / 60000).toFixed(0) + "min old, next refresh in " + ((VOTE_FRESH_MS - (now - lastVoteFetch)) / 60000).toFixed(0) + "min)" : "(refreshing)"}...`);
+  console.log(`\n[3/9] DRep votes ${votesFresh ? "(CACHED — " + ((now - lastVoteFetch) / 60000).toFixed(0) + "min old, next refresh in " + ((VOTE_FRESH_MS - (now - lastVoteFetch)) / 60000).toFixed(0) + "min)" : "(refreshing)"}...`);
 
   const voteMap = {};
   const proposalSet = {};
@@ -601,7 +604,7 @@ async function main() {
   }
 
   // ─── 4. Proposal details ──────────────────────────────────
-  console.log("\n[4/8] Fetching proposal details + metadata...");
+  console.log("\n[4/9] Fetching proposal details + metadata...");
   const cachedProposalIds = new Set(Object.keys(cache.proposals || {}));
   const newPropEntries = Object.entries(proposalSet).filter(([k]) => !cachedProposalIds.has(k));
   console.log(`  ${newPropEntries.length} new proposals (${cachedProposalIds.size} cached)`);
@@ -626,7 +629,7 @@ async function main() {
 
   } else {
     // Votes cached — skip vote + proposal fetch
-    console.log("\n[4/8] Proposal details (using cache)...");
+    console.log("\n[4/9] Proposal details (using cache)...");
   } // end if (!votesFresh)
 
   const proposals = Object.values(allProposals);
@@ -637,7 +640,7 @@ async function main() {
   proposals.forEach(p => { proposalExpirations[p.proposal_id] = p.expiration || 0; });
 
   // ─── 5. Build simulator data + update cache ───────────────
-  console.log("\n[5/8] Building simulator data + updating cache...");
+  console.log("\n[5/9] Building simulator data + updating cache...");
   let maxVotes = 0;
   Object.values(drepVoteCounts).forEach(c => { if (c > maxVotes) maxVotes = c; });
 
@@ -659,7 +662,7 @@ async function main() {
   // Note: saveCache moved to after CC section (step 7) to include all data
 
   // ─── 6. Stake history snapshot ──────────────────────────────
-  console.log("\n[6/8] Updating stake history snapshot...");
+  console.log("\n[6/9] Updating stake history snapshot...");
   const HISTORY_FILE = path.join(DATA_DIR, "drep-history.json");
   let history = [];
   try {
@@ -695,7 +698,7 @@ async function main() {
   const CC_FRESH_MS = 3 * 60 * 60 * 1000;  // 3h between CC refreshes
   const lastCCFetch = cache.lastCCFetchAt || 0;
   const ccFresh = (now - lastCCFetch) < CC_FRESH_MS;
-  console.log(`\n[7/8] CC data ${ccFresh ? "(CACHED — " + ((now - lastCCFetch) / 60000).toFixed(0) + "min old)" : "(refreshing)"}...`);
+  console.log(`\n[8/9] CC data ${ccFresh ? "(CACHED — " + ((now - lastCCFetch) / 60000).toFixed(0) + "min old)" : "(refreshing)"}...`);
 
   let ccMembers = [];
   let ccVoteMap = {};
@@ -1210,6 +1213,150 @@ async function main() {
     }
   }
 
+  // ─── 7f. Protocol Parameters & Network Info ──────────────────
+  console.log("\n[7/9] Fetching protocol parameters & network info...");
+  let protocolParams = {};
+  let networkInfo = {};
+  try {
+    const params = await fetchJSON("/epochs/latest/parameters");
+    if (params) {
+      protocolParams = {
+        // Governance thresholds (DRep)
+        dvt_motion_no_confidence: params.dvt_motion_no_confidence,
+        dvt_committee_normal: params.dvt_committee_normal,
+        dvt_committee_no_confidence: params.dvt_committee_no_confidence,
+        dvt_update_to_constitution: params.dvt_update_to_constitution,
+        dvt_hard_fork_initiation: params.dvt_hard_fork_initiation,
+        dvt_p_p_network_group: params.dvt_p_p_network_group,
+        dvt_p_p_economic_group: params.dvt_p_p_economic_group,
+        dvt_p_p_technical_group: params.dvt_p_p_technical_group,
+        dvt_p_p_gov_group: params.dvt_p_p_gov_group,
+        dvt_treasury_withdrawal: params.dvt_treasury_withdrawal,
+        // SPO thresholds
+        pvt_motion_no_confidence: params.pvt_motion_no_confidence,
+        pvt_committee_normal: params.pvt_committee_normal,
+        pvt_committee_no_confidence: params.pvt_committee_no_confidence,
+        pvt_hard_fork_initiation: params.pvt_hard_fork_initiation,
+        pvt_p_p_security_group: params.pvt_p_p_security_group,
+        // Key protocol params
+        min_fee_a: params.min_fee_a,
+        min_fee_b: params.min_fee_b,
+        max_block_size: params.max_block_size,
+        max_tx_size: params.max_tx_size,
+        max_block_header_size: params.max_block_header_size,
+        key_deposit: params.key_deposit,
+        pool_deposit: params.pool_deposit,
+        drep_deposit: params.drep_deposit,
+        gov_action_deposit: params.gov_action_deposit,
+        min_pool_cost: params.min_pool_cost,
+        protocol_major_ver: params.protocol_major_ver,
+        protocol_minor_ver: params.protocol_minor_ver,
+        committee_min_size: params.committee_min_size,
+        committee_max_term_length: params.committee_max_term_length,
+        gov_action_lifetime: params.gov_action_lifetime,
+        drep_activity: params.drep_activity,
+        max_collateral_inputs: params.max_collateral_inputs,
+        coins_per_utxo_size: params.coins_per_utxo_size,
+        cost_models: undefined, // too large, skip
+        price_mem: params.price_mem,
+        price_step: params.price_step,
+        max_tx_ex_mem: params.max_tx_ex_mem,
+        max_tx_ex_steps: params.max_tx_ex_steps,
+        max_block_ex_mem: params.max_block_ex_mem,
+        max_block_ex_steps: params.max_block_ex_steps,
+        max_val_size: params.max_val_size,
+        a0: params.a0,
+        rho: params.rho,
+        tau: params.tau,
+        decentralisation_param: params.decentralisation_param,
+        extra_entropy: params.extra_entropy,
+        collateral_percent: params.collateral_percent,
+        epoch: params.epoch
+      };
+      console.log(`  Protocol params: epoch ${params.epoch}, protocol v${params.protocol_major_ver}.${params.protocol_minor_ver}`);
+    }
+  } catch (e) { console.log(`  Protocol params fetch error: ${e.message}`); }
+
+  try {
+    const net = await fetchJSON("/network");
+    if (net && net.stake) {
+      networkInfo = {
+        supply_total: net.supply?.total || "0",
+        supply_circulating: net.supply?.circulating || "0",
+        supply_locked: net.supply?.locked || "0",
+        supply_treasury: net.supply?.treasury || "0",
+        supply_reserves: net.supply?.reserves || "0",
+        stake_live: net.stake?.live || "0",
+        stake_active: net.stake?.active || "0"
+      };
+      console.log(`  Network: treasury=${(Number(networkInfo.supply_treasury)/1e12).toFixed(2)}B ADA`);
+    }
+  } catch (e) { console.log(`  Network info fetch error: ${e.message}`); }
+
+  // ─── 7g. Build proposal voting summaries ──────────────────────
+  const proposalSummaries = {};
+  for (const prop of proposals) {
+    const pid = prop.proposal_id;
+    let drepYesStake = 0, drepNoStake = 0, drepAbstainStake = 0;
+    let ccYes = 0, ccNo = 0, ccAbstain = 0, ccEligible = 0;
+    let spoYesStake = 0, spoNoStake = 0, spoAbstainStake = 0;
+
+    // DRep votes (stake-weighted)
+    for (const d of dreps) {
+      if (d.drep_id === "drep_always_abstain" || d.drep_id === "drep_always_no_confidence") continue;
+      const vote = voteMap[`${d.drep_id}__${pid}`];
+      const stake = Number(d.amount) || 0;
+      if (vote === "Yes") drepYesStake += stake;
+      else if (vote === "No") drepNoStake += stake;
+      else if (vote === "Abstain") drepAbstainStake += stake;
+    }
+    // Add auto-dreps
+    const autoAbsStake = Number((dreps.find(d => d.drep_id === "drep_always_abstain") || {}).amount || 0);
+    const autoNCStake = Number((dreps.find(d => d.drep_id === "drep_always_no_confidence") || {}).amount || 0);
+    drepAbstainStake += autoAbsStake;
+    // auto_no_confidence counts as "Yes" for NoConfidence type, otherwise as abstain
+    if (prop.proposal_type === "NoConfidence") drepYesStake += autoNCStake;
+    else drepAbstainStake += autoNCStake;
+
+    // CC votes
+    for (const cc of (ccMembers || [])) {
+      const isElig = cc.eligible_proposals ? cc.eligible_proposals.includes(pid) : prop.proposal_type !== "UpdateCommittee";
+      if (!isElig) continue;
+      ccEligible++;
+      const cv = ccVoteMap[`${cc.cc_id}__${pid}`];
+      if (cv === "Yes") ccYes++;
+      else if (cv === "No") ccNo++;
+      else if (cv === "Abstain") ccAbstain++;
+    }
+
+    // SPO votes (stake-weighted)
+    const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
+    if (!SPO_INELIG.includes(prop.proposal_type)) {
+      for (const [poolId, info] of Object.entries(spoPoolInfo)) {
+        const stake = Number(info.active_stake) || 0;
+        const vote = spoVoteMap[`${poolId}__${pid}`];
+        if (vote) {
+          if (vote === "Yes") spoYesStake += stake;
+          else if (vote === "No") spoNoStake += stake;
+          else if (vote === "Abstain") spoAbstainStake += stake;
+        } else if (prop.proposal_type !== "HardForkInitiation") {
+          // Default behavior based on reward DRep delegation
+          if (info.pledge_drep === "drep_always_abstain") spoAbstainStake += stake;
+          else if (info.pledge_drep === "drep_always_no_confidence") {
+            if (prop.proposal_type === "NoConfidence") spoYesStake += stake;
+            else spoAbstainStake += stake;
+          }
+        }
+      }
+    }
+
+    proposalSummaries[pid] = {
+      drep: { yes: drepYesStake, no: drepNoStake, abstain: drepAbstainStake },
+      cc: { yes: ccYes, no: ccNo, abstain: ccAbstain, eligible: ccEligible },
+      spo: { yes: spoYesStake, no: spoNoStake, abstain: spoAbstainStake }
+    };
+  }
+
   // ─── Save unified cache ────────────────────────────────────
   saveCache({
     expiredVotes,
@@ -1234,8 +1381,8 @@ async function main() {
     lastCCFetchAt: ccFresh ? lastCCFetch : now
   });
 
-  // ─── 8. Write output files ────────────────────────────────
-  console.log("\n[8/8] Writing JSON files...");
+  // ─── 9. Write output files ────────────────────────────────
+  console.log("\n[9/9] Writing JSON files...");
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
   const meta = {
@@ -1287,7 +1434,12 @@ async function main() {
     console.log(`  DRep rationales: ${Object.keys(drepRationales).length} written`);
   }
 
-  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json", "cc-members.json", "cc-votes.json", "cc-rationales.json", "drep-rationales.json", "spo-votes.json", "spo-pools.json"];
+  // Write protocol params and governance info
+  fs.writeFileSync(path.join(DATA_DIR, "protocol-params.json"), JSON.stringify(protocolParams, null, 2));
+  fs.writeFileSync(path.join(DATA_DIR, "governance-info.json"), JSON.stringify({ network: networkInfo, protocolParams, proposalSummaries }, null, 2));
+  console.log(`  protocol-params.json and governance-info.json written`);
+
+  const files = ["dreps.json", "proposals.json", "votes.json", "simulator.json", "meta.json", "vote-cache.json", "drep-history.json", "cc-members.json", "cc-votes.json", "cc-rationales.json", "drep-rationales.json", "spo-votes.json", "spo-pools.json", "protocol-params.json", "governance-info.json"];
   files.forEach(f => {
     try { const size = fs.statSync(path.join(DATA_DIR, f)).size; console.log(`  ${f}: ${(size / 1024).toFixed(1)} KB`); } catch (e) {}
   });
