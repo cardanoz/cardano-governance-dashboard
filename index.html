@@ -152,6 +152,7 @@ const LANG = {
     summary_approval:"Approval", summary_yes:"Yes", summary_no:"No", summary_abstain:"Abstain",
     summary_threshold:"Threshold", summary_drep:"DRep", summary_cc:"CC", summary_spo:"SPO",
     summary_active:"Active", summary_expired:"Expired", summary_ratified:"Ratified",
+    summary_enacted:"Enacted", summary_dropped:"Dropped", summary_voting:"Voting",
     summary_na:"N/A", summary_proposal_status:"Proposal Status",
     hist_title:"DRep Stake History", hist_desc:"Tracking DRep voting power over time (snapshots captured each epoch)",
     hist_total_stake:"Total Stake (ADA)", hist_drep_count:"DRep Count", hist_top_dreps:"Top DReps by Stake",
@@ -241,6 +242,7 @@ const LANG = {
     summary_approval:"承認率", summary_yes:"賛成", summary_no:"反対", summary_abstain:"棄権",
     summary_threshold:"閾値", summary_drep:"DRep", summary_cc:"CC", summary_spo:"SPO",
     summary_active:"アクティブ", summary_expired:"期限切れ", summary_ratified:"批准済",
+    summary_enacted:"制定済", summary_dropped:"却下", summary_voting:"投票中",
     summary_na:"対象外", summary_proposal_status:"提案ステータス",
     hist_title:"DRepステーク推移", hist_desc:"DRep投票力の時系列推移（エポックごとにスナップショット記録）",
     hist_total_stake:"総ステーク (ADA)", hist_drep_count:"DRep数", hist_top_dreps:"ステーク上位DRep",
@@ -1212,6 +1214,18 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         _miniBar(ps.cc.yes_pct,_ct,"C","#f59e0b"),
                         _miniBar(ps.spo.yes_pct,_st,"S","#06b6d4")
                       )}
+                      {(()=>{
+                        const st = p.status || "";
+                        const stMap = {active:{label:T.summary_active||"Active",bg:"#3b82f620",color:"#60a5fa",border:"#3b82f640"},
+                          ratified:{label:T.summary_ratified||"Ratified",bg:"#8b5cf620",color:"#a78bfa",border:"#8b5cf640"},
+                          enacted:{label:T.summary_enacted||"Enacted",bg:"#10b98120",color:"#34d399",border:"#10b98140"},
+                          expired:{label:T.summary_expired||"Expired",bg:"#6b728020",color:"#9ca3af",border:"#6b728040"},
+                          dropped:{label:T.summary_dropped||"Dropped",bg:"#ef444420",color:"#f87171",border:"#ef444440"}};
+                        const s = stMap[st] || (st ? {label:st,bg:"#6b728020",color:"#9ca3af",border:"#6b728040"} : null);
+                        return s ? <span style={{fontSize:6,fontWeight:700,padding:"1px 3px",borderRadius:2,
+                          background:s.bg,color:s.color,border:`1px solid ${s.border}`,lineHeight:1.4,marginTop:1,
+                          textTransform:"uppercase",letterSpacing:".03em"}}>{s.label}</span> : null;
+                      })()}
                     </div>
                   </th>);})}
               </tr></thead>

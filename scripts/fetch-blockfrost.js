@@ -610,10 +610,14 @@ async function main() {
   console.log(`  ${newPropEntries.length} new proposals (${cachedProposalIds.size} cached)`);
 
   const newProposals = await batchProcess(newPropEntries, async ([propKey, info]) => {
-    let proposal_type = "", title = "", expiration = 0;
+    let proposal_type = "", title = "", expiration = 0, status = "";
     try {
       const detail = await fetchJSON(`/governance/proposals/${info.tx_hash}/${info.cert_index}`);
-      if (detail) { proposal_type = typeMap[detail.governance_type] || detail.governance_type || ""; expiration = detail.expiration || 0; }
+      if (detail) {
+        proposal_type = typeMap[detail.governance_type] || detail.governance_type || "";
+        expiration = detail.expiration || 0;
+        status = detail.status || "";
+      }
     } catch (e) {}
     try {
       const meta = await fetchJSON(`/governance/proposals/${info.tx_hash}/${info.cert_index}/metadata`);
@@ -623,7 +627,7 @@ async function main() {
         if (typeof title === "object") title = JSON.stringify(title);
       }
     } catch (e) {}
-    return { proposal_id: propKey, tx_hash: info.tx_hash, cert_index: info.cert_index, proposal_type, title, expiration, epoch_no: expiration };
+    return { proposal_id: propKey, tx_hash: info.tx_hash, cert_index: info.cert_index, proposal_type, title, expiration, epoch_no: expiration, status };
   }, "Props");
   newProposals.forEach(p => { allProposals[p.proposal_id] = p; });
 
@@ -635,6 +639,26 @@ async function main() {
   const proposals = Object.values(allProposals);
   proposals.sort((a, b) => (b.expiration || 0) - (a.expiration || 0));
   console.log(`  Total proposals: ${proposals.length}`);
+
+  // ─── Refresh proposal status for non-final proposals ───────
+  // Final statuses (enacted, expired, dropped) don't change. Only refresh active/ratified/unknown.
+  const FINAL_STATUSES = new Set(["enacted", "expired", "dropped"]);
+  const statusToRefresh = proposals.filter(p => !FINAL_STATUSES.has(p.status));
+  if (statusToRefresh.length > 0) {
+    console.log(`  Refreshing status for ${statusToRefresh.length} non-final proposals...`);
+    let statusUpdated = 0;
+    for (const p of statusToRefresh) {
+      try {
+        const detail = await fetchJSON(`/governance/proposals/${p.tx_hash}/${p.cert_index}`);
+        if (detail && detail.status && detail.status !== p.status) {
+          p.status = detail.status;
+          if (allProposals[p.proposal_id]) allProposals[p.proposal_id].status = detail.status;
+          statusUpdated++;
+        }
+      } catch (e) {}
+    }
+    if (statusUpdated > 0) console.log(`  Status updated: ${statusUpdated} proposals`);
+  }
 
   const proposalExpirations = {};
   proposals.forEach(p => { proposalExpirations[p.proposal_id] = p.expiration || 0; });
