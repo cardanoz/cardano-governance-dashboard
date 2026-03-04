@@ -645,19 +645,28 @@ async function main() {
   const FINAL_STATUSES = new Set(["enacted", "expired", "dropped"]);
   const statusToRefresh = proposals.filter(p => !FINAL_STATUSES.has(p.status));
   if (statusToRefresh.length > 0) {
-    console.log(`  Refreshing status for ${statusToRefresh.length} non-final proposals...`);
+    console.log(`  Refreshing status for ${statusToRefresh.length} non-final proposals (${proposals.length - statusToRefresh.length} already final)...`);
     let statusUpdated = 0;
-    for (const p of statusToRefresh) {
+    for (let si = 0; si < statusToRefresh.length; si++) {
+      const p = statusToRefresh[si];
       try {
         const detail = await fetchJSON(`/governance/proposals/${p.tx_hash}/${p.cert_index}`);
-        if (detail && detail.status && detail.status !== p.status) {
-          p.status = detail.status;
-          if (allProposals[p.proposal_id]) allProposals[p.proposal_id].status = detail.status;
-          statusUpdated++;
+        if (detail && detail.status) {
+          if (detail.status !== p.status) {
+            p.status = detail.status;
+            if (allProposals[p.proposal_id]) allProposals[p.proposal_id].status = detail.status;
+            statusUpdated++;
+          }
         }
       } catch (e) {}
+      if ((si + 1) % 20 === 0 || si === statusToRefresh.length - 1) {
+        console.log(`    [${si+1}/${statusToRefresh.length}] status checked (${statusUpdated} updated)`);
+      }
     }
-    if (statusUpdated > 0) console.log(`  Status updated: ${statusUpdated} proposals`);
+    console.log(`  Status refresh done: ${statusUpdated} updated`);
+    const statusCounts = {};
+    proposals.forEach(p => { const s = p.status || "unknown"; statusCounts[s] = (statusCounts[s] || 0) + 1; });
+    console.log(`  Status breakdown: ${Object.entries(statusCounts).map(([k,v])=>`${k}=${v}`).join(", ")}`);
   }
 
   const proposalExpirations = {};
