@@ -1361,16 +1361,22 @@ async function main() {
     }
   });
 
-  for (const prop of summaryProposals) {
+  for (let si = 0; si < summaryProposals.length; si++) {
+    const prop = summaryProposals[si];
     const bech32Id = bech32Map[prop.proposal_id];
+    const isExpired = prop.expiration && prop.expiration < currentEpoch;
     try {
       const result = await koiosGet("/proposal_voting_summary", { _proposal_id: bech32Id });
       if (Array.isArray(result) && result.length > 0) {
         proposalSummaries[prop.proposal_id] = parseSummary(result[0]);
         summaryOk++;
       }
+      if ((si + 1) % 10 === 0 || si === summaryProposals.length - 1) {
+        console.log(`    [${si+1}/${summaryProposals.length}] summaries fetched (${summaryOk} ok, ${summaryFail} fail)`);
+      }
     } catch (e) {
       summaryFail++;
+      console.log(`    [${si+1}/${summaryProposals.length}] FAIL ${prop.proposal_id.slice(0,16)}… ${isExpired?"(expired)":"(active)"}: ${e.message}`);
     }
   }
   console.log(`  Voting summaries: ${summaryOk} fetched, ${summaryFail} failed, ${restoredCount} from cache = ${Object.keys(proposalSummaries).length} total`);
