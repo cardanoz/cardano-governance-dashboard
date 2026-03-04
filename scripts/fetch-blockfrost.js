@@ -431,6 +431,40 @@ async function main() {
     }
   }
 
+  // Cross-check top DReps with Blockfrost to detect Koios staleness
+  // Koios live_delegated_stake can lag behind; Blockfrost amount is often fresher
+  const CROSSCHECK_TOP = 20;
+  const crosscheckIds = Object.entries(newDrepDetails)
+    .filter(([id, d]) => d.source === "koios_live" && !id.startsWith("drep_always_"))
+    .sort((a, b) => Number(b[1].amount) - Number(a[1].amount))
+    .slice(0, CROSSCHECK_TOP)
+    .map(([id]) => id);
+  if (crosscheckIds.length > 0) {
+    console.log(`  Cross-checking top ${crosscheckIds.length} DReps via Blockfrost...`);
+    let upgraded = 0;
+    for (const drepId of crosscheckIds) {
+      try {
+        const detail = await fetchJSON(`/governance/dreps/${drepId}`);
+        if (detail && detail.amount) {
+          const bfAmount = BigInt(detail.amount);
+          const koiosAmount = BigInt(newDrepDetails[drepId].amount || "0");
+          if (bfAmount > koiosAmount) {
+            const diffAda = Number(bfAmount - koiosAmount) / 1e6;
+            console.log(`    ${drepId.slice(0, 20)}... Blockfrost=${bfAmount} > Koios=${koiosAmount} (+${diffAda.toFixed(0)} ADA) → upgraded`);
+            newDrepDetails[drepId].amount = String(bfAmount);
+            newDrepDetails[drepId].delegators = detail.delegators_count || newDrepDetails[drepId].delegators;
+            newDrepDetails[drepId].source = "blockfrost_crosscheck";
+            upgraded++;
+          }
+        }
+      } catch (e) {
+        // Blockfrost call failed, keep Koios value
+      }
+      await new Promise(r => setTimeout(r, THROTTLE_MS));
+    }
+    console.log(`  Cross-check: ${upgraded}/${crosscheckIds.length} upgraded from Blockfrost`);
+  }
+
   // Metadata: keep Blockfrost metadata with 6h cache
   const needsMetaIds = drepIds.filter(d => !(useMetadataCache && cachedMeta[d.drep_id]));
   if (needsMetaIds.length > 0) {
