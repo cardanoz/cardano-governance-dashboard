@@ -1322,10 +1322,14 @@ async function main() {
     }
   }
 
-  // Only fetch voting summaries for active proposals (expired ones are cached above)
-  const summaryProposals = proposals.filter(p => bech32Map[p.proposal_id] && (!p.expiration || currentEpoch <= p.expiration));
+  // Fetch voting summaries for:
+  //  1. Active proposals (always refresh — votes can change)
+  //  2. Expired proposals NOT yet in cache (one-time fetch, then cached permanently)
+  const activePropsForSummary = proposals.filter(p => bech32Map[p.proposal_id] && (!p.expiration || currentEpoch <= p.expiration));
+  const expiredUncached = proposals.filter(p => bech32Map[p.proposal_id] && p.expiration && p.expiration < currentEpoch && !cachedSummaries[p.proposal_id]);
+  const summaryProposals = [...activePropsForSummary, ...expiredUncached];
   const summarySkipped = proposals.length - summaryProposals.length;
-  console.log(`  Voting summaries: ${restoredCount} restored from cache, fetching ${summaryProposals.length} active via Koios (${summarySkipped} expired skipped)...`);
+  console.log(`  Voting summaries: ${restoredCount} restored from cache, fetching ${activePropsForSummary.length} active + ${expiredUncached.length} expired-uncached via Koios (${summarySkipped} already cached)...`);
   let summaryOk = 0, summaryFail = 0;
 
   const parseSummary = (s) => ({
