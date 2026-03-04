@@ -1226,7 +1226,16 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         _miniBar(ps?ps.spo.yes_pct:0,_st,"S","#06b6d4",!spoCanVote)
                       )}
                       {(()=>{
-                        const st = p.status || "";
+                        // Determine status: use explicit status field, or infer from epoch fields, or from expiration
+                        let st = p.status || "";
+                        let epochInfo = "";
+                        if (p.enacted_epoch) { st = st || "enacted"; epochInfo = `E${p.enacted_epoch}`; }
+                        else if (p.ratified_epoch) { st = st || "ratified"; epochInfo = `E${p.ratified_epoch}`; }
+                        else if (p.dropped_epoch) { st = st || "dropped"; epochInfo = `E${p.dropped_epoch}`; }
+                        else if (p.expired_epoch) { st = st || "expired"; epochInfo = `E${p.expired_epoch}`; }
+                        else if (!st && p.expiration && govInfo && govInfo.protocolParams && govInfo.protocolParams.epoch) {
+                          st = p.expiration < govInfo.protocolParams.epoch ? "expired" : "active";
+                        }
                         const stMap = {active:{label:T.summary_active||"Active",bg:"#3b82f620",color:"#60a5fa",border:"#3b82f640"},
                           ratified:{label:T.summary_ratified||"Ratified",bg:"#8b5cf620",color:"#a78bfa",border:"#8b5cf640"},
                           enacted:{label:T.summary_enacted||"Enacted",bg:"#10b98120",color:"#34d399",border:"#10b98140"},
@@ -1235,7 +1244,8 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         const s = stMap[st] || (st ? {label:st,bg:"#6b728020",color:"#9ca3af",border:"#6b728040"} : null);
                         return s ? <span style={{fontSize:6,fontWeight:700,padding:"1px 3px",borderRadius:2,
                           background:s.bg,color:s.color,border:`1px solid ${s.border}`,lineHeight:1.4,marginTop:1,
-                          textTransform:"uppercase",letterSpacing:".03em"}}>{s.label}</span> : null;
+                          textTransform:"uppercase",letterSpacing:".03em"}}
+                          title={epochInfo?`${s.label} at Epoch ${epochInfo.slice(1)}`:s.label}>{s.label}{epochInfo?` ${epochInfo}`:""}</span> : null;
                       })()}
                     </div>
                   </th>);})}

@@ -611,12 +611,17 @@ async function main() {
 
   const newProposals = await batchProcess(newPropEntries, async ([propKey, info]) => {
     let proposal_type = "", title = "", expiration = 0, status = "";
+    let ratified_epoch = null, enacted_epoch = null, dropped_epoch = null, expired_epoch = null;
     try {
       const detail = await fetchJSON(`/governance/proposals/${info.tx_hash}/${info.cert_index}`);
       if (detail) {
         proposal_type = typeMap[detail.governance_type] || detail.governance_type || "";
         expiration = detail.expiration || 0;
         status = detail.status || "";
+        ratified_epoch = detail.ratified_epoch || null;
+        enacted_epoch = detail.enacted_epoch || null;
+        dropped_epoch = detail.dropped_epoch || null;
+        expired_epoch = detail.expired_epoch || null;
       }
     } catch (e) {}
     try {
@@ -627,7 +632,7 @@ async function main() {
         if (typeof title === "object") title = JSON.stringify(title);
       }
     } catch (e) {}
-    return { proposal_id: propKey, tx_hash: info.tx_hash, cert_index: info.cert_index, proposal_type, title, expiration, epoch_no: expiration, status };
+    return { proposal_id: propKey, tx_hash: info.tx_hash, cert_index: info.cert_index, proposal_type, title, expiration, epoch_no: expiration, status, ratified_epoch, enacted_epoch, dropped_epoch, expired_epoch };
   }, "Props");
   newProposals.forEach(p => { allProposals[p.proposal_id] = p; });
 
@@ -652,11 +657,16 @@ async function main() {
       try {
         const detail = await fetchJSON(`/governance/proposals/${p.tx_hash}/${p.cert_index}`);
         if (detail && detail.status) {
-          if (detail.status !== p.status) {
-            p.status = detail.status;
-            if (allProposals[p.proposal_id]) allProposals[p.proposal_id].status = detail.status;
-            statusUpdated++;
+          const changed = detail.status !== p.status;
+          p.status = detail.status;
+          p.ratified_epoch = detail.ratified_epoch || null;
+          p.enacted_epoch = detail.enacted_epoch || null;
+          p.dropped_epoch = detail.dropped_epoch || null;
+          p.expired_epoch = detail.expired_epoch || null;
+          if (allProposals[p.proposal_id]) {
+            Object.assign(allProposals[p.proposal_id], { status: p.status, ratified_epoch: p.ratified_epoch, enacted_epoch: p.enacted_epoch, dropped_epoch: p.dropped_epoch, expired_epoch: p.expired_epoch });
           }
+          if (changed) statusUpdated++;
         }
       } catch (e) {}
       if ((si + 1) % 20 === 0 || si === statusToRefresh.length - 1) {
