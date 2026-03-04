@@ -1170,13 +1170,15 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                   boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.drep_col}</th>
                 {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
                   const shortTitle = p.title ? (p.title.length > 30 ? p.title.slice(0,30)+"…" : p.title) : "";
-                  // Proposal approval mini-bars
+                  // Proposal approval mini-bars (using Koios voting summaries)
                   const ps = govInfo && govInfo.proposalSummaries && govInfo.proposalSummaries[p.proposal_id];
                   const pp = govInfo && govInfo.protocolParams;
-                  const _miniBar = (yes,no,thr,label,clr) => {
+                  // yesPct: 0-100 from Koios, thr: 0-1 from protocol params
+                  const _miniBar = (yesPct,thr,label,clr) => {
                     if(thr===null) return null;
-                    const voted=yes+no; const pct=voted>0?yes/voted:0; const met=pct>=thr;
-                    const pctS=voted>0?(pct*100).toFixed(0)+"%":"—";
+                    const pct = yesPct/100; // normalize to 0-1
+                    const met = pct >= thr;
+                    const pctS = yesPct > 0 ? yesPct.toFixed(0)+"%" : "0%";
                     return React.createElement("div",{key:label,style:{display:"flex",alignItems:"center",gap:1},
                       title:`${label}: ${pctS} / ${(thr*100).toFixed(0)}%`},
                       React.createElement("span",{style:{fontSize:5,color:clr,minWidth:12,textAlign:"right",lineHeight:1}},label),
@@ -1206,9 +1208,9 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                           onClick={()=>exportProposalRationales(p)}>📎</span>
                       </span>
                       {ps && React.createElement("div",{style:{display:"flex",flexDirection:"column",gap:0,marginTop:1,width:"100%"}},
-                        _miniBar(ps.drep.yes,ps.drep.no,_dt,"D","#8b5cf6"),
-                        _miniBar(ps.cc.yes,ps.cc.no,_ct,"C","#f59e0b"),
-                        _miniBar(ps.spo.yes,ps.spo.no,_st,"S","#06b6d4")
+                        _miniBar(ps.drep.yes_pct,_dt,"D","#8b5cf6"),
+                        _miniBar(ps.cc.yes_pct,_ct,"C","#f59e0b"),
+                        _miniBar(ps.spo.yes_pct,_st,"S","#06b6d4")
                       )}
                     </div>
                   </th>);})}

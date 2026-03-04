@@ -1293,69 +1293,55 @@ async function main() {
     }
   } catch (e) { console.log(`  Network info fetch error: ${e.message}`); }
 
-  // ─── 7g. Build proposal voting summaries ──────────────────────
+  // ─── 7g. Fetch proposal voting summaries from Koios ──────────────
+  // Uses /proposal_voting_summary for authoritative on-chain tallies
+  // (includes non-voter "No" counting, auto-drep handling, etc.)
   const proposalSummaries = {};
-  for (const prop of proposals) {
-    const pid = prop.proposal_id;
-    let drepYesStake = 0, drepNoStake = 0, drepAbstainStake = 0;
-    let ccYes = 0, ccNo = 0, ccAbstain = 0, ccEligible = 0;
-    let spoYesStake = 0, spoNoStake = 0, spoAbstainStake = 0;
-
-    // DRep votes (stake-weighted)
-    for (const d of dreps) {
-      if (d.drep_id === "drep_always_abstain" || d.drep_id === "drep_always_no_confidence") continue;
-      const vote = voteMap[`${d.drep_id}__${pid}`];
-      const stake = Number(d.amount) || 0;
-      if (vote === "Yes") drepYesStake += stake;
-      else if (vote === "No") drepNoStake += stake;
-      else if (vote === "Abstain") drepAbstainStake += stake;
-    }
-    // Add auto-dreps
-    const autoAbsStake = Number((dreps.find(d => d.drep_id === "drep_always_abstain") || {}).amount || 0);
-    const autoNCStake = Number((dreps.find(d => d.drep_id === "drep_always_no_confidence") || {}).amount || 0);
-    drepAbstainStake += autoAbsStake;
-    // auto_no_confidence counts as "Yes" for NoConfidence type, otherwise as abstain
-    if (prop.proposal_type === "NoConfidence") drepYesStake += autoNCStake;
-    else drepAbstainStake += autoNCStake;
-
-    // CC votes
-    for (const cc of (ccMembers || [])) {
-      const isElig = cc.eligible_proposals ? cc.eligible_proposals.includes(pid) : prop.proposal_type !== "UpdateCommittee";
-      if (!isElig) continue;
-      ccEligible++;
-      const cv = ccVoteMap[`${cc.cc_id}__${pid}`];
-      if (cv === "Yes") ccYes++;
-      else if (cv === "No") ccNo++;
-      else if (cv === "Abstain") ccAbstain++;
-    }
-
-    // SPO votes (stake-weighted)
-    const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
-    if (!SPO_INELIG.includes(prop.proposal_type)) {
-      for (const [poolId, info] of Object.entries(spoPoolInfo)) {
-        const stake = Number(info.active_stake) || 0;
-        const vote = spoVoteMap[`${poolId}__${pid}`];
-        if (vote) {
-          if (vote === "Yes") spoYesStake += stake;
-          else if (vote === "No") spoNoStake += stake;
-          else if (vote === "Abstain") spoAbstainStake += stake;
-        } else if (prop.proposal_type !== "HardForkInitiation") {
-          // Default behavior based on reward DRep delegation
-          if (info.pledge_drep === "drep_always_abstain") spoAbstainStake += stake;
-          else if (info.pledge_drep === "drep_always_no_confidence") {
-            if (prop.proposal_type === "NoConfidence") spoYesStake += stake;
-            else spoAbstainStake += stake;
+  const bech32Map = cache.bech32Map || {};
+  const summaryProposals = proposals.filter(p => bech32Map[p.proposal_id]);
+  console.log(`  Fetching voting summaries for ${summaryProposals.length} proposals via Koios...`);
+  let summaryOk = 0, summaryFail = 0;
+  for (const prop of summaryProposals) {
+    const bech32Id = bech32Map[prop.proposal_id];
+    try {
+      const result = await koiosGet("/proposal_voting_summary", { _proposal_id: bech32Id });
+      if (Array.isArray(result) && result.length > 0) {
+        const s = result[0];
+        proposalSummaries[prop.proposal_id] = {
+          proposal_type: s.proposal_type,
+          drep: {
+            yes_pct: Number(s.drep_yes_pct) || 0,
+            no_pct: Number(s.drep_no_pct) || 0,
+            yes_votes_cast: Number(s.drep_yes_votes_cast) || 0,
+            no_votes_cast: Number(s.drep_no_votes_cast) || 0,
+            abstain_votes_cast: Number(s.drep_abstain_votes_cast) || 0,
+            yes_power: s.drep_yes_vote_power || "0",
+            no_power: s.drep_no_vote_power || "0",
+          },
+          cc: {
+            yes_pct: Number(s.committee_yes_pct) || 0,
+            no_pct: Number(s.committee_no_pct) || 0,
+            yes_votes_cast: Number(s.committee_yes_votes_cast) || 0,
+            no_votes_cast: Number(s.committee_no_votes_cast) || 0,
+            abstain_votes_cast: Number(s.committee_abstain_votes_cast) || 0,
+          },
+          spo: {
+            yes_pct: Number(s.pool_yes_pct) || 0,
+            no_pct: Number(s.pool_no_pct) || 0,
+            yes_votes_cast: Number(s.pool_yes_votes_cast) || 0,
+            no_votes_cast: Number(s.pool_no_votes_cast) || 0,
+            abstain_votes_cast: Number(s.pool_abstain_votes_cast) || 0,
+            yes_power: s.pool_yes_vote_power || "0",
+            no_power: s.pool_no_vote_power || "0",
           }
-        }
+        };
+        summaryOk++;
       }
+    } catch (e) {
+      summaryFail++;
     }
-
-    proposalSummaries[pid] = {
-      drep: { yes: drepYesStake, no: drepNoStake, abstain: drepAbstainStake },
-      cc: { yes: ccYes, no: ccNo, abstain: ccAbstain, eligible: ccEligible },
-      spo: { yes: spoYesStake, no: spoNoStake, abstain: spoAbstainStake }
-    };
   }
+  console.log(`  Voting summaries: ${summaryOk} fetched, ${summaryFail} failed`);
 
   // ─── Save unified cache ────────────────────────────────────
   saveCache({
