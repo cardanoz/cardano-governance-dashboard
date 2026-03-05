@@ -2565,7 +2565,8 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
   };
   const getCCThreshold = () => pp ? Number(pp.dvt_committee_normal) || 0.67 : 0.67;
   const CC_INELIG = ["NoConfidence"];
-  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution"];
+  // For Vote Reminder, also skip InfoAction for SPO (not meaningful)
+  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
   const getSpoThreshold = (ptype) => {
     if (SPO_INELIG.includes(ptype)) return null;
     if (!pp) return 0.51;
@@ -2696,7 +2697,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       else if (s.minSPOs.length > 0) {
         post += `\n`;
         [...s.minSPOs.slice(0,5), ...s.extraSPOs.slice(0,3)].forEach(sp => {
-          post += `  • ${sp.ticker || sp.pool_id.slice(0,15)} (₳${fmtAda(sp.active_stake*1e6)})\n`;
+          post += `  • ${sp.ticker || sp.pool_id.slice(0,15)} (₳${fmtAda(sp.active_stake)})\n`;
         });
       } else post += `\n`;
     }
@@ -2824,7 +2825,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
                 !s ? E("span",{style:{color:"var(--text2)",opacity:.4,fontSize:9}},"—") :
                 s.thresholdMet ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ Threshold met") :
                 s.minSPOs.length === 0 ? E("span",{style:{color:"#f87171",fontSize:9}},"Unreachable") :
-                nameList(s.minSPOs, s.extraSPOs, sp=>sp.ticker||sp.pool_id.slice(0,12), sp=>"₳"+fmtStake(sp.active_stake*1e6))
+                nameList(s.minSPOs, s.extraSPOs, sp=>sp.ticker||sp.pool_id.slice(0,12), sp=>"₳"+fmtStake(sp.active_stake))
               ),
               // Copy single
               E("td",{style:{...tdS,textAlign:"center"}},
