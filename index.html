@@ -1242,7 +1242,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         else if (p.expired_epoch) { st = st || "expired"; epochInfo = `E${p.expired_epoch}`; }
                         else if (!st && p.expiration) {
                           const curEp = (govInfo && govInfo.protocolParams && govInfo.protocolParams.epoch) || (Math.floor((Date.now() - 1596059091000) / 432000000) + 208);
-                          st = p.expiration < curEp ? "expired" : "active";
+                          st = p.expiration <= curEp ? "expired" : "active";
                         }
                         const stMap = {active:{label:T.summary_active||"Active",bg:"#3b82f620",color:"#60a5fa",border:"#3b82f640"},
                           ratified:{label:T.summary_ratified||"Ratified",bg:"#8b5cf620",color:"#a78bfa",border:"#8b5cf640"},
@@ -2552,11 +2552,14 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 
   const curEp = (pp && pp.epoch) || (Math.floor((Date.now() - 1596059091000) / 432000000) + 208);
   const EPOCH_208_TS = 1596059091000, EPOCH_DUR = 432000000;
-  // Proposal expires at the END of expiration epoch → deadline = start of (expiration+1)
-  const epochEndTs = (ep) => EPOCH_208_TS + (ep + 1 - 208) * EPOCH_DUR;
-  const fmtDate = (ts) => { const d = new Date(ts); return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,"0")}-${String(d.getUTCDate()).padStart(2,"0")}`; };
-  const daysLeft = (ep) => { const ms = epochEndTs(ep) - Date.now(); return Math.max(0, Math.ceil(ms / 86400000)); };
-  const activeProps = (proposals || []).filter(p => p.expiration && p.expiration >= curEp);
+  // Blockfrost expiration = first epoch where proposal is INACTIVE
+  // Voting deadline = start of expiration epoch = end of (expiration-1)
+  const epochDeadlineTs = (ep) => EPOCH_208_TS + (ep - 208) * EPOCH_DUR;
+  const lastVoteEpoch = (ep) => ep - 1; // last epoch where votes are accepted
+  const fmtDate = (ts) => { const d = new Date(ts); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+  const fmtDateTime = (ts) => { const d = new Date(ts); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`; };
+  const daysLeft = (ep) => { const ms = epochDeadlineTs(ep) - Date.now(); return Math.max(0, Math.ceil(ms / 86400000)); };
+  const activeProps = (proposals || []).filter(p => p.expiration && p.expiration > curEp);
 
   // ─── Thresholds ───
   const getDrepThreshold = (ptype) => {
@@ -2682,11 +2685,11 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
     if (!rem || !rem.ps) return "";
     const p = rem.prop, d = rem.drepData, c = rem.ccData, s = rem.spoData;
     const dl = daysLeft(p.expiration);
-    const dlDate = fmtDate(epochEndTs(p.expiration));
+    const dlDate = fmtDate(epochDeadlineTs(p.expiration));
     let post = `📢 Cardano Vote Reminder\n\n`;
     post += `📋 ${p.title || p.proposal_id.slice(0,20)}\n`;
     post += `📊 ${p.proposal_type}\n`;
-    post += `⏰ Deadline: E${p.expiration} (${dlDate}) — ${dl} day${dl!==1?"s":""} left!\n\n`;
+    post += `⏰ Deadline: E${lastVoteEpoch(p.expiration)} (${dlDate}) — ${dl} day${dl!==1?"s":""} left!\n\n`;
     post += `🗳️ DRep: ${d.yesPct.toFixed(1)}% / ${(d.threshold*100).toFixed(0)}%`;
     if (d.deficit <= 0) post += ` ✅\n`;
     else {
@@ -2774,7 +2777,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
               E("td",{style:tdS,colSpan:8},
                 E("span",{style:{fontWeight:600}},`[${(p.proposal_type||"").slice(0,10)}] `),
                 E("span",null,(p.title||p.proposal_id).slice(0,50)),
-                E("span",{style:{color:"var(--text2)",marginLeft:6}},`E${p.expiration}`),
+                E("span",{style:{color:"var(--text2)",marginLeft:6}},`E${lastVoteEpoch(p.expiration)}`),
                 E("span",{style:{color:"var(--text2)",marginLeft:6,fontStyle:"italic"}},"(no data)")
               )
             );
@@ -2803,8 +2806,8 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
               E("td",{style:{...tdS,whiteSpace:"nowrap",textAlign:"center"}},
                 E("div",{style:{fontSize:10,fontWeight:700,color:daysLeft(p.expiration)<=5?"#f87171":daysLeft(p.expiration)<=15?"#f59e0b":"var(--text)"}},
                   `${daysLeft(p.expiration)}d`),
-                E("div",{style:{fontSize:8,color:"var(--text2)"}},`E${p.expiration}`),
-                E("div",{style:{fontSize:7,color:"var(--text2)"}},fmtDate(epochEndTs(p.expiration)))
+                E("div",{style:{fontSize:8,color:"var(--text2)"}},`E${lastVoteEpoch(p.expiration)}`),
+                E("div",{style:{fontSize:7,color:"var(--text2)"}},fmtDateTime(epochDeadlineTs(p.expiration)))
               ),
               // DRep %
               E("td",{style:{...tdS,whiteSpace:"nowrap"}},
