@@ -13,6 +13,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0d13;--bg2:#111621;--bg3:#181e2c;--bg4:#1f2738;--border:#262f42;--border2:#333e55;--text:#e8ecf4;--text2:#8692ab;--accent:#3b82f6;--accent2:#60a5fa;--yes:#34d399;--no:#f87171;--abstain:#fbbf24;--nv:#4b5563}
+[data-theme="light"]{--bg:#f5f7fa;--bg2:#e8ecf2;--bg3:#dde3ec;--bg4:#d0d8e4;--border:#c0c8d4;--border2:#a8b4c4;--text:#1a1e28;--text2:#4a5568;--accent:#2563eb;--accent2:#3b82f6;--yes:#059669;--no:#dc2626;--abstain:#d97706;--nv:#9ca3af}
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--bg2)}
@@ -37,7 +38,7 @@ input[type=number]{-moz-appearance:textfield}
   cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;transition:all .15s}
 .btn:hover{background:var(--bg4);border-color:var(--border2)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn-primary:hover{background:#2563eb}
+.btn-primary:hover{background:var(--accent2)}
 .vote-cell{overflow:hidden;position:relative;z-index:1}
 .tab-bar{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:14px}
 .tab-btn{flex:1;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:700;
@@ -145,6 +146,11 @@ const LANG = {
     ai_predict_title:"Vote Prediction (Coming Soon)",
     ai_predict_desc:"Input governance action drafts to predict DRep votes based on historical tendencies.",
     ai_predict_impl:"Planned: Cloudflare Workers + Claude Sonnet API",
+    footer_author:"Created by", footer_contact:"Contact", footer_disclaimer:"This tool is provided as-is. The author assumes no responsibility for any damages arising from its use.",
+    theme_toggle:"Theme",
+    ai_predict_input:"Describe the governance action draft...", ai_predict_type:"Action Type", ai_predict_btn:"Predict Votes", ai_predict_remaining:"remaining today",
+    ai_predict_loading:"Analyzing with Claude AI...", ai_predict_result_name:"DRep", ai_predict_result_vote:"Predicted Vote", ai_predict_result_confidence:"Confidence", ai_predict_result_reason:"Reason",
+    ai_predict_no_worker:"Vote prediction requires a Cloudflare Worker. See setup instructions.",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
@@ -251,6 +257,11 @@ const LANG = {
     ai_predict_title:"投票予測 (Coming Soon)",
     ai_predict_desc:"ガバナンスアクションのドラフトを入力すると、DRepの過去の投票傾向から賛成・反対を予測します。",
     ai_predict_impl:"Cloudflare Workers + Claude Sonnet APIで実装予定",
+    footer_author:"作成者", footer_contact:"お問い合わせ", footer_disclaimer:"本ツールの利用による一切の損害について、作者は責任を負いません。",
+    theme_toggle:"テーマ",
+    ai_predict_input:"ガバナンスアクションのドラフトを入力...", ai_predict_type:"アクションタイプ", ai_predict_btn:"投票を予測", ai_predict_remaining:"本日残り",
+    ai_predict_loading:"Claude AIで分析中...", ai_predict_result_name:"DRep", ai_predict_result_vote:"予測投票", ai_predict_result_confidence:"確度", ai_predict_result_reason:"理由",
+    ai_predict_no_worker:"投票予測にはCloudflare Workerが必要です。セットアップ手順をご確認ください。",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
@@ -3145,9 +3156,18 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 // ═══════════════════════════════════════════════════════════════════
 // AI Analysis Tab (β)
 // ═══════════════════════════════════════════════════════════════════
+const PREDICT_WORKER_URL = ""; // Set your Cloudflare Worker URL here, e.g. "https://predict-vote.your-account.workers.dev"
+
 function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummary, aiMeta, proposals, T, lang }) {
   const [subtab, setSubtab] = React.useState("tendencies");
   const [expandedRows, setExpandedRows] = React.useState({});
+  // Vote prediction state
+  const [predictText, setPredictText] = React.useState("");
+  const [predictType, setPredictType] = React.useState("TreasuryWithdrawals");
+  const [predictResult, setPredictResult] = React.useState(null);
+  const [predictLoading, setPredictLoading] = React.useState(false);
+  const [predictError, setPredictError] = React.useState(null);
+  const [predictRemaining, setPredictRemaining] = React.useState(null);
 
   const toggleRow = (key) => setExpandedRows(prev => ({...prev, [key]: !prev[key]}));
 
@@ -3165,27 +3185,27 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
 
   if (!hasData) {
     return React.createElement("div", {className:"card",style:{padding:32,textAlign:"center"}},
-      React.createElement("h2", {style:{color:"#4fc3f7",marginBottom:16}}, "🤖 " + T.ai_title),
-      React.createElement("p", {style:{color:"#8899aa"}}, T.ai_no_data),
-      React.createElement("p", {style:{color:"#667788",fontSize:12,marginTop:8}}, T.ai_no_data_desc)
+      React.createElement("h2", {style:{color:"var(--accent2)",marginBottom:16}}, "🤖 " + T.ai_title),
+      React.createElement("p", {style:{color:"var(--text2)"}}, T.ai_no_data),
+      React.createElement("p", {style:{color:"var(--text2)",fontSize:12,marginTop:8}}, T.ai_no_data_desc)
     );
   }
 
   const fmtS = fmtStakeShort;
   const fmtDate = (iso) => iso ? iso.split("T")[0] : "—";
   const E = React.createElement;
-  const thS = {padding:"5px 8px",fontSize:10,color:"#8899aa",fontWeight:600,textAlign:"left",borderBottom:"1px solid #232b3e",whiteSpace:"nowrap",position:"sticky",top:0,background:"#0e1320",zIndex:1};
+  const thS = {padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"left",borderBottom:"1px solid var(--border)",whiteSpace:"nowrap",position:"sticky",top:0,background:"var(--bg)",zIndex:1};
   const tdS = {padding:"5px 8px",fontSize:11,color:"#e0e6ed",borderBottom:"1px solid #1a2030",verticalAlign:"middle"};
   const lbS = {fontSize:11,fontWeight:600,marginBottom:2}; // label style
 
   // ─── Sub-tab: DRep Tendencies (table, multi-expand) ───
   const renderTendencies = () => {
-    if (!aiDrepTendencies?.dreps) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
+    if (!aiDrepTendencies?.dreps) return E("p",{style:{color:"var(--text2)"}},T.ai_no_data_short);
     const dreps = Object.entries(aiDrepTendencies.dreps)
       .sort((a,b) => Number(b[1].stake) - Number(a[1].stake));
 
     return E("div", null,
-      E("p", {style:{color:"#8899aa",fontSize:11,marginBottom:8}},
+      E("p", {style:{color:"var(--text2)",fontSize:11,marginBottom:8}},
         `${dreps.length} ${T.ai_dreps_analyzed} · ${T.ai_generated}: ${fmtDate(aiDrepTendencies.generatedAt)}`),
       E("div", {style:{overflowX:"auto",maxHeight:"70vh",overflowY:"auto"}},
         E("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
@@ -3218,26 +3238,26 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
                 },
                   E("td",{style:{...tdS,color:"#556677",textAlign:"center",fontSize:10}},d.rank),
                   E("td",{style:{...tdS,fontWeight:600,maxWidth:140,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},d.name),
-                  E("td",{style:{...tdS,textAlign:"right",color:"#8899aa",whiteSpace:"nowrap"}},"₳"+fmtS(d.stake)),
+                  E("td",{style:{...tdS,textAlign:"right",color:"var(--text2)",whiteSpace:"nowrap"}},"₳"+fmtS(d.stake)),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--yes)"}},d.voteSpread.yes),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},d.voteSpread.no),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},d.voteSpread.abstain),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--nv)"}},nv),
                   E("td",{style:{...tdS,padding:"5px 4px"}},
-                    total > 0 && E("div",{style:{display:"flex",height:6,borderRadius:3,overflow:"hidden",background:"#232b3e",width:80}},
+                    total > 0 && E("div",{style:{display:"flex",height:6,borderRadius:3,overflow:"hidden",background:"var(--border)",width:80}},
                       E("div",{style:{width:yP+"%",background:"var(--yes)"}}),
                       E("div",{style:{width:nP+"%",background:"var(--no)"}}),
                       E("div",{style:{width:aP+"%",background:"var(--abstain)"}})
                     )
                   ),
-                  E("td",{style:{...tdS,color:"#b0bec5",fontSize:10,maxWidth:260,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
+                  E("td",{style:{...tdS,color:"var(--text2)",fontSize:10,maxWidth:260,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
                     truncStr(summary, 60))
                 ),
                 isExp && E("tr",{key:id+"_exp"},
-                  E("td",{colSpan:9,style:{padding:"12px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
-                    E("div",{style:{fontSize:12,color:"#b0bec5",marginBottom:10,lineHeight:1.6}}, summary),
+                  E("td",{colSpan:9,style:{padding:"12px 16px",background:"var(--bg2)",borderBottom:"1px solid var(--border)"}},
+                    E("div",{style:{fontSize:12,color:"var(--text2)",marginBottom:10,lineHeight:1.6}}, summary),
                     kp && kp.length > 0 && E("div",{style:{marginBottom:10}},
-                      E("div",{style:{...lbS,color:"#4fc3f7"}},T.ai_key_positions+":"),
+                      E("div",{style:{...lbS,color:"var(--accent2)"}},T.ai_key_positions+":"),
                       E("ul", {style:{margin:"4px 0 0 16px",padding:0}},
                         kp.map((pos, i) =>
                           E("li", {key:i,style:{color:"#c0cad6",fontSize:11,marginBottom:3,lineHeight:1.5}}, pos)
@@ -3245,8 +3265,8 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
                       )
                     ),
                     vp && E("div",{style:{marginBottom:10}},
-                      E("div",{style:{...lbS,color:"#4fc3f7"}},T.ai_voting_pattern+":"),
-                      E("div",{style:{color:"#8899aa",fontSize:11,marginTop:2}}, "📊 " + vp)
+                      E("div",{style:{...lbS,color:"var(--accent2)"}},T.ai_voting_pattern+":"),
+                      E("div",{style:{color:"var(--text2)",fontSize:11,marginTop:2}}, "📊 " + vp)
                     ),
                     E("div",{style:{color:"#556677",fontSize:10,marginTop:4}},
                       `${T.ai_with_rationale}: ${d.withRationale}/${d.totalVotes} · ${fmtDate(d.lastAnalyzedAt)}` +
@@ -3263,7 +3283,7 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
 
   // ─── Sub-tab: Proposal Vote Reasons (table, sorted by epoch desc) ───
   const renderProposalReasons = () => {
-    if (!aiProposalReasons?.proposals) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
+    if (!aiProposalReasons?.proposals) return E("p",{style:{color:"var(--text2)"}},T.ai_no_data_short);
     const propEntries = Object.entries(aiProposalReasons.proposals)
       .sort((a,b) => {
         // Sort by submittedEpoch desc, fallback to key
@@ -3281,9 +3301,9 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
           E("div", {key:i,style:{background:"#1a2030",borderRadius:4,padding:"8px 10px",marginBottom:5,borderLeft:`3px solid ${color}`}},
             E("div", {style:{color:"#e0e6ed",fontSize:11,marginBottom:4,lineHeight:1.5}}, L(r,"reason")),
             E("div", {style:{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center",fontSize:10}},
-              E("span", {style:{color:"#8899aa",fontWeight:600}}, T.ai_total_stake+": ₳"+fmtS(r.totalStake)),
+              E("span", {style:{color:"var(--text2)",fontWeight:600}}, T.ai_total_stake+": ₳"+fmtS(r.totalStake)),
               (r.dreps || []).map((dr, j) =>
-                E("span", {key:j,style:{color:"#b0bec5",background:"#232b3e",borderRadius:3,padding:"1px 5px"}},
+                E("span", {key:j,style:{color:"var(--text2)",background:"var(--border)",borderRadius:3,padding:"1px 5px"}},
                   (dr.name || dr) + (dr.stake && Number(dr.stake) > 0 ? " ₳"+fmtS(dr.stake) : ""))
               )
             )
@@ -3299,7 +3319,7 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
         E("span",{style:{color:"#c0cad6"}},
           `${bd.total} (${T.ai_with_rationale}: ${bd.withRationale}, ${T.ai_without_rationale}: ${bd.withoutRationale}) · ₳${fmtS(bd.totalStake)}`),
         bd.withoutRationale > 0 && bd.withoutRationaleDreps && bd.withoutRationaleDreps.length > 0 &&
-          E("div",{style:{color:"#8899aa",marginTop:2,paddingLeft:8}},
+          E("div",{style:{color:"var(--text2)",marginTop:2,paddingLeft:8}},
             (lang==="ja"?"根拠なし: ":"No rationale: ") +
             bd.withoutRationaleDreps.map(d => d.name+" ₳"+fmtS(d.stake)).join(", ")
           )
@@ -3307,7 +3327,7 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
     };
 
     return E("div", null,
-      E("p", {style:{color:"#8899aa",fontSize:11,marginBottom:8}},
+      E("p", {style:{color:"var(--text2)",fontSize:11,marginBottom:8}},
         `${T.ai_generated}: ${fmtDate(aiProposalReasons.generatedAt)}`),
       E("div", {style:{overflowX:"auto",maxHeight:"70vh",overflowY:"auto"}},
         E("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
@@ -3335,8 +3355,8 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
                 },
                   E("td",{style:{...tdS,maxWidth:220,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontWeight:500}},
                     val.title || key.slice(0,20)),
-                  E("td",{style:{...tdS,color:"#8899aa",fontSize:10}},val.type),
-                  E("td",{style:{...tdS,textAlign:"center",color:"#4fc3f7"}},st.votedWithRationale||0),
+                  E("td",{style:{...tdS,color:"var(--text2)",fontSize:10}},val.type),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--accent2)"}},st.votedWithRationale||0),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},st.votedWithoutRationale||0),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},st.notVoted||0),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--yes)"}},yC),
@@ -3344,13 +3364,13 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},aC)
                 ),
                 isExp && E("tr",{key:key+"_exp"},
-                  E("td",{colSpan:8,style:{padding:"12px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                  E("td",{colSpan:8,style:{padding:"12px 16px",background:"var(--bg2)",borderBottom:"1px solid var(--border)"}},
                     // Vote breakdown per category
                     st.yesBreakdown && renderBreakdown(st.yesBreakdown, "Yes", "var(--yes)"),
                     st.noBreakdown && renderBreakdown(st.noBreakdown, "No", "var(--no)"),
                     st.abstainBreakdown && renderBreakdown(st.abstainBreakdown, "Abstain", "var(--abstain)"),
                     // NotVoted info
-                    st.notVoted > 0 && E("div",{style:{fontSize:10,marginBottom:10,color:"#8899aa"}},
+                    st.notVoted > 0 && E("div",{style:{fontSize:10,marginBottom:10,color:"var(--text2)"}},
                       E("span",{style:{color:"var(--nv)",fontWeight:600}},T.ai_not_voted_long+": "),
                       E("span",null,`${st.notVoted} · ₳${fmtS(st.notVotedTotalStake||0)}`),
                       st.notVotedTopDreps && st.notVotedTopDreps.length > 0 &&
@@ -3374,11 +3394,11 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
 
   // ─── Sub-tab: Action Type Summary (table, multi-expand) ───
   const renderActionTypeSummary = () => {
-    if (!aiActionTypeSummary?.actionTypes) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
+    if (!aiActionTypeSummary?.actionTypes) return E("p",{style:{color:"var(--text2)"}},T.ai_no_data_short);
     const types = Object.entries(aiActionTypeSummary.actionTypes);
 
     return E("div", null,
-      E("p", {style:{color:"#8899aa",fontSize:11,marginBottom:8}},
+      E("p", {style:{color:"var(--text2)",fontSize:11,marginBottom:8}},
         `${T.ai_generated}: ${fmtDate(aiActionTypeSummary.generatedAt)}`),
       E("div", {style:{overflowX:"auto"}},
         E("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
@@ -3398,16 +3418,16 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
                   onClick:()=>toggleRow("t_"+type),
                   style:{cursor:"pointer",background:isExp?"#151b28":"transparent",transition:"background .1s"}
                 },
-                  E("td",{style:{...tdS,fontWeight:600,color:"#4fc3f7"}},type),
-                  E("td",{style:{...tdS,textAlign:"center",color:"#8899aa"}},data.count),
+                  E("td",{style:{...tdS,fontWeight:600,color:"var(--accent2)"}},type),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--text2)"}},data.count),
                   E("td",{style:{...tdS,color:"var(--yes)",fontSize:10,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
                     yR.join(", ")),
                   E("td",{style:{...tdS,color:"var(--no)",fontSize:10,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
                     nR.join(", "))
                 ),
                 isExp && E("tr",{key:type+"_exp"},
-                  E("td",{colSpan:4,style:{padding:"12px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
-                    E("div",{style:{color:"#b0bec5",fontSize:12,marginBottom:10,lineHeight:1.6}}, L(data,"summary")),
+                  E("td",{colSpan:4,style:{padding:"12px 16px",background:"var(--bg2)",borderBottom:"1px solid var(--border)"}},
+                    E("div",{style:{color:"var(--text2)",fontSize:12,marginBottom:10,lineHeight:1.6}}, L(data,"summary")),
                     yR.length > 0 && E("div",{style:{marginBottom:8}},
                       E("div",{style:{color:"var(--yes)",fontSize:11,fontWeight:600,marginBottom:2}},T.ai_typical_yes+":"),
                       E("ul",{style:{margin:"2px 0 0 16px",padding:0}},
@@ -3430,12 +3450,95 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
     );
   };
 
-  // ─── Sub-tab: Vote Prediction (placeholder) ───
+  // ─── Sub-tab: Vote Prediction ───
+  const ACTION_TYPES = ["TreasuryWithdrawals","ParameterChange","HardForkInitiation","NoConfidence","UpdateCommittee","NewConstitution","InfoAction"];
+  const doPrediction = async () => {
+    if (!PREDICT_WORKER_URL) { setPredictError(T.ai_predict_no_worker); return; }
+    if (!predictText.trim() || predictText.trim().length < 10) return;
+    setPredictLoading(true); setPredictError(null); setPredictResult(null);
+    try {
+      const res = await fetch(PREDICT_WORKER_URL + "/predict", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({text:predictText, actionType:predictType})
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      setPredictResult(data);
+      if (data.remaining != null) setPredictRemaining(data.remaining);
+    } catch(e) { setPredictError(e.message); }
+    finally { setPredictLoading(false); }
+  };
   const renderPredict = () => {
-    return E("div", {style:{textAlign:"center",padding:32}},
-      E("h3", {style:{color:"#4fc3f7",marginBottom:12}}, "🔮 "+T.ai_predict_title),
-      E("p", {style:{color:"#8899aa",fontSize:13}}, T.ai_predict_desc),
-      E("p", {style:{color:"#667788",fontSize:11,marginTop:8}}, T.ai_predict_impl)
+    const voteColor = v => v==="Yes"?"var(--yes)":v==="No"?"var(--no)":"var(--abstain)";
+    return E("div", {style:{maxWidth:800,margin:"0 auto"}},
+      E("p", {style:{color:"var(--text2)",fontSize:12,marginBottom:12}}, T.ai_predict_desc),
+      // Input area
+      E("textarea", {
+        value:predictText, onChange:e=>setPredictText(e.target.value),
+        placeholder:T.ai_predict_input,
+        style:{width:"100%",minHeight:120,padding:10,fontSize:12,borderRadius:6,border:"1px solid var(--border)",
+          background:"var(--bg2)",color:"var(--text)",resize:"vertical",fontFamily:"inherit"}
+      }),
+      E("div", {style:{display:"flex",gap:8,marginTop:8,alignItems:"center",flexWrap:"wrap"}},
+        E("select", {value:predictType, onChange:e=>setPredictType(e.target.value),
+          style:{padding:"6px 10px",fontSize:11,borderRadius:6,border:"1px solid var(--border)",background:"var(--bg2)",color:"var(--text)"}},
+          ACTION_TYPES.map(t => E("option",{key:t,value:t},t))
+        ),
+        E("button", {onClick:doPrediction, disabled:predictLoading || !predictText.trim(),
+          className:"btn btn-primary", style:{fontSize:12,padding:"6px 16px",opacity:predictLoading?.6:1}},
+          predictLoading ? "⏳ "+T.ai_predict_loading : "🔮 "+T.ai_predict_btn
+        ),
+        predictRemaining != null && E("span",{style:{fontSize:10,color:"var(--text2)"}}, predictRemaining+" "+T.ai_predict_remaining)
+      ),
+      // Error
+      predictError && E("div",{style:{marginTop:10,padding:8,borderRadius:6,background:"rgba(248,113,113,.1)",border:"1px solid rgba(248,113,113,.3)",color:"var(--no)",fontSize:11}}, predictError),
+      // Results
+      predictResult && E("div", {style:{marginTop:16}},
+        // Summary
+        E("div", {style:{padding:10,borderRadius:6,background:"var(--bg2)",border:"1px solid var(--border)",marginBottom:12,fontSize:12,color:"var(--text)"}},
+          lang==="ja" ? predictResult.summary_ja : predictResult.summary_en
+        ),
+        // Predictions table
+        predictResult.predictions && E("div",{style:{overflowX:"auto"}},
+          E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+            E("thead",null,
+              E("tr",null,
+                E("th",{style:{...thS,minWidth:100}},T.ai_predict_result_name),
+                E("th",{style:{...thS,textAlign:"center",minWidth:60}},T.ai_predict_result_vote),
+                E("th",{style:{...thS,textAlign:"center",minWidth:60}},T.ai_predict_result_confidence),
+                E("th",{style:{...thS,minWidth:200}},T.ai_predict_result_reason)
+              )
+            ),
+            E("tbody",null,
+              predictResult.predictions.map((p,i) =>
+                E("tr",{key:i,style:{borderBottom:"1px solid var(--border)"}},
+                  E("td",{style:{...tdS,fontWeight:600}},p.name),
+                  E("td",{style:{...tdS,textAlign:"center",fontWeight:700,color:voteColor(p.vote)}},p.vote),
+                  E("td",{style:{...tdS,textAlign:"center"}},
+                    E("span",{style:{display:"inline-block",padding:"2px 6px",borderRadius:10,fontSize:10,fontWeight:600,
+                      background:p.confidence>=70?"rgba(52,211,153,.15)":p.confidence>=40?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)",
+                      color:p.confidence>=70?"var(--yes)":p.confidence>=40?"var(--abstain)":"var(--no)"}},
+                      p.confidence+"%")
+                  ),
+                  E("td",{style:{...tdS,color:"var(--text2)",fontSize:10}},lang==="ja"?p.reason_ja:p.reason_en)
+                )
+              )
+            )
+          )
+        ),
+        // Vote summary bar
+        predictResult.predictions && (() => {
+          const yes = predictResult.predictions.filter(p=>p.vote==="Yes").length;
+          const no = predictResult.predictions.filter(p=>p.vote==="No").length;
+          const abs = predictResult.predictions.filter(p=>p.vote==="Abstain").length;
+          const total = predictResult.predictions.length;
+          return E("div",{style:{marginTop:10,display:"flex",gap:12,justifyContent:"center",fontSize:11}},
+            E("span",{style:{color:"var(--yes)",fontWeight:600}},"✓ Yes: "+yes+" ("+Math.round(yes/total*100)+"%)"),
+            E("span",{style:{color:"var(--no)",fontWeight:600}},"✗ No: "+no+" ("+Math.round(no/total*100)+"%)"),
+            E("span",{style:{color:"var(--abstain)",fontWeight:600}},"− Abstain: "+abs+" ("+Math.round(abs/total*100)+"%)")
+          );
+        })()
+      )
     );
   };
 
@@ -3448,22 +3551,22 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
 
   return E("div", {className:"card",style:{padding:0}},
     // Header
-    E("div", {style:{padding:"12px 20px",borderBottom:"1px solid #232b3e",display:"flex",justifyContent:"space-between",alignItems:"center"}},
-      E("h2", {style:{color:"#4fc3f7",margin:0,fontSize:16}}, "🤖 "+T.ai_title),
-      aiMeta && E("span", {style:{color:"#556677",fontSize:10}},
+    E("div", {style:{padding:"12px 20px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}},
+      E("h2", {style:{color:"var(--accent2)",margin:0,fontSize:16}}, "🤖 "+T.ai_title),
+      aiMeta && E("span", {style:{color:"var(--text2)",fontSize:10,opacity:0.7}},
         `${T.ai_generated}: ${fmtDate(aiMeta.generatedAt)} · API: ${aiMeta.api_calls} calls · $${aiMeta.estimated_cost_usd?.toFixed(3) || "?"}`)
     ),
     // Sub-tabs (prominent, right below header)
-    E("div", {style:{display:"flex",gap:0,borderBottom:"2px solid #232b3e",background:"#0e1320",overflowX:"auto"}},
+    E("div", {style:{display:"flex",gap:0,borderBottom:"2px solid var(--border)",background:"var(--bg)",overflowX:"auto"}},
       tabs.map(t =>
         E("button", {
           key:t.key,
           onClick:()=>{setSubtab(t.key);setExpandedRows({});},
           style:{
             padding:"10px 18px",fontSize:12,fontWeight:subtab===t.key?700:500,
-            background:subtab===t.key?"#181e2a":"transparent",
-            border:"none",borderBottom:subtab===t.key?"2px solid #4fc3f7":"2px solid transparent",
-            color:subtab===t.key?"#4fc3f7":"#8899aa",cursor:"pointer",
+            background:subtab===t.key?"var(--bg3)":"transparent",
+            border:"none",borderBottom:subtab===t.key?"2px solid var(--accent2)":"2px solid transparent",
+            color:subtab===t.key?"var(--accent2)":"var(--text2)",cursor:"pointer",
             whiteSpace:"nowrap",transition:"all .15s"
           }
         }, t.label)
@@ -3616,6 +3719,8 @@ function GovernanceDataTab({ govInfo, T, lang, dreps, votes, proposals, ccMember
 function App() {
   const [lang,setLang] = useHashState("lang","en");
   const T = LANG[lang];
+  const [theme,setTheme] = useHashState("theme","dark");
+  React.useEffect(()=>{document.documentElement.setAttribute("data-theme",theme)},[theme]);
   const [tab,setTab] = useHashState("tab","dashboard");
   const [apiKey, setApiKey] = React.useState(getBfKey());
   const [apiKeyInput, setApiKeyInput] = React.useState(getBfKey());
@@ -4072,6 +4177,8 @@ function App() {
           {isDemo && <span style={{color:"#f59e0b",fontWeight:600,fontSize:11}}>⚠ {T.demo_mode}</span>}
         </div>
         <div style={{display:"flex",gap:6,alignItems:"center"}}>
+          <button onClick={()=>setTheme(theme==="dark"?"light":"dark")} style={{padding:"4px 10px",fontSize:13,border:"1px solid var(--border)",borderRadius:6,cursor:"pointer",
+            background:"var(--bg3)",color:"var(--text2)"}} title={T.theme_toggle}>{theme==="dark"?"\u2600\uFE0F":"\uD83C\uDF19"}</button>
           <div style={{display:"flex",border:"1px solid var(--border)",borderRadius:6,overflow:"hidden"}}>
             {["en","ja"].map(l=>(
               <button key={l} onClick={()=>setLang(l)} style={{padding:"4px 10px",fontSize:11,fontWeight:600,border:"none",cursor:"pointer",
@@ -4115,11 +4222,9 @@ function App() {
           ccMembers={ccMembers} ccVotes={ccVotes} proposals={proposals} T={T} />
       )}
 
-      <div style={{marginTop:12,textAlign:"center",color:"#333a4a",fontSize:10,lineHeight:1.8}}>
-        Data: <a href="https://blockfrost.io" target="_blank">Blockfrost.io</a> · <a href="https://koios.rest" target="_blank">Koios</a>
-        {dataSource === "static" && " (cached)"} ·
-        <a href="https://github.com/Cerkoryn/ExcludeKPayN" target="_blank">ExcludeKPayN (Middle-Out)</a> ·
-        Process-first framework (<a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694" target="_blank">CIP-1694</a>)
+      <div style={{marginTop:12,textAlign:"center",color:"var(--text2)",fontSize:10,lineHeight:1.8,opacity:0.7}}>
+        {T.footer_author} <a href="https://x.com/yutazzz" target="_blank" style={{color:"var(--accent2)"}}>Yuta</a> · <a href="https://x.com/yutazzz" target="_blank" style={{color:"var(--accent2)"}}>{T.footer_contact}</a>
+        <br/>{T.footer_disclaimer}
       </div>
     </div>
   );

@@ -1,0 +1,14 @@
+name = "predict-vote"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+CLAUDE_MODEL = "claude-sonnet-4-5-20250514"
+TENDENCIES_URL = "https://cardanoz.github.io/cardano-governance-dashboard/data/ai-drep-tendencies.json"
+
+# Create a KV namespace in Cloudflare dashboard and add the ID here
+# wrangler kv:namespace create RATE_LIMIT
+# Then add the binding below:
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "your-kv-namespace-id"
