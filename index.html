@@ -1068,7 +1068,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
   }
 
   function exportSpoVotesCSV(){
-    const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","UpdateCommittee"];
+    const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution"];
     const poolIds = new Set();
     Object.keys(spoVotes||{}).forEach(k => poolIds.add(k.split("__")[0]));
     Object.keys(spoPoolInfo||{}).forEach(id => poolIds.add(id));
@@ -1200,8 +1200,8 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                   // Cardano Conway voting eligibility by proposal type
                   // CC: cannot vote on NoConfidence, InfoAction
                   // SPO: can only vote on NoConfidence, UpdateCommittee, HardForkInitiation, ParameterChange(security group only)
-                  const CC_INELIG = ["NoConfidence","InfoAction"];
-                  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
+                  const CC_INELIG = ["NoConfidence"];
+                  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution"];
                   const ccCanVote = !CC_INELIG.includes(p.proposal_type);
                   // For ParameterChange, SPOs only vote on security group params.
                   // Detect non-security ParameterChange: voting summary has 0 SPO votes cast
@@ -1323,7 +1323,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                 <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:`${Math.round(6*zoom/100)}px ${Math.round(8*zoom/100)}px`,textAlign:"left",
                   borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:Math.round(9*zoom/100),fontWeight:700,
                   color:"var(--text2)",minWidth:Math.round(260*zoom/100),boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.cc_member}</th>
-                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);const ccInelig=["NoConfidence","InfoAction"].includes(p.proposal_type);
+                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);const ccInelig=p.proposal_type==="NoConfidence";
                   return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,
                     background:ccInelig?"rgba(128,128,128,.1)":"var(--bg3)",padding:"4px 2px",
                     textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:600,
@@ -1340,7 +1340,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                       boxShadow:"4px 0 8px rgba(0,0,0,.3)",fontSize:Math.round(11*zoom/100),fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:Math.round(180*zoom/100)}}>
                       {cc.name||shortId(cc.cc_id)}
                     </td>
-                    {pgP.map((p,ci)=>{const ccInelig=["NoConfidence","InfoAction"].includes(p.proposal_type);
+                    {pgP.map((p,ci)=>{const ccInelig=p.proposal_type==="NoConfidence";
                       if(ccInelig) return <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)",background:"rgba(128,128,128,.06)"}}>
                         <div style={{textAlign:"center",fontSize:8,color:"var(--text2)",opacity:.3}}>—</div></td>;
                       const v=ccGv(cc.cc_id,p.proposal_id);const ratObj=ccGr(cc.cc_id,p.proposal_id);return(
@@ -1363,7 +1363,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
 
       {/* ═══ SPO Votes Section (below CC) ═══ */}
       {pgP.length > 0 && Object.keys(spoPoolInfo||{}).length > 0 && (()=>{
-        const SPO_INELIGIBLE_TYPES = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
+        const SPO_INELIGIBLE_TYPES = ["TreasuryWithdrawals","NewConstitution"];
         // For ParameterChange, detect non-security-group proposals (SPOs can only vote on security group)
         const isSpoIneligible = (proposal) => {
           if (SPO_INELIGIBLE_TYPES.includes(proposal.proposal_type)) return true;
@@ -2564,10 +2564,10 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 
   // ─── CC threshold ───
   const getCCThreshold = () => pp ? Number(pp.dvt_committee_normal) || 0.67 : 0.67;
-  const CC_INELIG = ["NoConfidence","InfoAction"];
+  const CC_INELIG = ["NoConfidence"];
 
   // ─── SPO threshold ───
-  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
+  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution"];
   const getSpoThreshold = (ptype) => {
     if (SPO_INELIG.includes(ptype)) return null;
     if (!pp) return 0.51;
