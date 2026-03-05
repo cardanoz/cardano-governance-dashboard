@@ -2639,8 +2639,10 @@ function VetoPowerSection({ dreps, pp, T }) {
   const thV = {fontSize:9,fontWeight:700,padding:"4px 6px",borderBottom:"2px solid var(--border)",color:"var(--text2)"};
   const tdV = {fontSize:10,padding:"3px 6px",borderBottom:"1px solid var(--border)"};
   const fmtS = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
+  const fmtL = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(2)+"B":n>=1e6?(n/1e6).toFixed(2)+"M":n>=1e3?(n/1e3).toFixed(1)+"K":n.toFixed(0); };
 
-  return CE(Section,{title:"🛡️ "+(T.gov_veto||"Veto Power Analysis")},
+  return CE("div",{style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:10}},
+    CE("div",{style:{fontSize:13,fontWeight:700,color:"var(--accent2)",marginBottom:8}},"🛡️ "+(T.gov_veto||"Veto Power Analysis")),
     CE("div",{style:{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}},
       CE("div",{style:{background:"var(--bg3)",borderRadius:8,padding:"8px 12px",borderLeft:"3px solid #ef4444",flex:"1 1 200px"}},
         CE("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},"Auto-No (drep_always_no_confidence)"),
