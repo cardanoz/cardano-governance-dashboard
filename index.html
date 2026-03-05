@@ -2592,9 +2592,12 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       }).sort((a, b) => Number(b.amount) - Number(a.amount));
 
       const yesPower = Number(ps.drep.yes_power) || 0;
-      const noPower = Number(ps.drep.no_power) || 0;
-      const unvotedPower = unvotedDreps.reduce((s, d) => s + Number(d.amount), 0);
-      const totalPower = yesPower + noPower + unvotedPower;
+      const yesPct = (ps.drep.yes_pct || 0) / 100; // 0-1 scale
+      // Derive total active DRep stake from authoritative on-chain yes_pct
+      // total = yesPower / yesPct (when yesPct > 0)
+      const totalPower = yesPct > 0 ? yesPower / yesPct :
+        dreps.filter(d=>d.drep_id!=="drep_always_abstain"&&d.drep_id!=="drep_always_no_confidence"&&Number(d.amount)>0)
+          .reduce((s,d)=>s+Number(d.amount),0);
       const needed = drepThr * totalPower;
       const deficit = needed - yesPower;
 
@@ -2605,7 +2608,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
         for (const d of unvotedDreps) {
           minDreps.push(d);
           cumStake += Number(d.amount);
-          if (yesPower + cumStake >= needed) { thresholdMet = true; break; }
+          if (cumStake >= deficit) { thresholdMet = true; break; }
         }
       }
       const extraDreps = unvotedDreps.slice(minDreps.length, minDreps.length + extraCount);
@@ -2628,24 +2631,25 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       if (spoThr !== null && ps.spo) {
         spoYesPct = ps.spo.yes_pct || 0;
         const spoYesPower = Number(ps.spo.yes_power) || 0;
-        const spoNoPower = Number(ps.spo.no_power) || 0;
-        const votedPoolIds = new Set();
-        Object.keys(spoVotes || {}).forEach(k => { if (k.endsWith("__" + prop.proposal_id)) votedPoolIds.add(k.split("__")[0]); });
-        const unvotedPools = Object.keys(spoPoolInfo || {}).filter(pid => !votedPoolIds.has(pid)).map(pid => {
-          const info = (spoPoolInfo || {})[pid] || {};
-          return { pool_id: pid, ticker: info.ticker || "", active_stake: Number(info.active_stake || 0) };
-        }).filter(p => p.active_stake > 0).sort((a, b) => b.active_stake - a.active_stake);
-        const unvotedSpoStake = unvotedPools.reduce((s, p) => s + p.active_stake, 0);
-        const spoTotalPower = spoYesPower + spoNoPower + unvotedSpoStake;
+        const spoYesPctFrac = spoYesPct / 100;
+        // Derive total active SPO stake from authoritative on-chain yes_pct
+        const spoTotalPower = spoYesPctFrac > 0 ? spoYesPower / spoYesPctFrac :
+          Object.values(spoPoolInfo||{}).reduce((s,p)=>s+Number(p.active_stake||0),0);
         const spoNeeded = spoThr * spoTotalPower;
         const spoDeficit = spoNeeded - spoYesPower;
         spoThresholdMet = spoDeficit <= 0;
         if (!spoThresholdMet) {
+          const votedPoolIds = new Set();
+          Object.keys(spoVotes || {}).forEach(k => { if (k.endsWith("__" + prop.proposal_id)) votedPoolIds.add(k.split("__")[0]); });
+          const unvotedPools = Object.keys(spoPoolInfo || {}).filter(pid => !votedPoolIds.has(pid)).map(pid => {
+            const info = (spoPoolInfo || {})[pid] || {};
+            return { pool_id: pid, ticker: info.ticker || "", active_stake: Number(info.active_stake || 0) };
+          }).filter(p => p.active_stake > 0).sort((a, b) => b.active_stake - a.active_stake);
           let sCum = 0;
           for (const p of unvotedPools) {
             minSPOs.push(p);
             sCum += p.active_stake;
-            if (spoYesPower + sCum >= spoNeeded) break;
+            if (sCum >= spoDeficit) break;
           }
         }
       }
@@ -2745,18 +2749,17 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
         E("thead",null,
           E("tr",null,
             E("th",{style:thS},"Proposal"),
-            E("th",{style:{...thS,color:"#8b5cf6"}},"🗳️ DRep"),
-            E("th",{style:{...thS,color:"#8b5cf6"}},"Min DReps Needed"),
+            E("th",{style:{...thS,color:"#8b5cf6"}},"🗳️ DRep (Yes%/Thr)"),
+            E("th",{style:{...thS,color:"#8b5cf6"}},"Min DReps Needed for YES"),
             E("th",{style:{...thS,color:"#f59e0b"}},"🏛️ CC Unvoted"),
-            E("th",{style:{...thS,color:"#06b6d4"}},"🏊 SPO"),
-            E("th",{style:{...thS,color:"#06b6d4"}},"Min SPOs Needed"),
+            E("th",{style:{...thS,color:"#06b6d4"}},"🏊 SPO (Yes%/Thr)"),
+            E("th",{style:{...thS,color:"#06b6d4"}},"Min SPOs Needed for YES"),
             E("th",{style:{...thS,width:32}},"")
           )
         ),
         E("tbody",null,
           displayReminders.map(rem => {
             const p = rem.prop, d = rem.drepData, c = rem.ccData, s = rem.spoData;
-            const isExpanded = expandedProp === p.proposal_id;
             if (!rem.ps) return E("tr",{key:p.proposal_id},
               E("td",{style:tdS,colSpan:7},
                 E("span",{style:{fontWeight:600}},`[${(p.proposal_type||"").slice(0,10)}] `),
@@ -2766,95 +2769,67 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
               )
             );
 
-            return E(React.Fragment,{key:p.proposal_id},
-              E("tr",{style:{cursor:"pointer",background:isExpanded?"rgba(139,92,246,.06)":"transparent"},
-                onClick:()=>setExpandedProp(isExpanded?null:p.proposal_id)},
-                // Proposal name
-                E("td",{style:{...tdS,maxWidth:200}},
-                  E("div",{style:{fontWeight:600,fontSize:10,lineHeight:"1.3"}},
-                    `[${(p.proposal_type||"").slice(0,10)}] ${(p.title||p.proposal_id).slice(0,45)}`),
-                  E("div",{style:{fontSize:8,color:"var(--text2)"}},"Exp: E"+p.expiration)
-                ),
-                // DRep %
-                E("td",{style:tdS},
-                  E("span",{style:{color:d.deficit<=0?"#34d399":"#f87171",fontWeight:600}},
-                    `${d.yesPct.toFixed(1)}%/${(d.threshold*100).toFixed(0)}%`),
-                  d.deficit<=0 ? " ✅" : ""
-                ),
-                // Min DReps needed
-                E("td",{style:tdS},
-                  d.deficit<=0 ? E("span",{style:{color:"#34d399"}},"—") :
-                  E("span",null,`${d.minDreps.length}${extraCount>0?`+${d.extraDreps.length}`:""}`)
-                ),
-                // CC unvoted
-                E("td",{style:tdS},
-                  !c.canVote ? E("span",{style:{color:"var(--text2)",opacity:.4}},"N/A") :
-                  c.unvotedCC.length === 0 ? E("span",{style:{color:"#34d399"}},"✅ All voted") :
-                  E("span",null,`${c.unvotedCC.length} (${c.yesPct.toFixed(0)}%/${(c.threshold*100).toFixed(0)}%)`)
-                ),
-                // SPO %
-                E("td",{style:tdS},
-                  !s ? E("span",{style:{color:"var(--text2)",opacity:.4}},"N/A") :
-                  E("span",{style:{color:s.thresholdMet?"#34d399":"#f87171",fontWeight:600}},
-                    `${s.yesPct.toFixed(1)}%/${(s.threshold*100).toFixed(0)}%`),
-                  s && s.thresholdMet ? " ✅" : ""
-                ),
-                // Min SPOs needed
-                E("td",{style:tdS},
-                  !s ? E("span",{style:{color:"var(--text2)",opacity:.4}},"—") :
-                  s.thresholdMet ? E("span",{style:{color:"#34d399"}},"—") :
-                  E("span",null,`${s.minSPOs.length}${extraCount>0&&s.extraSPOs.length>0?`+${s.extraSPOs.length}`:""}`)
-                ),
-                // Copy single
-                E("td",{style:{...tdS,textAlign:"center"}},
-                  E("button",{onClick:ev=>{ev.stopPropagation();copySingle(rem);},title:"Copy X Post",
-                    style:{fontSize:9,padding:"2px 5px",background:"transparent",color:"var(--text2)",border:"1px solid var(--border)",borderRadius:4,cursor:"pointer"}},"📋")
+            // Helper: render name list with optional +α separator
+            const nameList = (items, extraItems, getName, getStake) => E("div",null,
+              items.map((item,i) => E("div",{key:i,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 2px",fontWeight:600}},
+                E("span",{style:{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}},getName(item)),
+                getStake && E("span",{style:{color:"var(--text2)",whiteSpace:"nowrap",marginLeft:4}},getStake(item))
+              )),
+              extraItems && extraItems.length > 0 && E("div",{style:{borderTop:"1px dashed var(--border)",marginTop:1,paddingTop:1}},
+                extraItems.map((item,i) => E("div",{key:"x"+i,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 2px",opacity:.55}},
+                  E("span",{style:{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}},getName(item)),
+                  getStake && E("span",{style:{color:"var(--text2)",whiteSpace:"nowrap",marginLeft:4}},getStake(item))
+                ))
+              )
+            );
+
+            return E("tr",{key:p.proposal_id},
+              // Proposal name
+              E("td",{style:{...tdS,maxWidth:180}},
+                E("div",{style:{fontWeight:600,fontSize:10,lineHeight:"1.3"}},
+                  `[${(p.proposal_type||"").slice(0,10)}] ${(p.title||p.proposal_id).slice(0,40)}`),
+                E("div",{style:{fontSize:8,color:"var(--text2)"}},"Exp: E"+p.expiration)
+              ),
+              // DRep %
+              E("td",{style:{...tdS,whiteSpace:"nowrap"}},
+                E("span",{style:{color:d.deficit<=0?"#34d399":"#f87171",fontWeight:600}},
+                  `${d.yesPct.toFixed(1)}%/${(d.threshold*100).toFixed(0)}%`),
+                d.deficit<=0 ? " ✅" : ""
+              ),
+              // Min DReps — show names + stake
+              E("td",{style:{...tdS,minWidth:160}},
+                d.deficit<=0 ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ Threshold met") :
+                d.minDreps.length === 0 ? E("span",{style:{color:"#f87171",fontSize:9}},"Unreachable") :
+                nameList(d.minDreps, d.extraDreps, dr=>dr.name||dr.drep_id.slice(0,20), dr=>"₳"+fmtStake(dr.amount))
+              ),
+              // CC unvoted — show names
+              E("td",{style:{...tdS,minWidth:120}},
+                !c.canVote ? E("span",{style:{color:"var(--text2)",opacity:.4,fontSize:9}},"N/A") :
+                c.unvotedCC.length === 0 ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ All voted") :
+                E("div",null,
+                  E("div",{style:{fontSize:8,color:"var(--text2)",marginBottom:1}},`${c.yesPct.toFixed(0)}%/${(c.threshold*100).toFixed(0)}%`),
+                  c.unvotedCC.map(cc => E("div",{key:cc.cc_id,style:{fontSize:9,padding:"1px 0"}},
+                    cc.name||cc.cc_id.slice(0,22)))
                 )
               ),
-              // Expanded detail row
-              isExpanded && E("tr",null,
-                E("td",{colSpan:7,style:{padding:"6px 8px",background:"rgba(139,92,246,.04)",borderBottom:"1px solid var(--border)"}},
-                  E("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}},
-                    // DRep detail
-                    E("div",null,
-                      E("div",{style:{fontSize:9,fontWeight:700,color:"#8b5cf6",marginBottom:3}},
-                        `🗳️ DRep — ${d.yesPct.toFixed(1)}% / ${(d.threshold*100).toFixed(0)}%`),
-                      d.deficit <= 0 ? E("div",{style:{fontSize:9,color:"#34d399"}},"✅ Threshold met") :
-                      E("div",null,
-                        d.minDreps.map((dr,i) => E("div",{key:dr.drep_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",fontWeight:600}},
-                          E("span",null,dr.name||dr.drep_id.slice(0,22)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(dr.amount))
-                        )),
-                        d.extraDreps.length > 0 && E("div",{style:{borderTop:"1px dashed var(--border)",marginTop:2,paddingTop:2}},
-                          d.extraDreps.map(dr => E("div",{key:dr.drep_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",opacity:.6}},
-                            E("span",null,dr.name||dr.drep_id.slice(0,22)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(dr.amount))
-                          ))
-                        )
-                      )
-                    ),
-                    // CC detail
-                    E("div",null,
-                      E("div",{style:{fontSize:9,fontWeight:700,color:"#f59e0b",marginBottom:3}},
-                        c.canVote ? `🏛️ CC — ${c.yesPct.toFixed(0)}% / ${(c.threshold*100).toFixed(0)}%` : "🏛️ CC — N/A"),
-                      c.canVote && c.unvotedCC.length === 0 && E("div",{style:{fontSize:9,color:"#34d399"}},"✅ All voted"),
-                      c.canVote && c.unvotedCC.map(cc => E("div",{key:cc.cc_id,style:{fontSize:9,padding:"1px 0"}},
-                        `• ${cc.name||cc.cc_id.slice(0,25)}`))
-                    ),
-                    // SPO detail
-                    E("div",null,
-                      E("div",{style:{fontSize:9,fontWeight:700,color:"#06b6d4",marginBottom:3}},
-                        s ? `🏊 SPO — ${s.yesPct.toFixed(1)}% / ${(s.threshold*100).toFixed(0)}%` : "🏊 SPO — N/A"),
-                      s && s.thresholdMet && E("div",{style:{fontSize:9,color:"#34d399"}},"✅ Threshold met"),
-                      s && !s.thresholdMet && s.minSPOs.map(sp => E("div",{key:sp.pool_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",fontWeight:600}},
-                        E("span",null,sp.ticker||sp.pool_id.slice(0,15)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(sp.active_stake*1e6))
-                      )),
-                      s && !s.thresholdMet && s.extraSPOs.length > 0 && E("div",{style:{borderTop:"1px dashed var(--border)",marginTop:2,paddingTop:2}},
-                        s.extraSPOs.map(sp => E("div",{key:sp.pool_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",opacity:.6}},
-                          E("span",null,sp.ticker||sp.pool_id.slice(0,15)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(sp.active_stake*1e6))
-                        ))
-                      )
-                    )
-                  )
-                )
+              // SPO %
+              E("td",{style:{...tdS,whiteSpace:"nowrap"}},
+                !s ? E("span",{style:{color:"var(--text2)",opacity:.4,fontSize:9}},"N/A") :
+                E("span",{style:{color:s.thresholdMet?"#34d399":"#f87171",fontWeight:600}},
+                  `${s.yesPct.toFixed(1)}%/${(s.threshold*100).toFixed(0)}%`),
+                s && s.thresholdMet ? " ✅" : ""
+              ),
+              // Min SPOs — show tickers + stake
+              E("td",{style:{...tdS,minWidth:140}},
+                !s ? E("span",{style:{color:"var(--text2)",opacity:.4,fontSize:9}},"—") :
+                s.thresholdMet ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ Threshold met") :
+                s.minSPOs.length === 0 ? E("span",{style:{color:"#f87171",fontSize:9}},"Unreachable") :
+                nameList(s.minSPOs, s.extraSPOs, sp=>sp.ticker||sp.pool_id.slice(0,12), sp=>"₳"+fmtStake(sp.active_stake*1e6))
+              ),
+              // Copy single
+              E("td",{style:{...tdS,textAlign:"center"}},
+                E("button",{onClick:ev=>{ev.stopPropagation();copySingle(rem);},title:"Copy X Post",
+                  style:{fontSize:9,padding:"2px 5px",background:"transparent",color:"var(--text2)",border:"1px solid var(--border)",borderRadius:4,cursor:"pointer"}},"📋")
               )
             );
           })
