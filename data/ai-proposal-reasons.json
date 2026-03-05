@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-05T07:58:34.146Z",
+  "generatedAt": "2026-03-05T09:02:53.681Z",
   "proposals": {
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "title": "Amaru Treasury Withdrawal 2026",
@@ -10247,9 +10247,342 @@
           ]
         }
       },
-      "yesReasons": [],
-      "noReasons": [],
-      "abstainReasons": []
+      "yesReasons": [
+        {
+          "reason_en": "Innovative loan-based Treasury model with repayment accountability and interest (2.44% APR), setting a sustainable precedent for future funding",
+          "reason_ja": "返済責任と利息（年利2.44%）を伴う革新的なローンベースの財務モデルで、将来の資金調達の先例を設定",
+          "totalStake": "920499708348641",
+          "dreps": [
+            {
+              "name": "Yoroi Wallet",
+              "stake": "0"
+            },
+            {
+              "name": "EMURGO",
+              "stake": "297934439474706"
+            },
+            {
+              "name": "Cardano Foundation",
+              "stake": "187939805127245"
+            },
+            {
+              "name": "Eternl DRep Committee",
+              "stake": "249542796519828"
+            },
+            {
+              "name": "Dave",
+              "stake": "61161018594631"
+            },
+            {
+              "name": "HOSKY",
+              "stake": "32676164048636"
+            },
+            {
+              "name": "Kyle Solomon",
+              "stake": "35654085126748"
+            },
+            {
+              "name": "Big Lazy Cat",
+              "stake": "33356423924818"
+            },
+            {
+              "name": "Blockjock (James Meidinger)",
+              "stake": "22234975532029"
+            }
+          ]
+        },
+        {
+          "reason_en": "SNEK team has proven execution track record with strong on-chain revenue generation (749,811 annual transactions, 68.7M ADA volume) and successful Tier 1 exchange listings",
+          "reason_ja": "SNEKチームは強力なオンチェーン収益生成（年間74万9千トランザクション、6,877万ADA取引量）とTier 1取引所上場の実績で証明された実行能力を持つ",
+          "totalStake": "886341918097068",
+          "dreps": [
+            {
+              "name": "YUTA",
+              "stake": "457107694733798"
+            },
+            {
+              "name": "Sebastien Guillemot",
+              "stake": "186393301262693"
+            },
+            {
+              "name": "CryptoCrow",
+              "stake": "210164758051941"
+            },
+            {
+              "name": "HOSKY",
+              "stake": "32676164048636"
+            }
+          ]
+        },
+        {
+          "reason_en": "Supports Cardano ecosystem growth by enabling CNT listings on global exchanges, boosting liquidity, visibility, and user acquisition for all Cardano native tokens",
+          "reason_ja": "グローバル取引所でのCNT上場を可能にし、Cardanoネイティブトークンの流動性、認知度、ユーザー獲得を促進してエコシステム成長を支援",
+          "totalStake": "134309877791078",
+          "dreps": [
+            {
+              "name": "Dave",
+              "stake": "61161018594631"
+            },
+            {
+              "name": "Chris-O",
+              "stake": "35969963415521"
+            },
+            {
+              "name": "MUEN",
+              "stake": "37178895780926"
+            }
+          ]
+        },
+        {
+          "reason_en": "SNEK is a respected and successful community project with strong market presence, particularly in Chinese community, demonstrating cultural and community value",
+          "reason_ja": "SNEKは尊敬される成功したコミュニティプロジェクトで、特に中国コミュニティで強い市場プレゼンスを持ち、文化的およびコミュニティ価値を示す",
+          "totalStake": "362340075109241",
+          "dreps": [
+            {
+              "name": "Dumpling🥟",
+              "stake": "81186016361910"
+            },
+            {
+              "name": "CryptoCrow",
+              "stake": "210164758051941"
+            },
+            {
+              "name": "Peter Bui",
+              "stake": "70989300695390"
+            }
+          ]
+        },
+        {
+          "reason_en": "Addresses Cardano's market isolation by leveraging a proven team to secure top-tier listings, creating reusable infrastructure and legal frameworks for future CNT projects",
+          "reason_ja": "実績のあるチームを活用してTier 1上場を確保することでCardanoの市場隔離に対処し、将来のCNTプロジェクト向けの再利用可能なインフラと法的枠組みを構築",
+          "totalStake": "97130982010152",
+          "dreps": [
+            {
+              "name": "Dave",
+              "stake": "61161018594631"
+            },
+            {
+              "name": "Chris-O",
+              "stake": "35969963415521"
+            }
+          ]
+        }
+      ],
+      "noReasons": [
+        {
+          "reason_en": "Lack of enforceable loan terms, collateral, jurisdiction, and default remedies - presented as a loan but lacks legal structure and enforcement mechanisms",
+          "reason_ja": "返済可能なローン条件、担保、管轄権、デフォルト時の救済措置の欠如 - ローンとして提示されているが、法的構造と実行メカニズムが不足",
+          "totalStake": "6080863628686",
+          "dreps": [
+            {
+              "name": "This Corrosion",
+              "stake": "1149008827451"
+            },
+            {
+              "name": "Tony Boersma",
+              "stake": "2160293642491"
+            },
+            {
+              "name": "BankFi",
+              "stake": "1952746725433"
+            },
+            {
+              "name": "TriangleForces",
+              "stake": "818814433311"
+            }
+          ]
+        },
+        {
+          "reason_en": "Treasury should not fund meme token marketing or exchange listing fees - should be project responsibility or funded through private capital, not public treasury",
+          "reason_ja": "財務省はミームトークンのマーケティングや取引所手数料に資金を提供すべきではない - プロジェクト責任またはプライベートキャピタルで資金提供されるべきで、公的財務ではない",
+          "totalStake": "8006411909241",
+          "dreps": [
+            {
+              "name": "Kevin_ALBERT",
+              "stake": "1230002957070"
+            },
+            {
+              "name": "AltcoinOracle",
+              "stake": "4975118559599"
+            },
+            {
+              "name": "MREDGARCROSS",
+              "stake": "638136791947"
+            },
+            {
+              "name": "The Dutch Drep",
+              "stake": "1163153600625"
+            }
+          ]
+        },
+        {
+          "reason_en": "Missing critical details on revenue sources for repayment, KPIs for success measurement, risk mitigation, and specific exchange listing agreements",
+          "reason_ja": "返済のための収益源、成功測定のためのKPI、リスク軽減、具体的な取引所上場契約に関する重要な詳細が不足している",
+          "totalStake": "206355375173751",
+          "dreps": [
+            {
+              "name": "Hermes Stakepool Germany (HRMS)",
+              "stake": "65710481741573"
+            },
+            {
+              "name": "SASA_nagamaru_ながまる",
+              "stake": "58632165272364"
+            },
+            {
+              "name": "Hermes Stakepool Germany (HRMS)",
+              "stake": "65710481741573"
+            },
+            {
+              "name": "InputEndorsers",
+              "stake": "7740395966687"
+            },
+            {
+              "name": "Porto Cripto DRep",
+              "stake": "4544398275147"
+            },
+            {
+              "name": "Mike Rogero",
+              "stake": "3600014101112"
+            },
+            {
+              "name": "CardaFlow",
+              "stake": "417438075295"
+            }
+          ]
+        },
+        {
+          "reason_en": "Conflict of interest - SNEK CEO Rapha sits on CSFW Treasury Management Committee, compromising fiduciary responsibility and independent evaluation",
+          "reason_ja": "利益相反 - SNEKのCEO RaphaがCSFW財務管理委員会に在籍しており、受託者責任と独立した評価を損なわせている",
+          "totalStake": "1149008827451",
+          "dreps": [
+            {
+              "name": "This Corrosion",
+              "stake": "1149008827451"
+            }
+          ]
+        },
+        {
+          "reason_en": "2.44% APR is too low for an unsecured loan and sets unsustainable precedent - interest rate should reflect market risk",
+          "reason_ja": "年利2.44%は無担保ローンでは低すぎ、持続不可能な先例を設定 - 金利は市場リスクを反映すべき",
+          "totalStake": "2979108075802",
+          "dreps": [
+            {
+              "name": "Tony Boersma",
+              "stake": "2160293642491"
+            },
+            {
+              "name": "TriangleForces",
+              "stake": "818814433311"
+            }
+          ]
+        },
+        {
+          "reason_en": "SNEK already listed on multiple exchanges - proposal lacks specificity on which new exchanges are targeted or have pre-agreements",
+          "reason_ja": "SNEKは既に複数の取引所に上場 - 提案は対象となる新規取引所や事前契約に関する具体性を欠いている",
+          "totalStake": "4544398275147",
+          "dreps": [
+            {
+              "name": "Porto Cripto DRep",
+              "stake": "4544398275147"
+            }
+          ]
+        },
+        {
+          "reason_en": "Philosophical opposition to meme tokens and concerns about normalizing meme-gambling as ecosystem achievement",
+          "reason_ja": "ミームトークンへの哲学的反対とミームギャンブルのエコシステム成果としての正常化への懸念",
+          "totalStake": "6621882676840",
+          "dreps": [
+            {
+              "name": "drep1ytw5tvdxpe...",
+              "stake": "6621882676840"
+            }
+          ]
+        }
+      ],
+      "abstainReasons": [
+        {
+          "reason_en": "Innovative loan model worth testing but concerns about broader ecosystem impact and treasury resource prioritization - prefer to observe community reception",
+          "reason_ja": "テスト価値のある革新的なローンモデルだが、より広いエコシステムへの影響と財務資源配分の優先度に懸念 - コミュニティの反応を観察したい",
+          "totalStake": "81095881097636",
+          "dreps": [
+            {
+              "name": "AKYO",
+              "stake": "47172466701949"
+            },
+            {
+              "name": "Socious",
+              "stake": "33923414395687"
+            }
+          ]
+        },
+        {
+          "reason_en": "First-of-its-kind loan proposal lacks fully defined safeguards and risk management frameworks - need clearer protections before full support",
+          "reason_ja": "初めてのローン提案で完全に定義された安全装置とリスク管理フレームワークが不足 - 完全なサポート前にはより明確な保護が必要",
+          "totalStake": "54184741877767",
+          "dreps": [
+            {
+              "name": "SIDAN Lab",
+              "stake": "21244043097504"
+            },
+            {
+              "name": "RCADA",
+              "stake": "16032726632846"
+            },
+            {
+              "name": "Rodrigo-[CHIL]",
+              "stake": "16788537254223"
+            },
+            {
+              "name": "MyCNFT DRep",
+              "stake": "119434893194"
+            }
+          ]
+        },
+        {
+          "reason_en": "Meme coin project lacks proven business model for loan repayment despite supporting pioneering CNT listing infrastructure",
+          "reason_ja": "パイオニアCNT上場インフラをサポートしているにもかかわらず、ミームコインプロジェクトはローン返済の実証されたビジネスモデルを欠いている",
+          "totalStake": "21244043097504",
+          "dreps": [
+            {
+              "name": "SIDAN Lab",
+              "stake": "21244043097504"
+            }
+          ]
+        },
+        {
+          "reason_en": "Info action step creates unnecessary delays given 67% approval requirement already mandatory at final vote",
+          "reason_ja": "最終投票で既に義務付けられている67%承認要件を考えると、情報行動ステップは不要な遅延を生み出す",
+          "totalStake": "44565654669607",
+          "dreps": [
+            {
+              "name": "AdaStat",
+              "stake": "44565654669607"
+            }
+          ]
+        },
+        {
+          "reason_en": "New funding model type requires further definition of framework, limits, and risk management parameters at community level",
+          "reason_ja": "新しい資金調達モデルタイプはコミュニティレベルでのフレームワーク、制限、リスク管理パラメータのさらなる定義が必要",
+          "totalStake": "1116968414594",
+          "dreps": [
+            {
+              "name": "CaFi",
+              "stake": "1116968414594"
+            }
+          ]
+        },
+        {
+          "reason_en": "Conflict of interest - must abstain from voting on Treasury matters due to governance role until epoch 726",
+          "reason_ja": "利益相反 - エポック726まで財務に関する投票から棄権する必要がある",
+          "totalStake": "433002449024",
+          "dreps": [
+            {
+              "name": "KryptoLabs",
+              "stake": "433002449024"
+            }
+          ]
+        }
+      ]
     },
     "89e3a4f09122d669d6f6c82dd894e02826e8497be7eb036233bafc0ee4fc6665#0": {
       "title": "Cardano in Oceania: A community-led strategic plan for investing in growth.",
@@ -18636,9 +18969,221 @@
           ]
         }
       },
-      "yesReasons": [],
-      "noReasons": [],
-      "abstainReasons": []
+      "yesReasons": [
+        {
+          "reason_en": "Supports decentralization and reduces reliance on centralized API providers through the Icebreaker network",
+          "reason_ja": "Icebreaker ネットワークを通じて、集中化された API プロバイダーへの依存を減らし、分散化をサポート",
+          "totalStake": "0",
+          "dreps": [
+            {
+              "name": "Yoroi Wallet",
+              "stake": "0"
+            }
+          ]
+        },
+        {
+          "reason_en": "Blockfrost is a widely adopted developer platform that plays a key role in supporting builders and improving reliability",
+          "reason_ja": "Blockfrost は広く採用されているデベロッパー プラットフォームであり、ビルダーのサポートと信頼性の向上に重要な役割を果たす",
+          "totalStake": "0",
+          "dreps": [
+            {
+              "name": "Yoroi Wallet",
+              "stake": "0"
+            }
+          ]
+        },
+        {
+          "reason_en": "Proposal includes Layer 2 integration such as Hydra, supporting Cardano's technical roadmap",
+          "reason_ja": "Hydra などの Layer 2 統合が含まれており、Cardano の技術ロードマップをサポート",
+          "totalStake": "0",
+          "dreps": [
+            {
+              "name": "Yoroi Wallet",
+              "stake": "0"
+            }
+          ]
+        },
+        {
+          "reason_en": "Fair pricing justified by achieving ecosystem growth goals and supporting economic identities for billions of people",
+          "reason_ja": "エコシステムの成長目標を達成し、数十億人の経済的アイデンティティをサポートするための公正な価格設定",
+          "totalStake": "457107694733798",
+          "dreps": [
+            {
+              "name": "YUTA",
+              "stake": "457107694733798"
+            }
+          ]
+        }
+      ],
+      "noReasons": [
+        {
+          "reason_en": "Limited cost-effectiveness; the proposal does not justify its expenses relative to expected benefits",
+          "reason_ja": "費用対効果が薄い。提案が期待される効果に見合う費用を正当化できていない",
+          "totalStake": "102410529539769",
+          "dreps": [
+            {
+              "name": "BTBF_XSP",
+              "stake": "102410529539769"
+            }
+          ]
+        },
+        {
+          "reason_en": "Failed to meet evaluation criteria across six categories; scored below threshold for support",
+          "reason_ja": "6 つのカテゴリーにおける評価基準を満たしておらず、サポートのための閾値以下のスコア",
+          "totalStake": "96812580604836",
+          "dreps": [
+            {
+              "name": "CardanoYoda",
+              "stake": "96812580604836"
+            }
+          ]
+        },
+        {
+          "reason_en": "Centralizes critical infrastructure and introduces unacceptable censorship, front-running, and MEV risks",
+          "reason_ja": "重要なインフラストラクチャを中央集約化し、検閲、フロントランニング、MEV のリスクを導入",
+          "totalStake": "61161018594631",
+          "dreps": [
+            {
+              "name": "Dave",
+              "stake": "61161018594631"
+            }
+          ]
+        },
+        {
+          "reason_en": "Lacks clear focus on traditional finance education and stakeholder engagement; does not adequately address target audience",
+          "reason_ja": "伝統的金融教育とステークホルダー エンゲージメントに対する明確なフォーカスが不足しており、ターゲット オ���ディエンスに適切に対応していない",
+          "totalStake": "73850411667758",
+          "dreps": [
+            {
+              "name": "Florian Volery",
+              "stake": "73850411667758"
+            }
+          ]
+        },
+        {
+          "reason_en": "Redundant with existing governance tools like Cexplorer and Tempo; should be funded through Catalyst instead",
+          "reason_ja": "Cexplorer や Tempo などの既存ガバナンス ツールと重複している。代わりに Catalyst を通じて資金調達されるべき",
+          "totalStake": "73850411667758",
+          "dreps": [
+            {
+              "name": "Florian Volery",
+              "stake": "73850411667758"
+            }
+          ]
+        }
+      ],
+      "abstainReasons": [
+        {
+          "reason_en": "Request amount is too high; cost is not justified for the value demonstrated to date",
+          "reason_ja": "要求額が高すぎる。これまでに示された価値では費用が正当化されていない",
+          "totalStake": "65710481741573",
+          "dreps": [
+            {
+              "name": "Hermes Stakepool Germany",
+              "stake": "65710481741573"
+            }
+          ]
+        },
+        {
+          "reason_en": "Proposal represents significant spend without clear evidence of direct measurable ecosystem gains; high cost for exploratory work",
+          "reason_ja": "エコシステムへの直接的で測定可能な利益の明確な証拠がない大きな支出。探索的作業に対する高コスト",
+          "totalStake": "70989300695390",
+          "dreps": [
+            {
+              "name": "Peter Bui",
+              "stake": "70989300695390"
+            }
+          ]
+        },
+        {
+          "reason_en": "Should be funded through Catalyst or grouped under another proposal like Builders DAO instead of separate treasury withdrawal",
+          "reason_ja": "Catalyst を通じて資金調達されるべき、または Builders DAO などの別の提案の下にグループ化されるべき",
+          "totalStake": "38602187999293",
+          "dreps": [
+            {
+              "name": "Patrick_Tobler",
+              "stake": "38602187999293"
+            }
+          ]
+        },
+        {
+          "reason_en": "Temporarily abstaining on all governance actions to avoid quorum delays while individual evaluation continues",
+          "reason_ja": "個別評価が継続する間、定足数遅延を避けるために、すべてのガバナンス アクションに対して一時的に棄権",
+          "totalStake": "32676164048636",
+          "dreps": [
+            {
+              "name": "HOSKY",
+              "stake": "32676164048636"
+            }
+          ]
+        },
+        {
+          "reason_en": "Early stage for governance improvements; prefer to gather more data from current governance processes before comprehensive changes",
+          "reason_ja": "ガバナンス改善は初期段階。包括的な変更を行う前に、現在のガバナンス プロセスからより多くのデータを収集することを希望",
+          "totalStake": "35654085126748",
+          "dreps": [
+            {
+              "name": "Kyle Solomon",
+              "stake": "35654085126748"
+            }
+          ]
+        },
+        {
+          "reason_en": "Core ecosystem tooling should seek funding through Catalyst, IOE maintenance, OSC proposal, or resubmit for future budgets",
+          "reason_ja": "コア エコシステム ツールは Catalyst、IOE メンテナンス、OSC 提案を通じて資金調達を求めるべき、または将来の予算のために再提出すべき",
+          "totalStake": "24644631706301",
+          "dreps": [
+            {
+              "name": "Cerkoryn",
+              "stake": "24644631706301"
+            }
+          ]
+        },
+        {
+          "reason_en": "Governance is already in viable state with other higher priorities; improvements are lower priority",
+          "reason_ja": "ガバナンスはすでに実行可能な状態にあり、他にもより高い優先事項がある。改善は優先度が低い",
+          "totalStake": "24644631706301",
+          "dreps": [
+            {
+              "name": "Cerkoryn",
+              "stake": "24644631706301"
+            }
+          ]
+        },
+        {
+          "reason_en": "While supporting governance improvements, Quadratic Funding is lower priority than addressing participation, proposal quality, and UX",
+          "reason_ja": "ガバナンス改善をサポートしていますが、二次資金調達は参加、提案の品質、UX に対処することより優先度が低い",
+          "totalStake": "24644631706301",
+          "dreps": [
+            {
+              "name": "Cerkoryn",
+              "stake": "24644631706301"
+            }
+          ]
+        },
+        {
+          "reason_en": "Decision caught between NO and ABSTAIN; concerns about marketing-first approach without killer applications to market",
+          "reason_ja": "NO と ABSTAIN の間で決定。マーケティングを優先するアプローチについての懸念。宣伝するキラー アプリケーションがない",
+          "totalStake": "24644631706301",
+          "dreps": [
+            {
+              "name": "Cerkoryn",
+              "stake": "24644631706301"
+            }
+          ]
+        },
+        {
+          "reason_en": "Previously voted YES during budget reconciliation but reconsidering given need for higher priority governance progress",
+          "reason_ja": "予算調整プロセス中に以前 YES 投票しまし��が、より高い優先度のガバナンス進捗の必要性を考慮して再検討中",
+          "totalStake": "21203173404822",
+          "dreps": [
+            {
+              "name": "Hephaestus Stake Pool",
+              "stake": "21203173404822"
+            }
+          ]
+        }
+      ]
     },
     "8ad3d454f3496a35cb0d07b0fd32f687f66338b7d60e787fc0a22939e5d8833e#7": {
       "title": "Withdraw ₳1,161,000 for zkFold ZK Rollup administered by Intersect",
@@ -19699,9 +20244,294 @@
           ]
         }
       },
-      "yesReasons": [],
-      "noReasons": [],
-      "abstainReasons": []
+      "yesReasons": [
+        {
+          "reason_en": "Ecosystem exposure and collaborative impact - Supporting projects to gain visibility at global exhibitions creates network effects and strengthens coordinated outreach",
+          "reason_ja": "エコシステムの露出と協働効果 - グローバル展示会でプロジェクトが認知を得るための支援は、ネットワーク効果を生み出し、協調的なアウトリーチを強化する",
+          "totalStake": "1548518455165768",
+          "dreps": [
+            {
+              "name": "Yoroi W₳llet",
+              "stake": "701300181259635"
+            },
+            {
+              "name": "YUTA",
+              "stake": "457107694733798"
+            },
+            {
+              "name": "EMURGO",
+              "stake": "297934439474706"
+            },
+            {
+              "name": "Peter Bui",
+              "stake": "70989300695390"
+            },
+            {
+              "name": "Ha-Nguyen",
+              "stake": "21186839002239"
+            }
+          ]
+        },
+        {
+          "reason_en": "Pragmatic community-led model with shared costs and ROI focus - Proposal requires projects to become self-sustaining after initial support with milestone-based contracts",
+          "reason_ja": "共有コストとROI重視の実用的なコミュニティ主導モデル - 提案はプロジェクトが初期支援後に自立することを要求し、マイルストーンベースの契約で実行される",
+          "totalStake": "199225633261148",
+          "dreps": [
+            {
+              "name": "Dave",
+              "stake": "61161018594631"
+            },
+            {
+              "name": "BTBF_XSP",
+              "stake": "102410529539769"
+            },
+            {
+              "name": "Kyle Solomon",
+              "stake": "35654085126748"
+            }
+          ]
+        },
+        {
+          "reason_en": "Support for experienced vendor and part of approved 2025 budget process - Proposal aligns with marketing and ecosystem growth goals from the Intersect-administered 275M ADA budget",
+          "reason_ja": "経験豊富なベンダーへの支持と承認済み2025予算プロセスの一部 - 提案はIntersectが管理する275M ADAの予算からのマーケティングとエコシステム成長目標に合致",
+          "totalStake": "446106346221916",
+          "dreps": [
+            {
+              "name": "Cardano Foundation",
+              "stake": "187939805127245"
+            },
+            {
+              "name": "Martin Lang",
+              "stake": "73872840055064"
+            },
+            {
+              "name": "AKYO",
+              "stake": "47172466701949"
+            },
+            {
+              "name": "SASA_nagamaru_ながまる",
+              "stake": "58632165272364"
+            },
+            {
+              "name": "AdaStat",
+              "stake": "44565654669607"
+            },
+            {
+              "name": "Socious",
+              "stake": "33923414395687"
+            }
+          ]
+        },
+        {
+          "reason_en": "Trust in proposal team and track record - Support based on confidence in the team's ability to execute and deliver results",
+          "reason_ja": "提案チームへの信頼と実績 - チームの実行能力と成果物の提供能力への信頼に基づく支持",
+          "totalStake": "138224982801814",
+          "dreps": [
+            {
+              "name": "HOSKY",
+              "stake": "32676164048636"
+            },
+            {
+              "name": "wolf31o2",
+              "stake": "23508481817034"
+            },
+            {
+              "name": "Blockjock",
+              "stake": "22234975532029"
+            },
+            {
+              "name": "Hephaestus Stake Pool [HEPHY]",
+              "stake": "21203173404822"
+            },
+            {
+              "name": "Patrick_Tobler",
+              "stake": "38602187999293"
+            }
+          ]
+        },
+        {
+          "reason_en": "Addressing brand recognition gap and global visibility - Real-world presence needed to expand Cardano awareness beyond core community to investors and developers",
+          "reason_ja": "ブランド認知度のギャップと世界的な可視性への対応 - 投資家と開発者にカルダーノの認知を拡大するための実際の存在が必要",
+          "totalStake": "153793863095987",
+          "dreps": [
+            {
+              "name": "drep1yffld2866p",
+              "stake": "115191675096694"
+            },
+            {
+              "name": "Patrick_Tobler",
+              "stake": "38602187999293"
+            }
+          ]
+        }
+      ],
+      "noReasons": [
+        {
+          "reason_en": "Lack of proven track record and vendor credibility - Concerns about vendor experience and no clear evidence of marketing expertise",
+          "reason_ja": "実績の欠如とベンダーの信頼性への懸念 - ベンダーの経験についての懸念と、マーケティング専門知識の明確な証拠がない",
+          "totalStake": "11067996812914",
+          "dreps": [
+            {
+              "name": "Daehan_kor",
+              "stake": "5622505512266"
+            },
+            {
+              "name": "Varavas",
+              "stake": "2918564750657"
+            },
+            {
+              "name": "Medusa DRep",
+              "stake": "2526926549991"
+            }
+          ]
+        },
+        {
+          "reason_en": "Insufficient detail, unclear ROI and attribution - Proposal lacks transparent selection criteria, event calendar, co-funding ratios, and hard KPIs",
+          "reason_ja": "詳細不足、不明確なROIと帰属 - 提案は透明な選定基準、イベントカレンダー、共同資金比率、明確なKPIが不足している",
+          "totalStake": "67143677210340",
+          "dreps": [
+            {
+              "name": "Tempo.Vote",
+              "stake": "49824091105927"
+            },
+            {
+              "name": "Terminada",
+              "stake": "16003465145074"
+            },
+            {
+              "name": "CaFi",
+              "stake": "1116968414594"
+            },
+            {
+              "name": "ArcadianComputers",
+              "stake": "199152544745"
+            },
+            {
+              "name": "JuanTheOne",
+              "stake": "0"
+            }
+          ]
+        },
+        {
+          "reason_en": "Temporary, ephemeral marketing with limited long-term impact - Event booths do not contribute to lasting infrastructure, core protocol development, or technical advancement",
+          "reason_ja": "一時的で限定的な長期的影響を持つマーケティング - イベントブースは永続的なインフラ、コア開発、技術的進歩に貢献しない",
+          "totalStake": "10535311336486",
+          "dreps": [
+            {
+              "name": "Cardanians",
+              "stake": "8167181914687"
+            },
+            {
+              "name": "Crypto_Oaj",
+              "stake": "581785097197"
+            },
+            {
+              "name": "Voice of the People",
+              "stake": "1463348535281"
+            },
+            {
+              "name": "William Doyle",
+              "stake": "294442273016"
+            },
+            {
+              "name": "Kevin G Mohr",
+              "stake": "28553516305"
+            }
+          ]
+        },
+        {
+          "reason_en": "Duplication with existing marketing efforts and budget inefficiency - Overlaps with Cardano Summit 2025, regional events, and other treasury-funded initiatives",
+          "reason_ja": "既存のマーケティング努力との重複と予算効率の低さ - カルダーノサミット2025、地域イベント、その他の財務資金計画との重複",
+          "totalStake": "2242226232754",
+          "dreps": [
+            {
+              "name": "Tony Boersma",
+              "stake": "2160293642491"
+            },
+            {
+              "name": "Victor.Villagomez",
+              "stake": "81932590263"
+            }
+          ]
+        },
+        {
+          "reason_en": "Wrong priority timing - Insufficient quality projects to showcase; need stronger builders before pursuing marketing initiatives",
+          "reason_ja": "優先順位の間違ったタイミング - 展示するプロジェクトの質が不十分。マーケティング取り組みを追求する前により強力なビルダーが必要",
+          "totalStake": "79644344660668",
+          "dreps": [
+            {
+              "name": "TriangleForces",
+              "stake": "818814433311"
+            },
+            {
+              "name": "AltcoinOracle",
+              "stake": "4975118559599"
+            },
+            {
+              "name": "Florian Volery",
+              "stake": "73850411667758"
+            }
+          ]
+        },
+        {
+          "reason_en": "Concerns about governance structure and centralized control - Structures resembling slush funds governed by single individuals should be avoided",
+          "reason_ja": "ガバナンス構造と集中化された統制についての懸念 - 単一個人によって統制されるスラッシュファンド類似の構造は避けるべき",
+          "totalStake": "96812580604836",
+          "dreps": [
+            {
+              "name": "CardanoYoda (MANDA Pool)",
+              "stake": "96812580604836"
+            }
+          ]
+        }
+      ],
+      "abstainReasons": [
+        {
+          "reason_en": "Uncertain long-term impact and preference for Catalyst-based funding - Value in visibility acknowledged but concerns about broad participation effectiveness and alternative mechanisms",
+          "reason_ja": "不確実な長期的影響とCatalystベースの資金調達への選好 - 可視性の価値は認識されているが、幅広い参加の有効性と代替メカニズムについての懸念",
+          "totalStake": "26136291077952",
+          "dreps": [
+            {
+              "name": "Dan",
+              "stake": "1491659371651"
+            },
+            {
+              "name": "Cerkoryn",
+              "stake": "24644631706301"
+            }
+          ]
+        },
+        {
+          "reason_en": "Budget reduction positive but requires additional transparency measures - Needs published event calendar, open selection criteria, and milestone-tied disbursements",
+          "reason_ja": "予算削減は肯定的だが追加の透明性対策が必要 - 公開されたイベントカレンダー、公開選定基準、マイルストーン連動の支出が必要",
+          "totalStake": "7989917320721",
+          "dreps": [
+            {
+              "name": "InputEndorsers",
+              "stake": "7740395966687"
+            },
+            {
+              "name": "JuanTheOne",
+              "stake": "249521354034"
+            }
+          ]
+        },
+        {
+          "reason_en": "Consistency with previous voting positions while monitoring proposal implementation - Maintaining earlier Ekklesia votes with ongoing oversight",
+          "reason_ja": "提案実装の監視しながら以前の投票立場との一貫性 - Ekklesia投票との早期の一貫性を維持しながら継続的な監視を実施",
+          "totalStake": "249686252737829",
+          "dreps": [
+            {
+              "name": "Eternl DRep Committee",
+              "stake": "249542796519828"
+            },
+            {
+              "name": "CASIA- Cardano Asia Team",
+              "stake": "143456218001"
+            }
+          ]
+        }
+      ]
     },
     "8ad3d454f3496a35cb0d07b0fd32f687f66338b7d60e787fc0a22939e5d8833e#35": {
       "title": "Withdraw ₳750,000 for Cardano Product Committee: Community-driven 2030 Carda...",
