@@ -4757,16 +4757,15 @@ function App() {
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="govdata"?"active":""}`} onClick={()=>setTab("govdata")}>{T.tab_govdata||"Protocol Info"}</button>
+        {/* DRep Hub & Tx Analysis: hidden until ready for production
         <button className={`tab-btn ${tab==="drep-hub"?"active":""}`} onClick={()=>setTab("drep-hub")}>{"📢 "+T.tab_drep_hub}</button>
         <button className={`tab-btn ${tab==="tx-analysis"?"active":""}`} onClick={()=>setTab("tx-analysis")}>{"📊 "+T.tab_tx_analysis}</button>
+        */}
         <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}>{"🤖 AI"+(lang==="ja"?"分析":"Analysis")}</button>
       </div>
 
-      {tab === "drep-hub" ? (
-        <DRepHubTab proposals={proposals} votes={votes} T={T} lang={lang} />
-      ) : tab === "tx-analysis" ? (
-        <TransactionAnalysisTab T={T} lang={lang} />
-      ) : tab === "ai" ? (
+      {/* DRep Hub & Tx Analysis: hidden until ready for production */}
+      {tab === "ai" ? (
         <AIAnalysisTab aiDrepTendencies={aiDrepTendencies} aiProposalReasons={aiProposalReasons}
           aiActionTypeSummary={aiActionTypeSummary} aiMeta={aiMeta} proposals={proposals} T={T} lang={lang} />
       ) : tab === "govdata" ? (
