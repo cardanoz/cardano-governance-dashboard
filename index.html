@@ -130,6 +130,21 @@ const LANG = {
     export_proposal_rationales:"Export DRep rationales for this proposal",
     download:"Download", close:"Close", source:"Source", expand:"Expand",
     constitution_tool:"Constitution",
+    ai_title:"AI Analysis (β)", ai_no_data:"AI analysis data has not been generated yet.",
+    ai_no_data_desc:"Results will appear here once Claude API analysis runs via GitHub Actions.",
+    ai_tab_drep:"DRep Voting Tendencies", ai_tab_reasons:"GA Vote Reason Analysis",
+    ai_tab_types:"GA Type Voting Trends", ai_tab_predict:"DRep Vote Prediction (β)",
+    ai_no_data_short:"No data", ai_dreps_analyzed:"DReps analyzed", ai_generated:"Generated",
+    ai_rank:"Rank", ai_votes:"Votes", ai_not_voted:"NV", ai_tendency:"Tendency",
+    ai_key_positions:"Key Positions", ai_voting_pattern:"Voting Pattern",
+    ai_with_rationale:"With Rationale", ai_without_rationale:"Without Rationale",
+    ai_not_voted_long:"Not Voted", ai_yes_reasons:"Yes Reasons", ai_no_reasons:"No Reasons",
+    ai_abstain_reasons:"Abstain Reasons", ai_total_stake:"Total Stake",
+    ai_typical_yes:"Typical Yes Reasons", ai_typical_no:"Typical No Reasons",
+    ai_proposals_count:"proposals", ai_rationales:"rationales",
+    ai_predict_title:"Vote Prediction (Coming Soon)",
+    ai_predict_desc:"Input governance action drafts to predict DRep votes based on historical tendencies.",
+    ai_predict_impl:"Planned: Cloudflare Workers + Claude Sonnet API",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
@@ -221,6 +236,21 @@ const LANG = {
     export_proposal_rationales:"この提案のDRep投票根拠を出力",
     download:"ダウンロード", close:"閉じる", source:"ソース", expand:"展開",
     constitution_tool:"憲法ツール",
+    ai_title:"AI分析 (β)", ai_no_data:"AI分析データはまだ生成されていません。",
+    ai_no_data_desc:"GitHub ActionsでClaude APIによる分析が実行されると、ここに結果が表示されます。",
+    ai_tab_drep:"DRep別の投票傾向分析", ai_tab_reasons:"GA別の賛否理由分析",
+    ai_tab_types:"GAタイプ別投票傾向", ai_tab_predict:"DRep投票予測(β)",
+    ai_no_data_short:"データなし", ai_dreps_analyzed:"DRep分析済", ai_generated:"生成日",
+    ai_rank:"順位", ai_votes:"投票", ai_not_voted:"未投票", ai_tendency:"傾向",
+    ai_key_positions:"主要なポジション", ai_voting_pattern:"投票パターン",
+    ai_with_rationale:"根拠あり", ai_without_rationale:"根拠なし",
+    ai_not_voted_long:"未投票", ai_yes_reasons:"賛成理由", ai_no_reasons:"反対理由",
+    ai_abstain_reasons:"棄権理由", ai_total_stake:"合計ステーク",
+    ai_typical_yes:"典型的な賛成理由", ai_typical_no:"典型的な反対理由",
+    ai_proposals_count:"件", ai_rationales:"根拠",
+    ai_predict_title:"投票予測 (Coming Soon)",
+    ai_predict_desc:"ガバナンスアクションのドラフトを入力すると、DRepの過去の投票傾向から賛成・反対を予測します。",
+    ai_predict_impl:"Cloudflare Workers + Claude Sonnet APIで実装予定",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
@@ -3115,119 +3145,125 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 // ═══════════════════════════════════════════════════════════════════
 // AI Analysis Tab (β)
 // ═══════════════════════════════════════════════════════════════════
-function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummary, aiMeta, proposals, T }) {
+function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummary, aiMeta, proposals, T, lang }) {
   const [subtab, setSubtab] = React.useState("tendencies");
-  const [selectedProposal, setSelectedProposal] = React.useState("");
-  const [expandedDrep, setExpandedDrep] = React.useState(null);
+  const [expandedRow, setExpandedRow] = React.useState(null);
 
   const hasData = aiDrepTendencies || aiProposalReasons || aiActionTypeSummary;
 
   if (!hasData) {
     return React.createElement("div", {className:"card",style:{padding:32,textAlign:"center"}},
-      React.createElement("h2", {style:{color:"#4fc3f7",marginBottom:16}}, "🤖 AI分析 (β)"),
-      React.createElement("p", {style:{color:"#8899aa"}}, "AI分析データはまだ生成されていません。"),
-      React.createElement("p", {style:{color:"#667788",fontSize:12,marginTop:8}}, "GitHub ActionsでClaude APIによる分析が実行されると、ここに結果が表示されます。")
+      React.createElement("h2", {style:{color:"#4fc3f7",marginBottom:16}}, "🤖 " + T.ai_title),
+      React.createElement("p", {style:{color:"#8899aa"}}, T.ai_no_data),
+      React.createElement("p", {style:{color:"#667788",fontSize:12,marginTop:8}}, T.ai_no_data_desc)
     );
   }
 
-  const fmtStake = fmtStakeShort;
-
+  const fmtS = fmtStakeShort;
   const fmtDate = (iso) => iso ? iso.split("T")[0] : "—";
+  const E = React.createElement;
+  const thS = {padding:"5px 8px",fontSize:10,color:"#8899aa",fontWeight:600,textAlign:"left",borderBottom:"1px solid #232b3e",whiteSpace:"nowrap",position:"sticky",top:0,background:"#0e1320",zIndex:1};
+  const tdS = {padding:"5px 8px",fontSize:11,color:"#e0e6ed",borderBottom:"1px solid #1a2030",verticalAlign:"middle"};
 
-  // Sub-tab: DRep Tendencies
+  // ─── Sub-tab: DRep Tendencies (table) ───
   const renderTendencies = () => {
-    if (!aiDrepTendencies?.dreps) return React.createElement("p",{style:{color:"#8899aa"}},"データなし");
+    if (!aiDrepTendencies?.dreps) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
     const dreps = Object.entries(aiDrepTendencies.dreps)
       .sort((a,b) => Number(b[1].stake) - Number(a[1].stake));
 
-    return React.createElement("div", null,
-      React.createElement("p", {style:{color:"#8899aa",fontSize:12,marginBottom:12}},
-        `${dreps.length} DReps analyzed · Generated: ${fmtDate(aiDrepTendencies.generatedAt)}`),
-      dreps.map(([id, d]) => {
-        const isExpanded = expandedDrep === id;
-        const total = d.voteSpread.yes + d.voteSpread.no + d.voteSpread.abstain;
-        const yesPct = total ? (d.voteSpread.yes/total*100).toFixed(0) : 0;
-        const noPct = total ? (d.voteSpread.no/total*100).toFixed(0) : 0;
-        const absPct = total ? (d.voteSpread.abstain/total*100).toFixed(0) : 0;
-
-        return React.createElement("div", {
-          key: id,
-          style:{
-            background:"#181e2a", borderRadius:8, padding:14, marginBottom:8,
-            cursor:"pointer", border: isExpanded ? "1px solid #4fc3f7" : "1px solid #232b3e"
-          },
-          onClick: () => setExpandedDrep(isExpanded ? null : id)
-        },
-          // Header row
-          React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
-            React.createElement("div", null,
-              React.createElement("span", {style:{color:"#e0e6ed",fontWeight:"bold"}}, `#${d.rank} ${d.name}`),
-              React.createElement("span", {style:{color:"#8899aa",fontSize:11,marginLeft:8}}, `₳${fmtStake(d.stake)}`)
-            ),
-            React.createElement("div", {style:{display:"flex",gap:4,fontSize:11}},
-              React.createElement("span", {style:{color:"#4fc3f7"}}, `Y:${d.voteSpread.yes}`),
-              React.createElement("span", {style:{color:"#ff7043"}}, `N:${d.voteSpread.no}`),
-              React.createElement("span", {style:{color:"#ffb74d"}}, `A:${d.voteSpread.abstain}`)
-            )
-          ),
-          // Vote bar
-          total > 0 && React.createElement("div", {
-            style:{display:"flex",height:4,borderRadius:2,overflow:"hidden",margin:"6px 0",background:"#232b3e"}
-          },
-            React.createElement("div", {style:{width:yesPct+"%",background:"#4fc3f7"}}),
-            React.createElement("div", {style:{width:noPct+"%",background:"#ff7043"}}),
-            React.createElement("div", {style:{width:absPct+"%",background:"#ffb74d"}})
-          ),
-          // Summary
-          React.createElement("p", {style:{color:"#b0bec5",fontSize:12,margin:"4px 0 0"}}, d.tendencySummary),
-          // Expanded details
-          isExpanded && React.createElement("div", {style:{marginTop:10,paddingTop:10,borderTop:"1px solid #232b3e"}},
-            d.keyPositions && d.keyPositions.length > 0 && React.createElement("div", {style:{marginBottom:8}},
-              React.createElement("span", {style:{color:"#4fc3f7",fontSize:11,fontWeight:"bold"}}, "主要なポジション:"),
-              React.createElement("ul", {style:{margin:"4px 0",paddingLeft:16}},
-                d.keyPositions.map((pos, i) =>
-                  React.createElement("li", {key:i,style:{color:"#c0cad6",fontSize:12,marginBottom:2}}, pos)
+    return E("div", null,
+      E("p", {style:{color:"#8899aa",fontSize:11,marginBottom:8}},
+        `${dreps.length} ${T.ai_dreps_analyzed} · ${T.ai_generated}: ${fmtDate(aiDrepTendencies.generatedAt)}`),
+      E("div", {style:{overflowX:"auto",maxHeight:"70vh",overflowY:"auto"}},
+        E("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead", null, E("tr", null,
+            E("th",{style:{...thS,width:30}},"#"),
+            E("th",{style:thS},"DRep"),
+            E("th",{style:{...thS,textAlign:"right"}},"Stake"),
+            E("th",{style:{...thS,textAlign:"center",color:"var(--yes)",width:28}},"Y"),
+            E("th",{style:{...thS,textAlign:"center",color:"var(--no)",width:28}},"N"),
+            E("th",{style:{...thS,textAlign:"center",color:"var(--abstain)",width:28}},"A"),
+            E("th",{style:{...thS,textAlign:"center",color:"var(--nv)",width:28}},T.ai_not_voted),
+            E("th",{style:{...thS,width:80}},""),
+            E("th",{style:thS},T.ai_tendency)
+          )),
+          E("tbody", null,
+            dreps.map(([id, d]) => {
+              const isExp = expandedRow === "d_"+id;
+              const total = d.voteSpread.yes + d.voteSpread.no + d.voteSpread.abstain;
+              const yP = total ? d.voteSpread.yes/total*100 : 0;
+              const nP = total ? d.voteSpread.no/total*100 : 0;
+              const aP = total ? d.voteSpread.abstain/total*100 : 0;
+              const nv = Math.max(0, (d.totalVotes||0) - total);
+              return E(React.Fragment, {key:id},
+                E("tr", {
+                  onClick:()=>setExpandedRow(isExp?null:"d_"+id),
+                  style:{cursor:"pointer",background:isExp?"#151b28":"transparent",transition:"background .1s"}
+                },
+                  E("td",{style:{...tdS,color:"#556677",textAlign:"center",fontSize:10}},d.rank),
+                  E("td",{style:{...tdS,fontWeight:600,maxWidth:140,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},d.name),
+                  E("td",{style:{...tdS,textAlign:"right",color:"#8899aa",whiteSpace:"nowrap"}},"₳"+fmtS(d.stake)),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--yes)"}},d.voteSpread.yes),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},d.voteSpread.no),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},d.voteSpread.abstain),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--nv)"}},nv),
+                  E("td",{style:{...tdS,padding:"5px 4px"}},
+                    total > 0 && E("div",{style:{display:"flex",height:6,borderRadius:3,overflow:"hidden",background:"#232b3e",width:80}},
+                      E("div",{style:{width:yP+"%",background:"var(--yes)"}}),
+                      E("div",{style:{width:nP+"%",background:"var(--no)"}}),
+                      E("div",{style:{width:aP+"%",background:"var(--abstain)"}})
+                    )
+                  ),
+                  E("td",{style:{...tdS,color:"#b0bec5",fontSize:10,maxWidth:260,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
+                    truncStr(d.tendencySummary, 60))
+                ),
+                isExp && E("tr",{key:id+"_exp"},
+                  E("td",{colSpan:9,style:{padding:"10px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                    E("div",{style:{fontSize:12,color:"#b0bec5",marginBottom:6}}, d.tendencySummary),
+                    d.keyPositions && d.keyPositions.length > 0 && E("div",{style:{marginBottom:6}},
+                      E("span",{style:{color:"#4fc3f7",fontSize:11,fontWeight:600}},T.ai_key_positions+": "),
+                      E("span",{style:{color:"#c0cad6",fontSize:11}}, d.keyPositions.join(" / "))
+                    ),
+                    d.votingPattern && E("div",{style:{marginBottom:6}},
+                      E("span",{style:{color:"#4fc3f7",fontSize:11,fontWeight:600}},T.ai_voting_pattern+": "),
+                      E("span",{style:{color:"#8899aa",fontSize:11}}, d.votingPattern)
+                    ),
+                    E("span",{style:{color:"#556677",fontSize:10}},
+                      `${T.ai_with_rationale}: ${d.withRationale}/${d.totalVotes} · ${fmtDate(d.lastAnalyzedAt)}` +
+                      (d.cached ? " (cached)" : ""))
+                  )
                 )
-              )
-            ),
-            d.votingPattern && React.createElement("p", {style:{color:"#8899aa",fontSize:11}},
-              "📊 " + d.votingPattern
-            ),
-            React.createElement("p", {style:{color:"#556677",fontSize:10,marginTop:4}},
-              `投票根拠付き: ${d.withRationale}/${d.totalVotes}件 · 最終分析: ${fmtDate(d.lastAnalyzedAt)}` +
-              (d.cached ? " (cached)" : "")
-            )
+              );
+            })
           )
-        );
-      })
+        )
+      )
     );
   };
 
-  // Sub-tab: Proposal Vote Reasons
+  // ─── Sub-tab: Proposal Vote Reasons (table) ───
   const renderProposalReasons = () => {
-    if (!aiProposalReasons?.proposals) return React.createElement("p",{style:{color:"#8899aa"}},"データなし");
-    const propEntries = Object.entries(aiProposalReasons.proposals);
-
-    // Default to first proposal with reasons
-    const selected = selectedProposal || (propEntries.find(([,v]) =>
-      (v.yesReasons?.length || 0) + (v.noReasons?.length || 0) > 0
-    ) || propEntries[0])?.[0] || "";
-
-    const propData = aiProposalReasons.proposals[selected];
+    if (!aiProposalReasons?.proposals) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
+    const propEntries = Object.entries(aiProposalReasons.proposals)
+      .sort((a,b) => {
+        // newest first: compare keys (tx_hash#index) — use index descending
+        const ai = parseInt(a[0].split("#")[1]) || 0;
+        const bi = parseInt(b[0].split("#")[1]) || 0;
+        return bi - ai;
+      });
 
     const renderReasonGroup = (reasons, label, color) => {
       if (!reasons || reasons.length === 0) return null;
-      return React.createElement("div", {style:{marginBottom:16}},
-        React.createElement("h4", {style:{color,fontSize:13,marginBottom:6}}, label),
+      return E("div", {style:{marginBottom:12}},
+        E("div", {style:{color,fontSize:12,fontWeight:600,marginBottom:4}}, label),
         reasons.map((r, i) =>
-          React.createElement("div", {key:i,style:{background:"#1a2030",borderRadius:6,padding:10,marginBottom:6,borderLeft:`3px solid ${color}`}},
-            React.createElement("p", {style:{color:"#e0e6ed",fontSize:12,marginBottom:4}}, r.reason),
-            React.createElement("div", {style:{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}},
-              React.createElement("span", {style:{color:"#8899aa",fontSize:11}}, `合計ステーク: ₳${fmtStake(r.totalStake)}`),
+          E("div", {key:i,style:{background:"#1a2030",borderRadius:4,padding:"6px 10px",marginBottom:4,borderLeft:`3px solid ${color}`}},
+            E("div", {style:{color:"#e0e6ed",fontSize:11,marginBottom:2}}, r.reason),
+            E("div", {style:{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center",fontSize:10}},
+              E("span", {style:{color:"#8899aa"}}, T.ai_total_stake+": ₳"+fmtS(r.totalStake)),
               (r.dreps || []).map((dr, j) =>
-                React.createElement("span", {key:j,style:{color:"#b0bec5",fontSize:10,background:"#232b3e",borderRadius:4,padding:"2px 6px"}},
-                  dr.name || dr
-                )
+                E("span", {key:j,style:{color:"#b0bec5",background:"#232b3e",borderRadius:3,padding:"1px 5px"}},
+                  dr.name || dr)
               )
             )
           )
@@ -3235,128 +3271,150 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
       );
     };
 
-    return React.createElement("div", null,
-      React.createElement("p", {style:{color:"#8899aa",fontSize:12,marginBottom:8}},
-        `Generated: ${fmtDate(aiProposalReasons.generatedAt)}`),
-      // Proposal selector
-      React.createElement("select", {
-        value: selected,
-        onChange: (e) => setSelectedProposal(e.target.value),
-        style:{
-          width:"100%",padding:8,marginBottom:16,background:"#181e2a",color:"#e0e6ed",
-          border:"1px solid #333a4a",borderRadius:6,fontSize:12
-        }
-      },
-        propEntries
-          .sort((a,b) => {
-            const aHas = (a[1].yesReasons?.length||0) + (a[1].noReasons?.length||0);
-            const bHas = (b[1].yesReasons?.length||0) + (b[1].noReasons?.length||0);
-            return bHas - aHas;
-          })
-          .map(([key, val]) =>
-            React.createElement("option", {key,value:key},
-              `${val.title || key.slice(0,20)} [${val.type}] — ${val.stats?.votedWithRationale||0} rationales`
-            )
+    return E("div", null,
+      E("p", {style:{color:"#8899aa",fontSize:11,marginBottom:8}},
+        `${T.ai_generated}: ${fmtDate(aiProposalReasons.generatedAt)}`),
+      E("div", {style:{overflowX:"auto",maxHeight:"70vh",overflowY:"auto"}},
+        E("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead", null, E("tr", null,
+            E("th",{style:thS},"GA"),
+            E("th",{style:{...thS,width:100}},"Type"),
+            E("th",{style:{...thS,textAlign:"center",width:50}},T.ai_with_rationale),
+            E("th",{style:{...thS,textAlign:"center",width:50}},T.ai_without_rationale),
+            E("th",{style:{...thS,textAlign:"center",width:50}},T.ai_not_voted_long),
+            E("th",{style:{...thS,textAlign:"center",width:30,color:"var(--yes)"}},"Y"),
+            E("th",{style:{...thS,textAlign:"center",width:30,color:"var(--no)"}},"N"),
+            E("th",{style:{...thS,textAlign:"center",width:30,color:"var(--abstain)"}},"A")
+          )),
+          E("tbody", null,
+            propEntries.map(([key, val]) => {
+              const isExp = expandedRow === "p_"+key;
+              const yC = val.yesReasons?.length||0;
+              const nC = val.noReasons?.length||0;
+              const aC = val.abstainReasons?.length||0;
+              return E(React.Fragment, {key},
+                E("tr", {
+                  onClick:()=>setExpandedRow(isExp?null:"p_"+key),
+                  style:{cursor:"pointer",background:isExp?"#151b28":"transparent",transition:"background .1s"}
+                },
+                  E("td",{style:{...tdS,maxWidth:220,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontWeight:500}},
+                    val.title || key.slice(0,20)),
+                  E("td",{style:{...tdS,color:"#8899aa",fontSize:10}},val.type),
+                  E("td",{style:{...tdS,textAlign:"center",color:"#4fc3f7"}},val.stats?.votedWithRationale||0),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},val.stats?.votedWithoutRationale||0),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},val.stats?.notVoted||0),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--yes)"}},yC),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},nC),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},aC)
+                ),
+                isExp && E("tr",{key:key+"_exp"},
+                  E("td",{colSpan:8,style:{padding:"10px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                    renderReasonGroup(val.yesReasons, "✅ "+T.ai_yes_reasons, "#4fc3f7"),
+                    renderReasonGroup(val.noReasons, "❌ "+T.ai_no_reasons, "#ff7043"),
+                    renderReasonGroup(val.abstainReasons, "⚖️ "+T.ai_abstain_reasons, "#ffb74d")
+                  )
+                )
+              );
+            })
           )
-      ),
-      // Stats
-      propData && React.createElement("div", {style:{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap"}},
-        React.createElement("div", {style:{background:"#181e2a",borderRadius:6,padding:"8px 14px",fontSize:11}},
-          React.createElement("span", {style:{color:"#8899aa"}}, "投票根拠あり: "),
-          React.createElement("span", {style:{color:"#4fc3f7",fontWeight:"bold"}}, propData.stats?.votedWithRationale || 0)
-        ),
-        React.createElement("div", {style:{background:"#181e2a",borderRadius:6,padding:"8px 14px",fontSize:11}},
-          React.createElement("span", {style:{color:"#8899aa"}}, "根拠なし: "),
-          React.createElement("span", {style:{color:"#ffb74d",fontWeight:"bold"}}, propData.stats?.votedWithoutRationale || 0)
-        ),
-        React.createElement("div", {style:{background:"#181e2a",borderRadius:6,padding:"8px 14px",fontSize:11}},
-          React.createElement("span", {style:{color:"#8899aa"}}, "未投票: "),
-          React.createElement("span", {style:{color:"#ff7043",fontWeight:"bold"}}, propData.stats?.notVoted || 0)
         )
-      ),
-      // Reason groups
-      propData && renderReasonGroup(propData.yesReasons, "✅ 賛成理由", "#4fc3f7"),
-      propData && renderReasonGroup(propData.noReasons, "❌ 反対理由", "#ff7043"),
-      propData && renderReasonGroup(propData.abstainReasons, "⚖️ 棄権理由", "#ffb74d")
+      )
     );
   };
 
-  // Sub-tab: Action Type Summary
+  // ─── Sub-tab: Action Type Summary (table) ───
   const renderActionTypeSummary = () => {
-    if (!aiActionTypeSummary?.actionTypes) return React.createElement("p",{style:{color:"#8899aa"}},"データなし");
+    if (!aiActionTypeSummary?.actionTypes) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
     const types = Object.entries(aiActionTypeSummary.actionTypes);
 
-    return React.createElement("div", null,
-      React.createElement("p", {style:{color:"#8899aa",fontSize:12,marginBottom:12}},
-        `Generated: ${fmtDate(aiActionTypeSummary.generatedAt)}`),
-      types.map(([type, data]) =>
-        React.createElement("div", {key:type,style:{background:"#181e2a",borderRadius:8,padding:14,marginBottom:10}},
-          React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}},
-            React.createElement("h4", {style:{color:"#4fc3f7",fontSize:13,margin:0}}, type),
-            React.createElement("span", {style:{color:"#8899aa",fontSize:11}}, `${data.count}件`)
-          ),
-          React.createElement("p", {style:{color:"#b0bec5",fontSize:12,marginBottom:8}}, data.summary),
-          data.typicalReasonsYes && data.typicalReasonsYes.length > 0 &&
-            React.createElement("div", {style:{marginBottom:6}},
-              React.createElement("span", {style:{color:"#4fc3f7",fontSize:11}}, "典型的な賛成理由: "),
-              React.createElement("span", {style:{color:"#c0cad6",fontSize:11}},
-                data.typicalReasonsYes.join(" / ")
-              )
-            ),
-          data.typicalReasonsNo && data.typicalReasonsNo.length > 0 &&
-            React.createElement("div", null,
-              React.createElement("span", {style:{color:"#ff7043",fontSize:11}}, "典型的な反対理由: "),
-              React.createElement("span", {style:{color:"#c0cad6",fontSize:11}},
-                data.typicalReasonsNo.join(" / ")
-              )
-            )
+    return E("div", null,
+      E("p", {style:{color:"#8899aa",fontSize:11,marginBottom:8}},
+        `${T.ai_generated}: ${fmtDate(aiActionTypeSummary.generatedAt)}`),
+      E("div", {style:{overflowX:"auto"}},
+        E("table", {style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead", null, E("tr", null,
+            E("th",{style:thS},"Type"),
+            E("th",{style:{...thS,textAlign:"center",width:40}},"#"),
+            E("th",{style:thS},T.ai_typical_yes),
+            E("th",{style:thS},T.ai_typical_no)
+          )),
+          E("tbody", null,
+            types.map(([type, data]) => {
+              const isExp = expandedRow === "t_"+type;
+              return E(React.Fragment, {key:type},
+                E("tr", {
+                  onClick:()=>setExpandedRow(isExp?null:"t_"+type),
+                  style:{cursor:"pointer",background:isExp?"#151b28":"transparent",transition:"background .1s"}
+                },
+                  E("td",{style:{...tdS,fontWeight:600,color:"#4fc3f7"}},type),
+                  E("td",{style:{...tdS,textAlign:"center",color:"#8899aa"}},data.count),
+                  E("td",{style:{...tdS,color:"var(--yes)",fontSize:10,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
+                    (data.typicalReasonsYes||[]).join(", ")),
+                  E("td",{style:{...tdS,color:"var(--no)",fontSize:10,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
+                    (data.typicalReasonsNo||[]).join(", "))
+                ),
+                isExp && E("tr",{key:type+"_exp"},
+                  E("td",{colSpan:4,style:{padding:"10px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                    E("div",{style:{color:"#b0bec5",fontSize:12,marginBottom:8}}, data.summary),
+                    (data.typicalReasonsYes||[]).length > 0 && E("div",{style:{marginBottom:6}},
+                      E("span",{style:{color:"var(--yes)",fontSize:11,fontWeight:600}},T.ai_typical_yes+": "),
+                      E("span",{style:{color:"#c0cad6",fontSize:11}}, data.typicalReasonsYes.join(" / "))
+                    ),
+                    (data.typicalReasonsNo||[]).length > 0 && E("div",null,
+                      E("span",{style:{color:"var(--no)",fontSize:11,fontWeight:600}},T.ai_typical_no+": "),
+                      E("span",{style:{color:"#c0cad6",fontSize:11}}, data.typicalReasonsNo.join(" / "))
+                    )
+                  )
+                )
+              );
+            })
+          )
         )
       )
     );
   };
 
-  // Sub-tab: Predict Vote (placeholder for Phase 3)
+  // ─── Sub-tab: Vote Prediction (placeholder) ───
   const renderPredict = () => {
-    return React.createElement("div", {style:{textAlign:"center",padding:32}},
-      React.createElement("h3", {style:{color:"#4fc3f7",marginBottom:12}}, "🔮 投票予測 (Coming Soon)"),
-      React.createElement("p", {style:{color:"#8899aa",fontSize:13}},
-        "ガバナンスアクションのドラフトを入力すると、DRepの過去の投票傾向から賛成・反対を予測します。"),
-      React.createElement("p", {style:{color:"#667788",fontSize:11,marginTop:8}},
-        "Cloudflare Workers + Claude Sonnet APIで実装予定")
+    return E("div", {style:{textAlign:"center",padding:32}},
+      E("h3", {style:{color:"#4fc3f7",marginBottom:12}}, "🔮 "+T.ai_predict_title),
+      E("p", {style:{color:"#8899aa",fontSize:13}}, T.ai_predict_desc),
+      E("p", {style:{color:"#667788",fontSize:11,marginTop:8}}, T.ai_predict_impl)
     );
   };
 
-  return React.createElement("div", {className:"card",style:{padding:0}},
+  const tabs = [
+    {key:"tendencies",label:T.ai_tab_drep},
+    {key:"reasons",label:T.ai_tab_reasons},
+    {key:"types",label:T.ai_tab_types},
+    {key:"predict",label:T.ai_tab_predict}
+  ];
+
+  return E("div", {className:"card",style:{padding:0}},
     // Header
-    React.createElement("div", {style:{padding:"16px 20px",borderBottom:"1px solid #232b3e"}},
-      React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
-        React.createElement("h2", {style:{color:"#4fc3f7",margin:0,fontSize:16}}, "🤖 AI分析 (β)"),
-        aiMeta && React.createElement("span", {style:{color:"#556677",fontSize:10}},
-          `Last: ${fmtDate(aiMeta.generatedAt)} · API: ${aiMeta.api_calls} calls · $${aiMeta.estimated_cost_usd?.toFixed(3) || "?"}`)
-      )
+    E("div", {style:{padding:"12px 20px",borderBottom:"1px solid #232b3e",display:"flex",justifyContent:"space-between",alignItems:"center"}},
+      E("h2", {style:{color:"#4fc3f7",margin:0,fontSize:16}}, "🤖 "+T.ai_title),
+      aiMeta && E("span", {style:{color:"#556677",fontSize:10}},
+        `${T.ai_generated}: ${fmtDate(aiMeta.generatedAt)} · API: ${aiMeta.api_calls} calls · $${aiMeta.estimated_cost_usd?.toFixed(3) || "?"}`)
     ),
-    // Sub-tabs
-    React.createElement("div", {style:{display:"flex",gap:0,borderBottom:"1px solid #232b3e",background:"#0e1320"}},
-      [
-        {key:"tendencies",label:"DRep傾向"},
-        {key:"reasons",label:"賛否理由分析"},
-        {key:"types",label:"タイプ別傾向"},
-        {key:"predict",label:"投票予測(β)"}
-      ].map(t =>
-        React.createElement("button", {
+    // Sub-tabs (prominent, right below header)
+    E("div", {style:{display:"flex",gap:0,borderBottom:"2px solid #232b3e",background:"#0e1320",overflowX:"auto"}},
+      tabs.map(t =>
+        E("button", {
           key:t.key,
-          onClick:()=>setSubtab(t.key),
+          onClick:()=>{setSubtab(t.key);setExpandedRow(null);},
           style:{
-            padding:"10px 16px",fontSize:12,background:"none",border:"none",
+            padding:"10px 18px",fontSize:12,fontWeight:subtab===t.key?700:500,
+            background:subtab===t.key?"#181e2a":"transparent",
+            border:"none",borderBottom:subtab===t.key?"2px solid #4fc3f7":"2px solid transparent",
             color:subtab===t.key?"#4fc3f7":"#8899aa",cursor:"pointer",
-            borderBottom:subtab===t.key?"2px solid #4fc3f7":"2px solid transparent",
-            fontWeight:subtab===t.key?"bold":"normal"
+            whiteSpace:"nowrap",transition:"all .15s"
           }
         }, t.label)
       )
     ),
     // Content
-    React.createElement("div", {style:{padding:16}},
+    E("div", {style:{padding:"12px 16px"}},
       subtab === "tendencies" ? renderTendencies() :
       subtab === "reasons" ? renderProposalReasons() :
       subtab === "types" ? renderActionTypeSummary() :
@@ -3982,7 +4040,7 @@ function App() {
 
       {tab === "ai" ? (
         <AIAnalysisTab aiDrepTendencies={aiDrepTendencies} aiProposalReasons={aiProposalReasons}
-          aiActionTypeSummary={aiActionTypeSummary} aiMeta={aiMeta} proposals={proposals} T={T} />
+          aiActionTypeSummary={aiActionTypeSummary} aiMeta={aiMeta} proposals={proposals} T={T} lang={lang} />
       ) : tab === "govdata" ? (
         <GovernanceDataTab govInfo={govInfo} T={T} lang={lang} dreps={allDreps.length?allDreps:dreps} votes={votes} proposals={proposals} ccMembers={ccMembers} ccVotes={ccVotes} spoVotes={spoVotes} spoPoolInfo={spoPoolInfo} />
       ) : tab === "dashboard" ? (
