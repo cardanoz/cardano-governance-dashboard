@@ -1269,17 +1269,34 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                   // Proposal approval mini-bars (using Koios voting summaries)
                   const ps = govInfo && govInfo.proposalSummaries && govInfo.proposalSummaries[p.proposal_id];
                   const pp = govInfo && govInfo.protocolParams;
-                  // yesPct: 0-100 from Koios, thr: 0-1 from protocol params
-                  // Compute SPO yes% from spo-votes.json when proposalSummaries lacks SPO data
+                  // Cardano Conway voting eligibility by proposal type
+                  const CC_INELIG = ["NoConfidence"];
+                  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution"];
+                  const ccCanVote = !CC_INELIG.includes(p.proposal_type);
+                  let spoCanVote = !SPO_INELIG.includes(p.proposal_type);
+                  // Compute SPO yes% from spo-votes.json (individual votes — more reliable than cached Koios summary)
                   let spoYesPctOverride = null;
+                  let spoVoteCounts = {yes:0, no:0, abstain:0};
                   if (spoCanVote && spoVotes) {
                     const propKey = (p.tx_hash || "") + "#" + (p.cert_index ?? "");
-                    let sy=0, sn=0, sa=0;
                     for (const [k,v] of Object.entries(spoVotes)) {
-                      if (k.includes("__" + propKey)) { if(v==="Yes")sy++; else if(v==="No")sn++; else if(v==="Abstain")sa++; }
+                      if (k.includes("__" + propKey)) { if(v==="Yes")spoVoteCounts.yes++; else if(v==="No")spoVoteCounts.no++; else if(v==="Abstain")spoVoteCounts.abstain++; }
                     }
-                    if (sy + sn + sa > 0) {
-                      spoYesPctOverride = (sy / (sy + sn + sa)) * 100;
+                    const spoTotal = spoVoteCounts.yes + spoVoteCounts.no + spoVoteCounts.abstain;
+                    if (spoTotal > 0) {
+                      spoYesPctOverride = (spoVoteCounts.yes / spoTotal) * 100;
+                    }
+                  }
+                  // For ParameterChange where SPOs have zero yes+no votes: threshold is treated as met
+                  // Use individual SPO vote data (spo-votes.json) as primary source, fall back to Koios summary
+                  let spoAllAbstain = false;
+                  if (spoCanVote && p.proposal_type === "ParameterChange") {
+                    const spoYesNoFromVotes = spoVoteCounts.yes + spoVoteCounts.no;
+                    if (spoYesNoFromVotes === 0) {
+                      // Double-check with Koios summary
+                      const koiosSpoYesNo = ps ? (ps.spo.yes_votes_cast||0) + (ps.spo.no_votes_cast||0) : 0;
+                      const koiosSpoPct = ps ? (ps.spo.yes_pct||0) + (ps.spo.no_pct||0) : 0;
+                      if (koiosSpoYesNo === 0 && koiosSpoPct === 0) spoAllAbstain = true;
                     }
                   }
                   const _miniBar = (yesPct,thr,label,clr,ineligible) => {
@@ -1303,21 +1320,6 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                       React.createElement("span",{style:{fontSize:5,fontWeight:600,color:met?"#34d399":"#f87171",minWidth:14,lineHeight:1}},pctS)
                     );
                   };
-                  // Cardano Conway voting eligibility by proposal type
-                  // CC: cannot vote on NoConfidence, InfoAction
-                  // SPO: can only vote on NoConfidence, UpdateCommittee, HardForkInitiation, ParameterChange(security group only)
-                  const CC_INELIG = ["NoConfidence"];
-                  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution"];
-                  const ccCanVote = !CC_INELIG.includes(p.proposal_type);
-                  // For ParameterChange, SPOs only vote on security group params.
-                  // Detect non-security ParameterChange: voting summary has 0 SPO votes cast
-                  let spoCanVote = !SPO_INELIG.includes(p.proposal_type);
-                  if (spoCanVote && p.proposal_type === "ParameterChange" && ps) {
-                    const spoYesNo = (ps.spo.yes_votes_cast||0) + (ps.spo.no_votes_cast||0);
-                    const spoPct = (ps.spo.yes_pct||0) + (ps.spo.no_pct||0);
-                    // Non-security ParameterChange: SPOs have no yes/no votes (only abstains or nothing)
-                    if (spoYesNo === 0 && spoPct === 0) spoCanVote = false;
-                  }
                   const _dt = getDrepThreshold(pp, p.proposal_type);
                   const _st = spoCanVote ? getSpoThreshold(pp, p.proposal_type) : null;
                   const _ct = ccCanVote ? getCCThreshold(pp) : null;
@@ -1355,7 +1357,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                             const drepMet = (ps.drep.yes_pct || 0) / 100 >= _dt;
                             const ccMet = !ccCanVote || (_ct !== null ? (ps.cc.yes_pct || 0) / 100 >= _ct : true);
                             const spoYesPctForStatus = spoYesPctOverride !== null ? spoYesPctOverride : (ps.spo.yes_pct || 0);
-                            const spoMet = !spoCanVote || (_st !== null ? spoYesPctForStatus / 100 >= _st : true);
+                            const spoMet = !spoCanVote || spoAllAbstain || (_st !== null ? spoYesPctForStatus / 100 >= _st : true);
                             const allMet = drepMet && ccMet && spoMet;
                             if (isExpired) {
                               st = allMet ? "ratified" : "expired";
