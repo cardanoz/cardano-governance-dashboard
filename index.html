@@ -1973,7 +1973,6 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang, govInfo }) {
       pctNow, pctPrev, adaChange, pctChange, delegators: d.delegators };
   });
 
-  // INPUT_STYLE used directly below
   const btnStyle = (active) => ({ fontSize: 11, padding: "4px 12px", borderRadius: 6, border: "1px solid " + (active ? "var(--accent)" : "var(--border)"),
     background: active ? "var(--accent)" : "var(--bg3)", color: active ? "#fff" : "var(--text2)", cursor: "pointer", fontWeight: active ? 600 : 400 });
   const toggleStyle = (active) => ({ fontSize: 11, padding: "4px 10px", borderRadius: 6,
@@ -2012,7 +2011,7 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang, govInfo }) {
         {/* Top N */}
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <label style={{ fontSize: 11, color: "var(--text2)" }}>Top N:</label>
-          <select value={topN} onChange={e => setTopN(Number(e.target.value))} style={{ ...ist, width: 55, padding: "3px 6px" }}>
+          <select value={topN} onChange={e => setTopN(Number(e.target.value))} style={{ ...INPUT_STYLE, width: 55, padding: "3px 6px" }}>
             {[5, 10, 15, 20].map(n => <option key={n} value={n}>{n}</option>)}
           </select>
         </div>
@@ -2037,7 +2036,7 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang, govInfo }) {
           <div style={{ width: 1, height: 24, background: "var(--border)" }}></div>
           <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
             <label style={{ fontSize: 11, color: "var(--text2)" }}>{lang === "ja" ? "基準:" : "Basis:"}</label>
-            <select value={projWindow} onChange={e => setProjWindow(Number(e.target.value))} style={{ ...ist, width: 75, padding: "3px 6px" }}>
+            <select value={projWindow} onChange={e => setProjWindow(Number(e.target.value))} style={{ ...INPUT_STYLE, width: 75, padding: "3px 6px" }}>
               <option value={3}>{lang === "ja" ? "直近3" : "Last 3"}</option>
               <option value={5}>{lang === "ja" ? "直近5" : "Last 5"}</option>
               <option value={10}>{lang === "ja" ? "直近10" : "Last 10"}</option>

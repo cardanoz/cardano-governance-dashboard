@@ -30,7 +30,7 @@ const DATA_DIR = path.resolve(__dirname, "..", "data");
 const TOP_N = parseInt(process.argv[2]) || 100;
 const CLAUDE_MODEL = "claude-haiku-4-5-20251001";
 const MAX_TOKENS = 1500;
-const THROTTLE_MS = 500; // between API calls
+const THROTTLE_MS = 200; // between API calls
 const MIN_NEW_VOTES_FOR_REANALYSIS = 3;
 
 // ─── Helpers ───
@@ -340,7 +340,7 @@ Respond in this exact JSON format:
         };
         skipped++;
       }
-      await sleep(2000); // back off on error
+      await sleep(1000); // back off on error
     }
   }
 
@@ -505,7 +505,7 @@ Only include categories that have rationales. Use the actual DRep names from the
         error: e.message
       };
       propErrors++;
-      await sleep(2000);
+      await sleep(1000);
     }
   }
 
