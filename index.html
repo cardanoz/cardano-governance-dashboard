@@ -1233,7 +1233,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         _miniBar(ps?ps.spo.yes_pct:0,_st,"S","#06b6d4",!spoCanVote)
                       )}
                       {(()=>{
-                        // Determine status: use explicit status field, or infer from epoch fields, or from expiration
+                        // Determine status: explicit fields → voting threshold analysis → expiration
                         let st = p.status || "";
                         let epochInfo = "";
                         if (p.enacted_epoch) { st = st || "enacted"; epochInfo = `E${p.enacted_epoch}`; }
@@ -1242,9 +1242,24 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         else if (p.expired_epoch) { st = st || "expired"; epochInfo = `E${p.expired_epoch}`; }
                         else if (!st && p.expiration) {
                           const curEp = (govInfo && govInfo.protocolParams && govInfo.protocolParams.epoch) || (Math.floor((Date.now() - 1596059091000) / 432000000) + 208);
-                          st = p.expiration <= curEp ? "expired" : "active";
+                          const isExpired = p.expiration <= curEp;
+                          // Check threshold achievement from voting summary
+                          if (ps && _dt !== null) {
+                            const drepMet = (ps.drep.yes_pct || 0) / 100 >= _dt;
+                            const ccMet = !ccCanVote || (_ct !== null ? (ps.cc.yes_pct || 0) / 100 >= _ct : true);
+                            const spoMet = !spoCanVote || (_st !== null ? (ps.spo.yes_pct || 0) / 100 >= _st : true);
+                            const allMet = drepMet && ccMet && spoMet;
+                            if (isExpired) {
+                              st = allMet ? "ratified" : "expired";
+                            } else {
+                              st = allMet ? "passing" : "active";
+                            }
+                          } else {
+                            st = isExpired ? "expired" : "active";
+                          }
                         }
                         const stMap = {active:{label:T.summary_active||"Active",bg:"#3b82f620",color:"#60a5fa",border:"#3b82f640"},
+                          passing:{label:"Passing",bg:"#10b98120",color:"#34d399",border:"#10b98140"},
                           ratified:{label:T.summary_ratified||"Ratified",bg:"#8b5cf620",color:"#a78bfa",border:"#8b5cf640"},
                           enacted:{label:T.summary_enacted||"Enacted",bg:"#10b98120",color:"#34d399",border:"#10b98140"},
                           expired:{label:T.summary_expired||"Expired",bg:"#6b728020",color:"#9ca3af",border:"#6b728040"},
@@ -2545,6 +2560,9 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
   const [extraCount, setExtraCount] = React.useState(3);
   const [copied, setCopied] = React.useState(false);
   const [expandedProp, setExpandedProp] = React.useState(null);
+  const [expandedCells, setExpandedCells] = React.useState({}); // key: "propId__col" → true
+  const toggleCell = (propId, col) => setExpandedCells(prev => ({ ...prev, [`${propId}__${col}`]: !prev[`${propId}__${col}`] }));
+  const isCellExpanded = (propId, col) => !!expandedCells[`${propId}__${col}`];
 
   const E = React.createElement;
   const fmtStake = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
@@ -2589,7 +2607,8 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
   const allReminders = React.useMemo(() => {
     return activeProps.map(prop => {
       const ps = govInfo && govInfo.proposalSummaries && govInfo.proposalSummaries[prop.proposal_id];
-      if (!ps) return { prop, ps: null, drepData: null, ccData: null, spoData: null };
+      const hasDrepSummary = ps && ps.drep;
+      const hasSpoSummary = ps && ps.spo;
 
       // DRep analysis — exclude auto voters and 0-stake DReps
       const drepThr = getDrepThreshold(prop.proposal_type);
@@ -2600,29 +2619,31 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
         return !v || v === "NotVoted";
       }).sort((a, b) => Number(b.amount) - Number(a.amount));
 
-      const yesPower = Number(ps.drep.yes_power) || 0;
-      const yesPct = (ps.drep.yes_pct || 0) / 100; // 0-1 scale
-      // Derive total active DRep stake from authoritative on-chain yes_pct
-      // total = yesPower / yesPct (when yesPct > 0)
-      const totalPower = yesPct > 0 ? yesPower / yesPct :
-        dreps.filter(d=>d.drep_id!=="drep_always_abstain"&&d.drep_id!=="drep_always_no_confidence"&&Number(d.amount)>0)
-          .reduce((s,d)=>s+Number(d.amount),0);
-      const needed = drepThr * totalPower;
-      const deficit = needed - yesPower;
-
-      let minDreps = [];
-      let cumStake = 0;
-      let thresholdMet = deficit <= 0;
-      if (!thresholdMet) {
-        for (const d of unvotedDreps) {
-          minDreps.push(d);
-          cumStake += Number(d.amount);
-          if (cumStake >= deficit) { thresholdMet = true; break; }
+      let deficit = 0, minDreps = [], cumStake = 0, thresholdMet = false, drepYesPct = 0;
+      if (hasDrepSummary) {
+        const yesPower = Number(ps.drep.yes_power) || 0;
+        drepYesPct = ps.drep.yes_pct || 0;
+        const yesPctFrac = drepYesPct / 100;
+        const totalPower = yesPctFrac > 0 ? yesPower / yesPctFrac :
+          dreps.filter(d=>d.drep_id!=="drep_always_abstain"&&d.drep_id!=="drep_always_no_confidence"&&Number(d.amount)>0)
+            .reduce((s,d)=>s+Number(d.amount),0);
+        const needed = drepThr * totalPower;
+        deficit = needed - yesPower;
+        thresholdMet = deficit <= 0;
+        if (!thresholdMet) {
+          for (const d of unvotedDreps) {
+            minDreps.push(d);
+            cumStake += Number(d.amount);
+            if (cumStake >= deficit) { thresholdMet = true; break; }
+          }
         }
+      } else {
+        // No summary — show top unvoted DReps (can't calculate deficit)
+        minDreps = unvotedDreps.slice(0, 5);
       }
       const extraDreps = unvotedDreps.slice(minDreps.length, minDreps.length + extraCount);
 
-      // CC analysis
+      // CC analysis (independent of proposal summary)
       const ccCanVote = !CC_INELIG.includes(prop.proposal_type);
       let unvotedCC = [];
       if (ccCanVote) {
@@ -2637,11 +2658,10 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       let minSPOs = [];
       let spoThresholdMet = true;
       let spoYesPct = 0;
-      if (spoThr !== null && ps.spo) {
+      if (spoThr !== null && hasSpoSummary) {
         spoYesPct = ps.spo.yes_pct || 0;
         const spoYesPower = Number(ps.spo.yes_power) || 0;
         const spoYesPctFrac = spoYesPct / 100;
-        // Derive total active SPO stake from authoritative on-chain yes_pct
         const spoTotalPower = spoYesPctFrac > 0 ? spoYesPower / spoYesPctFrac :
           Object.values(spoPoolInfo||{}).reduce((s,p)=>s+Number(p.active_stake||0),0);
         const spoNeeded = spoThr * spoTotalPower;
@@ -2665,9 +2685,9 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 
       return {
         prop, ps,
-        drepData: { threshold: drepThr, yesPct: ps.drep.yes_pct || 0, deficit, thresholdMet, minDreps, extraDreps },
-        ccData: { canVote: ccCanVote, threshold: getCCThreshold(), yesPct: ps.cc ? ps.cc.yes_pct || 0 : 0, unvotedCC },
-        spoData: spoThr !== null ? { threshold: spoThr, yesPct: spoYesPct, thresholdMet: spoThresholdMet, minSPOs,
+        drepData: { threshold: drepThr, yesPct: drepYesPct, deficit, thresholdMet, minDreps, extraDreps, hasSummary: !!hasDrepSummary },
+        ccData: { canVote: ccCanVote, threshold: getCCThreshold(), yesPct: ps && ps.cc ? ps.cc.yes_pct || 0 : 0, unvotedCC },
+        spoData: spoThr !== null ? { threshold: spoThr, yesPct: spoYesPct, thresholdMet: spoThresholdMet, minSPOs, hasSummary: !!hasSpoSummary,
           extraSPOs: minSPOs.length > 0 ? Object.keys(spoPoolInfo||{}).filter(pid => {
             const voted = new Set(); Object.keys(spoVotes||{}).forEach(k=>{if(k.endsWith("__"+prop.proposal_id))voted.add(k.split("__")[0]);});
             return !voted.has(pid) && !minSPOs.find(s=>s.pool_id===pid);
@@ -2682,7 +2702,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 
   // ─── Generate X post for one proposal ───
   const generatePostForProp = (rem) => {
-    if (!rem || !rem.ps) return "";
+    if (!rem || !rem.drepData) return "";
     const p = rem.prop, d = rem.drepData, c = rem.ccData, s = rem.spoData;
     const dl = daysLeft(p.expiration);
     const dlDate = fmtDate(epochDeadlineTs(p.expiration));
@@ -2690,19 +2710,26 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
     post += `📋 ${p.title || p.proposal_id.slice(0,20)}\n`;
     post += `📊 ${p.proposal_type}\n`;
     post += `⏰ Deadline: E${lastVoteEpoch(p.expiration)} (${dlDate}) — ${dl} day${dl!==1?"s":""} left!\n\n`;
-    post += `🗳️ DRep: ${d.yesPct.toFixed(1)}% / ${(d.threshold*100).toFixed(0)}%`;
-    if (d.deficit <= 0) post += ` ✅\n`;
-    else {
-      post += `\n`;
+    if (d.hasSummary) {
+      post += `🗳️ DRep: ${d.yesPct.toFixed(1)}% / ${(d.threshold*100).toFixed(0)}%`;
+      if (d.deficit <= 0) post += ` ✅\n`;
+      else {
+        post += `\n`;
+        [...d.minDreps, ...d.extraDreps].forEach(dr => {
+          post += `  • ${dr.name || dr.drep_id.slice(0,20)} (₳${fmtAda(dr.amount)})\n`;
+        });
+      }
+    } else {
+      post += `🗳️ DRep: Unvoted top DReps:\n`;
       [...d.minDreps, ...d.extraDreps].forEach(dr => {
         post += `  • ${dr.name || dr.drep_id.slice(0,20)} (₳${fmtAda(dr.amount)})\n`;
       });
     }
     if (c.canVote && c.unvotedCC.length > 0) {
-      post += `\n🏛️ CC (${c.yesPct.toFixed(0)}% / ${(c.threshold*100).toFixed(0)}%):\n`;
+      post += `\n🏛️ CC${d.hasSummary ? ` (${c.yesPct.toFixed(0)}% / ${(c.threshold*100).toFixed(0)}%)` : ""}:\n`;
       c.unvotedCC.forEach(cc => { post += `  • ${cc.name || cc.cc_id}\n`; });
     }
-    if (s) {
+    if (s && s.hasSummary) {
       post += `\n🏊 SPO: ${s.yesPct.toFixed(1)}% / ${(s.threshold*100).toFixed(0)}%`;
       if (s.thresholdMet) post += ` ✅\n`;
       else if (s.minSPOs.length > 0) {
@@ -2717,13 +2744,26 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
   };
 
   const copyAll = () => {
-    const texts = displayReminders.filter(r => r.ps).map(r => generatePostForProp(r));
+    const texts = displayReminders.filter(r => r.drepData).map(r => generatePostForProp(r));
     const text = texts.join("\n\n─────────────\n\n");
     navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   };
 
   const copySingle = (rem) => {
     navigator.clipboard.writeText(generatePostForProp(rem)).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+  };
+
+  const postToX = (text) => {
+    const url = `https://x.com/intent/post?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+  const postSingleToX = (rem) => postToX(generatePostForProp(rem));
+  const postAllToX = () => {
+    // X has a char limit (~280), so post the first proposal or a summary
+    const texts = displayReminders.filter(r => r.drepData).map(r => generatePostForProp(r));
+    if (texts.length === 1) { postToX(texts[0]); return; }
+    // For multiple, post a combined summary (user can edit in X composer)
+    postToX(texts.join("\n\n─────\n\n"));
   };
 
   // ─── Table header cell style ───
@@ -2751,7 +2791,11 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
         // Copy button
         E("button",{onClick:copyAll,className:"btn",
           style:{fontSize:10,padding:"4px 10px",background:copied?"#34d399":"var(--accent)",color:"#fff",fontWeight:600,borderRadius:5,border:"none",cursor:"pointer"}},
-          copied ? "✅ Copied!" : "📋 Copy X Post")
+          copied ? "✅ Copied!" : "📋 Copy"),
+        // Post to X button
+        E("button",{onClick:postAllToX,className:"btn",
+          style:{fontSize:10,padding:"4px 10px",background:"#000",color:"#fff",fontWeight:600,borderRadius:5,border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:3}},
+          E("span",{style:{fontWeight:900,fontSize:11}},"𝕏"), " Post")
       )
     ),
 
@@ -2773,28 +2817,30 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
         E("tbody",null,
           displayReminders.map(rem => {
             const p = rem.prop, d = rem.drepData, c = rem.ccData, s = rem.spoData;
-            if (!rem.ps) return E("tr",{key:p.proposal_id},
-              E("td",{style:tdS,colSpan:8},
-                E("span",{style:{fontWeight:600}},`[${(p.proposal_type||"").slice(0,10)}] `),
-                E("span",null,(p.title||p.proposal_id).slice(0,50)),
-                E("span",{style:{color:"var(--text2)",marginLeft:6}},`E${lastVoteEpoch(p.expiration)}`),
-                E("span",{style:{color:"var(--text2)",marginLeft:6,fontStyle:"italic"}},"(no data)")
-              )
-            );
 
-            // Helper: render name list with optional +α separator
-            const nameList = (items, extraItems, getName, getStake) => E("div",null,
-              items.map((item,i) => E("div",{key:i,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 2px",fontWeight:600}},
+            // Helper: render name list with collapse/expand for long lists
+            const COLLAPSE_MAX = 3; // show this many rows when collapsed
+            const nameList = (items, extraItems, getName, getStake, colId) => {
+              const allItems = [...items, ...(extraItems||[])];
+              const total = allItems.length;
+              const expanded = isCellExpanded(p.proposal_id, colId);
+              const needsCollapse = total > COLLAPSE_MAX + 1; // +1: don't collapse if only 1 extra
+              const visibleItems = needsCollapse && !expanded ? allItems.slice(0, COLLAPSE_MAX) : allItems;
+              const minCount = items.length;
+              const renderItem = (item, i) => E("div",{key:i,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 2px",fontWeight: i < minCount ? 600 : 400, opacity: i < minCount ? 1 : .55}},
                 E("span",{style:{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}},getName(item)),
                 getStake && E("span",{style:{color:"var(--text2)",whiteSpace:"nowrap",marginLeft:4}},getStake(item))
-              )),
-              extraItems && extraItems.length > 0 && E("div",{style:{borderTop:"1px dashed var(--border)",marginTop:1,paddingTop:1}},
-                extraItems.map((item,i) => E("div",{key:"x"+i,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 2px",opacity:.55}},
-                  E("span",{style:{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}},getName(item)),
-                  getStake && E("span",{style:{color:"var(--text2)",whiteSpace:"nowrap",marginLeft:4}},getStake(item))
-                ))
-              )
-            );
+              );
+              return E("div",null,
+                visibleItems.map((item,i) => renderItem(item, i)),
+                // separator between min and extra (only when expanded)
+                expanded && extraItems && extraItems.length > 0 && minCount <= visibleItems.length ? null : null,
+                needsCollapse && E("div",{
+                  onClick:ev=>{ev.stopPropagation();toggleCell(p.proposal_id,colId);},
+                  style:{fontSize:8,color:"var(--accent)",cursor:"pointer",padding:"2px 0",textAlign:"center",userSelect:"none",borderTop:"1px dashed var(--border)",marginTop:1}
+                }, expanded ? "▲ collapse" : `▼ +${total - COLLAPSE_MAX} more`)
+              );
+            };
 
             return E("tr",{key:p.proposal_id},
               // Proposal name
@@ -2811,50 +2857,106 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
               ),
               // DRep %
               E("td",{style:{...tdS,whiteSpace:"nowrap"}},
-                E("span",{style:{color:d.deficit<=0?"#34d399":"#f87171",fontWeight:600}},
-                  `${d.yesPct.toFixed(1)}%/${(d.threshold*100).toFixed(0)}%`),
-                d.deficit<=0 ? " ✅" : ""
+                d.hasSummary ?
+                  E("span",{style:{color:d.deficit<=0?"#34d399":"#f87171",fontWeight:600}},
+                    `${d.yesPct.toFixed(1)}%/${(d.threshold*100).toFixed(0)}%`) :
+                  E("span",{style:{color:"var(--text2)",fontSize:9}},"?%"),
+                d.hasSummary && d.deficit<=0 ? " ✅" : ""
               ),
               // Min DReps — show names + stake
               E("td",{style:{...tdS,minWidth:160}},
-                d.deficit<=0 ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ Threshold met") :
+                d.hasSummary && d.deficit<=0 ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ Threshold met") :
+                !d.hasSummary ? nameList(d.minDreps, d.extraDreps, dr=>dr.name||dr.drep_id.slice(0,20), dr=>"₳"+fmtStake(dr.amount), "drep") :
                 d.minDreps.length === 0 ? E("span",{style:{color:"#f87171",fontSize:9}},"Unreachable") :
-                nameList(d.minDreps, d.extraDreps, dr=>dr.name||dr.drep_id.slice(0,20), dr=>"₳"+fmtStake(dr.amount))
+                nameList(d.minDreps, d.extraDreps, dr=>dr.name||dr.drep_id.slice(0,20), dr=>"₳"+fmtStake(dr.amount), "drep")
               ),
-              // CC unvoted — show names
+              // CC unvoted — show names (collapsible)
               E("td",{style:{...tdS,minWidth:120}},
                 !c.canVote ? E("span",{style:{color:"var(--text2)",opacity:.4,fontSize:9}},"N/A") :
                 c.unvotedCC.length === 0 ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ All voted") :
-                E("div",null,
-                  E("div",{style:{fontSize:8,color:"var(--text2)",marginBottom:1}},`${c.yesPct.toFixed(0)}%/${(c.threshold*100).toFixed(0)}%`),
-                  c.unvotedCC.map(cc => E("div",{key:cc.cc_id,style:{fontSize:9,padding:"1px 0"}},
-                    cc.name||cc.cc_id.slice(0,22)))
-                )
+                (()=>{
+                  const ccExpanded = isCellExpanded(p.proposal_id, "cc");
+                  const ccNeedsCollapse = c.unvotedCC.length > COLLAPSE_MAX + 1;
+                  const ccVisible = ccNeedsCollapse && !ccExpanded ? c.unvotedCC.slice(0, COLLAPSE_MAX) : c.unvotedCC;
+                  return E("div",null,
+                    E("div",{style:{fontSize:8,color:"var(--text2)",marginBottom:1}},`${c.yesPct.toFixed(0)}%/${(c.threshold*100).toFixed(0)}%`),
+                    ccVisible.map(cc => E("div",{key:cc.cc_id,style:{fontSize:9,padding:"1px 0"}},
+                      cc.name||cc.cc_id.slice(0,22))),
+                    ccNeedsCollapse && E("div",{
+                      onClick:ev=>{ev.stopPropagation();toggleCell(p.proposal_id,"cc");},
+                      style:{fontSize:8,color:"var(--accent)",cursor:"pointer",padding:"2px 0",textAlign:"center",userSelect:"none",borderTop:"1px dashed var(--border)",marginTop:1}
+                    }, ccExpanded ? "▲ collapse" : `▼ +${c.unvotedCC.length - COLLAPSE_MAX} more`)
+                  );
+                })()
               ),
               // SPO %
               E("td",{style:{...tdS,whiteSpace:"nowrap"}},
                 !s ? E("span",{style:{color:"var(--text2)",opacity:.4,fontSize:9}},"N/A") :
+                !s.hasSummary ? E("span",{style:{color:"var(--text2)",fontSize:9}},"?%") :
                 E("span",{style:{color:s.thresholdMet?"#34d399":"#f87171",fontWeight:600}},
                   `${s.yesPct.toFixed(1)}%/${(s.threshold*100).toFixed(0)}%`),
-                s && s.thresholdMet ? " ✅" : ""
+                s && s.hasSummary && s.thresholdMet ? " ✅" : ""
               ),
               // Min SPOs — show tickers + stake
               E("td",{style:{...tdS,minWidth:140}},
                 !s ? E("span",{style:{color:"var(--text2)",opacity:.4,fontSize:9}},"—") :
+                !s.hasSummary ? E("span",{style:{color:"var(--text2)",fontSize:9}},"(no data)") :
                 s.thresholdMet ? E("span",{style:{color:"#34d399",fontSize:9}},"✅ Threshold met") :
                 s.minSPOs.length === 0 ? E("span",{style:{color:"#f87171",fontSize:9}},"Unreachable") :
-                nameList(s.minSPOs, s.extraSPOs, sp=>sp.ticker||sp.pool_id.slice(0,12), sp=>"₳"+fmtStake(sp.active_stake))
+                nameList(s.minSPOs, s.extraSPOs, sp=>sp.ticker||sp.pool_id.slice(0,12), sp=>"₳"+fmtStake(sp.active_stake), "spo")
               ),
-              // Copy single
-              E("td",{style:{...tdS,textAlign:"center"}},
-                E("button",{onClick:ev=>{ev.stopPropagation();copySingle(rem);},title:"Copy X Post",
-                  style:{fontSize:9,padding:"2px 5px",background:"transparent",color:"var(--text2)",border:"1px solid var(--border)",borderRadius:4,cursor:"pointer"}},"📋")
+              // Copy & Post
+              E("td",{style:{...tdS,textAlign:"center",whiteSpace:"nowrap"}},
+                E("button",{onClick:ev=>{ev.stopPropagation();copySingle(rem);},title:"Copy",
+                  style:{fontSize:9,padding:"2px 5px",background:"transparent",color:"var(--text2)",border:"1px solid var(--border)",borderRadius:4,cursor:"pointer",marginRight:3}},"📋"),
+                E("button",{onClick:ev=>{ev.stopPropagation();postSingleToX(rem);},title:"Post to X",
+                  style:{fontSize:9,padding:"2px 5px",background:"#000",color:"#fff",border:"none",borderRadius:4,cursor:"pointer",fontWeight:900}},"𝕏")
               )
             );
           })
         )
       )
     ) : E("div",{style:{fontSize:10,color:"var(--text2)",padding:8,textAlign:"center"}},"No active proposals")
+  );
+}
+
+// ─── VetoRow: single row in Veto Power Analysis table ───
+function VetoRow({ vr, fmtL, fmtAda, totalActive, ncPct }) {
+  const [expanded, setExpanded] = React.useState(false);
+  const E = React.createElement;
+  const tdS = {fontSize:10,padding:"4px 6px",borderBottom:"1px solid var(--border)",verticalAlign:"top"};
+  const COLLAPSE_MAX = 3;
+  const needsCollapse = vr.coalition.length > COLLAPSE_MAX + 1;
+  const visible = needsCollapse && !expanded ? vr.coalition.slice(0, COLLAPSE_MAX) : vr.coalition;
+  const fmtStake = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
+
+  return E("tr",null,
+    E("td",{style:{...tdS,fontWeight:600}},vr.label),
+    E("td",{style:{...tdS,textAlign:"center",color:"#34d399",fontWeight:600}},(vr.thr*100).toFixed(0)+"%"),
+    E("td",{style:{...tdS,textAlign:"center",color:"#ef4444",fontWeight:600}},(vr.vetoPct*100).toFixed(1)+"%+"),
+    E("td",{style:{...tdS,textAlign:"center",color:"#ef4444"}},ncPct.toFixed(1)+"%"),
+    E("td",{style:{...tdS,textAlign:"center",color: vr.deficit <= 0 ? "#34d399" : "#f59e0b",fontWeight:600}},
+      vr.deficit <= 0 ? "✅ 0%" : vr.deficitPct.toFixed(1)+"%"),
+    // Min Veto Coalition
+    E("td",{style:{...tdS,minWidth:180}},
+      vr.deficit <= 0 ?
+        E("span",{style:{color:"#ef4444",fontSize:9,fontWeight:600}},"⚠ Auto-No alone can veto") :
+        !vr.fulfilled ?
+          E("span",{style:{color:"var(--text2)",fontSize:9}},"Unreachable (not enough DReps)") :
+          E("div",null,
+            E("div",{style:{fontSize:8,color:"var(--text2)",marginBottom:2}},
+              vr.coalition.length+" DRep"+(vr.coalition.length!==1?"s":"")+" = ₳"+fmtStake(vr.cumStake)+" ("+
+              (totalActive>0?(vr.cumStake/totalActive*100).toFixed(1):0)+"%)"),
+            visible.map((d,i) => E("div",{key:i,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 2px",fontWeight:600}},
+              E("span",{style:{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:140}},d.name||d.drep_id.slice(0,20)),
+              E("span",{style:{color:"var(--text2)",whiteSpace:"nowrap",marginLeft:4}},"₳"+fmtStake(d.amount))
+            )),
+            needsCollapse && E("div",{
+              onClick:()=>setExpanded(!expanded),
+              style:{fontSize:8,color:"var(--accent)",cursor:"pointer",padding:"2px 0",textAlign:"center",userSelect:"none",borderTop:"1px dashed var(--border)",marginTop:1}
+            }, expanded ? "▲ collapse" : `▼ +${vr.coalition.length - COLLAPSE_MAX} more`)
+          )
+    )
   );
 }
 
@@ -2927,6 +3029,88 @@ function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccV
         ", Economic="+pctStr(pp.dvt_p_p_economic_group)+", Technical="+pctStr(pp.dvt_p_p_technical_group)+
         ", Governance="+pctStr(pp.dvt_p_p_gov_group))
     ),
+
+    // ─── Veto Power Analysis ───────────────────────────
+    (()=>{
+      // Total active DRep stake (excluding abstain, including no_confidence)
+      const vetoAllDreps = (dreps||[]).filter(d => d.drep_id !== "drep_always_abstain" && Number(d.amount) > 0);
+      const totalActive = vetoAllDreps.reduce((s,d) => s + Number(d.amount), 0);
+      const ncDrep = (dreps||[]).find(d => d.drep_id === "drep_always_no_confidence");
+      const ncPower = ncDrep ? Number(ncDrep.amount) : 0;
+      const ncPct = totalActive > 0 ? ncPower / totalActive * 100 : 0;
+      // Sortable DReps for coalition building (exclude both auto-voters)
+      const coalitionDreps = vetoAllDreps
+        .filter(d => d.drep_id !== "drep_always_no_confidence")
+        .sort((a,b) => Number(b.amount) - Number(a.amount));
+
+      // Action types with thresholds
+      const actionTypes = [
+        {key:"NoConfidence", label:T.type_noconf||"No Confidence", thr: Number(pp.dvt_motion_no_confidence)||0.67},
+        {key:"UpdateCommittee", label:T.type_cc||"Update CC", thr: Number(pp.dvt_committee_normal)||0.67},
+        {key:"NewConstitution", label:T.type_const||"New Constitution", thr: Number(pp.dvt_update_to_constitution)||0.75},
+        {key:"HardForkInitiation", label:T.type_hardfork||"Hard Fork", thr: Number(pp.dvt_hard_fork_initiation)||0.6},
+        {key:"TreasuryWithdrawals", label:T.type_treasury||"Treasury", thr: Number(pp.dvt_treasury_withdrawal)||0.67},
+        {key:"ParameterChange", label:T.type_param||"Param Change", thr: Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0)||0.67},
+        {key:"InfoAction", label:T.type_info||"Info Action", thr: 0.51}
+      ];
+
+      // Compute veto coalition for each action type
+      const vetoRows = actionTypes.map(at => {
+        const vetoPct = 1 - at.thr; // fraction needed for veto
+        const vetoNeeded = vetoPct * totalActive; // absolute power needed
+        const deficit = vetoNeeded - ncPower;
+        let coalition = [];
+        let cumStake = 0;
+        let fulfilled = deficit <= 0;
+        if (!fulfilled) {
+          for (const d of coalitionDreps) {
+            coalition.push(d);
+            cumStake += Number(d.amount);
+            if (cumStake >= deficit) { fulfilled = true; break; }
+          }
+        }
+        return { ...at, vetoPct, vetoNeeded, deficit: Math.max(0, deficit), coalition, cumStake, fulfilled,
+          deficitPct: totalActive > 0 ? Math.max(0, deficit) / totalActive * 100 : 0 };
+      });
+
+      return React.createElement(Section,{title:"🛡️ "+(T.gov_veto||"Veto Power Analysis")},
+        // Summary cards
+        React.createElement("div",{style:{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}},
+          React.createElement("div",{style:{background:"var(--bg3)",borderRadius:8,padding:"8px 12px",borderLeft:"3px solid #ef4444",flex:"1 1 200px"}},
+            React.createElement("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},
+              "Auto-No (drep_always_no_confidence)"),
+            React.createElement("div",{style:{fontSize:14,fontWeight:700,color:"#ef4444"}},"₳"+fmtL(ncPower)),
+            React.createElement("div",{style:{fontSize:10,color:"var(--text2)"}},ncPct.toFixed(2)+"% of active stake")
+          ),
+          React.createElement("div",{style:{background:"var(--bg3)",borderRadius:8,padding:"8px 12px",borderLeft:"3px solid #3b82f6",flex:"1 1 200px"}},
+            React.createElement("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},
+              "Total Active DRep Stake"),
+            React.createElement("div",{style:{fontSize:14,fontWeight:700,color:"#3b82f6"}},"₳"+fmtL(totalActive))
+          )
+        ),
+        // Explanation
+        React.createElement("div",{style:{fontSize:9,color:"var(--text2)",marginBottom:8,lineHeight:1.5}},
+          T.veto_explanation||"Veto = enough No votes to prevent a proposal from reaching its approval threshold. The drep_always_no_confidence auto-voter contributes No to every proposal. Additional DReps (sorted by stake) are listed to form the minimum veto coalition."),
+        // Table
+        React.createElement("div",{style:{overflowX:"auto"}},
+          React.createElement("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:10}},
+            React.createElement("thead",null,
+              React.createElement("tr",null,
+                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"left",borderBottom:"2px solid var(--border)",color:"var(--text2)"}},"Action Type"),
+                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#34d399"}},"Approval"),
+                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#ef4444"}},"Veto Need"),
+                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#ef4444"}},"Auto-No"),
+                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#f59e0b"}},"Add. Needed"),
+                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"left",borderBottom:"2px solid var(--border)",color:"#8b5cf6"}},"Min Veto Coalition")
+              )
+            ),
+            React.createElement("tbody",null,
+              vetoRows.map(vr => React.createElement(VetoRow,{key:vr.key,vr,fmtL,fmtAda:fmtL,totalActive,ncPct}))
+            )
+          )
+        )
+      );
+    })(),
 
     // Deposits & Costs
     React.createElement(Section,{title:"💰 "+(T.gov_deposits||"Deposits & Costs")},
