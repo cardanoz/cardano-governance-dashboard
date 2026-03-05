@@ -2920,45 +2920,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
   );
 }
 
-// ─── VetoRow: single row in Veto Power Analysis table ───
-function VetoRow({ vr, fmtL, fmtAda, totalActive, ncPct }) {
-  const [expanded, setExpanded] = React.useState(false);
-  const E = React.createElement;
-  const tdS = {fontSize:10,padding:"4px 6px",borderBottom:"1px solid var(--border)",verticalAlign:"top"};
-  const COLLAPSE_MAX = 3;
-  const needsCollapse = vr.coalition.length > COLLAPSE_MAX + 1;
-  const visible = needsCollapse && !expanded ? vr.coalition.slice(0, COLLAPSE_MAX) : vr.coalition;
-  const fmtStake = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
-
-  return E("tr",null,
-    E("td",{style:{...tdS,fontWeight:600}},vr.label),
-    E("td",{style:{...tdS,textAlign:"center",color:"#34d399",fontWeight:600}},(vr.thr*100).toFixed(0)+"%"),
-    E("td",{style:{...tdS,textAlign:"center",color:"#ef4444",fontWeight:600}},(vr.vetoPct*100).toFixed(1)+"%+"),
-    E("td",{style:{...tdS,textAlign:"center",color:"#ef4444"}},ncPct.toFixed(1)+"%"),
-    E("td",{style:{...tdS,textAlign:"center",color: vr.deficit <= 0 ? "#34d399" : "#f59e0b",fontWeight:600}},
-      vr.deficit <= 0 ? "✅ 0%" : vr.deficitPct.toFixed(1)+"%"),
-    // Min Veto Coalition
-    E("td",{style:{...tdS,minWidth:180}},
-      vr.deficit <= 0 ?
-        E("span",{style:{color:"#ef4444",fontSize:9,fontWeight:600}},"⚠ Auto-No alone can veto") :
-        !vr.fulfilled ?
-          E("span",{style:{color:"var(--text2)",fontSize:9}},"Unreachable (not enough DReps)") :
-          E("div",null,
-            E("div",{style:{fontSize:8,color:"var(--text2)",marginBottom:2}},
-              vr.coalition.length+" DRep"+(vr.coalition.length!==1?"s":"")+" = ₳"+fmtStake(vr.cumStake)+" ("+
-              (totalActive>0?(vr.cumStake/totalActive*100).toFixed(1):0)+"%)"),
-            visible.map((d,i) => E("div",{key:i,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 2px",fontWeight:600}},
-              E("span",{style:{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:140}},d.name||d.drep_id.slice(0,20)),
-              E("span",{style:{color:"var(--text2)",whiteSpace:"nowrap",marginLeft:4}},"₳"+fmtStake(d.amount))
-            )),
-            needsCollapse && E("div",{
-              onClick:()=>setExpanded(!expanded),
-              style:{fontSize:8,color:"var(--accent)",cursor:"pointer",padding:"2px 0",textAlign:"center",userSelect:"none",borderTop:"1px dashed var(--border)",marginTop:1}
-            }, expanded ? "▲ collapse" : `▼ +${vr.coalition.length - COLLAPSE_MAX} more`)
-          )
-    )
-  );
-}
+// (VetoRow removed — veto coalition now rendered inline in GovernanceDataTab)
 
 // ════════════════════════════════════════════════════════════════
 // Governance Data Tab (β) — Treasury, Protocol Params, Network Info
@@ -3038,26 +3000,48 @@ function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccV
       const ncDrep = (dreps||[]).find(d => d.drep_id === "drep_always_no_confidence");
       const ncPower = ncDrep ? Number(ncDrep.amount) : 0;
       const ncPct = totalActive > 0 ? ncPower / totalActive * 100 : 0;
-      // Sortable DReps for coalition building (exclude both auto-voters)
-      const coalitionDreps = vetoAllDreps
-        .filter(d => d.drep_id !== "drep_always_no_confidence")
-        .sort((a,b) => Number(b.amount) - Number(a.amount));
+      // Merge same-entity DReps (Yoroi + EMURGO = same entity)
+      const ENTITY_GROUPS = [
+        { name: "Yoroi / EMURGO", match: d => /yoroi/i.test(d.name||"") || /emurgo/i.test(d.name||"") }
+      ];
+      const coalitionDreps = (() => {
+        const singles = vetoAllDreps.filter(d => d.drep_id !== "drep_always_no_confidence");
+        const merged = [];
+        const used = new Set();
+        // Build merged entities
+        for (const eg of ENTITY_GROUPS) {
+          const members = singles.filter(d => eg.match(d));
+          if (members.length > 1) {
+            const totalAmt = members.reduce((s,d) => s + Number(d.amount), 0);
+            merged.push({ drep_id: members.map(d=>d.drep_id).join("+"), name: eg.name, amount: totalAmt, merged: true, members });
+            members.forEach(d => used.add(d.drep_id));
+          }
+        }
+        // Add remaining singles
+        for (const d of singles) {
+          if (!used.has(d.drep_id)) merged.push(d);
+        }
+        return merged.sort((a,b) => Number(b.amount) - Number(a.amount));
+      })();
 
-      // Action types with thresholds
+      // Action types with thresholds (ParameterChange split into 4 sub-groups)
       const actionTypes = [
         {key:"NoConfidence", label:T.type_noconf||"No Confidence", thr: Number(pp.dvt_motion_no_confidence)||0.67},
         {key:"UpdateCommittee", label:T.type_cc||"Update CC", thr: Number(pp.dvt_committee_normal)||0.67},
         {key:"NewConstitution", label:T.type_const||"New Constitution", thr: Number(pp.dvt_update_to_constitution)||0.75},
         {key:"HardForkInitiation", label:T.type_hardfork||"Hard Fork", thr: Number(pp.dvt_hard_fork_initiation)||0.6},
         {key:"TreasuryWithdrawals", label:T.type_treasury||"Treasury", thr: Number(pp.dvt_treasury_withdrawal)||0.67},
-        {key:"ParameterChange", label:T.type_param||"Param Change", thr: Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0)||0.67},
+        {key:"ParamNetwork", label:"Param: Network", thr: Number(pp.dvt_p_p_network_group)||0.67, sub:true},
+        {key:"ParamEconomic", label:"Param: Economic", thr: Number(pp.dvt_p_p_economic_group)||0.67, sub:true},
+        {key:"ParamTechnical", label:"Param: Technical", thr: Number(pp.dvt_p_p_technical_group)||0.67, sub:true},
+        {key:"ParamGovernance", label:"Param: Governance", thr: Number(pp.dvt_p_p_gov_group)||0.75, sub:true},
         {key:"InfoAction", label:T.type_info||"Info Action", thr: 0.51}
       ];
 
       // Compute veto coalition for each action type
       const vetoRows = actionTypes.map(at => {
-        const vetoPct = 1 - at.thr; // fraction needed for veto
-        const vetoNeeded = vetoPct * totalActive; // absolute power needed
+        const vetoPct = 1 - at.thr;
+        const vetoNeeded = vetoPct * totalActive;
         const deficit = vetoNeeded - ncPower;
         let coalition = [];
         let cumStake = 0;
@@ -3073,39 +3057,129 @@ function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccV
           deficitPct: totalActive > 0 ? Math.max(0, deficit) / totalActive * 100 : 0 };
       });
 
-      return React.createElement(Section,{title:"🛡️ "+(T.gov_veto||"Veto Power Analysis")},
+      // Build DRep ranking (shown once) — include all that appear in any coalition
+      const maxCoalitionSize = Math.max(...vetoRows.map(vr => vr.coalition.length));
+      const rankingDreps = coalitionDreps.slice(0, Math.max(maxCoalitionSize, 5));
+      // Cumulative stake including ncPower
+      let runningStake = ncPower;
+      const ranking = rankingDreps.map((d, i) => {
+        runningStake += Number(d.amount);
+        return { ...d, rank: i+1, cumStake: runningStake, cumPct: totalActive > 0 ? runningStake / totalActive * 100 : 0 };
+      });
+
+      const CE = React.createElement;
+      const thV = {fontSize:9,fontWeight:700,padding:"4px 6px",borderBottom:"2px solid var(--border)",color:"var(--text2)"};
+      const tdV = {fontSize:10,padding:"3px 6px",borderBottom:"1px solid var(--border)"};
+      const fmtS = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
+
+      return CE(Section,{title:"🛡️ "+(T.gov_veto||"Veto Power Analysis")},
         // Summary cards
-        React.createElement("div",{style:{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}},
-          React.createElement("div",{style:{background:"var(--bg3)",borderRadius:8,padding:"8px 12px",borderLeft:"3px solid #ef4444",flex:"1 1 200px"}},
-            React.createElement("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},
+        CE("div",{style:{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}},
+          CE("div",{style:{background:"var(--bg3)",borderRadius:8,padding:"8px 12px",borderLeft:"3px solid #ef4444",flex:"1 1 200px"}},
+            CE("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},
               "Auto-No (drep_always_no_confidence)"),
-            React.createElement("div",{style:{fontSize:14,fontWeight:700,color:"#ef4444"}},"₳"+fmtL(ncPower)),
-            React.createElement("div",{style:{fontSize:10,color:"var(--text2)"}},ncPct.toFixed(2)+"% of active stake")
+            CE("div",{style:{fontSize:14,fontWeight:700,color:"#ef4444"}},"₳"+fmtL(ncPower)),
+            CE("div",{style:{fontSize:10,color:"var(--text2)"}},ncPct.toFixed(2)+"% of active stake")
           ),
-          React.createElement("div",{style:{background:"var(--bg3)",borderRadius:8,padding:"8px 12px",borderLeft:"3px solid #3b82f6",flex:"1 1 200px"}},
-            React.createElement("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},
+          CE("div",{style:{background:"var(--bg3)",borderRadius:8,padding:"8px 12px",borderLeft:"3px solid #3b82f6",flex:"1 1 200px"}},
+            CE("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},
               "Total Active DRep Stake"),
-            React.createElement("div",{style:{fontSize:14,fontWeight:700,color:"#3b82f6"}},"₳"+fmtL(totalActive))
+            CE("div",{style:{fontSize:14,fontWeight:700,color:"#3b82f6"}},"₳"+fmtL(totalActive))
           )
         ),
         // Explanation
-        React.createElement("div",{style:{fontSize:9,color:"var(--text2)",marginBottom:8,lineHeight:1.5}},
-          T.veto_explanation||"Veto = enough No votes to prevent a proposal from reaching its approval threshold. The drep_always_no_confidence auto-voter contributes No to every proposal. Additional DReps (sorted by stake) are listed to form the minimum veto coalition."),
-        // Table
-        React.createElement("div",{style:{overflowX:"auto"}},
-          React.createElement("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:10}},
-            React.createElement("thead",null,
-              React.createElement("tr",null,
-                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"left",borderBottom:"2px solid var(--border)",color:"var(--text2)"}},"Action Type"),
-                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#34d399"}},"Approval"),
-                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#ef4444"}},"Veto Need"),
-                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#ef4444"}},"Auto-No"),
-                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"center",borderBottom:"2px solid var(--border)",color:"#f59e0b"}},"Add. Needed"),
-                React.createElement("th",{style:{fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"left",borderBottom:"2px solid var(--border)",color:"#8b5cf6"}},"Min Veto Coalition")
+        CE("div",{style:{fontSize:9,color:"var(--text2)",marginBottom:10,lineHeight:1.5}},
+          T.veto_explanation||"Veto = enough No votes to prevent a proposal from reaching its approval threshold. The drep_always_no_confidence auto-voter contributes No votes to every proposal. Below: top DReps by stake with cumulative veto power, then a table showing how many are needed per action type."),
+
+        // ── Part 1: DRep Ranking with cumulative bars ──
+        CE("div",{style:{fontSize:11,fontWeight:700,color:"var(--text)",marginBottom:4}},"DRep Veto Power Ranking"),
+        CE("div",{style:{overflowX:"auto",marginBottom:12}},
+          CE("table",{style:{width:"100%",borderCollapse:"collapse"}},
+            CE("thead",null,
+              CE("tr",null,
+                CE("th",{style:{...thV,textAlign:"center",width:24}},"#"),
+                CE("th",{style:{...thV,textAlign:"left"}},"DRep / Entity"),
+                CE("th",{style:{...thV,textAlign:"right"}},"Stake"),
+                CE("th",{style:{...thV,textAlign:"right"}},"Stake %"),
+                CE("th",{style:{...thV,textAlign:"right"}},"Cumul. %"),
+                CE("th",{style:{...thV,width:"30%"}},"Cumulative Veto Power")
               )
             ),
-            React.createElement("tbody",null,
-              vetoRows.map(vr => React.createElement(VetoRow,{key:vr.key,vr,fmtL,fmtAda:fmtL,totalActive,ncPct}))
+            CE("tbody",null,
+              // Row 0: Auto-No baseline
+              CE("tr",{key:"nc",style:{background:"rgba(239,68,68,.06)"}},
+                CE("td",{style:{...tdV,textAlign:"center",fontSize:9,color:"#ef4444"}},"🔴"),
+                CE("td",{style:{...tdV,fontWeight:600,color:"#ef4444"}},"drep_always_no_confidence"),
+                CE("td",{style:{...tdV,textAlign:"right"}},"₳"+fmtS(ncPower)),
+                CE("td",{style:{...tdV,textAlign:"right"}},ncPct.toFixed(2)+"%"),
+                CE("td",{style:{...tdV,textAlign:"right",fontWeight:600}},ncPct.toFixed(2)+"%"),
+                CE("td",{style:{...tdV}},
+                  CE("div",{style:{background:"var(--bg)",borderRadius:3,overflow:"hidden",height:14,position:"relative"}},
+                    CE("div",{style:{background:"#ef4444",height:"100%",width:ncPct+"%",borderRadius:3,minWidth:2}}),
+                    CE("span",{style:{position:"absolute",right:3,top:0,fontSize:8,lineHeight:"14px",color:"var(--text2)"}},ncPct.toFixed(1)+"%")
+                  )
+                )
+              ),
+              // Ranked DReps
+              ranking.map((d, i) => {
+                // Determine which action types this DRep's cumulative reaches
+                const vetosReached = vetoRows.filter(vr => vr.fulfilled && d.rank <= vr.coalition.length).length;
+                return CE("tr",{key:d.drep_id||i,style:{background:i%2===0?"transparent":"var(--bg2)"}},
+                  CE("td",{style:{...tdV,textAlign:"center",fontWeight:600}},d.rank),
+                  CE("td",{style:{...tdV,fontWeight:600}},
+                    d.merged ? CE("span",null,d.name," ",CE("span",{style:{fontSize:7,color:"var(--text2)",background:"var(--bg3)",padding:"1px 3px",borderRadius:3}},"merged")) :
+                    d.name||d.drep_id.slice(0,25)),
+                  CE("td",{style:{...tdV,textAlign:"right"}},"₳"+fmtS(d.amount)),
+                  CE("td",{style:{...tdV,textAlign:"right"}},(totalActive>0?Number(d.amount)/totalActive*100:0).toFixed(2)+"%"),
+                  CE("td",{style:{...tdV,textAlign:"right",fontWeight:600}},d.cumPct.toFixed(2)+"%"),
+                  CE("td",{style:{...tdV}},
+                    CE("div",{style:{background:"var(--bg)",borderRadius:3,overflow:"hidden",height:14,position:"relative"}},
+                      CE("div",{style:{background:"#ef444480",height:"100%",width:ncPct+"%",borderRadius:"3px 0 0 3px",minWidth:1}}),
+                      CE("div",{style:{background:"#8b5cf6",height:"100%",width:(d.cumPct-ncPct)+"%",position:"absolute",left:ncPct+"%",top:0,borderRadius:"0 3px 3px 0",minWidth:1}}),
+                      // Threshold markers
+                      vetoRows.filter(vr=>vr.vetoPct*100<=50).map(vr =>
+                        CE("div",{key:vr.key,title:vr.label+" veto: "+(vr.vetoPct*100).toFixed(0)+"%",
+                          style:{position:"absolute",left:(vr.vetoPct*100)+"%",top:0,bottom:0,width:1,background:vr.fulfilled && d.rank <= vr.coalition.length ?"#34d39980":"rgba(255,255,255,.3)"}})
+                      ),
+                      CE("span",{style:{position:"absolute",right:3,top:0,fontSize:8,lineHeight:"14px",color:"var(--text2)"}},d.cumPct.toFixed(1)+"%")
+                    )
+                  )
+                );
+              })
+            )
+          )
+        ),
+
+        // ── Part 2: Compact action type table ──
+        CE("div",{style:{fontSize:11,fontWeight:700,color:"var(--text)",marginBottom:4}},"Veto Threshold by Action Type"),
+        CE("div",{style:{overflowX:"auto"}},
+          CE("table",{style:{width:"100%",borderCollapse:"collapse"}},
+            CE("thead",null,
+              CE("tr",null,
+                CE("th",{style:{...thV,textAlign:"left"}},"Action Type"),
+                CE("th",{style:{...thV,textAlign:"center",color:"#34d399"}},"Approval"),
+                CE("th",{style:{...thV,textAlign:"center",color:"#ef4444"}},"Veto Need"),
+                CE("th",{style:{...thV,textAlign:"center",color:"#f59e0b"}},"Add. Needed"),
+                CE("th",{style:{...thV,textAlign:"center",color:"#8b5cf6"}},"Min Coalition"),
+                CE("th",{style:{...thV,textAlign:"left",color:"#8b5cf6"}},"Members")
+              )
+            ),
+            CE("tbody",null,
+              vetoRows.map(vr => CE("tr",{key:vr.key,style:{background:vr.sub?"rgba(139,92,246,.04)":"transparent"}},
+                CE("td",{style:{...tdV,fontWeight:600,paddingLeft:vr.sub?16:6,fontSize:vr.sub?9:10}},vr.label),
+                CE("td",{style:{...tdV,textAlign:"center",color:"#34d399",fontWeight:600}},(vr.thr*100).toFixed(0)+"%"),
+                CE("td",{style:{...tdV,textAlign:"center",color:"#ef4444",fontWeight:600}},(vr.vetoPct*100).toFixed(1)+"%"),
+                CE("td",{style:{...tdV,textAlign:"center",color:vr.deficit<=0?"#34d399":"#f59e0b",fontWeight:600}},
+                  vr.deficit<=0 ? "✅ 0%" : vr.deficitPct.toFixed(1)+"%"),
+                CE("td",{style:{...tdV,textAlign:"center",fontWeight:700,fontSize:12}},
+                  vr.deficit<=0 ? CE("span",{style:{color:"#ef4444"}},"⚠ 0") :
+                  !vr.fulfilled ? "—" :
+                  CE("span",{style:{color:"#8b5cf6"}},String(vr.coalition.length))),
+                CE("td",{style:{...tdV,fontSize:9,color:"var(--text2)"}},
+                  vr.deficit<=0 ? "Auto-No alone" :
+                  !vr.fulfilled ? "Unreachable" :
+                  vr.coalition.map(d=>(d.merged?d.name:d.name||d.drep_id.slice(0,12))).join(", "))
+              ))
             )
           )
         )
