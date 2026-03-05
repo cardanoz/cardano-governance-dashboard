@@ -2541,17 +2541,19 @@ function SimulatorTab({ dreps: rawDreps, voteData, totalActions, periodVoteData,
 // Vote Reminder — identify minimum voters needed to reach threshold
 // ════════════════════════════════════════════════════════════════
 function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, ccVotes, spoVotes, spoPoolInfo, pp }) {
-  const [selProp, setSelProp] = React.useState("");
+  const [filterProp, setFilterProp] = React.useState("__all__");
   const [extraCount, setExtraCount] = React.useState(3);
   const [copied, setCopied] = React.useState(false);
+  const [expandedProp, setExpandedProp] = React.useState(null);
+
+  const E = React.createElement;
+  const fmtStake = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
+  const fmtAda = fmtStake;
 
   const curEp = (pp && pp.epoch) || (Math.floor((Date.now() - 1596059091000) / 432000000) + 208);
   const activeProps = (proposals || []).filter(p => p.expiration && p.expiration >= curEp);
 
-  const prop = activeProps.find(p => p.proposal_id === selProp);
-  const ps = prop && govInfo && govInfo.proposalSummaries && govInfo.proposalSummaries[prop.proposal_id];
-
-  // ─── DRep threshold for this proposal type ───
+  // ─── Thresholds ───
   const getDrepThreshold = (ptype) => {
     if (!pp) return 0.67;
     const m = {NoConfidence:"dvt_motion_no_confidence",UpdateCommittee:"dvt_committee_normal",
@@ -2561,12 +2563,8 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
     if (ptype === "ParameterChange") return Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0) || 0.67;
     return Number(pp[m[ptype]]) || 0.67;
   };
-
-  // ─── CC threshold ───
   const getCCThreshold = () => pp ? Number(pp.dvt_committee_normal) || 0.67 : 0.67;
   const CC_INELIG = ["NoConfidence"];
-
-  // ─── SPO threshold ───
   const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution"];
   const getSpoThreshold = (ptype) => {
     if (SPO_INELIG.includes(ptype)) return null;
@@ -2578,183 +2576,291 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
     return 0.51;
   };
 
-  // ─── Compute reminder data ───
-  let reminderData = null;
-  if (prop && ps) {
-    const drepThr = getDrepThreshold(prop.proposal_type);
-    // DRep analysis
-    const unvotedDreps = dreps.filter(d => {
-      if (d.drep_id === "drep_always_abstain" || d.drep_id === "drep_always_no_confidence") return false;
-      const v = votes[`${d.drep_id}__${prop.proposal_id}`];
-      return !v || v === "NotVoted";
-    }).sort((a, b) => Number(b.amount) - Number(a.amount));
+  // ─── Compute reminder data for ALL active proposals ───
+  const allReminders = React.useMemo(() => {
+    return activeProps.map(prop => {
+      const ps = govInfo && govInfo.proposalSummaries && govInfo.proposalSummaries[prop.proposal_id];
+      if (!ps) return { prop, ps: null, drepData: null, ccData: null, spoData: null };
 
-    const yesPower = Number(ps.drep.yes_power) || 0;
-    const noPower = Number(ps.drep.no_power) || 0;
-    const unvotedPower = unvotedDreps.reduce((s, d) => s + Number(d.amount), 0);
-    const totalPower = yesPower + noPower + unvotedPower;
-    const needed = drepThr * totalPower;
-    const deficit = needed - yesPower;
-
-    let minDreps = [];
-    let cumStake = 0;
-    let thresholdReached = deficit <= 0;
-    if (!thresholdReached) {
-      for (const d of unvotedDreps) {
-        minDreps.push(d);
-        cumStake += Number(d.amount);
-        if (yesPower + cumStake >= needed) { thresholdReached = true; break; }
-      }
-    }
-    const extraDreps = unvotedDreps.slice(minDreps.length, minDreps.length + extraCount);
-
-    // CC analysis
-    const ccCanVote = !CC_INELIG.includes(prop.proposal_type);
-    let unvotedCC = [];
-    if (ccCanVote) {
-      unvotedCC = (ccMembers || []).filter(cc => {
-        const v = (ccVotes || {})[`${cc.cc_id}__${prop.proposal_id}`];
+      // DRep analysis — exclude auto voters and 0-stake DReps
+      const drepThr = getDrepThreshold(prop.proposal_type);
+      const unvotedDreps = dreps.filter(d => {
+        if (d.drep_id === "drep_always_abstain" || d.drep_id === "drep_always_no_confidence") return false;
+        if (Number(d.amount) <= 0) return false;
+        const v = votes[`${d.drep_id}__${prop.proposal_id}`];
         return !v || v === "NotVoted";
-      });
-    }
+      }).sort((a, b) => Number(b.amount) - Number(a.amount));
 
-    // SPO analysis
-    const spoThr = getSpoThreshold(prop.proposal_type);
-    let unvotedSPO = [];
-    let spoAnalysis = null;
-    if (spoThr !== null && ps.spo) {
-      const spoYesPower = Number(ps.spo.yes_power) || 0;
-      const spoNoPower = Number(ps.spo.no_power) || 0;
-      // Get pools that haven't voted
-      const allPoolIds = new Set(Object.keys(spoPoolInfo || {}));
-      Object.keys(spoVotes || {}).forEach(k => allPoolIds.add(k.split("__")[0]));
-      const votedPoolIds = new Set();
-      Object.keys(spoVotes || {}).forEach(k => { if (k.endsWith("__" + prop.proposal_id)) votedPoolIds.add(k.split("__")[0]); });
-      unvotedSPO = [...allPoolIds].filter(pid => !votedPoolIds.has(pid)).map(pid => {
-        const info = (spoPoolInfo || {})[pid] || {};
-        return { pool_id: pid, ticker: info.ticker || "", active_stake: info.active_stake || "0" };
-      }).sort((a, b) => Number(b.active_stake) - Number(a.active_stake)).slice(0, 20);
-      spoAnalysis = { threshold: spoThr, yesPct: ps.spo.yes_pct || 0 };
-    }
+      const yesPower = Number(ps.drep.yes_power) || 0;
+      const noPower = Number(ps.drep.no_power) || 0;
+      const unvotedPower = unvotedDreps.reduce((s, d) => s + Number(d.amount), 0);
+      const totalPower = yesPower + noPower + unvotedPower;
+      const needed = drepThr * totalPower;
+      const deficit = needed - yesPower;
 
-    reminderData = {
-      drepThr, deficit, yesPower, totalPower, needed, thresholdReached,
-      minDreps, extraDreps, unvotedDreps, unvotedCC, ccCanVote,
-      unvotedSPO, spoAnalysis, currentYesPct: ps.drep.yes_pct || 0
-    };
-  }
+      let minDreps = [];
+      let cumStake = 0;
+      let thresholdMet = deficit <= 0;
+      if (!thresholdMet) {
+        for (const d of unvotedDreps) {
+          minDreps.push(d);
+          cumStake += Number(d.amount);
+          if (yesPower + cumStake >= needed) { thresholdMet = true; break; }
+        }
+      }
+      const extraDreps = unvotedDreps.slice(minDreps.length, minDreps.length + extraCount);
 
-  // ─── Generate X post ───
-  const generatePost = () => {
-    if (!prop || !reminderData) return "";
-    const rd = reminderData;
-    const fmtAda = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
+      // CC analysis
+      const ccCanVote = !CC_INELIG.includes(prop.proposal_type);
+      let unvotedCC = [];
+      if (ccCanVote) {
+        unvotedCC = (ccMembers || []).filter(cc => {
+          const v = (ccVotes || {})[`${cc.cc_id}__${prop.proposal_id}`];
+          return !v || v === "NotVoted";
+        });
+      }
+
+      // SPO analysis
+      const spoThr = getSpoThreshold(prop.proposal_type);
+      let minSPOs = [];
+      let spoThresholdMet = true;
+      let spoYesPct = 0;
+      if (spoThr !== null && ps.spo) {
+        spoYesPct = ps.spo.yes_pct || 0;
+        const spoYesPower = Number(ps.spo.yes_power) || 0;
+        const spoNoPower = Number(ps.spo.no_power) || 0;
+        const votedPoolIds = new Set();
+        Object.keys(spoVotes || {}).forEach(k => { if (k.endsWith("__" + prop.proposal_id)) votedPoolIds.add(k.split("__")[0]); });
+        const unvotedPools = Object.keys(spoPoolInfo || {}).filter(pid => !votedPoolIds.has(pid)).map(pid => {
+          const info = (spoPoolInfo || {})[pid] || {};
+          return { pool_id: pid, ticker: info.ticker || "", active_stake: Number(info.active_stake || 0) };
+        }).filter(p => p.active_stake > 0).sort((a, b) => b.active_stake - a.active_stake);
+        const unvotedSpoStake = unvotedPools.reduce((s, p) => s + p.active_stake, 0);
+        const spoTotalPower = spoYesPower + spoNoPower + unvotedSpoStake;
+        const spoNeeded = spoThr * spoTotalPower;
+        const spoDeficit = spoNeeded - spoYesPower;
+        spoThresholdMet = spoDeficit <= 0;
+        if (!spoThresholdMet) {
+          let sCum = 0;
+          for (const p of unvotedPools) {
+            minSPOs.push(p);
+            sCum += p.active_stake;
+            if (spoYesPower + sCum >= spoNeeded) break;
+          }
+        }
+      }
+
+      return {
+        prop, ps,
+        drepData: { threshold: drepThr, yesPct: ps.drep.yes_pct || 0, deficit, thresholdMet, minDreps, extraDreps },
+        ccData: { canVote: ccCanVote, threshold: getCCThreshold(), yesPct: ps.cc ? ps.cc.yes_pct || 0 : 0, unvotedCC },
+        spoData: spoThr !== null ? { threshold: spoThr, yesPct: spoYesPct, thresholdMet: spoThresholdMet, minSPOs,
+          extraSPOs: minSPOs.length > 0 ? Object.keys(spoPoolInfo||{}).filter(pid => {
+            const voted = new Set(); Object.keys(spoVotes||{}).forEach(k=>{if(k.endsWith("__"+prop.proposal_id))voted.add(k.split("__")[0]);});
+            return !voted.has(pid) && !minSPOs.find(s=>s.pool_id===pid);
+          }).map(pid=>({pool_id:pid,ticker:(spoPoolInfo||{})[pid]?.ticker||"",active_stake:Number((spoPoolInfo||{})[pid]?.active_stake||0)}))
+            .filter(p=>p.active_stake>0).sort((a,b)=>b.active_stake-a.active_stake).slice(0,extraCount) : []
+        } : null
+      };
+    });
+  }, [activeProps.length, extraCount, dreps, votes, ccVotes, spoVotes, govInfo]);
+
+  const displayReminders = filterProp === "__all__" ? allReminders : allReminders.filter(r => r.prop.proposal_id === filterProp);
+
+  // ─── Generate X post for one proposal ───
+  const generatePostForProp = (rem) => {
+    if (!rem || !rem.ps) return "";
+    const p = rem.prop, d = rem.drepData, c = rem.ccData, s = rem.spoData;
     let post = `📢 Cardano Vote Reminder\n\n`;
-    post += `📋 ${prop.title || prop.proposal_id.slice(0,20)}\n`;
-    post += `📊 Type: ${prop.proposal_type} | Exp: Epoch ${prop.expiration}\n\n`;
-    post += `🗳️ DRep: ${rd.currentYesPct.toFixed(1)}% / ${(rd.drepThr*100).toFixed(0)}% needed\n`;
-    if (rd.deficit > 0 && rd.minDreps.length > 0) {
-      post += `\n⚡ Key DReps needed:\n`;
-      [...rd.minDreps, ...rd.extraDreps].forEach(d => {
-        post += `  • ${d.name || d.drep_id.slice(0,20)} (₳${fmtAda(d.amount)})\n`;
+    post += `📋 ${p.title || p.proposal_id.slice(0,20)}\n`;
+    post += `📊 ${p.proposal_type} | Exp: E${p.expiration}\n\n`;
+    post += `🗳️ DRep: ${d.yesPct.toFixed(1)}% / ${(d.threshold*100).toFixed(0)}%`;
+    if (d.deficit <= 0) post += ` ✅\n`;
+    else {
+      post += `\n`;
+      [...d.minDreps, ...d.extraDreps].forEach(dr => {
+        post += `  • ${dr.name || dr.drep_id.slice(0,20)} (₳${fmtAda(dr.amount)})\n`;
       });
-    } else if (rd.deficit <= 0) {
-      post += `✅ DRep threshold already met!\n`;
     }
-    if (rd.ccCanVote && rd.unvotedCC.length > 0) {
-      post += `\n🏛️ CC not yet voted:\n`;
-      rd.unvotedCC.forEach(cc => { post += `  • ${cc.name || cc.cc_id}\n`; });
+    if (c.canVote && c.unvotedCC.length > 0) {
+      post += `\n🏛️ CC (${c.yesPct.toFixed(0)}% / ${(c.threshold*100).toFixed(0)}%):\n`;
+      c.unvotedCC.forEach(cc => { post += `  • ${cc.name || cc.cc_id}\n`; });
     }
-    if (rd.spoAnalysis && rd.unvotedSPO.length > 0) {
-      post += `\n🏊 SPO: ${rd.spoAnalysis.yesPct.toFixed(1)}% / ${(rd.spoAnalysis.threshold*100).toFixed(0)}%\n`;
+    if (s) {
+      post += `\n🏊 SPO: ${s.yesPct.toFixed(1)}% / ${(s.threshold*100).toFixed(0)}%`;
+      if (s.thresholdMet) post += ` ✅\n`;
+      else if (s.minSPOs.length > 0) {
+        post += `\n`;
+        [...s.minSPOs.slice(0,5), ...s.extraSPOs.slice(0,3)].forEach(sp => {
+          post += `  • ${sp.ticker || sp.pool_id.slice(0,15)} (₳${fmtAda(sp.active_stake*1e6)})\n`;
+        });
+      } else post += `\n`;
     }
     post += `\n🔗 https://adatool.net\n#Cardano #Governance`;
     return post;
   };
 
-  const copyPost = () => {
-    const text = generatePost();
+  const copyAll = () => {
+    const texts = displayReminders.filter(r => r.ps).map(r => generatePostForProp(r));
+    const text = texts.join("\n\n─────────────\n\n");
     navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   };
 
-  const E = React.createElement;
-  const fmtStake = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
+  const copySingle = (rem) => {
+    navigator.clipboard.writeText(generatePostForProp(rem)).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+  };
+
+  // ─── Table header cell style ───
+  const thS = {fontSize:9,fontWeight:700,padding:"4px 6px",textAlign:"left",borderBottom:"2px solid var(--border)",color:"var(--text2)",whiteSpace:"nowrap"};
+  const tdS = {fontSize:10,padding:"4px 6px",borderBottom:"1px solid var(--border)",verticalAlign:"top"};
 
   return E("div",{style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:10}},
-    E("div",{style:{fontSize:13,fontWeight:700,color:"var(--accent2)",marginBottom:8}},"📢 Vote Reminder"),
-
-    // Proposal selector
-    E("div",{style:{marginBottom:10}},
-      E("select",{value:selProp,onChange:e=>setSelProp(e.target.value),
-        style:{fontSize:11,padding:"4px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",width:"100%",maxWidth:500}},
-        E("option",{value:""},"— Select active proposal —"),
-        activeProps.map(p => E("option",{key:p.proposal_id,value:p.proposal_id},
-          `[${(p.proposal_type||"").slice(0,12)}] ${(p.title||p.proposal_id).slice(0,60)} (E${p.expiration})`))
+    // Header + controls
+    E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,flexWrap:"wrap",gap:6}},
+      E("div",{style:{fontSize:13,fontWeight:700,color:"var(--accent2)"}},"📢 Vote Reminder"),
+      E("div",{style:{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}},
+        // Filter selector
+        E("select",{value:filterProp,onChange:e=>{ setFilterProp(e.target.value); setExpandedProp(null); },
+          style:{fontSize:10,padding:"3px 6px",borderRadius:5,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",maxWidth:300}},
+          E("option",{value:"__all__"},`All active (${activeProps.length})`),
+          activeProps.map(p => E("option",{key:p.proposal_id,value:p.proposal_id},
+            `${(p.proposal_type||"").slice(0,10)}: ${(p.title||p.proposal_id).slice(0,40)}`))
+        ),
+        // +α control
+        E("div",{style:{display:"flex",alignItems:"center",gap:3}},
+          E("span",{style:{fontSize:9,color:"var(--text2)"}},"+α:"),
+          E("input",{type:"number",min:0,max:20,value:extraCount,onChange:e=>setExtraCount(Math.max(0,Math.min(20,Number(e.target.value)))),
+            style:{width:36,fontSize:10,padding:"2px 3px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",textAlign:"center"}})
+        ),
+        // Copy button
+        E("button",{onClick:copyAll,className:"btn",
+          style:{fontSize:10,padding:"4px 10px",background:copied?"#34d399":"var(--accent)",color:"#fff",fontWeight:600,borderRadius:5,border:"none",cursor:"pointer"}},
+          copied ? "✅ Copied!" : "📋 Copy X Post")
       )
     ),
 
-    // Reminder content
-    prop && reminderData && E("div",{style:{display:"flex",flexDirection:"column",gap:8}},
+    // Table
+    activeProps.length > 0 ? E("div",{style:{overflowX:"auto"}},
+      E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:10}},
+        E("thead",null,
+          E("tr",null,
+            E("th",{style:thS},"Proposal"),
+            E("th",{style:{...thS,color:"#8b5cf6"}},"🗳️ DRep"),
+            E("th",{style:{...thS,color:"#8b5cf6"}},"Min DReps Needed"),
+            E("th",{style:{...thS,color:"#f59e0b"}},"🏛️ CC Unvoted"),
+            E("th",{style:{...thS,color:"#06b6d4"}},"🏊 SPO"),
+            E("th",{style:{...thS,color:"#06b6d4"}},"Min SPOs Needed"),
+            E("th",{style:{...thS,width:32}},"")
+          )
+        ),
+        E("tbody",null,
+          displayReminders.map(rem => {
+            const p = rem.prop, d = rem.drepData, c = rem.ccData, s = rem.spoData;
+            const isExpanded = expandedProp === p.proposal_id;
+            if (!rem.ps) return E("tr",{key:p.proposal_id},
+              E("td",{style:tdS,colSpan:7},
+                E("span",{style:{fontWeight:600}},`[${(p.proposal_type||"").slice(0,10)}] `),
+                E("span",null,(p.title||p.proposal_id).slice(0,50)),
+                E("span",{style:{color:"var(--text2)",marginLeft:6}},`E${p.expiration}`),
+                E("span",{style:{color:"var(--text2)",marginLeft:6,fontStyle:"italic"}},"(no data)")
+              )
+            );
 
-      // DRep section
-      E("div",{style:{background:"var(--bg3)",borderRadius:8,padding:10}},
-        E("div",{style:{fontSize:11,fontWeight:700,color:"#8b5cf6",marginBottom:4}},
-          `🗳️ DRep — ${reminderData.currentYesPct.toFixed(1)}% / ${(reminderData.drepThr*100).toFixed(0)}% ${reminderData.deficit<=0?"✅":"❌"}`),
-        reminderData.deficit > 0 && reminderData.minDreps.length > 0 ? E("div",null,
-          E("div",{style:{fontSize:9,color:"var(--text2)",marginBottom:4}},
-            `Minimum ${reminderData.minDreps.length} DRep(s) needed (by stake) to reach threshold:`),
-          reminderData.minDreps.map((d,i) => E("div",{key:d.drep_id,style:{display:"flex",justifyContent:"space-between",padding:"2px 4px",fontSize:10,background:i%2===0?"rgba(139,92,246,.08)":"transparent",borderRadius:4}},
-            E("span",{style:{fontWeight:600}},d.name||d.drep_id.slice(0,25)),
-            E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(d.amount))
-          )),
-          // +α extra
-          E("div",{style:{display:"flex",alignItems:"center",gap:6,marginTop:6}},
-            E("span",{style:{fontSize:9,color:"var(--text2)"}},"+ extra:"),
-            E("input",{type:"number",min:0,max:20,value:extraCount,onChange:e=>setExtraCount(Math.max(0,Math.min(20,Number(e.target.value)))),
-              style:{width:40,fontSize:10,padding:"2px 4px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",textAlign:"center"}})),
-          reminderData.extraDreps.length > 0 && reminderData.extraDreps.map(d => E("div",{key:d.drep_id,style:{display:"flex",justifyContent:"space-between",padding:"2px 4px",fontSize:10,opacity:.6,borderRadius:4}},
-            E("span",null,d.name||d.drep_id.slice(0,25)),
-            E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(d.amount))
-          ))
-        ) : reminderData.deficit <= 0 ? E("div",{style:{fontSize:10,color:"#34d399"}},"✅ DRep threshold already met") :
-          E("div",{style:{fontSize:10,color:"#f87171"}},"Not enough unvoted DRep stake to reach threshold")
-      ),
-
-      // CC section
-      reminderData.ccCanVote && E("div",{style:{background:"var(--bg3)",borderRadius:8,padding:10}},
-        E("div",{style:{fontSize:11,fontWeight:700,color:"#f59e0b",marginBottom:4}},
-          `🏛️ CC — ${ps.cc.yes_pct.toFixed(1)}% / ${(getCCThreshold()*100).toFixed(0)}%`),
-        reminderData.unvotedCC.length > 0 ? reminderData.unvotedCC.map(cc => E("div",{key:cc.cc_id,style:{fontSize:10,padding:"2px 4px"}},
-          `• ${cc.name||cc.cc_id}`
-        )) : E("div",{style:{fontSize:10,color:"#34d399"}},"All CC members have voted")
-      ),
-
-      // SPO section
-      reminderData.spoAnalysis && E("div",{style:{background:"var(--bg3)",borderRadius:8,padding:10}},
-        E("div",{style:{fontSize:11,fontWeight:700,color:"#06b6d4",marginBottom:4}},
-          `🏊 SPO — ${reminderData.spoAnalysis.yesPct.toFixed(1)}% / ${(reminderData.spoAnalysis.threshold*100).toFixed(0)}%`),
-        reminderData.unvotedSPO.length > 0 ? E("div",null,
-          E("div",{style:{fontSize:9,color:"var(--text2)",marginBottom:2}},"Top unvoted SPOs by stake:"),
-          reminderData.unvotedSPO.slice(0,10).map(s => E("div",{key:s.pool_id,style:{display:"flex",justifyContent:"space-between",padding:"2px 4px",fontSize:10,borderRadius:4}},
-            E("span",null,s.ticker||s.pool_id.slice(0,20)),
-            E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(s.active_stake))
-          ))
-        ) : E("div",{style:{fontSize:10,color:"var(--text2)"}},"No SPO data available")
-      ),
-
-      // Copy / X Post buttons
-      E("div",{style:{display:"flex",gap:8,marginTop:4}},
-        E("button",{onClick:copyPost,className:"btn",
-          style:{fontSize:11,padding:"6px 14px",background:copied?"#34d399":"var(--accent)",color:"#fff",fontWeight:600,borderRadius:6,border:"none",cursor:"pointer"}},
-          copied ? "✅ Copied!" : "📋 Copy X Post"),
-        E("button",{onClick:()=>{const t=generatePost();window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}`,"_blank");},className:"btn",
-          style:{fontSize:11,padding:"6px 14px",background:"#000",color:"#fff",fontWeight:600,borderRadius:6,border:"none",cursor:"pointer"}},
-          "𝕏 Post")
+            return E(React.Fragment,{key:p.proposal_id},
+              E("tr",{style:{cursor:"pointer",background:isExpanded?"rgba(139,92,246,.06)":"transparent"},
+                onClick:()=>setExpandedProp(isExpanded?null:p.proposal_id)},
+                // Proposal name
+                E("td",{style:{...tdS,maxWidth:200}},
+                  E("div",{style:{fontWeight:600,fontSize:10,lineHeight:"1.3"}},
+                    `[${(p.proposal_type||"").slice(0,10)}] ${(p.title||p.proposal_id).slice(0,45)}`),
+                  E("div",{style:{fontSize:8,color:"var(--text2)"}},"Exp: E"+p.expiration)
+                ),
+                // DRep %
+                E("td",{style:tdS},
+                  E("span",{style:{color:d.deficit<=0?"#34d399":"#f87171",fontWeight:600}},
+                    `${d.yesPct.toFixed(1)}%/${(d.threshold*100).toFixed(0)}%`),
+                  d.deficit<=0 ? " ✅" : ""
+                ),
+                // Min DReps needed
+                E("td",{style:tdS},
+                  d.deficit<=0 ? E("span",{style:{color:"#34d399"}},"—") :
+                  E("span",null,`${d.minDreps.length}${extraCount>0?`+${d.extraDreps.length}`:""}`)
+                ),
+                // CC unvoted
+                E("td",{style:tdS},
+                  !c.canVote ? E("span",{style:{color:"var(--text2)",opacity:.4}},"N/A") :
+                  c.unvotedCC.length === 0 ? E("span",{style:{color:"#34d399"}},"✅ All voted") :
+                  E("span",null,`${c.unvotedCC.length} (${c.yesPct.toFixed(0)}%/${(c.threshold*100).toFixed(0)}%)`)
+                ),
+                // SPO %
+                E("td",{style:tdS},
+                  !s ? E("span",{style:{color:"var(--text2)",opacity:.4}},"N/A") :
+                  E("span",{style:{color:s.thresholdMet?"#34d399":"#f87171",fontWeight:600}},
+                    `${s.yesPct.toFixed(1)}%/${(s.threshold*100).toFixed(0)}%`),
+                  s && s.thresholdMet ? " ✅" : ""
+                ),
+                // Min SPOs needed
+                E("td",{style:tdS},
+                  !s ? E("span",{style:{color:"var(--text2)",opacity:.4}},"—") :
+                  s.thresholdMet ? E("span",{style:{color:"#34d399"}},"—") :
+                  E("span",null,`${s.minSPOs.length}${extraCount>0&&s.extraSPOs.length>0?`+${s.extraSPOs.length}`:""}`)
+                ),
+                // Copy single
+                E("td",{style:{...tdS,textAlign:"center"}},
+                  E("button",{onClick:ev=>{ev.stopPropagation();copySingle(rem);},title:"Copy X Post",
+                    style:{fontSize:9,padding:"2px 5px",background:"transparent",color:"var(--text2)",border:"1px solid var(--border)",borderRadius:4,cursor:"pointer"}},"📋")
+                )
+              ),
+              // Expanded detail row
+              isExpanded && E("tr",null,
+                E("td",{colSpan:7,style:{padding:"6px 8px",background:"rgba(139,92,246,.04)",borderBottom:"1px solid var(--border)"}},
+                  E("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}},
+                    // DRep detail
+                    E("div",null,
+                      E("div",{style:{fontSize:9,fontWeight:700,color:"#8b5cf6",marginBottom:3}},
+                        `🗳️ DRep — ${d.yesPct.toFixed(1)}% / ${(d.threshold*100).toFixed(0)}%`),
+                      d.deficit <= 0 ? E("div",{style:{fontSize:9,color:"#34d399"}},"✅ Threshold met") :
+                      E("div",null,
+                        d.minDreps.map((dr,i) => E("div",{key:dr.drep_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",fontWeight:600}},
+                          E("span",null,dr.name||dr.drep_id.slice(0,22)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(dr.amount))
+                        )),
+                        d.extraDreps.length > 0 && E("div",{style:{borderTop:"1px dashed var(--border)",marginTop:2,paddingTop:2}},
+                          d.extraDreps.map(dr => E("div",{key:dr.drep_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",opacity:.6}},
+                            E("span",null,dr.name||dr.drep_id.slice(0,22)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(dr.amount))
+                          ))
+                        )
+                      )
+                    ),
+                    // CC detail
+                    E("div",null,
+                      E("div",{style:{fontSize:9,fontWeight:700,color:"#f59e0b",marginBottom:3}},
+                        c.canVote ? `🏛️ CC — ${c.yesPct.toFixed(0)}% / ${(c.threshold*100).toFixed(0)}%` : "🏛️ CC — N/A"),
+                      c.canVote && c.unvotedCC.length === 0 && E("div",{style:{fontSize:9,color:"#34d399"}},"✅ All voted"),
+                      c.canVote && c.unvotedCC.map(cc => E("div",{key:cc.cc_id,style:{fontSize:9,padding:"1px 0"}},
+                        `• ${cc.name||cc.cc_id.slice(0,25)}`))
+                    ),
+                    // SPO detail
+                    E("div",null,
+                      E("div",{style:{fontSize:9,fontWeight:700,color:"#06b6d4",marginBottom:3}},
+                        s ? `🏊 SPO — ${s.yesPct.toFixed(1)}% / ${(s.threshold*100).toFixed(0)}%` : "🏊 SPO — N/A"),
+                      s && s.thresholdMet && E("div",{style:{fontSize:9,color:"#34d399"}},"✅ Threshold met"),
+                      s && !s.thresholdMet && s.minSPOs.map(sp => E("div",{key:sp.pool_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",fontWeight:600}},
+                        E("span",null,sp.ticker||sp.pool_id.slice(0,15)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(sp.active_stake*1e6))
+                      )),
+                      s && !s.thresholdMet && s.extraSPOs.length > 0 && E("div",{style:{borderTop:"1px dashed var(--border)",marginTop:2,paddingTop:2}},
+                        s.extraSPOs.map(sp => E("div",{key:sp.pool_id,style:{fontSize:9,display:"flex",justifyContent:"space-between",padding:"1px 0",opacity:.6}},
+                          E("span",null,sp.ticker||sp.pool_id.slice(0,15)),E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(sp.active_stake*1e6))
+                        ))
+                      )
+                    )
+                  )
+                )
+              )
+            );
+          })
+        )
       )
-    ),
-
-    !prop && E("div",{style:{fontSize:10,color:"var(--text2)",padding:8,textAlign:"center"}},
-      "Select an active proposal to generate a vote reminder")
+    ) : E("div",{style:{fontSize:10,color:"var(--text2)",padding:8,textAlign:"center"}},"No active proposals")
   );
 }
 
