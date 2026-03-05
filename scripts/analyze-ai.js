@@ -47,6 +47,46 @@ function saveJSON(fname, data) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+// Attempt to parse JSON from Claude response, with repair for common issues
+function parseClaudeJSON(raw) {
+  // Extract JSON object from response
+  const match = raw.match(/\{[\s\S]*\}/);
+  if (!match) return {};
+  let json = match[0];
+  try {
+    return JSON.parse(json);
+  } catch (e1) {
+    // Repair common issues:
+    // 1. Trailing commas before ] or }
+    json = json.replace(/,\s*([}\]])/g, '$1');
+    // 2. Unescaped newlines in string values
+    json = json.replace(/(?<=:\s*"[^"]*)\n(?=[^"]*")/g, '\\n');
+    // 3. Single quotes instead of double quotes (naive)
+    // 4. Missing commas between array elements: "]["  or "} {"
+    json = json.replace(/"\s*\n\s*"/g, '","');
+    json = json.replace(/\}\s*\{/g, '},{');
+    try {
+      return JSON.parse(json);
+    } catch (e2) {
+      // Last resort: strip and retry
+      try {
+        // Try extracting just the key fields manually
+        const ts = raw.match(/"tendencySummary"\s*:\s*"([^"]+)"/)?.[1] || "";
+        const vp = raw.match(/"votingPattern"\s*:\s*"([^"]+)"/)?.[1] || "";
+        const kp = raw.match(/"keyPositions"\s*:\s*\[([\s\S]*?)\]/)?.[1] || "";
+        const kpArr = kp ? kp.split(/",\s*"/).map(s => s.replace(/^"|"$/g, '')) : [];
+        if (ts || vp) return { tendencySummary: ts, votingPattern: vp, keyPositions: kpArr };
+        // For proposal reasons
+        const summary = raw.match(/"summary"\s*:\s*"([^"]+)"/)?.[1] || "";
+        if (summary) return { summary };
+        return {};
+      } catch (e3) {
+        return {};
+      }
+    }
+  }
+}
+
 // ─── Claude API ───
 
 let totalInputTokens = 0;
@@ -242,7 +282,7 @@ Respond in this exact JSON format:
 
     try {
       const response = await callClaude(systemPrompt, userPrompt);
-      const parsed = JSON.parse(response.match(/\{[\s\S]*\}/)?.[0] || "{}");
+      const parsed = parseClaudeJSON(response);
 
       result[drepId] = {
         name: drepName,
@@ -415,7 +455,7 @@ Only include categories that have rationales. Use the actual DRep names from the
 
     try {
       const response = await callClaude(systemPrompt, userPrompt);
-      const parsed = JSON.parse(response.match(/\{[\s\S]*\}/)?.[0] || "{}");
+      const parsed = parseClaudeJSON(response);
 
       // Enrich with stake data
       const enrichReasons = (reasons, voteEntries) => {
@@ -550,7 +590,7 @@ Respond in JSON:
 
     try {
       const response = await callClaude(systemPrompt, userPrompt);
-      const parsed = JSON.parse(response.match(/\{[\s\S]*\}/)?.[0] || "{}");
+      const parsed = parseClaudeJSON(response);
 
       result[type] = {
         count: props.length,
