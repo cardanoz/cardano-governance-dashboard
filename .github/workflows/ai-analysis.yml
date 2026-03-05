@@ -1,0 +1,37 @@
+name: AI Analysis
+
+on:
+  workflow_run:
+    workflows: ["Update Governance Data"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run AI Analysis
+        env:
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: node scripts/analyze-ai.js 100
+
+      - name: Commit and push analysis
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ai-*.json
+          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Update AI analysis $(date -u +'%Y-%m-%d %H:%M UTC')" && git pull --rebase && git push)

@@ -2922,6 +2922,265 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 
 // (VetoRow removed — veto coalition now rendered inline in GovernanceDataTab)
 
+// ═══════════════════════════════════════════════════════════════════
+// AI Analysis Tab (β)
+// ═══════════════════════════════════════════════════════════════════
+function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummary, aiMeta, proposals, T }) {
+  const [subtab, setSubtab] = React.useState("tendencies");
+  const [selectedProposal, setSelectedProposal] = React.useState("");
+  const [expandedDrep, setExpandedDrep] = React.useState(null);
+
+  const hasData = aiDrepTendencies || aiProposalReasons || aiActionTypeSummary;
+
+  if (!hasData) {
+    return React.createElement("div", {className:"card",style:{padding:32,textAlign:"center"}},
+      React.createElement("h2", {style:{color:"#4fc3f7",marginBottom:16}}, "🤖 AI分析 (β)"),
+      React.createElement("p", {style:{color:"#8899aa"}}, "AI分析データはまだ生成されていません。"),
+      React.createElement("p", {style:{color:"#667788",fontSize:12,marginTop:8}}, "GitHub ActionsでClaude APIによる分析が実行されると、ここに結果が表示されます。")
+    );
+  }
+
+  const fmtStake = (amt) => {
+    const n = Number(amt) / 1e6;
+    if (n >= 1e9) return (n/1e9).toFixed(1) + "B";
+    if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
+    if (n >= 1e3) return (n/1e3).toFixed(0) + "K";
+    return n.toFixed(0);
+  };
+
+  const fmtDate = (iso) => iso ? iso.split("T")[0] : "—";
+
+  // Sub-tab: DRep Tendencies
+  const renderTendencies = () => {
+    if (!aiDrepTendencies?.dreps) return React.createElement("p",{style:{color:"#8899aa"}},"データなし");
+    const dreps = Object.entries(aiDrepTendencies.dreps)
+      .sort((a,b) => Number(b[1].stake) - Number(a[1].stake));
+
+    return React.createElement("div", null,
+      React.createElement("p", {style:{color:"#8899aa",fontSize:12,marginBottom:12}},
+        `${dreps.length} DReps analyzed · Generated: ${fmtDate(aiDrepTendencies.generatedAt)}`),
+      dreps.map(([id, d]) => {
+        const isExpanded = expandedDrep === id;
+        const total = d.voteSpread.yes + d.voteSpread.no + d.voteSpread.abstain;
+        const yesPct = total ? (d.voteSpread.yes/total*100).toFixed(0) : 0;
+        const noPct = total ? (d.voteSpread.no/total*100).toFixed(0) : 0;
+        const absPct = total ? (d.voteSpread.abstain/total*100).toFixed(0) : 0;
+
+        return React.createElement("div", {
+          key: id,
+          style:{
+            background:"#181e2a", borderRadius:8, padding:14, marginBottom:8,
+            cursor:"pointer", border: isExpanded ? "1px solid #4fc3f7" : "1px solid #232b3e"
+          },
+          onClick: () => setExpandedDrep(isExpanded ? null : id)
+        },
+          // Header row
+          React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
+            React.createElement("div", null,
+              React.createElement("span", {style:{color:"#e0e6ed",fontWeight:"bold"}}, `#${d.rank} ${d.name}`),
+              React.createElement("span", {style:{color:"#8899aa",fontSize:11,marginLeft:8}}, `₳${fmtStake(d.stake)}`)
+            ),
+            React.createElement("div", {style:{display:"flex",gap:4,fontSize:11}},
+              React.createElement("span", {style:{color:"#4fc3f7"}}, `Y:${d.voteSpread.yes}`),
+              React.createElement("span", {style:{color:"#ff7043"}}, `N:${d.voteSpread.no}`),
+              React.createElement("span", {style:{color:"#ffb74d"}}, `A:${d.voteSpread.abstain}`)
+            )
+          ),
+          // Vote bar
+          total > 0 && React.createElement("div", {
+            style:{display:"flex",height:4,borderRadius:2,overflow:"hidden",margin:"6px 0",background:"#232b3e"}
+          },
+            React.createElement("div", {style:{width:yesPct+"%",background:"#4fc3f7"}}),
+            React.createElement("div", {style:{width:noPct+"%",background:"#ff7043"}}),
+            React.createElement("div", {style:{width:absPct+"%",background:"#ffb74d"}})
+          ),
+          // Summary
+          React.createElement("p", {style:{color:"#b0bec5",fontSize:12,margin:"4px 0 0"}}, d.tendencySummary),
+          // Expanded details
+          isExpanded && React.createElement("div", {style:{marginTop:10,paddingTop:10,borderTop:"1px solid #232b3e"}},
+            d.keyPositions && d.keyPositions.length > 0 && React.createElement("div", {style:{marginBottom:8}},
+              React.createElement("span", {style:{color:"#4fc3f7",fontSize:11,fontWeight:"bold"}}, "主要なポジション:"),
+              React.createElement("ul", {style:{margin:"4px 0",paddingLeft:16}},
+                d.keyPositions.map((pos, i) =>
+                  React.createElement("li", {key:i,style:{color:"#c0cad6",fontSize:12,marginBottom:2}}, pos)
+                )
+              )
+            ),
+            d.votingPattern && React.createElement("p", {style:{color:"#8899aa",fontSize:11}},
+              "📊 " + d.votingPattern
+            ),
+            React.createElement("p", {style:{color:"#556677",fontSize:10,marginTop:4}},
+              `投票根拠付き: ${d.withRationale}/${d.totalVotes}件 · 最終分析: ${fmtDate(d.lastAnalyzedAt)}` +
+              (d.cached ? " (cached)" : "")
+            )
+          )
+        );
+      })
+    );
+  };
+
+  // Sub-tab: Proposal Vote Reasons
+  const renderProposalReasons = () => {
+    if (!aiProposalReasons?.proposals) return React.createElement("p",{style:{color:"#8899aa"}},"データなし");
+    const propEntries = Object.entries(aiProposalReasons.proposals);
+
+    // Default to first proposal with reasons
+    const selected = selectedProposal || (propEntries.find(([,v]) =>
+      (v.yesReasons?.length || 0) + (v.noReasons?.length || 0) > 0
+    ) || propEntries[0])?.[0] || "";
+
+    const propData = aiProposalReasons.proposals[selected];
+
+    const renderReasonGroup = (reasons, label, color) => {
+      if (!reasons || reasons.length === 0) return null;
+      return React.createElement("div", {style:{marginBottom:16}},
+        React.createElement("h4", {style:{color,fontSize:13,marginBottom:6}}, label),
+        reasons.map((r, i) =>
+          React.createElement("div", {key:i,style:{background:"#1a2030",borderRadius:6,padding:10,marginBottom:6,borderLeft:`3px solid ${color}`}},
+            React.createElement("p", {style:{color:"#e0e6ed",fontSize:12,marginBottom:4}}, r.reason),
+            React.createElement("div", {style:{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}},
+              React.createElement("span", {style:{color:"#8899aa",fontSize:11}}, `合計ステーク: ₳${fmtStake(r.totalStake)}`),
+              (r.dreps || []).map((dr, j) =>
+                React.createElement("span", {key:j,style:{color:"#b0bec5",fontSize:10,background:"#232b3e",borderRadius:4,padding:"2px 6px"}},
+                  dr.name || dr
+                )
+              )
+            )
+          )
+        )
+      );
+    };
+
+    return React.createElement("div", null,
+      React.createElement("p", {style:{color:"#8899aa",fontSize:12,marginBottom:8}},
+        `Generated: ${fmtDate(aiProposalReasons.generatedAt)}`),
+      // Proposal selector
+      React.createElement("select", {
+        value: selected,
+        onChange: (e) => setSelectedProposal(e.target.value),
+        style:{
+          width:"100%",padding:8,marginBottom:16,background:"#181e2a",color:"#e0e6ed",
+          border:"1px solid #333a4a",borderRadius:6,fontSize:12
+        }
+      },
+        propEntries
+          .sort((a,b) => {
+            const aHas = (a[1].yesReasons?.length||0) + (a[1].noReasons?.length||0);
+            const bHas = (b[1].yesReasons?.length||0) + (b[1].noReasons?.length||0);
+            return bHas - aHas;
+          })
+          .map(([key, val]) =>
+            React.createElement("option", {key,value:key},
+              `${val.title || key.slice(0,20)} [${val.type}] — ${val.stats?.votedWithRationale||0} rationales`
+            )
+          )
+      ),
+      // Stats
+      propData && React.createElement("div", {style:{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap"}},
+        React.createElement("div", {style:{background:"#181e2a",borderRadius:6,padding:"8px 14px",fontSize:11}},
+          React.createElement("span", {style:{color:"#8899aa"}}, "投票根拠あり: "),
+          React.createElement("span", {style:{color:"#4fc3f7",fontWeight:"bold"}}, propData.stats?.votedWithRationale || 0)
+        ),
+        React.createElement("div", {style:{background:"#181e2a",borderRadius:6,padding:"8px 14px",fontSize:11}},
+          React.createElement("span", {style:{color:"#8899aa"}}, "根拠なし: "),
+          React.createElement("span", {style:{color:"#ffb74d",fontWeight:"bold"}}, propData.stats?.votedWithoutRationale || 0)
+        ),
+        React.createElement("div", {style:{background:"#181e2a",borderRadius:6,padding:"8px 14px",fontSize:11}},
+          React.createElement("span", {style:{color:"#8899aa"}}, "未投票: "),
+          React.createElement("span", {style:{color:"#ff7043",fontWeight:"bold"}}, propData.stats?.notVoted || 0)
+        )
+      ),
+      // Reason groups
+      propData && renderReasonGroup(propData.yesReasons, "✅ 賛成理由", "#4fc3f7"),
+      propData && renderReasonGroup(propData.noReasons, "❌ 反対理由", "#ff7043"),
+      propData && renderReasonGroup(propData.abstainReasons, "⚖️ 棄権理由", "#ffb74d")
+    );
+  };
+
+  // Sub-tab: Action Type Summary
+  const renderActionTypeSummary = () => {
+    if (!aiActionTypeSummary?.actionTypes) return React.createElement("p",{style:{color:"#8899aa"}},"データなし");
+    const types = Object.entries(aiActionTypeSummary.actionTypes);
+
+    return React.createElement("div", null,
+      React.createElement("p", {style:{color:"#8899aa",fontSize:12,marginBottom:12}},
+        `Generated: ${fmtDate(aiActionTypeSummary.generatedAt)}`),
+      types.map(([type, data]) =>
+        React.createElement("div", {key:type,style:{background:"#181e2a",borderRadius:8,padding:14,marginBottom:10}},
+          React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}},
+            React.createElement("h4", {style:{color:"#4fc3f7",fontSize:13,margin:0}}, type),
+            React.createElement("span", {style:{color:"#8899aa",fontSize:11}}, `${data.count}件`)
+          ),
+          React.createElement("p", {style:{color:"#b0bec5",fontSize:12,marginBottom:8}}, data.summary),
+          data.typicalReasonsYes && data.typicalReasonsYes.length > 0 &&
+            React.createElement("div", {style:{marginBottom:6}},
+              React.createElement("span", {style:{color:"#4fc3f7",fontSize:11}}, "典型的な賛成理由: "),
+              React.createElement("span", {style:{color:"#c0cad6",fontSize:11}},
+                data.typicalReasonsYes.join(" / ")
+              )
+            ),
+          data.typicalReasonsNo && data.typicalReasonsNo.length > 0 &&
+            React.createElement("div", null,
+              React.createElement("span", {style:{color:"#ff7043",fontSize:11}}, "典型的な反対理由: "),
+              React.createElement("span", {style:{color:"#c0cad6",fontSize:11}},
+                data.typicalReasonsNo.join(" / ")
+              )
+            )
+        )
+      )
+    );
+  };
+
+  // Sub-tab: Predict Vote (placeholder for Phase 3)
+  const renderPredict = () => {
+    return React.createElement("div", {style:{textAlign:"center",padding:32}},
+      React.createElement("h3", {style:{color:"#4fc3f7",marginBottom:12}}, "🔮 投票予測 (Coming Soon)"),
+      React.createElement("p", {style:{color:"#8899aa",fontSize:13}},
+        "ガバナンスアクションのドラフトを入力すると、DRepの過去の投票傾向から賛成・反対を予測します。"),
+      React.createElement("p", {style:{color:"#667788",fontSize:11,marginTop:8}},
+        "Cloudflare Workers + Claude Sonnet APIで実装予定")
+    );
+  };
+
+  return React.createElement("div", {className:"card",style:{padding:0}},
+    // Header
+    React.createElement("div", {style:{padding:"16px 20px",borderBottom:"1px solid #232b3e"}},
+      React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
+        React.createElement("h2", {style:{color:"#4fc3f7",margin:0,fontSize:16}}, "🤖 AI分析 (β)"),
+        aiMeta && React.createElement("span", {style:{color:"#556677",fontSize:10}},
+          `Last: ${fmtDate(aiMeta.generatedAt)} · API: ${aiMeta.api_calls} calls · $${aiMeta.estimated_cost_usd?.toFixed(3) || "?"}`)
+      )
+    ),
+    // Sub-tabs
+    React.createElement("div", {style:{display:"flex",gap:0,borderBottom:"1px solid #232b3e",background:"#0e1320"}},
+      [
+        {key:"tendencies",label:"DRep傾向"},
+        {key:"reasons",label:"賛否理由分析"},
+        {key:"types",label:"タイプ別傾向"},
+        {key:"predict",label:"投票予測(β)"}
+      ].map(t =>
+        React.createElement("button", {
+          key:t.key,
+          onClick:()=>setSubtab(t.key),
+          style:{
+            padding:"10px 16px",fontSize:12,background:"none",border:"none",
+            color:subtab===t.key?"#4fc3f7":"#8899aa",cursor:"pointer",
+            borderBottom:subtab===t.key?"2px solid #4fc3f7":"2px solid transparent",
+            fontWeight:subtab===t.key?"bold":"normal"
+          }
+        }, t.label)
+      )
+    ),
+    // Content
+    React.createElement("div", {style:{padding:16}},
+      subtab === "tendencies" ? renderTendencies() :
+      subtab === "reasons" ? renderProposalReasons() :
+      subtab === "types" ? renderActionTypeSummary() :
+      renderPredict()
+    )
+  );
+}
+
 // ════════════════════════════════════════════════════════════════
 // Governance Data Tab (β) — Treasury, Protocol Params, Network Info
 // ════════════════════════════════════════════════════════════════
@@ -3274,6 +3533,10 @@ function App() {
   const [spoPoolInfo, setSpoPoolInfo] = React.useState({}); // {poolId: {ticker, name, pledge_drep}}
   // Governance data state
   const [govInfo, setGovInfo] = React.useState(null); // {network, protocolParams, proposalSummaries}
+  const [aiDrepTendencies, setAiDrepTendencies] = React.useState(null);
+  const [aiProposalReasons, setAiProposalReasons] = React.useState(null);
+  const [aiActionTypeSummary, setAiActionTypeSummary] = React.useState(null);
+  const [aiMeta, setAiMeta] = React.useState(null);
   const spoLoadedRef = React.useRef(false);
 
   const loadedPageRef = React.useRef(1);
@@ -3373,6 +3636,18 @@ function App() {
     try {
       if (histRes && histRes.ok) setStakeHistory(await histRes.json());
     } catch(e) { console.warn("History data load error:", e); }
+    // Load AI analysis data (lazy — non-blocking)
+    Promise.all([
+      fetch(base + "ai-drep-tendencies.json" + v).catch(() => null),
+      fetch(base + "ai-proposal-reasons.json" + v).catch(() => null),
+      fetch(base + "ai-action-type-summary.json" + v).catch(() => null),
+      fetch(base + "ai-meta.json" + v).catch(() => null)
+    ]).then(async ([dtRes, prRes, atsRes, metaRes]) => {
+      try { if (dtRes && dtRes.ok) setAiDrepTendencies(await dtRes.json()); } catch(e) {}
+      try { if (prRes && prRes.ok) setAiProposalReasons(await prRes.json()); } catch(e) {}
+      try { if (atsRes && atsRes.ok) setAiActionTypeSummary(await atsRes.json()); } catch(e) {}
+      try { if (metaRes && metaRes.ok) setAiMeta(await metaRes.json()); } catch(e) {}
+    });
     setIsDemo(false);
     setHasMore(false);
     setDataSource("static");
@@ -3706,6 +3981,8 @@ function App() {
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <button className={`tab-btn ${tab==="govdata"?"active":""}`} onClick={()=>setTab("govdata")}
           style={{fontSize:10,padding:"6px 10px",opacity:tab==="govdata"?1:.7}}>{T.tab_govdata||"Gov Data (β)"}</button>
+        <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}
+          style={{fontSize:10,padding:"6px 10px",opacity:tab==="ai"?1:.7}}>{"🤖 AI分析 (β)"}</button>
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
           <a href="https://adatool.net/constitution-tool/" target="_blank" rel="noopener"
             style={{fontSize:10,color:"var(--text2)",textDecoration:"none",opacity:.6,padding:"4px 8px",
@@ -3716,7 +3993,10 @@ function App() {
         </div>
       </div>
 
-      {tab === "govdata" ? (
+      {tab === "ai" ? (
+        <AIAnalysisTab aiDrepTendencies={aiDrepTendencies} aiProposalReasons={aiProposalReasons}
+          aiActionTypeSummary={aiActionTypeSummary} aiMeta={aiMeta} proposals={proposals} T={T} />
+      ) : tab === "govdata" ? (
         <GovernanceDataTab govInfo={govInfo} T={T} dreps={allDreps.length?allDreps:dreps} votes={votes} proposals={proposals} ccMembers={ccMembers} ccVotes={ccVotes} spoVotes={spoVotes} spoPoolInfo={spoPoolInfo} />
       ) : tab === "dashboard" ? (
         <DashboardTab dreps={dreps} proposals={proposals} votes={votes} drepRationales={drepRationales}
