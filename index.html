@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Adatool Gov - Cardano Governance Dashboard</title>
+<title>Adatool - Cardano Governance Dashboard</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230a0d13'/%3E%3Ccircle cx='32' cy='28' r='14' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M32 18v20M24 28h16' stroke='url(%23g)' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='28' r='4' fill='url(%23g)'/%3E%3Cpath d='M20 48h24M24 52h16' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' opacity='.5'/%3E%3C/svg%3E"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -128,6 +128,7 @@ const LANG = {
     export_rationales:"Export Rationales CSV",
     share_url:"Share", share_copied:"Copied!",
     export_proposal_rationales:"Export DRep rationales for this proposal",
+    download:"Download", close:"Close", source:"Source", expand:"Expand",
     constitution_tool:"Constitution",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
@@ -142,7 +143,7 @@ const LANG = {
     spo_no_eligible:"No SPO-eligible governance actions found",
     spo_hardfork_note:"Hard Fork: explicit vote required (no default)",
     spo_voted:"Voted", spo_total_pools:"Total Pools", spo_vote_count:"Votes",
-    tab_history:"Stake Analytics", tab_govdata:"Gov Data (β)",
+    tab_history:"Stake Analytics", tab_govdata:"Protocol Info",
     gov_treasury:"Treasury", gov_reserves:"Reserves", gov_supply:"Circulating Supply",
     gov_live_stake:"Live Stake", gov_active_stake:"Active Stake",
     gov_protocol_params:"Protocol Parameters", gov_governance_thresholds:"Governance Thresholds",
@@ -218,21 +219,22 @@ const LANG = {
     export_rationales:"投票根拠CSV出力",
     share_url:"共有", share_copied:"コピーしました！",
     export_proposal_rationales:"この提案のDRep投票根拠を出力",
+    download:"ダウンロード", close:"閉じる", source:"ソース", expand:"展開",
     constitution_tool:"憲法ツール",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
     api_key_required:"Blockfrost APIキーが必要です",
-    tab_spo:"SPO Vote",
+    tab_spo:"SPO投票",
     spo_pool:"プール", spo_ticker:"ティッカー", spo_pledge_drep:"報酬アドレスDRep",
     spo_stake:"投票力", spo_csv_export:"CSV出力",
     spo_filter_all:"すべて", spo_filter_voted:"投票済", spo_filter_not_voted:"未投票",
     spo_filter_auto_abstain:"自動棄権", spo_filter_auto_nc:"自動不信任",
     spo_loading:"SPO投票を読み込み中…", spo_auto_abstain:"自動棄権",
     spo_no_eligible:"SPO投票対象のガバナンスアクションがありません",
-    spo_hardfork_note:"Hard Fork: 明示投票必須（デフォルトなし）",
+    spo_hardfork_note:"ハードフォーク: 明示投票必須（デフォルトなし）",
     spo_voted:"投票済", spo_total_pools:"プール数", spo_vote_count:"投票数",
-    tab_history:"ステーク分析・予測", tab_govdata:"ガバナンスデータ (β)",
+    tab_history:"ステーク分析・予測", tab_govdata:"プロトコル情報",
     gov_treasury:"トレジャリー", gov_reserves:"リザーブ", gov_supply:"流通量",
     gov_live_stake:"ライブステーク", gov_active_stake:"アクティブステーク",
     gov_protocol_params:"プロトコルパラメータ", gov_governance_thresholds:"ガバナンス閾値",
@@ -747,9 +749,9 @@ function RationaleModal({ modal, onClose, T }) {
           )}
         </div>
         <div style={{padding:"10px 16px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:8}}>
-          {modal.text && modal.onDownload && <button className="btn" style={{fontSize:11}} onClick={modal.onDownload}>⬇ Download</button>}
-          {modal.url && <a href={modal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>🔗 Source</a>}
-          <button onClick={onClose} className="btn" style={{fontSize:11}}>Close</button>
+          {modal.text && modal.onDownload && <button className="btn" style={{fontSize:11}} onClick={modal.onDownload}>{"⬇ "+(T.download||"Download")}</button>}
+          {modal.url && <a href={modal.url} target="_blank" rel="noopener" className="btn" style={{fontSize:11}}>{"🔗 "+(T.source||"Source")}</a>}
+          <button onClick={onClose} className="btn" style={{fontSize:11}}>{T.close||"Close"}</button>
         </div>
       </div>
     </div>
@@ -1188,7 +1190,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
             <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>👥 {T.drep_section_title||"DRep Votes"} ({fDreps.length}{hasMore?"+":""})</span>
           </button>
           {drepOpen && <button className="btn" onClick={()=>setDrepFull(!drepFull)}
-            style={{fontSize:11,padding:"3px 10px",marginLeft:"auto",background:drepFull?"var(--accent)":"var(--bg3)",color:drepFull?"#fff":"var(--text)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>{drepFull?"⊗ Close":"⤢ Expand"}</button>}
+            style={{fontSize:11,padding:"3px 10px",marginLeft:"auto",background:drepFull?"var(--accent)":"var(--bg3)",color:drepFull?"#fff":"var(--text)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>{drepFull?("⊗ "+(T.close||"Close")):("⤢ "+(T.expand||"Expand"))}</button>}
         </div>
         {drepOpen && (
         <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)",flex:drepFull?1:undefined,display:drepFull?"flex":undefined,flexDirection:drepFull?"column":undefined}}>
@@ -1513,7 +1515,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>🏊 {T.tab_spo} ({spoList.length.toLocaleString()})</span>
         </button>
           {spoOpen && <button className="btn" onClick={()=>setSpoFull(!spoFull)}
-            style={{fontSize:11,padding:"3px 10px",marginLeft:"auto",background:spoFull?"var(--accent)":"var(--bg3)",color:spoFull?"#fff":"var(--text)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>{spoFull?"⊗ Close":"⤢ Expand"}</button>}
+            style={{fontSize:11,padding:"3px 10px",marginLeft:"auto",background:spoFull?"var(--accent)":"var(--bg3)",color:spoFull?"#fff":"var(--text)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>{spoFull?("⊗ "+(T.close||"Close")):("⤢ "+(T.expand||"Expand"))}</button>}
         </div>
         {spoOpen && (<>
         <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:6,flexWrap:"wrap"}}>
@@ -3366,7 +3368,7 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
 // ════════════════════════════════════════════════════════════════
 // Governance Data Tab (β) — Treasury, Protocol Params, Network Info
 // ════════════════════════════════════════════════════════════════
-function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccVotes, spoVotes, spoPoolInfo }) {
+function GovernanceDataTab({ govInfo, T, lang, dreps, votes, proposals, ccMembers, ccVotes, spoVotes, spoPoolInfo }) {
   if (!govInfo) return React.createElement("div",{style:{padding:40,textAlign:"center",color:"var(--text2)"}},
     "Governance data not available. Data will appear after the next data update.");
   const net = govInfo.network || {};
@@ -3475,6 +3477,20 @@ function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccV
       React.createElement(Row,{label:"ρ (Monetary Expansion)",value:String(pp.rho||"—")}),
       React.createElement(Row,{label:"τ (Treasury Cut)",value:String(pp.tau||"—")}),
       React.createElement(Row,{label:"Collateral %",value:pp.collateral_percent?pp.collateral_percent+"%":"—"})
+    ),
+
+    // Constitution Tool Link
+    React.createElement(Section,{title:"📜 "+(T.constitution_tool||"Constitution")},
+      React.createElement("p",{style:{fontSize:12,color:"var(--text2)",marginBottom:8,lineHeight:1.6}},
+        lang === "ja"
+          ? "Cardanoブロックチェーンの憲法を閲覧・検索できるツールです。ガバナンスアクション（特にNewConstitution）の提案時や、投票判断の際にご活用ください。"
+          : "A tool for viewing and searching the Cardano blockchain constitution. Useful when proposing governance actions (especially NewConstitution) or making voting decisions."),
+      React.createElement("a",{
+        href:"https://adatool.net/constitution-tool/",target:"_blank",rel:"noopener",
+        style:{display:"inline-flex",alignItems:"center",gap:6,padding:"8px 16px",borderRadius:8,
+          background:"var(--accent)",color:"#fff",fontSize:12,fontWeight:600,textDecoration:"none",
+          transition:"opacity .15s"}},
+        "📜 "+(lang === "ja" ? "憲法ツールを開く" : "Open Constitution Tool"))
     ),
 
   );
@@ -3895,7 +3911,7 @@ function App() {
   if (!apiKey && !loading && !isDemo && dataSource !== "static") {
     return (
       <div className="fade-in" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
-        <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Adatool <span style={{color:"var(--accent)"}}>Gov</span></div>
+        <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Adatool</div>
         <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,padding:24,maxWidth:440,width:"100%"}}>
           <h2 style={{fontSize:16,fontWeight:700,marginBottom:8}}>{T.api_key}</h2>
           <p style={{fontSize:12,color:"var(--text2)",marginBottom:16}}>
@@ -3915,7 +3931,7 @@ function App() {
 
   if(loading) return (
     <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
-      <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Adatool <span style={{color:"var(--accent)"}}>Gov</span></div>
+      <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Adatool</div>
       <div className="loader"><span/><span/><span/></div>
       <div style={{color:"var(--text2)",fontSize:13}}>{stage}</div>
     </div>
@@ -3938,13 +3954,8 @@ function App() {
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"baseline",gap:14,flexWrap:"wrap"}}>
-          <h1 style={{fontSize:19,fontWeight:800,letterSpacing:"-.02em",margin:0}}>Adatool <span style={{color:"var(--accent)"}}>Gov</span></h1>
-          <div style={{color:"var(--text2)",fontSize:11,display:"flex",gap:10,flexWrap:"wrap",alignItems:"center"}}>
-            <span>{T.subtitle_drep}: {dreps.length}{hasMore?"+":""}</span>
-            <span>{T.subtitle_actions}: {proposals.length}</span>
-            <span style={{color:"var(--border2)"}}>{T.api_stats}: {apiStats.calls} {T.api_calls} / {apiStats.cached} {T.cached}</span>
-            {isDemo && <span style={{color:"#f59e0b",fontWeight:600}}>⚠ {T.demo_mode}</span>}
-          </div>
+          <h1 style={{fontSize:19,fontWeight:800,letterSpacing:"-.02em",margin:0}}>Adatool</h1>
+          {isDemo && <span style={{color:"#f59e0b",fontWeight:600,fontSize:11}}>⚠ {T.demo_mode}</span>}
         </div>
         <div style={{display:"flex",gap:6,alignItems:"center"}}>
           <div style={{display:"flex",border:"1px solid var(--border)",borderRadius:6,overflow:"hidden"}}>
@@ -3963,27 +3974,17 @@ function App() {
       {/* Tab Bar */}
       <div className="tab-bar" style={{display:"flex",alignItems:"center",gap:0}}>
         <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
-        <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
-        <button className={`tab-btn ${tab==="govdata"?"active":""}`} onClick={()=>setTab("govdata")}
-          style={{fontSize:10,padding:"6px 10px",opacity:tab==="govdata"?1:.7}}>{T.tab_govdata||"Gov Data (β)"}</button>
-        <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}
-          style={{fontSize:10,padding:"6px 10px",opacity:tab==="ai"?1:.7}}>{"🤖 AI分析 (β)"}</button>
-        <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:6}}>
-          <a href="https://adatool.net/constitution-tool/" target="_blank" rel="noopener"
-            style={{fontSize:10,color:"var(--text2)",textDecoration:"none",opacity:.6,padding:"4px 8px",
-              borderRadius:6,border:"1px solid var(--border)",transition:"opacity .2s"}}
-            onMouseEnter={e=>e.target.style.opacity="1"} onMouseLeave={e=>e.target.style.opacity=".6"}
-          >📜 {T.constitution_tool||"Constitution"}</a>
-          <ShareButton T={T}/>
-        </div>
+        <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
+        <button className={`tab-btn ${tab==="govdata"?"active":""}`} onClick={()=>setTab("govdata")}>{T.tab_govdata||"Protocol Info"}</button>
+        <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}>{"🤖 AI"+(lang==="ja"?"分析":"Analysis")}</button>
       </div>
 
       {tab === "ai" ? (
         <AIAnalysisTab aiDrepTendencies={aiDrepTendencies} aiProposalReasons={aiProposalReasons}
           aiActionTypeSummary={aiActionTypeSummary} aiMeta={aiMeta} proposals={proposals} T={T} />
       ) : tab === "govdata" ? (
-        <GovernanceDataTab govInfo={govInfo} T={T} dreps={allDreps.length?allDreps:dreps} votes={votes} proposals={proposals} ccMembers={ccMembers} ccVotes={ccVotes} spoVotes={spoVotes} spoPoolInfo={spoPoolInfo} />
+        <GovernanceDataTab govInfo={govInfo} T={T} lang={lang} dreps={allDreps.length?allDreps:dreps} votes={votes} proposals={proposals} ccMembers={ccMembers} ccVotes={ccVotes} spoVotes={spoVotes} spoPoolInfo={spoPoolInfo} />
       ) : tab === "dashboard" ? (
         <DashboardTab dreps={dreps} proposals={proposals} votes={votes} drepRationales={drepRationales}
           ccMembers={ccMembers} ccVotes={ccVotes} ccRationales={ccRationales}
