@@ -649,6 +649,7 @@ async function main() {
     tier: `top_${TOP_N}`,
     dreps: drepTendencies
   });
+  saveJSON("ai-analysis-cache.json", data.cache); // save cache after each step
   console.log(`  Saved ai-drep-tendencies.json (${Object.keys(drepTendencies).length} DReps)`);
 
   // Step 2: Proposal Vote Reasons
@@ -657,6 +658,7 @@ async function main() {
     generatedAt: new Date().toISOString(),
     proposals: proposalReasons
   });
+  saveJSON("ai-analysis-cache.json", data.cache); // save cache after each step
   console.log(`  Saved ai-proposal-reasons.json (${Object.keys(proposalReasons).length} proposals)`);
 
   // Step 3: Action Type Summary
@@ -665,10 +667,7 @@ async function main() {
     generatedAt: new Date().toISOString(),
     actionTypes: actionTypeSummary
   });
-  console.log(`  Saved ai-action-type-summary.json (${Object.keys(actionTypeSummary).length} types)`);
-
-  // Save cache
-  saveJSON("ai-analysis-cache.json", data.cache);
+  saveJSON("ai-analysis-cache.json", data.cache); // final cache save
 
   // Save metadata
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
