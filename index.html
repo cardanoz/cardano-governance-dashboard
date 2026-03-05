@@ -151,6 +151,13 @@ const LANG = {
     ai_predict_input:"Describe the governance action draft...", ai_predict_type:"Action Type", ai_predict_btn:"Predict Votes", ai_predict_remaining:"remaining today",
     ai_predict_loading:"Analyzing with Claude AI...", ai_predict_result_name:"DRep", ai_predict_result_vote:"Predicted Vote", ai_predict_result_confidence:"Confidence", ai_predict_result_reason:"Reason",
     ai_predict_no_worker:"Vote prediction requires a Cloudflare Worker. See setup instructions.",
+    ai_predict_save:"Save Result", ai_predict_saved_title:"Saved Predictions", ai_predict_saved_empty:"No saved predictions yet",
+    ai_predict_saved_count:"saved", ai_predict_expand:"Expand", ai_predict_collapse:"Collapse",
+    tab_tx_analysis:"Tx Analysis",
+    txa_title:"Transaction Analysis (β)", txa_desc:"Cardano network transaction breakdown — local static data",
+    txa_total:"Total Transactions", txa_simple:"Simple Transfers", txa_smart:"Smart Contract Txs",
+    txa_by_project:"By Project/Protocol", txa_project:"Project", txa_tx_count:"Tx Count", txa_share:"Share",
+    txa_epoch:"Epoch", txa_period:"Period", txa_daily_avg:"Daily Average", txa_trend:"Trend",
     tab_drep_hub:"DRep Hub",
     dreph_title:"DRep Hub (β)", dreph_desc:"Aggregated governance info — stay informed without X",
     dreph_tab_gas:"New GAs", dreph_tab_digest:"Digest", dreph_tab_incidents:"Incidents", dreph_tab_signals:"Signals", dreph_tab_settings:"Settings",
@@ -286,6 +293,13 @@ const LANG = {
     ai_predict_input:"ガバナンスアクションのドラフトを入力...", ai_predict_type:"アクションタイプ", ai_predict_btn:"投票を予測", ai_predict_remaining:"本日残り",
     ai_predict_loading:"Claude AIで分析中...", ai_predict_result_name:"DRep", ai_predict_result_vote:"予測投票", ai_predict_result_confidence:"確度", ai_predict_result_reason:"理由",
     ai_predict_no_worker:"投票予測にはCloudflare Workerが必要です。セットアップ手順をご確認ください。",
+    ai_predict_save:"結果を保存", ai_predict_saved_title:"保存済み予測", ai_predict_saved_empty:"保存済みの予測結果はありません",
+    ai_predict_saved_count:"件", ai_predict_expand:"展開", ai_predict_collapse:"閉じる",
+    tab_tx_analysis:"Tx分析",
+    txa_title:"トランザクション分析 (β)", txa_desc:"Cardanoネットワークのトランザクション内訳 — ローカル静的データ",
+    txa_total:"総トランザクション数", txa_simple:"単純送金", txa_smart:"スマートコントラクトTx",
+    txa_by_project:"プロジェクト/プロトコル別", txa_project:"プロジェクト", txa_tx_count:"Tx数", txa_share:"シェア",
+    txa_epoch:"エポック", txa_period:"期間", txa_daily_avg:"日次平均", txa_trend:"トレンド",
     tab_drep_hub:"DRepハブ",
     dreph_title:"DRepハブ (β)", dreph_desc:"ガバナンス情報を集約 — Xを離れても最新情報にアクセス",
     dreph_tab_gas:"新GA", dreph_tab_digest:"ダイジェスト", dreph_tab_incidents:"インシデント", dreph_tab_signals:"シグナル", dreph_tab_settings:"設定",
@@ -1339,9 +1353,10 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                   // Detect non-security ParameterChange: voting summary has 0 SPO votes cast
                   let spoCanVote = !SPO_INELIG.includes(p.proposal_type);
                   if (spoCanVote && p.proposal_type === "ParameterChange" && ps) {
-                    const spoTotal = (ps.spo.yes_votes_cast||0) + (ps.spo.no_votes_cast||0) + (ps.spo.abstain_votes_cast||0);
+                    const spoYesNo = (ps.spo.yes_votes_cast||0) + (ps.spo.no_votes_cast||0);
                     const spoPct = (ps.spo.yes_pct||0) + (ps.spo.no_pct||0);
-                    if (spoTotal === 0 && spoPct === 0) spoCanVote = false;
+                    // Non-security ParameterChange: SPOs have no yes/no votes (only abstains or nothing)
+                    if (spoYesNo === 0 && spoPct === 0) spoCanVote = false;
                   }
                   const _dt = getDrepThreshold(pp, p.proposal_type);
                   const _st = spoCanVote ? getSpoThreshold(pp, p.proposal_type) : null;
@@ -3477,6 +3492,14 @@ function DRepHubTab({ proposals, votes, T, lang }) {
 // ═══════════════════════════════════════════════════════════════════
 const PREDICT_WORKER_URL = "https://predict-vote.adatool.workers.dev";
 
+const PREDICT_STORAGE_KEY = "adatool_saved_predictions";
+function loadSavedPredictions() {
+  try { return JSON.parse(localStorage.getItem(PREDICT_STORAGE_KEY) || "[]"); } catch { return []; }
+}
+function savePredictions(list) {
+  try { localStorage.setItem(PREDICT_STORAGE_KEY, JSON.stringify(list)); } catch {}
+}
+
 function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummary, aiMeta, proposals, T, lang }) {
   const [subtab, setSubtab] = React.useState("tendencies");
   const [expandedRows, setExpandedRows] = React.useState({});
@@ -3487,6 +3510,10 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
   const [predictLoading, setPredictLoading] = React.useState(false);
   const [predictError, setPredictError] = React.useState(null);
   const [predictRemaining, setPredictRemaining] = React.useState(null);
+  // Saved predictions state
+  const [savedPredictions, setSavedPredictions] = React.useState(loadSavedPredictions);
+  const [showSaved, setShowSaved] = React.useState(false);
+  const [expandedSaved, setExpandedSaved] = React.useState({});
 
   const toggleRow = (key) => setExpandedRows(prev => ({...prev, [key]: !prev[key]}));
 
@@ -3787,8 +3814,74 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
     } catch(e) { setPredictError(e.message); }
     finally { setPredictLoading(false); }
   };
-  const renderPredict = () => {
+  const savePredictionResult = () => {
+    if (!predictResult) return;
+    const entry = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      text: predictText.slice(0, 200),
+      actionType: predictType,
+      result: predictResult
+    };
+    const updated = [entry, ...savedPredictions].slice(0, 50); // keep max 50
+    setSavedPredictions(updated);
+    savePredictions(updated);
+  };
+  const deleteSavedPrediction = (id) => {
+    const updated = savedPredictions.filter(s => s.id !== id);
+    setSavedPredictions(updated);
+    savePredictions(updated);
+  };
+
+  const renderPredictionTable = (result, isCompact) => {
     const voteColor = v => v==="Yes"?"var(--yes)":v==="No"?"var(--no)":"var(--abstain)";
+    if (!result || !result.predictions) return null;
+    return E("div", null,
+      E("div", {style:{padding:isCompact?8:10,borderRadius:6,background:"var(--bg2)",border:"1px solid var(--border)",marginBottom:isCompact?8:12,fontSize:isCompact?11:12,color:"var(--text)"}},
+        lang==="ja" ? result.summary_ja : result.summary_en
+      ),
+      E("div",{style:{overflowX:"auto"}},
+        E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead",null,
+            E("tr",null,
+              E("th",{style:{...thS,minWidth:100}},T.ai_predict_result_name),
+              E("th",{style:{...thS,textAlign:"center",minWidth:60}},T.ai_predict_result_vote),
+              E("th",{style:{...thS,textAlign:"center",minWidth:60}},T.ai_predict_result_confidence),
+              E("th",{style:{...thS,minWidth:200}},T.ai_predict_result_reason)
+            )
+          ),
+          E("tbody",null,
+            result.predictions.map((p,i) =>
+              E("tr",{key:i,style:{borderBottom:"1px solid var(--border)"}},
+                E("td",{style:{...tdS,fontWeight:600}},p.name),
+                E("td",{style:{...tdS,textAlign:"center",fontWeight:700,color:voteColor(p.vote)}},p.vote),
+                E("td",{style:{...tdS,textAlign:"center"}},
+                  E("span",{style:{display:"inline-block",padding:"2px 6px",borderRadius:10,fontSize:10,fontWeight:600,
+                    background:p.confidence>=70?"rgba(52,211,153,.15)":p.confidence>=40?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)",
+                    color:p.confidence>=70?"var(--yes)":p.confidence>=40?"var(--abstain)":"var(--no)"}},
+                    p.confidence+"%")
+                ),
+                E("td",{style:{...tdS,color:"var(--text2)",fontSize:10}},lang==="ja"?p.reason_ja:p.reason_en)
+              )
+            )
+          )
+        )
+      ),
+      (() => {
+        const yes = result.predictions.filter(p=>p.vote==="Yes").length;
+        const no = result.predictions.filter(p=>p.vote==="No").length;
+        const abs = result.predictions.filter(p=>p.vote==="Abstain").length;
+        const total = result.predictions.length;
+        return E("div",{style:{marginTop:8,display:"flex",gap:12,justifyContent:"center",fontSize:11}},
+          E("span",{style:{color:"var(--yes)",fontWeight:600}},"✓ Yes: "+yes+" ("+Math.round(yes/total*100)+"%)"),
+          E("span",{style:{color:"var(--no)",fontWeight:600}},"✗ No: "+no+" ("+Math.round(no/total*100)+"%)"),
+          E("span",{style:{color:"var(--abstain)",fontWeight:600}},"− Abstain: "+abs+" ("+Math.round(abs/total*100)+"%)")
+        );
+      })()
+    );
+  };
+
+  const renderPredict = () => {
     return E("div", {style:{maxWidth:800,margin:"0 auto"}},
       E("p", {style:{color:"var(--text2)",fontSize:12,marginBottom:12}}, T.ai_predict_desc),
       // Input area
@@ -3813,50 +3906,60 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
       predictError && E("div",{style:{marginTop:10,padding:8,borderRadius:6,background:"rgba(248,113,113,.1)",border:"1px solid rgba(248,113,113,.3)",color:"var(--no)",fontSize:11}}, predictError),
       // Results
       predictResult && E("div", {style:{marginTop:16}},
-        // Summary
-        E("div", {style:{padding:10,borderRadius:6,background:"var(--bg2)",border:"1px solid var(--border)",marginBottom:12,fontSize:12,color:"var(--text)"}},
-          lang==="ja" ? predictResult.summary_ja : predictResult.summary_en
+        // Save button
+        E("div",{style:{display:"flex",justifyContent:"flex-end",marginBottom:8}},
+          E("button",{onClick:savePredictionResult, className:"btn",
+            style:{fontSize:11,padding:"4px 12px",background:"var(--bg3)",border:"1px solid var(--accent)",color:"var(--accent2)"}},
+            "💾 "+(lang==="ja"?"結果を保存":"Save Result"))
         ),
-        // Predictions table
-        predictResult.predictions && E("div",{style:{overflowX:"auto"}},
-          E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
-            E("thead",null,
-              E("tr",null,
-                E("th",{style:{...thS,minWidth:100}},T.ai_predict_result_name),
-                E("th",{style:{...thS,textAlign:"center",minWidth:60}},T.ai_predict_result_vote),
-                E("th",{style:{...thS,textAlign:"center",minWidth:60}},T.ai_predict_result_confidence),
-                E("th",{style:{...thS,minWidth:200}},T.ai_predict_result_reason)
-              )
-            ),
-            E("tbody",null,
-              predictResult.predictions.map((p,i) =>
-                E("tr",{key:i,style:{borderBottom:"1px solid var(--border)"}},
-                  E("td",{style:{...tdS,fontWeight:600}},p.name),
-                  E("td",{style:{...tdS,textAlign:"center",fontWeight:700,color:voteColor(p.vote)}},p.vote),
-                  E("td",{style:{...tdS,textAlign:"center"}},
-                    E("span",{style:{display:"inline-block",padding:"2px 6px",borderRadius:10,fontSize:10,fontWeight:600,
-                      background:p.confidence>=70?"rgba(52,211,153,.15)":p.confidence>=40?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)",
-                      color:p.confidence>=70?"var(--yes)":p.confidence>=40?"var(--abstain)":"var(--no)"}},
-                      p.confidence+"%")
-                  ),
-                  E("td",{style:{...tdS,color:"var(--text2)",fontSize:10}},lang==="ja"?p.reason_ja:p.reason_en)
-                )
-              )
-            )
+        renderPredictionTable(predictResult, false)
+      ),
+      // ─── Saved Predictions Toggle & List ───
+      E("div",{style:{marginTop:24,borderTop:"1px solid var(--border)",paddingTop:16}},
+        E("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}},
+          E("div",{style:{display:"flex",alignItems:"center",gap:10}},
+            E("span",{style:{fontSize:13,fontWeight:600,color:"var(--text)"}},
+              "📋 "+(lang==="ja"?"保存済み予測":"Saved Predictions")),
+            savedPredictions.length > 0 && E("span",{style:{fontSize:10,color:"var(--text2)",background:"var(--bg3)",padding:"2px 8px",borderRadius:10}},
+              savedPredictions.length+(lang==="ja"?"件":" saved"))
+          ),
+          E("button",{
+            onClick:()=>setShowSaved(!showSaved),
+            style:{
+              position:"relative",width:44,height:24,borderRadius:12,border:"none",cursor:"pointer",
+              background:showSaved?"var(--accent)":"var(--border2)",transition:"background .2s",padding:0
+            }},
+            E("span",{style:{
+              position:"absolute",top:2,left:showSaved?22:2,width:20,height:20,borderRadius:10,
+              background:"#fff",transition:"left .2s",boxShadow:"0 1px 3px rgba(0,0,0,.3)"
+            }})
           )
         ),
-        // Vote summary bar
-        predictResult.predictions && (() => {
-          const yes = predictResult.predictions.filter(p=>p.vote==="Yes").length;
-          const no = predictResult.predictions.filter(p=>p.vote==="No").length;
-          const abs = predictResult.predictions.filter(p=>p.vote==="Abstain").length;
-          const total = predictResult.predictions.length;
-          return E("div",{style:{marginTop:10,display:"flex",gap:12,justifyContent:"center",fontSize:11}},
-            E("span",{style:{color:"var(--yes)",fontWeight:600}},"✓ Yes: "+yes+" ("+Math.round(yes/total*100)+"%)"),
-            E("span",{style:{color:"var(--no)",fontWeight:600}},"✗ No: "+no+" ("+Math.round(no/total*100)+"%)"),
-            E("span",{style:{color:"var(--abstain)",fontWeight:600}},"− Abstain: "+abs+" ("+Math.round(abs/total*100)+"%)")
-          );
-        })()
+        showSaved && savedPredictions.length === 0 && E("div",{style:{textAlign:"center",padding:20,color:"var(--text2)",fontSize:12}},
+          lang==="ja"?"保存済みの予測結果はありません":"No saved predictions yet"),
+        showSaved && savedPredictions.map(sp =>
+          E("div",{key:sp.id,style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:8,padding:"10px 14px",marginBottom:8}},
+            E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}},
+              E("div",{style:{display:"flex",gap:8,alignItems:"center",flex:1,minWidth:0}},
+                E("span",{style:{fontSize:10,fontWeight:600,padding:"2px 6px",borderRadius:4,background:"var(--accent)20",color:"var(--accent2)"}},sp.actionType),
+                E("span",{style:{fontSize:10,color:"var(--text2)"}},sp.date?.split("T")[0]||""),
+                E("span",{style:{fontSize:10,color:"var(--text2)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",maxWidth:300}},
+                  sp.text)
+              ),
+              E("div",{style:{display:"flex",gap:6,alignItems:"center",flexShrink:0}},
+                E("button",{
+                  onClick:()=>setExpandedSaved(prev=>({...prev,[sp.id]:!prev[sp.id]})),
+                  className:"btn",style:{fontSize:10,padding:"2px 8px"}},
+                  expandedSaved[sp.id] ? (lang==="ja"?"閉じる":"Collapse") : (lang==="ja"?"展開":"Expand")),
+                E("button",{
+                  onClick:()=>deleteSavedPrediction(sp.id),
+                  className:"btn",style:{fontSize:10,padding:"2px 8px",color:"var(--no)",borderColor:"var(--no)30"}},
+                  "✕")
+              )
+            ),
+            expandedSaved[sp.id] && renderPredictionTable(sp.result, true)
+          )
+        )
       )
     );
   };
@@ -4029,6 +4132,152 @@ function GovernanceDataTab({ govInfo, T, lang, dreps, votes, proposals, ccMember
         "📜 "+(lang === "ja" ? "憲法ツールを開く" : "Open Constitution Tool"))
     ),
 
+  );
+}
+
+// ════════════════════════════════════════════════════════════════
+// Transaction Analysis Tab (β) — Local static data
+// ════════════════════════════════════════════════════════════════
+function TransactionAnalysisTab({ T, lang }) {
+  const E = React.createElement;
+
+  // ── Sample static data (will be replaced by real data pipeline later) ──
+  const epochData = [
+    { epoch: 616, total: 412850, simple: 198168, smart: 214682, daily_avg: 82570 },
+    { epoch: 615, total: 398420, simple: 191242, smart: 207178, daily_avg: 79684 },
+    { epoch: 614, total: 425100, simple: 204048, smart: 221052, daily_avg: 85020 },
+    { epoch: 613, total: 389760, simple: 187085, smart: 202675, daily_avg: 77952 },
+    { epoch: 612, total: 405300, simple: 194544, smart: 210756, daily_avg: 81060 },
+    { epoch: 611, total: 378900, simple: 181872, smart: 197028, daily_avg: 75780 },
+  ];
+
+  const projectData = [
+    { name: "SundaeSwap", txCount: 52340, color: "#8b5cf6" },
+    { name: "Minswap", txCount: 48720, color: "#3b82f6" },
+    { name: "JPG Store", txCount: 35890, color: "#f59e0b" },
+    { name: "Liqwid Finance", txCount: 28450, color: "#06b6d4" },
+    { name: "Lenfi (Aada)", txCount: 18930, color: "#34d399" },
+    { name: "DexHunter", txCount: 15670, color: "#f87171" },
+    { name: "Optim Finance", txCount: 12340, color: "#a78bfa" },
+    { name: "Splash Protocol", txCount: 9850, color: "#fbbf24" },
+    { name: "Indigo Protocol", txCount: 8760, color: "#14b8a6" },
+    { name: "WingRiders", txCount: 7520, color: "#fb923c" },
+    { name: "Levvy Finance", txCount: 5430, color: "#e879f9" },
+    { name: lang==="ja"?"その他":"Others", txCount: 21782, color: "#6b7280" },
+  ];
+
+  const latestEpoch = epochData[0];
+  const totalProjectTx = projectData.reduce((s,p) => s + p.txCount, 0);
+  const smartPct = latestEpoch.total > 0 ? (latestEpoch.smart / latestEpoch.total * 100).toFixed(1) : "0";
+  const simplePct = latestEpoch.total > 0 ? (latestEpoch.simple / latestEpoch.total * 100).toFixed(1) : "0";
+
+  const Section = ({title, children}) => E("div",{
+    style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:10}},
+    E("div",{style:{fontSize:13,fontWeight:700,color:"var(--accent2)",marginBottom:8}},title),
+    children);
+
+  return E("div",{style:{maxWidth:900,margin:"0 auto"}},
+    // Header
+    E("div",{className:"card",style:{padding:"16px 20px",marginBottom:12}},
+      E("h2",{style:{color:"var(--accent2)",margin:0,fontSize:16,marginBottom:4}}, "📊 "+T.txa_title),
+      E("p",{style:{color:"var(--text2)",fontSize:11,margin:0}}, T.txa_desc),
+      E("p",{style:{color:"var(--abstain)",fontSize:10,margin:"4px 0 0",fontStyle:"italic"}},
+        lang==="ja"?"※ サンプルデータです。実際のデータパイプライン接続後に自動更新されます。"
+          :"※ Sample data shown. Will auto-update once the data pipeline is connected.")
+    ),
+
+    // Overview Cards
+    E(Section,{title:"📈 "+(lang==="ja"?"概要 (Epoch "+latestEpoch.epoch+")":"Overview (Epoch "+latestEpoch.epoch+")")},
+      E("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:8,marginBottom:8}},
+        ...[
+          {label:T.txa_total, value:latestEpoch.total.toLocaleString(), color:"#3b82f6"},
+          {label:T.txa_simple, value:latestEpoch.simple.toLocaleString(), sub:simplePct+"%", color:"#34d399"},
+          {label:T.txa_smart, value:latestEpoch.smart.toLocaleString(), sub:smartPct+"%", color:"#8b5cf6"},
+          {label:T.txa_daily_avg, value:latestEpoch.daily_avg.toLocaleString(), color:"#f59e0b"},
+        ].map(({label,value,sub,color},i) => E("div",{key:i,
+          style:{background:"var(--bg3)",borderRadius:8,padding:"10px 12px",borderLeft:`3px solid ${color}`}},
+          E("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},label),
+          E("div",{style:{fontSize:18,fontWeight:700,color}},value),
+          sub && E("div",{style:{fontSize:10,color:"var(--text2)",marginTop:1}},sub)
+        ))
+      ),
+      // Simple vs Smart contract bar
+      E("div",{style:{display:"flex",height:10,borderRadius:5,overflow:"hidden",background:"var(--border)",marginTop:4}},
+        E("div",{style:{width:simplePct+"%",background:"#34d399",transition:"width .3s"}}),
+        E("div",{style:{width:smartPct+"%",background:"#8b5cf6",transition:"width .3s"}})
+      ),
+      E("div",{style:{display:"flex",justifyContent:"space-between",fontSize:9,color:"var(--text2)",marginTop:4}},
+        E("span",null,"🟩 "+(lang==="ja"?"単純送金":"Simple")+": "+simplePct+"%"),
+        E("span",null,"🟪 "+(lang==="ja"?"スマートコントラクト":"Smart Contract")+": "+smartPct+"%")
+      )
+    ),
+
+    // Epoch History Table
+    E(Section,{title:"📅 "+(lang==="ja"?"エポック別推移":"Epoch History")},
+      E("div",{style:{overflowX:"auto"}},
+        E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead",null,
+            E("tr",null,
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"left",borderBottom:"1px solid var(--border)"}},T.txa_epoch),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"right",borderBottom:"1px solid var(--border)"}},T.txa_total),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"#34d399",fontWeight:600,textAlign:"right",borderBottom:"1px solid var(--border)"}},T.txa_simple),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"#8b5cf6",fontWeight:600,textAlign:"right",borderBottom:"1px solid var(--border)"}},T.txa_smart),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"right",borderBottom:"1px solid var(--border)"}},T.txa_daily_avg),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"center",borderBottom:"1px solid var(--border)"}},T.txa_trend)
+            )
+          ),
+          E("tbody",null,
+            epochData.map((ep,i) => {
+              const prev = epochData[i+1];
+              const change = prev ? ((ep.total - prev.total) / prev.total * 100).toFixed(1) : null;
+              return E("tr",{key:ep.epoch,style:{borderBottom:"1px solid var(--border)"}},
+                E("td",{style:{padding:"6px 8px",fontWeight:600,color:"var(--accent2)"}},ep.epoch),
+                E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text)"}},ep.total.toLocaleString()),
+                E("td",{style:{padding:"6px 8px",textAlign:"right",color:"#34d399"}},ep.simple.toLocaleString()),
+                E("td",{style:{padding:"6px 8px",textAlign:"right",color:"#8b5cf6"}},ep.smart.toLocaleString()),
+                E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text2)"}},ep.daily_avg.toLocaleString()),
+                E("td",{style:{padding:"6px 8px",textAlign:"center",fontSize:10,fontWeight:600,
+                  color:change===null?"var(--text2)":Number(change)>=0?"var(--yes)":"var(--no)"}},
+                  change===null?"—":(Number(change)>=0?"+":"")+change+"%")
+              );
+            })
+          )
+        )
+      )
+    ),
+
+    // Project Breakdown
+    E(Section,{title:"🏗 "+T.txa_by_project+" (Epoch "+latestEpoch.epoch+")"},
+      E("div",{style:{overflowX:"auto"}},
+        E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead",null,
+            E("tr",null,
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"left",borderBottom:"1px solid var(--border)"}},T.txa_project),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"right",borderBottom:"1px solid var(--border)"}},T.txa_tx_count),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"right",borderBottom:"1px solid var(--border)"}},T.txa_share),
+              E("th",{style:{padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"left",borderBottom:"1px solid var(--border)",minWidth:120}},"")
+            )
+          ),
+          E("tbody",null,
+            projectData.sort((a,b) => b.txCount - a.txCount).map((p,i) => {
+              const pct = totalProjectTx > 0 ? (p.txCount / totalProjectTx * 100) : 0;
+              return E("tr",{key:i,style:{borderBottom:"1px solid var(--border)"}},
+                E("td",{style:{padding:"6px 8px",fontWeight:600,color:p.color}},p.name),
+                E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text)"}},p.txCount.toLocaleString()),
+                E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text2)"}},pct.toFixed(1)+"%"),
+                E("td",{style:{padding:"6px 8px"}},
+                  E("div",{style:{height:8,borderRadius:4,overflow:"hidden",background:"var(--border)",width:"100%"}},
+                    E("div",{style:{height:"100%",width:pct+"%",background:p.color,borderRadius:4,transition:"width .3s"}})
+                  )
+                )
+              );
+            })
+          )
+        )
+      ),
+      E("div",{style:{marginTop:8,fontSize:10,color:"var(--text2)",textAlign:"right"}},
+        (lang==="ja"?"スマートコントラクトTx合計: ":"Smart Contract Txs total: ")+totalProjectTx.toLocaleString())
+    )
   );
 }
 
@@ -4518,11 +4767,14 @@ function App() {
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="govdata"?"active":""}`} onClick={()=>setTab("govdata")}>{T.tab_govdata||"Protocol Info"}</button>
         <button className={`tab-btn ${tab==="drep-hub"?"active":""}`} onClick={()=>setTab("drep-hub")}>{"📢 "+T.tab_drep_hub}</button>
+        <button className={`tab-btn ${tab==="tx-analysis"?"active":""}`} onClick={()=>setTab("tx-analysis")}>{"📊 "+T.tab_tx_analysis}</button>
         <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}>{"🤖 AI"+(lang==="ja"?"分析":"Analysis")}</button>
       </div>
 
       {tab === "drep-hub" ? (
         <DRepHubTab proposals={proposals} votes={votes} T={T} lang={lang} />
+      ) : tab === "tx-analysis" ? (
+        <TransactionAnalysisTab T={T} lang={lang} />
       ) : tab === "ai" ? (
         <AIAnalysisTab aiDrepTendencies={aiDrepTendencies} aiProposalReasons={aiProposalReasons}
           aiActionTypeSummary={aiActionTypeSummary} aiMeta={aiMeta} proposals={proposals} T={T} lang={lang} />
