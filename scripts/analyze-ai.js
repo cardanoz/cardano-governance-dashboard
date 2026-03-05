@@ -28,7 +28,7 @@ if (!CLAUDE_API_KEY) { console.error("ERROR: CLAUDE_API_KEY env var required"); 
 
 const DATA_DIR = path.resolve(__dirname, "..", "data");
 const TOP_N = parseInt(process.argv[2]) || 100;
-const CLAUDE_MODEL = "claude-3-5-haiku-20241022";
+const CLAUDE_MODEL = "claude-haiku-4-5-20251001";
 const MAX_TOKENS = 1500;
 const THROTTLE_MS = 500; // between API calls
 const MIN_NEW_VOTES_FOR_REANALYSIS = 3;
