@@ -1199,11 +1199,18 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                   };
                   // Cardano Conway voting eligibility by proposal type
                   // CC: cannot vote on NoConfidence, InfoAction
-                  // SPO: can only vote on NoConfidence, UpdateCommittee, HardForkInitiation, ParameterChange(security)
+                  // SPO: can only vote on NoConfidence, UpdateCommittee, HardForkInitiation, ParameterChange(security group only)
                   const CC_INELIG = ["NoConfidence","InfoAction"];
                   const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
                   const ccCanVote = !CC_INELIG.includes(p.proposal_type);
-                  const spoCanVote = !SPO_INELIG.includes(p.proposal_type);
+                  // For ParameterChange, SPOs only vote on security group params.
+                  // Detect non-security ParameterChange: voting summary has 0 SPO votes cast
+                  let spoCanVote = !SPO_INELIG.includes(p.proposal_type);
+                  if (spoCanVote && p.proposal_type === "ParameterChange" && ps) {
+                    const spoTotal = (ps.spo.yes_votes_cast||0) + (ps.spo.no_votes_cast||0) + (ps.spo.abstain_votes_cast||0);
+                    const spoPct = (ps.spo.yes_pct||0) + (ps.spo.no_pct||0);
+                    if (spoTotal === 0 && spoPct === 0) spoCanVote = false;
+                  }
                   const _dt = pp ? (p.proposal_type==="NoConfidence"?Number(pp.dvt_motion_no_confidence)||.67:p.proposal_type==="UpdateCommittee"?Number(pp.dvt_committee_normal)||.67:p.proposal_type==="NewConstitution"?Number(pp.dvt_update_to_constitution)||.75:p.proposal_type==="HardForkInitiation"?Number(pp.dvt_hard_fork_initiation)||.6:p.proposal_type==="TreasuryWithdrawals"?Number(pp.dvt_treasury_withdrawal)||.67:p.proposal_type==="ParameterChange"?Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0)||.67:p.proposal_type==="InfoAction"?.51:.67) : .67;
                   const _st = spoCanVote?(pp?(p.proposal_type==="NoConfidence"?Number(pp.pvt_motion_no_confidence)||.51:p.proposal_type==="HardForkInitiation"?Number(pp.pvt_hard_fork_initiation)||.51:p.proposal_type==="UpdateCommittee"?Number(pp.pvt_committee_normal)||.51:p.proposal_type==="ParameterChange"?Number(pp.pvt_p_p_security_group)||.51:.51):.51):null;
                   const _ct = ccCanVote?(pp?Number(pp.dvt_committee_normal)||.67:.67):null;
@@ -1233,8 +1240,9 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                         else if (p.ratified_epoch) { st = st || "ratified"; epochInfo = `E${p.ratified_epoch}`; }
                         else if (p.dropped_epoch) { st = st || "dropped"; epochInfo = `E${p.dropped_epoch}`; }
                         else if (p.expired_epoch) { st = st || "expired"; epochInfo = `E${p.expired_epoch}`; }
-                        else if (!st && p.expiration && govInfo && govInfo.protocolParams && govInfo.protocolParams.epoch) {
-                          st = p.expiration < govInfo.protocolParams.epoch ? "expired" : "active";
+                        else if (!st && p.expiration) {
+                          const curEp = (govInfo && govInfo.protocolParams && govInfo.protocolParams.epoch) || (Math.floor((Date.now() - 1596059091000) / 432000000) + 208);
+                          st = p.expiration < curEp ? "expired" : "active";
                         }
                         const stMap = {active:{label:T.summary_active||"Active",bg:"#3b82f620",color:"#60a5fa",border:"#3b82f640"},
                           ratified:{label:T.summary_ratified||"Ratified",bg:"#8b5cf620",color:"#a78bfa",border:"#8b5cf640"},
@@ -1355,7 +1363,20 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
 
       {/* ═══ SPO Votes Section (below CC) ═══ */}
       {pgP.length > 0 && Object.keys(spoPoolInfo||{}).length > 0 && (()=>{
-        const SPO_INELIGIBLE = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
+        const SPO_INELIGIBLE_TYPES = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
+        // For ParameterChange, detect non-security-group proposals (SPOs can only vote on security group)
+        const isSpoIneligible = (proposal) => {
+          if (SPO_INELIGIBLE_TYPES.includes(proposal.proposal_type)) return true;
+          if (proposal.proposal_type === "ParameterChange" && govInfo && govInfo.proposalSummaries) {
+            const ps = govInfo.proposalSummaries[proposal.proposal_id];
+            if (ps) {
+              const total = (ps.spo.yes_votes_cast||0)+(ps.spo.no_votes_cast||0)+(ps.spo.abstain_votes_cast||0);
+              const pct = (ps.spo.yes_pct||0)+(ps.spo.no_pct||0);
+              if (total === 0 && pct === 0) return true;
+            }
+          }
+          return false;
+        };
         const spoPerPage = 100;
         const toggleSpoSort = (key) => {
           if (spoSortKey === key) setSpoSortDir(d => d === "asc" ? "desc" : "asc");
@@ -1367,7 +1388,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         function getSpoEffVote(pool, proposal) {
           const explicit = pool.votes[proposal.proposal_id];
           if (explicit) return { vote: explicit, type: "explicit" };
-          if (SPO_INELIGIBLE.includes(proposal.proposal_type)) return { vote: "Ineligible", type: "ineligible" };
+          if (isSpoIneligible(proposal)) return { vote: "Ineligible", type: "ineligible" };
           if (proposal.proposal_type === "HardForkInitiation") return { vote: "NotVoted", type: "none" };
           if (pool.isAutoAbstain) return { vote: "Abstain", type: "auto" };
           if (pool.isAutoNoConf) {
@@ -1458,7 +1479,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           <select value={spoGaFilter} onChange={e=>{setSpoGaFilter(e.target.value);setSpoPage(0);}}
             style={{fontSize:8,padding:"1px 3px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",maxWidth:150}}>
             <option value="">—</option>
-            {pgP.filter(p=>!SPO_INELIGIBLE.includes(p.proposal_type)).map(p=>(
+            {pgP.filter(p=>!isSpoIneligible(p)).map(p=>(
               <option key={p.proposal_id} value={p.proposal_id}>[{(p.proposal_type||"").replace("Initiation","").replace("Withdrawals","")}] {(p.title||shortId(p.proposal_id)).slice(0,25)}</option>
             ))}
           </select>
@@ -1478,7 +1499,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                   <span onClick={()=>toggleSpoSort("ticker")} style={{cursor:"pointer"}}>{T.spo_ticker}{spoSortArrow("ticker")}</span>
                   <span onClick={()=>toggleSpoSort("stake")} style={{cursor:"pointer",fontSize:7,marginLeft:6,fontWeight:400,padding:"1px 3px",borderRadius:3,background:spoSortKey==="stake"?"rgba(59,130,246,.15)":"transparent"}}>{T.spo_stake}{spoSortArrow("stake")}</span>
                 </th>
-                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);const inelig=SPO_INELIGIBLE.includes(p.proposal_type);
+                {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);const inelig=isSpoIneligible(p);
                   return <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,
                     background:inelig?"rgba(128,128,128,.1)":"var(--bg3)",padding:"4px 2px",
                     textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:600,
@@ -1503,7 +1524,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                       </span>
                     </td>
                     {pgP.map((p,ci)=>{
-                      const inelig = SPO_INELIGIBLE.includes(p.proposal_type);
+                      const inelig = isSpoIneligible(p);
                       if (inelig) return <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)",background:"rgba(128,128,128,.06)"}}>
                         <div style={{textAlign:"center",fontSize:8,color:"var(--text2)",opacity:.3}}>—</div></td>;
                       const ev = getSpoEffVote(pool, p);
