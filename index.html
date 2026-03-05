@@ -151,6 +151,30 @@ const LANG = {
     ai_predict_input:"Describe the governance action draft...", ai_predict_type:"Action Type", ai_predict_btn:"Predict Votes", ai_predict_remaining:"remaining today",
     ai_predict_loading:"Analyzing with Claude AI...", ai_predict_result_name:"DRep", ai_predict_result_vote:"Predicted Vote", ai_predict_result_confidence:"Confidence", ai_predict_result_reason:"Reason",
     ai_predict_no_worker:"Vote prediction requires a Cloudflare Worker. See setup instructions.",
+    tab_drep_hub:"DRep Hub",
+    dreph_title:"DRep Hub (β)", dreph_desc:"Aggregated governance info — stay informed without X",
+    dreph_tab_gas:"New GAs", dreph_tab_digest:"Digest", dreph_tab_incidents:"Incidents", dreph_tab_signals:"Signals", dreph_tab_settings:"Settings",
+    dreph_gas_subtitle:"Governance actions currently seeking votes",
+    dreph_gas_type:"Type", dreph_gas_title:"Title", dreph_gas_status:"Status", dreph_gas_epoch:"Epoch", dreph_gas_yes:"Y", dreph_gas_no:"N", dreph_gas_abstain:"A",
+    dreph_digest_subtitle:"AI-summarized discussions from X, forums & Discord",
+    dreph_digest_source:"Source", dreph_digest_topic:"Topic", dreph_digest_sentiment:"Sentiment",
+    dreph_digest_positive:"Positive", dreph_digest_negative:"Negative", dreph_digest_mixed:"Mixed", dreph_digest_neutral:"Neutral",
+    dreph_digest_coming:"Automated collection coming soon. Will use X API + Claude AI to summarize governance discussions daily.",
+    dreph_inc_subtitle:"Urgent items & draft proposals seeking feedback",
+    dreph_inc_urgent:"Urgent", dreph_inc_draft:"Draft", dreph_inc_priority:"Priority",
+    dreph_inc_high:"High", dreph_inc_medium:"Medium", dreph_inc_low:"Low",
+    dreph_inc_feedback:"Seeking Feedback", dreph_inc_responses:"responses",
+    dreph_inc_coming:"Automated incident detection coming soon.",
+    dreph_sig_subtitle:"Off-chain voting intentions & DRep signals",
+    dreph_sig_drep:"DRep", dreph_sig_ga:"Governance Action", dreph_sig_vote:"Intended Vote", dreph_sig_confidence:"Confidence", dreph_sig_reason:"Rationale", dreph_sig_date:"Scheduled",
+    dreph_sig_coming:"Interactive signaling system coming soon. DReps will be able to post voting intentions.",
+    dreph_set_subtitle:"Email & notification preferences",
+    dreph_set_email:"Email Address", dreph_set_email_ph:"your@email.com", dreph_set_register:"Register",
+    dreph_set_notif:"Notifications", dreph_set_new_ga:"New Governance Actions", dreph_set_urgent:"Urgent Items",
+    dreph_set_signals:"DRep Signals", dreph_set_weekly:"Weekly Digest",
+    dreph_set_save:"Save", dreph_set_saved:"Saved!",
+    dreph_set_demo_note:"Demo: preferences saved in browser only",
+    dreph_mock_label:"Sample data for demonstration",
     demo_mode:"Demo Mode", clear_cache:"Clear Cache",
     api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
     api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
@@ -262,6 +286,30 @@ const LANG = {
     ai_predict_input:"ガバナンスアクションのドラフトを入力...", ai_predict_type:"アクションタイプ", ai_predict_btn:"投票を予測", ai_predict_remaining:"本日残り",
     ai_predict_loading:"Claude AIで分析中...", ai_predict_result_name:"DRep", ai_predict_result_vote:"予測投票", ai_predict_result_confidence:"確度", ai_predict_result_reason:"理由",
     ai_predict_no_worker:"投票予測にはCloudflare Workerが必要です。セットアップ手順をご確認ください。",
+    tab_drep_hub:"DRepハブ",
+    dreph_title:"DRepハブ (β)", dreph_desc:"ガバナンス情報を集約 — Xを離れても最新情報にアクセス",
+    dreph_tab_gas:"新GA", dreph_tab_digest:"ダイジェスト", dreph_tab_incidents:"インシデント", dreph_tab_signals:"シグナル", dreph_tab_settings:"設定",
+    dreph_gas_subtitle:"投票を求めるガバナンスアクション",
+    dreph_gas_type:"タイプ", dreph_gas_title:"タイトル", dreph_gas_status:"ステータス", dreph_gas_epoch:"エポック", dreph_gas_yes:"Y", dreph_gas_no:"N", dreph_gas_abstain:"A",
+    dreph_digest_subtitle:"X・フォーラム・Discordの議論をAIで要約",
+    dreph_digest_source:"ソース", dreph_digest_topic:"トピック", dreph_digest_sentiment:"センチメント",
+    dreph_digest_positive:"ポジティブ", dreph_digest_negative:"ネガティブ", dreph_digest_mixed:"混合", dreph_digest_neutral:"中立",
+    dreph_digest_coming:"自動収集機能は近日公開。X API + Claude AIで毎日ガバナンスの議論を要約します。",
+    dreph_inc_subtitle:"緊急事項とフィードバックを求める草案提案",
+    dreph_inc_urgent:"緊急", dreph_inc_draft:"草案", dreph_inc_priority:"優先度",
+    dreph_inc_high:"高", dreph_inc_medium:"中", dreph_inc_low:"低",
+    dreph_inc_feedback:"フィードバック募集中", dreph_inc_responses:"件の回答",
+    dreph_inc_coming:"インシデント自動検知機能は近日公開。",
+    dreph_sig_subtitle:"DRepのオフチェーン投票意向とシグナル",
+    dreph_sig_drep:"DRep", dreph_sig_ga:"ガバナンスアクション", dreph_sig_vote:"予定投票", dreph_sig_confidence:"確信度", dreph_sig_reason:"根拠", dreph_sig_date:"投票予定",
+    dreph_sig_coming:"インタラクティブなシグナルシステムは近日公開。DRepが投票意向を投稿できるようになります。",
+    dreph_set_subtitle:"メール・通知設定",
+    dreph_set_email:"メールアドレス", dreph_set_email_ph:"your@email.com", dreph_set_register:"登録",
+    dreph_set_notif:"通知設定", dreph_set_new_ga:"新しいGA", dreph_set_urgent:"緊急項目",
+    dreph_set_signals:"DRepシグナル", dreph_set_weekly:"週次ダイジェスト",
+    dreph_set_save:"保存", dreph_set_saved:"保存しました！",
+    dreph_set_demo_note:"デモ版: 設定はブラウザ内のみに保存されます",
+    dreph_mock_label:"デモ用サンプルデータ",
     demo_mode:"デモモード", clear_cache:"キャッシュクリア",
     api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
     api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
@@ -3154,6 +3202,277 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 // (VetoRow removed — veto coalition now rendered inline in GovernanceDataTab)
 
 // ═══════════════════════════════════════════════════════════════════
+// DRep Hub Tab (β)
+// ═══════════════════════════════════════════════════════════════════
+function DRepHubTab({ proposals, votes, T, lang }) {
+  const [subtab, setSubtab] = React.useState("new-gas");
+  const [expandedRows, setExpandedRows] = React.useState({});
+  const [email, setEmail] = React.useState("");
+  const [notif, setNotif] = React.useState({newGa:true,urgent:true,signals:true,weekly:false});
+  const [saved, setSaved] = React.useState(false);
+  const E = React.createElement;
+
+  const thS = {padding:"5px 8px",fontSize:10,color:"var(--text2)",fontWeight:600,textAlign:"left",borderBottom:"1px solid var(--border)",whiteSpace:"nowrap",position:"sticky",top:0,background:"var(--bg)",zIndex:1};
+  const tdS = {padding:"5px 8px",fontSize:11,color:"var(--text)",borderBottom:"1px solid var(--border)",verticalAlign:"middle"};
+
+  // ─── Mock Data ───
+  const mockDigest = [
+    {id:"d1",date:"2026-03-04",source:"X (Twitter)",topic:lang==="ja"?"憲法v2.4の賛否議論":"Constitution v2.4 Debate",
+      summary:lang==="ja"?"Constitution v2.4について活発な議論。拘束力のない条項の削除を支持する声と、慎重なアプローチを求める声が混在。主要DRepの多くは条件付き賛成の立場。":"Active debate on Constitution v2.4. Mixed views on removing non-binding provisions. Most major DReps conditionally supportive, concerns about rushed timeline.",
+      sentiment:"mixed",mentions:["Cardano Foundation","YUTA","Intersect"]},
+    {id:"d2",date:"2026-03-03",source:"Cardano Forum",topic:lang==="ja"?"トレジャリー引き出し基準の議論":"Treasury Withdrawal Standards Discussion",
+      summary:lang==="ja"?"トレジャリー引き出しの監査要件と透明性基準について議論。コミュニティは定期的な報告義務と第三者監査の導入を推進。":"Discussion on audit requirements and transparency standards for treasury withdrawals. Community pushing for regular reporting obligations and third-party audits.",
+      sentiment:"positive",mentions:["Cerkoryn","Adam Dean","CardanoSphere"]},
+    {id:"d3",date:"2026-03-02",source:"Discord",topic:lang==="ja"?"DRep報酬メカニズムの提案":"DRep Reward Mechanism Proposals",
+      summary:lang==="ja"?"複数のDRep報酬モデルが提案され比較検討中。投票率ベースのペナルティと根拠提出ボーナスの組み合わせが有力。":"Multiple DRep reward models proposed and compared. Vote-rate penalty combined with rationale bonus gaining traction.",
+      sentiment:"neutral",mentions:["SIPO DRep","Phil UPLC","Goofycrisp"]},
+    {id:"d4",date:"2026-03-01",source:"Telegram",topic:lang==="ja"?"パラメータ変更提案への反応":"Parameter Change Proposal Reactions",
+      summary:lang==="ja"?"max_tx_sizeの増加提案に対して技術コミュニティから懸念の声。ブロックサイズとの整合性やネットワーク負荷への影響を懸念。":"Technical community concerns about max_tx_size increase proposal. Worries about block size consistency and network load impact.",
+      sentiment:"negative",mentions:["IOG","Tweag","Well-Typed"]}
+  ];
+
+  const mockIncidents = [
+    {id:"i1",type:"urgent",title:lang==="ja"?"緊急: ガバナンスアクション投票期限迫る (3件)":"Urgent: 3 Governance Actions Nearing Vote Deadline",
+      desc:lang==="ja"?"3件のGAが今エポック末に投票期限を迎えます。未投票のDRepは早めの対応を推奨します。":"3 GAs reaching vote deadline this epoch. DReps who haven't voted are encouraged to act soon.",
+      priority:"high",date:"2026-03-05",daysLeft:2},
+    {id:"i2",type:"urgent",title:lang==="ja"?"CC委員の任期満了が近づいています":"CC Member Terms Expiring Soon",
+      desc:lang==="ja"?"2名のCC委員の任期が今月末に満了します。UpdateCommitteeアクションの提出が必要になる可能性があります。":"2 CC members' terms expiring end of month. May require UpdateCommittee action submission.",
+      priority:"medium",date:"2026-03-04",daysLeft:25},
+    {id:"d1",type:"draft",title:lang==="ja"?"[草案] Cardanoエコシステム助成金プログラム":"[Draft] Cardano Ecosystem Grant Program",
+      desc:lang==="ja"?"年間₳2Mの助成金プログラム草案。DRepからのフィードバックを求めています。Cardano Forumで議論中。":"Draft for annual ₳2M grant program. Seeking DRep feedback. Under discussion on Cardano Forum.",
+      priority:"medium",date:"2026-03-03",responses:18},
+    {id:"d2",type:"draft",title:lang==="ja"?"[草案] DRep行動規範の策定":"[Draft] DRep Code of Conduct",
+      desc:lang==="ja"?"DRepの行動規範を定める草案。コミュニティ全体からのインプットを求めています。":"Draft establishing a DRep code of conduct. Seeking input from the entire community.",
+      priority:"low",date:"2026-03-02",responses:7}
+  ];
+
+  const mockSignals = [
+    {id:"s1",drep:"Cardano Foundation",ga:"Constitution v2.4",vote:"Yes",confidence:85,reason:lang==="ja"?"透明性と説明責任の向上を支持":"Supports improved transparency and accountability",date:"2026-03-06"},
+    {id:"s2",drep:"YUTA",ga:"Treasury Withdrawal ₳500K",vote:"Yes",confidence:75,reason:lang==="ja"?"エコシステム発展のための適切な投資":"Appropriate investment for ecosystem development",date:"2026-03-07"},
+    {id:"s3",drep:"Yoroi Wallet",ga:"Constitution v2.4",vote:"Yes",confidence:70,reason:lang==="ja"?"条件付き賛成 — 実装タイムラインの明確化が必要":"Conditional yes — implementation timeline needs clarification",date:"2026-03-06"},
+    {id:"s4",drep:"Army of Spies",ga:"Treasury Withdrawal ₳500K",vote:"No",confidence:80,reason:lang==="ja"?"監査メカニズムが不十分":"Insufficient audit mechanisms",date:"2026-03-08"},
+    {id:"s5",drep:"Everstake",ga:"Parameter Change: max_tx_size",vote:"Abstain",confidence:60,reason:lang==="ja"?"技術的な影響評価がさらに必要":"Need more technical impact assessment",date:"2026-03-09"},
+    {id:"s6",drep:"SIPO DRep",ga:"Constitution v2.4",vote:"Yes",confidence:90,reason:lang==="ja"?"コミュニティの長期的な利益に合致":"Aligns with long-term community interests",date:"2026-03-06"}
+  ];
+
+  // ─── Helpers ───
+  const sentimentColor = s => s==="positive"?"var(--yes)":s==="negative"?"var(--no)":s==="mixed"?"var(--abstain)":"var(--text2)";
+  const sentimentLabel = s => T["dreph_digest_"+s] || s;
+  const priorityColor = p => p==="high"?"var(--no)":p==="medium"?"var(--abstain)":"var(--text2)";
+  const voteColor = v => v==="Yes"?"var(--yes)":v==="No"?"var(--no)":"var(--abstain)";
+
+  // ─── Sub-tab: New GAs ───
+  const renderNewGAs = () => {
+    const active = (proposals||[]).filter(p => !p.status || p.status === "active" || p.status === "voting" || p.status === "passing");
+    const sorted = [...active].sort((a,b) => (b.submitted_epoch||0) - (a.submitted_epoch||0));
+    if (sorted.length === 0) return E("p",{style:{color:"var(--text2)",textAlign:"center",padding:20}},T.dreph_gas_subtitle);
+    return E("div",null,
+      E("p",{style:{color:"var(--text2)",fontSize:11,marginBottom:10}},T.dreph_gas_subtitle),
+      E("div",{style:{overflowX:"auto"}},
+        E("table",{style:{width:"100%",borderCollapse:"collapse"}},
+          E("thead",null,E("tr",null,
+            E("th",{style:thS},T.dreph_gas_type),
+            E("th",{style:{...thS,minWidth:200}},T.dreph_gas_title),
+            E("th",{style:{...thS,textAlign:"center"}},T.dreph_gas_status),
+            E("th",{style:{...thS,textAlign:"center"}},T.dreph_gas_epoch),
+            E("th",{style:{...thS,textAlign:"center",color:"var(--yes)"}},T.dreph_gas_yes),
+            E("th",{style:{...thS,textAlign:"center",color:"var(--no)"}},T.dreph_gas_no),
+            E("th",{style:{...thS,textAlign:"center",color:"var(--abstain)"}},T.dreph_gas_abstain)
+          )),
+          E("tbody",null,sorted.map((p,i) => {
+            const type = p.type || p.proposal_type || "Unknown";
+            const title = p.title || p.proposal_id?.slice(0,20)+"…" || "—";
+            const voteKeys = Object.keys(votes||{}).filter(k => k.includes(p.proposal_id));
+            const yc = voteKeys.filter(k=>votes[k]==="Yes").length;
+            const nc = voteKeys.filter(k=>votes[k]==="No").length;
+            const ac = voteKeys.filter(k=>votes[k]==="Abstain").length;
+            return E("tr",{key:i,style:{borderBottom:"1px solid var(--border)"}},
+              E("td",{style:{...tdS}},E("span",{style:{color:actionColor(type),fontWeight:600,fontSize:10}},type)),
+              E("td",{style:{...tdS,fontWeight:500,maxWidth:300,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},title),
+              E("td",{style:{...tdS,textAlign:"center"}},E("span",{style:{fontSize:9,padding:"2px 6px",borderRadius:8,background:"rgba(59,130,246,.15)",color:"var(--accent2)",fontWeight:600}},p.status||"active")),
+              E("td",{style:{...tdS,textAlign:"center",fontSize:10}},p.submitted_epoch||"—"),
+              E("td",{style:{...tdS,textAlign:"center",color:"var(--yes)",fontWeight:600}},yc),
+              E("td",{style:{...tdS,textAlign:"center",color:"var(--no)",fontWeight:600}},nc),
+              E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)",fontWeight:600}},ac)
+            );
+          }))
+        )
+      )
+    );
+  };
+
+  // ─── Sub-tab: Governance Digest ───
+  const renderDigest = () => {
+    return E("div",null,
+      E("p",{style:{color:"var(--text2)",fontSize:11,marginBottom:10}},T.dreph_digest_subtitle),
+      E("div",{style:{background:"var(--bg3)",borderRadius:6,padding:"8px 12px",marginBottom:12,fontSize:10,color:"var(--accent2)"}},
+        "ℹ️ "+T.dreph_mock_label+" — "+T.dreph_digest_coming),
+      mockDigest.map(d => E("div",{key:d.id,className:"card",style:{padding:"12px 16px",marginBottom:8}},
+        E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,flexWrap:"wrap",gap:6}},
+          E("div",{style:{display:"flex",gap:8,alignItems:"center"}},
+            E("span",{style:{fontSize:10,color:"var(--text2)"}},d.date),
+            E("span",{style:{fontSize:9,padding:"2px 6px",borderRadius:8,background:"var(--bg3)",color:"var(--accent2)",fontWeight:600}},d.source)
+          ),
+          E("span",{style:{fontSize:9,padding:"2px 8px",borderRadius:8,fontWeight:600,color:sentimentColor(d.sentiment),
+            background:d.sentiment==="positive"?"rgba(52,211,153,.1)":d.sentiment==="negative"?"rgba(248,113,113,.1)":d.sentiment==="mixed"?"rgba(251,191,36,.1)":"rgba(75,85,99,.1)"}},
+            sentimentLabel(d.sentiment))
+        ),
+        E("div",{style:{fontWeight:600,fontSize:12,marginBottom:4,color:"var(--text)"}},d.topic),
+        E("div",{style:{fontSize:11,color:"var(--text2)",lineHeight:1.6,marginBottom:6}},d.summary),
+        E("div",{style:{display:"flex",gap:4,flexWrap:"wrap"}},
+          d.mentions.map((m,j) => E("span",{key:j,style:{fontSize:9,padding:"1px 6px",borderRadius:4,background:"var(--border)",color:"var(--text2)"}},m))
+        )
+      ))
+    );
+  };
+
+  // ─── Sub-tab: Incidents & Drafts ───
+  const renderIncidents = () => {
+    const urgents = mockIncidents.filter(i=>i.type==="urgent");
+    const drafts = mockIncidents.filter(i=>i.type==="draft");
+    const renderItem = (item) => E("div",{key:item.id,className:"card",style:{padding:"12px 16px",marginBottom:8,
+      borderLeft:`3px solid ${priorityColor(item.priority)}`}},
+      E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4,flexWrap:"wrap",gap:6}},
+        E("div",{style:{display:"flex",gap:6,alignItems:"center"}},
+          E("span",{style:{fontSize:9,padding:"2px 6px",borderRadius:4,fontWeight:700,color:"#fff",
+            background:item.type==="urgent"?"var(--no)":"var(--accent)"}},item.type==="urgent"?T.dreph_inc_urgent:T.dreph_inc_draft),
+          E("span",{style:{fontSize:9,padding:"2px 6px",borderRadius:4,fontWeight:600,color:priorityColor(item.priority),
+            background:item.priority==="high"?"rgba(248,113,113,.1)":item.priority==="medium"?"rgba(251,191,36,.1)":"rgba(75,85,99,.1)"}},
+            T["dreph_inc_"+item.priority])
+        ),
+        E("span",{style:{fontSize:10,color:"var(--text2)"}},item.date)
+      ),
+      E("div",{style:{fontWeight:600,fontSize:12,marginBottom:4,color:"var(--text)"}},item.title),
+      E("div",{style:{fontSize:11,color:"var(--text2)",lineHeight:1.5,marginBottom:4}},item.desc),
+      item.daysLeft != null && E("span",{style:{fontSize:10,color:"var(--no)",fontWeight:600}},
+        (lang==="ja"?"残り":"")+(item.daysLeft)+(lang==="ja"?"日":"d left")),
+      item.responses != null && E("span",{style:{fontSize:10,color:"var(--accent2)",fontWeight:600}},
+        item.responses+" "+T.dreph_inc_responses)
+    );
+    return E("div",null,
+      E("p",{style:{color:"var(--text2)",fontSize:11,marginBottom:10}},T.dreph_inc_subtitle),
+      E("div",{style:{background:"var(--bg3)",borderRadius:6,padding:"8px 12px",marginBottom:12,fontSize:10,color:"var(--accent2)"}},
+        "ℹ️ "+T.dreph_mock_label+" — "+T.dreph_inc_coming),
+      urgents.length > 0 && E("div",{style:{marginBottom:12}},
+        E("div",{style:{fontSize:12,fontWeight:700,color:"var(--no)",marginBottom:6}},"🚨 "+T.dreph_inc_urgent),
+        urgents.map(renderItem)
+      ),
+      drafts.length > 0 && E("div",null,
+        E("div",{style:{fontSize:12,fontWeight:700,color:"var(--accent2)",marginBottom:6}},"📝 "+T.dreph_inc_draft),
+        drafts.map(renderItem)
+      )
+    );
+  };
+
+  // ─── Sub-tab: Signals ───
+  const renderSignals = () => {
+    return E("div",null,
+      E("p",{style:{color:"var(--text2)",fontSize:11,marginBottom:10}},T.dreph_sig_subtitle),
+      E("div",{style:{background:"var(--bg3)",borderRadius:6,padding:"8px 12px",marginBottom:12,fontSize:10,color:"var(--accent2)"}},
+        "ℹ️ "+T.dreph_mock_label+" — "+T.dreph_sig_coming),
+      E("div",{style:{overflowX:"auto"}},
+        E("table",{style:{width:"100%",borderCollapse:"collapse"}},
+          E("thead",null,E("tr",null,
+            E("th",{style:thS},T.dreph_sig_drep),
+            E("th",{style:thS},T.dreph_sig_ga),
+            E("th",{style:{...thS,textAlign:"center"}},T.dreph_sig_vote),
+            E("th",{style:{...thS,textAlign:"center"}},T.dreph_sig_confidence),
+            E("th",{style:{...thS,minWidth:150}},T.dreph_sig_reason),
+            E("th",{style:{...thS,textAlign:"center"}},T.dreph_sig_date)
+          )),
+          E("tbody",null,mockSignals.map((s,i) =>
+            E("tr",{key:i,style:{borderBottom:"1px solid var(--border)"}},
+              E("td",{style:{...tdS,fontWeight:600}},s.drep),
+              E("td",{style:{...tdS,fontSize:10}},s.ga),
+              E("td",{style:{...tdS,textAlign:"center",fontWeight:700,color:voteColor(s.vote)}},s.vote),
+              E("td",{style:{...tdS,textAlign:"center"}},
+                E("span",{style:{padding:"2px 6px",borderRadius:10,fontSize:10,fontWeight:600,
+                  background:s.confidence>=70?"rgba(52,211,153,.15)":s.confidence>=40?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)",
+                  color:s.confidence>=70?"var(--yes)":s.confidence>=40?"var(--abstain)":"var(--no)"}},s.confidence+"%")),
+              E("td",{style:{...tdS,fontSize:10,color:"var(--text2)"}},s.reason),
+              E("td",{style:{...tdS,textAlign:"center",fontSize:10}},s.date)
+            )
+          ))
+        )
+      )
+    );
+  };
+
+  // ─── Sub-tab: Settings ───
+  const renderSettings = () => {
+    const toggle = (key) => setNotif(prev=>({...prev,[key]:!prev[key]}));
+    const handleSave = () => { setSaved(true); setTimeout(()=>setSaved(false),2000); };
+    const toggleStyle = (on) => ({padding:"6px 12px",fontSize:11,borderRadius:6,border:"1px solid var(--border)",cursor:"pointer",fontWeight:600,
+      background:on?"var(--accent)":"var(--bg3)",color:on?"#fff":"var(--text2)"});
+    return E("div",{style:{maxWidth:500,margin:"0 auto"}},
+      E("p",{style:{color:"var(--text2)",fontSize:11,marginBottom:16}},T.dreph_set_subtitle),
+      // Email
+      E("div",{className:"card",style:{padding:"12px 16px",marginBottom:10}},
+        E("div",{style:{fontSize:12,fontWeight:600,marginBottom:8,color:"var(--text)"}},T.dreph_set_email),
+        E("div",{style:{display:"flex",gap:6}},
+          E("input",{type:"email",value:email,onChange:e=>setEmail(e.target.value),placeholder:T.dreph_set_email_ph,
+            style:{flex:1,padding:"6px 10px",fontSize:11,borderRadius:6,border:"1px solid var(--border)",background:"var(--bg3)",color:"var(--text)"}}),
+          E("button",{className:"btn btn-primary",style:{fontSize:11},disabled:true},T.dreph_set_register)
+        )
+      ),
+      // Notification toggles
+      E("div",{className:"card",style:{padding:"12px 16px",marginBottom:10}},
+        E("div",{style:{fontSize:12,fontWeight:600,marginBottom:10,color:"var(--text)"}},T.dreph_set_notif),
+        [{key:"newGa",label:T.dreph_set_new_ga},{key:"urgent",label:T.dreph_set_urgent},
+         {key:"signals",label:T.dreph_set_signals},{key:"weekly",label:T.dreph_set_weekly}].map(n =>
+          E("div",{key:n.key,style:{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"1px solid var(--border)"}},
+            E("span",{style:{fontSize:11,color:"var(--text)"}},n.label),
+            E("button",{onClick:()=>toggle(n.key),style:toggleStyle(notif[n.key])},notif[n.key]?"ON":"OFF")
+          )
+        )
+      ),
+      // Save
+      E("div",{style:{textAlign:"center",marginTop:10}},
+        E("button",{onClick:handleSave,className:"btn btn-primary",style:{fontSize:12,padding:"8px 24px"}},T.dreph_set_save),
+        saved && E("span",{style:{marginLeft:10,color:"var(--yes)",fontSize:11,fontWeight:600}},T.dreph_set_saved)
+      ),
+      E("div",{style:{textAlign:"center",marginTop:10,fontSize:10,color:"var(--text2)",opacity:0.7}},T.dreph_set_demo_note)
+    );
+  };
+
+  // ─── Main Render ───
+  const tabs = [
+    {key:"new-gas",label:"📢 "+T.dreph_tab_gas},
+    {key:"digest",label:"📰 "+T.dreph_tab_digest},
+    {key:"incidents",label:"🚨 "+T.dreph_tab_incidents},
+    {key:"signals",label:"💬 "+T.dreph_tab_signals},
+    {key:"settings",label:"⚙️ "+T.dreph_tab_settings}
+  ];
+
+  return E("div",{className:"card",style:{padding:0}},
+    E("div",{style:{padding:"12px 20px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}},
+      E("div",null,
+        E("h2",{style:{color:"var(--accent2)",margin:0,fontSize:16}},"📢 "+T.dreph_title),
+        E("p",{style:{color:"var(--text2)",fontSize:10,margin:"2px 0 0"}},T.dreph_desc)
+      )
+    ),
+    E("div",{style:{display:"flex",gap:0,borderBottom:"2px solid var(--border)",background:"var(--bg)",overflowX:"auto"}},
+      tabs.map(t =>
+        E("button",{key:t.key,onClick:()=>setSubtab(t.key),style:{
+          padding:"10px 18px",fontSize:12,fontWeight:subtab===t.key?700:500,
+          background:subtab===t.key?"var(--bg3)":"transparent",
+          border:"none",borderBottom:subtab===t.key?"2px solid var(--accent2)":"2px solid transparent",
+          color:subtab===t.key?"var(--accent2)":"var(--text2)",cursor:"pointer",
+          whiteSpace:"nowrap",transition:"all .15s"
+        }},t.label)
+      )
+    ),
+    E("div",{style:{padding:"12px 16px"}},
+      subtab==="new-gas" ? renderNewGAs() :
+      subtab==="digest" ? renderDigest() :
+      subtab==="incidents" ? renderIncidents() :
+      subtab==="signals" ? renderSignals() :
+      renderSettings()
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
 // AI Analysis Tab (β)
 // ═══════════════════════════════════════════════════════════════════
 const PREDICT_WORKER_URL = "https://predict-vote.adatool.workers.dev";
@@ -4198,10 +4517,13 @@ function App() {
         <button className={`tab-btn ${tab==="history"?"active":""}`} onClick={()=>setTab("history")}>{T.tab_history}</button>
         <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
         <button className={`tab-btn ${tab==="govdata"?"active":""}`} onClick={()=>setTab("govdata")}>{T.tab_govdata||"Protocol Info"}</button>
+        <button className={`tab-btn ${tab==="drep-hub"?"active":""}`} onClick={()=>setTab("drep-hub")}>{"📢 "+T.tab_drep_hub}</button>
         <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}>{"🤖 AI"+(lang==="ja"?"分析":"Analysis")}</button>
       </div>
 
-      {tab === "ai" ? (
+      {tab === "drep-hub" ? (
+        <DRepHubTab proposals={proposals} votes={votes} T={T} lang={lang} />
+      ) : tab === "ai" ? (
         <AIAnalysisTab aiDrepTendencies={aiDrepTendencies} aiProposalReasons={aiProposalReasons}
           aiActionTypeSummary={aiActionTypeSummary} aiMeta={aiMeta} proposals={proposals} T={T} lang={lang} />
       ) : tab === "govdata" ? (
