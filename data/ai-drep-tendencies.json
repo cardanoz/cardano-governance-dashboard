@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-05T20:55:17.103Z",
+  "generatedAt": "2026-03-05T21:52:44.501Z",
   "tier": "top_100",
   "dreps": {
     "drep1ygr9tuapcanc3kpeyy4dc3vmrz9cfe5q7v9wj3x9j0ap3tswtre9j": {
       "name": "Yoroi W₳llet",
-      "stake": "701300181259635",
+      "stake": "706688300992836",
       "rank": 1,
       "totalVotes": 78,
       "withRationale": 62,
@@ -37,7 +37,7 @@
     },
     "drep1y2200we9c904un36tzaearntzzl63snffuul9qsk0te4utqfkke0w": {
       "name": "YUTA",
-      "stake": "457107694733798",
+      "stake": "456560934816090",
       "rank": 2,
       "totalVotes": 86,
       "withRationale": 86,
@@ -70,7 +70,7 @@
     },
     "drep1ytvlwvyjmzfyn56n0zz4f6lj94wxhmsl5zky6knnzrf4jygpyahug": {
       "name": "EMURGO",
-      "stake": "297934439474706",
+      "stake": "297641950522245",
       "rank": 3,
       "totalVotes": 77,
       "withRationale": 75,
@@ -103,7 +103,7 @@
     },
     "drep1y2nvdau7g7xt6dlh9wydy9c4fvve24rr67twf5w63axu56q4rypfz": {
       "name": "Blockdaemon",
-      "stake": "289301555669338",
+      "stake": "291025714570235",
       "rank": 4,
       "totalVotes": 55,
       "withRationale": 0,
@@ -119,12 +119,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 55,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.321Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.679Z",
       "cached": false
     },
     "drep1y29h2q6cst2pvkl2sqqvf5ljcy36uv7pmy482xnczddzgqshus24w": {
       "name": "Eternl DRep Committee",
-      "stake": "249542796519828",
+      "stake": "250295455940124",
       "rank": 5,
       "totalVotes": 82,
       "withRationale": 78,
@@ -157,7 +157,7 @@
     },
     "drep1ytfwpmt2fvdnyvlswyjyggpf8alwkpm7ha6cua9nsak525ssmvm57": {
       "name": "CryptoCrow",
-      "stake": "210164758051941",
+      "stake": "210177320524214",
       "rank": 6,
       "totalVotes": 52,
       "withRationale": 5,
@@ -190,7 +190,7 @@
     },
     "drep1ydpfkyjxzeqvalf6fgvj7lznrk8kcmfnvy9hyl6gr6ez6wgsjaelx": {
       "name": "Cardano Foundation",
-      "stake": "187939805127245",
+      "stake": "189929386416299",
       "rank": 7,
       "totalVotes": 80,
       "withRationale": 74,
@@ -223,7 +223,7 @@
     },
     "drep1y2csyxt7u2hl4674pl9cef5lknafaw5nraxvyx033kmd0es3awuv0": {
       "name": "Sebastien Guillemot セバ",
-      "stake": "186393301262693",
+      "stake": "186426813306648",
       "rank": 8,
       "totalVotes": 51,
       "withRationale": 7,
@@ -256,7 +256,7 @@
     },
     "drep1yt8p080ajks6zdnxd9z6a6q60p9sm9j5rl7tc63mfna8r6cnp4wr3": {
       "name": "Everstake",
-      "stake": "120937771045532",
+      "stake": "120686546544414",
       "rank": 9,
       "totalVotes": 35,
       "withRationale": 0,
@@ -272,12 +272,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 35,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.364Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.724Z",
       "cached": false
     },
     "drep1yffld2866p00cyg3ejjdewtvazgah7jjgk0s9m7m5ytmmdq33v3zh": {
       "name": "drep1yffld2866p00cyg...",
-      "stake": "115191675096694",
+      "stake": "115583518603139",
       "rank": 10,
       "totalVotes": 80,
       "withRationale": 76,
@@ -310,7 +310,7 @@
     },
     "drep1yt77crnmjuqkj9gcwjjsurez7s07jhwhyt4suxs3xeqftcsfrspun": {
       "name": "JAZZ",
-      "stake": "103015284354285",
+      "stake": "103016988443018",
       "rank": 11,
       "totalVotes": 86,
       "withRationale": 0,
@@ -326,12 +326,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 86,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.384Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.744Z",
       "cached": false
     },
     "drep1y2vyrqh0fa4qh4tmy7322va6ryk78uh6szppezaft0watyqp5hdwx": {
       "name": "BTBF_XSP",
-      "stake": "102410529539769",
+      "stake": "101288646838706",
       "rank": 12,
       "totalVotes": 68,
       "withRationale": 54,
@@ -364,7 +364,7 @@
     },
     "drep1ygqgayvx8yzsaj9hprja3l6jy3v4px9z3u8uvecuvm3f92ce7mckx": {
       "name": "Army of Spies",
-      "stake": "97817160268829",
+      "stake": "97823778939917",
       "rank": 13,
       "totalVotes": 72,
       "withRationale": 20,
@@ -397,7 +397,7 @@
     },
     "drep1y2m0g4r66pyaw3p7u454wc0p4f0ygm8ueaev0mgd3tvwm7sskqwqp": {
       "name": "CardanoYoda (MANDA Pool)",
-      "stake": "96812580604836",
+      "stake": "96805492629784",
       "rank": 14,
       "totalVotes": 86,
       "withRationale": 82,
@@ -430,7 +430,7 @@
     },
     "drep1yg343cyuckglj48a6gpcey7fkfcy5x5f9g65wme3ne9q2mgaedmkm": {
       "name": "Phil UPLC",
-      "stake": "87491857925270",
+      "stake": "87427662271089",
       "rank": 15,
       "totalVotes": 49,
       "withRationale": 15,
@@ -463,7 +463,7 @@
     },
     "drep1y2rtf58m0lv9spcqx5mads20gpfulf6l97w57ecdy00vjdq0klh4l": {
       "name": "Dumpling🥟",
-      "stake": "81186016361910",
+      "stake": "81769042303285",
       "rank": 16,
       "totalVotes": 62,
       "withRationale": 13,
@@ -496,7 +496,7 @@
     },
     "drep1y20fpc0f6qjl4edtl9cxzrvqzd8jkzr6ja7p0p2n7cxragqkurae3": {
       "name": "Peyton",
-      "stake": "79201428106983",
+      "stake": "79431959563599",
       "rank": 17,
       "totalVotes": 62,
       "withRationale": 4,
@@ -529,7 +529,7 @@
     },
     "drep1yfukpxsssua0tuqdpd9etnxtxc5t6cqrsyfmzmycxh92nhgksvnps": {
       "name": "drep1yfukpxsssua0tuq...",
-      "stake": "75346744195104",
+      "stake": "75348176089519",
       "rank": 18,
       "totalVotes": 13,
       "withRationale": 0,
@@ -545,46 +545,13 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 13,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.455Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.813Z",
       "cached": false
-    },
-    "drep1ytwmwvtd0a8lr45ssner2tjxzv5y8q03w3606yeald9mdmgmwecja": {
-      "name": "Martin Lang",
-      "stake": "73872840055064",
-      "rank": 19,
-      "totalVotes": 66,
-      "withRationale": 30,
-      "voteSpread": {
-        "yes": 54,
-        "no": 9,
-        "abstain": 3
-      },
-      "tendencySummary_en": "Martin Lang is a strong supporter of Cardano governance initiatives, voting affirmatively on 81.8% of proposals. He demonstrates pragmatic incrementalism, accepting imperfect but functional solutions (like the constitution) while requiring clear specifications on critical details (Net Change Limit definitions). His voting shows consistency with prior Ekklesia positions and careful analysis of technical and financial guardrails.",
-      "tendencySummary_ja": "Martin Langはカルダノのガバナンス提案の強力な支持者であり、提案の81.8%に肯定投票しています。彼は実用的な段階的改善を示し、不完全だが機能的なソリューション（憲法など）を受け入れながら、重要な詳細（Net Change Limitの定義）については明確な仕様を要求しています。彼の投票は過去のEkklesia投票との一貫性と技術的・財務的ガードレールの注意深い分析を示しています。",
-      "keyPositions_en": [
-        "Support constitutional governance with iterative improvements (V1, V2, V3 approach)",
-        "Favor technical optimization prioritizing CPU parallelization over multi-node over-development",
-        "Reduce treasury tax rate from 20% to 10% to incentivize spending discipline and delegator rewards",
-        "Require explicit definitions and guardrails for treasury withdrawal limits before approval",
-        "Oppose redundant treasury limit proposals that duplicate already-approved frameworks"
-      ],
-      "keyPositions_ja": [
-        "反復的改善を伴う憲法的ガバナンス（V1、V2、V3アプローチ）を支持",
-        "マルチノード過剰開発よりもCPU並列化を優先する技術最適化を支持",
-        "支出規律とデリゲーター報酬を促すため、財務省税率を20%から10%に削減",
-        "承認前に財務省引き出し制限の明示的な定義とガードレールを要求",
-        "既に承認されたフレームワークを重複する冗長な財務省制限提案に反対"
-      ],
-      "votingPattern_en": "Martin votes Yes on well-defined proposals with clear specifications and technical merit, votes No only when definitions lack clarity or create redundancy, and maintains consistency with his documented Ekklesia voting positions across governance actions.",
-      "votingPattern_ja": "Martinは明確な仕様と技術的メリットを持つよく定義された提案に投票し、定義が不明確または冗長性を生じる場合にのみNoに投票し、ガバナンスアクション全体で彼の文書化されたEkklesia投票立場との一貫性を維持します。",
-      "lastAnalyzedVoteCount": 66,
-      "lastAnalyzedAt": "2026-03-05T07:15:56.503Z",
-      "cached": true
     },
     "drep1yguh6dsgx0g58v8pqmxgfrkq0x8vfv6tcp92uzzjrykwy8cjmelsy": {
       "name": "Florian Volery",
-      "stake": "73850411667758",
-      "rank": 20,
+      "stake": "74015631359537",
+      "rank": 19,
       "totalVotes": 72,
       "withRationale": 26,
       "voteSpread": {
@@ -614,9 +581,42 @@
       "lastAnalyzedAt": "2026-03-05T07:16:04.846Z",
       "cached": true
     },
+    "drep1ytwmwvtd0a8lr45ssner2tjxzv5y8q03w3606yeald9mdmgmwecja": {
+      "name": "Martin Lang",
+      "stake": "73819136164658",
+      "rank": 20,
+      "totalVotes": 66,
+      "withRationale": 30,
+      "voteSpread": {
+        "yes": 54,
+        "no": 9,
+        "abstain": 3
+      },
+      "tendencySummary_en": "Martin Lang is a strong supporter of Cardano governance initiatives, voting affirmatively on 81.8% of proposals. He demonstrates pragmatic incrementalism, accepting imperfect but functional solutions (like the constitution) while requiring clear specifications on critical details (Net Change Limit definitions). His voting shows consistency with prior Ekklesia positions and careful analysis of technical and financial guardrails.",
+      "tendencySummary_ja": "Martin Langはカルダノのガバナンス提案の強力な支持者であり、提案の81.8%に肯定投票しています。彼は実用的な段階的改善を示し、不完全だが機能的なソリューション（憲法など）を受け入れながら、重要な詳細（Net Change Limitの定義）については明確な仕様を要求しています。彼の投票は過去のEkklesia投票との一貫性と技術的・財務的ガードレールの注意深い分析を示しています。",
+      "keyPositions_en": [
+        "Support constitutional governance with iterative improvements (V1, V2, V3 approach)",
+        "Favor technical optimization prioritizing CPU parallelization over multi-node over-development",
+        "Reduce treasury tax rate from 20% to 10% to incentivize spending discipline and delegator rewards",
+        "Require explicit definitions and guardrails for treasury withdrawal limits before approval",
+        "Oppose redundant treasury limit proposals that duplicate already-approved frameworks"
+      ],
+      "keyPositions_ja": [
+        "反復的改善を伴う憲法的ガバナンス（V1、V2、V3アプローチ）を支持",
+        "マルチノード過剰開発よりもCPU並列化を優先する技術最適化を支持",
+        "支出規律とデリゲーター報酬を促すため、財務省税率を20%から10%に削減",
+        "承認前に財務省引き出し制限の明示的な定義とガードレールを要求",
+        "既に承認されたフレームワークを重複する冗長な財務省制限提案に反対"
+      ],
+      "votingPattern_en": "Martin votes Yes on well-defined proposals with clear specifications and technical merit, votes No only when definitions lack clarity or create redundancy, and maintains consistency with his documented Ekklesia voting positions across governance actions.",
+      "votingPattern_ja": "Martinは明確な仕様と技術的メリットを持つよく定義された提案に投票し、定義が不明確または冗長性を生じる場合にのみNoに投票し、ガバナンスアクション全体で彼の文書化されたEkklesia投票立場との一貫性を維持します。",
+      "lastAnalyzedVoteCount": 66,
+      "lastAnalyzedAt": "2026-03-05T07:15:56.503Z",
+      "cached": true
+    },
     "drep1yftc8zs7gjcj4a9nxzplz4wg6cwweya0kxp8adnw59vsyrqvrysud": {
       "name": "Peter Bui",
-      "stake": "70989300695390",
+      "stake": "70992173405051",
       "rank": 21,
       "totalVotes": 59,
       "withRationale": 51,
@@ -649,7 +649,7 @@
     },
     "drep1ygs5hngva3hymv7j4v0aewxpsjqskj9dnmy7j3jz5ven5zqvulq2t": {
       "name": "Hermes Stakepool Germany (HRMS)",
-      "stake": "65710481741573",
+      "stake": "65726795008031",
       "rank": 22,
       "totalVotes": 64,
       "withRationale": 18,
@@ -682,7 +682,7 @@
     },
     "drep1ygsgfhcydhlfglamhzkjn97rz3edef8a4z99fwl2frcwnrcmgurt3": {
       "name": "Dave",
-      "stake": "61161018594631",
+      "stake": "61198502219072",
       "rank": 23,
       "totalVotes": 79,
       "withRationale": 74,
@@ -715,7 +715,7 @@
     },
     "drep1ygnh2uf4wkc8ldgfxwz7rzuga3m8jtqew9xh5g3n587mg6g3ge0sj": {
       "name": "drep1ygnh2uf4wkc8ldg...",
-      "stake": "58857346545768",
+      "stake": "58897639847741",
       "rank": 24,
       "totalVotes": 84,
       "withRationale": 77,
@@ -748,7 +748,7 @@
     },
     "drep1ytuddrgqca0xd4aams6pl9zndpcmxg0rs7z3mggjelm6kscp4arg5": {
       "name": "SASA_nagamaru_ながまる",
-      "stake": "58632165272364",
+      "stake": "58551800217331",
       "rank": 25,
       "totalVotes": 85,
       "withRationale": 75,
@@ -781,7 +781,7 @@
     },
     "drep1ygxasnzmrevqra9vscpsy4xf4rqthzkp6rr6zzft2lc7nscahj9r9": {
       "name": "Goofycrisp",
-      "stake": "53464201812734",
+      "stake": "53451400738456",
       "rank": 26,
       "totalVotes": 26,
       "withRationale": 8,
@@ -814,7 +814,7 @@
     },
     "drep1y2eu92qwy875nlslg3ahlh0hy5vhzpkrjay88ptvdp0z6cqm9h25x": {
       "name": "Tempo.Vote",
-      "stake": "49824091105927",
+      "stake": "50429687578628",
       "rank": 27,
       "totalVotes": 67,
       "withRationale": 27,
@@ -847,7 +847,7 @@
     },
     "drep1yts3qdjsqcnhld4r3uek2uu0n2tnh824tgnf75a83q3yhequuy54u": {
       "name": "AKYO",
-      "stake": "47172466701949",
+      "stake": "47170191320187",
       "rank": 28,
       "totalVotes": 84,
       "withRationale": 80,
@@ -880,7 +880,7 @@
     },
     "drep1yfemdmjmxr59kecgqnzd8d0ankkue4rdnn35c8qfsuljt9cjree5m": {
       "name": "PoolTool",
-      "stake": "47087295676792",
+      "stake": "47091561561978",
       "rank": 29,
       "totalVotes": 76,
       "withRationale": 0,
@@ -896,12 +896,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 76,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.547Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.909Z",
       "cached": false
     },
     "drep1yfe9en4hsgc3r6nhtmwjeljh06hgnvt9yzzkwqcftvdj34cdxdg7u": {
       "name": "AdaStat",
-      "stake": "44565654669607",
+      "stake": "44579385099584",
       "rank": 30,
       "totalVotes": 77,
       "withRationale": 75,
@@ -934,7 +934,7 @@
     },
     "drep1ytjz60rgwhkzfhrv5hkvn9dxcerpwadq2khqvhp5fqws3kqmemccf": {
       "name": "HISAI",
-      "stake": "42914329863955",
+      "stake": "42927570109607",
       "rank": 31,
       "totalVotes": 37,
       "withRationale": 0,
@@ -950,12 +950,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 37,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.564Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.927Z",
       "cached": false
     },
     "drep1yfaaaaa270yjt6tu5skndugekprf5ykv5jshanl0c6gqx5qpstskf": {
       "name": "Drep One",
-      "stake": "42416485813240",
+      "stake": "41881484521655",
       "rank": 32,
       "totalVotes": 48,
       "withRationale": 0,
@@ -971,12 +971,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 48,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.571Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.935Z",
       "cached": false
     },
     "drep1ygm9wxzrrdqpt0hek5kj7ys6tmsc8dycp7tkjwqxqrhjr6csq3s3t": {
       "name": "Patrick_Tobler",
-      "stake": "38602187999293",
+      "stake": "38524684210952",
       "rank": 33,
       "totalVotes": 78,
       "withRationale": 56,
@@ -1007,10 +1007,31 @@
       "lastAnalyzedAt": "2026-03-05T07:17:21.960Z",
       "cached": true
     },
+    "drep1ygxeadaklzz93n2tn9vnqz0fxapyv7ltel4d9808aeftl7gnxkszd": {
+      "name": "NEDSCAVE.IO",
+      "stake": "37943154414623",
+      "rank": 34,
+      "totalVotes": 38,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 30,
+        "no": 7,
+        "abstain": 1
+      },
+      "tendencySummary_en": "No voting rationales provided.",
+      "tendencySummary_ja": "投票根拠の提出なし。",
+      "keyPositions_en": [],
+      "keyPositions_ja": [],
+      "votingPattern_en": "Votes without providing rationale",
+      "votingPattern_ja": "根拠なしで投票",
+      "lastAnalyzedVoteCount": 38,
+      "lastAnalyzedAt": "2026-03-05T21:52:43.950Z",
+      "cached": false
+    },
     "drep1y2xacakh0g8q4exfgmvywy62an74cj7ejcpcrgq6vh4dckqhtsyh5": {
       "name": "Aichi/Tokai_DRep",
-      "stake": "37739391298690",
-      "rank": 34,
+      "stake": "37750673420911",
+      "rank": 35,
       "totalVotes": 74,
       "withRationale": 12,
       "voteSpread": {
@@ -1042,8 +1063,8 @@
     },
     "drep1yt6lgdpqjey286qwt287mnk7sdqh95avfmde42vq3mltjys75kg5k": {
       "name": "MUEN",
-      "stake": "37178895780926",
-      "rank": 35,
+      "stake": "37207238365023",
+      "rank": 36,
       "totalVotes": 85,
       "withRationale": 8,
       "voteSpread": {
@@ -1073,10 +1094,43 @@
       "lastAnalyzedAt": "2026-03-05T07:17:34.724Z",
       "cached": true
     },
+    "drep1yffcjs0njfea09xhs6up429rhya5pxd7qz7hvmwq6vqy2nczwpj3g": {
+      "name": "Big Lazy Cat",
+      "stake": "37203760700444",
+      "rank": 37,
+      "totalVotes": 79,
+      "withRationale": 23,
+      "voteSpread": {
+        "yes": 54,
+        "no": 11,
+        "abstain": 14
+      },
+      "tendencySummary_en": "Big Lazy Cat demonstrates a pragmatic, infrastructure-focused approach to governance, strongly supporting stablecoin integration, treasury efficiency improvements, and constitutional governance frameworks. The DRep favors evidence-based decision-making with quantifiable KPIs and milestone-based reporting, while being cautious about premature deployments in immature ecosystems like Hydra.",
+      "tendencySummary_ja": "Big Lazy Catは実用的でインフラ中心のガバナンスアプローチを示しており、ステーブルコイン統合、財務効率改善、および憲法的ガバナンスフレームワークを強く支持しています。このDRepは定量化可能なKPIとマイルストーンベースのレポーティングに基づいた意思決定を支持する一方で、Hydraのような成熟していないエコシステムでの時期尚早な展開に対して慎重です。",
+      "keyPositions_en": [
+        "Strongly supports native USDT/USDC stablecoin integration as critical infrastructure priority for Cardano DeFi",
+        "Advocates for quantifiable KPIs and strict milestone-based reporting to measure proposal impact",
+        "Favors governance efficiency improvements and treasury accountability measures with clear accountability frameworks",
+        "Cautious about funding immature technologies (Hydra, DeltaDeFi) until broader adoption is demonstrated",
+        "Supports loan-based treasury models and creative financial mechanisms for sustainable ecosystem growth"
+      ],
+      "keyPositions_ja": [
+        "CardanoのDeFiにとって重要なインフラとしてのネイティブUSDT/USDCステーブルコイン統合を強く支持",
+        "定量化可能なKPIと厳密なマイルストーンベースのレポーティングを支持して提案の影響を測定する",
+        "明確な説明責任フレームワークを備えたガバナンス効率改善と財務監督措置を支持",
+        "広範な採用が実証されるまで、成熟していないテクノロジー（Hydra、DeltaDeFi）への資金提供について慎重",
+        "持続可能なエコシステム成長のためのローンベースの財務モデルと創造的な財務メカニズムを支持"
+      ],
+      "votingPattern_en": "Big Lazy Cat votes affirmatively (68%) on infrastructure, governance efficiency, and strategic alignment proposals, but applies strict scrutiny to treasury expenditures by demanding quantifiable outcomes, mature technology readiness, and clear market demand before approving deployments.",
+      "votingPattern_ja": "Big Lazy Catはインフラ、ガバナンス効率、および戦略的整合性の提案に肯定的に投票する傾向（68%）を示しますが、定量化可能な成果、成熟したテクノロジーの準備状況、および配置前の明確な市場需要を要求することで、財務支出に厳密な精査を適用します。",
+      "lastAnalyzedVoteCount": 79,
+      "lastAnalyzedAt": "2026-03-05T07:18:10.477Z",
+      "cached": true
+    },
     "drep1yfu5d42qfu7e3euu4kkamcg3g3z2zn6sd674gkdww8ey63stlsrlt": {
       "name": "Linda - Cryptofly",
-      "stake": "36082643829307",
-      "rank": 36,
+      "stake": "36540368191358",
+      "rank": 38,
       "totalVotes": 70,
       "withRationale": 0,
       "voteSpread": {
@@ -1091,13 +1145,13 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 70,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.604Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:43.984Z",
       "cached": false
     },
     "drep1ygeqtuysjy9s3mw3ej7essghq9rk3cnl08fehntu4jw3rtqfw96dg": {
       "name": "FIMI",
-      "stake": "36044424456978",
-      "rank": 37,
+      "stake": "36122809799631",
+      "rank": 39,
       "totalVotes": 26,
       "withRationale": 1,
       "voteSpread": {
@@ -1127,8 +1181,8 @@
     },
     "drep1y25xtvu3d0gaf6cxktr9pkfgnywmqsh4fum93s8m3hlp4aqj3uqdp": {
       "name": "Chris-O",
-      "stake": "35969963415521",
-      "rank": 38,
+      "stake": "35902536811830",
+      "rank": 40,
       "totalVotes": 78,
       "withRationale": 7,
       "voteSpread": {
@@ -1158,31 +1212,10 @@
       "lastAnalyzedAt": "2026-03-05T07:17:46.873Z",
       "cached": true
     },
-    "drep1ygxeadaklzz93n2tn9vnqz0fxapyv7ltel4d9808aeftl7gnxkszd": {
-      "name": "NEDSCAVE.IO",
-      "stake": "35921711980871",
-      "rank": 39,
-      "totalVotes": 38,
-      "withRationale": 0,
-      "voteSpread": {
-        "yes": 30,
-        "no": 7,
-        "abstain": 1
-      },
-      "tendencySummary_en": "No voting rationales provided.",
-      "tendencySummary_ja": "投票根拠の提出なし。",
-      "keyPositions_en": [],
-      "keyPositions_ja": [],
-      "votingPattern_en": "Votes without providing rationale",
-      "votingPattern_ja": "根拠なしで投票",
-      "lastAnalyzedVoteCount": 38,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.626Z",
-      "cached": false
-    },
     "drep1ytzshxuma6cwrnlv2ucyclfqw3k4nu4nuudmh2z87j9hncsk9dhy4": {
       "name": "Kyle Solomon",
-      "stake": "35654085126748",
-      "rank": 40,
+      "stake": "35656711765631",
+      "rank": 41,
       "totalVotes": 75,
       "withRationale": 68,
       "voteSpread": {
@@ -1214,8 +1247,8 @@
     },
     "drep1ygtxcscvznhs2nqap9u8gtxa0dx0l6q5zhsqqlw46enwh8cttd07h": {
       "name": "TERA DRep",
-      "stake": "35591638127521",
-      "rank": 41,
+      "stake": "35618533562405",
+      "rank": 42,
       "totalVotes": 60,
       "withRationale": 0,
       "voteSpread": {
@@ -1230,13 +1263,13 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 60,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.644Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.017Z",
       "cached": false
     },
     "drep1ytcv4ax77s0enqef56qjflf4d8zjgxulukme9uf5p8cfaagysjppn": {
       "name": "Socious",
-      "stake": "33923414395687",
-      "rank": 42,
+      "stake": "33931967838992",
+      "rank": 43,
       "totalVotes": 79,
       "withRationale": 79,
       "voteSpread": {
@@ -1266,42 +1299,9 @@
       "lastAnalyzedAt": "2026-03-05T07:18:02.761Z",
       "cached": true
     },
-    "drep1yffcjs0njfea09xhs6up429rhya5pxd7qz7hvmwq6vqy2nczwpj3g": {
-      "name": "Big Lazy Cat",
-      "stake": "33356423924818",
-      "rank": 43,
-      "totalVotes": 79,
-      "withRationale": 23,
-      "voteSpread": {
-        "yes": 54,
-        "no": 11,
-        "abstain": 14
-      },
-      "tendencySummary_en": "Big Lazy Cat demonstrates a pragmatic, infrastructure-focused approach to governance, strongly supporting stablecoin integration, treasury efficiency improvements, and constitutional governance frameworks. The DRep favors evidence-based decision-making with quantifiable KPIs and milestone-based reporting, while being cautious about premature deployments in immature ecosystems like Hydra.",
-      "tendencySummary_ja": "Big Lazy Catは実用的でインフラ中心のガバナンスアプローチを示しており、ステーブルコイン統合、財務効率改善、および憲法的ガバナンスフレームワークを強く支持しています。このDRepは定量化可能なKPIとマイルストーンベースのレポーティングに基づいた意思決定を支持する一方で、Hydraのような成熟していないエコシステムでの時期尚早な展開に対して慎重です。",
-      "keyPositions_en": [
-        "Strongly supports native USDT/USDC stablecoin integration as critical infrastructure priority for Cardano DeFi",
-        "Advocates for quantifiable KPIs and strict milestone-based reporting to measure proposal impact",
-        "Favors governance efficiency improvements and treasury accountability measures with clear accountability frameworks",
-        "Cautious about funding immature technologies (Hydra, DeltaDeFi) until broader adoption is demonstrated",
-        "Supports loan-based treasury models and creative financial mechanisms for sustainable ecosystem growth"
-      ],
-      "keyPositions_ja": [
-        "CardanoのDeFiにとって重要なインフラとしてのネイティブUSDT/USDCステーブルコイン統合を強く支持",
-        "定量化可能なKPIと厳密なマイルストーンベースのレポーティングを支持して提案の影響を測定する",
-        "明確な説明責任フレームワークを備えたガバナンス効率改善と財務監督措置を支持",
-        "広範な採用が実証されるまで、成熟していないテクノロジー（Hydra、DeltaDeFi）への資金提供について慎重",
-        "持続可能なエコシステム成長のためのローンベースの財務モデルと創造的な財務メカニズムを支持"
-      ],
-      "votingPattern_en": "Big Lazy Cat votes affirmatively (68%) on infrastructure, governance efficiency, and strategic alignment proposals, but applies strict scrutiny to treasury expenditures by demanding quantifiable outcomes, mature technology readiness, and clear market demand before approving deployments.",
-      "votingPattern_ja": "Big Lazy Catはインフラ、ガバナンス効率、および戦略的整合性の提案に肯定的に投票する傾向（68%）を示しますが、定量化可能な成果、成熟したテクノロジーの準備状況、および配置前の明確な市場需要を要求することで、財務支出に厳密な精査を適用します。",
-      "lastAnalyzedVoteCount": 79,
-      "lastAnalyzedAt": "2026-03-05T07:18:10.477Z",
-      "cached": true
-    },
     "drep1yf2jzhuc4f7eu2yay9d9ta3dykxxcwn34wz8kak7nhd7vcgrxn7ns": {
       "name": "HOSKY",
-      "stake": "32676164048636",
+      "stake": "32467562736992",
       "rank": 44,
       "totalVotes": 74,
       "withRationale": 69,
@@ -1334,7 +1334,7 @@
     },
     "drep1ygj6hupsan57ujlv6l0vw9naxzt5753uhpe79nluymqzlcq7fe4vs": {
       "name": "ranket",
-      "stake": "30950795302382",
+      "stake": "30970178183301",
       "rank": 45,
       "totalVotes": 79,
       "withRationale": 0,
@@ -1350,12 +1350,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 79,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.684Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.051Z",
       "cached": false
     },
     "drep1yggcntj7vdc2l3j05w0ep84ay8qjz0fnrse6rl8gccd9fsqadw3qg": {
       "name": "WaffleCapital",
-      "stake": "30844392178466",
+      "stake": "30854136201028",
       "rank": 46,
       "totalVotes": 58,
       "withRationale": 2,
@@ -1386,7 +1386,7 @@
     },
     "drep1yglrf4el8gghum239fggvfrau25k2576y4dvcz65r2ukj8sqpsc2k": {
       "name": "Cerkoryn",
-      "stake": "24644631706301",
+      "stake": "24662148379266",
       "rank": 47,
       "totalVotes": 76,
       "withRationale": 76,
@@ -1419,7 +1419,7 @@
     },
     "drep1yfa8r8r36x7x05htftce7qhafrn5nzzr6vazy95pzy6y5dqac0ss7": {
       "name": "wolf31o2 (Chris Gianelloni)",
-      "stake": "23508481817034",
+      "stake": "23521241752068",
       "rank": 48,
       "totalVotes": 74,
       "withRationale": 19,
@@ -1450,10 +1450,31 @@
       "lastAnalyzedAt": "2026-03-05T07:18:38.470Z",
       "cached": true
     },
+    "drep1y2wlkylx89hjqkhcejtap8sdwyfpjlf72dmuzqfe9rxlchc4g3xse": {
+      "name": "ADA Ocean",
+      "stake": "23287120716999",
+      "rank": 49,
+      "totalVotes": 22,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 17,
+        "no": 3,
+        "abstain": 2
+      },
+      "tendencySummary_en": "No voting rationales provided.",
+      "tendencySummary_ja": "投票根拠の提出なし。",
+      "keyPositions_en": [],
+      "keyPositions_ja": [],
+      "votingPattern_en": "Votes without providing rationale",
+      "votingPattern_ja": "根拠なしで投票",
+      "lastAnalyzedVoteCount": 22,
+      "lastAnalyzedAt": "2026-03-05T21:52:44.084Z",
+      "cached": false
+    },
     "drep1ytfnmf4uftt4fe0h63xhadl0v402gr6nnhtcgrq2sas26kgaf3n5y": {
       "name": "drep1ytfnmf4uftt4fe0...",
-      "stake": "23415194072304",
-      "rank": 49,
+      "stake": "22996658327359",
+      "rank": 50,
       "totalVotes": 84,
       "withRationale": 1,
       "voteSpread": {
@@ -1483,30 +1504,9 @@
       "lastAnalyzedAt": "2026-03-05T07:18:43.931Z",
       "cached": true
     },
-    "drep1y2wlkylx89hjqkhcejtap8sdwyfpjlf72dmuzqfe9rxlchc4g3xse": {
-      "name": "ADA Ocean",
-      "stake": "23275290592436",
-      "rank": 50,
-      "totalVotes": 22,
-      "withRationale": 0,
-      "voteSpread": {
-        "yes": 17,
-        "no": 3,
-        "abstain": 2
-      },
-      "tendencySummary_en": "No voting rationales provided.",
-      "tendencySummary_ja": "投票根拠の提出なし。",
-      "keyPositions_en": [],
-      "keyPositions_ja": [],
-      "votingPattern_en": "Votes without providing rationale",
-      "votingPattern_ja": "根拠なしで投票",
-      "lastAnalyzedVoteCount": 22,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.723Z",
-      "cached": false
-    },
     "drep1ygnypzfv2v8fmfelthahvn0rqyh54sf6z2aa5m7f3fkjgqqt8l2qq": {
       "name": "Blockjock (James Meidinger)",
-      "stake": "22234975532029",
+      "stake": "22254397321152",
       "rank": 51,
       "totalVotes": 40,
       "withRationale": 22,
@@ -1539,7 +1539,7 @@
     },
     "drep1ytu64qt7send5dw7wcd0z5geh4ka6qstgvtgval097hed7qqnqh2n": {
       "name": "phillerino",
-      "stake": "21287913967211",
+      "stake": "21311018826125",
       "rank": 52,
       "totalVotes": 53,
       "withRationale": 3,
@@ -1570,43 +1570,10 @@
       "lastAnalyzedAt": "2026-03-05T07:18:58.611Z",
       "cached": true
     },
-    "drep1yfjez5zup0gystdvc933w2mn8k64hcy3krvc2namluwjxdcfhm8wd": {
-      "name": "SIDAN Lab",
-      "stake": "21244043097504",
-      "rank": 53,
-      "totalVotes": 42,
-      "withRationale": 23,
-      "voteSpread": {
-        "yes": 24,
-        "no": 13,
-        "abstain": 5
-      },
-      "tendencySummary_en": "SIDAN Lab demonstrates a fiscally conservative yet pragmatic approach to governance, prioritizing treasury discipline and transparent oversight while supporting strategic ecosystem infrastructure investments. They actively engage with proposals, willing to change positions based on community dialogue and improved implementation details, but remain cautious about large bundled spending and prefer measured governance evolution.",
-      "tendencySummary_ja": "SIDAN Labは財政的に保守的でありながら実用的なガバナンスアプローチを示しており、財務規律と透明性のある監督を優先しながら戦略的なエコシステムインフラ投資をサポートしています。プロポーザルに積極的に関与し、コミュニティ対話と改善された実装の詳細に基づいて立場を変える意思がありますが、大規模な統合支出と過度な計算制限緩和に対しては慎重です。",
-      "keyPositions_en": [
-        "Support infrastructure resilience through alternative node implementations in modern languages (Rust)",
-        "Favor measured treasury spending caps (200M-300M ADA) over aggressive spending to build governance trust",
-        "Require transparent governance processes with clear metrics, accountability mechanisms, and fund repayment terms",
-        "Oppose large bundled proposals that limit DRep discretion and obscure individual project merits",
-        "Support ecosystem growth initiatives with proven community engagement and strategic visibility (Token 2049, stablecoin liquidity)"
-      ],
-      "keyPositions_ja": [
-        "モダン言語（Rust）での代替ノード実装を通じたインフラの耐性強化をサポート",
-        "ガバナンス信頼構築のため、積極的支出よりも測定された財務上限（200M～300M ADA）を支持",
-        "明確なメトリクス、説明責任メカニズム、資金返済条件を備えた透明なガバナンスプロセスを要求",
-        "DRep裁量権を制限し個別プロジェクトの長所を不明瞭にする大規模統合提案に反対",
-        "実証されたコミュニティ関与と戦略的可視性（Token 2049、ステーブルコイン流動性）を持つエコシステム成長イニシアティブをサポート"
-      ],
-      "votingPattern_en": "SIDAN Lab votes affirmatively on strategic infrastructure, ecosystem incentives, and transparent funding proposals, but votes negatively or abstains on bundled budgets lacking clarity, premature multi-year governance locks, and proposals without proven repayment models or unclear authorship.",
-      "votingPattern_ja": "SIDAN Labは戦略的インフラ、エコシステムインセンティブ、透明性のある資金提案に肯定的に投票しますが、明確さを欠く統合予算、時期尚早な複数年ガバナンス制限、実証された返済モデルがないか著者不明のプロポーザルに対しては否定的に投票するか棄権します。",
-      "lastAnalyzedVoteCount": 42,
-      "lastAnalyzedAt": "2026-03-05T07:19:07.296Z",
-      "cached": true
-    },
     "drep1y2zu74gt8sxtrxcngqsmrnupkzrtmlqshmvmm5qtuhxx6xqt7yhaw": {
       "name": "Hephaestus Stake Pool [HEPHY]",
-      "stake": "21203173404822",
-      "rank": 54,
+      "stake": "21211081259812",
+      "rank": 53,
       "totalVotes": 83,
       "withRationale": 80,
       "voteSpread": {
@@ -1636,9 +1603,42 @@
       "lastAnalyzedAt": "2026-03-05T07:19:15.117Z",
       "cached": true
     },
+    "drep1yfjez5zup0gystdvc933w2mn8k64hcy3krvc2namluwjxdcfhm8wd": {
+      "name": "SIDAN Lab",
+      "stake": "21196550993791",
+      "rank": 54,
+      "totalVotes": 42,
+      "withRationale": 23,
+      "voteSpread": {
+        "yes": 24,
+        "no": 13,
+        "abstain": 5
+      },
+      "tendencySummary_en": "SIDAN Lab demonstrates a fiscally conservative yet pragmatic approach to governance, prioritizing treasury discipline and transparent oversight while supporting strategic ecosystem infrastructure investments. They actively engage with proposals, willing to change positions based on community dialogue and improved implementation details, but remain cautious about large bundled spending and prefer measured governance evolution.",
+      "tendencySummary_ja": "SIDAN Labは財政的に保守的でありながら実用的なガバナンスアプローチを示しており、財務規律と透明性のある監督を優先しながら戦略的なエコシステムインフラ投資をサポートしています。プロポーザルに積極的に関与し、コミュニティ対話と改善された実装の詳細に基づいて立場を変える意思がありますが、大規模な統合支出と過度な計算制限緩和に対しては慎重です。",
+      "keyPositions_en": [
+        "Support infrastructure resilience through alternative node implementations in modern languages (Rust)",
+        "Favor measured treasury spending caps (200M-300M ADA) over aggressive spending to build governance trust",
+        "Require transparent governance processes with clear metrics, accountability mechanisms, and fund repayment terms",
+        "Oppose large bundled proposals that limit DRep discretion and obscure individual project merits",
+        "Support ecosystem growth initiatives with proven community engagement and strategic visibility (Token 2049, stablecoin liquidity)"
+      ],
+      "keyPositions_ja": [
+        "モダン言語（Rust）での代替ノード実装を通じたインフラの耐性強化をサポート",
+        "ガバナンス信頼構築のため、積極的支出よりも測定された財務上限（200M～300M ADA）を支持",
+        "明確なメトリクス、説明責任メカニズム、資金返済条件を備えた透明なガバナンスプロセスを要求",
+        "DRep裁量権を制限し個別プロジェクトの長所を不明瞭にする大規模統合提案に反対",
+        "実証されたコミュニティ関与と戦略的可視性（Token 2049、ステーブルコイン流動性）を持つエコシステム成長イニシアティブをサポート"
+      ],
+      "votingPattern_en": "SIDAN Lab votes affirmatively on strategic infrastructure, ecosystem incentives, and transparent funding proposals, but votes negatively or abstains on bundled budgets lacking clarity, premature multi-year governance locks, and proposals without proven repayment models or unclear authorship.",
+      "votingPattern_ja": "SIDAN Labは戦略的インフラ、エコシステムインセンティブ、透明性のある資金提案に肯定的に投票しますが、明確さを欠く統合予算、時期尚早な複数年ガバナンス制限、実証された返済モデルがないか著者不明のプロポーザルに対しては否定的に投票するか棄権します。",
+      "lastAnalyzedVoteCount": 42,
+      "lastAnalyzedAt": "2026-03-05T07:19:07.296Z",
+      "cached": true
+    },
     "drep1y2z8gktqj27kwmmxesd0y484f7p4z9tjf5xu8m4sucstm3gvtywlp": {
       "name": "Ha-Nguyen",
-      "stake": "21186839002239",
+      "stake": "21187180919637",
       "rank": 55,
       "totalVotes": 69,
       "withRationale": 39,
@@ -1671,7 +1671,7 @@
     },
     "drep1yv4uesaj92wk8ljlsh4p7jzndnzrflchaz5fzug3zxg4naqkpeas3": {
       "name": "drep1yv4uesaj92wk8lj...",
-      "stake": "21041656214209",
+      "stake": "21124739889403",
       "rank": 56,
       "totalVotes": 29,
       "withRationale": 0,
@@ -1687,12 +1687,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 29,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.770Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.143Z",
       "cached": false
     },
     "drep1yt0cvg2649d34afclefrxvyn2ctys87a5jt84ckczyjlvgcu7nxyr": {
       "name": "drep1yt0cvg2649d34af...",
-      "stake": "19561575795953",
+      "stake": "19545301142815",
       "rank": 57,
       "totalVotes": 31,
       "withRationale": 16,
@@ -1725,7 +1725,7 @@
     },
     "drep1yfp4qmp849250svle8gw2m5jwjra86e76q8vz97wp998feg9mx9c5": {
       "name": "Moonstake",
-      "stake": "19154771708764",
+      "stake": "19165438863155",
       "rank": 58,
       "totalVotes": 83,
       "withRationale": 0,
@@ -1741,12 +1741,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 83,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.784Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.158Z",
       "cached": false
     },
     "drep1y24xr6m4mkgl7e7886sk3wee7h73mcreysyvhrwzksy5ajqrv0rrv": {
       "name": "CTEC-Stake-Pool",
-      "stake": "18822171414241",
+      "stake": "18831644037968",
       "rank": 59,
       "totalVotes": 83,
       "withRationale": 0,
@@ -1762,12 +1762,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 83,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.792Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.168Z",
       "cached": false
     },
     "drep1y27qjjnz9a7q6zmvpajzqpqylnka6lpkvcm9sgjrdheqt0qq6pchw": {
       "name": "Chris [STR8] - Straightpool",
-      "stake": "18456230952583",
+      "stake": "18471866523873",
       "rank": 60,
       "totalVotes": 51,
       "withRationale": 38,
@@ -1800,7 +1800,7 @@
     },
     "drep1yteh8udkttzy7frwl6yj5wzyqc04kx65pwwrqefx9j52ymgr6kuak": {
       "name": "Dori",
-      "stake": "18197955578177",
+      "stake": "18225926208252",
       "rank": 61,
       "totalVotes": 30,
       "withRationale": 1,
@@ -1833,7 +1833,7 @@
     },
     "drep1ytaunswwpytxjk2ja7c5suxrjz57vtq4ryzu7prkxmm4wdqs7c9wn": {
       "name": "MiyatakeJapan",
-      "stake": "16976180843058",
+      "stake": "16981427665704",
       "rank": 62,
       "totalVotes": 70,
       "withRationale": 4,
@@ -1866,7 +1866,7 @@
     },
     "drep1y2j2q9pcl855969ea9csrhdta6slnamctgzuvuqnnkl6fusqyjy36": {
       "name": "Rodrigo-[CHIL]",
-      "stake": "16788537254223",
+      "stake": "16955452111517",
       "rank": 63,
       "totalVotes": 86,
       "withRationale": 31,
@@ -1899,7 +1899,7 @@
     },
     "drep1yfh3y46ffal6gyuf42e26urg5yyjecrgu2qyaj6zr8amk2sx3yn8g": {
       "name": "LateGameCrypto",
-      "stake": "16420246209202",
+      "stake": "16428982350691",
       "rank": 64,
       "totalVotes": 23,
       "withRationale": 7,
@@ -1932,7 +1932,7 @@
     },
     "drep1ygs99wsy49h9vydggncfeck2xwmngyeltp66pvgzl6jz63s6qmu3p": {
       "name": "DraculaDAO",
-      "stake": "16294058593615",
+      "stake": "16296769912326",
       "rank": 65,
       "totalVotes": 80,
       "withRationale": 47,
@@ -1965,7 +1965,7 @@
     },
     "drep1yf7kjx5rlyuyzxkr4dzyccdfs8tesh29amrtcpyplu3asnqjgmdz3": {
       "name": "RCADA",
-      "stake": "16032726632846",
+      "stake": "16038708240458",
       "rank": 66,
       "totalVotes": 48,
       "withRationale": 47,
@@ -1998,7 +1998,7 @@
     },
     "drep1ytf9f78k7rkwk4cu6l2nvna22keu9yus4kqzc0hqspd36uszu0xc2": {
       "name": "Terminada",
-      "stake": "16003465145074",
+      "stake": "15992888427948",
       "rank": 67,
       "totalVotes": 62,
       "withRationale": 34,
@@ -2031,7 +2031,7 @@
     },
     "drep1yfew9k09hzz0wk49yynlpz7ywx57vux5plqdxgyluvs6qksc6gtzk": {
       "name": "Richard Irving",
-      "stake": "14502782111205",
+      "stake": "14507517513475",
       "rank": 68,
       "totalVotes": 0,
       "withRationale": 0,
@@ -2047,12 +2047,12 @@
       "votingPattern_en": "Has not voted",
       "votingPattern_ja": "未投票",
       "lastAnalyzedVoteCount": 0,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.860Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.239Z",
       "cached": false
     },
     "drep1ytrqcqg4qh35nwed29nzatke8jemsyelyhdencdc4hx5y0qh3adwe": {
       "name": "忠実",
-      "stake": "13952738288261",
+      "stake": "13957962797471",
       "rank": 69,
       "totalVotes": 62,
       "withRationale": 0,
@@ -2068,12 +2068,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 62,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.867Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.249Z",
       "cached": false
     },
     "drep1y2jnqfamg4tq5aepxhggzhqg7pq5gunph4wypkyh9q3qt2cru5m2j": {
       "name": "Wada DRep",
-      "stake": "13807195624753",
+      "stake": "13812181911063",
       "rank": 70,
       "totalVotes": 80,
       "withRationale": 79,
@@ -2106,7 +2106,7 @@
     },
     "drep1ytr0t0sxfl7qf99zd8x9dam8c0mqkemrtuekh4hekpd8fpqty2h5n": {
       "name": "Smaug",
-      "stake": "12992971473937",
+      "stake": "12998656420433",
       "rank": 71,
       "totalVotes": 73,
       "withRationale": 2,
@@ -2139,7 +2139,7 @@
     },
     "drep1y2v2ncht76apatlnxgtz8h8zy943avf7padqkkvycmzmcpcre7fek": {
       "name": "concon",
-      "stake": "12278463439613",
+      "stake": "12272347702178",
       "rank": 72,
       "totalVotes": 82,
       "withRationale": 0,
@@ -2155,12 +2155,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 82,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.890Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.273Z",
       "cached": false
     },
     "drep1ygzp8678j5q8s8syhk4a7a4tr54sp3su8fxzzdjhuxcn4tc6r2qcn": {
       "name": "AQUA_Vote",
-      "stake": "12146902566288",
+      "stake": "12150973450785",
       "rank": 73,
       "totalVotes": 16,
       "withRationale": 1,
@@ -2193,7 +2193,7 @@
     },
     "drep1ygt7jr22s8fc36hnamgfzqtecuz2ppsj6jr5k0e8gp2pv7qw8ehel": {
       "name": "OREKA_Vote",
-      "stake": "11739567255119",
+      "stake": "11743678438540",
       "rank": 74,
       "totalVotes": 17,
       "withRationale": 1,
@@ -2226,7 +2226,7 @@
     },
     "drep1y2sld9e4nmasqfpusd5e67rwczj4l20d3653jgs38r4mams52y4jx": {
       "name": "π Lanningham",
-      "stake": "11305975173408",
+      "stake": "11250558946869",
       "rank": 75,
       "totalVotes": 16,
       "withRationale": 16,
@@ -2259,7 +2259,7 @@
     },
     "drep1y2k8uedxj5xzymxxzf07plg0t5xd4mmckwg9lwkwhdlwyesy0eyf8": {
       "name": "Holger",
-      "stake": "11185029316406",
+      "stake": "11220136543166",
       "rank": 76,
       "totalVotes": 13,
       "withRationale": 0,
@@ -2275,12 +2275,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 13,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.920Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.306Z",
       "cached": false
     },
     "drep1yt5cc878w5c8umxrfudnmzw425epxnvvttw7hhrhwfhp0zqf400ze": {
       "name": "Paul Ko",
-      "stake": "11016004121121",
+      "stake": "11021745381508",
       "rank": 77,
       "totalVotes": 70,
       "withRationale": 0,
@@ -2296,12 +2296,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 70,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.927Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.313Z",
       "cached": false
     },
     "drep1yfk27rp5ae0ggmdx09k6k00ctnc5249s2pm49xmv2d60hrc9pm404": {
       "name": "STP",
-      "stake": "10993409345056",
+      "stake": "10995449373396",
       "rank": 78,
       "totalVotes": 11,
       "withRationale": 0,
@@ -2317,12 +2317,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 11,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.934Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.324Z",
       "cached": false
     },
     "drep1ythpg7cjugjv0uq5eclcuucln3ve4xu8aj23lwhk9dmj0wslug6qh": {
       "name": "Clean_Eyes",
-      "stake": "10098878567288",
+      "stake": "10102058274437",
       "rank": 79,
       "totalVotes": 1,
       "withRationale": 0,
@@ -2338,12 +2338,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 1,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.941Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.332Z",
       "cached": false
     },
     "drep1yt37s3z3ddzmzug9mujxy5c0patgetmjv6fhf3he4nmnv2ga3nad2": {
       "name": "pammariko",
-      "stake": "9565009267894",
+      "stake": "9567418925585",
       "rank": 80,
       "totalVotes": 82,
       "withRationale": 0,
@@ -2359,12 +2359,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 82,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.950Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.339Z",
       "cached": false
     },
     "drep1y2fhyudw8ju53e296c3yugvul6h3fpurhnx45lfa9e5meqgtky0gg": {
       "name": "KTOP",
-      "stake": "8680765894481",
+      "stake": "8674835739617",
       "rank": 81,
       "totalVotes": 80,
       "withRationale": 2,
@@ -2395,7 +2395,7 @@
     },
     "drep1yt4lyf0fwlrz8k6j5evd3rxw0sqp67qkh36su98a97q3qsc0h03y4": {
       "name": "Cardanians",
-      "stake": "8167181914687",
+      "stake": "8050254166127",
       "rank": 82,
       "totalVotes": 71,
       "withRationale": 51,
@@ -2428,7 +2428,7 @@
     },
     "drep1y2pyv5v96qle0xp35fhlv2wwjudx8y2e0dcpvktj2xfr8ugdnlh4q": {
       "name": "drep1y2pyv5v96qle0xp...",
-      "stake": "8019683909841",
+      "stake": "8022026380940",
       "rank": 83,
       "totalVotes": 5,
       "withRationale": 0,
@@ -2444,12 +2444,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 5,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.972Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.365Z",
       "cached": false
     },
     "drep1ytq64jdk5fequ0228znae33d3ncs50ujl7qev0uqlx37l8cpjhc2k": {
       "name": "ATLAS_Wolfgang",
-      "stake": "7884495160270",
+      "stake": "7887801517641",
       "rank": 84,
       "totalVotes": 14,
       "withRationale": 0,
@@ -2465,12 +2465,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 14,
-      "lastAnalyzedAt": "2026-03-05T20:55:16.979Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.372Z",
       "cached": false
     },
     "drep1y2hlgh9600zjlt39dh54z7z8d65kahneck8yhh7ugmzc9as0xrzqd": {
       "name": "InputEndorsers",
-      "stake": "7740395966687",
+      "stake": "7716364043912",
       "rank": 85,
       "totalVotes": 86,
       "withRationale": 84,
@@ -2503,7 +2503,7 @@
     },
     "drep1yfpazkd0aqex0kd3vrhk47sjy0jqgq3xu6h2zv9wevfequcxyynwv": {
       "name": "PRIDE",
-      "stake": "7340176303839",
+      "stake": "7396195467221",
       "rank": 86,
       "totalVotes": 66,
       "withRationale": 1,
@@ -2536,7 +2536,7 @@
     },
     "drep1yfdfs28uwafjgmrkatdektlzrvha2cmvqjhuz700e04mawq23rmrg": {
       "name": "drep1yfdfs28uwafjgmr...",
-      "stake": "7098067809311",
+      "stake": "7100746441946",
       "rank": 87,
       "totalVotes": 85,
       "withRationale": 74,
@@ -2569,7 +2569,7 @@
     },
     "drep1y2jd3c4hgg0tdua58z6c64k9rf58lz3jlcjlxcjfeaspl6q2e9zm6": {
       "name": "drep1y2jd3c4hgg0tdua...",
-      "stake": "6710379535097",
+      "stake": "6706315138889",
       "rank": 88,
       "totalVotes": 27,
       "withRationale": 26,
@@ -2602,7 +2602,7 @@
     },
     "drep1ytw5tvdxpe39l9gm3g49gl0whwd2dgu4mcf5ml5z3zfuk3s8npegv": {
       "name": "drep1ytw5tvdxpe39l9g...",
-      "stake": "6621882676840",
+      "stake": "6624129547926",
       "rank": 89,
       "totalVotes": 11,
       "withRationale": 7,
@@ -2635,7 +2635,7 @@
     },
     "drep1y2urcg66ytnvt5tv7kv4saemu83hnuk9rydhh0tmem96mac3ltuaf": {
       "name": "drep1y2urcg66ytnvt5t...",
-      "stake": "6375045448060",
+      "stake": "6377020394079",
       "rank": 90,
       "totalVotes": 1,
       "withRationale": 0,
@@ -2651,12 +2651,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 1,
-      "lastAnalyzedAt": "2026-03-05T20:55:17.026Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.421Z",
       "cached": false
     },
     "drep1ytnyqac848el309ynepkh9auljjt75za9fj2wzzu4gl0wecgwhxy5": {
       "name": "drep1ytnyqac848el309...",
-      "stake": "6292988821352",
+      "stake": "6290749452326",
       "rank": 91,
       "totalVotes": 0,
       "withRationale": 0,
@@ -2672,12 +2672,12 @@
       "votingPattern_en": "Has not voted",
       "votingPattern_ja": "未投票",
       "lastAnalyzedVoteCount": 0,
-      "lastAnalyzedAt": "2026-03-05T20:55:17.033Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.428Z",
       "cached": false
     },
     "drep1y24zgz7nnyfuefgy8d0qhg2w0av26zp5lq6vk0eg2l7vk8qp7g8e9": {
       "name": "Shota",
-      "stake": "6067520602147",
+      "stake": "6073226650614",
       "rank": 92,
       "totalVotes": 10,
       "withRationale": 0,
@@ -2693,12 +2693,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 10,
-      "lastAnalyzedAt": "2026-03-05T20:55:17.041Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.438Z",
       "cached": false
     },
     "drep1ytae7wj5s8pu8qry9vfcnqy97w68z96lffzwzrc4verpkfqsl8e8m": {
       "name": "stakit (sti) by TOBG",
-      "stake": "5913855257567",
+      "stake": "5905145745349",
       "rank": 93,
       "totalVotes": 2,
       "withRationale": 0,
@@ -2714,12 +2714,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 2,
-      "lastAnalyzedAt": "2026-03-05T20:55:17.048Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.446Z",
       "cached": false
     },
     "drep1y26sfka2km0p4xw073ujdq406wxxczhdyfh9vw7yxpfselchzkdjn": {
       "name": "YOADA",
-      "stake": "5856449078252",
+      "stake": "5853146445764",
       "rank": 94,
       "totalVotes": 85,
       "withRationale": 6,
@@ -2752,7 +2752,7 @@
     },
     "drep1y28uwdrz2acyp4jka5fqp2fa3hp0klpme8wug3f5p2y45zsc0e8qw": {
       "name": "Daehan_kor",
-      "stake": "5622505512266",
+      "stake": "5623857662410",
       "rank": 95,
       "totalVotes": 61,
       "withRationale": 38,
@@ -2785,7 +2785,7 @@
     },
     "drep1yf0s5guxklwlqn7ttdpfwmmkaucwaqkkm6hzncy8nful5fgemurcj": {
       "name": "STORM Partners",
-      "stake": "5480692715870",
+      "stake": "5481948049037",
       "rank": 96,
       "totalVotes": 66,
       "withRationale": 62,
@@ -2818,7 +2818,7 @@
     },
     "drep1ygc29nv90qqtf7qwlp5eqwnscdmvk5utnul9arfm9eklw9cphfhhu": {
       "name": "Kostas Panagias",
-      "stake": "5407991940362",
+      "stake": "5409387546099",
       "rank": 97,
       "totalVotes": 80,
       "withRationale": 78,
@@ -2851,7 +2851,7 @@
     },
     "drep1y25rvalxnc4p8fghxcwkz0l6gdseqduqvrdzh5pzdprrvnczj0ucx": {
       "name": "ONYX AI DRep",
-      "stake": "5213506981696",
+      "stake": "5213148833629",
       "rank": 98,
       "totalVotes": 67,
       "withRationale": 0,
@@ -2867,12 +2867,12 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 67,
-      "lastAnalyzedAt": "2026-03-05T20:55:17.085Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.485Z",
       "cached": false
     },
     "drep1ytfas4axhm8yzrqqh4ru2uuqesu87zeq6fwg5pq8azqf7ecu4nu8s": {
       "name": "Peter Horsfall",
-      "stake": "5151752499686",
+      "stake": "5157161891571",
       "rank": 99,
       "totalVotes": 74,
       "withRationale": 22,
@@ -2905,7 +2905,7 @@
     },
     "drep1yffymrag4k6jn7cqpdhryhtcm0czrkc6h9c3w85ynydc8js0vhlta": {
       "name": "dRep_Voshe",
-      "stake": "5040869918004",
+      "stake": "5042415292075",
       "rank": 100,
       "totalVotes": 7,
       "withRationale": 0,
@@ -2921,7 +2921,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 7,
-      "lastAnalyzedAt": "2026-03-05T20:55:17.102Z",
+      "lastAnalyzedAt": "2026-03-05T21:52:44.500Z",
       "cached": false
     }
   }
