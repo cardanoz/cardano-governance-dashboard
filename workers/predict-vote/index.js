@@ -71,17 +71,20 @@ export default {
       const tendencies = await tendenciesRes.json();
 
       // Select top 30 DReps by stake for prediction
-      const topDreps = (tendencies.dreps || [])
+      // dreps can be an object keyed by drepId or an array
+      const drepsRaw = tendencies.dreps || {};
+      const drepsArray = Array.isArray(drepsRaw)
+        ? drepsRaw
+        : Object.entries(drepsRaw).map(([id, d]) => ({ ...d, drepId: id }));
+      const topDreps = drepsArray
         .sort((a, b) => (b.stake || 0) - (a.stake || 0))
-        .slice(0, 30);
+        .slice(0, 15);
 
       const drepContext = topDreps.map(d => {
         const name = d.name || d.drepId?.slice(0, 12) || "Unknown";
-        const tEN = d.tendencySummary_en || d.tendencySummary || "";
-        const tJA = d.tendencySummary_ja || d.tendencySummary || "";
-        const vp = d.votingPattern_en || d.votingPattern || "";
-        const kp = (d.keyPositions_en || d.keyPositions || []).join("; ");
-        return `- ${name} (₳${Math.round((d.stake||0)/1e6)}M): ${tEN} | Pattern: ${vp} | Positions: ${kp}`;
+        const tEN = (d.tendencySummary_en || d.tendencySummary || "").slice(0, 150);
+        const vp = (d.votingPattern_en || d.votingPattern || "").slice(0, 100);
+        return `- ${name} (₳${Math.round((d.stake||0)/1e6)}M): ${tEN} | ${vp}`;
       }).join("\n");
 
       // Build Claude prompt
@@ -92,11 +95,11 @@ Type: ${actionType || "Unknown"}
 Content:
 ${text.slice(0, 3000)}
 
-## DRep Tendencies (Top 30 by voting power)
+## DRep Tendencies (Top 15 by voting power)
 ${drepContext}
 
 ## Instructions
-For each DRep above, predict their vote (Yes/No/Abstain) with a confidence percentage (0-100) and a brief reason.
+For each DRep above, predict their vote (Yes/No/Abstain) with confidence (0-100) and a SHORT reason (1 sentence max).
 
 Respond in JSON format:
 {
