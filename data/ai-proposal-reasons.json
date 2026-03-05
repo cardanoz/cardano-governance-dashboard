@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-05T16:16:20.374Z",
+  "generatedAt": "2026-03-05T18:37:18.680Z",
   "proposals": {
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "title": "Amaru Treasury Withdrawal 2026",
@@ -36471,6 +36471,19 @@
           ]
         }
       ]
+    },
+    "e9693ed6b6465b2b46daaf641486a12b4b2946081634b5967b9d98897b0598fa#0": {
+      "title": "Cardano Budget Process Framework (facilitated by Intersect)",
+      "type": "InfoAction",
+      "submittedEpoch": 0,
+      "stats": {
+        "votedWithRationale": 0,
+        "votedWithoutRationale": 1,
+        "notVoted": 1592
+      },
+      "yesReasons": [],
+      "noReasons": [],
+      "abstainReasons": []
     },
     "0b19476e40bbbb5e1e8ce153523762e2b6859e7ecacbaf06eae0ee6a447e79b9#0": {
       "title": "Hard Fork to Protocol Version 10 (\"Plomin\" Hard Fork)",

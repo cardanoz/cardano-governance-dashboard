@@ -38312,35 +38312,35 @@
       }
     },
     "InfoAction": {
-      "proposalCount": 29,
+      "proposalCount": 30,
       "rationaleCount": 1958,
       "analysis": {
-        "count": 29,
-        "summary_en": "This InfoAction proposes setting a Net Change Limit (NCL) of 300 Million ADA for Epochs 613–713, representing a decrease from the previous 350M limit and aligning with estimated treasury inflows. Voting reflects a divide between those supporting fiscal discipline and conservative spending versus those concerned the limit is still too high or may unnecessarily constrain ecosystem development.",
-        "summary_ja": "このInfoActionは、エポック613～713の正味変更上限（NCL）を3億ADAに設定することを提案しており、前回の3億5000万ADAから削減され、推定される財務流入額と一致しています。投票は、財政規律と慎重な支出を支持する側と、上限がまだ高すぎる、または生態系開発を不必要に制限する可能性があると懸念する側の間で分裂しています。",
+        "count": 30,
+        "summary_en": "The 300M ADA Net Change Limit for Epochs 613–713 reflects a cautious fiscal approach, with supporters viewing it as prudent treasury management aligned with annual inflows and current market conditions. Opponents argue it's still excessive, lacks adequate accountability mechanisms, and unnecessarily constrains the ecosystem's growth potential given that NCLs are governance ceilings rather than mandatory spending targets.",
+        "summary_ja": "エポック613～713の3億ADA純変化上限は、慎重な財政運営アプローチを反映し、支持者は年間流入高と現在の市場条件に適合した賢明な資金管理と見なしています。反対者は、依然として過度であり、適切な説明責任メカニズムが不足しており、NCLが義務的支出目標ではなくガバナンス上限であることを踏まえると、エコシステムの成長可能性を不必要に制約していると主張しています。",
         "typicalReasonsYes_en": [
-          "Aligns NCL with prior year treasury inflows (~307M ADA), demonstrating fiscal discipline and responsible management",
-          "Lower than previous 350M proposal and more conservative given current ADA price ($0.28) and market conditions",
-          "Necessary safeguard to prevent treasury depletion while maintaining funding for essential ecosystem infrastructure and development",
-          "Establishes clear governance framework; limit can be adjusted upward in future proposals if ecosystem needs increase"
+          "Conservative fiscal discipline aligned with 2025 treasury inflows (~306-307M ADA) and current ADA price volatility",
+          "Prudent reduction from the previous 350M ADA proposal, signaling responsible governance maturity",
+          "Necessary guardrail that can be adjusted in future governance actions without stalling treasury operations",
+          "Sustainable balance between funding ecosystem needs (infrastructure, security, scalability) and maintaining long-term treasury viability"
         ],
         "typicalReasonsYes_ja": [
-          "前年度の財務流入額（約3億7000万ADA）と整合し、財政規律と責任ある運営を実証している",
-          "前回の3億5000万提案より低く、現在のADA価格（$0.28）と市場状況を考慮した保守的なアプローチ",
-          "財務流出を防ぎながら、重要な生態系インフラと開発に資金を提供する必要不可欠なセーフガード",
-          "明確なガバナンスフレームワークを確立し、生態系のニーズが増加した場合は将来の提案で上限を調整可能"
+          "2025年の資金流入（約306-307M ADA）と現在のADA価格変動性に合致した保守的な財政規律",
+          "以前の350M ADA案からの慎重な削減で、責任あるガバナンス成熟度を示す",
+          "将来のガバナンスアクションで調整可能な必要不可欠な保護手段であり、資金運用停滞を招かない",
+          "エコシステムニーズ（インフラ、セキュリティ、スケーラビリティの資金）と長期的な資金庫存続性維持のバランス"
         ],
         "typicalReasonsNo_en": [
-          "300M ADA still excessive; treasury should grow rather than deplete; recommend 200-250M ADA limit to enforce prioritization",
-          "Creates spending-parity cycle ('earn it, burn it') rather than true fiscal discipline; should not automatically spend all available funds",
-          "Lack of transparent reporting on 2025 budget outcomes; premature to approve 2026 budget without accountability for prior spending",
-          "Unnecessary constraint on ecosystem development; 350M provides flexibility to fund quality proposals without artificial budget ceiling"
+          "300M ADA is still excessive; stricter limits (200-250M) needed to enforce real fiscal discipline and treasury growth",
+          "NCL functions as a de facto spending target rather than a ceiling, creating 'earn it, burn it' cycle instead of long-term treasury sustainability",
+          "Lack of transparent reporting, evaluation mechanisms, and accountability for prior year spending before approving new budgets",
+          "Premature approval without addressing governance maturity, proposal quality metrics, and mid-term review mechanisms"
         ],
         "typicalReasonsNo_ja": [
-          "3億ADAはまだ過度であり、財務は枯渇ではなく成長すべき；2億～2億5000万ADAの上限を推奨して優先順位付けを強制",
-          "真の財政規律ではなく「得たら使う」サイクルを作成；利用可能なすべての資金を自動的に支出すべきではない",
-          "2025年度予算成果の透明なレポートがない；先年度支出の説明責任がないまま2026年度予算を承認するのは時期尚早",
-          "生態系開発への不必要な制約；3億5000万ADAは人工的な予算上限なしに質の高い提案に資金を供給する柔軟性を提供"
+          "3億ADAはなお過度である。200～250M ADAへの厳格化により、真の財政規律と資金庫成長強制が必要",
+          "NCLは上限ではなく事実上の支出目標として機能し、『稼いだら使う』サイクルを生み、長期的資金庫持続性を損なう",
+          "新年度予算承認前に、前年度支出の透明性報告、評価メカニズム、説明責任欠如に対処必要",
+          "ガバナンス成熟度、提案品質指標、中期レビューメカニズム未整備のまま早急に承認する危険性"
         ]
       }
     },
