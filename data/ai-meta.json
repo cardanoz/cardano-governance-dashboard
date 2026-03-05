@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-03-05T06:23:26.589Z",
+  "tier": "top_100",
+  "runtime_seconds": 1139.5,
+  "api_calls": 160,
+  "input_tokens": 611007,
+  "output_tokens": 108692,
+  "estimated_cost_usd": 0.9236,
+  "stats": {
+    "drepsAnalyzed": 100,
+    "proposalsAnalyzed": 89,
+    "actionTypesAnalyzed": 6
+  }
+}

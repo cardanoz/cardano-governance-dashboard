@@ -1,0 +1,2202 @@
+{
+  "generatedAt": "2026-03-05T06:09:27.237Z",
+  "tier": "top_100",
+  "dreps": {
+    "drep1ygr9tuapcanc3kpeyy4dc3vmrz9cfe5q7v9wj3x9j0ap3tswtre9j": {
+      "name": "Yoroi W₳llet",
+      "stake": "701300181259635",
+      "rank": 1,
+      "totalVotes": 78,
+      "withRationale": 62,
+      "voteSpread": {
+        "yes": 63,
+        "no": 11,
+        "abstain": 4
+      },
+      "tendencySummary": "Yoroi Walletは開発者���ール、インフラストラクチャ、生態系の成長に対して戦略的に支援する一方で、透明性の不足、明確な説明責任の欠如、またはコミュニティの十分な議論がない提案には厳格に投票します。財務の透明性と段階的な進捗の検証を重視する原則的な投票者です。",
+      "keyPositions": [
+        "開発者ツールとインフラストラクチャへの投資による生態系成長を支持",
+        "透明性、説明責任、明確な資金使用計画を持つ提案のみを支援",
+        "革新的な資金調達モデル（ローンなど）による財政的責任を支持",
+        "段階的な進捗検証とマイルストーン基盤の管理を重視",
+        "提案の草拙段階での十分なコミュニティ協議と合意形成を要求"
+      ],
+      "votingPattern": "Yoroiは提案の基本的な目的には同意しても、実行計画の不十分さ、透明性の欠如、説明責任枠組みの明確化がない場合は投票を留保または反対します。",
+      "lastAnalyzedVoteCount": 78,
+      "lastAnalyzedAt": "2026-03-05T06:04:31.655Z",
+      "cached": false
+    },
+    "drep1y2200we9c904un36tzaearntzzl63snffuul9qsk0te4utqfkke0w": {
+      "name": "YUTA",
+      "stake": "457107694733798",
+      "rank": 2,
+      "totalVotes": 86,
+      "withRationale": 86,
+      "voteSpread": {
+        "yes": 75,
+        "no": 9,
+        "abstain": 2
+      },
+      "tendencySummary": "YUTAは提案の詳細な分析に基づいて投票し、明確なKPI、収益性の証拠、エコシステムへの実際の貢献を厳密に検証する傾向がある。財務規律を重視しながらも、検証可能なデータと実績のある団体による提案には支持的である。",
+      "keyPositions": [
+        "KPIと目標値の明確化および測定可能性の重視",
+        "オンチェーン収益実績と持続可能なビジネスモデルの検証",
+        "エコシステムの構造的課題（リキディティ、ノード実装の多様性）への投資支持",
+        "過度な予算支出からのADAホルダー保護と財務規律の維持",
+        "実装経験と実績のある団体・個人による提案の評価"
+      ],
+      "votingPattern": "詳細な根拠を伴う分析的な投票で、データ検証可能性と長期的エコシステム価値を重視し、YESが圧倒的多数（75票）を占めるが、不明確な成果指標やキャッチアップ困難な目標には厳密にNOを投じる。",
+      "lastAnalyzedVoteCount": 86,
+      "lastAnalyzedAt": "2026-03-05T06:04:36.811Z",
+      "cached": false
+    },
+    "drep1ytvlwvyjmzfyn56n0zz4f6lj94wxhmsl5zky6knnzrf4jygpyahug": {
+      "name": "EMURGO",
+      "stake": "297934439474706",
+      "rank": 3,
+      "totalVotes": 77,
+      "withRationale": 75,
+      "voteSpread": {
+        "yes": 60,
+        "no": 11,
+        "abstain": 6
+      },
+      "tendencySummary": "EMURGOは実質的な生���系価値とアカウンタビリティを重視する戦略的投資家として機能し、RWA統合やDeFiインフラなど長期的なエコシステム成長に直結する提案に投票する一方、単一プロジェクトへの補助金や説明責任が不十分な提案には厳しい姿勢を示しています。プロセスの透明性と財務規律を強調しており、修正を通じた段階的な改善を支持する傾向があります。",
+      "keyPositions": [
+        "RWA統合とDeFi流動性インフラの戦略的投資を支持",
+        "ローンベースモデルなど革新的なガバナンスメカニズムと財務規律の推進",
+        "予算提案における明確な説明責任、透明性、生態系全体への利益の要求",
+        "エコシステム全体への波及効果のない単一プロジェクトへの資金提供に反対",
+        "プロセスの完全性と憲法的保護者としての委員会機能の維持"
+      ],
+      "votingPattern": "EMURGOは肯定的な投票（60票）を通じてCardanoの長期的なエコシステム成長と革新的なガバナンス構造を強力に支持する一方で、説明責任が不十分な提案に対しては否決票（11票）で原則を貫き、プロセスの不確実性や懸念事項がある場合は棄権する慎重で原則的���アプローチを取っています。",
+      "lastAnalyzedVoteCount": 77,
+      "lastAnalyzedAt": "2026-03-05T06:04:42.276Z",
+      "cached": false
+    },
+    "drep1y2nvdau7g7xt6dlh9wydy9c4fvve24rr67twf5w63axu56q4rypfz": {
+      "name": "Blockdaemon",
+      "stake": "289301555669338",
+      "rank": 4,
+      "totalVotes": 55,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 42,
+        "no": 0,
+        "abstain": 13
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 55,
+      "lastAnalyzedAt": "2026-03-05T06:04:42.486Z",
+      "cached": false
+    },
+    "drep1y29h2q6cst2pvkl2sqqvf5ljcy36uv7pmy482xnczddzgqshus24w": {
+      "name": "Eternl DRep Committee",
+      "stake": "249542796519828",
+      "rank": 5,
+      "totalVotes": 82,
+      "withRationale": 78,
+      "voteSpread": {
+        "yes": 59,
+        "no": 12,
+        "abstain": 11
+      },
+      "tendencySummary": "Eternl DRep Committeeは���倒的に肯定的な投票傾向を示しており、72%がYES投票である。提案の実行可能性、チームの実績、透明性のある予算計画を重視し、曖昧性や過度な予算請求に対しては慎重に投票している。",
+      "keyPositions": [
+        "実績のあるチームと明確な償還計画を持つ提案を強く支持",
+        "予算の妥当性と詳細な説明を重視し、不透明な大規模予算請求に反対",
+        "ガバナンス効率化（憲法改正など）と実装可能性の高い提案を支持",
+        "5年先の市場変化を予測できない硬直的な戦略設定に反対",
+        "Constitution準拠と多委員会の署名による監視体制のある提案を承認"
+      ],
+      "votingPattern": "提案の実行能力、チームの信頼性、予算の合理性、透明性を総合的に評価し、高い基準を適用した慎重だが支持的な投票行動を示している。",
+      "lastAnalyzedVoteCount": 82,
+      "lastAnalyzedAt": "2026-03-05T06:04:46.788Z",
+      "cached": false
+    },
+    "drep1ytfwpmt2fvdnyvlswyjyggpf8alwkpm7ha6cua9nsak525ssmvm57": {
+      "name": "CryptoCrow",
+      "stake": "210164758051941",
+      "rank": 6,
+      "totalVotes": 52,
+      "withRationale": 5,
+      "voteSpread": {
+        "yes": 50,
+        "no": 2,
+        "abstain": 0
+      },
+      "tendencySummary": "CryptoCrowは生態系の成長と実用性向上を重視する強気な支持者であり、Cardanoの競争力強化と開発者ツール充実に積極的に投票している。既存の財務基盤を活用した長期的なエコシステム拡大戦略を支持する傾向が見られる。",
+      "keyPositions": [
+        "ステーキング報酬の改善による分散化推進",
+        "開発者向けツールとインフラの充実",
+        "RWA（現実資産）分野へのCardanoの参入",
+        "実績のあるコミュニティプロジェクトの支援",
+        "Cardanoの受動的収入ソリューションとしての価値向上"
+      ],
+      "votingPattern": "CryptoCrowは実質的な生態系貢献と長期的な成長見通しを評価基準とし、熟考した上で圧倒的にYes投票（96%)を行う親支持的な投票パターンを示している。",
+      "lastAnalyzedVoteCount": 52,
+      "lastAnalyzedAt": "2026-03-05T06:04:50.449Z",
+      "cached": false
+    },
+    "drep1ydpfkyjxzeqvalf6fgvj7lznrk8kcmfnvy9hyl6gr6ez6wgsjaelx": {
+      "name": "Cardano Foundation",
+      "stake": "187939805127245",
+      "rank": 7,
+      "totalVotes": 80,
+      "withRationale": 74,
+      "voteSpread": {
+        "yes": 58,
+        "no": 7,
+        "abstain": 15
+      },
+      "tendencySummary": "Cardano Foundationは生���系の戦略的成長と透明性を重視し、評価枠組みに基づいて一貫性のある投票判断を行う傾向がある。委任投票の73%がYes投票であり、プロトコル改善、予算配分、ガバナンス体制の強化に対して支持的である。",
+      "keyPositions": [
+        "段階的で透明性のあるガバナンス改善と憲法の継続的精緻化の支持",
+        "開発者体験向上とスケーラビリティ強化のためのプロトコルパラメータ変更の支持",
+        "生態系戦略目標と一致した予算配分と資金メカニズムの革新の推進",
+        "説明責任と透明性が不十分な提案への慎重な姿勢と、修正版への再検討機会の提供",
+        "Constitutional Committeeの機能的継続性と運営レジリエンスの確保"
+      ],
+      "votingPattern": "Cardano Foundationは詳細な評価枠組みに基づいて各提案を個別に判断し、戦略的価値と実装可能性を重視しながら、不完全な提案についても段階的改善を支援する建設的なアプローチを採取している。",
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-05T06:04:55.180Z",
+      "cached": false
+    },
+    "drep1y2csyxt7u2hl4674pl9cef5lknafaw5nraxvyx033kmd0es3awuv0": {
+      "name": "Sebastien Guillemot セバ",
+      "stake": "186393301262693",
+      "rank": 8,
+      "totalVotes": 51,
+      "withRationale": 7,
+      "voteSpread": {
+        "yes": 36,
+        "no": 7,
+        "abstain": 8
+      },
+      "tendencySummary": "セバスチャンは、���ロジェクトの実績と信頼性を重視しながらも、費用対効果と透明性に厳しい基準を適用する慎重な投票者です。技術的専門知識がない分野では謙虚に棄権し、ユーザー体験やプロセスの中央集権化に関する懸念を積極的に表明しています。",
+      "keyPositions": [
+        "実績のあるチームと信頼できるアクターへの支持",
+        "費用対効果と価値提供の厳格な評価",
+        "ユーザーインターフェースと利便性の重視",
+        "プロセスの中央集権化と支配への懸念",
+        "自分の専門外の領域では棄権する謙虚さ"
+      ],
+      "votingPattern": "実績と信頼性を最優先とし、提案の価値と費用の見合いを批判的に検証する傾向が見られ、不確実性が高い場合は棄権する慎重な投票行動を示しています。",
+      "lastAnalyzedVoteCount": 51,
+      "lastAnalyzedAt": "2026-03-05T06:04:58.738Z",
+      "cached": false
+    },
+    "drep1yt8p080ajks6zdnxd9z6a6q60p9sm9j5rl7tc63mfna8r6cnp4wr3": {
+      "name": "Everstake",
+      "stake": "120937771045532",
+      "rank": 9,
+      "totalVotes": 35,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 28,
+        "no": 0,
+        "abstain": 7
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 35,
+      "lastAnalyzedAt": "2026-03-05T06:04:58.946Z",
+      "cached": false
+    },
+    "drep1yffld2866p00cyg3ejjdewtvazgah7jjgk0s9m7m5ytmmdq33v3zh": {
+      "name": "drep1yffld2866p00cyg...",
+      "stake": "115191675096694",
+      "rank": 10,
+      "totalVotes": 80,
+      "withRationale": 76,
+      "voteSpread": {
+        "yes": 73,
+        "no": 4,
+        "abstain": 3
+      },
+      "tendencySummary": "SIPOはCardanoのイン��ラストラクチャ強化と生態系の多様性拡大を重視する進歩的なDRepであり、開発者向けツール、DeFi基盤整備、ガバナンス制度の成熟化に対して一貫して支持する傾向がある。単一トークンのマーケティングや未成熟なガバナンス構造には慎重であり、条件付き支持を頻繁に用いる。",
+      "keyPositions": [
+        "複数言語対応の開発者ツール（Python、Java等）への投資を支持",
+        "DeFi基盤整備（ステーブルコイン流動性、オラクル、クロスチェーンブリッジ）の戦略的重要性を重視",
+        "ガバナンス制度の制度的成熟化と憲法の明確化を推進",
+        "トレジャリー資金は公共財に限定すべきでトークンマーケティングには不適切と主張",
+        "ネットワーク復元力強化とノード実装の多様化によるシステミックリスク低減を支持"
+      ],
+      "votingPattern": "SIPOは長期的なインフラ投資と生態系多様性に対しては強く支持し、個別トークン支援やガバナンス過渡期の不確実性に対しては慎重に条件付き支持または棄権する傾向がある。",
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-05T06:05:04.338Z",
+      "cached": false
+    },
+    "drep1yt77crnmjuqkj9gcwjjsurez7s07jhwhyt4suxs3xeqftcsfrspun": {
+      "name": "JAZZ",
+      "stake": "103015284354285",
+      "rank": 11,
+      "totalVotes": 86,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 74,
+        "no": 3,
+        "abstain": 9
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 86,
+      "lastAnalyzedAt": "2026-03-05T06:05:04.552Z",
+      "cached": false
+    },
+    "drep1y2vyrqh0fa4qh4tmy7322va6ryk78uh6szppezaft0watyqp5hdwx": {
+      "name": "BTBF_XSP",
+      "stake": "102410529539769",
+      "rank": 12,
+      "totalVotes": 68,
+      "withRationale": 54,
+      "voteSpread": {
+        "yes": 62,
+        "no": 5,
+        "abstain": 1
+      },
+      "tendencySummary": "CARDANO2025ロードマ��プの実現を最優先とし、基盤技術強化、コア開発研究、マーケティング強化を一貫して支持しています。提案の必要性を丁寧に精査した上で柔軟に投票判断し、Cardanoエコシステムの急速な発展を強く推進する傾向を示しています。",
+      "keyPositions": [
+        "CARDANO2025ロードマップの実現と基盤技術の維持強化",
+        "マーケティング強化によるCardanoブランドの国際的認知拡大",
+        "ステーブルコイン導入による他チェーンとの相互運用性の確保",
+        "ガバナンス効率化と参加促進",
+        "開発ツールと基盤インフラの継続的改善"
+      ],
+      "votingPattern": "CARDANO2025ロードマップ実現への貢献度を基準に、提案内容と資金配分の合理性を精査した上で投票する、ビジョン主導型かつ実用主義的な投票パターンを示しています。",
+      "lastAnalyzedVoteCount": 68,
+      "lastAnalyzedAt": "2026-03-05T06:05:07.945Z",
+      "cached": false
+    },
+    "drep1ygqgayvx8yzsaj9hprja3l6jy3v4px9z3u8uvecuvm3f92ce7mckx": {
+      "name": "Army of Spies",
+      "stake": "97817160268829",
+      "rank": 13,
+      "totalVotes": 72,
+      "withRationale": 20,
+      "voteSpread": {
+        "yes": 31,
+        "no": 40,
+        "abstain": 1
+      },
+      "tendencySummary": "Army of Spiesは分散化の価値を重視し、透明性と詳細な検証に基づいた慎重な投票スタイルを示しています。技術的専門性が高い提案には信頼を寄せる一方で、過度な中央集権化やコミュニティの理想的価値を損なう変更には強く反対しています。",
+      "keyPositions": [
+        "分散化の推進と中央集権化の抵抗",
+        "透明性と詳細な情報開示の要求",
+        "コンセンシスアプローチよりも個別課題の検討を優先",
+        "インフラなど生態系全体に利益をもたらす支出を重視",
+        "コミュニティの理想的言語と価値観の保護"
+      ],
+      "votingPattern": "技術委員会や専門家の見解に信頼を置く一方で、大型で複合的な提案や透明性に欠ける決定には厳格に審査して反対する傾向が見られます。",
+      "lastAnalyzedVoteCount": 72,
+      "lastAnalyzedAt": "2026-03-05T06:05:12.525Z",
+      "cached": false
+    },
+    "drep1y2m0g4r66pyaw3p7u454wc0p4f0ygm8ueaev0mgd3tvwm7sskqwqp": {
+      "name": "CardanoYoda (MANDA Pool)",
+      "stake": "96812580604836",
+      "rank": 14,
+      "totalVotes": 86,
+      "withRationale": 82,
+      "voteSpread": {
+        "yes": 58,
+        "no": 28,
+        "abstain": 0
+      },
+      "tendencySummary": "CardanoYodaは、Cardano���基盤的インフラ、ガバナンス、戦略的統合に強い支持を示しながら、詳細な分析に基づいて投機的プロジェクトや不十分な根拠のある提案には慎重に反対する。透明性と手続き的妥当性を重視し、定量的評価基準を使用して提案を評価する傾向が明らかである。",
+      "keyPositions": [
+        "ガバナンスインフラとDeFi基盤技術への投資を支持",
+        "詳細な分析と定量評価基準（スコア6点以上）に基づく判断",
+        "メームコインなど投機的プロジェクトへの財務支援に反対",
+        "憲法改正やCC選出など正当な手続きを経た提案を支持",
+        "中央集権的統合よりもCardano独自の開発と採用を優先"
+      ],
+      "votingPattern": "Yes/No比率は2.1:1でYes票が優勢だが、すべての投票に詳細な分析的根拠を伴わせ、手続きの妥当性、チームの実績、生態系への実質的インパクトを厳密に検証してから判断している。",
+      "lastAnalyzedVoteCount": 86,
+      "lastAnalyzedAt": "2026-03-05T06:05:17.632Z",
+      "cached": false
+    },
+    "drep1yg343cyuckglj48a6gpcey7fkfcy5x5f9g65wme3ne9q2mgaedmkm": {
+      "name": "Phil UPLC",
+      "stake": "87491857925270",
+      "rank": 15,
+      "totalVotes": 49,
+      "withRationale": 15,
+      "voteSpread": {
+        "yes": 44,
+        "no": 4,
+        "abstain": 1
+      },
+      "tendencySummary": "Phil UPLCは、Cardanoのガバナンスプロセス改善と生態系統合を強く支持する革新的な投票者です。予算プロセスの改革、憲法の簡素化、ブロックチェーン間統合を優先する傾向が見られます。",
+      "keyPositions": [
+        "ガバナンス予算プロセスの抜本的改革が必要",
+        "憲法改正は単一項目に焦点を絞るべき",
+        "Cardanoのブロックチェーン統合と相互運用性の促進",
+        "委員会CC最小メンバー要件の撤廃",
+        "開発ツールのオープンソース化支持"
+      ],
+      "votingPattern": "高いYes比率（44/49）で改革的・統合志向の提案を支持する一方、過度に保守的または委員会権限拡大の提案には反対する傾向があります。",
+      "lastAnalyzedVoteCount": 49,
+      "lastAnalyzedAt": "2026-03-05T06:05:21.354Z",
+      "cached": false
+    },
+    "drep1y2rtf58m0lv9spcqx5mads20gpfulf6l97w57ecdy00vjdq0klh4l": {
+      "name": "Dumpling🥟",
+      "stake": "81186016361910",
+      "rank": 16,
+      "totalVotes": 62,
+      "withRationale": 13,
+      "voteSpread": {
+        "yes": 48,
+        "no": 10,
+        "abstain": 4
+      },
+      "tendencySummary": "Dumpling🥟は技術革新と生態的インフラ建設を重視する一方で、財政的な持続可能性と透明性を強く求めるDRepです。時機と効果測定を重視し、社区の声に耳を傾けながら慎重なアプローチを取っています。",
+      "keyPositions": [
+        "技術インフラと去中心化の推進を支持（Rustノードクライアント、GovTool等）",
+        "財政支出の透明性と評価メカニズムの確立が必須",
+        "社区のフィードバックと長期的な持続可能性を優先",
+        "過度なパラメータ調整と急進的な投資には慎重",
+        "開発者コミュニティのサポートと多様化を推進"
+      ],
+      "votingPattern": "技術的価値と長期的持続可能性を判断基準として、財政規律を前提にインフラ・開発支援には賛成し、不十分な透明性や過剰支出には反対する傾向が顕著です。",
+      "lastAnalyzedVoteCount": 62,
+      "lastAnalyzedAt": "2026-03-05T06:05:25.483Z",
+      "cached": false
+    },
+    "drep1y20fpc0f6qjl4edtl9cxzrvqzd8jkzr6ja7p0p2n7cxragqkurae3": {
+      "name": "Peyton",
+      "stake": "79201428106983",
+      "rank": 17,
+      "totalVotes": 62,
+      "withRationale": 4,
+      "voteSpread": {
+        "yes": 43,
+        "no": 19,
+        "abstain": 0
+      },
+      "tendencySummary": "Peytonは、Cardanoの分散型ガバナンスの発展と透明性を重視し、予算配分における責任ある資金使用を強く主張する。個別提案の詳細評価と社区の信頼性を基準に投票する傾向が強い。",
+      "keyPositions": [
+        "予算案は関連性の低い複数提案を統合すべきではなく、個別の小規模提案として承認されるべき",
+        "国庫資金の支出は現在の運用維持と確実な効用拡大にのみ使用すべき",
+        "開発者の実績、能力、説明責任が資金配分の重要な評価基準",
+        "ノード多様性やHaskellノードの代替案など社団が望む技術的改善を支持",
+        "dRepsが効果的に予算を使用するための十分な信頼性と適切なツール整備が必須"
+      ],
+      "votingPattern": "高い投票率（43/62がYes）を示しながらも、予算の構成方法と提案の質的評価に基づいて戦略的に判断し、社団の長期的利益を優先する。",
+      "lastAnalyzedVoteCount": 62,
+      "lastAnalyzedAt": "2026-03-05T06:05:31.468Z",
+      "cached": false
+    },
+    "drep1yfukpxsssua0tuqdpd9etnxtxc5t6cqrsyfmzmycxh92nhgksvnps": {
+      "name": "drep1yfukpxsssua0tuq...",
+      "stake": "75346744195104",
+      "rank": 18,
+      "totalVotes": 13,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 10,
+        "no": 2,
+        "abstain": 1
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 13,
+      "lastAnalyzedAt": "2026-03-05T06:05:31.683Z",
+      "cached": false
+    },
+    "drep1ytwmwvtd0a8lr45ssner2tjxzv5y8q03w3606yeald9mdmgmwecja": {
+      "name": "Martin Lang",
+      "stake": "73872840055064",
+      "rank": 19,
+      "totalVotes": 66,
+      "withRationale": 30,
+      "voteSpread": {
+        "yes": 54,
+        "no": 9,
+        "abstain": 3
+      },
+      "tendencySummary": "Martin Langは強固な支持者であり、Cardanoの憲法制定と技術ロードマップ、財務規律に対してYes票を圧倒的に投じている。彼は明確な定義と詳細な説明を重視し、不十分な仕様のある提案に対しては批判的である。",
+      "keyPositions": [
+        "Cardano憲法制定を支持し、段階的な改善を容認する現実的なアプローチ",
+        "ノードのマルチスレッド化とCPU最適化による技術的改善の推進",
+        "財務規律：トレジャリータックスを20%から10%への引き下げを支持",
+        "Net Change Limitなどの財政枠組みの明確な定義と詳細な説明を要求",
+        "Ekklesia投票との一貫性を重視し、同じ立場を継続的に支持"
+      ],
+      "votingPattern": "圧倒的多数のYes票（81.8%）を投じ、技術的進歩と財務ガバナンスの改善を支持しながら、曖昧な定義の提案に対しては批判的なNo票を投じる。",
+      "lastAnalyzedVoteCount": 66,
+      "lastAnalyzedAt": "2026-03-05T06:05:36.574Z",
+      "cached": false
+    },
+    "drep1yguh6dsgx0g58v8pqmxgfrkq0x8vfv6tcp92uzzjrykwy8cjmelsy": {
+      "name": "Florian Volery",
+      "stake": "73850411667758",
+      "rank": 20,
+      "totalVotes": 72,
+      "withRationale": 26,
+      "voteSpread": {
+        "yes": 45,
+        "no": 27,
+        "abstain": 0
+      },
+      "tendencySummary": "Florian Voléryは、Cardanoの実質的な価値創造に直結するDeFi・スケーラビリティ投資を強く支持する一方、透明性と民主的正当性を欠く組織体制（Intersect、OSC等）には一貫して反対する原則的な投票者です。既存の実績ある組織・プロジェクトを信頼し、戦略的で焦点を絞った提案を重視します。",
+      "keyPositions": [
+        "DeFi・スケーラビリティ・ステーブルコイン基盤整備への強い支持",
+        "オンチェーン選出による民主的ガバナンス体制の確立を要求",
+        "実績あるチーム・既存プロジェクトへの信頼と支持",
+        "戦略的・焦点型の提案を重視、広範で曖昧な予算配分に反対",
+        "十分なテストと透明性を伴わない急ぎの提案には反対"
+      ],
+      "votingPattern": "DeFiとスケーラビリティの実現、実績ある組織の支援には投票し、民主的正当性を欠く組織体制と戦略性の不足した提案には一貫して反対する。",
+      "lastAnalyzedVoteCount": 72,
+      "lastAnalyzedAt": "2026-03-05T06:05:41.295Z",
+      "cached": false
+    },
+    "drep1yftc8zs7gjcj4a9nxzplz4wg6cwweya0kxp8adnw59vsyrqvrysud": {
+      "name": "Peter Bui",
+      "stake": "70989300695390",
+      "rank": 21,
+      "totalVotes": 59,
+      "withRationale": 51,
+      "voteSpread": {
+        "yes": 47,
+        "no": 6,
+        "abstain": 6
+      },
+      "tendencySummary": "Peter Buiは2025年のCardano予算で事前承認されたコア・インフラストラクチャプロジェクトを強く支持し、技術的実績と生態系の戦略的優先事項に基づいて投票する傾向がある。透明性、説明責任、コミュニティセンチメントを重視しながら、利益相反が生じる場合は自制を示す。",
+      "keyPositions": [
+        "事前承認されたコアインフラとスマートコントラクト開発ツールの資金提供を支持",
+        "相互運用性とZKブリッジを含むCardanoの欠落インフラの戦略的構築を推進",
+        "ブロックチェーンエクスプローラーやウォレットなどの必須ユーザー向けツールの継続的維持に賛成",
+        "透明性、マイルストーンベースの保証、コミュニティの合意に基づく提案を優先",
+        "利益相反がある場合は棄権するなど、倫理的ガバナンス原則を遵守"
+      ],
+      "votingPattern": "承認済みの予算配分とコア開発優先事項に強く同意し、技術的実績と生態系への戦略的重要性を基準に高い承認率(47/53)を示しながら、倫理的懸念や分散化の原則に関わるまれなNo投票を行う。",
+      "lastAnalyzedVoteCount": 59,
+      "lastAnalyzedAt": "2026-03-05T06:05:46.816Z",
+      "cached": false
+    },
+    "drep1ygs5hngva3hymv7j4v0aewxpsjqskj9dnmy7j3jz5ven5zqvulq2t": {
+      "name": "Hermes Stakepool Germany (HRMS)",
+      "stake": "65710481741573",
+      "rank": 22,
+      "totalVotes": 64,
+      "withRationale": 18,
+      "voteSpread": {
+        "yes": 50,
+        "no": 13,
+        "abstain": 1
+      },
+      "tendencySummary": "HRMS Stakepoolはカルダノのエコシステム発展と実用性向上を重視し、DeFiの流動性確保やRWAなどの実質的なユースケースに対して積極的に支持する傾向がある。提案の経済的妥当性には慎重で、詳細な検証を経た上で判断を変更することもある。",
+      "keyPositions": [
+        "カルダノのDeFi流動性拡大を支持",
+        "実質的なRWA活用による制度投資家受け入れを推進",
+        "過度な報酬や不十分な詳細情報の提案には反対",
+        "提案の実用性とカルダノ全体への長期的利益を重視",
+        "コミュニティとの対話を通じた投票姿勢の変更を実施"
+      ],
+      "votingPattern": "実質的なエコシステム価値創造と経済的合理性を基準に判断し、詳細な分析と対話を経て慎重に投票する傾向が見られる。",
+      "lastAnalyzedVoteCount": 64,
+      "lastAnalyzedAt": "2026-03-05T06:05:50.639Z",
+      "cached": false
+    },
+    "drep1ygsgfhcydhlfglamhzkjn97rz3edef8a4z99fwl2frcwnrcmgurt3": {
+      "name": "Dave",
+      "stake": "61161018594631",
+      "rank": 23,
+      "totalVotes": 79,
+      "withRationale": 74,
+      "voteSpread": {
+        "yes": 51,
+        "no": 27,
+        "abstain": 1
+      },
+      "tendencySummary": "Daveは財政規律と説明責任を重視する慎重な投票者であり、戦略的インフラ投資には支持的だが、返済メカニズムや明確な価値還元がない提案には厳しい態度を取っている。回収不可能な助成金よりも返済可能なローン構造を好み、総予算規模の適切性を常に検証している。",
+      "keyPositions": [
+        "返済メカニズムのない商業的成長への財務補助に反対",
+        "インフラギャップ解決のための戦略的な大規模投資に賛成",
+        "過度な予算上限に反対し厳格な財政規律を主張",
+        "ガバナンス基盤の整備と透明性向上を支持",
+        "中央集権的な管理より分散型・コミュニティ主導の施策を支持"
+      ],
+      "votingPattern": "Dave は投資の構造(助成金対ローン)、返済能力、説明責任メカニズムの有無によって投票を判断し、エコシステムの長期的持続可能性を重視して利己的なプロジェクト拡張には厳しく、必須インフラと責任あるガバナンスには柔軟である。",
+      "lastAnalyzedVoteCount": 79,
+      "lastAnalyzedAt": "2026-03-05T06:05:55.786Z",
+      "cached": false
+    },
+    "drep1ygnh2uf4wkc8ldgfxwz7rzuga3m8jtqew9xh5g3n587mg6g3ge0sj": {
+      "name": "drep1ygnh2uf4wkc8ldg...",
+      "stake": "58857346545768",
+      "rank": 24,
+      "totalVotes": 84,
+      "withRationale": 77,
+      "voteSpread": {
+        "yes": 40,
+        "no": 41,
+        "abstain": 3
+      },
+      "tendencySummary": "厳格な透明性と説明責任を重視し、提案の詳細性や合意形成プロセスが不十分な場合は反対する傾向が強い。コミュニティ主導の選挙結果には従うが、大規模な財務支出については慎重で、特に2025年の予算執行が検証されるまでは抑制的なスタンスを取っている。",
+      "keyPositions": [
+        "提案の透明性と詳細情報の十分な開示が必須",
+        "憲法改正には広範なコミュニティ協議が必要",
+        "大規模な予算支出に対する厳しい検証と説明責任の追求",
+        "財務資源の受取人と管理者の明確化が不可欠",
+        "エコシステムの分散化と中央集権化への警戒"
+      ],
+      "votingPattern": "プロセスの透明性と適切な手続きが不足している提案に対しては反対し、正当な選挙結果や十分な情報がある提案には支持する傾向を示している。",
+      "lastAnalyzedVoteCount": 84,
+      "lastAnalyzedAt": "2026-03-05T06:05:59.869Z",
+      "cached": false
+    },
+    "drep1ytuddrgqca0xd4aams6pl9zndpcmxg0rs7z3mggjelm6kscp4arg5": {
+      "name": "SASA_nagamaru_ながまる",
+      "stake": "58632165272364",
+      "rank": 25,
+      "totalVotes": 85,
+      "withRationale": 75,
+      "voteSpread": {
+        "yes": 70,
+        "no": 13,
+        "abstain": 2
+      },
+      "tendencySummary": "慎重で詳細な検討を基に、インフラ整備と生態系成長に関する提案には強く支持する一方、ガバナンス体制の成熟度やリスク管理の堅牢性が不十分な場合は慎重に反対する。初期段階では反対していた提案でも、追加情報や詳細な監査体制の確認により投票を変更する柔軟性を示す。",
+      "keyPositions": [
+        "ステーブルコイン流動性とDeFiインフラの拡充は生態系成熟の必須要件",
+        "スマートコントラクトによる資金管理と第三者監査による透明性確保を重視",
+        "ガバナンス体制の成熟度向上とリスク管理フレームワークの強化が前提条件",
+        "初期段階では反対でも詳細検討後の投票変更を厭わない誠実な姿勢",
+        "ノード多様性やプロトコル拡張など長期的な分散化戦略を支持"
+      ],
+      "votingPattern": "インフラ整備・生態系成長提案に対しては詳細検討後に強く支持し(Yes 70票)、ガバナンスの成熟度が不十分な提案や透明性が欠ける案件に対して慎重に反対(No 13票)する、原則志向の投票行動を示している。",
+      "lastAnalyzedVoteCount": 85,
+      "lastAnalyzedAt": "2026-03-05T06:06:05.029Z",
+      "cached": false
+    },
+    "drep1ygxasnzmrevqra9vscpsy4xf4rqthzkp6rr6zzft2lc7nscahj9r9": {
+      "name": "Goofycrisp",
+      "stake": "53464201812734",
+      "rank": 26,
+      "totalVotes": 26,
+      "withRationale": 8,
+      "voteSpread": {
+        "yes": 19,
+        "no": 3,
+        "abstain": 4
+      },
+      "tendencySummary": "Goofycrisp は Cardano エコシステムの流動性強化と基盤インフラ整備を重視する積極的な支持者で、特にステーブルコインと重要な統合機能の拡充に強い関心を持っています。透明性のある統治フレームワークと明確な成功指標を備えた提案を支持する傾向が見られます。",
+      "keyPositions": [
+        "ステーブルコイン流動性の大幅な拡充とDEX上での深い流動性確保",
+        "Cardano憲法による透明で説明責任のある統治フレームワークの構築",
+        "機関投資家向けカストディインフラ、ブリッジ、オラクルなどの基盤統合整備",
+        "予算提案プロセスの簡素化と機動的なコミュニティ主導のイニシアティブ促進",
+        "長期的なネットワーク復元力と成長に基づく戦略的意思決定フレームワーク"
+      ],
+      "votingPattern": "Cardanoの基盤インフラと流動性強化に直結する提案には強く賛成し、透明な統治と明確な成功指標を備えた構造化された提案を一貫して支持しています。",
+      "lastAnalyzedVoteCount": 26,
+      "lastAnalyzedAt": "2026-03-05T06:06:09.161Z",
+      "cached": false
+    },
+    "drep1y2eu92qwy875nlslg3ahlh0hy5vhzpkrjay88ptvdp0z6cqm9h25x": {
+      "name": "Tempo.Vote",
+      "stake": "49824091105927",
+      "rank": 27,
+      "totalVotes": 67,
+      "withRationale": 27,
+      "voteSpread": {
+        "yes": 38,
+        "no": 20,
+        "abstain": 9
+      },
+      "tendencySummary": "Tempo.Voteは財務管理と透明性を重視し、過度な支出に反対しながらも、エコシステムの成長と開発者体験向上に投資する提案には慎重に支持する。憲法と予算プロセスの改善には前向きだが、ガバナンスの段階的改善と厳格な監督を求める。",
+      "keyPositions": [
+        "財務管理における不十分なガードレールと透明性の欠如に懸念を表示",
+        "過度な予算配分や費用対効果の低い支出に反対",
+        "開発者体験とスケーリング、DeFiエコシステムへの投資を優先",
+        "ガバナンスプロセスの改善と段階的で測定可能なアプローチを支持",
+        "不明瞭なオムニバス予案よりも個別の提案投票を強く支持"
+      ],
+      "votingPattern": "予算効率性と透明性を基準に厳密に評価し、長期的なエコシステム成長に貢献する提案には支持するが、説明責任と詳細なガイドラインが不足する提案には強く反対する傾向がある。",
+      "lastAnalyzedVoteCount": 67,
+      "lastAnalyzedAt": "2026-03-05T06:06:13.555Z",
+      "cached": false
+    },
+    "drep1yts3qdjsqcnhld4r3uek2uu0n2tnh824tgnf75a83q3yhequuy54u": {
+      "name": "AKYO",
+      "stake": "47172466701949",
+      "rank": 28,
+      "totalVotes": 84,
+      "withRationale": 80,
+      "voteSpread": {
+        "yes": 64,
+        "no": 9,
+        "abstain": 11
+      },
+      "tendencySummary": "AKYOは、Cardanoのエコシステム全体への波及効果と長期的な基盤構築を重視する傾向が強く、個別提案の詳細より全体への貢献度を優先判断する。一方で、利益相反の可能性や制度的前例への懸念からは保守的であり、憲法委員会メンバーとしての中立性維持を重視している。",
+      "keyPositions": [
+        "エコシステム全体への波及効果と公共財性を重視した投票判断",
+        "基盤インフラ強化と長期的スケーラビリティ向上への支持",
+        "ガバナンス機能と継続性の維持を優先",
+        "利益相反や中立性が問われる場面では慎重に棄権",
+        "個別トークン支援など限定的な効果の提案には反対"
+      ],
+      "votingPattern": "エコシステム全体への貢献度が高い提案には積極的に賛成し（Yes 64票）、限定的効果や中立性に疑問のある提案には反対か棄権する二者択一の傾向が明確である。",
+      "lastAnalyzedVoteCount": 84,
+      "lastAnalyzedAt": "2026-03-05T06:06:18.391Z",
+      "cached": false
+    },
+    "drep1yfemdmjmxr59kecgqnzd8d0ankkue4rdnn35c8qfsuljt9cjree5m": {
+      "name": "PoolTool",
+      "stake": "47087295676792",
+      "rank": 29,
+      "totalVotes": 76,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 65,
+        "no": 11,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 76,
+      "lastAnalyzedAt": "2026-03-05T06:06:18.600Z",
+      "cached": false
+    },
+    "drep1yfe9en4hsgc3r6nhtmwjeljh06hgnvt9yzzkwqcftvdj34cdxdg7u": {
+      "name": "AdaStat",
+      "stake": "44565654669607",
+      "rank": 30,
+      "totalVotes": 77,
+      "withRationale": 75,
+      "voteSpread": {
+        "yes": 62,
+        "no": 9,
+        "abstain": 6
+      },
+      "tendencySummary": "AdaStatは、長期的な生態系価値が請求額を超えるかどうかという明確な原則に基づいて投票する分析的なDRepです。予備投票プロセスの非効率性に対する懸念を示しながらも、具体的な説明や修正が提供されれば柔軟に立場を変える傾向があります。",
+      "keyPositions": [
+        "生態系への長期的価値が投資額を上回る場合に資金配分を支持",
+        "予備投票ステップは不要で官僚主義を増加させると考える",
+        "提案の具体性と明確さの不足に対する懸念を重視",
+        "DRepやSPOへの報酬補償には現在のところ反対",
+        "プロトコル改善と生態系の安定性向上を支持"
+      ],
+      "votingPattern": "詳細な説明や修正が行われた場合は立場を変える意思を示しながら、予備投票プロセスの非効率性に対しては一貫して棄権票を投じる傾向がある。",
+      "lastAnalyzedVoteCount": 77,
+      "lastAnalyzedAt": "2026-03-05T06:06:22.745Z",
+      "cached": false
+    },
+    "drep1ytjz60rgwhkzfhrv5hkvn9dxcerpwadq2khqvhp5fqws3kqmemccf": {
+      "name": "HISAI",
+      "stake": "42914329863955",
+      "rank": 31,
+      "totalVotes": 37,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 27,
+        "no": 7,
+        "abstain": 3
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 37,
+      "lastAnalyzedAt": "2026-03-05T06:06:22.958Z",
+      "cached": false
+    },
+    "drep1yfaaaaa270yjt6tu5skndugekprf5ykv5jshanl0c6gqx5qpstskf": {
+      "name": "Drep One",
+      "stake": "42416485813240",
+      "rank": 32,
+      "totalVotes": 48,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 43,
+        "no": 5,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 48,
+      "lastAnalyzedAt": "2026-03-05T06:06:22.969Z",
+      "cached": false
+    },
+    "drep1ygm9wxzrrdqpt0hek5kj7ys6tmsc8dycp7tkjwqxqrhjr6csq3s3t": {
+      "name": "Patrick_Tobler",
+      "stake": "38602187999293",
+      "rank": 33,
+      "totalVotes": 78,
+      "withRationale": 56,
+      "voteSpread": {
+        "yes": 66,
+        "no": 10,
+        "abstain": 2
+      },
+      "tendencySummary": "Patrick_Toblerは、Cardanoエコシステムの開発ツール、インフラストラクチャ、重要なプロジェクトに対して強く支持する傾向を示しており、提案の実用性と生態系への長期的な貢献を重視している。予算配分や資金調達については慎重だが、採択済みの予算案の実行やエコシステムの成長に必要な支出には前向きな姿勢を持っている。",
+      "keyPositions": [
+        "開発ツールとインフラストラクチャの整備を重視",
+        "Eternl、Maestro、Scalusなど実用的で広く使用されているプロジェクトを支持",
+        "提案の予算額が適切であるかを検証し、ADA価格との関係性を考慮",
+        "ガバナンス関連より採用と実際のアプリケーション開発を優先",
+        "完了済みプロジェクトの予算実行と緊急度の高い提案を認める"
+      ],
+      "votingPattern": "投票比率が圧倒的にYes(66票)が優位であり、詳細な検討とコミュニティとの対話を通じて意思決定を行う慎重で建設的なアプローチを示している。",
+      "lastAnalyzedVoteCount": 78,
+      "lastAnalyzedAt": "2026-03-05T06:06:27.530Z",
+      "cached": false
+    },
+    "drep1y2xacakh0g8q4exfgmvywy62an74cj7ejcpcrgq6vh4dckqhtsyh5": {
+      "name": "Aichi/Tokai_DRep",
+      "stake": "37739391298690",
+      "rank": 34,
+      "totalVotes": 74,
+      "withRationale": 12,
+      "voteSpread": {
+        "yes": 61,
+        "no": 10,
+        "abstain": 3
+      },
+      "tendencySummary": "Aichi/Tokai_DRepは、Cardanoのガバナンス強化と透明性向上を支持する進歩的な投票者です。コミュニティ参加の拡大と明確な責任定義を重視する一方で、不十分な正当化や透明性の欠如には厳しく反対しています。",
+      "keyPositions": [
+        "ガバナンスの透明性と説明責任の強化",
+        "コミュニティ参加の包括性と民主性の拡大",
+        "予算配分の適切性と費用対効果の厳格な検証",
+        "十分な検討と段階的な実装の重要性",
+        "開発者体験の向上とネットワーク性能のバランス"
+      ],
+      "votingPattern": "圧倒的多数の賛成票（82.4%）を投じながら、透明性不足や予算の過度な規模、十分な正当化がない提案に対しては一貫して反対し、段階的改善を求める慎重で原則的な投票行動を示しています。",
+      "lastAnalyzedVoteCount": 74,
+      "lastAnalyzedAt": "2026-03-05T06:06:31.448Z",
+      "cached": false
+    },
+    "drep1yt6lgdpqjey286qwt287mnk7sdqh95avfmde42vq3mltjys75kg5k": {
+      "name": "MUEN",
+      "stake": "37178895780926",
+      "rank": 35,
+      "totalVotes": 85,
+      "withRationale": 8,
+      "voteSpread": {
+        "yes": 72,
+        "no": 10,
+        "abstain": 3
+      },
+      "tendencySummary": "MUENは、Cardanoの国庫管理と予算使用の透明性・説明責任を重視するDRepであり、エコシステムの実質的な発展に貢献する提案には支持的である。同時に、不明瞭な予算計画や過度な権力集中には慎重な姿勢を示している。",
+      "keyPositions": [
+        "国庫の無駄使いを防ぎ、予算の透明性と説明責任を厳しく監視すべき",
+        "オンチェーン研究やユースケース開発など実質的な生産性のある支出は支持",
+        "Intersectなど巨額予算計上には懸念があり、Catalystの諸問題を認識している",
+        "ローンの返済モデルの脆弱性を指摘しつつも、イノベーション実行の必要性を認める",
+        "ガバナンスの実績主義を支持し、実行履歴のある提案には説得力を認める"
+      ],
+      "votingPattern": "複数の提案について詳細な根拠を記載した上で投票しており、単純な可否ではなく条件付き支持や問題点指摘を含む分析的で慎重な投票スタイルを示している。",
+      "lastAnalyzedVoteCount": 85,
+      "lastAnalyzedAt": "2026-03-05T06:06:36.296Z",
+      "cached": false
+    },
+    "drep1yfu5d42qfu7e3euu4kkamcg3g3z2zn6sd674gkdww8ey63stlsrlt": {
+      "name": "Linda - Cryptofly",
+      "stake": "36082643829307",
+      "rank": 36,
+      "totalVotes": 70,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 52,
+        "no": 15,
+        "abstain": 3
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 70,
+      "lastAnalyzedAt": "2026-03-05T06:06:36.509Z",
+      "cached": false
+    },
+    "drep1ygeqtuysjy9s3mw3ej7essghq9rk3cnl08fehntu4jw3rtqfw96dg": {
+      "name": "FIMI",
+      "stake": "36044424456978",
+      "rank": 37,
+      "totalVotes": 26,
+      "withRationale": 1,
+      "voteSpread": {
+        "yes": 24,
+        "no": 1,
+        "abstain": 1
+      },
+      "tendencySummary": "FIMIは圧倒的に協調的で建設的なアプローチを示しており、コミュニティの統一と協力を重視している。投票行動は非常に肯定的であり、プロジェクト間のパートナーシップや共同作業を強く支持する傾向がある。",
+      "keyPositions": [
+        "コミュニティの協力と統一を重視",
+        "プロジェクト間のパートナーシップを支持",
+        "建設的で協調的なガバナンス"
+      ],
+      "votingPattern": "圧倒的な賛成票（24票中24票の賛成比率）で一貫性があり、異議や懸念をほとんど示さない非常に支持的な投票行動を示している。",
+      "lastAnalyzedVoteCount": 26,
+      "lastAnalyzedAt": "2026-03-05T06:06:38.962Z",
+      "cached": false
+    },
+    "drep1y25xtvu3d0gaf6cxktr9pkfgnywmqsh4fum93s8m3hlp4aqj3uqdp": {
+      "name": "Chris-O",
+      "stake": "35969963415521",
+      "rank": 38,
+      "totalVotes": 78,
+      "withRationale": 7,
+      "voteSpread": {
+        "yes": 63,
+        "no": 12,
+        "abstain": 3
+      },
+      "tendencySummary": "Chris-Oは、Cardanoのガバナンス構造の強化と生態系全体に利益をもたらす提案を支持する傾向が強い。一方で、特定のプロジェクトへの選別的な資金配分や十分な検討なしの提案には慎重で、透明性と説明責任を重視している。",
+      "keyPositions": [
+        "憲法委員会（CC）はCardanoのオンチェーンガバナンスの重要な要素",
+        "生態系全体に利益をもたらさない選別的な財務配分には反対",
+        "DeFiの流動性向上とADA の利用促進を支持",
+        "提案は十分な検討期間と地域社会の議論が必要",
+        "償却可能なローンベースの財務引き出しは説明責任を強化"
+      ],
+      "votingPattern": "Chris-Oは圧倒的にYesに投票する傾向（63対12）を示しており、特にガバナンス強化と生態系全体に利益をもたらす提案を支持する一方で、不完全な提案や選別的な資金配分には慎重な投票を行っている。",
+      "lastAnalyzedVoteCount": 78,
+      "lastAnalyzedAt": "2026-03-05T06:06:42.815Z",
+      "cached": false
+    },
+    "drep1ygxeadaklzz93n2tn9vnqz0fxapyv7ltel4d9808aeftl7gnxkszd": {
+      "name": "NEDSCAVE.IO",
+      "stake": "35921711980871",
+      "rank": 39,
+      "totalVotes": 38,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 30,
+        "no": 7,
+        "abstain": 1
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 38,
+      "lastAnalyzedAt": "2026-03-05T06:06:43.026Z",
+      "cached": false
+    },
+    "drep1ytzshxuma6cwrnlv2ucyclfqw3k4nu4nuudmh2z87j9hncsk9dhy4": {
+      "name": "Kyle Solomon",
+      "stake": "35654085126748",
+      "rank": 40,
+      "totalVotes": 75,
+      "withRationale": 68,
+      "voteSpread": {
+        "yes": 58,
+        "no": 13,
+        "abstain": 4
+      },
+      "tendencySummary": "Kyle Solomonは開発者向けツール、エコシステム拡大、そして実績を持つチームへの投資を強く支持する傾向がある。VCプレイやコミュニティ検証なしのプロジェクトには懐疑的だが、十分な協議と実行能力がある場合は柔軟に投票する。",
+      "keyPositions": [
+        "開発者UXと戦略的なツール開発への投資を優先",
+        "実績と信頼がある既知チームへの信頼投資",
+        "VC資金調達すべきプロジェクトの財務からの除外",
+        "十分なコミュニティ検証とカタリスト実績のない提案への慎重さ",
+        "ガバナンス効率化と憲法改正による制度強化の支持"
+      ],
+      "votingPattern": "実行能力と生態系戦略的価値を重視し、VC案件除外とコミュニティプロセス尊重を条件に、概ね賛成票を投じる。",
+      "lastAnalyzedVoteCount": 75,
+      "lastAnalyzedAt": "2026-03-05T06:06:47.240Z",
+      "cached": false
+    },
+    "drep1ygtxcscvznhs2nqap9u8gtxa0dx0l6q5zhsqqlw46enwh8cttd07h": {
+      "name": "TERA DRep",
+      "stake": "35591638127521",
+      "rank": 41,
+      "totalVotes": 60,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 39,
+        "no": 21,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 60,
+      "lastAnalyzedAt": "2026-03-05T06:06:47.448Z",
+      "cached": false
+    },
+    "drep1ytcv4ax77s0enqef56qjflf4d8zjgxulukme9uf5p8cfaagysjppn": {
+      "name": "Socious",
+      "stake": "33923414395687",
+      "rank": 42,
+      "totalVotes": 79,
+      "withRationale": 79,
+      "voteSpread": {
+        "yes": 62,
+        "no": 7,
+        "abstain": 10
+      },
+      "tendencySummary": "Sociousは、コミュニティの意思を尊重し、透明性と説明責任を重視する建設的なガバナンス参加者です。Treasury Withdrawalと基盤的なインフラ提案に強く支持する一方で、手続き的整合性や十分な議論がない提案に対しては慎重に判断します。",
+      "keyPositions": [
+        "コミュニティの意思と透明なプロセスの尊重",
+        "インフラストラクチャおよびエコシステム開発への積極的支援",
+        "手続き的整合性と憲法的ガバナンスの厳格な遵守",
+        "利益相反回避のための自制と中立性の維持",
+        "詳細な検証と監視を伴う大規模予算の慎重な評価"
+      ],
+      "votingPattern": "Treasury Withdrawalと基盤的インフラ提案には高い賛成率を示しながら、手続き的問題や十分な議論がない提案には棄権や反対を行う、原則主義的かつバランスの取れた投票パターンです。",
+      "lastAnalyzedVoteCount": 79,
+      "lastAnalyzedAt": "2026-03-05T06:06:51.111Z",
+      "cached": false
+    },
+    "drep1yffcjs0njfea09xhs6up429rhya5pxd7qz7hvmwq6vqy2nczwpj3g": {
+      "name": "Big Lazy Cat",
+      "stake": "33356423924818",
+      "rank": 43,
+      "totalVotes": 79,
+      "withRationale": 23,
+      "voteSpread": {
+        "yes": 54,
+        "no": 11,
+        "abstain": 14
+      },
+      "tendencySummary": "Big Lazy Catは、Cardanoの基盤インフラ（ステーブルコイン、クロスチェーン相互運用性、ガバナンス効率化）を優先しつつ、市場需要が不十分な段階でのプロジェクト展開には慎重である。Treasury資金の責任ある使用と明確な成果測定を重視し、時期尚早と判断した提案には異議を唱える傾向がある。",
+      "keyPositions": [
+        "Tier-1ステーブルコイン（USDT/USDC）とセキュアなクロスチェーン相互運用性はCardanoの最優先課題",
+        "DeFi流動性提供は市場需要が成熟するまで段階的に進めるべき",
+        "Treasury引き出しには定量的KPIと厳格な会計監査・透明性が必須",
+        "ガバナンス効率化と制度的透明性の強化を支持",
+        "実績未成熟な技術への先行投資には慎重"
+      ],
+      "votingPattern": "インフラ整備と制度設計には支持（Yes 54票）を示す一方、市場需要不足やKPI不足、実績未確認を理由に反対（No 11票）または保留（Abstain 14票）の判断を下す、合理的で条件付きの投票パターン。",
+      "lastAnalyzedVoteCount": 79,
+      "lastAnalyzedAt": "2026-03-05T06:06:56.188Z",
+      "cached": false
+    },
+    "drep1yf2jzhuc4f7eu2yay9d9ta3dykxxcwn34wz8kak7nhd7vcgrxn7ns": {
+      "name": "HOSKY",
+      "stake": "32676164048636",
+      "rank": 44,
+      "totalVotes": 74,
+      "withRationale": 69,
+      "voteSpread": {
+        "yes": 31,
+        "no": 8,
+        "abstain": 35
+      },
+      "tendencySummary": "HOSKYは「Cardano First」の原則に基づき、長期的なエコシステムの健全性と責任ある資金運用を重視する実用志向の投票者です。個人的利益よりコミュニティ全体の利益を優先し、透明性と説明責任を備えた提案を支持する傾向があります。",
+      "keyPositions": [
+        "分散化と地域的成長を通じたカルダノの実用的採用推進",
+        "個人プロジェクト利益のための公的資金補助に反対",
+        "透明性と説明責任を備えた提案の支持",
+        "財務監視とマイルストーン型の段階的支出を重視",
+        "Constitutional Committeeメンバーとしての利益相反の適切な管理"
+      ],
+      "votingPattern": "実質的な利益をもたらす提案には肯定的投票（31票）を行い、私的利益重視やコミュニティ資金濫用リスク（8票）には否定的、評価継続中や利益相反がある場合は棄権（35票）という責任ある投票パターンを示しています。",
+      "lastAnalyzedVoteCount": 74,
+      "lastAnalyzedAt": "2026-03-05T06:07:00.640Z",
+      "cached": false
+    },
+    "drep1ygj6hupsan57ujlv6l0vw9naxzt5753uhpe79nluymqzlcq7fe4vs": {
+      "name": "ranket",
+      "stake": "30950795302382",
+      "rank": 45,
+      "totalVotes": 79,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 70,
+        "no": 4,
+        "abstain": 5
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 79,
+      "lastAnalyzedAt": "2026-03-05T06:07:00.854Z",
+      "cached": false
+    },
+    "drep1yggcntj7vdc2l3j05w0ep84ay8qjz0fnrse6rl8gccd9fsqadw3qg": {
+      "name": "WaffleCapital",
+      "stake": "30844392178466",
+      "rank": 46,
+      "totalVotes": 58,
+      "withRationale": 2,
+      "voteSpread": {
+        "yes": 56,
+        "no": 1,
+        "abstain": 1
+      },
+      "tendencySummary": "WaffleCapitalは圧倒的に肯定的な投票姿勢を示しており、56票中55票が賛成票となっています。技術的な合理性と実用性を重視し、開発者コミュニティの拡大とインフラストラクチャーの改善に対して強い支持を示しています。",
+      "keyPositions": [
+        "Rustでの実装によるDeveloperコミュニティの拡大を支持",
+        "メモリ効率とハードウェア要件の削減を重視",
+        "インフラドキュメンテーションの改善と透明性を支持",
+        "技術的実装の質と持続可能性を優先"
+      ],
+      "votingPattern": "技術的メリットに基づいた高い賛成率（96.6%）を示し、インフラ改善提案に対して強い支持姿勢を示しています。",
+      "lastAnalyzedVoteCount": 58,
+      "lastAnalyzedAt": "2026-03-05T06:07:04.748Z",
+      "cached": false
+    },
+    "drep1yglrf4el8gghum239fggvfrau25k2576y4dvcz65r2ukj8sqpsc2k": {
+      "name": "Cerkoryn",
+      "stake": "24644631706301",
+      "rank": 47,
+      "totalVotes": 76,
+      "withRationale": 76,
+      "voteSpread": {
+        "yes": 40,
+        "no": 16,
+        "abstain": 20
+      },
+      "tendencySummary": "Cerkorynはコア開発と実質的なインパクトを重視し、明確な説明責任と効率性を求める厳格な財務管理者です。過度に広範または不十分に定義されたプロジェクト、及び一方的な助成金ではなくローンや収益分配構造での資本配分を好みます。",
+      "keyPositions": [
+        "コア開発とロードマップメンテナンスを優先する",
+        "ステーブルコイン流動性と取引所上場を重視する",
+        "不明確な説明責任と測定基準を持つプロジェクトを反対する",
+        "助成金よりもローンや収益分配などのアカウンタビリティ構造を支持する",
+        "資金効率性と実績の検証を要求する"
+      ],
+      "votingPattern": "Cerkorynは実践的価値、明確な説明責任、効率的な資金使用を示すプロジェクトには投票し、曖昧な目標、過度な資金要求、または単なる地域的優遇を示すプロジェクトには一貫して反対する傾向があります。",
+      "lastAnalyzedVoteCount": 76,
+      "lastAnalyzedAt": "2026-03-05T06:07:09.514Z",
+      "cached": false
+    },
+    "drep1yfa8r8r36x7x05htftce7qhafrn5nzzr6vazy95pzy6y5dqac0ss7": {
+      "name": "wolf31o2 (Chris Gianelloni)",
+      "stake": "23508481817034",
+      "rank": 48,
+      "totalVotes": 74,
+      "withRationale": 19,
+      "voteSpread": {
+        "yes": 55,
+        "no": 13,
+        "abstain": 6
+      },
+      "tendencySummary": "Chris Gianelloniは技術的価値とエコシステムへの実質的な貢献を重視し、開発ツール、Catalyst資金、教育的アウトリーチに強く支持している。一方で、予算の妥当性、透明性の欠如、個人のセキュリティを損なう施策には慎重または反対する傾向を示している。",
+      "keyPositions": [
+        "オープンソース化と技術的相互運用性の推進を支持",
+        "Catalystとエコシステム開発資金への強い支持",
+        "個人情報開示の強制化に強く反対",
+        "予算規模の妥当性と実行可能性の検証を重視",
+        "ガバナンス効率化（非アクティブなCC委員の交代推進）"
+      ],
+      "votingPattern": "技術的詳細と利益相反の透明性に基づいて判断し、イノベーション促進を支持する一方で、セキュリティ軽視や予算不十分な施策には反対する実用的で批判的なアプローチ。",
+      "lastAnalyzedVoteCount": 74,
+      "lastAnalyzedAt": "2026-03-05T06:07:13.442Z",
+      "cached": false
+    },
+    "drep1ytfnmf4uftt4fe0h63xhadl0v402gr6nnhtcgrq2sas26kgaf3n5y": {
+      "name": "drep1ytfnmf4uftt4fe0...",
+      "stake": "23415194072304",
+      "rank": 49,
+      "totalVotes": 84,
+      "withRationale": 1,
+      "voteSpread": {
+        "yes": 65,
+        "no": 19,
+        "abstain": 0
+      },
+      "tendencySummary": "このDRepは圧倒的に肯定的な投票傾向を示しており、84票中65票（77%）が賛成しています。投票理由の提示がほぼなく、透明性に関する懸念があります。",
+      "keyPositions": [
+        "提案に対して強く肯定的な立場",
+        "投票根拠の説明不足",
+        "高い投票参加率"
+      ],
+      "votingPattern": "ほぼ理由提示なしで機械的に賛成票を投じる傾向が見られます。",
+      "lastAnalyzedVoteCount": 84,
+      "lastAnalyzedAt": "2026-03-05T06:07:15.612Z",
+      "cached": false
+    },
+    "drep1y2wlkylx89hjqkhcejtap8sdwyfpjlf72dmuzqfe9rxlchc4g3xse": {
+      "name": "ADA Ocean",
+      "stake": "23275290592436",
+      "rank": 50,
+      "totalVotes": 22,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 17,
+        "no": 3,
+        "abstain": 2
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 22,
+      "lastAnalyzedAt": "2026-03-05T06:07:15.821Z",
+      "cached": false
+    },
+    "drep1ygnypzfv2v8fmfelthahvn0rqyh54sf6z2aa5m7f3fkjgqqt8l2qq": {
+      "name": "Blockjock (James Meidinger)",
+      "stake": "22234975532029",
+      "rank": 51,
+      "totalVotes": 40,
+      "withRationale": 22,
+      "voteSpread": {
+        "yes": 35,
+        "no": 2,
+        "abstain": 3
+      },
+      "tendencySummary": "Blockjockは、Cardanoエコシステムの実質的な成長と分散化を重視するDRepであり、技術的実績のあるチームやインフラ提案に強く支持する傾向がある。彼の投票は、長期的なエコシステム構築、DeFiインフラの整備、ガバナンスの透明性向上に焦点を当てている。",
+      "keyPositions": [
+        "信頼できるチームの実績と能力を基にした投票判断を重視",
+        "DeFiインフラとステーブルコイン流動性の確保は必須要件",
+        "分散型ガバナンスツールと透明性のあるガバナンス構造の強化支持",
+        "測定可能なKPIと明確な説明責任を伴う提案を評価",
+        "Cardanoの商業的競争力向上と取引量増加を志向"
+      ],
+      "votingPattern": "実績のあるチーム提案や必須インフラに対しては強く支持し、重複性や不明瞭性がある提案に対しては厳格に判断する一貫した投票パターン。",
+      "lastAnalyzedVoteCount": 40,
+      "lastAnalyzedAt": "2026-03-05T06:07:19.916Z",
+      "cached": false
+    },
+    "drep1ytu64qt7send5dw7wcd0z5geh4ka6qstgvtgval097hed7qqnqh2n": {
+      "name": "phillerino",
+      "stake": "21287913967211",
+      "rank": 52,
+      "totalVotes": 53,
+      "withRationale": 3,
+      "voteSpread": {
+        "yes": 44,
+        "no": 9,
+        "abstain": 0
+      },
+      "tendencySummary": "phillerinはCardanoの開発進捗を重視し、特にSNEKプロジェクトとDeFi基盤整備への支持を強く示しています。提案に対する肯定的な立場が顕著で、実用性とエコシステム発展を重視する投票傾向があります。",
+      "keyPositions": [
+        "SNEKプロジェクトへの強力な支持",
+        "CardanoのDeFi発展に向けたステーブルコイン導入の重要性",
+        "生産的な開発進捗を重視し反対を避ける姿勢"
+      ],
+      "votingPattern": "全体的に強い肯定的傾向（賛成:83%）を示し、エコシステム発展に繋がる提案に対してほぼ無条件で支持する投票パターンです。",
+      "lastAnalyzedVoteCount": 53,
+      "lastAnalyzedAt": "2026-03-05T06:07:23.131Z",
+      "cached": false
+    },
+    "drep1yfjez5zup0gystdvc933w2mn8k64hcy3krvc2namluwjxdcfhm8wd": {
+      "name": "SIDAN Lab",
+      "stake": "21244043097504",
+      "rank": 53,
+      "totalVotes": 42,
+      "withRationale": 23,
+      "voteSpread": {
+        "yes": 24,
+        "no": 13,
+        "abstain": 5
+      },
+      "tendencySummary": "SIDAN Labは、透明性のある資金配分、明確なガバナンス構造、そして慎重な財政管理を重視する分析的で思慮深いDRepです。エコシステムの長期的な持続性と信頼構築を優先し、大規模な一括予算提案には批判的ですが、インフラ強化や測定可能な成果を伴うプロジェクトには支持を示します。",
+      "keyPositions": [
+        "透明性と監督が伴う明確にスコープされた資金配分を支持",
+        "単一の実装への依存を減らすための複数のノード実装開発を支持",
+        "大規模で不透明な一括予算提案に反対",
+        "財政規律とKPI測定による説明責任を重視",
+        "初期段階のガバナンスでは慎重さと段階的なアプローチを推奨"
+      ],
+      "votingPattern": "SIDAN Labは、提案の構造、透明性レベル、測定可能な成果指標、そして生態系への実質的な影響に基づいて投票を差別化し、財政規律と長期的なネットワーク健全性を一貫して優先させています。",
+      "lastAnalyzedVoteCount": 42,
+      "lastAnalyzedAt": "2026-03-05T06:07:27.660Z",
+      "cached": false
+    },
+    "drep1y2zu74gt8sxtrxcngqsmrnupkzrtmlqshmvmm5qtuhxx6xqt7yhaw": {
+      "name": "Hephaestus Stake Pool [HEPHY]",
+      "stake": "21203173404822",
+      "rank": 54,
+      "totalVotes": 83,
+      "withRationale": 80,
+      "voteSpread": {
+        "yes": 49,
+        "no": 22,
+        "abstain": 12
+      },
+      "tendencySummary": "Hephaestus Stake Poolは、提案の詳細な審査と透明性を重視し、予見可能性や完成度が不足している提案には慎重に投票する傾向がある。財務規律を求め、不完全な情報提供や設定された基準を遵守しない提案に対しては厳格に対応する。",
+      "keyPositions": [
+        "提案は詳細で検証可能な情報と透明な開示を必須とすべき",
+        "財務規律重視：危険な前例設定や過度な支出の回避",
+        "生きた文書である憲法の急速な改正には反対",
+        "ガバナンスツール（GovTool）や基盤インフラの維持を支持",
+        "困難な判断では慎重な投票態度（棄権）を示す"
+      ],
+      "votingPattern": "詳細な提案理由を作成し、参考資料の提供や完全性を厳密に確認した上で投票する一方、原則立場と実際の懸念が衝突する場合は棄権を選択することが多い。",
+      "lastAnalyzedVoteCount": 83,
+      "lastAnalyzedAt": "2026-03-05T06:07:32.220Z",
+      "cached": false
+    },
+    "drep1y2z8gktqj27kwmmxesd0y484f7p4z9tjf5xu8m4sucstm3gvtywlp": {
+      "name": "Ha-Nguyen",
+      "stake": "21186839002239",
+      "rank": 55,
+      "totalVotes": 69,
+      "withRationale": 39,
+      "voteSpread": {
+        "yes": 55,
+        "no": 11,
+        "abstain": 3
+      },
+      "tendencySummary": "Ha-Nguyenは、透明性のある予算管理、コミュニティの広範な合意、スケーラビリティと基盤インフラへの投資を重視する支持的なDRepです。ただし、不透明性、過度な集中化、明確な成果測定の欠如がある提案には厳格に反対します。",
+      "keyPositions": [
+        "スケーラビリティとコア基盤インフラの優先投資を支持",
+        "マイルストーン報告と独立監査によるトランザクション透明性を要求",
+        "個別トークンやセントラル化されたサービスへのコミュニティ資金投入に反対",
+        "複数プロジェクトの一括提案ではなく個別評価を求める",
+        "コミュニティ主導で透明性のある憲法改正プロセスを支持"
+      ],
+      "votingPattern": "Ekklesia上での事前の広範なコミュニティ合意、透明性のある予算構成、測定可能なマイルストーン、独立監査の有無で判断し、インフラ・開発ツール支援には賛成、個別トークン利益や不透明性のある提案には反対する一貫したパターンを示しています。",
+      "lastAnalyzedVoteCount": 69,
+      "lastAnalyzedAt": "2026-03-05T06:07:37.172Z",
+      "cached": false
+    },
+    "drep1yv4uesaj92wk8ljlsh4p7jzndnzrflchaz5fzug3zxg4naqkpeas3": {
+      "name": "drep1yv4uesaj92wk8lj...",
+      "stake": "21041656214209",
+      "rank": 56,
+      "totalVotes": 29,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 14,
+        "no": 12,
+        "abstain": 3
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 29,
+      "lastAnalyzedAt": "2026-03-05T06:07:37.383Z",
+      "cached": false
+    },
+    "drep1yt0cvg2649d34afclefrxvyn2ctys87a5jt84ckczyjlvgcu7nxyr": {
+      "name": "drep1yt0cvg2649d34af...",
+      "stake": "19561575795953",
+      "rank": 57,
+      "totalVotes": 31,
+      "withRationale": 16,
+      "voteSpread": {
+        "yes": 18,
+        "no": 13,
+        "abstain": 0
+      },
+      "tendencySummary": "このDRepは、透明性と厳密な財務管理を重視する実用主義的な投票パターンを示しており、コミュニティの民主的決定と技術的検証を尊重しながらも、過度なリスクや不十分な根拠のある提案には慎重に反対する。憲法改正やプロトコルアップグレードなどの重要なガバナンス行動では支持を示し、予算配分や資金要求については詳細な監督と証拠ベースの評価を求める。",
+      "keyPositions": [
+        "厳格な財務管理と長期的な財務持続性の重視",
+        "透明性、監査、実証可能な成果に基づく資金承認",
+        "民主的選挙結果の尊重とコミュニティの意思の反映",
+        "技術的検証と事前の安全性確認を資金配分の前提条件とすること",
+        "測定可能なKPIと具体的な戦略に基づくガバナンスフレームワーク"
+      ],
+      "votingPattern": "提案の質、財務的責任性、技術的根拠、コミュニティプロセスの民主性を総合的に評価し、構造的改善やコミュニティ合意に基づいた行動には肯定的だが、過度なリスク、不透明性、民主的原則の軽視には一貫して反対する。",
+      "lastAnalyzedVoteCount": 31,
+      "lastAnalyzedAt": "2026-03-05T06:07:42.272Z",
+      "cached": false
+    },
+    "drep1yfp4qmp849250svle8gw2m5jwjra86e76q8vz97wp998feg9mx9c5": {
+      "name": "Moonstake",
+      "stake": "19154771708764",
+      "rank": 58,
+      "totalVotes": 83,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 77,
+        "no": 1,
+        "abstain": 5
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 83,
+      "lastAnalyzedAt": "2026-03-05T06:07:42.483Z",
+      "cached": false
+    },
+    "drep1y24xr6m4mkgl7e7886sk3wee7h73mcreysyvhrwzksy5ajqrv0rrv": {
+      "name": "CTEC-Stake-Pool",
+      "stake": "18822171414241",
+      "rank": 59,
+      "totalVotes": 82,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 68,
+        "no": 13,
+        "abstain": 1
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 82,
+      "lastAnalyzedAt": "2026-03-05T06:07:42.491Z",
+      "cached": false
+    },
+    "drep1y27qjjnz9a7q6zmvpajzqpqylnka6lpkvcm9sgjrdheqt0qq6pchw": {
+      "name": "Chris [STR8] - Straightpool",
+      "stake": "18456230952583",
+      "rank": 60,
+      "totalVotes": 51,
+      "withRationale": 38,
+      "voteSpread": {
+        "yes": 43,
+        "no": 8,
+        "abstain": 0
+      },
+      "tendencySummary": "Chris [STR8]は圧倒的多数派の賛成票（43票）を投じており、Cardanoエコシステムの発展と革新的な提案を強く支持する傾向が見られます。財務管理を慎重に行いながらも、VCモデルの導入やDeFi流動性の強化など、生産的で長期的価値をもたらす提案に対しては積極的に投票しています。",
+      "keyPositions": [
+        "Cardano DeFiとステーブルコイン流動性の強化を優先課題と位置づけ",
+        "財務的に自己持続可能なVC型の財務引き出しモデルの導入支持",
+        "Plutusスクリプト性能向上など技術的改善による低リスク・高インパクト提案への支持",
+        "完全オープンソースのガバナンスツール（GovTool）の維持と開発継続への支持",
+        "Cardano 2030ビジョンと憲法改正による透明性と説明責任の向上への賛同"
+      ],
+      "votingPattern": "Ekklesiaでの事前投票との一貫性を重視しながら、エコシステム発展に貢献する戦略的提案に高い確率で賛成し、財政規律が不十分またはCatalystの方が適切な提案に対してのみ反対票を投じています。",
+      "lastAnalyzedVoteCount": 51,
+      "lastAnalyzedAt": "2026-03-05T06:07:47.376Z",
+      "cached": false
+    },
+    "drep1yteh8udkttzy7frwl6yj5wzyqc04kx65pwwrqefx9j52ymgr6kuak": {
+      "name": "Dori",
+      "stake": "18197955578177",
+      "rank": 61,
+      "totalVotes": 30,
+      "withRationale": 1,
+      "voteSpread": {
+        "yes": 19,
+        "no": 7,
+        "abstain": 4
+      },
+      "tendencySummary": "Doriは透明性と正当性を重視する実用的な投票者で、技術的な問題による救済には同意するものの、補償額や追加条件には慎重な姿勢を示しています。ガバナンスの公正性と資金の適切な配分を厳格に監視する傾向があります。",
+      "keyPositions": [
+        "初期バグによる払い戻しは原提案者への返金確認が必須",
+        "過度な補償額（3,000ADA追加）には反対",
+        "追加理由での重ねての払い戻しには強く反対",
+        "技術的問題による救済は正当と認める",
+        "ガバナンス提案の透明性と検証を重視"
+      ],
+      "votingPattern": "技術的根拠がある場合は基本的に賛成するが、補償内容の妥当性を厳格に検証し、過度な要求には反対票を投じる条件付き投票者。",
+      "lastAnalyzedVoteCount": 30,
+      "lastAnalyzedAt": "2026-03-05T06:07:50.908Z",
+      "cached": false
+    },
+    "drep1ytaunswwpytxjk2ja7c5suxrjz57vtq4ryzu7prkxmm4wdqs7c9wn": {
+      "name": "MiyatakeJapan",
+      "stake": "16976180843058",
+      "rank": 62,
+      "totalVotes": 70,
+      "withRationale": 4,
+      "voteSpread": {
+        "yes": 62,
+        "no": 8,
+        "abstain": 0
+      },
+      "tendencySummary": "MiyatakeJapanは予算決定プロセスの効率性と実行可能性を重視し、不確実性が高い中での長期計画策定に慎重な立場を示しています。当年度予算の確実な決定を優先し、過度な時間・労力の消費を懸念しており、Cardanoの継続的な進展維持を重視しています。",
+      "keyPositions": [
+        "2025年度予算の確実な決定を最優先すべき",
+        "確実な見通しなしに2026年度以降の予算決定を先送りすべき",
+        "予算確認プロセスの効率化と時間・労力削減が必要",
+        "Cardanoの事業継続と進展維持を最優先すべき"
+      ],
+      "votingPattern": "予算関連議案に対して圧倒的多数の賛成(62票)を示しつつ、特定の長期計画や不透明な予算策定には慎重な反対(8票)を行う、現実的で段階的なアプローチを取っています。",
+      "lastAnalyzedVoteCount": 70,
+      "lastAnalyzedAt": "2026-03-05T06:07:54.435Z",
+      "cached": false
+    },
+    "drep1y2j2q9pcl855969ea9csrhdta6slnamctgzuvuqnnkl6fusqyjy36": {
+      "name": "Rodrigo-[CHIL]",
+      "stake": "16788537254223",
+      "rank": 63,
+      "totalVotes": 86,
+      "withRationale": 31,
+      "voteSpread": {
+        "yes": 63,
+        "no": 6,
+        "abstain": 17
+      },
+      "tendencySummary": "Rodrigo-[CHIL]は経済活動の促進とCardanoの競争力維持を重視し、財務効率化や戦略的投資を支持する傾向がある。ただし、十分な情報開示と透明性がない場合は慎重に判断し、実行可能性や詳細な条件確認を求める姿勢を示している。",
+      "keyPositions": [
+        "財務規律と効率性の重視 - 財務規模が過剰である場合は適切な削減を支持",
+        "Cardanoのスケーリングと競争力強化を優先",
+        "DeFiやBitcoin統合などの戦略的生態系拡大に賛成",
+        "情報開示と透明性がない提案には慎重に対応",
+        "実行可能性と詳細な条件確認を求める実務的姿勢"
+      ],
+      "votingPattern": "財政・技術的な正当性と戦略的重要性を判断基準として、情報や詳細が不足している場合は棄権し、明確で実現可能な提案に対しては強く支持する傾向がある。",
+      "lastAnalyzedVoteCount": 86,
+      "lastAnalyzedAt": "2026-03-05T06:07:58.723Z",
+      "cached": false
+    },
+    "drep1yfh3y46ffal6gyuf42e26urg5yyjecrgu2qyaj6zr8amk2sx3yn8g": {
+      "name": "LateGameCrypto",
+      "stake": "16420246209202",
+      "rank": 64,
+      "totalVotes": 23,
+      "withRationale": 7,
+      "voteSpread": {
+        "yes": 13,
+        "no": 10,
+        "abstain": 0
+      },
+      "tendencySummary": "LateGameCryptoは、提案の直接的でコア的なエコシステム利益を重視し、ROIの不確実性や定量化不足の提案に対して慎重です。トレジャリー資金の効率的な使用と提案者のCardanoへの真摯なコミットメントを厳しく評価します。",
+      "keyPositions": [
+        "エコシステムへの直接的なコア利益を提供する提案のみを優先",
+        "ROIと定量的インパクト測定の明確さを要求",
+        "提案者のCardano生態系への真摯なコミットメントを検証",
+        "トレジャリー資金の効率性と必要性を厳密に査定",
+        "補助的利益のためのトレジャリー支出は非推奨"
+      ],
+      "votingPattern": "提案の実質的価値、定量可能性、提案者の信頼性を厳しく検証する傾向が強く、肯定的な根拠の提示が限定的です。",
+      "lastAnalyzedVoteCount": 23,
+      "lastAnalyzedAt": "2026-03-05T06:08:02.279Z",
+      "cached": false
+    },
+    "drep1ygs99wsy49h9vydggncfeck2xwmngyeltp66pvgzl6jz63s6qmu3p": {
+      "name": "DraculaDAO",
+      "stake": "16294058593615",
+      "rank": 65,
+      "totalVotes": 80,
+      "withRationale": 47,
+      "voteSpread": {
+        "yes": 63,
+        "no": 15,
+        "abstain": 2
+      },
+      "tendencySummary": "DraculaDAO is結果指向的資金配分を重視し、成果ベースの助成金制度を支持しています。開発予算の継続的資金提供には反対しますが、具体的な価値を提供する革新的プロジェクトには柔軟に対応します。",
+      "keyPositions": [
+        "成果指向の資金配分と適切な金額設定を重視",
+        "継続的開発予算ではなく成果ベースの助成金を支持",
+        "革新的でエコシステムに価値をもたらすプロジェクトは例外的に支持",
+        "マーケティング予算は提案額と価値提案で判断",
+        "インフラなど必要不可欠なプロジェクトを支持"
+      ],
+      "votingPattern": "圧倒的多数の賛成票（80票中63票）を投じており、個別案件の具体的価値と妥当性に基づいてケースバイケースで判断する柔軟な投票姿勢を示しています。",
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-05T06:08:06.105Z",
+      "cached": false
+    },
+    "drep1yf7kjx5rlyuyzxkr4dzyccdfs8tesh29amrtcpyplu3asnqjgmdz3": {
+      "name": "RCADA",
+      "stake": "16032726632846",
+      "rank": 66,
+      "totalVotes": 48,
+      "withRationale": 47,
+      "voteSpread": {
+        "yes": 14,
+        "no": 7,
+        "abstain": 27
+      },
+      "tendencySummary": "RCADAは実質的な提案評価と厳密なプロセス遵守を重視し、不確実性や手続き的欠陥がある場合は慎重に棄権する傾向を示している。インフラ整備、透明性、測定可能な成果を優先し、単一ベンダーへの依存やトレジャリー資金の過度な使用には反対する。",
+      "keyPositions": [
+        "エコシステム全体に恩恵をもたらす非排他的インフラストラクチャを優先",
+        "透明性、測定可能なKPI、監査可能性を備えた提案を支持",
+        "単一ベンダー依存やIntersectへの権限集中に対する懸念を重視",
+        "憲法的適合性と手続き的厳密性を遵守できない提案には投票しない",
+        "トレジャリー資金の規模が大きい場合は高い基準を適用"
+      ],
+      "votingPattern": "不確実性や手続き違反がある場合は棄権し、検討対象外の提案には明確に反対、原則に沿い適切に構造化された提案には賛成する二層的な投票パターンを示している。",
+      "lastAnalyzedVoteCount": 48,
+      "lastAnalyzedAt": "2026-03-05T06:08:10.909Z",
+      "cached": false
+    },
+    "drep1ytf9f78k7rkwk4cu6l2nvna22keu9yus4kqzc0hqspd36uszu0xc2": {
+      "name": "Terminada",
+      "stake": "16003465145074",
+      "rank": 67,
+      "totalVotes": 62,
+      "withRationale": 34,
+      "voteSpread": {
+        "yes": 29,
+        "no": 32,
+        "abstain": 1
+      },
+      "tendencySummary": "Terminadaは透明性と分散性を強く重視し、委員会による不透明な資金配分(スラッシュファンド)に反対する厳格な投票者です。オープンソース化とProject Catalystを通じた直接的なコミュニティ投票を支持する傾向があります。",
+      "keyPositions": [
+        "委員会による不透明な資金管理やスラッシュファンドに強く反対",
+        "Project Catalystによる直接的なコミュニティ投票と監視を重視",
+        "オープンソース化されたコードのみが資金調達に値すると考える",
+        "Cardano Foundationの独立性と透明性の欠如に対する懸念",
+        "実績不明確な提案や過度な予算要求に対する反対"
+      ],
+      "votingPattern": "技術的な妥当性と分散性・透明性の原則を厳密に評価し、不透明な組織構造や委員会主導の資金配分には一貫して反対票を投じています。",
+      "lastAnalyzedVoteCount": 62,
+      "lastAnalyzedAt": "2026-03-05T06:08:15.265Z",
+      "cached": false
+    },
+    "drep1yfew9k09hzz0wk49yynlpz7ywx57vux5plqdxgyluvs6qksc6gtzk": {
+      "name": "Richard Irving",
+      "stake": "14502782111205",
+      "rank": 68,
+      "totalVotes": 0,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 0,
+        "no": 0,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Has not voted",
+      "lastAnalyzedVoteCount": 0,
+      "lastAnalyzedAt": "2026-03-05T06:08:15.477Z",
+      "cached": false
+    },
+    "drep1ytrqcqg4qh35nwed29nzatke8jemsyelyhdencdc4hx5y0qh3adwe": {
+      "name": "忠実",
+      "stake": "13952738288261",
+      "rank": 69,
+      "totalVotes": 62,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 34,
+        "no": 28,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 62,
+      "lastAnalyzedAt": "2026-03-05T06:08:15.489Z",
+      "cached": false
+    },
+    "drep1y2jnqfamg4tq5aepxhggzhqg7pq5gunph4wypkyh9q3qt2cru5m2j": {
+      "name": "Wada DRep",
+      "stake": "13807195624753",
+      "rank": 70,
+      "totalVotes": 80,
+      "withRationale": 79,
+      "voteSpread": {
+        "yes": 62,
+        "no": 12,
+        "abstain": 6
+      },
+      "tendencySummary": "Wada DRep は、Cardano のガバナンスプロセスと財務規律を重視し、戦略的価値と手続き的整合性を慎重に検討した上で投票する委員会。予算承認済みの実装や生態系インフラには積極的に支持する一方で、憲法遵守の不足、説明責任の欠如、プロセスの不透明さには反対票を投じる傾向がある。",
+      "keyPositions": [
+        "予算承認済みの財務引き出しと生態系インフラ整備を支持",
+        "憲法プロセスへの厳格な遵守と説明責任を要求",
+        "長期的な戦略的価値と生態系持続性を優先評価",
+        "不十分な詳細説明と不適切なプロセスには反対",
+        "分権化ガバナンスと地域的エコシステム構築を強調"
+      ],
+      "votingPattern": "Wada DRep は、提案の実質的な価値と手続き的適切性の両立を厳密に評価し、戦略的必要性が高い場合でもプロセス上の瑕疵がある場合は慎重に対応する複層的な投票パターンを示している。",
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-05T06:08:19.794Z",
+      "cached": false
+    },
+    "drep1ytr0t0sxfl7qf99zd8x9dam8c0mqkemrtuekh4hekpd8fpqty2h5n": {
+      "name": "Smaug",
+      "stake": "12992971473937",
+      "rank": 71,
+      "totalVotes": 73,
+      "withRationale": 2,
+      "voteSpread": {
+        "yes": 50,
+        "no": 7,
+        "abstain": 16
+      },
+      "tendencySummary": "Smaugは圧倒的に賛成票を投じる傾向が強く（50票対7票），提案の大多数を支持している。限定的な根拠付き投票から判断すると，実用性と強化の原則に基づいて判断する傾向が見られる。",
+      "keyPositions": [
+        "実用性のない提案には反対",
+        "プロトコルの強化と進化を支持",
+        "多数の提案に対して肯定的姿勢"
+      ],
+      "votingPattern": "Smaugは大部分の提案に賛成する傾向が強く，実用性がない場合のみ反対票を投じる比較的単純な投票パターンを示している。",
+      "lastAnalyzedVoteCount": 73,
+      "lastAnalyzedAt": "2026-03-05T06:08:22.421Z",
+      "cached": false
+    },
+    "drep1y2v2ncht76apatlnxgtz8h8zy943avf7padqkkvycmzmcpcre7fek": {
+      "name": "concon",
+      "stake": "12278463439613",
+      "rank": 72,
+      "totalVotes": 82,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 76,
+        "no": 6,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 82,
+      "lastAnalyzedAt": "2026-03-05T06:08:22.629Z",
+      "cached": false
+    },
+    "drep1ygzp8678j5q8s8syhk4a7a4tr54sp3su8fxzzdjhuxcn4tc6r2qcn": {
+      "name": "AQUA_Vote",
+      "stake": "12146902566288",
+      "rank": 73,
+      "totalVotes": 16,
+      "withRationale": 1,
+      "voteSpread": {
+        "yes": 14,
+        "no": 2,
+        "abstain": 0
+      },
+      "tendencySummary": "AQUA_Voteは予算配分の優先順位として、ステーク報酬の引き上げよりもCardanoの実装・拡大に重点を置く傾向を示しています。ただし投票理由の提示が極めて限定的（16票中1票のみ）であり、詳細な立場の把握は困難です。",
+      "keyPositions": [
+        "Catalystプロジェクト開発への予算優先配分",
+        "コミュニティ拡大と実装促進",
+        "ステーク報酬引き上げへの慎重姿勢",
+        "ビジネス・政府機関によるCardano採用の推進"
+      ],
+      "votingPattern": "強いYes傾向（14:2の比率）を示しており、多くのGov Actionに支持的ですが、戦略的な予算配分に関する限定的な異議を唱える選別的な投票者です。",
+      "lastAnalyzedVoteCount": 16,
+      "lastAnalyzedAt": "2026-03-05T06:08:25.773Z",
+      "cached": false
+    },
+    "drep1ygt7jr22s8fc36hnamgfzqtecuz2ppsj6jr5k0e8gp2pv7qw8ehel": {
+      "name": "OREKA_Vote",
+      "stake": "11739567255119",
+      "rank": 74,
+      "totalVotes": 17,
+      "withRationale": 1,
+      "voteSpread": {
+        "yes": 15,
+        "no": 2,
+        "abstain": 0
+      },
+      "tendencySummary": "OREKA_Vote は圧倒的に肯定的な投票傾向を示しており、提案の承認に非常に積極的です。記録されたガバナンス投票において、ほぼすべての提案を支持しながら、実務的な政策更新の必要性を重視する立場を示しています。",
+      "keyPositions": [
+        "管理政策の定期的な更新と改善を支持",
+        "ガバナンス提案への積極的な承認姿勢",
+        "実際の要件に基づいた柔軟な政策対応"
+      ],
+      "votingPattern": "提案に対してほぼ無条件に賛成する傾向が強く（肯定票15：反対票2）、投票根拠の記録は極めて限定的です。",
+      "lastAnalyzedVoteCount": 17,
+      "lastAnalyzedAt": "2026-03-05T06:08:28.618Z",
+      "cached": false
+    },
+    "drep1y2sld9e4nmasqfpusd5e67rwczj4l20d3653jgs38r4mams52y4jx": {
+      "name": "π Lanningham",
+      "stake": "11305975173408",
+      "rank": 75,
+      "totalVotes": 16,
+      "withRationale": 16,
+      "voteSpread": {
+        "yes": 10,
+        "no": 4,
+        "abstain": 2
+      },
+      "tendencySummary": "π Lanninghamは段階的で慎重なアプローチを重視しながらも、エコシステムの長期的な発展と経済的実行可能性のための建設的な前進を支持する傾向があります。利益相反がある場合は透明性を持って開示し、詳細な分析に基づいた投票判断を行う責任あるDRepです。",
+      "keyPositions": [
+        "Cardanoの経済的実行可能性と長期的な資金戦略の確立を優先",
+        "憲法のような重要な基盤的枠組みは不完全でも反復可能性を重視して承認",
+        "ネットワーク多様性とノード実装の重要性を強く支持",
+        "利益相反の状況では透明性を持って棄権または開示投票を実施",
+        "急激な変更より段階的で検証されたアプローチを好む"
+      ],
+      "votingPattern": "提案の長期的な影響と全体的な方向性を評価し、詳細な公開分析に基づいて投票する一方、利益相反や他の提案との矛盾がある場合は厳密に対処する傾向があります。",
+      "lastAnalyzedVoteCount": 16,
+      "lastAnalyzedAt": "2026-03-05T06:08:33.508Z",
+      "cached": false
+    },
+    "drep1y2k8uedxj5xzymxxzf07plg0t5xd4mmckwg9lwkwhdlwyesy0eyf8": {
+      "name": "Holger",
+      "stake": "11185029316406",
+      "rank": 76,
+      "totalVotes": 13,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 9,
+        "no": 1,
+        "abstain": 3
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 13,
+      "lastAnalyzedAt": "2026-03-05T06:08:33.721Z",
+      "cached": false
+    },
+    "drep1yt5cc878w5c8umxrfudnmzw425epxnvvttw7hhrhwfhp0zqf400ze": {
+      "name": "Paul Ko",
+      "stake": "11016004121121",
+      "rank": 77,
+      "totalVotes": 70,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 65,
+        "no": 5,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 70,
+      "lastAnalyzedAt": "2026-03-05T06:08:33.730Z",
+      "cached": false
+    },
+    "drep1yfk27rp5ae0ggmdx09k6k00ctnc5249s2pm49xmv2d60hrc9pm404": {
+      "name": "STP",
+      "stake": "10993409345056",
+      "rank": 78,
+      "totalVotes": 11,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 8,
+        "no": 2,
+        "abstain": 1
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 11,
+      "lastAnalyzedAt": "2026-03-05T06:08:33.739Z",
+      "cached": false
+    },
+    "drep1ythpg7cjugjv0uq5eclcuucln3ve4xu8aj23lwhk9dmj0wslug6qh": {
+      "name": "Clean_Eyes",
+      "stake": "10098878567288",
+      "rank": 79,
+      "totalVotes": 1,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 1,
+        "no": 0,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 1,
+      "lastAnalyzedAt": "2026-03-05T06:08:33.750Z",
+      "cached": false
+    },
+    "drep1yt37s3z3ddzmzug9mujxy5c0patgetmjv6fhf3he4nmnv2ga3nad2": {
+      "name": "pammariko",
+      "stake": "9565009267894",
+      "rank": 80,
+      "totalVotes": 82,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 72,
+        "no": 3,
+        "abstain": 7
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 82,
+      "lastAnalyzedAt": "2026-03-05T06:08:33.758Z",
+      "cached": false
+    },
+    "drep1y2fhyudw8ju53e296c3yugvul6h3fpurhnx45lfa9e5meqgtky0gg": {
+      "name": "KTOP",
+      "stake": "8680765894481",
+      "rank": 81,
+      "totalVotes": 80,
+      "withRationale": 2,
+      "voteSpread": {
+        "yes": 51,
+        "no": 27,
+        "abstain": 2
+      },
+      "tendencySummary": "KTOPは提案を評価する際にCatalystでの議論を重視し、ガバナンス投票の範囲外と判断される意見提案に対しては否定的な投票姿勢を示している。全体的には肯定的な投票傾向（Yes:51）が優勢だが、意思決定プロセスの適切な区分けに関心を持つDRepである。",
+      "keyPositions": [
+        "Catalyst適切な提案はCatalystで議論されるべき",
+        "ガバナンス投票と提案カテゴリの境界線を重視",
+        "意見・提案型の案件は不適切と判断"
+      ],
+      "votingPattern": "KTOPは大多数の提案に賛成する傾向を示しながらも、提案の性質や適切な審議プロセスに対する懸念から選別的に反対票を投じている。",
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-05T06:08:37.099Z",
+      "cached": false
+    },
+    "drep1yt4lyf0fwlrz8k6j5evd3rxw0sqp67qkh36su98a97q3qsc0h03y4": {
+      "name": "Cardanians",
+      "stake": "8167181914687",
+      "rank": 82,
+      "totalVotes": 71,
+      "withRationale": 51,
+      "voteSpread": {
+        "yes": 46,
+        "no": 20,
+        "abstain": 5
+      },
+      "tendencySummary": "Cardanians DRepは、明確な実行計画、財務透明性、および測定可能な成果を伴う提案を支持する厳密な評価者です。官僚的構造や不十分な説明責任を持つ資金配分には反対し、インフラストラクチャ改善やコミュニティ利益に直結する提案には慎重に支持します。",
+      "keyPositions": [
+        "提案には具体的なマイルストーン、予算内訳、実行責任が必須",
+        "インフラストラクチャとプロトコル改善は優先支持対象",
+        "不明確な委員会構造や権力集中型の提案は反対",
+        "財務規律と透明性を伴う革新的な資金モデル（ローン型など）を支持",
+        "コミュニティガバナンスと分散化の強化を重視"
+      ],
+      "votingPattern": "詳細な説明責任と測定可能な成果を欠く提案には厳しく反対し、技術的インフラストラクチャの改善と透明性のある資金配分には支持する傾向が強い。",
+      "lastAnalyzedVoteCount": 71,
+      "lastAnalyzedAt": "2026-03-05T06:08:41.563Z",
+      "cached": false
+    },
+    "drep1y2pyv5v96qle0xp35fhlv2wwjudx8y2e0dcpvktj2xfr8ugdnlh4q": {
+      "name": "drep1y2pyv5v96qle0xp...",
+      "stake": "8019683909841",
+      "rank": 83,
+      "totalVotes": 5,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 3,
+        "no": 1,
+        "abstain": 1
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 5,
+      "lastAnalyzedAt": "2026-03-05T06:08:41.771Z",
+      "cached": false
+    },
+    "drep1ytq64jdk5fequ0228znae33d3ncs50ujl7qev0uqlx37l8cpjhc2k": {
+      "name": "ATLAS_Wolfgang",
+      "stake": "7884495160270",
+      "rank": 84,
+      "totalVotes": 14,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 10,
+        "no": 3,
+        "abstain": 1
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 14,
+      "lastAnalyzedAt": "2026-03-05T06:08:41.779Z",
+      "cached": false
+    },
+    "drep1y2hlgh9600zjlt39dh54z7z8d65kahneck8yhh7ugmzc9as0xrzqd": {
+      "name": "InputEndorsers",
+      "stake": "7740395966687",
+      "rank": 85,
+      "totalVotes": 86,
+      "withRationale": 84,
+      "voteSpread": {
+        "yes": 55,
+        "no": 26,
+        "abstain": 5
+      },
+      "tendencySummary": "InputEndorsersは、Cardanoの予算支出に対して慎重で規律的なアプローチを取っており、個人的な支出限度額(₳200-250M)を設定して最初のMVG年度の財務規律を維持しようとしている。ガバナンスインフラ、憲法改正、セキュリティ向上など、生産的で長期的な価値をもたらす提案には支持を示す一方で、商業的なサービス資金化や市場介入には懐疑的である。",
+      "keyPositions": [
+        "ガバナンスインフラ(GovTool等)への資金提供を優先支持",
+        "短期間の商業プロジェクト資金化(18ヶ月契約など)には慎重",
+        "個人的な年間予算枠(₳200-250M)を厳格に遵守する意思",
+        "市場介入的な財務支出(流動性提供など)の高リスク性を懸念",
+        "分散化とセキュリティに関する技術的提案に支持"
+      ],
+      "votingPattern": "是認55件、反対26件、棄権5件で強気傾向を示しており、ガバナンス強化や基盤整備には積極的に投票する一方で、商業的資金化や市場操作的提案には厳格に反対票を投じている。",
+      "lastAnalyzedVoteCount": 86,
+      "lastAnalyzedAt": "2026-03-05T06:08:46.830Z",
+      "cached": false
+    },
+    "drep1yfpazkd0aqex0kd3vrhk47sjy0jqgq3xu6h2zv9wevfequcxyynwv": {
+      "name": "PRIDE",
+      "stake": "7340176303839",
+      "rank": 86,
+      "totalVotes": 66,
+      "withRationale": 1,
+      "voteSpread": {
+        "yes": 30,
+        "no": 34,
+        "abstain": 2
+      },
+      "tendencySummary": "PRIDEは資金配分のあり方に対して慎重な姿勢を示し、特にDRep資金化に対して反対の立場をとっています。投票パターンは比較的均衡していますが、DRep関連の提案に対しては明確な反対姿勢が見られます。",
+      "keyPositions": [
+        "DRep資金化への反対",
+        "資金配分優先順位の見直しが必要",
+        "Pillar 3の提案内容に対する異議"
+      ],
+      "votingPattern": "全体的にはバランスの取れた投票姿勢を示しながらも、DRep関連の議題では原則的に反対票を投じる傾向が見られます。",
+      "lastAnalyzedVoteCount": 66,
+      "lastAnalyzedAt": "2026-03-05T06:08:49.376Z",
+      "cached": false
+    },
+    "drep1yfdfs28uwafjgmrkatdektlzrvha2cmvqjhuz700e04mawq23rmrg": {
+      "name": "drep1yfdfs28uwafjgmr...",
+      "stake": "7098067809311",
+      "rank": 87,
+      "totalVotes": 85,
+      "withRationale": 74,
+      "voteSpread": {
+        "yes": 64,
+        "no": 18,
+        "abstain": 3
+      },
+      "tendencySummary": "このDRepは、Cardanoの継続的な改善とエコシステム発展を重視する進歩的な投票者です。ガバナンスプロセスの改善、DeFi・ステーブルコイン・重要インフラへの資金配分、実質的な価値をもたらすプロジェクトを積極的に支持する傾向があります。",
+      "keyPositions": [
+        "ガバナンスプロセスの効率化と明確化を支持",
+        "DeFi・ステーブルコイン・重要インフラへの投資拡大",
+        "測定可能な成果とKPIを備えた具体的なプロジェクトを優先",
+        "エコシステム成長のための戦略的リスク（抵当付きローンなど）を受け入れ",
+        "持続可能性とNCL管理のバランスに関する懸念を保持"
+      ],
+      "votingPattern": "Yes票が圧倒的多数派（64票）で、提案の実質的価値と長期的なエコシステム発展への貢献度を慎重に評価し、詳細な根拠付き投票を提供する意識的なアプローチを示しています。",
+      "lastAnalyzedVoteCount": 85,
+      "lastAnalyzedAt": "2026-03-05T06:08:53.964Z",
+      "cached": false
+    },
+    "drep1y2jd3c4hgg0tdua58z6c64k9rf58lz3jlcjlxcjfeaspl6q2e9zm6": {
+      "name": "drep1y2jd3c4hgg0tdua...",
+      "stake": "6710379535097",
+      "rank": 88,
+      "totalVotes": 27,
+      "withRationale": 26,
+      "voteSpread": {
+        "yes": 19,
+        "no": 8,
+        "abstain": 0
+      },
+      "tendencySummary": "このDRepは、Cardanoのガバナンスと技術的発展を支持する実用的かつデータ駆動型のアプローチを採用しており、完璧性よりも実行可能性を優先します。憲法的コンプライアンスと生態系の安定性を重視しながらも、戦略的な投資と革新を通じた長期的な成長を支持しています。",
+      "keyPositions": [
+        "ガバナンスの段階的かつ証拠に基づく発展を支持",
+        "予算管理と財務規律の重要性を認識",
+        "技術的基盤整備と開発者体験の向上を優先",
+        "憲法的コンプライアンスと手続き的完全性への厳格な遵守",
+        "コミュニティメンバーとその貢献の尊重"
+      ],
+      "votingPattern": "肯定票が多く（19票）、慎重な検討を伴う否定票（8票）を行い、タイミング、規模、手続き的合法性に関する懸念から選別的に反対しています。",
+      "lastAnalyzedVoteCount": 27,
+      "lastAnalyzedAt": "2026-03-05T06:08:57.938Z",
+      "cached": false
+    },
+    "drep1ytw5tvdxpe39l9gm3g49gl0whwd2dgu4mcf5ml5z3zfuk3s8npegv": {
+      "name": "drep1ytw5tvdxpe39l9g...",
+      "stake": "6621882676840",
+      "rank": 89,
+      "totalVotes": 11,
+      "withRationale": 7,
+      "voteSpread": {
+        "yes": 6,
+        "no": 5,
+        "abstain": 0
+      },
+      "tendencySummary": "このDRepは、ミームやメモ文化への強い反対と、暗号通貨の本来の目的（既存システムからの解放と真の平等）への信念が特徴です。中央集権的な権威構造に対して懐疑的であり、Cardanoの理想主義的なビジョンを重視しています。",
+      "keyPositions": [
+        "ミームプロジェクトや投機的行為の資金配分に反対",
+        "暗号通貨は既存の政府・法的システムからの独立が必須",
+        "委員会（CC）の権限拡大や既得権層による搾取に反対",
+        "「ADA保有者」という用語で政府の支配回避を支持",
+        "KPIやプロジェクト基準の厳格化を要求"
+      ],
+      "votingPattern": "理想主義的な原則（分散化、既存権力構造からの独立）に基づいて賛成・反対を判断し、娯楽性やメモ文化、中央集権的な権威拡大には一貫して反対票を投じています。",
+      "lastAnalyzedVoteCount": 11,
+      "lastAnalyzedAt": "2026-03-05T06:09:02.139Z",
+      "cached": false
+    },
+    "drep1y2urcg66ytnvt5tv7kv4saemu83hnuk9rydhh0tmem96mac3ltuaf": {
+      "name": "drep1y2urcg66ytnvt5t...",
+      "stake": "6375045448060",
+      "rank": 90,
+      "totalVotes": 1,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 1,
+        "no": 0,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 1,
+      "lastAnalyzedAt": "2026-03-05T06:09:02.352Z",
+      "cached": false
+    },
+    "drep1ytnyqac848el309ynepkh9auljjt75za9fj2wzzu4gl0wecgwhxy5": {
+      "name": "drep1ytnyqac848el309...",
+      "stake": "6292988821352",
+      "rank": 91,
+      "totalVotes": 0,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 0,
+        "no": 0,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Has not voted",
+      "lastAnalyzedVoteCount": 0,
+      "lastAnalyzedAt": "2026-03-05T06:09:02.362Z",
+      "cached": false
+    },
+    "drep1y24zgz7nnyfuefgy8d0qhg2w0av26zp5lq6vk0eg2l7vk8qp7g8e9": {
+      "name": "Shota",
+      "stake": "6067520602147",
+      "rank": 92,
+      "totalVotes": 10,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 4,
+        "no": 6,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 10,
+      "lastAnalyzedAt": "2026-03-05T06:09:02.371Z",
+      "cached": false
+    },
+    "drep1ytae7wj5s8pu8qry9vfcnqy97w68z96lffzwzrc4verpkfqsl8e8m": {
+      "name": "stakit (sti) by TOBG",
+      "stake": "5913855257567",
+      "rank": 93,
+      "totalVotes": 2,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 2,
+        "no": 0,
+        "abstain": 0
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 2,
+      "lastAnalyzedAt": "2026-03-05T06:09:02.381Z",
+      "cached": false
+    },
+    "drep1y26sfka2km0p4xw073ujdq406wxxczhdyfh9vw7yxpfselchzkdjn": {
+      "name": "YOADA",
+      "stake": "5856449078252",
+      "rank": 94,
+      "totalVotes": 84,
+      "withRationale": 6,
+      "voteSpread": {
+        "yes": 77,
+        "no": 7,
+        "abstain": 0
+      },
+      "tendencySummary": "YOADAは生態系の発展に必要な施策に対して強く肯定的な投票傾向を示しており、戦略的なビジョンやセキュリティ投資に積極的に支持している。一方、ガバナンス報酬など時期尚早と判断される提案には慎重な姿勢を取っている。",
+      "keyPositions": [
+        "エコシステムの必須インフラ投資を重視する",
+        "戦略的ビジョンと生態系の発展に賛成",
+        "セキュリティ向上施策を構造的投資と評価",
+        "ガバナンス報酬の時期尚早性に懸念"
+      ],
+      "votingPattern": "圧倒的多数賛成(77:7)で、特にエコシステムの基盤構築やセキュリティ関連提案に高い支持を示す傾向が見られる。",
+      "lastAnalyzedVoteCount": 84,
+      "lastAnalyzedAt": "2026-03-05T06:09:05.228Z",
+      "cached": false
+    },
+    "drep1y28uwdrz2acyp4jka5fqp2fa3hp0klpme8wug3f5p2y45zsc0e8qw": {
+      "name": "Daehan_kor",
+      "stake": "5622505512266",
+      "rank": 95,
+      "totalVotes": 60,
+      "withRationale": 38,
+      "voteSpread": {
+        "yes": 46,
+        "no": 14,
+        "abstain": 0
+      },
+      "tendencySummary": "Daehan_korは開発者体験の向上とコア基盤技術への投資を重視し、実績のない提案や不十分な説明には厳しく評価する傾向がある。透明性とROIの明確性を求め、市場が選別する勝者への支援を信条としている。",
+      "keyPositions": [
+        "開発者体験（DX）向上のための技術スタック投資を優先",
+        "透明性とオープンソース化による条件付き承認",
+        "実績のない組織や不十分な説明の提案は厳しく評価",
+        "Ledger/Trezorなどセキュリティインフラの維持を重視",
+        "市場で実績を示したプロジェクトへの選別的支援"
+      ],
+      "votingPattern": "技術的価値と実装の実績を根拠とした理性的な投票を行い、開発生態系の充実と透明性を条件とするプラグマティックなアプローチを示している。",
+      "lastAnalyzedVoteCount": 60,
+      "lastAnalyzedAt": "2026-03-05T06:09:09.602Z",
+      "cached": false
+    },
+    "drep1yf0s5guxklwlqn7ttdpfwmmkaucwaqkkm6hzncy8nful5fgemurcj": {
+      "name": "STORM Partners",
+      "stake": "5480692715870",
+      "rank": 96,
+      "totalVotes": 66,
+      "withRationale": 62,
+      "voteSpread": {
+        "yes": 55,
+        "no": 8,
+        "abstain": 3
+      },
+      "tendencySummary": "STORM Partnersは、オープンソースで検証済みのインフラストラクチャと、明確なROI・マイルストーンベースの構造を持つ提案を優先する。商業的な単一ベンダー依存やプロプライエタリなSaaSモデル、十分な透明性や事前協議のない大規模予算配分には慎重に反対する。",
+      "keyPositions": [
+        "オープンソース・開発者アクセス性の向上による生態系効率化を重視",
+        "マイルストーン・返済義務・監査を備えた財務構造の厳格な要件",
+        "プロプライエタリ・ベンダー依存よりも分散型共有インフラの優先",
+        "コミュニティ協議と透明性を経た大型予算配分のみを支持",
+        "実績のあるチームとRWA・機関投資家向けの戦略的機会の支持"
+      ],
+      "votingPattern": "インフラ品質・チーム実績・返済可能性・事前協議と透明性を基準に詳細な判断理由を示しながら投票する傾向が強く、単一トークン利益や不透明な財務構造には一貫して反対する。",
+      "lastAnalyzedVoteCount": 66,
+      "lastAnalyzedAt": "2026-03-05T06:09:14.698Z",
+      "cached": false
+    },
+    "drep1ygc29nv90qqtf7qwlp5eqwnscdmvk5utnul9arfm9eklw9cphfhhu": {
+      "name": "Kostas Panagias",
+      "stake": "5407991940362",
+      "rank": 97,
+      "totalVotes": 80,
+      "withRationale": 78,
+      "voteSpread": {
+        "yes": 60,
+        "no": 15,
+        "abstain": 5
+      },
+      "tendencySummary": "Kostas Panagias is a principled DRep who emphasizes constitutional compliance, fiscal conservatism, and strategic alignment with Cardano's long-term vision. He votes YES on proposals that demonstrate accountability, pass constitutional scrutiny, and advance critical ecosystem infrastructure, while voting NO on unconstitutional submissions, excessive spending, or poor user experience implementations.",
+      "keyPositions": [
+        "憲法準拠性と適切な手続きの厳格な要求",
+        "年間取引手数料収入を超えない保守的な財政政策",
+        "戦略的優先事項と生態系競争力への配置",
+        "説明責任と透明性を示すプロジェクトの支持",
+        "コミュニティフィードバックに応じた提案改善の評価"
+      ],
+      "votingPattern": "Ekklesia予算調整プロセスの方針に基づいた一貫した投票行動を示しており、YES票は戦略的重要性と憲法準拠性を示す提案に集中し、NO票は憲法違反、予算超過、不十分なユーザー体験に対する原則的な異議である。",
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-05T06:09:18.951Z",
+      "cached": false
+    },
+    "drep1y25rvalxnc4p8fghxcwkz0l6gdseqduqvrdzh5pzdprrvnczj0ucx": {
+      "name": "ONYX AI DRep",
+      "stake": "5213506981696",
+      "rank": 98,
+      "totalVotes": 67,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 52,
+        "no": 12,
+        "abstain": 3
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 67,
+      "lastAnalyzedAt": "2026-03-05T06:09:19.161Z",
+      "cached": false
+    },
+    "drep1ytfas4axhm8yzrqqh4ru2uuqesu87zeq6fwg5pq8azqf7ecu4nu8s": {
+      "name": "Peter Horsfall",
+      "stake": "5151752499686",
+      "rank": 99,
+      "totalVotes": 74,
+      "withRationale": 22,
+      "voteSpread": {
+        "yes": 68,
+        "no": 6,
+        "abstain": 0
+      },
+      "tendencySummary": "Peter Horsfallは、Cardanoの長期的な成長と安定性を重視し、堅牢なガバナンス構造の維持を優先する支持者です。予算管理、憲法改正、地域開発、技術革新を支持する傾向が強く、権力集中や過度な削減には慎重です。",
+      "keyPositions": [
+        "Cardano財務の長期的安定性と慎重な資金配分を支持",
+        "透明性と説明責任を備えた堅牢なガバナンス構造の強化",
+        "憲法改正とコミュニティ主導の民主的プロセスへの支持",
+        "Oceaniaなどの地域開発と革新的なプロジェクトへの投資",
+        "権力集中の抑制と委員会規模の維持による分散的意思決定"
+      ],
+      "votingPattern": "保守的で戦略的な投票行動であり、Cardanoの長期的成長を支える建設的提案には強く支持する一方、権力集中や重要な機能の縮小には明確に反対しています。",
+      "lastAnalyzedVoteCount": 74,
+      "lastAnalyzedAt": "2026-03-05T06:09:27.026Z",
+      "cached": false
+    },
+    "drep1yffymrag4k6jn7cqpdhryhtcm0czrkc6h9c3w85ynydc8js0vhlta": {
+      "name": "dRep_Voshe",
+      "stake": "5040869918004",
+      "rank": 100,
+      "totalVotes": 7,
+      "withRationale": 0,
+      "voteSpread": {
+        "yes": 2,
+        "no": 4,
+        "abstain": 1
+      },
+      "tendencySummary": "No voting rationales provided.",
+      "keyPositions": [],
+      "votingPattern": "Votes without providing rationale",
+      "lastAnalyzedVoteCount": 7,
+      "lastAnalyzedAt": "2026-03-05T06:09:27.237Z",
+      "cached": false
+    }
+  }
+}

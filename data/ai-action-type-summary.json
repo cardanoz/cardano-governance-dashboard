@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-03-05T06:23:26.584Z",
+  "actionTypes": {
+    "TreasuryWithdrawals": {
+      "count": 47,
+      "summary": "Treasury Withdrawal proposals for Cardano receive mixed support, with YES votes (3310) significantly outnumbering NO votes (996) and relatively few abstentions (315). The most contentious proposals involve discretionary spending or new initiatives, while infrastructure investments with proven track records (like Amaru node diversity) garner stronger consensus.",
+      "typicalReasonsYes": [
+        "Team has strong track record and proved financial responsibility (e.g., returned unused funds)",
+        "Proposal addresses critical infrastructure needs (node diversity, decentralization, resilience)",
+        "Detailed budget breakdown and clear milestones with measurable KPIs provided",
+        "Strategic long-term value to Cardano ecosystem despite current market conditions"
+      ],
+      "typicalReasonsNo": [
+        "Excessive budget allocation without proven market demand or clear ROI metrics",
+        "Lack of transparency in governance structure (committee composition, qualifications)",
+        "Constitutional compliance issues or governance process concerns",
+        "Concern about duplicating existing efforts or inefficient use of treasury funds"
+      ]
+    },
+    "ParameterChange": {
+      "count": 5,
+      "summary": "このパラメータ変更提案は、憲法委員会（CC）の最小規模を7から5に削減することを目指しています。投票者の意見は分かれており、賛成派はガバナンスの運用上の脆弱性を解決することを強調し、反対派はより大きな委員会による分散化と監視機能の重要性を主張しています。",
+      "typicalReasonsYes": [
+        "現在7人のCC委員が最小規模に等しいため、1人の辞任や欠員によってガバナンスが完全に停止するリスクを回避できる",
+        "5人への削減は緊急時の下限に過ぎず、7人体制の運用原則を維持しながら運用上の柔軟性を提供する",
+        "Cardanoの初期段階において、ガバナンスの実効性と信頼性を向上させ、意思決定の遅延や停止を防ぐことができる",
+        "委員会の権限や判断基準を弱めるものではなく、一時的な欠員時もガバナンスを継続可能にする成熟した調整である"
+      ],
+      "typicalReasonsNo": [
+        "より少ないCC委員は権力の集中と中央化につながり、ガバナンスに対する監視機能が低下する",
+        "最小規模を削減するのではなく、委員の総数を9人に増やし最小規模を7人に設定する方が望ましい",
+        "現在のCC選出プロセスはオフチェーンで実施され、DRep参加が限定的であるため、委員の質が未だ十分に認証されていない",
+        "最小規模の削減は根本的な問題解決ではなく、高品質のCC委員の厳選と責任へのコミットメント強化が必要である"
+      ]
+    },
+    "InfoAction": {
+      "count": 29,
+      "summary": "InfoActionの投票では、300M ADAのNet Change Limit（NCL）設定について、全体的に賛成が多数派となっています。賛成派は財政規律と前年度の流入額との整合性を重視し、反対派はより厳格な支出制限やガバナンス成熟度の懸念を述べています。",
+      "typicalReasonsYes": [
+        "前年度の実際の資金流入額（約306-307M ADA）に基づいた合理的で保守的なアプローチ",
+        "350M ADAから300M ADAへの削減により、財政規律と責任ある管理姿勢を示す",
+        "ADA価格下落（約30%）や準備金減少を考慮した慎重な予算設定",
+        "初期段階のガバナンス成熟化において、トレジャリー運用を停滞させないバランスの取れた選択"
+      ],
+      "typicalReasonsNo": [
+        "300M ADAは依然として過度であり、200-250M ADAへのさらなる削減による厳格な財政規律が必要",
+        "前年度（2025年）予算の実績評価や透明性のある報告が不十分なまま新予算を承認することへの懸念",
+        "NCLを「使い切るべき予算」として機能させるべきではなく、個別提案の評価を重視すべき",
+        "ADA価格連動的な予算設定は短期的な市場変動に左右され、数十年単位で機能するトレジャリー設計として不適切"
+      ]
+    },
+    "NewConstitution": {
+      "count": 4,
+      "summary": "Cardano Constitution v2.4 received strong support (236 YES vs 74 NO votes) with backing from major DReps like Yoroi and EMURGO. The proposal focused on simplifying governance by removing non-binding provisions, eliminating the Budget Info Action, and strengthening accountability mechanisms. However, significant concerns about the amendment process, legal clarity, and community inclusivity were raised by opponents.",
+      "typicalReasonsYes": [
+        "Removes non-binding expectations and redundant mechanisms (Budget Info Action) to make governance more enforceable and practical",
+        "Clarifies definitions and strengthens audit/accountability safeguards for treasury management and proposal immutability",
+        "Improves governance maturity and operational transparency while maintaining decentralization principles",
+        "Addresses previous concerns raised in earlier versions through iterative improvements and community feedback incorporation"
+      ],
+      "typicalReasonsNo": [
+        "Lacks legitimate community-wide involvement and formal amendment process; appears driven by single influential actor rather than systematic community consensus",
+        "Poor legal drafting quality with vague terminology, grammatical issues, and unpredictable interpretation consequences",
+        "Removes important safeguards (budget mechanics, conduct expectations) that prevent governance capture by well-resourced actors",
+        "Insufficient accountability and authorship clarity for such a foundational document; insufficient debate and feedback incorporation despite multiple iterations"
+      ]
+    },
+    "new_committee": {
+      "count": 3,
+      "summary": "3つの新規委員会メンバー追加提案に対する投票では、賛成190票が反対22票を大きく上回っている。賛成派は委員会の安定性と継続性向上、ガバナンス停止リスク軽減を主な理由としているのに対し、反対派は選挙プロセスの尊重と適切な手続き変更の必要性を強調している。",
+      "typicalReasonsYes": [
+        "委員会の最小要件以上の人数維持による、欠員時のガバナンス停止リスク低減",
+        "選挙での高い支持率と候補者の適格性・信頼性の証明",
+        "委員会の継続性・回復力・機能安定性の向上"
+      ],
+      "typicalReasonsNo": [
+        "憲法で定められた選挙プロセスと民主的手続きの尊重不足",
+        "事前の構造的変更やコンセンサス形成なしでの恣意的な委員会拡大",
+        "2位候補の追加任命が正当な選出プロセスを回避する可能性"
+      ]
+    },
+    "HardForkInitiation": {
+      "count": 1,
+      "summary": "投票根拠データなし",
+      "typicalReasonsYes": [],
+      "typicalReasonsNo": [],
+      "analysisTokens": 0
+    }
+  }
+}
