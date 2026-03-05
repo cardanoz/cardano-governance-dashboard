@@ -2544,6 +2544,8 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
   const [selProp, setSelProp] = React.useState("");
   const [extraCount, setExtraCount] = React.useState(3);
   const [copied, setCopied] = React.useState(false);
+  const [editedPost, setEditedPost] = React.useState("");
+  const textareaRef = React.useRef(null);
 
   const curEp = (pp && pp.epoch) || (Math.floor((Date.now() - 1596059091000) / 432000000) + 208);
   const activeProps = (proposals || []).filter(p => p.expiration && p.expiration >= curEp);
@@ -2584,6 +2586,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
     const drepThr = getDrepThreshold(prop.proposal_type);
     // DRep analysis
     const unvotedDreps = dreps.filter(d => {
+      if (d.drep_id === "drep_always_abstain" || d.drep_id === "drep_always_no_confidence") return false;
       const v = votes[`${d.drep_id}__${prop.proposal_id}`];
       return !v || v === "NotVoted";
     }).sort((a, b) => Number(b.amount) - Number(a.amount));
@@ -2671,10 +2674,11 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
     return post;
   };
 
-  const copyPost = () => {
-    const text = generatePost();
-    navigator.clipboard.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
-  };
+  // Auto-generate post when proposal or extraCount changes
+  React.useEffect(() => {
+    if (prop && reminderData) setEditedPost(generatePost());
+    else setEditedPost("");
+  }, [selProp, extraCount, prop ? prop.proposal_id : null]);
 
   const E = React.createElement;
   const fmtStake = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
@@ -2692,63 +2696,31 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       )
     ),
 
-    // Reminder content
+    // +α control
+    prop && reminderData && E("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:8}},
+      E("span",{style:{fontSize:10,color:"var(--text2)"}},"+ extra DReps:"),
+      E("input",{type:"number",min:0,max:20,value:extraCount,onChange:e=>setExtraCount(Math.max(0,Math.min(20,Number(e.target.value)))),
+        style:{width:44,fontSize:10,padding:"3px 4px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",textAlign:"center"}})
+    ),
+
+    // X Post preview (editable textarea)
     prop && reminderData && E("div",{style:{display:"flex",flexDirection:"column",gap:8}},
-
-      // DRep section
-      E("div",{style:{background:"var(--bg3)",borderRadius:8,padding:10}},
-        E("div",{style:{fontSize:11,fontWeight:700,color:"#8b5cf6",marginBottom:4}},
-          `🗳️ DRep — ${reminderData.currentYesPct.toFixed(1)}% / ${(reminderData.drepThr*100).toFixed(0)}% ${reminderData.deficit<=0?"✅":"❌"}`),
-        reminderData.deficit > 0 && reminderData.minDreps.length > 0 ? E("div",null,
-          E("div",{style:{fontSize:9,color:"var(--text2)",marginBottom:4}},
-            `Minimum ${reminderData.minDreps.length} DRep(s) needed to reach threshold:`),
-          reminderData.minDreps.map((d,i) => E("div",{key:d.drep_id,style:{display:"flex",justifyContent:"space-between",padding:"2px 4px",fontSize:10,background:i%2===0?"rgba(139,92,246,.08)":"transparent",borderRadius:4}},
-            E("span",{style:{fontWeight:600}},d.name||d.drep_id.slice(0,25)),
-            E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(d.amount))
-          )),
-          // +α extra
-          E("div",{style:{display:"flex",alignItems:"center",gap:6,marginTop:6}},
-            E("span",{style:{fontSize:9,color:"var(--text2)"}},"+ extra:"),
-            E("input",{type:"number",min:0,max:20,value:extraCount,onChange:e=>setExtraCount(Math.max(0,Math.min(20,Number(e.target.value)))),
-              style:{width:40,fontSize:10,padding:"2px 4px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",textAlign:"center"}})),
-          reminderData.extraDreps.length > 0 && reminderData.extraDreps.map(d => E("div",{key:d.drep_id,style:{display:"flex",justifyContent:"space-between",padding:"2px 4px",fontSize:10,opacity:.6,borderRadius:4}},
-            E("span",null,d.name||d.drep_id.slice(0,25)),
-            E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(d.amount))
-          ))
-        ) : reminderData.deficit <= 0 ? E("div",{style:{fontSize:10,color:"#34d399"}},"✅ DRep threshold already met") :
-          E("div",{style:{fontSize:10,color:"#f87171"}},"Not enough unvoted DRep stake to reach threshold")
-      ),
-
-      // CC section
-      reminderData.ccCanVote && E("div",{style:{background:"var(--bg3)",borderRadius:8,padding:10}},
-        E("div",{style:{fontSize:11,fontWeight:700,color:"#f59e0b",marginBottom:4}},
-          `🏛️ CC — ${ps.cc.yes_pct.toFixed(1)}% / ${(getCCThreshold()*100).toFixed(0)}%`),
-        reminderData.unvotedCC.length > 0 ? reminderData.unvotedCC.map(cc => E("div",{key:cc.cc_id,style:{fontSize:10,padding:"2px 4px"}},
-          `• ${cc.name||cc.cc_id}`
-        )) : E("div",{style:{fontSize:10,color:"#34d399"}},"All CC members have voted")
-      ),
-
-      // SPO section
-      reminderData.spoAnalysis && E("div",{style:{background:"var(--bg3)",borderRadius:8,padding:10}},
-        E("div",{style:{fontSize:11,fontWeight:700,color:"#06b6d4",marginBottom:4}},
-          `🏊 SPO — ${reminderData.spoAnalysis.yesPct.toFixed(1)}% / ${(reminderData.spoAnalysis.threshold*100).toFixed(0)}%`),
-        reminderData.unvotedSPO.length > 0 ? E("div",null,
-          E("div",{style:{fontSize:9,color:"var(--text2)",marginBottom:2}},"Top unvoted SPOs by stake:"),
-          reminderData.unvotedSPO.slice(0,10).map(s => E("div",{key:s.pool_id,style:{display:"flex",justifyContent:"space-between",padding:"2px 4px",fontSize:10,borderRadius:4}},
-            E("span",null,s.ticker||s.pool_id.slice(0,20)),
-            E("span",{style:{color:"var(--text2)"}},"₳"+fmtStake(s.active_stake))
-          ))
-        ) : E("div",{style:{fontSize:10,color:"var(--text2)"}},"No SPO data available")
-      ),
-
-      // Generate X post button
-      E("div",{style:{display:"flex",gap:8,marginTop:4}},
-        E("button",{onClick:copyPost,className:"btn",
-          style:{fontSize:11,padding:"6px 14px",background:copied?"#34d399":"var(--accent)",color:"#fff",fontWeight:600,borderRadius:6,border:"none",cursor:"pointer"}},
-          copied ? "✅ Copied!" : "📋 Copy X Post"),
-        E("button",{onClick:()=>{const t=generatePost();const w=window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}`,"_blank");},className:"btn",
-          style:{fontSize:11,padding:"6px 14px",background:"#1DA1F2",color:"#fff",fontWeight:600,borderRadius:6,border:"none",cursor:"pointer"}},
-          "𝕏 Post")
+      E("textarea",{ref:textareaRef,value:editedPost,onChange:e=>setEditedPost(e.target.value),
+        style:{width:"100%",minHeight:200,fontSize:11,lineHeight:"1.5",fontFamily:"monospace",padding:10,borderRadius:8,
+          border:"1px solid var(--border)",background:"var(--bg3)",color:"var(--text)",resize:"vertical",boxSizing:"border-box"}}),
+      E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
+        E("span",{style:{fontSize:9,color:"var(--text2)"}},`${editedPost.length} chars`),
+        E("div",{style:{display:"flex",gap:8}},
+          E("button",{onClick:()=>setEditedPost(generatePost()),className:"btn",
+            style:{fontSize:10,padding:"5px 10px",background:"var(--bg3)",color:"var(--text2)",borderRadius:6,border:"1px solid var(--border)",cursor:"pointer"}},
+            "🔄 Reset"),
+          E("button",{onClick:()=>{navigator.clipboard.writeText(editedPost).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);});},className:"btn",
+            style:{fontSize:11,padding:"6px 14px",background:copied?"#34d399":"var(--accent)",color:"#fff",fontWeight:600,borderRadius:6,border:"none",cursor:"pointer"}},
+            copied ? "✅ Copied!" : "📋 Copy"),
+          E("button",{onClick:()=>{window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(editedPost)}`,"_blank");},className:"btn",
+            style:{fontSize:11,padding:"6px 14px",background:"#000",color:"#fff",fontWeight:600,borderRadius:6,border:"none",cursor:"pointer"}},
+            "𝕏 Post")
+        )
       )
     ),
 

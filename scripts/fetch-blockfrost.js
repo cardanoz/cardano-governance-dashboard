@@ -1091,27 +1091,45 @@ async function main() {
 
   // ─── 7e. SPO votes + pool info (Koios) ─────────────────────
   console.log("\n  [SPO] Fetching SPO votes + pool info via Koios...");
-  // SPOs can vote on all governance action types
-  // Only fetch SPO votes for active proposals (not expired ones — those are immutable)
-  const spoEligibleProposals = proposals.filter(p => p.proposal_type && (!p.expiration || currentEpoch <= p.expiration));
-  const spoExpiredCount = proposals.filter(p => p.proposal_type && p.expiration && currentEpoch > p.expiration).length;
-  console.log(`  SPO-eligible proposals: ${spoEligibleProposals.length} active / ${proposals.length} total (${spoExpiredCount} expired skipped)`);
+  // Separate active and expired proposals
+  const spoActiveProposals = proposals.filter(p => p.proposal_type && (!p.expiration || currentEpoch <= p.expiration));
+  const spoExpiredProposals = proposals.filter(p => p.proposal_type && p.expiration && currentEpoch > p.expiration);
+  console.log(`  SPO proposals: ${spoActiveProposals.length} active, ${spoExpiredProposals.length} expired / ${proposals.length} total`);
 
   let spoVoteMap = {};
   let spoPoolInfo = {};
 
-  // Load cached SPO data
-  const cachedSpoVotes = cache.spoVoteMap || {};
+  // Load cached SPO data (split into expired permanent + active refresh)
+  const cachedSpoExpiredVotes = cache.spoExpiredVotes || {};
+  const cachedSpoActiveVotes = cache.spoActiveVotes || {};
   const cachedSpoPoolInfo = cache.spoPoolInfo || {};
   const SPO_FRESH_MS = 3 * 3600000; // 3 hours
   const lastSpoFetch = cache.lastSpoFetchAt || 0;
   let spoFresh = (now - lastSpoFetch) < SPO_FRESH_MS;
 
-  // Safeguard: if cached SPO data doesn't cover most proposals, force refresh
-  if (spoFresh && spoEligibleProposals.length > 0) {
-    const cachedSpoProps = new Set(Object.keys(cachedSpoVotes).map(k => k.split("__")[1]));
-    if (cachedSpoProps.size < spoEligibleProposals.length / 2) {
-      console.log(`  ⚠ SPO cache has votes for only ${cachedSpoProps.size}/${spoEligibleProposals.length} proposals — forcing refresh`);
+  // Migrate from old single spoVoteMap if needed
+  if (Object.keys(cachedSpoExpiredVotes).length === 0 && cache.spoVoteMap && Object.keys(cache.spoVoteMap).length > 0) {
+    console.log("  Migrating old spoVoteMap to split expired/active cache...");
+    const expiredPropIds = new Set(spoExpiredProposals.map(p => p.proposal_id));
+    for (const [key, val] of Object.entries(cache.spoVoteMap)) {
+      const propId = key.split("__")[1];
+      if (expiredPropIds.has(propId)) cachedSpoExpiredVotes[key] = val;
+      else cachedSpoActiveVotes[key] = val;
+    }
+    console.log(`  Migrated: ${Object.keys(cachedSpoExpiredVotes).length} expired, ${Object.keys(cachedSpoActiveVotes).length} active`);
+  }
+
+  // Restore expired SPO votes (permanent — never re-fetch)
+  let spoExpiredVotes = { ...cachedSpoExpiredVotes };
+  const cachedExpiredPropIds = new Set(Object.keys(cachedSpoExpiredVotes).map(k => k.split("__")[1]));
+  const expiredUncachedSpo = spoExpiredProposals.filter(p => !cachedExpiredPropIds.has(p.proposal_id));
+  console.log(`  SPO expired votes: ${Object.keys(cachedSpoExpiredVotes).length} cached, ${expiredUncachedSpo.length} uncached expired proposals to fetch`);
+
+  // Safeguard: if cached SPO data doesn't cover most active proposals, force refresh
+  if (spoFresh && spoActiveProposals.length > 0) {
+    const cachedActiveProps = new Set(Object.keys(cachedSpoActiveVotes).map(k => k.split("__")[1]));
+    if (cachedActiveProps.size < spoActiveProposals.length / 2) {
+      console.log(`  ⚠ SPO cache has votes for only ${cachedActiveProps.size}/${spoActiveProposals.length} active proposals — forcing refresh`);
       spoFresh = false;
     }
   }
@@ -1121,17 +1139,23 @@ async function main() {
     spoFresh = false;
   }
 
-  if (spoFresh) {
-    spoVoteMap = cachedSpoVotes;
+  // Combine proposals to fetch: active (if not fresh) + expired uncached
+  const spoPropsToFetch = [];
+  if (!spoFresh) spoPropsToFetch.push(...spoActiveProposals);
+  spoPropsToFetch.push(...expiredUncachedSpo);
+
+  if (spoFresh && expiredUncachedSpo.length === 0) {
+    spoVoteMap = { ...cachedSpoExpiredVotes, ...cachedSpoActiveVotes };
     spoPoolInfo = cachedSpoPoolInfo;
     console.log(`  SPO data CACHED (${((now - lastSpoFetch) / 60000).toFixed(0)}min old): ${Object.keys(spoVoteMap).length} votes, ${Object.keys(spoPoolInfo).length} pools`);
-  } else if (spoEligibleProposals.length === 0) {
-    console.log(`  No SPO-eligible proposals, skipping`);
+  } else if (spoPropsToFetch.length === 0) {
+    spoVoteMap = { ...cachedSpoExpiredVotes };
+    console.log(`  No SPO proposals to fetch, using ${Object.keys(spoVoteMap).length} expired cached votes`);
   } else {
     try {
       // Ensure bech32Map has all proposals — refresh if any are missing
       let spoBech32Map = cache.bech32Map || {};
-      const missingBech32 = spoEligibleProposals.filter(p => !spoBech32Map[p.proposal_id]);
+      const missingBech32 = spoPropsToFetch.filter(p => !spoBech32Map[p.proposal_id]);
       if (missingBech32.length > 0 || Object.keys(spoBech32Map).length === 0) {
         console.log(`  Refreshing bech32Map for SPO (${missingBech32.length} proposals missing)...`);
         let allKP = [];
@@ -1153,17 +1177,17 @@ async function main() {
       }
 
       // Step 1: Fetch SPO votes per eligible proposal
-      // Deduplicate proposals by tx_hash#cert_index to avoid fetching same proposal multiple times
+      // Deduplicate proposals to avoid fetching same proposal multiple times
       const seenProposalIds = new Set();
       const uniqueSpoProposals = [];
-      for (const p of spoEligibleProposals) {
+      for (const p of spoPropsToFetch) {
         if (!seenProposalIds.has(p.proposal_id)) {
           seenProposalIds.add(p.proposal_id);
           uniqueSpoProposals.push(p);
         }
       }
-      if (uniqueSpoProposals.length < spoEligibleProposals.length) {
-        console.log(`  Deduplicated: ${spoEligibleProposals.length} → ${uniqueSpoProposals.length} unique proposals`);
+      if (uniqueSpoProposals.length < spoPropsToFetch.length) {
+        console.log(`  Deduplicated: ${spoPropsToFetch.length} → ${uniqueSpoProposals.length} unique proposals`);
       }
 
       let spoVoteCount = 0;
@@ -1258,11 +1282,22 @@ async function main() {
         }
       }
       console.log(`  SPO pool info built: ${Object.keys(spoPoolInfo).length} pools`);
+
+      // Split newly fetched votes into expired (permanent) and active
+      const expiredPropIds = new Set(spoExpiredProposals.map(p => p.proposal_id));
+      for (const [key, val] of Object.entries(spoVoteMap)) {
+        const propId = key.split("__")[1];
+        if (expiredPropIds.has(propId)) spoExpiredVotes[key] = val;
+      }
+      // Merge: expired (permanent) + freshly fetched active
+      spoVoteMap = { ...spoExpiredVotes, ...spoVoteMap };
+      console.log(`  SPO total: ${Object.keys(spoVoteMap).length} votes (${Object.keys(spoExpiredVotes).length} expired permanent)`);
     } catch (e) {
       console.log(`  SPO data fetch error: ${e.message}`);
       // Fall back to cached data if available
-      if (Object.keys(cachedSpoVotes).length > 0) {
-        spoVoteMap = cachedSpoVotes;
+      const fallback = { ...cachedSpoExpiredVotes, ...cachedSpoActiveVotes };
+      if (Object.keys(fallback).length > 0) {
+        spoVoteMap = fallback;
         spoPoolInfo = cachedSpoPoolInfo;
         console.log(`  Falling back to cached SPO data: ${Object.keys(spoVoteMap).length} votes`);
       }
@@ -1440,8 +1475,20 @@ async function main() {
     ccActiveVotes, ccActiveRationales,
     drepExpiredRationales, drepActiveRationales,
     bech32Map: cache.bech32Map || {},
-    spoVoteMap, spoPoolInfo,
-    lastSpoFetchAt: spoFresh ? lastSpoFetch : now,
+    spoExpiredVotes: (() => {
+      const ev = {};
+      const expPropIds = new Set(proposals.filter(p => p.expiration && currentEpoch > p.expiration).map(p => p.proposal_id));
+      for (const [k, v] of Object.entries(spoVoteMap)) { if (expPropIds.has(k.split("__")[1])) ev[k] = v; }
+      return ev;
+    })(),
+    spoActiveVotes: (() => {
+      const av = {};
+      const expPropIds = new Set(proposals.filter(p => p.expiration && currentEpoch > p.expiration).map(p => p.proposal_id));
+      for (const [k, v] of Object.entries(spoVoteMap)) { if (!expPropIds.has(k.split("__")[1])) av[k] = v; }
+      return av;
+    })(),
+    spoPoolInfo,
+    lastSpoFetchAt: (spoFresh && expiredUncachedSpo.length === 0) ? lastSpoFetch : now,
     proposalSummaries,
     ccMembers,
     currentEpoch,
