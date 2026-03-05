@@ -1224,65 +1224,6 @@ async function main() {
       }
       console.log(`  SPO votes: ${spoVoteCount} total from ${votingPoolIds.size} pools`);
 
-      // Step 2: Fetch pool info ONLY for pools that actually voted (not all ~3000 registered pools)
-      // This dramatically reduces API calls from ~60+ (all pools) to just a few batches
-      const poolsToFetch = [...votingPoolIds].filter(pid => !cachedSpoPoolInfo[pid]);
-      const poolsFromCache = votingPoolIds.size - poolsToFetch.length;
-      console.log(`  Pool info needed: ${votingPoolIds.size} voting pools (${poolsFromCache} cached, ${poolsToFetch.length} to fetch)`);
-
-      // Start with cached pool info for known pools
-      for (const [pid, info] of Object.entries(cachedSpoPoolInfo)) {
-        if (votingPoolIds.has(pid)) spoPoolInfo[pid] = info;
-      }
-
-      if (poolsToFetch.length > 0) {
-        // Fetch pool info in batches
-        const POOL_BATCH = 50;
-        for (let i = 0; i < poolsToFetch.length; i += POOL_BATCH) {
-          const batch = poolsToFetch.slice(i, i + POOL_BATCH);
-          try {
-            const data = await koiosPost("/pool_info", { _pool_bech32_ids: batch });
-            if (data) data.forEach(p => {
-              if (p.pool_id_bech32) {
-                spoPoolInfo[p.pool_id_bech32] = {
-                  ticker: p.ticker || "",
-                  reward_addr: p.reward_addr || "",
-                  pledge_drep: null, // Will be filled in Step 3
-                  active_stake: p.active_stake || p.live_stake || "0"
-                };
-              }
-            });
-          } catch (e) { console.log(`    pool_info batch error: ${e.message}`); }
-        }
-        console.log(`  Pool info fetched: ${Object.keys(spoPoolInfo).length} pools`);
-
-        // Step 3: Bulk-check DRep delegation for pledge addresses of newly fetched pools only
-        const newRewardAddrs = [...new Set(
-          poolsToFetch.map(pid => spoPoolInfo[pid]?.reward_addr).filter(Boolean)
-        )];
-        if (newRewardAddrs.length > 0) {
-          console.log(`  Checking DRep delegation for ${newRewardAddrs.length} new reward addresses...`);
-          const addrToDrep = {};
-          const ACCT_BATCH = 50;
-          for (let i = 0; i < newRewardAddrs.length; i += ACCT_BATCH) {
-            const batch = newRewardAddrs.slice(i, i + ACCT_BATCH);
-            try {
-              const data = await koiosPost("/account_info", { _stake_addresses: batch });
-              if (data) data.forEach(a => { if (a.stake_address) addrToDrep[a.stake_address] = a.delegated_drep || null; });
-            } catch (e) { console.log(`    account_info batch error: ${e.message}`); }
-          }
-          // Apply delegation info to pool info
-          for (const pid of poolsToFetch) {
-            if (spoPoolInfo[pid] && spoPoolInfo[pid].reward_addr) {
-              spoPoolInfo[pid].pledge_drep = addrToDrep[spoPoolInfo[pid].reward_addr] || null;
-            }
-          }
-          const drepCount = Object.values(addrToDrep).filter(v => v).length;
-          console.log(`  Delegation: ${drepCount}/${newRewardAddrs.length} have DRep delegation`);
-        }
-      }
-      console.log(`  SPO pool info built: ${Object.keys(spoPoolInfo).length} pools`);
-
       // Split newly fetched votes into expired (permanent) and active
       const expiredPropIds = new Set(spoExpiredProposals.map(p => p.proposal_id));
       for (const [key, val] of Object.entries(spoVoteMap)) {
@@ -1301,6 +1242,90 @@ async function main() {
         spoPoolInfo = cachedSpoPoolInfo;
         console.log(`  Falling back to cached SPO data: ${Object.keys(spoVoteMap).length} votes`);
       }
+    }
+  }
+
+  // ─── 7e2. All registered pool info (independent of vote freshness) ───
+  const SPO_POOL_FRESH_MS = 12 * 3600000; // 12 hours — pool list changes slowly
+  const lastPoolListFetch = cache.lastPoolListFetchAt || 0;
+  let poolListFresh = (now - lastPoolListFetch) < SPO_POOL_FRESH_MS && Object.keys(cachedSpoPoolInfo).length > 500;
+
+  if (poolListFresh) {
+    // Use cached pool info, but make sure spoPoolInfo has it
+    if (Object.keys(spoPoolInfo).length < Object.keys(cachedSpoPoolInfo).length) {
+      spoPoolInfo = { ...cachedSpoPoolInfo };
+    }
+    console.log(`  Pool list CACHED (${((now - lastPoolListFetch) / 3600000).toFixed(1)}h old): ${Object.keys(spoPoolInfo).length} pools`);
+  } else {
+    try {
+      console.log("  Fetching all registered pools via Koios /pool_list...");
+      let allPoolIds = [];
+      let plOff = 0;
+      while (true) {
+        const page = await koiosGet("/pool_list", { offset: plOff, limit: 500 });
+        if (!page || page.length === 0) break;
+        allPoolIds = allPoolIds.concat(page.map(p => p.pool_id_bech32).filter(Boolean));
+        if (page.length < 500) break;
+        plOff += 500;
+      }
+      console.log(`  Found ${allPoolIds.length} registered pools`);
+
+      const poolsToFetch = allPoolIds.filter(pid => !spoPoolInfo[pid]);
+      console.log(`  Pool info: ${allPoolIds.length - poolsToFetch.length} already known, ${poolsToFetch.length} to fetch`);
+
+      if (poolsToFetch.length > 0) {
+        const POOL_BATCH = 50;
+        for (let i = 0; i < poolsToFetch.length; i += POOL_BATCH) {
+          const batch = poolsToFetch.slice(i, i + POOL_BATCH);
+          try {
+            const data = await koiosPost("/pool_info", { _pool_bech32_ids: batch });
+            if (data) data.forEach(p => {
+              if (p.pool_id_bech32) {
+                spoPoolInfo[p.pool_id_bech32] = {
+                  ticker: p.ticker || "",
+                  reward_addr: p.reward_addr || "",
+                  pledge_drep: null,
+                  active_stake: p.active_stake || p.live_stake || "0"
+                };
+              }
+            });
+          } catch (e) { console.log(`    pool_info batch error: ${e.message}`); }
+          if ((i + POOL_BATCH) % 500 === 0 || i + POOL_BATCH >= poolsToFetch.length) {
+            console.log(`    [${Math.min(i+POOL_BATCH,poolsToFetch.length)}/${poolsToFetch.length}] pool info fetched`);
+          }
+        }
+        // Bulk-check DRep delegation for new pools
+        const newRewardAddrs = [...new Set(
+          poolsToFetch.map(pid => spoPoolInfo[pid]?.reward_addr).filter(Boolean)
+        )];
+        if (newRewardAddrs.length > 0) {
+          console.log(`  Checking DRep delegation for ${newRewardAddrs.length} new reward addresses...`);
+          const addrToDrep = {};
+          const ACCT_BATCH = 50;
+          for (let i = 0; i < newRewardAddrs.length; i += ACCT_BATCH) {
+            const batch = newRewardAddrs.slice(i, i + ACCT_BATCH);
+            try {
+              const data = await koiosPost("/account_info", { _stake_addresses: batch });
+              if (data) data.forEach(a => { if (a.stake_address) addrToDrep[a.stake_address] = a.delegated_drep || null; });
+            } catch (e) { console.log(`    account_info batch error: ${e.message}`); }
+          }
+          for (const pid of poolsToFetch) {
+            if (spoPoolInfo[pid] && spoPoolInfo[pid].reward_addr) {
+              spoPoolInfo[pid].pledge_drep = addrToDrep[spoPoolInfo[pid].reward_addr] || null;
+            }
+          }
+          const drepCount = Object.values(addrToDrep).filter(v => v).length;
+          console.log(`  Delegation: ${drepCount}/${newRewardAddrs.length} have DRep delegation`);
+        }
+      }
+      console.log(`  SPO pool info built: ${Object.keys(spoPoolInfo).length} pools`);
+    } catch (e) {
+      console.log(`  Pool list fetch error: ${e.message}`);
+      // Fall back to cached if available
+      if (Object.keys(cachedSpoPoolInfo).length > Object.keys(spoPoolInfo).length) {
+        spoPoolInfo = { ...cachedSpoPoolInfo };
+      }
+      poolListFresh = true; // Don't update timestamp on failure
     }
   }
 
@@ -1489,6 +1514,7 @@ async function main() {
     })(),
     spoPoolInfo,
     lastSpoFetchAt: (spoFresh && expiredUncachedSpo.length === 0) ? lastSpoFetch : now,
+    lastPoolListFetchAt: poolListFresh ? lastPoolListFetch : now,
     proposalSummaries,
     ccMembers,
     currentEpoch,
