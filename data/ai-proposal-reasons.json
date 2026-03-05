@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-05T10:03:32.179Z",
+  "generatedAt": "2026-03-05T11:02:35.931Z",
   "proposals": {
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "title": "Amaru Treasury Withdrawal 2026",
@@ -7,9 +7,9 @@
       "submittedEpoch": 0,
       "stats": {
         "votedWithRationale": 28,
-        "votedWithoutRationale": 41,
-        "notVoted": 1524,
-        "notVotedTotalStake": "3508768319828081",
+        "votedWithoutRationale": 42,
+        "notVoted": 1523,
+        "notVotedTotalStake": "3508385752365840",
         "notVotedTopDreps": [
           {
             "name": "EMURGO",
@@ -129,53 +129,41 @@
           ]
         },
         "abstainBreakdown": {
-          "total": 2,
+          "total": 3,
           "withRationale": 1,
-          "withoutRationale": 1,
-          "totalStake": "33362724039996",
+          "withoutRationale": 2,
+          "totalStake": "33745291502237",
           "withRationaleStake": "33356423924818",
-          "withoutRationaleStake": "6300115178",
+          "withoutRationaleStake": "388867577419",
           "withoutRationaleDreps": [
             {
               "name": "drep1y2cnrwkyg6...",
               "stake": "6300115178"
+            },
+            {
+              "name": "A$Y",
+              "stake": "382567462241"
             }
           ]
         }
       },
       "yesReasons": [
         {
-          "reason_en": "Node diversity and decentralization - Critical infrastructure for reducing single-point-of-failure risk and network resilience",
-          "reason_ja": "ノード多様性と分散化 - 単一障害点のリスク低減とネットワーク耐性のための重要インフラストラクチャ",
-          "totalStake": "576627970544288",
+          "reason_en": "Structural security investment and node diversity for Cardano resilience",
+          "reason_ja": "Cardanoの構造的セキュリティ投資とノード多様性によるレジリエンス向上",
+          "totalStake": "471634495217201",
           "dreps": [
             {
               "name": "YUTA",
               "stake": "457107694733798"
             },
             {
-              "name": "CardanoYoda",
-              "stake": "96812580604836"
-            },
-            {
-              "name": "InputEndorsers",
-              "stake": "7740395966687"
-            },
-            {
               "name": "YOADA",
               "stake": "5856449078252"
             },
             {
-              "name": "BWtake(長崎)Japan",
-              "stake": "3640391238501"
-            },
-            {
-              "name": "Varavas",
-              "stake": "2918564750657"
-            },
-            {
-              "name": "FAIR Pool #01",
-              "stake": "1621938733093"
+              "name": "InputEndorsers",
+              "stake": "7740395966687"
             },
             {
               "name": "Talos",
@@ -192,29 +180,25 @@
           ]
         },
         {
-          "reason_en": "Proven team track record and financial transparency - Demonstrated responsibility by returning unused funds to treasury and delivering on commitments",
-          "reason_ja": "実績のあるチームと財務の透明性 - 未使用資金をトレジャリーに返還し、約束を果たした実績を実証",
-          "totalStake": "107772405519192",
+          "reason_en": "Proven track record and fiscal responsibility of the team",
+          "reason_ja": "チームの実績と財政責任性の実証",
+          "totalStake": "140510379503269",
           "dreps": [
             {
-              "name": "MUEN",
-              "stake": "37178895780926"
-            },
-            {
-              "name": "Cerkoryn",
-              "stake": "24644631706301"
+              "name": "CardanoYoda",
+              "stake": "96812580604836"
             },
             {
               "name": "GAIA",
               "stake": "2663151620777"
             },
             {
-              "name": "Talos",
-              "stake": "760069627547"
+              "name": "FAIR Pool #01",
+              "stake": "1621938733093"
             },
             {
-              "name": "Dr. Navjit Dhaliwal",
-              "stake": "3873017866625"
+              "name": "Talos",
+              "stake": "760069627547"
             },
             {
               "name": "Patrick_Tobler",
@@ -227,40 +211,40 @@
           ]
         },
         {
-          "reason_en": "High-value structural security investment for Cardano - Essential for long-term protocol robustness and reducing Haskell implementation dependency",
-          "reason_ja": "カルダノの高価値な構造的セキュリティ投資 - 長期的なプロトコル堅牢性とHaskell実装依存の低減に不可欠",
-          "totalStake": "480102739893374",
+          "reason_en": "Reduces single-point-of-failure risk from Haskell node dependency",
+          "reason_ja": "Haskellノード実装への単一依存リスク低減",
+          "totalStake": "8619900487428",
           "dreps": [
             {
-              "name": "YUTA",
-              "stake": "457107694733798"
-            },
-            {
-              "name": "Blockjock",
-              "stake": "22234975532029"
+              "name": "InputEndorsers",
+              "stake": "7740395966687"
             },
             {
               "name": "Talos",
               "stake": "760069627547"
+            },
+            {
+              "name": "MyCNFT DRep",
+              "stake": "119434893194"
             }
           ]
         },
         {
-          "reason_en": "Detailed proposal quality and comprehensive documentation - Well-presented budget breakdown, clear milestones, KPIs, and contingency planning",
-          "reason_ja": "詳細な提案品質と包括的なドキュメント - よくまとめられた予算内訳、明確なマイルストーン、KPI、および有事対応計画",
-          "totalStake": "106592353379911",
+          "reason_en": "Well-structured proposal with detailed budget, milestones, and transparency measures",
+          "reason_ja": "詳細な予算、マイルストーン、透明性措置を含む構成の良い提案",
+          "totalStake": "102724975279849",
           "dreps": [
             {
               "name": "CardanoYoda",
               "stake": "96812580604836"
             },
             {
-              "name": "InputEndorsers",
-              "stake": "7740395966687"
-            },
-            {
               "name": "FAIR Pool #01",
               "stake": "1621938733093"
+            },
+            {
+              "name": "Dr. Navjit Dhaliwal",
+              "stake": "3873017866625"
             },
             {
               "name": "CardaFlow",
@@ -269,36 +253,29 @@
           ]
         },
         {
-          "reason_en": "Strategic Rust-based alternative implementation - Attracts diverse developer ecosystems and proves protocol portability",
-          "reason_ja": "戦略的なRustベースの代替実装 - 多様な開発者エコシステムを引き付け、プロトコルの移植性を実証",
-          "totalStake": "4400460866048",
+          "reason_en": "Rust-based alternative implementation attracts developers and improves accessibility",
+          "reason_ja": "Rustベースの代���実装は開発者を惹きつけ、アクセシビリティを向上させる",
+          "totalStake": "28793931521187",
           "dreps": [
             {
               "name": "BWtake(長崎)Japan",
               "stake": "3640391238501"
             },
             {
-              "name": "Talos",
-              "stake": "760069627547"
+              "name": "Blockjock",
+              "stake": "22234975532029"
+            },
+            {
+              "name": "Varavas",
+              "stake": "2918564750657"
             }
           ]
         }
       ],
       "noReasons": [
         {
-          "reason_en": "Redundant with existing IOG Rust node development - Concerns about funding duplicate Rust node implementations",
-          "reason_ja": "既存のIOG Rust開発と重複 - Rust実装の重複への懸念",
-          "totalStake": "3762902081",
-          "dreps": [
-            {
-              "name": "Rich King",
-              "stake": "3762902081"
-            }
-          ]
-        },
-        {
-          "reason_en": "Budget structure and governance concerns - Questions about effective ADA/USD conversion rates and audit cost justification",
-          "reason_ja": "予算構造とガバナンスの懸念 - 有効なADA/USD換算レートと監査費用の正当化に関する疑問",
+          "reason_en": "Concerns about budget structure, conversion rate discrepancies, and audit cost justification",
+          "reason_ja": "予算構造、為替レート矛盾、監査費用の正当性に関する懸念",
           "totalStake": "58857346545768",
           "dreps": [
             {
@@ -306,12 +283,23 @@
               "stake": "58857346545768"
             }
           ]
+        },
+        {
+          "reason_en": "IOG already funded a Rust node implementation; duplication of effort unnecessary",
+          "reason_ja": "IOGが既にRustノード実装に資金提供済み。重複投資は不要",
+          "totalStake": "3762902081",
+          "dreps": [
+            {
+              "name": "Rich King",
+              "stake": "3762902081"
+            }
+          ]
         }
       ],
       "abstainReasons": [
         {
-          "reason_en": "Premature funding expansion - Preference to see production-ready block-producing node delivered and validated before funding additional scope",
-          "reason_ja": "時期尚早な資金配分の拡大 - 追加の対象について資金を提供する前に、本番環境対応のブロック生成ノードの配信と検証を見ることを希望",
+          "reason_en": "Prefer production-ready delivery before funding additional scope expansions",
+          "reason_ja": "追加スコープ拡張への資金提供前に、本番環境対応ノード配信を優先したい",
           "totalStake": "33356423924818",
           "dreps": [
             {
