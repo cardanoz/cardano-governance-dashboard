@@ -352,6 +352,35 @@ function fmtAdaNum(ada) {
   if(ada>=1e3) return (ada/1e3).toFixed(1)+"K";
   return ada.toFixed(ada < 1 ? 4 : 1);
 }
+// Short ADA format (lovelace → 1-decimal) — used by tables and compact displays
+function fmtStakeShort(v) { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); }
+// Truncate string with ellipsis
+function truncStr(s, max) { return s && s.length > max ? s.slice(0, max) + "…" : s || ""; }
+
+// ─── Threshold lookups (shared across DashboardTab, VoteReminderSection) ───
+function getDrepThreshold(pp, ptype) {
+  if (!pp) return 0.67;
+  if (ptype === "InfoAction") return 0.51;
+  if (ptype === "ParameterChange") return Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0) || 0.67;
+  const m = {NoConfidence:"dvt_motion_no_confidence",UpdateCommittee:"dvt_committee_normal",
+    NewConstitution:"dvt_update_to_constitution",HardForkInitiation:"dvt_hard_fork_initiation",
+    TreasuryWithdrawals:"dvt_treasury_withdrawal"};
+  return Number(pp[m[ptype]]) || 0.67;
+}
+function getSpoThreshold(pp, ptype) {
+  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
+  if (SPO_INELIG.includes(ptype)) return null;
+  if (!pp) return 0.51;
+  if (ptype === "NoConfidence") return Number(pp.pvt_motion_no_confidence) || 0.51;
+  if (ptype === "HardForkInitiation") return Number(pp.pvt_hard_fork_initiation) || 0.51;
+  if (ptype === "UpdateCommittee") return Number(pp.pvt_committee_normal) || 0.51;
+  if (ptype === "ParameterChange") return Number(pp.pvt_p_p_security_group) || 0.51;
+  return 0.51;
+}
+function getCCThreshold(pp) { return pp ? Number(pp.dvt_committee_normal) || 0.67 : 0.67; }
+// Current epoch from timestamp
+function currentEpochNow() { return Math.floor((Date.now() - EPOCH_208_TS) / EPOCH_DURATION) + 208; }
+
 // IPFS URL resolver — convert ipfs:// to gateway URL
 function resolveIpfsUrl(url) {
   if (!url) return null;
@@ -1095,7 +1124,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
     downloadCSV(buildCSV(hdr, rows), "spo_votes.csv");
   }
 
-  const ist=INPUT_STYLE;
+
 
   return (
     <div>
@@ -1107,12 +1136,12 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
           {filtersOpen ? "▼" : "▶"} {T.filter_collapse || "Filters"}
         </button>
         {filtersOpen && [
-          {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>{setSearch(e.target.value);setDPage(0)}} style={{...ist,width:150}}/>},
-          {l:T.filter_min_stake,el:<input type="number" placeholder="1000000" value={minStake} onChange={e=>{setMinStake(e.target.value);setDPage(0)}} style={{...ist,width:110}}/>},
-          {l:T.filter_max_stake,el:<input type="number" placeholder="999999999" value={maxStake} onChange={e=>{setMaxStake(e.target.value);setDPage(0)}} style={{...ist,width:110}}/>},
-          {l:T.filter_action_type,el:<select value={actType} onChange={e=>{setActType(e.target.value);setPPage(0)}} style={{...ist,minWidth:120}}>
+          {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>{setSearch(e.target.value);setDPage(0)}} style={{...INPUT_STYLE,width:150}}/>},
+          {l:T.filter_min_stake,el:<input type="number" placeholder="1000000" value={minStake} onChange={e=>{setMinStake(e.target.value);setDPage(0)}} style={{...INPUT_STYLE,width:110}}/>},
+          {l:T.filter_max_stake,el:<input type="number" placeholder="999999999" value={maxStake} onChange={e=>{setMaxStake(e.target.value);setDPage(0)}} style={{...INPUT_STYLE,width:110}}/>},
+          {l:T.filter_action_type,el:<select value={actType} onChange={e=>{setActType(e.target.value);setPPage(0)}} style={{...INPUT_STYLE,minWidth:120}}>
             <option value="all">{T.filter_all}</option>{actTypes.map(t=><option key={t} value={t}>{actionLabel(t,T)}</option>)}</select>},
-          {l:T.filter_sort,el:<select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{...ist,minWidth:100}}>
+          {l:T.filter_sort,el:<select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{...INPUT_STYLE,minWidth:100}}>
             <option value="stake_desc">{T.sort_stake_desc}</option><option value="stake_asc">{T.sort_stake_asc}</option><option value="name_asc">{T.sort_name}</option></select>},
         ].map(({l,el},i)=>(<div key={i} style={{display:"flex",flexDirection:"column",gap:3}}>
           <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",letterSpacing:".06em"}}>{l}</label>{el}</div>))}
@@ -1223,9 +1252,9 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
                     const spoPct = (ps.spo.yes_pct||0) + (ps.spo.no_pct||0);
                     if (spoTotal === 0 && spoPct === 0) spoCanVote = false;
                   }
-                  const _dt = pp ? (p.proposal_type==="NoConfidence"?Number(pp.dvt_motion_no_confidence)||.67:p.proposal_type==="UpdateCommittee"?Number(pp.dvt_committee_normal)||.67:p.proposal_type==="NewConstitution"?Number(pp.dvt_update_to_constitution)||.75:p.proposal_type==="HardForkInitiation"?Number(pp.dvt_hard_fork_initiation)||.6:p.proposal_type==="TreasuryWithdrawals"?Number(pp.dvt_treasury_withdrawal)||.67:p.proposal_type==="ParameterChange"?Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0)||.67:p.proposal_type==="InfoAction"?.51:.67) : .67;
-                  const _st = spoCanVote?(pp?(p.proposal_type==="NoConfidence"?Number(pp.pvt_motion_no_confidence)||.51:p.proposal_type==="HardForkInitiation"?Number(pp.pvt_hard_fork_initiation)||.51:p.proposal_type==="UpdateCommittee"?Number(pp.pvt_committee_normal)||.51:p.proposal_type==="ParameterChange"?Number(pp.pvt_p_p_security_group)||.51:.51):.51):null;
-                  const _ct = ccCanVote?(pp?Number(pp.dvt_committee_normal)||.67:.67):null;
+                  const _dt = getDrepThreshold(pp, p.proposal_type);
+                  const _st = spoCanVote ? getSpoThreshold(pp, p.proposal_type) : null;
+                  const _ct = ccCanVote ? getCCThreshold(pp) : null;
                   return(
                   <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"4px 2px",
                     textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:600,minWidth:Math.round(70*zoom/100),maxWidth:Math.round(90*zoom/100),verticalAlign:"bottom"}}>
@@ -1472,7 +1501,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         });
         const spoPageData = spoList.slice(spoPage * spoPerPage, (spoPage + 1) * spoPerPage);
         const spoTotalPages = Math.max(1, Math.ceil(spoList.length / spoPerPage));
-        const fmtStake = (s) => { const a = Number(s)/1e6; return a>=1e9?(a/1e9).toFixed(1)+"B":a>=1e6?(a/1e6).toFixed(1)+"M":a>=1e3?(a/1e3).toFixed(0)+"K":Math.round(a).toLocaleString(); };
+        const fmtStake = fmtStakeShort;
         const spoFBtnS = (active) => ({fontSize:8,padding:"2px 6px",borderRadius:4,cursor:"pointer",border:active?"1px solid var(--accent)":"1px solid var(--border)",background:active?"rgba(59,130,246,.12)":"var(--bg)",color:active?"var(--accent)":"var(--text2)"});
 
         return (
@@ -1637,9 +1666,7 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang, govInfo }) {
       id: d.drep_id, name: d.name, amount: d.amount, delegators: d.delegators
     }));
     const totalStake = active.reduce((s, d) => s + Number(d.amount), 0);
-    // Estimate current epoch from timestamp
-    const nowSec = Math.floor(Date.now() / 1000);
-    const currentEpoch = 208 + Math.floor((nowSec - 1596059091) / 432000);
+    const currentEpoch = currentEpochNow();
     // Only add if we don't already have this epoch
     const lastEpoch = base.length > 0 ? base[base.length - 1].epoch : 0;
     if (currentEpoch > lastEpoch) {
@@ -1946,7 +1973,7 @@ function StakeHistoryTab({ history: rawHistory, liveDreps, T, lang, govInfo }) {
       pctNow, pctPrev, adaChange, pctChange, delegators: d.delegators };
   });
 
-  const ist = INPUT_STYLE;
+  // INPUT_STYLE used directly below
   const btnStyle = (active) => ({ fontSize: 11, padding: "4px 12px", borderRadius: 6, border: "1px solid " + (active ? "var(--accent)" : "var(--border)"),
     background: active ? "var(--accent)" : "var(--bg3)", color: active ? "#fff" : "var(--text2)", cursor: "pointer", fontWeight: active ? 600 : 400 });
   const toggleStyle = (active) => ({ fontSize: 11, padding: "4px 10px", borderRadius: 6,
@@ -2638,8 +2665,8 @@ function VetoPowerSection({ dreps, pp, T }) {
   });
   const thV = {fontSize:9,fontWeight:700,padding:"4px 6px",borderBottom:"2px solid var(--border)",color:"var(--text2)"};
   const tdV = {fontSize:10,padding:"3px 6px",borderBottom:"1px solid var(--border)"};
-  const fmtS = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
-  const fmtL = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(2)+"B":n>=1e6?(n/1e6).toFixed(2)+"M":n>=1e3?(n/1e3).toFixed(1)+"K":n.toFixed(0); };
+  const fmtS = fmtStakeShort;
+  const fmtL = fmtAda; // global fmtAda has same signature (lovelace in)
 
   return CE("div",{style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:10}},
     CE("div",{style:{fontSize:13,fontWeight:700,color:"var(--accent2)",marginBottom:8}},"🛡️ "+(T.gov_veto||"Veto Power Analysis")),
@@ -2750,43 +2777,20 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
   const isCellExpanded = (propId, col) => !!expandedCells[`${propId}__${col}`];
 
   const E = React.createElement;
-  const fmtStake = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":Math.round(n).toLocaleString(); };
-  const fmtAda = fmtStake;
+  const fmtStake = fmtStakeShort;
 
-  const curEp = (pp && pp.epoch) || (Math.floor((Date.now() - 1596059091000) / 432000000) + 208);
-  const EPOCH_208_TS = 1596059091000, EPOCH_DUR = 432000000;
+  const curEp = (pp && pp.epoch) || currentEpochNow();
   // Blockfrost expiration = first epoch where proposal is INACTIVE
   // Voting deadline = start of expiration epoch = end of (expiration-1)
-  const epochDeadlineTs = (ep) => EPOCH_208_TS + (ep - 208) * EPOCH_DUR;
+  const epochDeadlineTs = (ep) => EPOCH_208_TS + (ep - 208) * EPOCH_DURATION;
   const lastVoteEpoch = (ep) => ep - 1; // last epoch where votes are accepted
   const fmtDate = (ts) => { const d = new Date(ts); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
   const fmtDateTime = (ts) => { const d = new Date(ts); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`; };
   const daysLeft = (ep) => { const ms = epochDeadlineTs(ep) - Date.now(); return Math.max(0, Math.ceil(ms / 86400000)); };
   const activeProps = (proposals || []).filter(p => p.expiration && p.expiration > curEp);
 
-  // ─── Thresholds ───
-  const getDrepThreshold = (ptype) => {
-    if (!pp) return 0.67;
-    const m = {NoConfidence:"dvt_motion_no_confidence",UpdateCommittee:"dvt_committee_normal",
-      NewConstitution:"dvt_update_to_constitution",HardForkInitiation:"dvt_hard_fork_initiation",
-      TreasuryWithdrawals:"dvt_treasury_withdrawal",InfoAction:null};
-    if (ptype === "InfoAction") return 0.51;
-    if (ptype === "ParameterChange") return Math.max(Number(pp.dvt_p_p_network_group)||0,Number(pp.dvt_p_p_economic_group)||0,Number(pp.dvt_p_p_technical_group)||0,Number(pp.dvt_p_p_gov_group)||0) || 0.67;
-    return Number(pp[m[ptype]]) || 0.67;
-  };
-  const getCCThreshold = () => pp ? Number(pp.dvt_committee_normal) || 0.67 : 0.67;
+  // ─── Thresholds (using shared functions) ───
   const CC_INELIG = ["NoConfidence"];
-  // For Vote Reminder, also skip InfoAction for SPO (not meaningful)
-  const SPO_INELIG = ["TreasuryWithdrawals","NewConstitution","InfoAction"];
-  const getSpoThreshold = (ptype) => {
-    if (SPO_INELIG.includes(ptype)) return null;
-    if (!pp) return 0.51;
-    if (ptype === "NoConfidence") return Number(pp.pvt_motion_no_confidence) || 0.51;
-    if (ptype === "HardForkInitiation") return Number(pp.pvt_hard_fork_initiation) || 0.51;
-    if (ptype === "UpdateCommittee") return Number(pp.pvt_committee_normal) || 0.51;
-    if (ptype === "ParameterChange") return Number(pp.pvt_p_p_security_group) || 0.51;
-    return 0.51;
-  };
 
   // ─── Compute reminder data for ALL active proposals ───
   const allReminders = React.useMemo(() => {
@@ -2796,7 +2800,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       const hasSpoSummary = ps && ps.spo;
 
       // DRep analysis — exclude auto voters and 0-stake DReps
-      const drepThr = getDrepThreshold(prop.proposal_type);
+      const drepThr = getDrepThreshold(pp, prop.proposal_type);
       const unvotedDreps = dreps.filter(d => {
         if (d.drep_id === "drep_always_abstain" || d.drep_id === "drep_always_no_confidence") return false;
         if (Number(d.amount) <= 0) return false;
@@ -2839,7 +2843,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       }
 
       // SPO analysis
-      const spoThr = getSpoThreshold(prop.proposal_type);
+      const spoThr = getSpoThreshold(pp, prop.proposal_type);
       let minSPOs = [];
       let spoThresholdMet = true;
       let spoYesPct = 0;
@@ -2871,7 +2875,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
       return {
         prop, ps,
         drepData: { threshold: drepThr, yesPct: drepYesPct, deficit, thresholdMet, minDreps, extraDreps, hasSummary: !!hasDrepSummary },
-        ccData: { canVote: ccCanVote, threshold: getCCThreshold(), yesPct: ps && ps.cc ? ps.cc.yes_pct || 0 : 0, unvotedCC },
+        ccData: { canVote: ccCanVote, threshold: getCCThreshold(pp), yesPct: ps && ps.cc ? ps.cc.yes_pct || 0 : 0, unvotedCC },
         spoData: spoThr !== null ? { threshold: spoThr, yesPct: spoYesPct, thresholdMet: spoThresholdMet, minSPOs, hasSummary: !!hasSpoSummary,
           extraSPOs: minSPOs.length > 0 ? Object.keys(spoPoolInfo||{}).filter(pid => {
             const voted = new Set(); Object.keys(spoVotes||{}).forEach(k=>{if(k.endsWith("__"+prop.proposal_id))voted.add(k.split("__")[0]);});
@@ -3125,13 +3129,7 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
     );
   }
 
-  const fmtStake = (amt) => {
-    const n = Number(amt) / 1e6;
-    if (n >= 1e9) return (n/1e9).toFixed(1) + "B";
-    if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
-    if (n >= 1e3) return (n/1e3).toFixed(0) + "K";
-    return n.toFixed(0);
-  };
+  const fmtStake = fmtStakeShort;
 
   const fmtDate = (iso) => iso ? iso.split("T")[0] : "—";
 
@@ -3374,8 +3372,8 @@ function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccV
     "Governance data not available. Data will appear after the next data update.");
   const net = govInfo.network || {};
   const pp = govInfo.protocolParams || {};
-  const fmtL = (v) => { const n=Number(v)/1e6; return n>=1e9?(n/1e9).toFixed(2)+"B":n>=1e6?(n/1e6).toFixed(2)+"M":n>=1e3?(n/1e3).toFixed(1)+"K":n.toFixed(0); };
-  const fmtAda = (v) => "₳ "+fmtL(v);
+  const fmtL = fmtAda; // reuse global
+  const fmtAdaP = (v) => "₳ "+fmtL(v);
   const pctStr = (v) => v!==undefined&&v!==null ? (Number(v)*100).toFixed(0)+"%" : "—";
 
   const Section = ({title,children}) => React.createElement("div",{
@@ -3402,11 +3400,11 @@ function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccV
     React.createElement(Section,{title:"🏦 "+(T.gov_treasury||"Treasury")+" & "+(T.gov_supply||"Supply")},
       React.createElement("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:8,marginBottom:4}},
         ...[
-          {label:T.gov_treasury||"Treasury",value:fmtAda(net.supply_treasury),color:"#f59e0b"},
-          {label:T.gov_reserves||"Reserves",value:fmtAda(net.supply_reserves),color:"#8b5cf6"},
-          {label:T.gov_supply||"Circulating",value:fmtAda(net.supply_circulating),color:"#06b6d4"},
-          {label:T.gov_live_stake||"Live Stake",value:fmtAda(net.stake_live),color:"#34d399"},
-          {label:T.gov_active_stake||"Active Stake",value:fmtAda(net.stake_active),color:"#14b8a6"},
+          {label:T.gov_treasury||"Treasury",value:fmtAdaP(net.supply_treasury),color:"#f59e0b"},
+          {label:T.gov_reserves||"Reserves",value:fmtAdaP(net.supply_reserves),color:"#8b5cf6"},
+          {label:T.gov_supply||"Circulating",value:fmtAdaP(net.supply_circulating),color:"#06b6d4"},
+          {label:T.gov_live_stake||"Live Stake",value:fmtAdaP(net.stake_live),color:"#34d399"},
+          {label:T.gov_active_stake||"Active Stake",value:fmtAdaP(net.stake_active),color:"#14b8a6"},
         ].map(({label,value,color},i) => React.createElement("div",{key:i,
           style:{background:"var(--bg3)",borderRadius:8,padding:"10px 12px",borderLeft:`3px solid ${color}`}},
           React.createElement("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},label),
@@ -3438,12 +3436,12 @@ function GovernanceDataTab({ govInfo, T, dreps, votes, proposals, ccMembers, ccV
 
     // Deposits & Costs
     React.createElement(Section,{title:"💰 "+(T.gov_deposits||"Deposits & Costs")},
-      React.createElement(Row,{label:"DRep Deposit",value:fmtAda(pp.drep_deposit)}),
-      React.createElement(Row,{label:"Gov Action Deposit",value:fmtAda(pp.gov_action_deposit)}),
-      React.createElement(Row,{label:"Pool Deposit",value:fmtAda(pp.pool_deposit)}),
-      React.createElement(Row,{label:"Key Deposit",value:fmtAda(pp.key_deposit)}),
-      React.createElement(Row,{label:"Min Pool Cost",value:fmtAda(pp.min_pool_cost)}),
-      React.createElement(Row,{label:"Coins per UTxO byte",value:fmtAda(pp.coins_per_utxo_size)})
+      React.createElement(Row,{label:"DRep Deposit",value:fmtAdaP(pp.drep_deposit)}),
+      React.createElement(Row,{label:"Gov Action Deposit",value:fmtAdaP(pp.gov_action_deposit)}),
+      React.createElement(Row,{label:"Pool Deposit",value:fmtAdaP(pp.pool_deposit)}),
+      React.createElement(Row,{label:"Key Deposit",value:fmtAdaP(pp.key_deposit)}),
+      React.createElement(Row,{label:"Min Pool Cost",value:fmtAdaP(pp.min_pool_cost)}),
+      React.createElement(Row,{label:"Coins per UTxO byte",value:fmtAdaP(pp.coins_per_utxo_size)})
     ),
 
     // Governance Settings
