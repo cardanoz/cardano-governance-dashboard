@@ -1248,7 +1248,13 @@ async function main() {
   // ─── 7e2. All registered pool info (independent of vote freshness) ───
   const SPO_POOL_FRESH_MS = 12 * 3600000; // 12 hours — pool list changes slowly
   const lastPoolListFetch = cache.lastPoolListFetchAt || 0;
-  let poolListFresh = (now - lastPoolListFetch) < SPO_POOL_FRESH_MS && Object.keys(cachedSpoPoolInfo).length > 500;
+  // Check if cached pool info has tickers — if most are empty, force re-fetch
+  const cachedTickerCount = Object.values(cachedSpoPoolInfo).filter(p => p.ticker).length;
+  const cachedPoolCount = Object.keys(cachedSpoPoolInfo).length;
+  let poolListFresh = (now - lastPoolListFetch) < SPO_POOL_FRESH_MS && cachedPoolCount > 500 && cachedTickerCount > cachedPoolCount * 0.1;
+  if (!poolListFresh && cachedPoolCount > 500 && cachedTickerCount < cachedPoolCount * 0.1) {
+    console.log(`  Pool cache has ${cachedTickerCount}/${cachedPoolCount} tickers — forcing re-fetch`);
+  }
 
   if (poolListFresh) {
     // Use cached pool info, but make sure spoPoolInfo has it
@@ -1270,8 +1276,10 @@ async function main() {
       }
       console.log(`  Found ${allPoolIds.length} registered pools`);
 
-      const poolsToFetch = allPoolIds.filter(pid => !spoPoolInfo[pid]);
-      console.log(`  Pool info: ${allPoolIds.length - poolsToFetch.length} already known, ${poolsToFetch.length} to fetch`);
+      // Re-fetch pools that have no ticker (likely missing metadata from previous fetch)
+      const tickerMissing = allPoolIds.filter(pid => spoPoolInfo[pid] && !spoPoolInfo[pid].ticker);
+      const poolsToFetch = allPoolIds.filter(pid => !spoPoolInfo[pid] || !spoPoolInfo[pid].ticker);
+      console.log(`  Pool info: ${allPoolIds.length - poolsToFetch.length} complete, ${poolsToFetch.length} to fetch (${tickerMissing.length} missing ticker)`);
 
       if (poolsToFetch.length > 0) {
         const POOL_BATCH = 50;
@@ -1279,16 +1287,28 @@ async function main() {
           const batch = poolsToFetch.slice(i, i + POOL_BATCH);
           try {
             const data = await koiosPost("/pool_info", { _pool_bech32_ids: batch });
-            if (data) data.forEach(p => {
-              if (p.pool_id_bech32) {
-                spoPoolInfo[p.pool_id_bech32] = {
-                  ticker: p.ticker || "",
-                  reward_addr: p.reward_addr || "",
-                  pledge_drep: null,
-                  active_stake: p.active_stake || p.live_stake || "0"
-                };
+            if (data) {
+              // Debug: log field names from first response (one-time)
+              if (i === 0 && data[0]) {
+                const keys = Object.keys(data[0]);
+                console.log(`    pool_info fields: ${keys.join(", ")}`);
+                if (data[0].meta_json) console.log(`    meta_json sample: ${JSON.stringify(data[0].meta_json)}`);
               }
-            });
+              data.forEach(p => {
+                if (p.pool_id_bech32) {
+                  // Ticker may be at p.ticker (old Koios) or p.meta_json.ticker (current Koios)
+                  const ticker = p.ticker || (p.meta_json && p.meta_json.ticker) || "";
+                  const poolName = (p.meta_json && p.meta_json.name) || "";
+                  spoPoolInfo[p.pool_id_bech32] = {
+                    ticker: ticker,
+                    name: poolName,
+                    reward_addr: p.reward_addr || "",
+                    pledge_drep: null,
+                    active_stake: p.active_stake || p.live_stake || "0"
+                  };
+                }
+              });
+            }
           } catch (e) { console.log(`    pool_info batch error: ${e.message}`); }
           if ((i + POOL_BATCH) % 500 === 0 || i + POOL_BATCH >= poolsToFetch.length) {
             console.log(`    [${Math.min(i+POOL_BATCH,poolsToFetch.length)}/${poolsToFetch.length}] pool info fetched`);
