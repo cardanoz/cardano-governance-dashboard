@@ -1,9 +1,13 @@
 name: AI Analysis
 
 on:
+  # Run after governance data update completes
   workflow_run:
     workflows: ["Update Governance Data"]
     types: [completed]
+  # Daily schedule (09:00 UTC = 18:00 JST) — retry errors & analyze new data
+  schedule:
+    - cron: '0 9 * * *'
   workflow_dispatch:
 
 permissions:
@@ -13,7 +17,7 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout repository

@@ -144,7 +144,7 @@ function loadAllData() {
   const proposals = loadJSON("proposals.json") || [];
   const rationales = loadJSON("drep-rationales.json") || {};
   const govInfo = loadJSON("governance-info.json") || {};
-  const cache = loadJSON("ai-analysis-cache.json") || { drepCache: {}, proposalCache: {} };
+  const cache = loadJSON("ai-analysis-cache.json") || { drepCache: {}, proposalCache: {}, actionTypeCache: {} };
 
   // Sort DReps by stake (exclude auto-abstain, auto-no-confidence, 0-stake)
   const activeDreps = dreps
@@ -369,6 +369,7 @@ async function analyzeProposalReasons(data) {
   });
 
   console.log(`  Proposals with rationales: ${proposalsToAnalyze.length}/${proposals.length}`);
+  let propAnalyzed = 0, propCached = 0, propErrors = 0;
 
   for (let pi = 0; pi < proposalsToAnalyze.length; pi++) {
     const p = proposalsToAnalyze[pi];
@@ -406,6 +407,7 @@ async function analyzeProposalReasons(data) {
     const prevAnalysis = cache.proposalCache?.[propKey];
     if (prevAnalysis && prevAnalysis.voteCountAtAnalysis === totalVoted) {
       result[propKey] = prevAnalysis.analysis;
+      propCached++;
       continue;
     }
 
@@ -489,11 +491,12 @@ Only include categories that have rationales. Use the actual DRep names from the
         voteCountAtAnalysis: totalVoted,
         analysis
       };
+      propAnalyzed++;
 
-      if ((pi + 1) % 10 === 0) console.log(`  [${pi + 1}/${proposalsToAnalyze.length}] proposals analyzed`);
+      if ((pi + 1) % 10 === 0) console.log(`  [${pi + 1}/${proposalsToAnalyze.length}] (${propAnalyzed} new, ${propCached} cached, ${propErrors} errors)`);
       await sleep(THROTTLE_MS);
     } catch (e) {
-      console.log(`  ERROR analyzing proposal ${p.title}: ${e.message}`);
+      console.log(`  ERROR analyzing proposal ${(p.title||"").slice(0,60)}: ${e.message}`);
       result[propKey] = {
         title: p.title || propKey,
         type: p.proposal_type || "unknown",
@@ -501,6 +504,7 @@ Only include categories that have rationales. Use the actual DRep names from the
         yesReasons: [], noReasons: [], abstainReasons: [],
         error: e.message
       };
+      propErrors++;
       await sleep(2000);
     }
   }
@@ -519,7 +523,7 @@ Only include categories that have rationales. Use the actual DRep names from the
     }
   }
 
-  console.log(`  Done: ${proposalsToAnalyze.length} proposals analyzed`);
+  console.log(`  Done: ${propAnalyzed} analyzed, ${propCached} cached, ${propErrors} errors, ${Object.keys(result).length} total`);
   return result;
 }
 
@@ -527,7 +531,8 @@ Only include categories that have rationales. Use the actual DRep names from the
 
 async function analyzeActionTypeSummary(data, drepTendencies) {
   console.log("\n═══ Step 3: Action Type Summary ═══");
-  const { proposals, votes, rationales } = data;
+  const { proposals, votes, rationales, cache } = data;
+  if (!cache.actionTypeCache) cache.actionTypeCache = {};
 
   // Group proposals by type
   const typeGroups = {};
@@ -538,6 +543,7 @@ async function analyzeActionTypeSummary(data, drepTendencies) {
   });
 
   const result = {};
+  let cachedCount = 0, analyzedCount = 0;
 
   for (const [type, props] of Object.entries(typeGroups)) {
     // Gather all rationales for this type
@@ -562,6 +568,14 @@ async function analyzeActionTypeSummary(data, drepTendencies) {
         typicalReasonsNo: [],
         analysisTokens: 0
       };
+      continue;
+    }
+
+    // Check cache — skip if proposal count and rationale count unchanged
+    const prevTypeCache = cache.actionTypeCache[type];
+    if (prevTypeCache && prevTypeCache.proposalCount === props.length && prevTypeCache.rationaleCount === totalRationales && prevTypeCache.analysis) {
+      result[type] = prevTypeCache.analysis;
+      cachedCount++;
       continue;
     }
 
@@ -592,12 +606,15 @@ Respond in JSON:
       const response = await callClaude(systemPrompt, userPrompt);
       const parsed = parseClaudeJSON(response);
 
-      result[type] = {
+      const analysis = {
         count: props.length,
         summary: parsed.summary || "",
         typicalReasonsYes: parsed.typicalReasonsYes || [],
         typicalReasonsNo: parsed.typicalReasonsNo || []
       };
+      result[type] = analysis;
+      cache.actionTypeCache[type] = { proposalCount: props.length, rationaleCount: totalRationales, analysis };
+      analyzedCount++;
       await sleep(THROTTLE_MS);
     } catch (e) {
       console.log(`  ERROR analyzing type ${type}: ${e.message}`);
@@ -610,7 +627,7 @@ Respond in JSON:
     }
   }
 
-  console.log(`  Done: ${Object.keys(result).length} action types analyzed`);
+  console.log(`  Done: ${analyzedCount} analyzed, ${cachedCount} cached, ${Object.keys(result).length} total`);
   return result;
 }
 
