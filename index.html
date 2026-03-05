@@ -3156,7 +3156,7 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 // ═══════════════════════════════════════════════════════════════════
 // AI Analysis Tab (β)
 // ═══════════════════════════════════════════════════════════════════
-const PREDICT_WORKER_URL = ""; // Set your Cloudflare Worker URL here, e.g. "https://predict-vote.your-account.workers.dev"
+const PREDICT_WORKER_URL = "https://predict-vote.adatool.workers.dev";
 
 function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummary, aiMeta, proposals, T, lang }) {
   const [subtab, setSubtab] = React.useState("tendencies");
