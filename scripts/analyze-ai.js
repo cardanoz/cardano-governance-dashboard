@@ -29,7 +29,7 @@ if (!CLAUDE_API_KEY) { console.error("ERROR: CLAUDE_API_KEY env var required"); 
 const DATA_DIR = path.resolve(__dirname, "..", "data");
 const TOP_N = parseInt(process.argv[2]) || 100;
 const CLAUDE_MODEL = "claude-haiku-4-5-20251001";
-const MAX_TOKENS = 1500;
+const MAX_TOKENS = 2500;
 const THROTTLE_MS = 200; // between API calls
 const MIN_NEW_VOTES_FOR_REANALYSIS = 3;
 
@@ -71,14 +71,18 @@ function parseClaudeJSON(raw) {
       // Last resort: strip and retry
       try {
         // Try extracting just the key fields manually
+        const ts_en = raw.match(/"tendencySummary_en"\s*:\s*"([^"]+)"/)?.[1] || "";
+        const ts_ja = raw.match(/"tendencySummary_ja"\s*:\s*"([^"]+)"/)?.[1] || "";
+        const vp_en = raw.match(/"votingPattern_en"\s*:\s*"([^"]+)"/)?.[1] || "";
+        const vp_ja = raw.match(/"votingPattern_ja"\s*:\s*"([^"]+)"/)?.[1] || "";
+        if (ts_en || ts_ja) return { tendencySummary_en: ts_en, tendencySummary_ja: ts_ja, votingPattern_en: vp_en, votingPattern_ja: vp_ja, keyPositions_en: [], keyPositions_ja: [] };
+        // Fallback to old single-language fields
         const ts = raw.match(/"tendencySummary"\s*:\s*"([^"]+)"/)?.[1] || "";
         const vp = raw.match(/"votingPattern"\s*:\s*"([^"]+)"/)?.[1] || "";
-        const kp = raw.match(/"keyPositions"\s*:\s*\[([\s\S]*?)\]/)?.[1] || "";
-        const kpArr = kp ? kp.split(/",\s*"/).map(s => s.replace(/^"|"$/g, '')) : [];
-        if (ts || vp) return { tendencySummary: ts, votingPattern: vp, keyPositions: kpArr };
-        // For proposal reasons
-        const summary = raw.match(/"summary"\s*:\s*"([^"]+)"/)?.[1] || "";
-        if (summary) return { summary };
+        if (ts || vp) return { tendencySummary_en: ts, tendencySummary_ja: ts, votingPattern_en: vp, votingPattern_ja: vp, keyPositions_en: [], keyPositions_ja: [] };
+        const summary_en = raw.match(/"summary_en"\s*:\s*"([^"]+)"/)?.[1] || "";
+        const summary_ja = raw.match(/"summary_ja"\s*:\s*"([^"]+)"/)?.[1] || "";
+        if (summary_en || summary_ja) return { summary_en, summary_ja };
         return {};
       } catch (e3) {
         return {};
@@ -197,7 +201,9 @@ async function analyzeDRepTendencies(data) {
     const prevVoteCount = prevCache?.lastAnalyzedVoteCount || 0;
     const newVotes = drepVotes.length - prevVoteCount;
 
-    if (prevCache?.tendencySummary && newVotes < MIN_NEW_VOTES_FOR_REANALYSIS) {
+    // Only use cache if bilingual fields exist (tendencySummary_en); old single-lang cache triggers re-analysis
+    const hasBilingualCache = !!prevCache?.tendencySummary_en;
+    if (hasBilingualCache && newVotes < MIN_NEW_VOTES_FOR_REANALYSIS) {
       // Use cached result
       result[drepId] = {
         name: drepName,
@@ -206,9 +212,12 @@ async function analyzeDRepTendencies(data) {
         totalVotes: drepVotes.length,
         withRationale,
         voteSpread,
-        tendencySummary: prevCache.tendencySummary,
-        keyPositions: prevCache.keyPositions || [],
-        votingPattern: prevCache.votingPattern || "",
+        tendencySummary_en: prevCache.tendencySummary_en || prevCache.tendencySummary || "",
+        tendencySummary_ja: prevCache.tendencySummary_ja || prevCache.tendencySummary || "",
+        keyPositions_en: prevCache.keyPositions_en || prevCache.keyPositions || [],
+        keyPositions_ja: prevCache.keyPositions_ja || prevCache.keyPositions || [],
+        votingPattern_en: prevCache.votingPattern_en || prevCache.votingPattern || "",
+        votingPattern_ja: prevCache.votingPattern_ja || prevCache.votingPattern || "",
         lastAnalyzedVoteCount: prevCache.lastAnalyzedVoteCount,
         lastAnalyzedAt: prevCache.lastAnalyzedAt,
         cached: true
@@ -226,9 +235,12 @@ async function analyzeDRepTendencies(data) {
         totalVotes: drepVotes.length,
         withRationale: 0,
         voteSpread,
-        tendencySummary: "No voting rationales provided.",
-        keyPositions: [],
-        votingPattern: drepVotes.length > 0 ? "Votes without providing rationale" : "Has not voted",
+        tendencySummary_en: "No voting rationales provided.",
+        tendencySummary_ja: "投票根拠の提出なし。",
+        keyPositions_en: [],
+        keyPositions_ja: [],
+        votingPattern_en: drepVotes.length > 0 ? "Votes without providing rationale" : "Has not voted",
+        votingPattern_ja: drepVotes.length > 0 ? "根拠なしで投票" : "未投票",
         lastAnalyzedVoteCount: drepVotes.length,
         lastAnalyzedAt: new Date().toISOString(),
         cached: false
@@ -272,13 +284,13 @@ Voting rationales:
 ${rationaleTexts.join("\n---\n")}`;
     }
 
-    const systemPrompt = `You are analyzing a Cardano DRep's voting behavior. Based on their voting rationales, provide:
-1. A concise tendency summary (2-3 sentences in Japanese)
-2. Key positions as a JSON array of strings (in Japanese, max 5 items)
-3. Voting pattern description (1 sentence in Japanese)
+    const systemPrompt = `You are analyzing a Cardano DRep's voting behavior. Based on their voting rationales, provide analysis in BOTH English and Japanese:
+1. A concise tendency summary (2-3 sentences) in both languages
+2. Key positions as arrays of strings (max 5 items each) in both languages
+3. Voting pattern description (1 sentence) in both languages
 
 Respond in this exact JSON format:
-{"tendencySummary":"...","keyPositions":["...","..."],"votingPattern":"..."}`;
+{"tendencySummary_en":"...","tendencySummary_ja":"...","keyPositions_en":["..."],"keyPositions_ja":["..."],"votingPattern_en":"...","votingPattern_ja":"..."}`;
 
     try {
       const response = await callClaude(systemPrompt, userPrompt);
@@ -291,9 +303,12 @@ Respond in this exact JSON format:
         totalVotes: drepVotes.length,
         withRationale,
         voteSpread,
-        tendencySummary: parsed.tendencySummary || "Analysis failed",
-        keyPositions: parsed.keyPositions || [],
-        votingPattern: parsed.votingPattern || "",
+        tendencySummary_en: parsed.tendencySummary_en || parsed.tendencySummary || "Analysis failed",
+        tendencySummary_ja: parsed.tendencySummary_ja || parsed.tendencySummary || "分析失敗",
+        keyPositions_en: parsed.keyPositions_en || parsed.keyPositions || [],
+        keyPositions_ja: parsed.keyPositions_ja || parsed.keyPositions || [],
+        votingPattern_en: parsed.votingPattern_en || parsed.votingPattern || "",
+        votingPattern_ja: parsed.votingPattern_ja || parsed.votingPattern || "",
         lastAnalyzedVoteCount: drepVotes.length,
         lastAnalyzedAt: new Date().toISOString(),
         cached: false
@@ -303,9 +318,12 @@ Respond in this exact JSON format:
       cache.drepCache[drepId] = {
         lastAnalyzedVoteCount: drepVotes.length,
         lastAnalyzedAt: new Date().toISOString(),
-        tendencySummary: parsed.tendencySummary,
-        keyPositions: parsed.keyPositions,
-        votingPattern: parsed.votingPattern
+        tendencySummary_en: parsed.tendencySummary_en || parsed.tendencySummary,
+        tendencySummary_ja: parsed.tendencySummary_ja || parsed.tendencySummary,
+        keyPositions_en: parsed.keyPositions_en || parsed.keyPositions,
+        keyPositions_ja: parsed.keyPositions_ja || parsed.keyPositions,
+        votingPattern_en: parsed.votingPattern_en || parsed.votingPattern,
+        votingPattern_ja: parsed.votingPattern_ja || parsed.votingPattern
       };
 
       analyzed++;
@@ -316,13 +334,16 @@ Respond in this exact JSON format:
     } catch (e) {
       console.log(`  ERROR analyzing ${drepName}: ${e.message}`);
       // Use previous cache or mark as failed
-      if (prevCache?.tendencySummary) {
+      if (prevCache?.tendencySummary_en) {
         result[drepId] = {
           name: drepName, stake: d.amount, rank: i + 1,
           totalVotes: drepVotes.length, withRationale, voteSpread,
-          tendencySummary: prevCache.tendencySummary,
-          keyPositions: prevCache.keyPositions || [],
-          votingPattern: prevCache.votingPattern || "",
+          tendencySummary_en: prevCache.tendencySummary_en || prevCache.tendencySummary || "",
+          tendencySummary_ja: prevCache.tendencySummary_ja || prevCache.tendencySummary || "",
+          keyPositions_en: prevCache.keyPositions_en || prevCache.keyPositions || [],
+          keyPositions_ja: prevCache.keyPositions_ja || prevCache.keyPositions || [],
+          votingPattern_en: prevCache.votingPattern_en || prevCache.votingPattern || "",
+          votingPattern_ja: prevCache.votingPattern_ja || prevCache.votingPattern || "",
           lastAnalyzedVoteCount: prevCache.lastAnalyzedVoteCount,
           lastAnalyzedAt: prevCache.lastAnalyzedAt,
           cached: true
@@ -332,8 +353,9 @@ Respond in this exact JSON format:
         result[drepId] = {
           name: drepName, stake: d.amount, rank: i + 1,
           totalVotes: drepVotes.length, withRationale, voteSpread,
-          tendencySummary: "Analysis error",
-          keyPositions: [], votingPattern: "",
+          tendencySummary_en: "Analysis error", tendencySummary_ja: "分析エラー",
+          keyPositions_en: [], keyPositions_ja: [],
+          votingPattern_en: "", votingPattern_ja: "",
           lastAnalyzedVoteCount: drepVotes.length,
           lastAnalyzedAt: new Date().toISOString(),
           cached: false
@@ -405,7 +427,9 @@ async function analyzeProposalReasons(data) {
 
     // Check cache
     const prevAnalysis = cache.proposalCache?.[propKey];
-    if (prevAnalysis && prevAnalysis.voteCountAtAnalysis === totalVoted) {
+    // Only use cache if bilingual (reason_en exists in at least one reason), else re-analyze
+    const hasBilingualReasons = prevAnalysis?.analysis?.yesReasons?.some(r => r.reason_en) || prevAnalysis?.analysis?.noReasons?.some(r => r.reason_en);
+    if (prevAnalysis && prevAnalysis.voteCountAtAnalysis === totalVoted && hasBilingualReasons) {
       result[propKey] = prevAnalysis.analysis;
       propCached++;
       continue;
@@ -416,6 +440,7 @@ async function analyzeProposalReasons(data) {
       result[propKey] = {
         title: p.title || propKey,
         type: p.proposal_type || "unknown",
+        submittedEpoch: p.epoch || 0,
         stats: { votedWithRationale: 0, votedWithoutRationale: totalVoted, notVoted: allDreps.length - totalVoted },
         yesReasons: [], noReasons: [], abstainReasons: []
       };
@@ -445,13 +470,13 @@ ${formatVoteGroup(propVotes.abstain, "ABSTAIN")}`;
 
     const systemPrompt = `You analyze Cardano governance action votes. Group the voting rationales into distinct reasons.
 For each vote category (Yes/No/Abstain), identify 1-5 distinct reason groups.
-Each reason should be a concise summary in Japanese.
+Provide each reason in BOTH English and Japanese.
 
 Respond in this exact JSON format:
 {
-  "yesReasons": [{"reason":"理由の要約","drepNames":["name1","name2"]}],
-  "noReasons": [{"reason":"理由の要約","drepNames":["name1"]}],
-  "abstainReasons": [{"reason":"理由の要約","drepNames":["name1"]}]
+  "yesReasons": [{"reason_en":"reason summary","reason_ja":"理由の要約","drepNames":["name1","name2"]}],
+  "noReasons": [{"reason_en":"reason summary","reason_ja":"理由の要約","drepNames":["name1"]}],
+  "abstainReasons": [{"reason_en":"reason summary","reason_ja":"理由の要約","drepNames":["name1"]}]
 }
 Only include categories that have rationales. Use the actual DRep names from the input.`;
 
@@ -469,17 +494,53 @@ Only include categories that have rationales. Use the actual DRep names from the
             return { name, stake: entry?.stake || "0" };
           });
           const totalStake = matchedDreps.reduce((sum, d) => sum + Number(d.stake || 0), 0);
-          return { reason: r.reason, totalStake: String(totalStake), dreps: matchedDreps };
+          return { reason_en: r.reason_en || r.reason || "", reason_ja: r.reason_ja || r.reason || "", totalStake: String(totalStake), dreps: matchedDreps };
         });
       };
+
+      // Compute per-vote-type breakdown: with/without rationale and total stakes
+      const buildVoteBreakdown = (voteEntries) => {
+        const withRat = voteEntries.filter(e => e.rationaleText);
+        const withoutRat = voteEntries.filter(e => !e.rationaleText);
+        return {
+          total: voteEntries.length,
+          withRationale: withRat.length,
+          withoutRationale: withoutRat.length,
+          totalStake: String(voteEntries.reduce((s,e) => s + Number(e.stake||0), 0)),
+          withRationaleStake: String(withRat.reduce((s,e) => s + Number(e.stake||0), 0)),
+          withoutRationaleStake: String(withoutRat.reduce((s,e) => s + Number(e.stake||0), 0)),
+          withoutRationaleDreps: withoutRat.slice(0,10).map(e => ({name:e.drepName,stake:e.stake}))
+        };
+      };
+
+      // Compute NotVoted top DReps (by stake)
+      const votedDrepIds = new Set();
+      for (const [key] of Object.entries(votes)) {
+        if (!key.includes(`__${propKey}`)) continue;
+        votedDrepIds.add(key.split("__")[0]);
+      }
+      const notVotedDreps = allDreps
+        .filter(d => d.drep_id && !d.drep_id.startsWith("drep_always_") && Number(d.amount) > 0 && !votedDrepIds.has(d.drep_id))
+        .sort((a,b) => Number(b.amount) - Number(a.amount))
+        .slice(0,10)
+        .map(d => ({name: d.name || d.drep_id.slice(0,15)+"...", stake: d.amount}));
+      const notVotedTotalStake = String(allDreps
+        .filter(d => d.drep_id && !d.drep_id.startsWith("drep_always_") && Number(d.amount) > 0 && !votedDrepIds.has(d.drep_id))
+        .reduce((s,d) => s + Number(d.amount||0), 0));
 
       const analysis = {
         title: p.title || propKey,
         type: p.proposal_type || "unknown",
+        submittedEpoch: p.epoch || 0,
         stats: {
           votedWithRationale,
           votedWithoutRationale,
-          notVoted: allDreps.length - totalVoted
+          notVoted: allDreps.length - totalVoted,
+          notVotedTotalStake,
+          notVotedTopDreps: notVotedDreps,
+          yesBreakdown: buildVoteBreakdown(propVotes.yes),
+          noBreakdown: buildVoteBreakdown(propVotes.no),
+          abstainBreakdown: buildVoteBreakdown(propVotes.abstain)
         },
         yesReasons: enrichReasons(parsed.yesReasons, propVotes.yes),
         noReasons: enrichReasons(parsed.noReasons, propVotes.no),
@@ -517,6 +578,7 @@ Only include categories that have rationales. Use the actual DRep names from the
       result[propKey] = {
         title: p.title || propKey,
         type: p.proposal_type || "unknown",
+        submittedEpoch: p.epoch || 0,
         stats: { votedWithRationale: 0, votedWithoutRationale: totalVoted, notVoted: allDreps.length - totalVoted },
         yesReasons: [], noReasons: [], abstainReasons: []
       };
@@ -563,17 +625,16 @@ async function analyzeActionTypeSummary(data, drepTendencies) {
     if (totalRationales === 0) {
       result[type] = {
         count: props.length,
-        summary: "投票根拠データなし",
-        typicalReasonsYes: [],
-        typicalReasonsNo: [],
-        analysisTokens: 0
+        summary_en: "No voting rationale data.", summary_ja: "投票根拠データなし。",
+        typicalReasonsYes_en: [], typicalReasonsYes_ja: [],
+        typicalReasonsNo_en: [], typicalReasonsNo_ja: []
       };
       continue;
     }
 
     // Check cache — skip if proposal count and rationale count unchanged
     const prevTypeCache = cache.actionTypeCache[type];
-    if (prevTypeCache && prevTypeCache.proposalCount === props.length && prevTypeCache.rationaleCount === totalRationales && prevTypeCache.analysis) {
+    if (prevTypeCache && prevTypeCache.proposalCount === props.length && prevTypeCache.rationaleCount === totalRationales && prevTypeCache.analysis?.summary_en) {
       result[type] = prevTypeCache.analysis;
       cachedCount++;
       continue;
@@ -594,13 +655,13 @@ ${sampleNo || "(none)"}
 Abstain rationales (${typeRationales.abstain.length} total, showing up to 10):
 ${sampleAbstain || "(none)"}`;
 
-    const systemPrompt = `Analyze voting patterns for this Cardano governance action type. Provide in Japanese:
-1. Overall summary (2-3 sentences)
-2. Typical reasons for Yes votes (array of strings, max 4)
-3. Typical reasons for No votes (array of strings, max 4)
+    const systemPrompt = `Analyze voting patterns for this Cardano governance action type. Provide in BOTH English and Japanese:
+1. Overall summary (2-3 sentences) in both languages
+2. Typical reasons for Yes votes (array of strings, max 4) in both languages
+3. Typical reasons for No votes (array of strings, max 4) in both languages
 
 Respond in JSON:
-{"summary":"...","typicalReasonsYes":["..."],"typicalReasonsNo":["..."]}`;
+{"summary_en":"...","summary_ja":"...","typicalReasonsYes_en":["..."],"typicalReasonsYes_ja":["..."],"typicalReasonsNo_en":["..."],"typicalReasonsNo_ja":["..."]}`;
 
     try {
       const response = await callClaude(systemPrompt, userPrompt);
@@ -608,9 +669,12 @@ Respond in JSON:
 
       const analysis = {
         count: props.length,
-        summary: parsed.summary || "",
-        typicalReasonsYes: parsed.typicalReasonsYes || [],
-        typicalReasonsNo: parsed.typicalReasonsNo || []
+        summary_en: parsed.summary_en || parsed.summary || "",
+        summary_ja: parsed.summary_ja || parsed.summary || "",
+        typicalReasonsYes_en: parsed.typicalReasonsYes_en || parsed.typicalReasonsYes || [],
+        typicalReasonsYes_ja: parsed.typicalReasonsYes_ja || parsed.typicalReasonsYes || [],
+        typicalReasonsNo_en: parsed.typicalReasonsNo_en || parsed.typicalReasonsNo || [],
+        typicalReasonsNo_ja: parsed.typicalReasonsNo_ja || parsed.typicalReasonsNo || []
       };
       result[type] = analysis;
       cache.actionTypeCache[type] = { proposalCount: props.length, rationaleCount: totalRationales, analysis };
@@ -620,9 +684,9 @@ Respond in JSON:
       console.log(`  ERROR analyzing type ${type}: ${e.message}`);
       result[type] = {
         count: props.length,
-        summary: "分析エラー",
-        typicalReasonsYes: [],
-        typicalReasonsNo: []
+        summary_en: "Analysis error", summary_ja: "分析エラー",
+        typicalReasonsYes_en: [], typicalReasonsYes_ja: [],
+        typicalReasonsNo_en: [], typicalReasonsNo_ja: []
       };
     }
   }

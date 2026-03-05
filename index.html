@@ -3147,9 +3147,21 @@ function VoteReminderSection({ govInfo, T, dreps, votes, proposals, ccMembers, c
 // ═══════════════════════════════════════════════════════════════════
 function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummary, aiMeta, proposals, T, lang }) {
   const [subtab, setSubtab] = React.useState("tendencies");
-  const [expandedRow, setExpandedRow] = React.useState(null);
+  const [expandedRows, setExpandedRows] = React.useState({});
+
+  const toggleRow = (key) => setExpandedRows(prev => ({...prev, [key]: !prev[key]}));
 
   const hasData = aiDrepTendencies || aiProposalReasons || aiActionTypeSummary;
+  // Bilingual helper: pick en/ja field, fallback to old single field
+  const L = (obj, field) => {
+    if (!obj) return "";
+    const v = obj[field+"_"+lang] || obj[field+"_en"] || obj[field] || "";
+    return v;
+  };
+  const LA = (obj, field) => {
+    if (!obj) return [];
+    return obj[field+"_"+lang] || obj[field+"_en"] || obj[field] || [];
+  };
 
   if (!hasData) {
     return React.createElement("div", {className:"card",style:{padding:32,textAlign:"center"}},
@@ -3164,8 +3176,9 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
   const E = React.createElement;
   const thS = {padding:"5px 8px",fontSize:10,color:"#8899aa",fontWeight:600,textAlign:"left",borderBottom:"1px solid #232b3e",whiteSpace:"nowrap",position:"sticky",top:0,background:"#0e1320",zIndex:1};
   const tdS = {padding:"5px 8px",fontSize:11,color:"#e0e6ed",borderBottom:"1px solid #1a2030",verticalAlign:"middle"};
+  const lbS = {fontSize:11,fontWeight:600,marginBottom:2}; // label style
 
-  // ─── Sub-tab: DRep Tendencies (table) ───
+  // ─── Sub-tab: DRep Tendencies (table, multi-expand) ───
   const renderTendencies = () => {
     if (!aiDrepTendencies?.dreps) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
     const dreps = Object.entries(aiDrepTendencies.dreps)
@@ -3189,15 +3202,18 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
           )),
           E("tbody", null,
             dreps.map(([id, d]) => {
-              const isExp = expandedRow === "d_"+id;
+              const isExp = !!expandedRows["d_"+id];
               const total = d.voteSpread.yes + d.voteSpread.no + d.voteSpread.abstain;
               const yP = total ? d.voteSpread.yes/total*100 : 0;
               const nP = total ? d.voteSpread.no/total*100 : 0;
               const aP = total ? d.voteSpread.abstain/total*100 : 0;
               const nv = Math.max(0, (d.totalVotes||0) - total);
+              const summary = L(d,"tendencySummary");
+              const kp = LA(d,"keyPositions");
+              const vp = L(d,"votingPattern");
               return E(React.Fragment, {key:id},
                 E("tr", {
-                  onClick:()=>setExpandedRow(isExp?null:"d_"+id),
+                  onClick:()=>toggleRow("d_"+id),
                   style:{cursor:"pointer",background:isExp?"#151b28":"transparent",transition:"background .1s"}
                 },
                   E("td",{style:{...tdS,color:"#556677",textAlign:"center",fontSize:10}},d.rank),
@@ -3215,20 +3231,24 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
                     )
                   ),
                   E("td",{style:{...tdS,color:"#b0bec5",fontSize:10,maxWidth:260,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
-                    truncStr(d.tendencySummary, 60))
+                    truncStr(summary, 60))
                 ),
                 isExp && E("tr",{key:id+"_exp"},
-                  E("td",{colSpan:9,style:{padding:"10px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
-                    E("div",{style:{fontSize:12,color:"#b0bec5",marginBottom:6}}, d.tendencySummary),
-                    d.keyPositions && d.keyPositions.length > 0 && E("div",{style:{marginBottom:6}},
-                      E("span",{style:{color:"#4fc3f7",fontSize:11,fontWeight:600}},T.ai_key_positions+": "),
-                      E("span",{style:{color:"#c0cad6",fontSize:11}}, d.keyPositions.join(" / "))
+                  E("td",{colSpan:9,style:{padding:"12px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                    E("div",{style:{fontSize:12,color:"#b0bec5",marginBottom:10,lineHeight:1.6}}, summary),
+                    kp && kp.length > 0 && E("div",{style:{marginBottom:10}},
+                      E("div",{style:{...lbS,color:"#4fc3f7"}},T.ai_key_positions+":"),
+                      E("ul", {style:{margin:"4px 0 0 16px",padding:0}},
+                        kp.map((pos, i) =>
+                          E("li", {key:i,style:{color:"#c0cad6",fontSize:11,marginBottom:3,lineHeight:1.5}}, pos)
+                        )
+                      )
                     ),
-                    d.votingPattern && E("div",{style:{marginBottom:6}},
-                      E("span",{style:{color:"#4fc3f7",fontSize:11,fontWeight:600}},T.ai_voting_pattern+": "),
-                      E("span",{style:{color:"#8899aa",fontSize:11}}, d.votingPattern)
+                    vp && E("div",{style:{marginBottom:10}},
+                      E("div",{style:{...lbS,color:"#4fc3f7"}},T.ai_voting_pattern+":"),
+                      E("div",{style:{color:"#8899aa",fontSize:11,marginTop:2}}, "📊 " + vp)
                     ),
-                    E("span",{style:{color:"#556677",fontSize:10}},
+                    E("div",{style:{color:"#556677",fontSize:10,marginTop:4}},
                       `${T.ai_with_rationale}: ${d.withRationale}/${d.totalVotes} · ${fmtDate(d.lastAnalyzedAt)}` +
                       (d.cached ? " (cached)" : ""))
                   )
@@ -3241,33 +3261,48 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
     );
   };
 
-  // ─── Sub-tab: Proposal Vote Reasons (table) ───
+  // ─── Sub-tab: Proposal Vote Reasons (table, sorted by epoch desc) ───
   const renderProposalReasons = () => {
     if (!aiProposalReasons?.proposals) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
     const propEntries = Object.entries(aiProposalReasons.proposals)
       .sort((a,b) => {
-        // newest first: compare keys (tx_hash#index) — use index descending
-        const ai = parseInt(a[0].split("#")[1]) || 0;
-        const bi = parseInt(b[0].split("#")[1]) || 0;
-        return bi - ai;
+        // Sort by submittedEpoch desc, fallback to key
+        const ae = a[1].submittedEpoch || 0;
+        const be = b[1].submittedEpoch || 0;
+        if (be !== ae) return be - ae;
+        return b[0].localeCompare(a[0]);
       });
 
     const renderReasonGroup = (reasons, label, color) => {
       if (!reasons || reasons.length === 0) return null;
-      return E("div", {style:{marginBottom:12}},
-        E("div", {style:{color,fontSize:12,fontWeight:600,marginBottom:4}}, label),
+      return E("div", {style:{marginBottom:14}},
+        E("div", {style:{color,fontSize:12,fontWeight:600,marginBottom:6}}, label),
         reasons.map((r, i) =>
-          E("div", {key:i,style:{background:"#1a2030",borderRadius:4,padding:"6px 10px",marginBottom:4,borderLeft:`3px solid ${color}`}},
-            E("div", {style:{color:"#e0e6ed",fontSize:11,marginBottom:2}}, r.reason),
+          E("div", {key:i,style:{background:"#1a2030",borderRadius:4,padding:"8px 10px",marginBottom:5,borderLeft:`3px solid ${color}`}},
+            E("div", {style:{color:"#e0e6ed",fontSize:11,marginBottom:4,lineHeight:1.5}}, L(r,"reason")),
             E("div", {style:{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center",fontSize:10}},
-              E("span", {style:{color:"#8899aa"}}, T.ai_total_stake+": ₳"+fmtS(r.totalStake)),
+              E("span", {style:{color:"#8899aa",fontWeight:600}}, T.ai_total_stake+": ₳"+fmtS(r.totalStake)),
               (r.dreps || []).map((dr, j) =>
                 E("span", {key:j,style:{color:"#b0bec5",background:"#232b3e",borderRadius:3,padding:"1px 5px"}},
-                  dr.name || dr)
+                  (dr.name || dr) + (dr.stake && Number(dr.stake) > 0 ? " ₳"+fmtS(dr.stake) : ""))
               )
             )
           )
         )
+      );
+    };
+
+    const renderBreakdown = (bd, label, color) => {
+      if (!bd) return null;
+      return E("div",{style:{marginBottom:6,fontSize:10}},
+        E("span",{style:{color,fontWeight:600}},label+": "),
+        E("span",{style:{color:"#c0cad6"}},
+          `${bd.total} (${T.ai_with_rationale}: ${bd.withRationale}, ${T.ai_without_rationale}: ${bd.withoutRationale}) · ₳${fmtS(bd.totalStake)}`),
+        bd.withoutRationale > 0 && bd.withoutRationaleDreps && bd.withoutRationaleDreps.length > 0 &&
+          E("div",{style:{color:"#8899aa",marginTop:2,paddingLeft:8}},
+            (lang==="ja"?"根拠なし: ":"No rationale: ") +
+            bd.withoutRationaleDreps.map(d => d.name+" ₳"+fmtS(d.stake)).join(", ")
+          )
       );
     };
 
@@ -3288,27 +3323,42 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
           )),
           E("tbody", null,
             propEntries.map(([key, val]) => {
-              const isExp = expandedRow === "p_"+key;
+              const isExp = !!expandedRows["p_"+key];
               const yC = val.yesReasons?.length||0;
               const nC = val.noReasons?.length||0;
               const aC = val.abstainReasons?.length||0;
+              const st = val.stats||{};
               return E(React.Fragment, {key},
                 E("tr", {
-                  onClick:()=>setExpandedRow(isExp?null:"p_"+key),
+                  onClick:()=>toggleRow("p_"+key),
                   style:{cursor:"pointer",background:isExp?"#151b28":"transparent",transition:"background .1s"}
                 },
                   E("td",{style:{...tdS,maxWidth:220,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontWeight:500}},
                     val.title || key.slice(0,20)),
                   E("td",{style:{...tdS,color:"#8899aa",fontSize:10}},val.type),
-                  E("td",{style:{...tdS,textAlign:"center",color:"#4fc3f7"}},val.stats?.votedWithRationale||0),
-                  E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},val.stats?.votedWithoutRationale||0),
-                  E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},val.stats?.notVoted||0),
+                  E("td",{style:{...tdS,textAlign:"center",color:"#4fc3f7"}},st.votedWithRationale||0),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},st.votedWithoutRationale||0),
+                  E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},st.notVoted||0),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--yes)"}},yC),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--no)"}},nC),
                   E("td",{style:{...tdS,textAlign:"center",color:"var(--abstain)"}},aC)
                 ),
                 isExp && E("tr",{key:key+"_exp"},
-                  E("td",{colSpan:8,style:{padding:"10px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                  E("td",{colSpan:8,style:{padding:"12px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                    // Vote breakdown per category
+                    st.yesBreakdown && renderBreakdown(st.yesBreakdown, "Yes", "var(--yes)"),
+                    st.noBreakdown && renderBreakdown(st.noBreakdown, "No", "var(--no)"),
+                    st.abstainBreakdown && renderBreakdown(st.abstainBreakdown, "Abstain", "var(--abstain)"),
+                    // NotVoted info
+                    st.notVoted > 0 && E("div",{style:{fontSize:10,marginBottom:10,color:"#8899aa"}},
+                      E("span",{style:{color:"var(--nv)",fontWeight:600}},T.ai_not_voted_long+": "),
+                      E("span",null,`${st.notVoted} · ₳${fmtS(st.notVotedTotalStake||0)}`),
+                      st.notVotedTopDreps && st.notVotedTopDreps.length > 0 &&
+                        E("div",{style:{marginTop:2,paddingLeft:8}},
+                          "Top: " + st.notVotedTopDreps.map(d => d.name+" ₳"+fmtS(d.stake)).join(", ")
+                        )
+                    ),
+                    // Reason groups
                     renderReasonGroup(val.yesReasons, "✅ "+T.ai_yes_reasons, "#4fc3f7"),
                     renderReasonGroup(val.noReasons, "❌ "+T.ai_no_reasons, "#ff7043"),
                     renderReasonGroup(val.abstainReasons, "⚖️ "+T.ai_abstain_reasons, "#ffb74d")
@@ -3322,7 +3372,7 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
     );
   };
 
-  // ─── Sub-tab: Action Type Summary (table) ───
+  // ─── Sub-tab: Action Type Summary (table, multi-expand) ───
   const renderActionTypeSummary = () => {
     if (!aiActionTypeSummary?.actionTypes) return E("p",{style:{color:"#8899aa"}},T.ai_no_data_short);
     const types = Object.entries(aiActionTypeSummary.actionTypes);
@@ -3340,29 +3390,35 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
           )),
           E("tbody", null,
             types.map(([type, data]) => {
-              const isExp = expandedRow === "t_"+type;
+              const isExp = !!expandedRows["t_"+type];
+              const yR = LA(data,"typicalReasonsYes");
+              const nR = LA(data,"typicalReasonsNo");
               return E(React.Fragment, {key:type},
                 E("tr", {
-                  onClick:()=>setExpandedRow(isExp?null:"t_"+type),
+                  onClick:()=>toggleRow("t_"+type),
                   style:{cursor:"pointer",background:isExp?"#151b28":"transparent",transition:"background .1s"}
                 },
                   E("td",{style:{...tdS,fontWeight:600,color:"#4fc3f7"}},type),
                   E("td",{style:{...tdS,textAlign:"center",color:"#8899aa"}},data.count),
                   E("td",{style:{...tdS,color:"var(--yes)",fontSize:10,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
-                    (data.typicalReasonsYes||[]).join(", ")),
+                    yR.join(", ")),
                   E("td",{style:{...tdS,color:"var(--no)",fontSize:10,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},
-                    (data.typicalReasonsNo||[]).join(", "))
+                    nR.join(", "))
                 ),
                 isExp && E("tr",{key:type+"_exp"},
-                  E("td",{colSpan:4,style:{padding:"10px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
-                    E("div",{style:{color:"#b0bec5",fontSize:12,marginBottom:8}}, data.summary),
-                    (data.typicalReasonsYes||[]).length > 0 && E("div",{style:{marginBottom:6}},
-                      E("span",{style:{color:"var(--yes)",fontSize:11,fontWeight:600}},T.ai_typical_yes+": "),
-                      E("span",{style:{color:"#c0cad6",fontSize:11}}, data.typicalReasonsYes.join(" / "))
+                  E("td",{colSpan:4,style:{padding:"12px 16px",background:"#151b28",borderBottom:"1px solid #232b3e"}},
+                    E("div",{style:{color:"#b0bec5",fontSize:12,marginBottom:10,lineHeight:1.6}}, L(data,"summary")),
+                    yR.length > 0 && E("div",{style:{marginBottom:8}},
+                      E("div",{style:{color:"var(--yes)",fontSize:11,fontWeight:600,marginBottom:2}},T.ai_typical_yes+":"),
+                      E("ul",{style:{margin:"2px 0 0 16px",padding:0}},
+                        yR.map((r,i) => E("li",{key:i,style:{color:"#c0cad6",fontSize:11,marginBottom:2}},r))
+                      )
                     ),
-                    (data.typicalReasonsNo||[]).length > 0 && E("div",null,
-                      E("span",{style:{color:"var(--no)",fontSize:11,fontWeight:600}},T.ai_typical_no+": "),
-                      E("span",{style:{color:"#c0cad6",fontSize:11}}, data.typicalReasonsNo.join(" / "))
+                    nR.length > 0 && E("div",null,
+                      E("div",{style:{color:"var(--no)",fontSize:11,fontWeight:600,marginBottom:2}},T.ai_typical_no+":"),
+                      E("ul",{style:{margin:"2px 0 0 16px",padding:0}},
+                        nR.map((r,i) => E("li",{key:i,style:{color:"#c0cad6",fontSize:11,marginBottom:2}},r))
+                      )
                     )
                   )
                 )
@@ -3402,7 +3458,7 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
       tabs.map(t =>
         E("button", {
           key:t.key,
-          onClick:()=>{setSubtab(t.key);setExpandedRow(null);},
+          onClick:()=>{setSubtab(t.key);setExpandedRows({});},
           style:{
             padding:"10px 18px",fontSize:12,fontWeight:subtab===t.key?700:500,
             background:subtab===t.key?"#181e2a":"transparent",
