@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-05T07:22:29.774Z",
+  "generatedAt": "2026-03-05T07:56:19.039Z",
   "tier": "top_100",
   "dreps": {
     "drep1ygr9tuapcanc3kpeyy4dc3vmrz9cfe5q7v9wj3x9j0ap3tswtre9j": {
@@ -33,7 +33,7 @@
       "votingPattern_ja": "Yoroiは、実績のある実行能力と堅牢な監視構造を備えた十分に文書化されたイニシアチブに主にYESで投票し、透明性または明確な説明責任フレームワークに欠ける提案にはNOで投票し、提案にメリットがあるが完全な支持の前にさらなるコミュニティ議論や説明が必要な場合は棄権します。",
       "lastAnalyzedVoteCount": 78,
       "lastAnalyzedAt": "2026-03-05T07:14:11.675Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2200we9c904un36tzaearntzzl63snffuul9qsk0te4utqfkke0w": {
       "name": "YUTA",
@@ -66,7 +66,7 @@
       "votingPattern_ja": "YUTAは明確に定義されたKPI、実証された実行能力、または重要なインフラストラクチャーニーズを持つ提案にYESを投票し、測定可能な成果、現実的でないターゲット、または不十分な財務正当化を欠く率先事業にはNOを投票します。",
       "lastAnalyzedVoteCount": 86,
       "lastAnalyzedAt": "2026-03-05T07:14:19.296Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytvlwvyjmzfyn56n0zz4f6lj94wxhmsl5zky6knnzrf4jygpyahug": {
       "name": "EMURGO",
@@ -99,7 +99,7 @@
       "votingPattern_ja": "EMURGOは実績のある実行、明確な生態系利益、透明性のある説明責任構造を示す提案に対してYES投票し（60件のYES投票）、提案が十分な明確性を欠くか進行中のガバナンスプロセスと競合する場合には棄権し（6件の棄権）、財務配分が測定可能な利益を欠くか問題のある前例を作成する場合にはNO投票します（11件のNO投票）。これは財政規律と分散化配置への原則的な重点を反映しています。",
       "lastAnalyzedVoteCount": 77,
       "lastAnalyzedAt": "2026-03-05T07:14:28.983Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2nvdau7g7xt6dlh9wydy9c4fvve24rr67twf5w63axu56q4rypfz": {
       "name": "Blockdaemon",
@@ -119,7 +119,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 55,
-      "lastAnalyzedAt": "2026-03-05T07:14:29.193Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.231Z",
       "cached": false
     },
     "drep1y29h2q6cst2pvkl2sqqvf5ljcy36uv7pmy482xnczddzgqshus24w": {
@@ -153,7 +153,7 @@
       "votingPattern_ja": "Eternlは透明性のあるチームと明確な成果物を持つ十分に正当化された開発助成に賛成投票し、予算が不明確またはガバナンス制限を伴う提案に反対投票し、価値を認めているが実行の詳細またはコスト効率を疑問視する場合は棄権投票をしています。",
       "lastAnalyzedVoteCount": 82,
       "lastAnalyzedAt": "2026-03-05T07:14:36.909Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytfwpmt2fvdnyvlswyjyggpf8alwkpm7ha6cua9nsak525ssmvm57": {
       "name": "CryptoCrow",
@@ -186,7 +186,7 @@
       "votingPattern_ja": "生態系成長、開発者ユーティリティ、戦略的市場ポジショニングの観点から提案を慎重に評価する強い肯定的投票者（96％のYes率）で、棄権や拒否はまれです。",
       "lastAnalyzedVoteCount": 52,
       "lastAnalyzedAt": "2026-03-05T07:14:42.926Z",
-      "cached": false
+      "cached": true
     },
     "drep1ydpfkyjxzeqvalf6fgvj7lznrk8kcmfnvy9hyl6gr6ez6wgsjaelx": {
       "name": "Cardano Foundation",
@@ -219,7 +219,7 @@
       "votingPattern_ja": "Cardano Foundationは、明確な戦略的整合性、説明責任メカニズム、コミュニティへの利益を示す提案にはYESに投票することが圧倒的に多く、戦略的にフィードバック機会を提供するために棄権し、提案が正当性を欠いているか不適切なインセンティブを生み出す場合のみNOに投��します。",
       "lastAnalyzedVoteCount": 80,
       "lastAnalyzedAt": "2026-03-05T07:14:50.182Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2csyxt7u2hl4674pl9cef5lknafaw5nraxvyx033kmd0es3awuv0": {
       "name": "Sebastien Guillemot セバ",
@@ -252,7 +252,7 @@
       "votingPattern_ja": "ギルモットはほとんどの提案に肯定票を投じる（71%の賛成率）一方で、資金額が正当化されない場合、ユーザーエクスペリエンスが低い場合、ガバナンスリスクが存在する場合、または提案が彼の技術的専門知識の範囲外にある場合に戦略的に反対票または棄権票を投じます。",
       "lastAnalyzedVoteCount": 51,
       "lastAnalyzedAt": "2026-03-05T07:14:56.385Z",
-      "cached": false
+      "cached": true
     },
     "drep1yt8p080ajks6zdnxd9z6a6q60p9sm9j5rl7tc63mfna8r6cnp4wr3": {
       "name": "Everstake",
@@ -272,7 +272,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 35,
-      "lastAnalyzedAt": "2026-03-05T07:14:56.598Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.276Z",
       "cached": false
     },
     "drep1yffld2866p00cyg3ejjdewtvazgah7jjgk0s9m7m5ytmmdq33v3zh": {
@@ -306,7 +306,7 @@
       "votingPattern_ja": "SIPOは感情的な判断ではなく戦略的な制度的推論に基づいた非常に一貫したYES投票（80票中73票）を示しており、稀なNO投票はミッション外の財務使用（トークンマーケティング）に限定され、エコシステム全体のコンセンサスが必要なガバナンスパラメータ決定に時折Abstain投票があり、承認されたイニシアチブの実装フィードバックを詳細に説明する条件付きYES投票がある。",
       "lastAnalyzedVoteCount": 80,
       "lastAnalyzedAt": "2026-03-05T07:15:06.848Z",
-      "cached": false
+      "cached": true
     },
     "drep1yt77crnmjuqkj9gcwjjsurez7s07jhwhyt4suxs3xeqftcsfrspun": {
       "name": "JAZZ",
@@ -326,7 +326,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 86,
-      "lastAnalyzedAt": "2026-03-05T07:15:07.060Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.297Z",
       "cached": false
     },
     "drep1y2vyrqh0fa4qh4tmy7322va6ryk78uh6szppezaft0watyqp5hdwx": {
@@ -360,7 +360,7 @@
       "votingPattern_ja": "BTBF_XSPはエコシステム開発、ガバナンス効率化、市場拡大に合致した提案に圧倒的に賛成（賛成：62、反対：5、棄権：1）し、費用対効果の懸念に限定された稀な反対を行う。",
       "lastAnalyzedVoteCount": 68,
       "lastAnalyzedAt": "2026-03-05T07:15:13.310Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygqgayvx8yzsaj9hprja3l6jy3v4px9z3u8uvecuvm3f92ce7mckx": {
       "name": "Army of Spies",
@@ -393,7 +393,7 @@
       "votingPattern_ja": "Army of SpiesはNoにやや多く投票し（40 No対31 Yes）、憲法の変更、大規模な包括的提案、およびトレジャリー支出を慎重に精査しながら、技術委員会の推奨事項とより狭い財政上の施策を一般的に支持しています。",
       "lastAnalyzedVoteCount": 72,
       "lastAnalyzedAt": "2026-03-05T07:15:20.466Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2m0g4r66pyaw3p7u454wc0p4f0ygm8ueaev0mgd3tvwm7sskqwqp": {
       "name": "CardanoYoda (MANDA Pool)",
@@ -426,7 +426,7 @@
       "votingPattern_ja": "CardanoYodaはガバナンス、憲法、およびインフラストラクチャ提案に肯定的に投票する一方、投機的企業、コミュニティ投入が不足しているプロジェクト、または不明確なROI指標を持つものの財務支出に一貫して反対し、すべての決定にわたって原則的な理由付けで67%のYES投票率を示しています。",
       "lastAnalyzedVoteCount": 86,
       "lastAnalyzedAt": "2026-03-05T07:15:28.350Z",
-      "cached": false
+      "cached": true
     },
     "drep1yg343cyuckglj48a6gpcey7fkfcy5x5f9g65wme3ne9q2mgaedmkm": {
       "name": "Phil UPLC",
@@ -459,7 +459,7 @@
       "votingPattern_ja": "エコシステム効率性、相互運用性、および焦点を絞ったガバナンス改善に沿った提案に圧倒的多数の賛成票（89.8%の承認率）を投じ、過度に保守的であるか委員会集中化を増加させる提案にのみ反対票を投じます。",
       "lastAnalyzedVoteCount": 49,
       "lastAnalyzedAt": "2026-03-05T07:15:35.725Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2rtf58m0lv9spcqx5mads20gpfulf6l97w57ecdy00vjdq0klh4l": {
       "name": "Dumpling🥟",
@@ -492,7 +492,7 @@
       "votingPattern_ja": "Dumpling🥟は、明確な予算を持つ定義されたテクニカルインフラプロジェクトとガバナンスツールには肯定的に投票する（77%のYes票）が、評価メカニズムに欠けている提案、貧弱なリスク・リターン比を示す、またはコミュニティコンセンサスなしに主要なガバナンス変更を急ごうとしている場合はNoに投票します。",
       "lastAnalyzedVoteCount": 62,
       "lastAnalyzedAt": "2026-03-05T07:15:42.967Z",
-      "cached": false
+      "cached": true
     },
     "drep1y20fpc0f6qjl4edtl9cxzrvqzd8jkzr6ja7p0p2n7cxragqkurae3": {
       "name": "Peyton",
@@ -525,7 +525,7 @@
       "votingPattern_ja": "十分に構成されたガバナンス、有能なチーム、およびインフラストラクチャの多様性への支持によって駆動される強いYES傾向（69%の承認率）。透明性に欠ける不十分に組織された包括的予算に対する選別的なNO投票を特徴とします。",
       "lastAnalyzedVoteCount": 62,
       "lastAnalyzedAt": "2026-03-05T07:15:48.799Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfukpxsssua0tuqdpd9etnxtxc5t6cqrsyfmzmycxh92nhgksvnps": {
       "name": "drep1yfukpxsssua0tuq...",
@@ -545,7 +545,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 13,
-      "lastAnalyzedAt": "2026-03-05T07:15:49.014Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.356Z",
       "cached": false
     },
     "drep1ytwmwvtd0a8lr45ssner2tjxzv5y8q03w3606yeald9mdmgmwecja": {
@@ -579,7 +579,7 @@
       "votingPattern_ja": "Martinは明確な仕様と技術的メリットを持つよく定義された提案に投票し、定義が不明確または冗長性を生じる場合にのみNoに投票し、ガバナンスアクション全体で彼の文書化されたEkklesia投票立場との一貫性を維持します。",
       "lastAnalyzedVoteCount": 66,
       "lastAnalyzedAt": "2026-03-05T07:15:56.503Z",
-      "cached": false
+      "cached": true
     },
     "drep1yguh6dsgx0g58v8pqmxgfrkq0x8vfv6tcp92uzzjrykwy8cjmelsy": {
       "name": "Florian Volery",
@@ -612,7 +612,7 @@
       "votingPattern_ja": "DeFi/インフラ関連イニシアティブとFoundation支援プログラムに一貫してYESで投票する一方、オンチェーン選出されたリーダーシップ、透明な予算内訳、またはエコシステム優先事項との明確な戦略的整合性を欠いたガバナンス提案にはNOで投票します。",
       "lastAnalyzedVoteCount": 72,
       "lastAnalyzedAt": "2026-03-05T07:16:04.846Z",
-      "cached": false
+      "cached": true
     },
     "drep1yftc8zs7gjcj4a9nxzplz4wg6cwweya0kxp8adnw59vsyrqvrysud": {
       "name": "Peter Bui",
@@ -645,7 +645,7 @@
       "votingPattern_ja": "ピーターは提案の79.7%でイエスと投票し、確立されたインフラ資金と予算整合的なイニシアティブを支持しながら、ガバナンス拡大に時折ノーと投票したり、エコシステムの報酬と分散化のトレードオフについて懸念を表明しています。",
       "lastAnalyzedVoteCount": 59,
       "lastAnalyzedAt": "2026-03-05T07:16:12.435Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygs5hngva3hymv7j4v0aewxpsjqskj9dnmy7j3jz5ven5zqvulq2t": {
       "name": "Hermes Stakepool Germany (HRMS)",
@@ -678,7 +678,7 @@
       "votingPattern_ja": "Hermes Stakepool Germanyは約79%のケースで賛成票を投じ、主にエコシステム構築イニシアティブをサポートしながら国庫配分に対する実質的な正当化を要求し、報酬提案に対して自制を行使しています。",
       "lastAnalyzedVoteCount": 64,
       "lastAnalyzedAt": "2026-03-05T07:16:19.890Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygsgfhcydhlfglamhzkjn97rz3edef8a4z99fwl2frcwnrcmgurt3": {
       "name": "Dave",
@@ -711,7 +711,7 @@
       "votingPattern_ja": "Daveは説明責任を伴うインフラ、技術的アップグレード、ガバナンス成熟度、戦略的ローンにはYESを投票し、マーケティング計画、過度な予算、持続不可能な資金調達モデル、明確な価値還元メカニズムがないか費用を正当化できないプロポーザルにはNOを投票します。",
       "lastAnalyzedVoteCount": 79,
       "lastAnalyzedAt": "2026-03-05T07:16:27.884Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygnh2uf4wkc8ldgfxwz7rzuga3m8jtqew9xh5g3n587mg6g3ge0sj": {
       "name": "drep1ygnh2uf4wkc8ldg...",
@@ -744,7 +744,7 @@
       "votingPattern_ja": "このDRepは、ほぼ均衡した投票分布（賛成=40、反対=41、棄権=3）を示しており、イデオロギー的な一致よりもむしろ各提案の利点に対する慎重な検討を反映し、手続きの遵守と透明性を優先しながらコミュニティ主導のイニシアチブをサポート��ています。",
       "lastAnalyzedVoteCount": 84,
       "lastAnalyzedAt": "2026-03-05T07:16:35.196Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytuddrgqca0xd4aams6pl9zndpcmxg0rs7z3mggjelm6kscp4arg5": {
       "name": "SASA_nagamaru_ながまる",
@@ -777,7 +777,7 @@
       "votingPattern_ja": "エコシステムインフラ、ガバナンス改革、憲法修正を圧倒的に支持（70票のYes票）する一方で、曖昧なKPI、国庫への過度な負担、実行明確性の不十分さを持つ提案��拒否（13票のNo票）し、説明責任メカニズムと計測された制度発展への一貫した支持を示しています。",
       "lastAnalyzedVoteCount": 85,
       "lastAnalyzedAt": "2026-03-05T07:16:43.412Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygxasnzmrevqra9vscpsy4xf4rqthzkp6rr6zzft2lc7nscahj9r9": {
       "name": "Goofycrisp",
@@ -810,7 +810,7 @@
       "votingPattern_ja": "Goofycripは、実績のある明確なガバナンスメカニズムを備えた十分に構造化された財務基盤のインフラストラクチャ提案に賛成票を投じ、エコシステムの重要な優先事項と長期的な持続可能性を強調する詳細な根拠を通じて高い関与を維持しています。",
       "lastAnalyzedVoteCount": 26,
       "lastAnalyzedAt": "2026-03-05T07:16:50.625Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2eu92qwy875nlslg3ahlh0hy5vhzpkrjay88ptvdp0z6cqm9h25x": {
       "name": "Tempo.Vote",
@@ -843,7 +843,7 @@
       "votingPattern_ja": "Tempo.Voteは個別のケースごとに戦略的に投票し、エコシステムの成長とガバナンスの改善を支持しながら、コスト正当化が不明確で、監視メカニズムが不十分か、Cardanoの技術開発ニーズと予算優先度が一致していない提案を一貫して拒否しています。",
       "lastAnalyzedVoteCount": 67,
       "lastAnalyzedAt": "2026-03-05T07:16:58.671Z",
-      "cached": false
+      "cached": true
     },
     "drep1yts3qdjsqcnhld4r3uek2uu0n2tnh824tgnf75a83q3yhequuy54u": {
       "name": "AKYO",
@@ -876,7 +876,7 @@
       "votingPattern_ja": "AKYOは中核インフラ、ガバナンスメカニズム、エコシステム全体の公共財を強化する提案に肯定的に投票する一方で、持続可能性への懸念、実行計画の抽象性、または個人的利益相反がある提案では棄権し、狭い範囲の提案には反対票を投じます。",
       "lastAnalyzedVoteCount": 84,
       "lastAnalyzedAt": "2026-03-05T07:17:06.114Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfemdmjmxr59kecgqnzd8d0ankkue4rdnn35c8qfsuljt9cjree5m": {
       "name": "PoolTool",
@@ -896,7 +896,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 76,
-      "lastAnalyzedAt": "2026-03-05T07:17:06.327Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.447Z",
       "cached": false
     },
     "drep1yfe9en4hsgc3r6nhtmwjeljh06hgnvt9yzzkwqcftvdj34cdxdg7u": {
@@ -930,7 +930,7 @@
       "votingPattern_ja": "肯定的なエコシステムへの影響評価に基づく圧倒的多数のYes投票（62/77）、単一トークンリストとガバナンス補償に対する選別的なNo投票、および手続き的に冗長と見なされる予備的な情報アクションに対する戦略的な棄権から構成されています。",
       "lastAnalyzedVoteCount": 77,
       "lastAnalyzedAt": "2026-03-05T07:17:13.480Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytjz60rgwhkzfhrv5hkvn9dxcerpwadq2khqvhp5fqws3kqmemccf": {
       "name": "HISAI",
@@ -950,7 +950,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 37,
-      "lastAnalyzedAt": "2026-03-05T07:17:13.691Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.466Z",
       "cached": false
     },
     "drep1yfaaaaa270yjt6tu5skndugekprf5ykv5jshanl0c6gqx5qpstskf": {
@@ -971,7 +971,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 48,
-      "lastAnalyzedAt": "2026-03-05T07:17:13.702Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.474Z",
       "cached": false
     },
     "drep1ygm9wxzrrdqpt0hek5kj7ys6tmsc8dycp7tkjwqxqrhjr6csq3s3t": {
@@ -1005,7 +1005,7 @@
       "votingPattern_ja": "エコシステムのツーリングと開発資金に対しては慎重なデューデリジェンスを伴ってYESをデフォルトで投票し、緊急性に欠ける場合、財務慣行を悪化させる場合、または採用優先事項と一致しない場合は戦略的にNO投票を行う。",
       "lastAnalyzedVoteCount": 78,
       "lastAnalyzedAt": "2026-03-05T07:17:21.960Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2xacakh0g8q4exfgmvywy62an74cj7ejcpcrgq6vh4dckqhtsyh5": {
       "name": "Aichi/Tokai_DRep",
@@ -1038,7 +1038,7 @@
       "votingPattern_ja": "明確なコミュニティまたは開発者の支持を持つ正当性の高いガバナンス改善と技術的改善については一貫して賛成票を投じる一方、透明性が不十分、予算正当性が不適切、またはコミュニティコンセンサスを欠く提案には反対票を投じます。",
       "lastAnalyzedVoteCount": 74,
       "lastAnalyzedAt": "2026-03-05T07:17:28.312Z",
-      "cached": false
+      "cached": true
     },
     "drep1yt6lgdpqjey286qwt287mnk7sdqh95avfmde42vq3mltjys75kg5k": {
       "name": "MUEN",
@@ -1071,7 +1071,7 @@
       "votingPattern_ja": "MUENは財務責任、エコシステム開発可能性、透明性のあるガバナンス構造を示す提案に圧倒的に賛成（84.7%が賛成）し、コスト根拠不足またはガバナンス問題がある提案を拒否する投票パターンを示しています。",
       "lastAnalyzedVoteCount": 85,
       "lastAnalyzedAt": "2026-03-05T07:17:34.724Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfu5d42qfu7e3euu4kkamcg3g3z2zn6sd674gkdww8ey63stlsrlt": {
       "name": "Linda - Cryptofly",
@@ -1091,7 +1091,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 70,
-      "lastAnalyzedAt": "2026-03-05T07:17:34.936Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.507Z",
       "cached": false
     },
     "drep1ygeqtuysjy9s3mw3ej7essghq9rk3cnl08fehntu4jw3rtqfw96dg": {
@@ -1123,7 +1123,7 @@
       "votingPattern_ja": "FIMIは例外的に高い承認率（賛成票92.3%）と協調的な哲学を示していますが、限定された根拠文書（3.8%）により詳細な立場分析が困難です。",
       "lastAnalyzedVoteCount": 26,
       "lastAnalyzedAt": "2026-03-05T07:17:39.143Z",
-      "cached": false
+      "cached": true
     },
     "drep1y25xtvu3d0gaf6cxktr9pkfgnywmqsh4fum93s8m3hlp4aqj3uqdp": {
       "name": "Chris-O",
@@ -1156,7 +1156,7 @@
       "votingPattern_ja": "Chris-Oは明確なアカウンタビリティを持つガバナンスインフラと戦略的エコシステムイニシアティブに「Yes」投票し、広範な利益正当性がない、または不十分なコミュニティ協議を欠いた単一プロジェクトへの予算配分には「No」投票します。",
       "lastAnalyzedVoteCount": 78,
       "lastAnalyzedAt": "2026-03-05T07:17:46.873Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygxeadaklzz93n2tn9vnqz0fxapyv7ltel4d9808aeftl7gnxkszd": {
       "name": "NEDSCAVE.IO",
@@ -1176,7 +1176,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 38,
-      "lastAnalyzedAt": "2026-03-05T07:17:47.082Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.530Z",
       "cached": false
     },
     "drep1ytzshxuma6cwrnlv2ucyclfqw3k4nu4nuudmh2z87j9hncsk9dhy4": {
@@ -1210,7 +1210,7 @@
       "votingPattern_ja": "開発者ツール、戦略的なエコシステムインフラストラクチャ、および憲法的ガバナンス措置に一貫してYes投票。コミュニティ検証を欠けた早すぎるまたはVC支援のプロジェクトにNo投票。ガバナンスプロセスが迂回されたり不完全な作業が提示された場合にAbstain投票。",
       "lastAnalyzedVoteCount": 75,
       "lastAnalyzedAt": "2026-03-05T07:17:54.692Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygtxcscvznhs2nqap9u8gtxa0dx0l6q5zhsqqlw46enwh8cttd07h": {
       "name": "TERA DRep",
@@ -1230,7 +1230,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 60,
-      "lastAnalyzedAt": "2026-03-05T07:17:54.904Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.559Z",
       "cached": false
     },
     "drep1ytcv4ax77s0enqef56qjflf4d8zjgxulukme9uf5p8cfaagysjppn": {
@@ -1264,7 +1264,7 @@
       "votingPattern_ja": "Sociousはコミュニティの正当性と運用準備を示すTreasury引き出しとインフラ提案に肯定票を投じ、さらなる議論が必要な革新的・複雑なイニシアティブに戦略的に棄権し、実質的利点があっても手続き的に問題のあるガバナンス行動に選別的に反対票を投じます。",
       "lastAnalyzedVoteCount": 79,
       "lastAnalyzedAt": "2026-03-05T07:18:02.761Z",
-      "cached": false
+      "cached": true
     },
     "drep1yffcjs0njfea09xhs6up429rhya5pxd7qz7hvmwq6vqy2nczwpj3g": {
       "name": "Big Lazy Cat",
@@ -1297,7 +1297,7 @@
       "votingPattern_ja": "Big Lazy Catはインフラ、ガバナンス効率、および戦略的整合性の提案に肯定的に投票する傾向（68%）を示しますが、定量化可能な成果、成熟したテクノロジーの準備状況、および配置前の明確な市場需要を要求することで、財務支出に厳密な精査を適用します。",
       "lastAnalyzedVoteCount": 79,
       "lastAnalyzedAt": "2026-03-05T07:18:10.477Z",
-      "cached": false
+      "cached": true
     },
     "drep1yf2jzhuc4f7eu2yay9d9ta3dykxxcwn34wz8kak7nhd7vcgrxn7ns": {
       "name": "HOSKY",
@@ -1330,7 +1330,7 @@
       "votingPattern_ja": "HOSKYは憲法上のガバナンス改善、インフラストラクチャ投資、エコシステム強化措置に賛成票を投じます。憲法遵守の欠如または民間利益を代表する提案に反対票を投じます。詳細なレビューを待機している場合または利益相反に直面している場合は棄権します。",
       "lastAnalyzedVoteCount": 74,
       "lastAnalyzedAt": "2026-03-05T07:18:17.892Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygj6hupsan57ujlv6l0vw9naxzt5753uhpe79nluymqzlcq7fe4vs": {
       "name": "ranket",
@@ -1350,7 +1350,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 79,
-      "lastAnalyzedAt": "2026-03-05T07:18:18.109Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.591Z",
       "cached": false
     },
     "drep1yggcntj7vdc2l3j05w0ep84ay8qjz0fnrse6rl8gccd9fsqadw3qg": {
@@ -1382,7 +1382,7 @@
       "votingPattern_ja": "ほぼ完全に肯定的な投票パターンで反対はごく少数であり、ほとんどの提案との高い信念の一致、またはガバナンス問題の限定的な批判的評価を示唆しています。",
       "lastAnalyzedVoteCount": 58,
       "lastAnalyzedAt": "2026-03-05T07:18:23.046Z",
-      "cached": false
+      "cached": true
     },
     "drep1yglrf4el8gghum239fggvfrau25k2576y4dvcz65r2ukj8sqpsc2k": {
       "name": "Cerkoryn",
@@ -1415,7 +1415,7 @@
       "votingPattern_ja": "Cerkorynはコンstitutional改善、ガバナンスインフラストラクチャ、コア開発作業、およびコミュニティのコンセンサスまたはパイオニア価値を持つイニシアティブにYESを投じ、投機的プロジェクト、過度な補償、不明確な説明責任フレームワーク、および戦略的根拠または測定可能なリターンを欠くトレジャリー支出にはNOを投じます。",
       "lastAnalyzedVoteCount": 76,
       "lastAnalyzedAt": "2026-03-05T07:18:31.958Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfa8r8r36x7x05htftce7qhafrn5nzzr6vazy95pzy6y5dqac0ss7": {
       "name": "wolf31o2 (Chris Gianelloni)",
@@ -1448,7 +1448,7 @@
       "votingPattern_ja": "Wolf31o2は生態系の利益と開発者の力の向上に基づく非常に肯定的な投票パターン(75%のイエス票)を示しており、プライバシー懸念、コスト考慮、または不明確さに基づく選別的なノー票、および提案が志向的だが実行不可能な場合の時折の棄権を伴っています。",
       "lastAnalyzedVoteCount": 74,
       "lastAnalyzedAt": "2026-03-05T07:18:38.470Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytfnmf4uftt4fe0h63xhadl0v402gr6nnhtcgrq2sas26kgaf3n5y": {
       "name": "drep1ytfnmf4uftt4fe0...",
@@ -1481,7 +1481,7 @@
       "votingPattern_ja": "最小限の文書化された根拠で提案を圧倒的に承認しており、エコシステム開発への体系的なサポートまたはガバナンス事項への限定的な慎重な関与を示唆しています。",
       "lastAnalyzedVoteCount": 84,
       "lastAnalyzedAt": "2026-03-05T07:18:43.931Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2wlkylx89hjqkhcejtap8sdwyfpjlf72dmuzqfe9rxlchc4g3xse": {
       "name": "ADA Ocean",
@@ -1501,7 +1501,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 22,
-      "lastAnalyzedAt": "2026-03-05T07:18:44.144Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.633Z",
       "cached": false
     },
     "drep1ygnypzfv2v8fmfelthahvn0rqyh54sf6z2aa5m7f3fkjgqqt8l2qq": {
@@ -1535,7 +1535,7 @@
       "votingPattern_ja": "Blockjockは実証されたチーム能力を持つ実質的なインフラ、ガバナンス、戦略的イニシアティブに投票し、重複した、不明確な、または不適切に帰属された提案に対しては選別的に棄権または反対投票し、説明責任への期待によって緩和された情報に基づいた熱意のパターンを反映しています。",
       "lastAnalyzedVoteCount": 40,
       "lastAnalyzedAt": "2026-03-05T07:18:53.209Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytu64qt7send5dw7wcd0z5geh4ka6qstgvtgval097hed7qqnqh2n": {
       "name": "phillerino",
@@ -1568,7 +1568,7 @@
       "votingPattern_ja": "インフラストラクチャーとエコシステム開発提案に対して最小限の批判的検討で一貫してイエス投票し、戦略的価値評価に基づくプロジェクト実現可能性への強い信念を示しています。",
       "lastAnalyzedVoteCount": 53,
       "lastAnalyzedAt": "2026-03-05T07:18:58.611Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfjez5zup0gystdvc933w2mn8k64hcy3krvc2namluwjxdcfhm8wd": {
       "name": "SIDAN Lab",
@@ -1601,7 +1601,7 @@
       "votingPattern_ja": "SIDAN Labは戦略的インフラ、エコシステムインセンティブ、透明性のある資金提案に肯定的に投票しますが、明確さを欠く統合予算、時期尚早な複数年ガバナンス制限、実証された返済モデルがないか著者不明のプロポーザルに対しては否定的に投票するか棄権します。",
       "lastAnalyzedVoteCount": 42,
       "lastAnalyzedAt": "2026-03-05T07:19:07.296Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2zu74gt8sxtrxcngqsmrnupkzrtmlqshmvmm5qtuhxx6xqt7yhaw": {
       "name": "Hephaestus Stake Pool [HEPHY]",
@@ -1634,7 +1634,7 @@
       "votingPattern_ja": "明確なアカウンタビリティを伴う十分にドキュメント化されたインフラおよびエコシステム調整提案にYesを投じ、先例考慮なしの思索的またはドキュメント不十分な予算要求にNoを投じ、手続き要件が憲法上の変更と衝突する場合または提案が適切な承認を欠く場合にAbstainを投じます。",
       "lastAnalyzedVoteCount": 83,
       "lastAnalyzedAt": "2026-03-05T07:19:15.117Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2z8gktqj27kwmmxesd0y484f7p4z9tjf5xu8m4sucstm3gvtywlp": {
       "name": "Ha-Nguyen",
@@ -1667,7 +1667,7 @@
       "votingPattern_ja": "Ha-Nguyenは実利的な開発親和的姿勢を示す一方で、透明性、競争的プロセス、または明確なエコシステム全体の利益を欠く提案に原則的に反対し、説明責任メカニズムとCardanoの憲法ガバナンス枠組みへの適合性を一貫して強調しています。",
       "lastAnalyzedVoteCount": 69,
       "lastAnalyzedAt": "2026-03-05T07:19:23.187Z",
-      "cached": false
+      "cached": true
     },
     "drep1yv4uesaj92wk8ljlsh4p7jzndnzrflchaz5fzug3zxg4naqkpeas3": {
       "name": "drep1yv4uesaj92wk8lj...",
@@ -1687,7 +1687,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 29,
-      "lastAnalyzedAt": "2026-03-05T07:19:23.400Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.683Z",
       "cached": false
     },
     "drep1yt0cvg2649d34afclefrxvyn2ctys87a5jt84ckczyjlvgcu7nxyr": {
@@ -1721,7 +1721,7 @@
       "votingPattern_ja": "ガバナンス改革、監査証拠を伴う技術アップグレード、および貢献者の敬意に対してYESに投票。財務準備金枯渇のリスク、監査されていない大規模支出、および民主的選挙結果に矛盾する提案に対してNOに投票。",
       "lastAnalyzedVoteCount": 31,
       "lastAnalyzedAt": "2026-03-05T07:19:31.216Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfp4qmp849250svle8gw2m5jwjra86e76q8vz97wp998feg9mx9c5": {
       "name": "Moonstake",
@@ -1741,7 +1741,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 83,
-      "lastAnalyzedAt": "2026-03-05T07:19:31.428Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.699Z",
       "cached": false
     },
     "drep1y24xr6m4mkgl7e7886sk3wee7h73mcreysyvhrwzksy5ajqrv0rrv": {
@@ -1762,7 +1762,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 83,
-      "lastAnalyzedAt": "2026-03-05T07:19:31.438Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.710Z",
       "cached": false
     },
     "drep1y27qjjnz9a7q6zmvpajzqpqylnka6lpkvcm9sgjrdheqt0qq6pchw": {
@@ -1796,7 +1796,7 @@
       "votingPattern_ja": "圧倒的に肯定的（43賛成対8反対）であり、選別的な反対票は戦略的適合性、適切なガバナンス構造、または財務保全原則との一致を欠くプロポーザルに限定されています。",
       "lastAnalyzedVoteCount": 51,
       "lastAnalyzedAt": "2026-03-05T07:19:38.770Z",
-      "cached": false
+      "cached": true
     },
     "drep1yteh8udkttzy7frwl6yj5wzyqc04kx65pwwrqefx9j52ymgr6kuak": {
       "name": "Dori",
@@ -1829,7 +1829,7 @@
       "votingPattern_ja": "Doriはほとんどの提案に肯定的に投票しますが（73%の賛成率）、疑わしい財政配分、過度な補償、または不明確な正当化を伴う提案については選別的に反対し、最小限の棄権で明確な選好形成を示唆しています。",
       "lastAnalyzedVoteCount": 30,
       "lastAnalyzedAt": "2026-03-05T07:19:45.047Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytaunswwpytxjk2ja7c5suxrjz57vtq4ryzu7prkxmm4wdqs7c9wn": {
       "name": "MiyatakeJapan",
@@ -1862,7 +1862,7 @@
       "votingPattern_ja": "MiyatakeJapanは全体的に肯定的に投票する傾向（Yes率88.6%）を示しながら、当年度予算問題が解決されるまで長期計画提案への支援を戦略的に保留し、時間的順序付けロジックに基づく条件付き支持を実証している。",
       "lastAnalyzedVoteCount": 70,
       "lastAnalyzedAt": "2026-03-05T07:19:50.683Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2j2q9pcl855969ea9csrhdta6slnamctgzuvuqnnkl6fusqyjy36": {
       "name": "Rodrigo-[CHIL]",
@@ -1895,7 +1895,7 @@
       "votingPattern_ja": "ロドリゴは成長指向型およびインフラストラクチャ提案に対して肯定的に投票し、より明確さが必要なガバナンス問題について慎重に棄権し、コミュニティ相談が排他的または十分に発展していないと認識される決定に対して投票します。",
       "lastAnalyzedVoteCount": 86,
       "lastAnalyzedAt": "2026-03-05T07:19:57.595Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfh3y46ffal6gyuf42e26urg5yyjecrgu2qyaj6zr8amk2sx3yn8g": {
       "name": "LateGameCrypto",
@@ -1928,7 +1928,7 @@
       "votingPattern_ja": "LateGameCryptoはトレジャリプロポーザルに対して防御的に投票し、定量化可能なエコシステム影響と提案者のコミットメントの実質的な証拠を要求します。詳細な理由付けよりもコンテンツ推奨（ビデオリンク）に基づいてYesに投票する傾向があります。",
       "lastAnalyzedVoteCount": 23,
       "lastAnalyzedAt": "2026-03-05T07:20:03.648Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygs99wsy49h9vydggncfeck2xwmngyeltp66pvgzl6jz63s6qmu3p": {
       "name": "DraculaDAO",
@@ -1961,7 +1961,7 @@
       "votingPattern_ja": "DraculaDAOは具体的な高価値成果物、実績のあるチーム実行、および財務利用への革新的アプローチを示すプロジェクトに投票し、成果が曖昧な提案、大規模な継続予算、または不十分なチーム実績を持つプロポーザルには反対投票します。",
       "lastAnalyzedVoteCount": 80,
       "lastAnalyzedAt": "2026-03-05T07:20:10.419Z",
-      "cached": false
+      "cached": true
     },
     "drep1yf7kjx5rlyuyzxkr4dzyccdfs8tesh29amrtcpyplu3asnqjgmdz3": {
       "name": "RCADA",
@@ -1994,7 +1994,7 @@
       "votingPattern_ja": "RCADAは投票の56%を戦略的棄権として採用し、即座の精査または憲法上の懸念が生じている提案に評価を集中させるための意図的なガバナンスツールとして機能させ、詳細が不十分または構造的に問題のある財務要求から、インフラストラクチャおよびプロセス提案のYES投票を区別するために厳格な憲法および財政的規律を適用しています。",
       "lastAnalyzedVoteCount": 48,
       "lastAnalyzedAt": "2026-03-05T07:20:19.085Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytf9f78k7rkwk4cu6l2nvna22keu9yus4kqzc0hqspd36uszu0xc2": {
       "name": "Terminada",
@@ -2027,7 +2027,7 @@
       "votingPattern_ja": "Terminadaは、オープンソース対応、責任ある専門チームによる実行、またはProject Catalystなどの確立されたメカニズムによる直接的なコミュニティ監督を示さない限り、ほとんどの提案に反対票を投じます(32反対対29賛成)。",
       "lastAnalyzedVoteCount": 62,
       "lastAnalyzedAt": "2026-03-05T07:20:27.107Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfew9k09hzz0wk49yynlpz7ywx57vux5plqdxgyluvs6qksc6gtzk": {
       "name": "Richard Irving",
@@ -2047,7 +2047,7 @@
       "votingPattern_en": "Has not voted",
       "votingPattern_ja": "未投票",
       "lastAnalyzedVoteCount": 0,
-      "lastAnalyzedAt": "2026-03-05T07:20:27.320Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.782Z",
       "cached": false
     },
     "drep1ytrqcqg4qh35nwed29nzatke8jemsyelyhdencdc4hx5y0qh3adwe": {
@@ -2068,7 +2068,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 62,
-      "lastAnalyzedAt": "2026-03-05T07:20:27.333Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.790Z",
       "cached": false
     },
     "drep1y2jnqfamg4tq5aepxhggzhqg7pq5gunph4wypkyh9q3qt2cru5m2j": {
@@ -2102,7 +2102,7 @@
       "votingPattern_ja": "Wadaは明確なメトリクスとコミュニティの利益を伴う手続き上健全で実質的に調整された提案に対して投票し、憲法上に準拠していないまたは未成熟なイニシアティブに対しては文化的価値に関係なくNOに投票し、プロセスの懸念が存在するが実質的なメリットが認識される場合またはキャパシティの制約が徹底的なレビューを妨げる場合は棄権投票します。",
       "lastAnalyzedVoteCount": 80,
       "lastAnalyzedAt": "2026-03-05T07:20:36.214Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytr0t0sxfl7qf99zd8x9dam8c0mqkemrtuekh4hekpd8fpqty2h5n": {
       "name": "Smaug",
@@ -2135,7 +2135,7 @@
       "votingPattern_ja": "Smaugは極めて高い承認率と実質的にゼロの批判的精査を伴うゴム印承認パターンを示しており、受動的な委任または提案の価値に関わらずそれを受け入れることへのイデオロギー的コミットメントを示唆しています。",
       "lastAnalyzedVoteCount": 73,
       "lastAnalyzedAt": "2026-03-05T07:20:42.033Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2v2ncht76apatlnxgtz8h8zy943avf7padqkkvycmzmcpcre7fek": {
       "name": "concon",
@@ -2155,7 +2155,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 82,
-      "lastAnalyzedAt": "2026-03-05T07:20:42.251Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.814Z",
       "cached": false
     },
     "drep1ygzp8678j5q8s8syhk4a7a4tr54sp3su8fxzzdjhuxcn4tc6r2qcn": {
@@ -2189,7 +2189,7 @@
       "votingPattern_ja": "AQUA_Voteは提案を一貫して承認する傾向（14 Yes対2 No）を示し、直接的な報酬最大化よりもエコシステムの成長と採用に戦略的に焦点を当てています。",
       "lastAnalyzedVoteCount": 16,
       "lastAnalyzedAt": "2026-03-05T07:20:46.370Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygt7jr22s8fc36hnamgfzqtecuz2ppsj6jr5k0e8gp2pv7qw8ehel": {
       "name": "OREKA_Vote",
@@ -2222,7 +2222,7 @@
       "votingPattern_ja": "OREKA_Voteは強いイエスバイアスを伴う寛容な投票パターンを示し、提案に反対することはめったになく、投票決定の説明文書をほとんど提供しません。",
       "lastAnalyzedVoteCount": 17,
       "lastAnalyzedAt": "2026-03-05T07:20:51.554Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2sld9e4nmasqfpusd5e67rwczj4l20d3653jgs38r4mams52y4jx": {
       "name": "π Lanningham",
@@ -2255,7 +2255,7 @@
       "votingPattern_ja": "主に支持的（62.5%のYes投票）であり、十分な正当化を欠く提案または論理的矛盾を生じさせる提案には選別的にNo投票し、直接的な財政的利益またはプロジェクト関与が利益相反を生じさせる場合には原則的に棄権する。",
       "lastAnalyzedVoteCount": 16,
       "lastAnalyzedAt": "2026-03-05T07:20:58.460Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2k8uedxj5xzymxxzf07plg0t5xd4mmckwg9lwkwhdlwyesy0eyf8": {
       "name": "Holger",
@@ -2275,7 +2275,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 13,
-      "lastAnalyzedAt": "2026-03-05T07:20:58.670Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.846Z",
       "cached": false
     },
     "drep1yt5cc878w5c8umxrfudnmzw425epxnvvttw7hhrhwfhp0zqf400ze": {
@@ -2296,7 +2296,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 70,
-      "lastAnalyzedAt": "2026-03-05T07:20:58.681Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.854Z",
       "cached": false
     },
     "drep1yfk27rp5ae0ggmdx09k6k00ctnc5249s2pm49xmv2d60hrc9pm404": {
@@ -2317,7 +2317,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 11,
-      "lastAnalyzedAt": "2026-03-05T07:20:58.694Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.862Z",
       "cached": false
     },
     "drep1ythpg7cjugjv0uq5eclcuucln3ve4xu8aj23lwhk9dmj0wslug6qh": {
@@ -2338,7 +2338,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 1,
-      "lastAnalyzedAt": "2026-03-05T07:20:58.704Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.870Z",
       "cached": false
     },
     "drep1yt37s3z3ddzmzug9mujxy5c0patgetmjv6fhf3he4nmnv2ga3nad2": {
@@ -2359,7 +2359,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 82,
-      "lastAnalyzedAt": "2026-03-05T07:20:58.713Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.878Z",
       "cached": false
     },
     "drep1y2fhyudw8ju53e296c3yugvul6h3fpurhnx45lfa9e5meqgtky0gg": {
@@ -2391,7 +2391,7 @@
       "votingPattern_ja": "KTOPは「はい」(27)よりも「いいえ」(51)にはるかに多く投票し、棄権は最小限であり、提案と意見を除外し、実質的なガバナンス問題を優先するゲートキーピングアプローチを示唆している。",
       "lastAnalyzedVoteCount": 80,
       "lastAnalyzedAt": "2026-03-05T07:21:03.288Z",
-      "cached": false
+      "cached": true
     },
     "drep1yt4lyf0fwlrz8k6j5evd3rxw0sqp67qkh36su98a97q3qsc0h03y4": {
       "name": "Cardanians",
@@ -2424,7 +2424,7 @@
       "votingPattern_ja": "Cardaniansは測定可能な成果を持つ技術基盤、ガバナンスフレームワーク、および憲法改正に肯定的に投票し、詳細な実行計画、透明なパートナー選択、または明確な説明責任構造のない~₳1-2Mを超える提案に否定的または棄権投票を行い、行政的オーバーヘッド、出力のない委員会資金、およびプロトコル持続可能性の整合性のないオフチェーンイニシアチブに対して特に懐疑的である。",
       "lastAnalyzedVoteCount": 71,
       "lastAnalyzedAt": "2026-03-05T07:21:13.558Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2pyv5v96qle0xp35fhlv2wwjudx8y2e0dcpvktj2xfr8ugdnlh4q": {
       "name": "drep1y2pyv5v96qle0xp...",
@@ -2444,7 +2444,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 5,
-      "lastAnalyzedAt": "2026-03-05T07:21:13.768Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.901Z",
       "cached": false
     },
     "drep1ytq64jdk5fequ0228znae33d3ncs50ujl7qev0uqlx37l8cpjhc2k": {
@@ -2465,7 +2465,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 14,
-      "lastAnalyzedAt": "2026-03-05T07:21:13.781Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.910Z",
       "cached": false
     },
     "drep1y2hlgh9600zjlt39dh54z7z8d65kahneck8yhh7ugmzc9as0xrzqd": {
@@ -2499,7 +2499,7 @@
       "votingPattern_ja": "ガバナンスインフラ、憲法改善、分散化の取り組みにはYESを投票し、商業補助金、市場介入、戦略的明確性を欠く提案にはNOを投票し、棄権は形式的な憲法要件のために予約されています。",
       "lastAnalyzedVoteCount": 86,
       "lastAnalyzedAt": "2026-03-05T07:21:20.541Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfpazkd0aqex0kd3vrhk47sjy0jqgq3xu6h2zv9wevfequcxyynwv": {
       "name": "PRIDE",
@@ -2532,7 +2532,7 @@
       "votingPattern_ja": "PRIDEは若干の否定的バイアスを持つ均衡的だが懐疑的な投票パターンを採用し、各提案を慎重に評価しながらDRep報酬を拡大する資金メカニズムに常に異議を唱えている。",
       "lastAnalyzedVoteCount": 66,
       "lastAnalyzedAt": "2026-03-05T07:21:26.185Z",
-      "cached": false
+      "cached": true
     },
     "drep1yfdfs28uwafjgmrkatdektlzrvha2cmvqjhuz700e04mawq23rmrg": {
       "name": "drep1yfdfs28uwafjgmr...",
@@ -2565,7 +2565,7 @@
       "votingPattern_ja": "DeFiインフラ、エコシステム開発、ガバナンス明確化を進める提案に肯定的に投票しながら、透明な正当性、コミュニティ入力、または明確な成功メトリクスに欠ける高コスト イニシアティブに対して選別的懐疑主義を維持し—財務持続可能性に関する懸念が潜在的利益を上回る場合、時折棄権します。",
       "lastAnalyzedVoteCount": 85,
       "lastAnalyzedAt": "2026-03-05T07:21:35.119Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2jd3c4hgg0tdua58z6c64k9rf58lz3jlcjlxcjfeaspl6q2e9zm6": {
       "name": "drep1y2jd3c4hgg0tdua...",
@@ -2598,7 +2598,7 @@
       "votingPattern_ja": "ガバナンスインフラ、憲法問題、戦略的エコシステム投資への圧倒的なYES投票（19/27）で、手続き違反、タイミング懸念、不十分なROI正当化、または時期尚早の2026コミットメントを対象とした選別的なNO投票—イデオロギー的一貫性よりも規律ある実用主義を反映",
       "lastAnalyzedVoteCount": 27,
       "lastAnalyzedAt": "2026-03-05T07:21:43.625Z",
-      "cached": false
+      "cached": true
     },
     "drep1ytw5tvdxpe39l9gm3g49gl0whwd2dgu4mcf5ml5z3zfuk3s8npegv": {
       "name": "drep1ytw5tvdxpe39l9g...",
@@ -2631,7 +2631,7 @@
       "votingPattern_ja": "分散化の原則との一致に基づいて選別的に投票し、些末的または権威を強化すると認識される提案を却下する実用的理想主義者で、実装の詳細とガバナンス指標に対して高い基準を維持しています。",
       "lastAnalyzedVoteCount": 11,
       "lastAnalyzedAt": "2026-03-05T07:21:48.987Z",
-      "cached": false
+      "cached": true
     },
     "drep1y2urcg66ytnvt5tv7kv4saemu83hnuk9rydhh0tmem96mac3ltuaf": {
       "name": "drep1y2urcg66ytnvt5t...",
@@ -2651,7 +2651,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 1,
-      "lastAnalyzedAt": "2026-03-05T07:21:49.201Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.958Z",
       "cached": false
     },
     "drep1ytnyqac848el309ynepkh9auljjt75za9fj2wzzu4gl0wecgwhxy5": {
@@ -2672,7 +2672,7 @@
       "votingPattern_en": "Has not voted",
       "votingPattern_ja": "未投票",
       "lastAnalyzedVoteCount": 0,
-      "lastAnalyzedAt": "2026-03-05T07:21:49.212Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.966Z",
       "cached": false
     },
     "drep1y24zgz7nnyfuefgy8d0qhg2w0av26zp5lq6vk0eg2l7vk8qp7g8e9": {
@@ -2693,7 +2693,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 10,
-      "lastAnalyzedAt": "2026-03-05T07:21:49.222Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.973Z",
       "cached": false
     },
     "drep1ytae7wj5s8pu8qry9vfcnqy97w68z96lffzwzrc4verpkfqsl8e8m": {
@@ -2714,7 +2714,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 2,
-      "lastAnalyzedAt": "2026-03-05T07:21:49.232Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:18.981Z",
       "cached": false
     },
     "drep1y26sfka2km0p4xw073ujdq406wxxczhdyfh9vw7yxpfselchzkdjn": {
@@ -2748,7 +2748,7 @@
       "votingPattern_ja": "YOADAは戦略的なエコシステム開発と重要なインフラストラクチャへの支持に基づいた一貫した賛成投票パターンを示しており、新しい補償モデルを含む提案に対しては選別的な精査を適用しています。",
       "lastAnalyzedVoteCount": 84,
       "lastAnalyzedAt": "2026-03-05T07:21:55.141Z",
-      "cached": false
+      "cached": true
     },
     "drep1y28uwdrz2acyp4jka5fqp2fa3hp0klpme8wug3f5p2y45zsc0e8qw": {
       "name": "Daehan_kor",
@@ -2781,7 +2781,7 @@
       "votingPattern_ja": "Daehan_korは実用的な利益のある技術インフラと開発者ツールには肯定的に投票しますが、実証済みの成果、市場検証、または明確な透明性とROI正当性に欠けるプロポーザルには否定的に投票します。",
       "lastAnalyzedVoteCount": 61,
       "lastAnalyzedAt": "2026-03-05T07:22:01.834Z",
-      "cached": false
+      "cached": true
     },
     "drep1yf0s5guxklwlqn7ttdpfwmmkaucwaqkkm6hzncy8nful5fgemurcj": {
       "name": "STORM Partners",
@@ -2814,7 +2814,7 @@
       "votingPattern_ja": "STORM Partnersは、検証済みの影響とオープンソース原則を持つインフラストラクチャ、ガバナンス、戦略的イニシアティブに肯定的に投票し（55票のはい）、返済構造またはコミュニティ所有の利益に欠けている商業補助金に否定的に投票し（8票のいいえ）、不適切な予算サイクルタイミングで到着した設計の良い提案についてときどき棄権しています（3棄権）。",
       "lastAnalyzedVoteCount": 66,
       "lastAnalyzedAt": "2026-03-05T07:22:11.747Z",
-      "cached": false
+      "cached": true
     },
     "drep1ygc29nv90qqtf7qwlp5eqwnscdmvk5utnul9arfm9eklw9cphfhhu": {
       "name": "Kostas Panagias",
@@ -2847,7 +2847,7 @@
       "votingPattern_ja": "パナギアスは憲法的プロセス、戦略的ロードマップ、ガバナンス継続性と一貫したプロポーザルに対してYESで投票し、適切な予算認可を欠く、財政制限を超える、または違憲要素を含むプロポーザルに対してはNOで投票し、Ekklesia予算投票の決定に従う場合は棄権します。",
       "lastAnalyzedVoteCount": 80,
       "lastAnalyzedAt": "2026-03-05T07:22:21.040Z",
-      "cached": false
+      "cached": true
     },
     "drep1y25rvalxnc4p8fghxcwkz0l6gdseqduqvrdzh5pzdprrvnczj0ucx": {
       "name": "ONYX AI DRep",
@@ -2867,7 +2867,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 67,
-      "lastAnalyzedAt": "2026-03-05T07:22:21.254Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:19.022Z",
       "cached": false
     },
     "drep1ytfas4axhm8yzrqqh4ru2uuqesu87zeq6fwg5pq8azqf7ecu4nu8s": {
@@ -2901,7 +2901,7 @@
       "votingPattern_ja": "憲法的枠組みを強化し、明確な監視メカニズムを備えたコミュニティ支持のイニシアティブを支持し、カルダノの技術的または地域的発展を促進するガバナンス提案に一貫して「賛成」票を投じ、制度的チェックまたは監視能力を削減する対策に対しては選別的に「反対」票を投じます。",
       "lastAnalyzedVoteCount": 74,
       "lastAnalyzedAt": "2026-03-05T07:22:29.561Z",
-      "cached": false
+      "cached": true
     },
     "drep1yffymrag4k6jn7cqpdhryhtcm0czrkc6h9c3w85ynydc8js0vhlta": {
       "name": "dRep_Voshe",
@@ -2921,7 +2921,7 @@
       "votingPattern_en": "Votes without providing rationale",
       "votingPattern_ja": "根拠なしで投票",
       "lastAnalyzedVoteCount": 7,
-      "lastAnalyzedAt": "2026-03-05T07:22:29.773Z",
+      "lastAnalyzedAt": "2026-03-05T07:56:19.038Z",
       "cached": false
     }
   }
