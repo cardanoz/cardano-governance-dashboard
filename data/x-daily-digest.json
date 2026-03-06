@@ -168,5 +168,189 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2025-03-06",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano ADA Payment Integration Goes Live at 137 Swiss SPAR Stores",
+        "title_ja": "カルダノADAが137のスイスSPARストアで決済対応開始",
+        "summary_en": "Cardano Foundation partnership with DFX enables real-time ADA payments at 137 SPAR supermarket locations across Switzerland, marking a significant milestone for blockchain utility in everyday retail commerce.",
+        "summary_ja": "カルダノ財団とDFXの提携により、スイス全土の137のSPARスーパーマーケットでリアルタイムADA決済が実現。日常的な小売取引でのブロックチェーン利用の大きなマイルストーン。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@ItsBitcoinWorld",
+          "@thecryptobasic"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Testnet Planned for June 2026; Protocol Version 11 Hard Fork Preparation Underway",
+        "title_ja": "Ouroboros Leios テストネット2026年6月予定、プロトコルバージョン11ハードフォーク準備進行中",
+        "summary_en": "Cardano SPO community call confirms Leios testnet launch scheduled for June 2026, with Protocol Version 11 hard fork preparing improvements to Plutus smart contract performance and cryptographic functions on SanchoNet.",
+        "summary_ja": "カルダノSPOコミュニティコールでLeiosテストネット2026年6月予定が確認。プロトコルバージョン11ハードフォークはPlutusスマートコントラクト性能とSanchoNetの暗号機能を改善予定。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@RickMcCracken",
+          "@whaleUTXO",
+          "@ADA_Stakepool"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Multiple Critical Infrastructure Releases: Hydra 1.3.0, Dolos v1.0.0-rc.12, and Blockfrost Updates",
+        "title_ja": "複数の重要インフラ更新：Hydra 1.3.0、Dolos v1.0.0-rc.12、Blockfrostアップデート",
+        "summary_en": "Four major developer infrastructure releases rolled out including Hydra state channel layer 1.3.0, Dolos indexer v1.0.0-rc.12, and Blockfrost API updates, enhancing Cardano's development toolkit.",
+        "summary_ja": "Hydraステートチャネル1.3.0、Dolosインデクサーv1.0.0-rc.12、Blockfrost APIアップデートなど4つの重要リリースが公開。カルダノの開発ツールキットを強化。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "constitution_budget",
+        "title_en": "Revised Cardano 2026 Budget Process Framework Submitted for DRep Voting",
+        "title_ja": "改訂版カルダノ2026年予算プロセスフレームワーク、DRep投票向けに提出",
+        "summary_en": "Intersect submits improved 2026 Treasury budgeting framework incorporating lessons from 2025, with clarifications on 'participating stake' definitions and enhanced ecosystem coordination processes requiring DRep approval.",
+        "summary_ja": "Intersectが2025年の教訓を踏まえた改訂版2026年予算フレームワークを提出。「参加ステーク」定義の明確化とDRep承認を必要とする強化されたエコシステム協調プロセス。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@IntersectMBO",
+          "@NicolasC3rny",
+          "@JBriggsLondon"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "CIP-113 Enables RWA and Interoperability; New CIP-177 Proposes Ouroboros Tachys for Partner Chains",
+        "title_ja": "CIP-113がRWAと相互運用性を実現、新CIP-177がパートナーチェーン向けOuroboros Tachysを提案",
+        "summary_en": "Cardano Foundation CEO Frederik Gregaard highlights CIP-113 capabilities for real-world assets and interoperability. Simultaneously, CIP-177 proposes Ouroboros Tachys to simplify partner chain deployment while maintaining ecosystem compatibility.",
+        "summary_ja": "カルダノ財団CEO Frederik Gregaard氏がCIP-113のRWAと相互運用性機能を強調。同時にCIP-177がパートナーチェーン配備を簡潔化しながらエコシステム互換性を維持するOuroboros Tachysを提案。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "SPO",
+          "DRep"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@hal_eight",
+          "@therealdisasm"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Begin Wallet Launches Frictionless Cardano Payment Links with QR Code and Deep Link Integration",
+        "title_ja": "Begin WalletがQRコードとディープリンク統合により、カルダノの摩擦のない決済リンク機能をローンチ",
+        "summary_en": "Begin Wallet introduces simple crypto payment links enabling frictionless ADA transactions via QR codes, deep links, or one-tap payments, launching first on Cardano with plans for multi-chain expansion.",
+        "summary_ja": "Begin WalletがQRコード、ディープリンク、ワンタップ決済を通じて摩擦のないADA取引を実現。カルダノで最初にローンチ、その後マルチチェーン展開予定。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "New CIP Proposes Removal of DRep Requirement for Staking Reward Withdrawal",
+        "title_ja": "ステーキング報酬引き出しのDRep要件削除を提案する新CIP",
+        "summary_en": "Cerkoryn introduces CIP to eliminate the dRep registration requirement for withdrawing staking rewards, addressing friction in Cardano's governance participation model and improving user experience.",
+        "summary_ja": "Cerkoryn氏がステーキング報酬引き出しのdRep登録要件を廃止するCIPを提案。カルダノのガバナンス参加モデルの摩擦を軽減し、ユーザーエクスペリエンスを改善。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@Cerkoryn"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens Smart Accounts Enable USDC Migration and DeFi Access Without Traditional Wallets",
+        "title_ja": "FluidTokens Smart Accountsが従来のウォレットなしでUSDC移行とDeFiアクセスを実現",
+        "summary_en": "FluidTokens removes barriers to Cardano DeFi by enabling users to migrate USDC, swap tokens, and access DeFi protocols through Smart Accounts without requiring traditional Cardano wallet infrastructure.",
+        "summary_ja": "FluidTokensがSmart Accountsを通じて、従来のカルダノウォレット不要でUSDC移行、トークンスワップ、DeFiアクセスを実現。カルダノDeFiへの参入障壁を除去。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_Power",
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Bitrue Launches Cardano ADA Yield Farming with Deep Liquidity Pools",
+        "title_ja": "Bitrue カルダノADAイールドファーミング提供開始、深流動性プール搭載",
+        "summary_en": "Bitrue exchange launches dedicated Cardano ADA yield farming platform with enhanced liquidity infrastructure, expanding institutional-grade earning opportunities within the Cardano ecosystem.",
+        "summary_ja": "Bitrue取引所がカルダノADA向けイールドファーミングプラットフォームをローンチ。拡張された流動性インフラでカルダノエコシステム内の機関向け収益機会を拡大。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@Diyon_Bitrue"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Cardano Foundation Hosts Buidler Fest v3 in Buenos Aires (March 24-25) Focused on CIP-13, CIP-99, and CIP-157 URIs",
+        "title_ja": "カルダノ財団ブエノスアイレスでBuidler Fest v3開催、CIP-13/99/157 URIに焦点",
+        "summary_en": "Cardano Foundation sponsors Buidler Fest v3 developer conference in Buenos Aires on March 24-25, featuring deep dives into Cardano URI protocols (CIP-13, CIP-99, CIP-157, CIP-158, CIP-162) and wallet integration strategies.",
+        "summary_ja": "カルダノ財団がブエノスアイレスでBuidler Fest v3開催（3月24-25日）。Cardano URIプロトコル（CIP-13/99/157/158/162）とウォレット統合戦略に焦点。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@adamKDean"
+        ]
+      }
+    ],
+    "tweetCount": 98,
+    "generatedAt": "2026-03-06T08:00:58.087Z",
+    "apiUsage": {
+      "input_tokens": 7280,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2837,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]

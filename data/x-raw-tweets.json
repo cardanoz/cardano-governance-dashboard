@@ -1,5 +1,18 @@
 [
   {
+    "id": "2029828986688393343",
+    "text": "@XRPcryptowolf Hi there, thanks for mentioning us! We appreciate you highlighting the launch of the Cardano ADA Yield Farming on Bitrue.\n\n​We are excited to offer this as part of our commitment to providing diverse earning opportunities and deep liquidity for the Cardano ecosystem. Yield farming allows ADA holders to maximize their assets in a secure and transparent environment, helping everyone participate more effectively as the network continues to evolve.\n\n​Thank you for your continued support. — DE",
+    "author": "Diyon_Bitrue",
+    "authorLabel": "Bitrue Support",
+    "createdAt": "Fri Mar 06 07:58:37 +0000 2026",
+    "tier": 2,
+    "category": "ecosystem_adoption",
+    "searchLabel": "Ecosystem & Adoption",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/Diyon_Bitrue/status/2029828986688393343"
+  },
+  {
     "id": "2029826007167812047",
     "text": "BUILDER TOOLING: \n@BeginWallet is introducing a simple crypto payment link: https://t.co/2d6D4fLXoM. \nShare one link, receive crypto via QR code, deep link, or one tap. Cardano launches first, with more chains expected after. Frictionless payments remain a key adoption layer. https://t.co/1qrFH1zrLH",
     "author": "Cardano_Power",
@@ -86,8 +99,8 @@
     "tier": 2,
     "category": "ecosystem_adoption",
     "searchLabel": "Ecosystem & Adoption",
-    "likes": 6,
-    "retweets": 1,
+    "likes": 7,
+    "retweets": 2,
     "url": "https://x.com/thecryptobasic/status/2029812255047700744"
   },
   {
@@ -572,6 +585,19 @@
     "url": "https://x.com/AngeIdusTX/status/2029704910032289954"
   },
   {
+    "id": "2029693219471347903",
+    "text": "🚨🌐Cardano次期ハードフォークが目前へ──Node 10.7.0がエコシステム統合の起点に\n\nCardanoのアップグレード状況について、Intersectから最新の「Upgrade Bulletin #6」が公開されま���た。\n\n今回のポイントは、次期ハードフォーク候補リリース（HFC）に向けた最終段階に入ってきたという点です。\nまず現在の状況ですが、テストネットの SanchoNet はすでに新しいCardanoノードにアップグレードされており、Protocol Version 11 の機能テストが進められています。\n\nまた、Plutusの新しいコストモデルも準備が進んでおり、すでにSanchoNetではテスト可能な状態になっています。\n現在公開されているノードは Cardano Node 10.6.2。\n\nこれは約3週間前にリリースされたもので、ハードフォークに関する機能をテストできるバージョンですが、メインネット用の正式なハードフォーク候補ではありません。\n次に予定されているのが Cardano Node 10.7.0 です。\n\nこのバージョンは\n・1週間以内のリリース予定\n・メインネットハードフォーク候補（HFC）になる予定\n・エコシステムツールとの統合ポイントになる\nとされており、リリース後は\n\nPreview → PreProd → Mainnet\n\nという順番でネットワークがフォークされる見込みです。\n\nただし、パフォーマンス結果や統合テストの状況によっては、さらに小さなマイナーア���プデートが追加される可能性もあります。\n\nまた今回のアップグレードは、単なるハードフォーク対応だけではなく、新機能も含む大きなノードアップデートになる予定です。\n\nそのため、ウォレット、dApp、インフラ、ツールなど、エコシステム全体がNode 10.7への統合作業を開始することが重要とされています。\n\nコミュニティ向けの動きとしては、今週から\n・Hard Forkワーキンググループが毎週ミーティング\n・毎週木曜日にXスペース開催（日本時間だと深夜）\nなど、アップグレードに向けた情報共有も強化されます。\n\nCardanoの大型アップグレードは、\n\nノード → テストネット → エコシステム統合 → メインネット\n\nという段階的プロセスで進みます。",
+    "author": "SIPO_Tokyo",
+    "authorLabel": "SIPO：CARDANO SPO & DRep",
+    "createdAt": "Thu Mar 05 22:59:08 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 7,
+    "retweets": 0,
+    "url": "https://x.com/SIPO_Tokyo/status/2029693219471347903"
+  },
+  {
     "id": "2029679886298644666",
     "text": "@ItsDave_ADA @Quantumplation Just dropped a CIP a few minutes ago to remove the dRep requirement to withdraw staking rewards as well. \n\nhttps://t.co/7sJYlL6U08 https://t.co/FoJdRl9SwC",
     "author": "Cerkoryn",
@@ -599,7 +625,7 @@
   },
   {
     "id": "2029677388792311978",
-    "text": "ニュース動向 in エポック616\n\nINDEX\n\n・『世界が揺れる中で、静かに積み上がる設計──接続・証明・拡張。Cardanoが“次の金融レール”へ進む春』 USDCx・Midnight・Leiosが示す「制御された透明性」への構造転換\n・AIはもう戦場にいる──米軍がClaudeを軍事作戦で使用との報道\n・AIと軍事の新章──OpenAIが「戦争省」と結んだ合意、その中身と余白\n・CMEが握った“価格の心臓部”──暗号資産市場は新フェーズへ\n・ADA、機関マネーの正式ルートへ──CME上場が意味するもの\n・TVLの“質”が動いた日 ― USDCxがもたらすオンチェーン転換\n・SIPO DRep：『Amaru Treasury Withdrawal 2026』提案をどう考えるか― SIPO DRepの分析と「Yes」評価、スタンス\n・チャールズ・ホスキンソン氏動画「H.R. 3633 and the Idiocy of the Masses」全翻訳：H.R.3633を巡る激論──「悪法は無法より悪い」理由\n・トランプ大統領が銀行に警告――“暗号産業を止めるな” 米国の金融覇権を巡る新しい戦線\n・Cardanoガバナンスの実像：数字から見えた課題と、SIPOが考える次のステップ\n・内部告発は“勇気”ではなく“インフラ”の問題──Midnightが示す新しい社会基盤\n・KrakenがFRB決済ネットワークに直結──暗号資産が“金融インフラ”へ進化する瞬間\n・Midnightの技術中核を担う「Aliit Fellowship」第2期募集開始\n・Cardano × Midnightで“完全プライベート予測市場”が誕生へ\n・Xが銀行になる日：イーロン・マスク氏が描く“金融OS”の正体\n・Midnight開発が着実に前進：Testnet-02で400万ブロック達成、NIGHT償還は5億超へ\n・“暗号資産で覇権を取る”──トランプ発言が示す米国の新しい国家戦略\n・BTCが“金融インフラ”になる日：モルガン・スタンレーのSEC提出書類\n・AI革命はビットコインをどう変えるのか？──NYDIGレポートが示す“本当の論点\n\nエポック616終了時点ステーキング動向\n\n・ステーキング動向 in エポック616\n・SIPO、SIPO2、SIPO3エポック616ステーキング報告\n・SIPOエポック616ステーキング報告\n・SIPO2エポック616ステーキング報告\n・SIPO3エポック616ステーキング報告\n👇\nhttps://t.co/vVE1cmw2sU\n\n#Cardano #ADA \n\n3/n",
+    "text": "ニュース動向 in エポック616\n\nINDEX\n\n・『世界が揺れ��中で、静かに積み上がる設計──接続・証明・拡張。Cardanoが“次の金融レール”へ進む春』 USDCx・Midnight・Leiosが示す「制御された透明性」への構造転換\n・AIはもう戦場にいる──米軍がClaudeを軍事作戦で使用との報道\n・AIと軍事の新章──OpenAIが「戦争省」と結んだ合意、その中身と余白\n・CMEが握った“価格の心臓部”──暗号資産市場は新フェーズへ\n・ADA、機関マネーの正式ルートへ──CME上場が意味するもの\n・TVLの“質”が動いた日 ― USDCxがもたらすオンチェーン転換\n・SIPO DRep：『Amaru Treasury Withdrawal 2026』提案をどう考えるか― SIPO DRepの分析と「Yes」評価、スタンス\n・チャールズ・ホスキンソン氏動画「H.R. 3633 and the Idiocy of the Masses」全翻訳：H.R.3633を巡る激論──「悪法は無法より悪い」理由\n・トランプ大統領が銀行に警告――“暗号産業を止めるな” 米国の金融覇権を巡る新しい戦線\n・Cardanoガバナンスの実像：数字から見えた課題と、SIPOが考える次のステップ\n・内部告発は“勇気”ではなく“インフラ”の問題──Midnightが示す新しい社会基盤\n・KrakenがFRB決済ネットワー��に直結──暗号資産が“金融インフラ”へ進化する瞬間\n・Midnightの技術中核を担う「Aliit Fellowship」第2期募集開始\n・Cardano × Midnightで“完全プライベート予測市場”が誕生へ\n・Xが銀行になる日：イーロン・マスク氏が描く“金融OS”の正体\n・Midnight開発が着実に前進：Testnet-02で400万ブロック達成、NIGHT償還は5億超へ\n・“暗号資産で覇権を取る”──トランプ発言が示す米国の新しい国家戦略\n・BTCが“金融インフラ”になる日：モルガン・スタンレーのSEC提出書類\n・AI革命はビットコインをどう変えるのか？──NYDIGレポートが示す“本当の論点\n\nエポック616終了時点ステーキング動向\n\n・ステーキング動向 in エポック616\n・SIPO、SIPO2、SIPO3エポック616ステーキング報告\n・SIPOエポック616ステーキング報告\n・SIPO2エポック616ステーキング報告\n・SIPO3エポック616ステーキング報告\n👇\nhttps://t.co/vVE1cmw2sU\n\n#Cardano #ADA \n\n3/n",
     "author": "SIPO_Tokyo",
     "authorLabel": "SIPO：CARDANO SPO & DRep",
     "createdAt": "Thu Mar 05 21:56:13 +0000 2026",
@@ -612,7 +638,7 @@
   },
   {
     "id": "2029677183673979275",
-    "text": "カルダノ財団のCEO、フレデリック・グレガード氏は「CIP-113は、RWAやその他の��野でいくつかの能力を提供します。技術スタックと相互運用性スタックの面で、本当に成熟してきています。TradFi、食糧安全保障、そしてその先へ。」と述べました。 $ADA $NIGHT",
+    "text": "カルダノ財団のCEO、フレデリック・グレガード氏は「CIP-113は、RWAやその他の分野でいくつかの能力を提供します。技術スタックと相互運用性スタックの面で、本当に成熟してきています。TradFi、食糧安全保障、そしてその先へ。」と述べました。 $ADA $NIGHT",
     "author": "funkyhiro2009",
     "authorLabel": "ADA Labo Cardano Stake Pool ALAB / RDB",
     "createdAt": "Thu Mar 05 21:55:24 +0000 2026",
@@ -691,15 +717,28 @@
   {
     "id": "2029635808941215933",
     "text": "Nice list of projects on @Cardano . \n\nThanks for sharing @bigpey, but here's a request for next time, I know it's more work, but can you please provide the official X handles for projects so that us noobs don't have to guess and end up on a scam website. 🙏",
-    "author": "Linnovations88",
-    "authorLabel": "Linno - ₳D₳ NIGHT",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Thu Mar 05 19:11:00 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 0,
     "retweets": 0,
-    "url": "https://x.com/Linnovations88/status/2029635808941215933"
+    "url": "https://x.com/unknown/status/2029635808941215933"
+  },
+  {
+    "id": "2029633949442449483",
+    "text": "This is what decentralization looks like on Cardano, Intersect members working hand in hand with the community to resolve problems, create new innovative solutions and carrying forward the idea of effective collaborative effort ruling the day! great work there are soooo many people that work tirelessly in the background to make all this happen which is impossible to tag all of them, therefore @IntersectMBO and all that live and breath Cardano Governance!!",
+    "author": "blockjock2017",
+    "authorLabel": "Blockjock-James Dont Hate Just Create",
+    "createdAt": "Thu Mar 05 19:03:36 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 14,
+    "retweets": 3,
+    "url": "https://x.com/blockjock2017/status/2029633949442449483"
   },
   {
     "id": "2029630630720340314",
@@ -723,9 +762,60 @@
     "tier": 2,
     "category": "dev_tools",
     "searchLabel": "Dev Tools & Releases",
-    "likes": 2,
+    "likes": 3,
     "retweets": 1,
     "url": "https://x.com/cardano_updates/status/2029630629285925056"
+  },
+  {
+    "id": "2029618206285943199",
+    "text": "The Cardano Foundation is proud to support Buidler Fest every year, a 2-day gathering for Cardano developers in Buenos Aires.\n\nWe hope to see you there, 24-25 March. 🇦🇷\n\nMint your spot: https://t.co/bENm4KpTrb",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Thu Mar 05 18:01:03 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 135,
+    "retweets": 21,
+    "url": "https://x.com/Cardano_CF/status/2029618206285943199"
+  },
+  {
+    "id": "2029617949682680204",
+    "text": "Guys! Come hang with me here! Intersect is a member-driven organization at the heart of the Cardano ecosystems placing the community at the center of Cardano’s ongoing development and direction.\nhttps://t.co/pgpoyQIVU4 https://t.co/fGiil731ia",
+    "author": "SpyCrypto",
+    "authorLabel": "spy",
+    "createdAt": "Thu Mar 05 18:00:02 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 1,
+    "retweets": 0,
+    "url": "https://x.com/SpyCrypto/status/2029617949682680204"
+  },
+  {
+    "id": "2029610759588544793",
+    "text": "Ah! Cardano! https://t.co/KUnQoIuSis",
+    "author": "CryptoWatcherOG",
+    "authorLabel": "CryptoW₳tcher 👀 🐍",
+    "createdAt": "Thu Mar 05 17:31:28 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 8,
+    "retweets": 0,
+    "url": "https://x.com/CryptoWatcherOG/status/2029610759588544793"
+  },
+  {
+    "id": "2029609145272356924",
+    "text": "The changes proposed mark a big improvement on last year, starting with confirming the community are happy with it before we begin! \n\nThanks to our members &amp; everyone who contributed their thoughts into what the process should look like moving forward 🙏\n\nhttps://t.co/Ivdt5gVrDf",
+    "author": "JBriggsLondon",
+    "authorLabel": "Jack B",
+    "createdAt": "Thu Mar 05 17:25:03 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 31,
+    "retweets": 6,
+    "url": "https://x.com/JBriggsLondon/status/2029609145272356924"
   },
   {
     "id": "2029609110941872135",
@@ -754,6 +844,57 @@
     "url": "https://x.com/hal_eight/status/2029609103790653590"
   },
   {
+    "id": "2029605479908004136",
+    "text": "Pentad and Intersect - the European Union of Cardano",
+    "author": "wafflepool",
+    "authorLabel": "Le Waffle",
+    "createdAt": "Thu Mar 05 17:10:29 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 7,
+    "retweets": 0,
+    "url": "https://x.com/wafflepool/status/2029605479908004136"
+  },
+  {
+    "id": "2029604707304350038",
+    "text": "Here it is, folks! The Budget process from Intersect for 2026. Any questions? My DMs are open.",
+    "author": "radioastro",
+    "authorLabel": "Lloyd D - $radioastro",
+    "createdAt": "Thu Mar 05 17:07:25 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 13,
+    "retweets": 1,
+    "url": "https://x.com/radioastro/status/2029604707304350038"
+  },
+  {
+    "id": "2029599599904837823",
+    "text": "A lot of work from my side went into this new process.\n\nIt is a clear improvement over the initial process from 2025.\n\nI can't wait to hear what you all think, and if you are a DRep, please vote on the info action!",
+    "author": "NicolasC3rny",
+    "authorLabel": "Nicolas Cerny",
+    "createdAt": "Thu Mar 05 16:47:07 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 29,
+    "retweets": 10,
+    "url": "https://x.com/NicolasC3rny/status/2029599599904837823"
+  },
+  {
+    "id": "2029598183257489648",
+    "text": "@Cointelegraph Full details in our press release: https://t.co/gvYRHclp4F",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Thu Mar 05 16:41:29 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 125,
+    "retweets": 8,
+    "url": "https://x.com/Cardano_CF/status/2029598183257489648"
+  },
+  {
     "id": "2029598145726894237",
     "text": "Good stuff in Cardano SPO call today, potential Leios testnet planned for June 2026 🔥",
     "author": "RickMcCracken",
@@ -765,6 +906,19 @@
     "likes": 214,
     "retweets": 19,
     "url": "https://x.com/RickMcCracken/status/2029598145726894237"
+  },
+  {
+    "id": "2029596903533314490",
+    "text": "A new info action just dropped:\nCardano Budget Process Framework (facilitated by Intersect)\nhttps://t.co/MOEgLsJKQh",
+    "author": "Nomos_guild",
+    "authorLabel": "Nomos",
+    "createdAt": "Thu Mar 05 16:36:24 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 2,
+    "retweets": 0,
+    "url": "https://x.com/Nomos_guild/status/2029596903533314490"
   },
   {
     "id": "2029595375275807038",
@@ -791,6 +945,56 @@
     "likes": 7,
     "retweets": 1,
     "url": "https://x.com/cardano_updates/status/2029591619616334005"
+  },
+  {
+    "id": "2029591481439141962",
+    "text": "Thank you to members of the Budget Committee and everyone who contributed to the framework.\n\nYou can view the Info Action live here:\nhttps://t.co/TxzMx4up3K",
+    "author": "IntersectMBO",
+    "authorLabel": "Intersect",
+    "createdAt": "Thu Mar 05 16:14:51 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 9,
+    "retweets": 0,
+    "url": "https://x.com/IntersectMBO/status/2029591481439141962"
+  },
+  {
+    "id": "2029591353857126851",
+    "text": "@NaVi_GaT0R @IntersectMBO This is exactly the kind of situation that shows why Cardano struggles to govern itself.\n\nYou just described months of coordination with Pentad, Intersect, the Cardano Foundation, Fireblocks, and ecosystem teams.\n\nAnd after all of that alignment and work, the team actually building the solution ends up eating the cost.\n\nThat is the kind of incentive structure that makes serious builders think twice about working in this ecosystem. No competent team walks into an environment where doing the work that benefits everyone most likely ends with them taking a loss.\n\nRespect for taking it on the chin and still delivering the integration. But situations like this are exactly why people hesitate to build here in the first place.",
+    "author": "SpentronSpence",
+    "authorLabel": "Spentron",
+    "createdAt": "Thu Mar 05 16:14:21 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 9,
+    "retweets": 0,
+    "url": "https://x.com/SpentronSpence/status/2029591353857126851"
+  },
+  {
+    "id": "2029591252618924379",
+    "text": "I'm very excited to see the proposal from the @IntersectCBC go live for the Cardano 2026 Budget Process!\n\nPlease check it out and vote on it, or encourage your DRep to vote on your behalf!",
+    "author": "AdamRusch",
+    "authorLabel": "Adam Rusch",
+    "createdAt": "Thu Mar 05 16:13:57 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 6,
+    "retweets": 0,
+    "url": "https://x.com/AdamRusch/status/2029591252618924379"
+  },
+  {
+    "id": "2029590341033283667",
+    "text": "A refreshed framework for the Cardano 2026 budget cycle has been submitted!\n\nCardano's Treasury is one of the ecosystem's greatest strategic resources. Based on lessons from 2025 and progress made on ecosystem strategy, a revamped 2026 budgeting framework has been proposed to better align funding with Vision 2030 priorities, measurable outcomes, and ecosystem growth.\n\nRead more ➡️ https://t.co/KrgI0s78KE\n\nDReps can vote to endorse the framework now ➡️",
+    "author": "IntersectMBO",
+    "authorLabel": "Intersect",
+    "createdAt": "Thu Mar 05 16:10:19 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 52,
+    "retweets": 20,
+    "url": "https://x.com/IntersectMBO/status/2029590341033283667"
   },
   {
     "id": "2029588908514701544",
@@ -871,6 +1075,18 @@
     "url": "https://x.com/Ryun1_/status/2029573536067535185"
   },
   {
+    "id": "2029572131286093847",
+    "text": "https://t.co/LOIpFphJHY",
+    "author": "IntersectMBO",
+    "authorLabel": "Intersect",
+    "createdAt": "Thu Mar 05 14:57:58 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 15,
+    "retweets": 3,
+    "url": "https://x.com/IntersectMBO/status/2029572131286093847"
+  },
+  {
     "id": "2029565469435277693",
     "text": "@ApexFusion @ApexFusion @filipblagojevi8 @phil_uplc \n\nRegarding the discussion about Tachys on the Cardano L1, I'm curios about compatibility with Leios.\n\nWould it even be compatible or is it one vs. the other?  My understanding is that we couldn't have both.",
     "author": "Cerkoryn",
@@ -923,6 +1139,19 @@
     "url": "https://x.com/Ryzenklot/status/2029531246007844953"
   },
   {
+    "id": "2029527725476544639",
+    "text": "GitHub Weekly Development Activity:\n\n#1: 142 Masumi\n#2: 141 DeltaDeFi\n#3: 117 Cardano Node\n#4: 92 Scalus\n#5: 91 Mithril\n#6: 80 Cardano Foundation\n#7: 76 https://t.co/4FX7ktS18m\n#8: 66 Blockfrost\n#9: 63 Flux Point Studios\n#10: 47 Evolution SDK https://t.co/uQO1wyTXYz",
+    "author": "ProofOfCardano",
+    "authorLabel": "Proof of Cardano",
+    "createdAt": "Thu Mar 05 12:01:31 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 6,
+    "retweets": 1,
+    "url": "https://x.com/ProofOfCardano/status/2029527725476544639"
+  },
+  {
     "id": "2029526781951357056",
     "text": "@AdaLink_io @LucidCiC Why @LucidCiC’s Work worth Engaging\n\nNarrative Building that Focuses on the  big picture of Cardano, framing technical milestones like the Conway hard fork or decentralized governance as part of a long term global vision. https://t.co/SWM5J4HR3V",
     "author": "Ryzenklot",
@@ -962,17 +1191,94 @@
     "url": "https://x.com/grok/status/2029511072210636956"
   },
   {
+    "id": "2029509585703162136",
+    "text": "You deserve better.",
+    "author": "notrick374",
+    "authorLabel": "Ricky",
+    "createdAt": "Thu Mar 05 10:49:26 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 12,
+    "retweets": 0,
+    "url": "https://x.com/notrick374/status/2029509585703162136"
+  },
+  {
+    "id": "2029506965194342749",
+    "text": "After around 4 months of back and forth with Pentad & Intersect. Pentad steering committee decided not to reimburse Iagon for the Fireblocks integration fee. \n\n@IntersectMBO recommend it to be approved but Pentad committee decided against. \n\nThis integration is a necessary stop-gap solution in order to provide institutional custody solutions for Cardano. If it goes well, this will lead to native integration. This is the solution that was recommend by Fireblocks to show ARR. \n\nWe also made steps early on to contact a host of dApps, market makers, capital funds, that could benefit from this solution to see what type of features they would like to see within the integration. \n\nWe even invited CF's Global Head of Technical Integrations @michaeldotada  to make sure the features were in alignment with the goals. Michiel also attended every meeting leading up to the commercial agreement with Fireblocks.\n\nThis is Cardano wide integration, helps every CNT and at the same time provides $ADA native staking and voting features. \n\nIt is worth noting that FB wanted to work with us on this stop-gap integration and not the pentad members. They had the option of working with others and choose not to. Prior to pentad formalizing, we were assured by many of their members that they would have no objection to this reimbursement. Our plan was to go to the treasury prior to their pentad proposal being proposed within the Cardano treasury. We waited because of these verbal assurances. \n\n@IagonOfficial will still continue this integration for Cardano and pay for the full fee. We don't plan to go to the treasury for a refund. We hope you like what we deliver. Excited for the end result!",
+    "author": "NaVi_GaT0R",
+    "authorLabel": "Dr. Navjit Dhaliwal",
+    "createdAt": "Thu Mar 05 10:39:01 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 511,
+    "retweets": 101,
+    "url": "https://x.com/NaVi_GaT0R/status/2029506965194342749"
+  },
+  {
+    "id": "2029500590443602022",
+    "text": "Oh wow. This was a nice surprise to wake up to 👀 \n\nIf stake stays the same (or higher) until epochs end today it will be the first time in the pools 4 year history that it will register an active stake &gt;₳1M 🤞🏻🙏🏻 \n\nThanks for supporting a small independent pool 🤝\n\n#Cardano https://t.co/gwJTkwZu4p",
+    "author": "HephyPool",
+    "authorLabel": "HEPHY Stake Pool | Mithril 🛡️| Icebreaker 🧊",
+    "createdAt": "Thu Mar 05 10:13:41 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 76,
+    "retweets": 5,
+    "url": "https://x.com/HephyPool/status/2029500590443602022"
+  },
+  {
+    "id": "2029497214196679124",
+    "text": "You can now pay with $ADA at 137 SPAR stores across Switzerland.\n\nIn partnership with @DFX_swiss and @BrickTowers, we are helping bring blockchain into everyday commerce through real-time, low-cost retail payments.\n\nRead the full press release: https://t.co/gvYRHclp4F",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Thu Mar 05 10:00:16 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 704,
+    "retweets": 161,
+    "url": "https://x.com/Cardano_CF/status/2029497214196679124"
+  },
+  {
+    "id": "2029475467527336243",
+    "text": "Thought of the day…\n\nSo many of the people shaping the ecosystem are community members who decided to get involved.\n\nIntersect Committee applications will open March 30 and need people who like to \n\n• read things carefully\n• challenge ideas constructively\n• help the ecosystem make better decisions\n\nCould that be you? 👀\n\nMore info:\nhttps://t.co/7bcniQTyTs",
+    "author": "LallyMcClay",
+    "authorLabel": "LallyMcClay",
+    "createdAt": "Thu Mar 05 08:33:51 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 22,
+    "retweets": 8,
+    "url": "https://x.com/LallyMcClay/status/2029475467527336243"
+  },
+  {
     "id": "2029470064370483396",
     "text": "@am_tortl This is one of the few promising projects on Cardano which are a bit out of the box but are really happening instead of being a scam. It was the right decision to fund them.",
-    "author": "SaeKuruKasa",
-    "authorLabel": "Kuru",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Thu Mar 05 08:12:23 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 2,
     "retweets": 0,
-    "url": "https://x.com/SaeKuruKasa/status/2029470064370483396"
+    "url": "https://x.com/unknown/status/2029470064370483396"
+  },
+  {
+    "id": "2029455113559892297",
+    "text": "@TapTools yup, and every single Tesla (and Starlink) out there could easily run a cardano node",
+    "author": "S_Morri",
+    "authorLabel": "Norlack",
+    "createdAt": "Thu Mar 05 07:12:59 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 3,
+    "retweets": 0,
+    "url": "https://x.com/S_Morri/status/2029455113559892297"
   },
   {
     "id": "2029453846573953409",
@@ -981,8 +1287,8 @@
     "authorLabel": "BBHMM | ☔️ | ADA | WMTx | Apex Fusion | Midnight",
     "createdAt": "Thu Mar 05 07:07:57 +0000 2026",
     "tier": 2,
-    "category": "security",
-    "searchLabel": "Security & Incidents",
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
     "likes": 0,
     "retweets": 0,
     "url": "https://x.com/BBHMM_Stake/status/2029453846573953409"
@@ -1016,28 +1322,41 @@
   {
     "id": "2029442467137786289",
     "text": "@JaromirTesar @bigpey we are one of them. mining a block is a rare event (1/ 2 months). and we have no to little  chance of getting new delegators to improve the situation.\nhowever, we run 3 professional high end servers (1 producer, 2 relays) for over 5 years without a single outage!\nthe situation is",
-    "author": "ADA_Stakepool",
-    "authorLabel": "Cardano Stakepool Germany",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Thu Mar 05 06:22:44 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 0,
     "retweets": 0,
-    "url": "https://x.com/ADA_Stakepool/status/2029442467137786289"
+    "url": "https://x.com/unknown/status/2029442467137786289"
+  },
+  {
+    "id": "2029439163419034007",
+    "text": "I'm really not trying to be mean, but...\n\nFor all the resources spent on governance, Cardano’s top DRep is a small @emurgo_io wallet team, not an individual, and it has ~4× the voting power of the @Cardano_CF.\n\nThis is absurd. Not good for business.\n\n@IntersectMBO  please fix.",
+    "author": "CSWAP_Destroy",
+    "authorLabel": "Jon Kravetz",
+    "createdAt": "Thu Mar 05 06:09:36 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 41,
+    "retweets": 3,
+    "url": "https://x.com/CSWAP_Destroy/status/2029439163419034007"
   },
   {
     "id": "2029434804710605227",
     "text": "$ADA uses all same Manila slum mods. Just profiting. $ADA going to zero just scams. And Charles Hoskinson is just same criminal jew scam",
-    "author": "TEhrenbolger",
-    "authorLabel": "T E",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Thu Mar 05 05:52:17 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 0,
     "retweets": 0,
-    "url": "https://x.com/TEhrenbolger/status/2029434804710605227"
+    "url": "https://x.com/unknown/status/2029434804710605227"
   },
   {
     "id": "2029392431935045971",
@@ -1092,6 +1411,19 @@
     "url": "https://x.com/unknown/status/2029382564226429156"
   },
   {
+    "id": "2029357984313147423",
+    "text": "Wed, 4 Mar 26: https://t.co/NzDhfWaH4X\n\n885 commits pushed across 75 repos\n+13335927/-244553 lines changed\n\n1. mithril - 147\n2. ouroboros-consensus - 60\n3. plutus - 44\n4. cardano-academy - 41\n5. acropolis - 33\n\n#Cardano $ADA #Koios",
+    "author": "cardano_updates",
+    "authorLabel": "Cardano Updates",
+    "createdAt": "Thu Mar 05 00:47:01 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 9,
+    "retweets": 2,
+    "url": "https://x.com/cardano_updates/status/2029357984313147423"
+  },
+  {
     "id": "2029327830715081090",
     "text": "@Hmsoriginal @M_S_Billingslea bro hamas and the PLO were dancing in the streets for days... handing out candies and desserts. why are u focused on 5 random dudes who we've never been able to trace or connect to any actual gov action when actual gov officials in gaza and wb cheered and OBL took responsibility",
     "author": "Yiz_Borol",
@@ -1103,6 +1435,31 @@
     "likes": 4,
     "retweets": 0,
     "url": "https://x.com/Yiz_Borol/status/2029327830715081090"
+  },
+  {
+    "id": "2029306232473854412",
+    "text": "@gravitycardano Glad you liked it, Gravity.\n\nBe sure to catch the complete Community Digest here:  https://t.co/kO5wTerVH8",
+    "author": "Cardano",
+    "authorLabel": "Cardano Official",
+    "createdAt": "Wed Mar 04 21:21:23 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 1,
+    "retweets": 0,
+    "url": "https://x.com/Cardano/status/2029306232473854412"
+  },
+  {
+    "id": "2029301227859918943",
+    "text": "Cardano Stake Pool Operator and DRep Update!\n\nCardano nodes for Basic Attention Token (BAT) Stake Pool has been upgrade version 10.5.4 --> 10.6.2. It has been live for multiple days. No issues to note for day-to-day operations. See update release notes at: https://t.co/h71h9aM5So\n\nOur BAT Community DREP has voted on additional governance proposal.\n- Amaru Treasury Withdrawal 2026 YES\n\nAble to be reviewed publicly at: https://t.co/9eC6pooY4e\n\nIf you have any questions about our voting, please DM or leave a comment. Happy to engage with our audience.",
+    "author": "aranyaka_",
+    "authorLabel": "alex.brave ⟁ 🍥",
+    "createdAt": "Wed Mar 04 21:01:29 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/aranyaka_/status/2029301227859918943"
   },
   {
     "id": "2029299986937331934",
@@ -1157,6 +1514,19 @@
     "url": "https://x.com/unknown/status/2029283660872945839"
   },
   {
+    "id": "2029246737995415955",
+    "text": "Losing a delegator as a small pool is always tough. Losing one to YOROI, a pool that has been largely asleep for nearly 200 epochs while working away here diligently for 4 years hits different. Thanks for the support for the past year though 🫡 It was greatly appreciated.",
+    "author": "HephyPool",
+    "authorLabel": "HEPHY Stake Pool | Mithril 🛡️| Icebreaker 🧊",
+    "createdAt": "Wed Mar 04 17:24:58 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 19,
+    "retweets": 3,
+    "url": "https://x.com/HephyPool/status/2029246737995415955"
+  },
+  {
     "id": "2029221714761019717",
     "text": "See the draft proposal to increase the parameter K.\n\nIt proposes to increase the target number of pools in Cardano from 500 to 1000.\n\nCredit and thanks to: @earncoinpool\n\nhttps://t.co/6He3Rl0s84",
     "author": "JaromirTesar",
@@ -1184,7 +1554,7 @@
   },
   {
     "id": "2029213054496276498",
-    "text": "Slow rug / scam / dead projects\n\n- Monad\n- Starknet\n- Zksync\n- Scroll\n- Taiko\n- Mantle\n- Algorand\n- Luna\n- Aleo\n- Mina\n- Linea \n- Boba network\n– Aptos\n– Cosmos\n– NEAR\n– Rootstock\n– Cardano\n– Stellar\n– Cronos\n– Axelar\n– Astar\n– Bittensor\n– Celo\n– Zircuit\n– EOS\n– Sonic\n– Injective",
+    "text": "Slow rug / scam / dead projects\n\n- Monad\n- Starknet\n- Zksync\n- Scroll\n- Taiko\n- Mantle\n- Algorand\n- Luna\n- Aleo\n- Mina\n- Linea \n- Boba network\n– Aptos\n– Cosmos\n– NEAR\n– Rootstock\n– Cardano\n– Stellar\n– Cronos\n– Axelar\n– Astar\n– Bittensor\n– Celo\n– Zircuit\n– EOS\n– Sonic\n�� Injective",
     "author": "unknown",
     "authorLabel": "unknown",
     "createdAt": "Wed Mar 04 15:11:07 +0000 2026",
@@ -1197,16 +1567,16 @@
   },
   {
     "id": "2029212406765772949",
-    "text": "I have heard so many projects using Zero Knowledge as a way to scam people or hide a custodial protocol\n\nThat's why education is needed not just for devs but across community\n\nThe first two chapters of my ebook are live 👇\n\nZK from zero on Cardano \n\n(Actually even if you are not in Cardano is interesting)",
-    "author": "elraulito",
-    "authorLabel": "elraulito",
+    "text": "I have heard so many projects using Zero Knowledge as a way to scam people or hide a custodial protocol\n\nThat's why education is needed not just for devs but across community\n\nThe first two chapters of my ebook are live 👇\n\nZK from zero on Cardano \n\n(Actually even if you are not https://t.co/yaBa1Y6FT8",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Wed Mar 04 15:08:33 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 128,
     "retweets": 28,
-    "url": "https://x.com/elraulito/status/2029212406765772949"
+    "url": "https://x.com/unknown/status/2029212406765772949"
   },
   {
     "id": "2029211167441227931",
@@ -1222,17 +1592,53 @@
     "url": "https://x.com/abuIbrahimno_/status/2029211167441227931"
   },
   {
+    "id": "2029210570025472161",
+    "text": "Missed this week’s updates? Don’t worry, @Cardano’s got you covered. 👀\n\nCatch up with the latest Community Digest, featuring the official launch of USDCx on Cardano via Circle’s xReserve, the transition of Project Catalyst stewardship to the Cardano Foundation, and the move toward a multilingual https://t.co/7G40WcUe45 powered by community translations.\n\nAll this, and more, in the latest edition 👇",
+    "author": "Cardano",
+    "authorLabel": "Cardano Official",
+    "createdAt": "Wed Mar 04 15:01:15 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 76,
+    "retweets": 14,
+    "url": "https://x.com/Cardano/status/2029210570025472161"
+  },
+  {
     "id": "2029203437875823014",
     "text": "@Dudewhyme Absolutely, though a lot of the hype bros who were trying to skim off the market cap have moved on.\n\nIt's way harder to scam on Cardano.",
-    "author": "silksteele",
-    "authorLabel": "Silksteele",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Wed Mar 04 14:32:55 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 1,
     "retweets": 0,
-    "url": "https://x.com/silksteele/status/2029203437875823014"
+    "url": "https://x.com/unknown/status/2029203437875823014"
+  },
+  {
+    "id": "2029194601941152214",
+    "text": "The @CardanoSummit is built on collaboration.\n\nThese 2025 achievements would not be possible without @RareEvo, @Emurgo_io, @Wada_Org, and @CardanoSolar. Thank you for your contributions!\n\nSingapore is next this 5-6 October.\n\nJoin the mailing list: https://t.co/Xbxw2c5IXJ",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Wed Mar 04 13:57:48 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 47,
+    "retweets": 8,
+    "url": "https://x.com/Cardano_CF/status/2029194601941152214"
+  },
+  {
+    "id": "2029194599038636328",
+    "text": "From Lausanne to Dubai.\n\nFrom Berlin to Nairobi.\n\nThe @CardanoSummit has evolved into a global platform for enterprise adoption and ecosystem growth.\n\nWe break down the real metrics behind 2025 and what they mean for 2026 in Singapore.\n\nFull report: https://t.co/F0n0aWtNjF https://t.co/OA1K9OYjTt",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Wed Mar 04 13:57:47 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 145,
+    "retweets": 22,
+    "url": "https://x.com/Cardano_CF/status/2029194599038636328"
   },
   {
     "id": "2029190812823589373",
@@ -1248,6 +1654,30 @@
     "url": "https://x.com/earncoinpool/status/2029190812823589373"
   },
   {
+    "id": "2029187930514690174",
+    "text": "@Ledger gm Ledger",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Wed Mar 04 13:31:17 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 46,
+    "retweets": 1,
+    "url": "https://x.com/Cardano_CF/status/2029187930514690174"
+  },
+  {
+    "id": "2029186833641255334",
+    "text": "Some of those shaping Cardano today started by asking one question:\n\n\"Could I actually do that?\"\n\nFrom March 30, paid individual Intersect members can apply to stand in the 2026 Intersect Committee Elections.\n\nDetails 👇 \nhttps://t.co/zwUPHJFHCm\n\nIf you’re reading this thinking “someone should be doing that”… it might be you.",
+    "author": "IntersectMBO",
+    "authorLabel": "Intersect",
+    "createdAt": "Wed Mar 04 13:26:56 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 42,
+    "retweets": 17,
+    "url": "https://x.com/IntersectMBO/status/2029186833641255334"
+  },
+  {
     "id": "2029184695934595419",
     "text": "🔔 We’re going LIVE in less than an hour! Ready to move from listening to collaborating? Register now and join the conversation live: https://t.co/nFvmLtOZNk https://t.co/dZJU7QTLss",
     "author": "GovActionHub",
@@ -1261,8 +1691,45 @@
     "url": "https://x.com/GovActionHub/status/2029184695934595419"
   },
   {
+    "id": "2029165318556246434",
+    "text": "GitHub Weekly Development Activity:\n\n#1: 155 DeltaDeFi\n#2: 150 Masumi\n#3: 86 https://t.co/4FX7ktS18m\n#4: 82 Mithril\n#5: 80 Cardano Node\n#6: 69 Cardano Foundation\n#7: 66 Flux Point Studios\n#8: 59 Scalus\n#9: 56 Blockfrost\n#10: 41 Evolution SDK https://t.co/0TRXo9NOhL",
+    "author": "ProofOfCardano",
+    "authorLabel": "Proof of Cardano",
+    "createdAt": "Wed Mar 04 12:01:26 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 10,
+    "retweets": 1,
+    "url": "https://x.com/ProofOfCardano/status/2029165318556246434"
+  },
+  {
+    "id": "2029140394361880847",
+    "text": "Secure your financial records on the blockchain with Reeve: https://t.co/SnTNHi4oqd",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Wed Mar 04 10:22:24 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 20,
+    "retweets": 3,
+    "url": "https://x.com/Cardano_CF/status/2029140394361880847"
+  },
+  {
+    "id": "2029140391342018918",
+    "text": "Audit season.\n\nPDFs and screenshots work fine until someone asks: \"Can you prove this hasn't changed?\"\n\nReeve adds cryptographic proof to financial reports, so what was disclosed is permanently verifiable on-chain. https://t.co/89lNrDP83I",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Wed Mar 04 10:22:23 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 134,
+    "retweets": 16,
+    "url": "https://x.com/Cardano_CF/status/2029140391342018918"
+  },
+  {
     "id": "2029134761671680336",
-    "text": "The Daily by Ruma — Mar 4th\n\nKey takeaways:\n\n• Global markets plunge into extreme fear amid Federal Reserve ACH outage and political tensions.\n\n• Donald Trump accuses 'banking cartel' of impeding crucial crypto legislation.\n\n• U.S. stocks shed $1 trillion, South Korea market halts trading following widespread downturn.\n\n• Cardano founder Charles Hoskinson rejects CLARITY Act, citing potential XRP bias.",
+    "text": "The Daily by Ruma — Mar 4th\n\nKey takeaways:\n\n• Global markets plunge into extreme fear amid Federal Reserve ACH outage and political tensions.\n\n• Donald Trump accuses 'banking cartel' of impeding crucial crypto legislation.\n\n• U.S. stocks shed $1 trillion, South Korea market",
     "author": "unknown",
     "authorLabel": "unknown",
     "createdAt": "Wed Mar 04 10:00:01 +0000 2026",
@@ -1289,14 +1756,14 @@
   {
     "id": "2029120483111620729",
     "text": "@XassetshodlR @ModernCdn @Sssebi just because it moves slow doesnt make it a scam. There are instituations that do have used and use cardano. You sound like you lost money.",
-    "author": "jesseboy61",
-    "authorLabel": "Jesseboy61",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Wed Mar 04 09:03:17 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 0,
     "retweets": 0,
-    "url": "https://x.com/jesseboy61/status/2029120483111620729"
+    "url": "https://x.com/unknown/status/2029120483111620729"
   }
 ]
