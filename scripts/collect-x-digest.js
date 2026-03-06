@@ -54,12 +54,12 @@ const TIER2_SEARCHES = [
   {
     category: "governance_action",
     label: "GA & Voting",
-    query: '"governance action" OR "gov action" OR "drep vote" OR "on-chain vote" cardano -airdrop -giveaway -price -is:retweet',
+    query: 'cardano ("governance action" OR "gov action" OR "drep vote" OR "on-chain vote") -airdrop -giveaway -price -is:retweet',
   },
   {
     category: "constitution_budget",
     label: "Constitution & Budget",
-    query: 'cardano (constitution OR "budget proposal" OR "treasury withdrawal" OR "intersect budget" OR "delegate representative") -airdrop -price -is:retweet',
+    query: 'cardano (constitution OR "budget proposal" OR "treasury withdrawal" OR intersect OR "delegate representative") -airdrop -price -is:retweet',
   },
   {
     category: "protocol_parameter",
@@ -69,7 +69,7 @@ const TIER2_SEARCHES = [
   {
     category: "network_ops",
     label: "Network Operations",
-    query: '"cardano-node" OR mithril OR "db-sync" OR "spo update" OR (cardano node release) -is:retweet',
+    query: 'cardano ("cardano-node" OR mithril OR "db-sync" OR "spo update" OR "node release" OR "node version") -is:retweet',
   },
   {
     category: "security",
@@ -147,14 +147,16 @@ function sleep(ms) {
 // ─── Tier 1: Collect account tweets ─────────────────────────────────────────
 
 async function collectTier1() {
-  console.log("\n=== Tier 1: Account Monitoring ===");
+  console.log("\n=== Tier 1: Account Monitoring (via advanced_search) ===");
   const tweets = [];
 
   for (const account of TIER1_ACCOUNTS) {
     try {
       console.log(`  Fetching @${account.username} (${account.label})...`);
-      const res = await apiGet("/twitter/user/last_tweets", {
-        userName: account.username,
+      // Use advanced_search with "from:username" — more reliable than last_tweets on free tier
+      const res = await apiGet("/twitter/tweet/advanced_search", {
+        query: `from:${account.username} -is:retweet`,
+        queryType: "Latest",
       });
 
       // Debug: log response structure for first account
@@ -163,27 +165,26 @@ async function collectTier1() {
         console.log(`    [DEBUG] Response preview: ${JSON.stringify(res).slice(0, 300)}`);
       }
 
-      // Response format: { status, data: { tweets: [...] }, has_next_page, next_cursor }
+      // Response format: { tweets: [...], has_next_page, next_cursor }
       let accountTweets = [];
-      if (Array.isArray(res.data?.tweets)) accountTweets = res.data.tweets;
-      else if (Array.isArray(res.tweets)) accountTweets = res.tweets;
+      if (Array.isArray(res.tweets)) accountTweets = res.tweets;
+      else if (Array.isArray(res.data?.tweets)) accountTweets = res.data.tweets;
       else if (Array.isArray(res.data)) accountTweets = res.data;
       else console.log(`    [WARN] Unexpected response format: ${JSON.stringify(res).slice(0, 200)}`);
 
       let count = 0;
 
       for (const t of accountTweets) {
-        // Only include tweets from last 24h
+        // Only include tweets from last 48h
         const createdAt = new Date(t.createdAt || t.created_at || 0);
         const hoursDiff = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60);
-        if (hoursDiff > 48) continue; // 48h buffer for timezone differences
+        if (hoursDiff > 48) continue;
 
-        // Skip pure retweets
-        if (t.isRetweet || (t.text && t.text.startsWith("RT @"))) continue;
+        const text = t.text || t.full_text || "";
 
         tweets.push({
           id: t.id || t.tweetId || t.id_str,
-          text: t.text || t.full_text || "",
+          text: text,
           author: account.username,
           authorLabel: account.label,
           createdAt: t.createdAt || t.created_at,
