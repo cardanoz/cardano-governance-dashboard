@@ -7132,7 +7132,7 @@ function VoteReminderSection({
 // (VetoRow removed — veto coalition now rendered inline in GovernanceDataTab)
 
 // ═══════════════════════════════════════════════════════════════════
-// DRep Hub Tab (β) — Unified Governance Digest
+// DRep Hub Tab (β) — Unified ADA Digest
 // ═══════════════════════════════════════════════════════════════════
 function DRepHubTab({
   proposals,
@@ -9204,7 +9204,7 @@ function AIAnalysisTab({
 }
 
 // ════════════════════════════════════════════════════════════════
-// Gov Hub Tab (β) — X Digest / Governance News Feed
+// ADA Hub Tab (β) — X Digest / ADA News Feed
 // ════════════════════════════════════════════════════════════════
 function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
   const E = React.createElement;
@@ -9564,7 +9564,7 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
       E("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
         E("span", { style: { fontSize: 20 } }, "📡"),
         E("span", { style: { fontSize: 15, fontWeight: 700 } },
-          lang === "ja" ? "Cardano ガバナンスダイジェスト" : "Cardano Governance Digest"),
+          lang === "ja" ? "ADA ダイジェスト" : "ADA Digest"),
         E("span", { style: { fontSize: 10, background: "var(--accent)", color: "#fff", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}, "β")
       ),
       viewMode === "daily" && digest && E("div", { style: { fontSize: 11, color: "var(--text3)" } },
@@ -10681,6 +10681,8 @@ function App() {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
   const [tab, setTab] = useHashState("tab", "dashboard");
+  // Backward compat: #tab=govhub → adahub
+  React.useEffect(() => { if (tab === "govhub") setTab("adahub"); }, [tab]);
   const [apiKey, setApiKey] = React.useState(getBfKey());
   const [apiKeyInput, setApiKeyInput] = React.useState(getBfKey());
 
@@ -11454,9 +11456,9 @@ function App() {
     className: `tab-btn ${tab === "ai" ? "active" : ""}`,
     onClick: () => setTab("ai")
   }, "🤖 AI " + (lang === "ja" ? "Analysis" : "Analysis")), /*#__PURE__*/React.createElement("button", {
-    className: `tab-btn ${tab === "govhub" ? "active" : ""}`,
-    onClick: () => setTab("govhub")
-  }, "📡 Gov Hub")), tab === "govhub" ? /*#__PURE__*/React.createElement(GovHubTab, {
+    className: `tab-btn ${tab === "adahub" ? "active" : ""}`,
+    onClick: () => setTab("adahub")
+  }, "📡 ADA Hub")), tab === "adahub" ? /*#__PURE__*/React.createElement(GovHubTab, {
     xDailyDigest: xDailyDigest,
     xDigestMeta: xDigestMeta,
     T: T,
