@@ -30,22 +30,74 @@ const DATA_DIR = path.join(__dirname, "..", "data");
 // ─── Tier 1: Trigger Accounts ───────────────────────────────────────────────
 
 const TIER1_ACCOUNTS = [
-  // Institutional / Official
+  // ── Institutional / Official ──
   { username: "InputOutputHK", category: "institutional", label: "IOG" },
+  { username: "IOGroup", category: "institutional", label: "IO Group" },
   { username: "Cardano", category: "institutional", label: "Cardano Official" },
   { username: "Cardano_CF", category: "institutional", label: "Cardano Foundation" },
   { username: "IntersectMBO", category: "institutional", label: "Intersect" },
   { username: "emurgo_io", category: "institutional", label: "EMURGO" },
   { username: "Catalyst_onX", category: "institutional", label: "Project Catalyst" },
-  // Key Persons
+  { username: "midnightfdn", category: "institutional", label: "Midnight Foundation" },
+  { username: "MidnightNtwrk", category: "institutional", label: "Midnight Network" },
+  { username: "RareEvo", category: "institutional", label: "RareEvo" },
+  // ── Key Persons ──
   { username: "IOHK_Charles", category: "key_person", label: "Charles Hoskinson" },
   { username: "SebastienGllmt", category: "key_person", label: "dcSpark/Paima" },
-  // Governance Tools
+  { username: "phillip_pon", category: "key_person", label: "Phillip (IOG)" },
+  { username: "lara_bcw", category: "key_person", label: "Lara (Blockchain Women)" },
+  { username: "NicolasC3rny", category: "key_person", label: "Nicolas Cerny" },
+  { username: "KylixAfonso", category: "key_person", label: "Kylix Afonso" },
+  { username: "MauroAndreoliA", category: "key_person", label: "Mauro Andreoli" },
+  { username: "CardanoRami", category: "key_person", label: "Cardano Rami" },
+  { username: "MicheleHarmonic", category: "key_person", label: "Michele (Harmonic)" },
+  { username: "phil_uplc", category: "key_person", label: "Phil UPLC" },
+  { username: "DeOpenSourceGuy", category: "key_person", label: "De Open Source Guy" },
+  { username: "planetmaaz", category: "key_person", label: "Planet Maaz" },
+  { username: "rafaelfraga_f", category: "key_person", label: "Rafael Fraga" },
+  { username: "Ryun1_", category: "key_person", label: "Ryun1" },
+  { username: "taichiyokoyama", category: "key_person", label: "Taichi Yokoyama" },
+  // ── Governance / DRep / CC ──
   { username: "GovToolCardano", category: "governance_tool", label: "GovTool" },
   { username: "laboradorace_io", category: "governance_tool", label: "Lace Wallet" },
-  // SPO
+  { username: "intertreeJK", category: "governance_tool", label: "InterTree JK" },
+  { username: "cardanocuria", category: "governance_tool", label: "Cardano Curia" },
+  { username: "gravitycardano", category: "governance_tool", label: "Gravity Cardano" },
+  { username: "IntersectCIVICS", category: "governance_tool", label: "Intersect CIVICS" },
+  { username: "tingvard", category: "governance_tool", label: "Tingvard" },
+  { username: "governancevote", category: "governance_tool", label: "Governance Vote" },
+  { username: "Intersect_MCC", category: "governance_tool", label: "Intersect MCC" },
+  { username: "IntersectOSO", category: "governance_tool", label: "Intersect OSO" },
+  { username: "tempo_vote", category: "governance_tool", label: "Tempo Vote" },
+  { username: "clarity_dao", category: "governance_tool", label: "Clarity DAO" },
+  { username: "shieldedtech", category: "governance_tool", label: "Shielded Tech" },
+  // ── SPO / Regional ──
   { username: "CardanoSPO", category: "spo", label: "SPO Community" },
   { username: "SmaugPool", category: "spo", label: "Smaug Pool" },
+  { username: "SIPO_Tokyo", category: "spo", label: "SIPO Tokyo" },
+  { username: "AichiStakePool", category: "spo", label: "Aichi Stake Pool" },
+  { username: "HephyPool", category: "spo", label: "Hephy Pool" },
+  { username: "JapanCardano", category: "spo", label: "Japan Cardano" },
+  { username: "EasternCardano", category: "spo", label: "Eastern Cardano" },
+  { username: "CardanoAtlantic", category: "spo", label: "Cardano Atlantic" },
+  // ── Dev Tools / Builder ──
+  { username: "blockfrost_io", category: "dev_tools", label: "Blockfrost" },
+  { username: "builder__dao", category: "dev_tools", label: "Builder DAO" },
+  { username: "sidan_lab", category: "dev_tools", label: "Sidan Lab" },
+  { username: "meshsdk", category: "dev_tools", label: "Mesh SDK" },
+  { username: "AnastasiaLabs", category: "dev_tools", label: "Anastasia Labs" },
+  { username: "txpipe_tools", category: "dev_tools", label: "TxPipe" },
+  { username: "DemeterRun", category: "dev_tools", label: "Demeter Run" },
+  { username: "TapTools", category: "dev_tools", label: "TapTools" },
+  { username: "lantr_io", category: "dev_tools", label: "Lantr" },
+  { username: "zkFold", category: "dev_tools", label: "zkFold" },
+  { username: "midnightexplr", category: "dev_tools", label: "Midnight Explorer" },
+  // ── Ecosystem / DeFi / Adoption ──
+  { username: "SyncAI_Network", category: "ecosystem_adoption", label: "SyncAI Network" },
+  { username: "MinswapIntern", category: "ecosystem_adoption", label: "Minswap" },
+  { username: "AnzensOfficial", category: "ecosystem_adoption", label: "Anzens" },
+  { username: "USDMOfficial", category: "ecosystem_adoption", label: "USDM" },
+  { username: "snek", category: "ecosystem_adoption", label: "SNEK" },
 ];
 
 // ─── Tier 2: Keyword Searches ───────────────────────────────────────────────
