@@ -48,5 +48,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/x-digest-*.json data/x-daily-digest.json data/x-monthly-digest.json data/x-digest-index.json
+          git add data/x-digest-*.json data/x-daily-digest.json data/x-digest-index.json
+          git add data/x-monthly-digest.json 2>/dev/null || true
           git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Backfill digests ${{ inputs.from_date }} to ${{ inputs.to_date }}" && git pull --rebase && git push)
