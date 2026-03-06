@@ -1247,7 +1247,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
       {/* ═══ DRep Votes Section (top) ═══ */}
       <div style={drepFull?{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9998,background:"var(--bg)",padding:12,display:"flex",flexDirection:"column"}:{marginBottom:12}}>
         <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:drepOpen?6:0}}>
-          <button onClick={()=>setDrepOpen(!drepOpen)}
+          <button onClick={()=>{if(drepOpen)setDrepFull(false);setDrepOpen(!drepOpen);}}
             style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",display:"flex",alignItems:"center",gap:6}}>
             <span style={{fontSize:12,color:"var(--text2)"}}>{drepOpen?"▼":"▶"}</span>
             <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>👥 {T.drep_section_title||"DRep Votes"} ({fDreps.length}{hasMore?"+":""})</span>
@@ -1575,7 +1575,7 @@ function DashboardTab({ dreps, proposals, votes, drepRationales, warnings, hasMo
         return (
       <div style={spoFull?{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:9998,background:"var(--bg)",padding:12,display:"flex",flexDirection:"column"}:{marginBottom:12}}>
         <div style={{display:"flex",alignItems:"center",gap:6}}>
-        <button onClick={()=>setSpoOpen(!spoOpen)}
+        <button onClick={()=>{if(spoOpen)setSpoFull(false);setSpoOpen(!spoOpen);}}
           style={{background:"none",border:"none",cursor:"pointer",padding:"4px 0",marginBottom:spoOpen?6:0,display:"flex",alignItems:"center",gap:6}}>
           <span style={{fontSize:12,color:"var(--text2)"}}>{spoOpen?"▼":"▶"}</span>
           <span style={{fontSize:13,fontWeight:700,color:"var(--accent2)"}}>🏊 {T.tab_spo} ({spoList.length.toLocaleString()})</span>
