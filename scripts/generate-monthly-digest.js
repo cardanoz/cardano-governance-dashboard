@@ -129,21 +129,37 @@ async function main() {
 
   console.log(`  Found ${dailyDigests.length} daily digests for ${month}`);
 
-  // Aggregate all highlights
+  // Aggregate all highlights — only keep importance >= 3 to reduce input size
   let allHighlightsText = "";
   let totalTweets = 0;
   let totalHighlights = 0;
+  let includedHighlights = 0;
 
   for (const d of dailyDigests) {
-    allHighlightsText += `\n### ${d.date} (${d.tweetCount || 0} tweets)\n`;
     totalTweets += d.tweetCount || 0;
-    for (const h of d.highlights || []) {
+    const important = (d.highlights || []).filter(h => (h.importance || 0) >= 3);
+    if (important.length === 0) continue;
+    allHighlightsText += `\n### ${d.date}\n`;
+    for (const h of important) {
       totalHighlights++;
-      allHighlightsText += `- [${h.category}][imp:${h.importance}] ${h.title_en}: ${h.summary_en}\n`;
+      includedHighlights++;
+      // Use title only (skip summary) to save tokens
+      allHighlightsText += `- [${h.category}][imp:${h.importance}] ${h.title_en}\n`;
+    }
+  }
+  // Also count low-importance ones for stats
+  for (const d of dailyDigests) {
+    for (const h of d.highlights || []) {
+      if ((h.importance || 0) < 3) totalHighlights++;
     }
   }
 
-  console.log(`  Total: ${totalHighlights} highlights from ${totalTweets} tweets`);
+  console.log(`  Total: ${totalHighlights} highlights (${includedHighlights} important) from ${totalTweets} tweets`);
+
+  // Truncate if still too large (~8000 chars ≈ 2000 tokens)
+  if (allHighlightsText.length > 8000) {
+    allHighlightsText = allHighlightsText.slice(0, 8000) + "\n... (truncated)";
+  }
 
   // Generate monthly summary via Claude Haiku
   const systemPrompt = `You are a Cardano governance analyst creating a MONTHLY summary digest.
@@ -179,14 +195,14 @@ Output ONLY valid JSON (no markdown, no explanation):
     }
   ]
 }
-Select TOP 5-8 most impactful highlights of the month. Identify 3-5 category trends. List 2-4 action items.
-Category keys: governance_action, constitution_budget, protocol_parameter, network_ops, security, ecosystem_adoption, dev_tools, institutional, key_person, governance_tool, spo`;
+Select TOP 5 most impactful highlights. Identify 3 category trends. List 2 action items.
+Keep summaries concise (1 sentence each). Category keys: governance_action, constitution_budget, protocol_parameter, network_ops, security, ecosystem_adoption, dev_tools, institutional, key_person, governance_tool, spo`;
 
   const userMsg = `Create a monthly governance digest for ${month} based on these daily highlights:\n${allHighlightsText}`;
 
   try {
     console.log("  Calling Claude Haiku for monthly synthesis...");
-    const { text, usage } = await callClaude(systemPrompt, userMsg, 4000);
+    const { text, usage } = await callClaude(systemPrompt, userMsg, 6000);
     console.log(`  Claude usage: ${usage.input_tokens} in / ${usage.output_tokens} out`);
 
     let jsonStr = text.trim();
