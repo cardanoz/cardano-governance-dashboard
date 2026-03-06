@@ -1,47 +1,47 @@
 [
   {
     "month": "2026-03",
-    "summary_en": "March 2026 demonstrated Cardano's maturation as a multi-layered ecosystem with major institutional adoption, infrastructure upgrades, and privacy integration. CME's ADA futures launch and Swiss retail adoption signified institutional mainstream acceptance, while Midnight's mainnet activation and Leios testnet planning advanced the protocol layer. Stablecoin infrastructure (USDCx reaching $47M supply) and DeFi protocol launches (Strike V2, Bodega prediction markets) accelerated ecosystem growth, with governance focusing on parameter optimization and budget framework updates.",
-    "summary_ja": "2026年3月はCardanoのマルチレイヤーエコシステム成熟を示し、機関投資家採用、インフラ整備、プライバシー統合で大きな進展があった。CMEのADA先物上場とスイス小売採用により機関投資家の主流受け入れが確認され、Midnightメインネット起動とLeiosテストネット計画がプロトコル層を推進した。ステーブルコイン基盤（USDCx供給$47M到達）とDeFiプロトコル立ち上げがエコシステム成長を加速させ、ガバナンスはパラメータ最適化と予算枠組み更新に焦点を当てた。",
+    "summary_en": "March 2026 marked a pivotal month for Cardano's ecosystem expansion, highlighted by major infrastructure upgrades including Midnight mainnet launch, CME Group's integration of ADA futures, and significant DeFi growth driven by USDCx stablecoin deployment across multiple protocols. Protocol advancement continued with Ouroboros Leios and Tachýs development progressing toward deployment, while institutional adoption accelerated with 137 Swiss supermarkets accepting ADA payments. The ecosystem demonstrated strong momentum across privacy, DeFi, and real-world payment layers, though governance discussions emerged regarding DRep centralization concerns.",
+    "summary_ja": "2026年3月は、Midnightメインネット立ち上げ、CMEグループのADA先物統合、USDCx導入によるDeFi成長など、インフラアップグレードによってCardanoエコシステムの拡大が加速した重要な月となりました。Ouroboros LeiosとTachýsの開発が展開に向けて進行し、137のスイススーパーマーケットでのADA決済受け入れなど制度的採用が急速に進みました。プライバシー、DeFi、実世界決済層全体でエコシステムが強い勢いを示す一方で、DRep中央集権化への懸念に関するガバナンス議論が浮上しました。",
     "topHighlights": [
       {
-        "category": "institutional",
-        "title_en": "CME Group Launches 24/7 ADA Futures Trading",
-        "title_ja": "CMEグループが24/7 ADA先物取引を開始",
-        "summary_en": "CME's addition of ADA to its crypto futures suite with 24/7 trading marked the first major institutional derivatives venue for Cardano, legitimizing ADA as an institutional asset class.",
-        "summary_ja": "CMEがCardanoの初の主要機関デリバティブ取引所としてADAを先物スイートに追加し、24/7取引でADAを機関投資家資産として正当化した。",
-        "importance": 5
-      },
-      {
         "category": "ecosystem_adoption",
-        "title_en": "Midnight Mainnet Launch & Privacy Layer Activation",
-        "title_ja": "Midnightメインネット起動とプライバシーレイヤー有効化",
-        "summary_en": "Midnight's late March mainnet activation introduced the first privacy-preserving smart contract layer to Cardano, enabling applications like Bodega's fully private prediction markets and expanding ecosystem use cases.",
-        "summary_ja": "Midnightの3月末メインネット起動により、Cardanoに初のプライバシー保護スマートコントラクトレイヤーが導入され、Bodegaの完全プライベート予測市場などを有効化した。",
-        "importance": 5
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "USDCx Stablecoin Infrastructure Reaches $47M Supply",
-        "title_ja": "USDCxステーブルコイン基盤が$47M供給に到達",
-        "summary_en": "Circle's xReserve-backed USDCx stablecoin achieved rapid adoption on Cardano with 40% weekly growth, establishing robust liquidity infrastructure for DeFi protocols and real-world payments.",
-        "summary_ja": "CircleのxReserve裏付けUSDCxがCardanoで40%週間成長で急速採用され、DeFiプロトコルと実世界決済の堅牢な流動性基盤を確立した。",
+        "title_en": "USDCx Stablecoin Deployment Transforms Cardano DeFi Infrastructure",
+        "title_ja": "USDCxステーブルコイン導入がCardano DeFiインフラを変革",
+        "summary_en": "USDCx launch created major liquidity infrastructure enabling integration across Strike, Liqwid, FluidTokens and other protocols, driving 40% weekly growth in Cardano stablecoin supply reaching $47M.",
+        "summary_ja": "USDCx立ち上げはStrike、Liqwid、FluidTokensなど複数プロトコル間の統合を可能にする主要流動性インフラを創出し、Cardanoステーブルコイン供給を$47Mに達するまで40%の週間成長を推進しました。",
         "importance": 5
       },
       {
         "category": "protocol_parameter",
-        "title_en": "Ouroboros Leios Testnet Planned for June 2026",
-        "title_ja": "Ouroboros Leios テストネット2026年6月予定",
-        "summary_en": "Leios testnet planning and Apex Fusion's Ouroboros Tachýs advancement (sub-second block times) signaled imminent consensus layer upgrades addressing the throughput-decentralization-security trilemma.",
-        "summary_ja": "LeiosテストネットプランニングとApex FusionのOutoboros Tachýs進展（サブ秒ブロック時間）は、スループット・分散・セキュリティのトリレンマに対処する間近のコンセンサス層アップグレードを示唆した。",
+        "title_en": "Ouroboros Leios and Tachýs Consensus Upgrades Progress Toward End-2026 Deployment",
+        "title_ja": "Ouroboros LeiosおよびTachýsコンセンサスアップグレードが2026年末の展開に向けて進行",
+        "summary_en": "Leios testnet scheduled for June 2026 and Tachýs advancement promise sub-second block times and trilemma resolution, representing fundamental protocol improvements expected by year-end.",
+        "summary_ja": "Leiosテストネット予定が2026年6月で、Tachýs推進が1秒未満のブロック時間とトリレンマ解決を約束し、年末までの根本的なプロトコル改善を表しています。",
+        "importance": 5
+      },
+      {
+        "category": "institutional",
+        "title_en": "CME Group Integration and Swiss Retail Adoption Signal Mainstream Institutional Acceptance",
+        "title_ja": "CMEグループ統合とスイス小売採用が主流制度受け入れを示唆",
+        "summary_en": "CME's addition of ADA to crypto futures suite with 24/7 trading combined with 137 Swiss supermarkets accepting ADA payments demonstrates institutional adoption reaching real-world transaction scale.",
+        "summary_ja": "CMEのADA先物スイート追加と24時間取引が137のスイススーパーマーケットでのADA支払い受け入れと組み合わさり、制度的採用が実世界取引規模に到達していることを示しています。",
         "importance": 5
       },
       {
         "category": "ecosystem_adoption",
-        "title_en": "Swiss Retail Adoption: 137 Supermarkets Accept ADA",
-        "title_ja": "スイス小売採用：137のスーパーがADAを受け入れ",
-        "summary_en": "Spar supermarkets in Switzerland enabling ADA payments across 137 stores demonstrated mainstream real-world adoption beyond financial infrastructure.",
-        "summary_ja": "スイスのSparスーパーマーケット137店舗でのADA決済実現により、金融インフラを超えた主流的な実世界採用が証明された。",
+        "title_en": "Midnight Privacy Layer Mainnet Launch Establishes Private DApp Ecosystem",
+        "title_ja": "Midnightプライバシー層メインネット立ち上げがプライベートDAppエコシステムを確立",
+        "summary_en": "Midnight mainnet activation enabled fully private prediction markets like Bodega and cross-network privacy integration, establishing Cardano as a leading privacy-enabled blockchain platform.",
+        "summary_ja": "Midnightメインネット活性化によってBodegaなどの完全プライベート予測市場およびネットワーク間プライバシー統合が有効化され、CardanoをプライバシスEnabled主要ブロックチェーンプラットフォームとして確立しました。",
+        "importance": 5
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Lace 2.0 Wallet and Development Tools Enable Enhanced User Experience and Infrastructure",
+        "title_ja": "Lace 2.0ウォレットと開発ツールがユーザー体験とインフラを強化",
+        "summary_en": "Lace 2.0 release alongside Cardano Rosetta Java v2.1.0 Conway support and Project Reeve verifiable insights platform provided foundational infrastructure for ecosystem development and institutional integration.",
+        "summary_ja": "Lace 2.0のリリース、Cardano Rosetta Java v2.1.0 Conway対応、Project Reeveプラットフォームがエコシステム開発と制度統合のための基盤インフラを提供しました。",
         "importance": 5
       }
     ],
@@ -49,42 +49,42 @@
       {
         "category": "ecosystem_adoption",
         "trend": "rising",
-        "note_en": "DeFi protocol launches, stablecoin infrastructure growth, and real-world payment integration accelerated throughout March, establishing Cardano as a production-ready blockchain.",
-        "note_ja": "DeFiプロトコル立ち上げ、ステーブルコイン基盤成長、実世界決済統合が3月全体で加速し、Cardanoをプロダクションレディなブロックチェーンとして確立した。"
-      },
-      {
-        "category": "protocol_parameter",
-        "trend": "rising",
-        "note_en": "Major consensus layer upgrades (Leios, Ouroboros Tachýs) moved from research to testnet planning, with pool parameter optimization discussions indicating active governance refinement.",
-        "note_ja": "Leios、Ouroboros Tachýsなど主要コンセンサス層アップグレードが研究からテストネット計画に移行し、プール目標パラメータ倍増提案がガバナンス改善を示唆した。"
+        "note_en": "Explosive growth in DeFi protocols, stablecoins, and payment integrations across Cardano with multiple major launches (USDCx, FluidTokens, Bodega, retail payments) creating network effects.",
+        "note_ja": "USDCx、FluidTokens、Bodega、小売決済などの複数の主要立ち上げによってネットワーク効果を生成するCardano全体のDeFiプロトコル、ステーブルコイン、決済統合での爆発的成長。"
       },
       {
         "category": "institutional",
         "trend": "rising",
-        "note_en": "CME futures launch and BlockSign institutional reporting integration signaled sustained momentum in attracting regulated financial institutions and enterprise adoption.",
-        "note_ja": "CME先物上場とBlockSign機関投資家報告統合により、規制金融機関とエンタープライズ採用の持続的な勢いが示された。"
+        "note_en": "Accelerating institutional adoption through CME derivatives integration and real-world merchant acceptance in regulated markets, signaling mainstream financial system integration.",
+        "note_ja": "CME先物統合と規制市場における実世界マーチャント受け入れによる制度採用の加速、主流金融システム統合を示唆。"
+      },
+      {
+        "category": "governance_action",
+        "trend": "declining",
+        "note_en": "Emerging governance concerns regarding DRep centralization raised community calls for fresh governance model evaluation despite ongoing constitutional framework implementation.",
+        "note_ja": "DRep中央集権化に関する新興ガバナンス懸念が進行中の憲法枠組み実装にもかかわらずガバナンスモデル評価の新規開始への社会的呼び出しを引き出しました。"
       }
     ],
     "actionItems": [
       {
-        "action_en": "Monitor Leios testnet launch in June 2026 and evaluate community feedback on consensus layer upgrades; DReps should prepare governance positions on Ouroboros Tachýs parameter adoption and pool target K doubling proposals.",
-        "action_ja": "2026年6月のLeiosテストネット立ち上げを監視し、コンセンサス層アップグレードのコミュニティフィードバックを評価する。DRepsはOutoboros Tachýsパラメータ採用とプール目標K倍増提案のガバナンスポジション準備が必要。",
+        "action_en": "DReps and CC should prepare for June 2026 Leios testnet launch and evaluate governance framework scalability to address centralization concerns while onboarding new institutional participants entering through CME and merchant channels.",
+        "action_ja": "DRepsと憲法委員会は2026年6月のLeiosテストネット立ち上げに向けて準備し、CMEとマーチャントチャネルを通じて参入する新しい制度参加者をオンボーディングしながら中央集権化懸念に対処するためガバナンスフレームワークのスケーラビリティを評価すべきです。",
         "audience": [
           "DRep",
-          "governance_tool"
+          "CC",
+          "SPO"
         ]
       },
       {
-        "action_en": "Track stablecoin ecosystem health (USDCx, FluidTokens smart accounts) and DeFi protocol maturation (Strike V2, Bodega); assess regulatory implications of retail ADA payments in Switzerland for future compliance frameworks.",
-        "action_ja": "ステーブルコインエコシステムの健全性（USDCx、FluidTokensスマートアカウント）とDeFiプロトコル成熟度を追跡。スイスの小売ADA決済の規制含意を評価し、将来のコンプライアンス枠組みに反映させる。",
+        "action_en": "SPOs and ecosystem partners should prepare for van Rossem hard fork completion and monitor Pool Target Parameter K doubling proposal while scaling infrastructure to support surging DeFi TVL and retail payment volume from Swiss and international integrations.",
+        "action_ja": "SPOとエコシステムパートナーはvan Rossumハードフォーク完了の準備とプールターゲットパラメータK倍増提案の監視を行いながら、スイス国際統合からのDeFi TVLおよび���売決済ボリューム急増に対応するようインフラをスケーリングすべきです。",
         "audience": [
           "SPO",
-          "CC",
-          "DRep"
+          "CC"
         ]
       }
     ],
-    "generatedAt": "2026-03-06T15:07:09.727Z",
+    "generatedAt": "2026-03-06T15:38:24.751Z",
     "stats": {
       "totalTweets": 610,
       "totalHighlights": 49,
@@ -98,7 +98,216 @@
         "ephemeral_5m_input_tokens": 0,
         "ephemeral_1h_input_tokens": 0
       },
-      "output_tokens": 2174,
+      "output_tokens": 2352,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
+    "month": "2026-02",
+    "summary_en": "February 2026 marked a pivotal month for Cardano governance and ecosystem maturation, with major institutional milestones including CME futures launch and significant protocol upgrades. Critical governance actions dominated discussions, particularly around Protocol V11 hard fork scheduling and parameter changes requiring SPO coordination. Ecosystem expansion accelerated through Midnight mainnet preparations, USDCx integration, Bitcoin cross-chain bridges, and substantial DeFi/AI infrastructure growth, while developer tooling maturity improved significantly with Yaci Store 2.0 and enhanced security frameworks.",
+    "summary_ja": "2026年2月はCardanoガバナンスとエコシステム成熟の重要な月となりました。CME先物上場や重要なプロトコルアップグレードなど機関投資家向けの主要マイルストーンが達成されました。Protocol V11ハードフォークスケジューリングとSPO調整が必要なパラメータ変更をめぐるガバナンスアクションが主要議題となり、同時にMidnightメインネット準備、USDCx統合、ビットコインクロスチェーンブリッジを通じたエコシステム拡大が加速しました。",
+    "topHighlights": [
+      {
+        "category": "institutional",
+        "title_en": "CME Group Launches Cardano Futures Trading",
+        "title_ja": "CMEグループがCardano先物取引を開始",
+        "summary_en": "CME launched Cardano ADA futures on February 9, 2026, representing major institutional validation and potentially transforming market liquidity and mainstream adoption.",
+        "summary_ja": "2026年2月9日にCMEがCardano ADA先物を上場し、機関投資家による大規模な検証を実現し、市場流動性とメインストリーム採用を変革する可能性がある。",
+        "importance": 5
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Protocol V11 (Van Rossem) Hard Fork Governance Scheduled",
+        "title_ja": "Protocol V11ハードフォークガバナンス予定",
+        "summary_en": "Van Rossem hard fork governance actions reached critical thresholds with SPO coordination required, including Leios scaling reaching 1,000 TPS testnet milestone.",
+        "summary_ja": "Van Rossemハードフォークガバナンスアクションが重要な閾値に達し、SPO調整が必要となり、Leiosスケーリングが1,000 TPSテストネットマイルストーンに到達。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet and USDCx Integration Strategic Expansion",
+        "title_ja": "MidnightメインネットとUSDCx統合戦略展開",
+        "summary_en": "Midnight productization strategy advanced with mainnet launch roadmap and OS development, while Circle's native USDCx integration via CNT enabled major stablecoin adoption.",
+        "summary_ja": "Midnightの製品化戦略がメインネット立上げロードマップとOS開発で進展し、CircleのネイティブUSDCx統合がCNT経由で実現され、主要なステーブルコイン採用を可能にした。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Bitcoin-Cardano Cross-Chain Bridge and Multi-Chain Integration Progress",
+        "title_ja": "ビットコン-Cardanoクロスチェーンブリッジと複数チェーン統合進展",
+        "summary_en": "Bitcoin cross-chain bridge progressed toward launch and Fluid Tokens bridge development continued, enabling critical multi-chain asset interoperability.",
+        "summary_ja": "ビットコンクロスチェーンブリッジが立上げに向けて進展し、Fluid Tokensブリッジ開発が継続され、重要なマルチチェーン資産相互運用性が実現。",
+        "importance": 5
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Production-Grade Infrastructure: Yaci Store 2.0 and Enhanced Developer Tooling",
+        "title_ja": "本番環境向けインフラ：Yaci Store 2.0と強化された開発者ツール",
+        "summary_en": "Yaci Store 2.0.0 released as production-grade Cardano data infrastructure alongside Cardano Rosetta Java v2.0.0, SuperNode simplification, and high-assurance smart contract verification tools.",
+        "summary_ja": "Yaci Store 2.0.0が本番環境対応のCardanoデータインフラとしてリリースされ、Cardano Rosetta Java v2.0.0、SuperNode簡素化、高保証スマートコントラクト検証ツールと並行して提供。",
+        "importance": 5
+      }
+    ],
+    "trends": [
+      {
+        "category": "governance_action",
+        "trend": "rising",
+        "note_en": "SPO coordination on parameter changes and hard fork governance intensified, with multiple critical governance actions requiring immediate stakeholder voting.",
+        "note_ja": "パラメータ変更とハードフォークガバナンスに関するSPO調整が加速し、複数の重要なガバナンスアクションが即時ステークホルダー投票を必要とした。"
+      },
+      {
+        "category": "ecosystem_adoption",
+        "trend": "rising",
+        "note_en": "DeFi protocol maturity and AI agent infrastructure expansion accelerated, with FluidTokens reaching record TVL, Masumi agent-to-agent payments scaling, and enterprise partnership emphasis.",
+        "note_ja": "DeFiプロトコル成熟度とAIエージェントインフラ拡大が加速し、FluidTokensが記録的なTVLに到達、Masumiエージェント間決済がスケーリング、企業パートナーシップが強調された。"
+      },
+      {
+        "category": "institutional",
+        "trend": "rising",
+        "note_en": "Major institutional validation accelerated with CME futures launch, Coinbase COIN50 inclusion, and enterprise blockchain adoption focus across forums and partnerships.",
+        "note_ja": "CME先物上場、Coinbase COIN50組入れ、フォーラムとパートナーシップ全体でのエンタープライズブロックチェーン採用フォーカスにより、機関投資家による検証が加速。"
+      }
+    ],
+    "actionItems": [
+      {
+        "action_en": "All stakeholders must monitor Van Rossem hard fork (Protocol V11) governance vote thresholds and SPO parameter change submissions scheduled for February 5 calls; DReps should prepare voting positions on Leios scaling parameters and execution limit adjustments.",
+        "action_ja": "全ステークホルダーはVan Rossemハードフォーク（Protocol V11）ガバナンス投票閾値とSPOパラメータ変更提出（2月5日コール予定）を監視し、DRepはLeiosスケーリングパラメータと実行制限調整について投票方針を準備する必要があります。",
+        "audience": [
+          "DRep",
+          "SPO",
+          "CC"
+        ]
+      },
+      {
+        "action_en": "Ecosystem projects and developers should accelerate preparations for Midnight mainnet launch and USDCx integration timelines; institutional stakeholders should evaluate CME futures market opportunities and institutional adoption infrastructure readiness.",
+        "action_ja": "エコシステムプロジェクトと開発者はMidnightメインネット立上げとUSDCx統合タイムラインの準備を加速し、機関投資家ステークホルダーはCME先物市場機会と機関採用インフラ準備状況を評価する必要があります。",
+        "audience": [
+          "DRep",
+          "SPO"
+        ]
+      }
+    ],
+    "generatedAt": "2026-03-06T15:38:05.302Z",
+    "stats": {
+      "totalTweets": 2485,
+      "totalHighlights": 245,
+      "daysWithData": 28
+    },
+    "apiUsage": {
+      "input_tokens": 2886,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2165,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
+    "month": "2026-01",
+    "summary_en": "January 2026 marked a transformative month for Cardano governance with Charles Hoskinson's departure from day-to-day leadership coinciding with major protocol advances including Ouroboros Leios CIP approval and Midnight privacy chain launch. The community successfully ratified a critical 70M ADA treasury withdrawal for infrastructure development while establishing institutional credibility through ProShares ETF inclusion and major partnerships. On-chain governance matured significantly with Constitutional Committee expansion proposals and enhanced DRep decentralization tools, while ecosystem adoption accelerated with stablecoin launches, RWA tokenization standards, and cross-chain DeFi infrastructure reaching production readiness.",
+    "summary_ja": "2026年1月はCardanoガバナンスの転換点となり、Charles Hoskinsonの日常的リーダーシップからの撤退と、Ouroboros LeiosのCIP承認およびMidnight プライバシーチェーン起動という主要なプロトコル進展が並行した。コミュニティはインフラ開発のための重要な70M ADAの財務引き出しを批准し、ProShares ETF含有およびメジャーパートナーシップを通じて機関的信頼を確立した。オンチェーンガバナンスは憲法委員会拡大提案と強化されたDRep分散化ツールにより成熟し、ステーブルコイン立ち上げ、RWAトークン化標準、クロスチェーンDeFiインフラが本番対応に達することで、エコシステム採用が加速した。",
+    "topHighlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Linear Leios CIP-0164 Approved - Historic Scalability Breakthrough",
+        "title_ja": "Ouroboros Linear Leios CIP-0164承認 - 歴史的スケーラビリティ突破",
+        "summary_en": "Ouroboros Leios development reached 67% completion with CIP-0164 finalized on Jan 7-9, enabling throughput scaling without sacrificing decentralization—positioning Cardano for major performance improvements in 2026.",
+        "summary_ja": "Ouroboros Leios開発は67%完了に達し、CIP-0164は1月7-9日に確定され、分散化を犠牲にすることなくスループットスケーリングを実現し、2026年の大幅なパフォーマンス向上に向けてCardanoを位置付けた。",
+        "importance": 5
+      },
+      {
+        "category": "governance_action",
+        "title_en": "70M ADA Critical Integrations Budget Ratified for Infrastructure Development",
+        "title_ja": "インフラ開発のための70M ADA重要統合予算が批准",
+        "summary_en": "Constitutional Committee and DRep community approved major treasury withdrawal on Jan 2-5 to fund critical ecosystem infrastructure, marking significant on-chain governance maturity and community consensus on strategic resource allocation.",
+        "summary_ja": "憲法委員会とDRepコミュニティは1月2-5日に重要なエコシステムインフラ資金提供のための大幅な財務引き出しを承認し、オンチェーンガバナンスの成熟と戦略的リソース配分に関するコミュニティコンセンサスを示した。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Privacy Chain Launch & Stablecoin Ecosystem Goes Live",
+        "title_ja": "Midnightプライバシーチェーン起動とステーブルコインエコシステムが稼働開始",
+        "summary_en": "Midnight preview network launched Jan 7 with NIGHT token and native asset support, while Djed stablecoin and multi-chain DeFi infrastructure achieved production readiness, representing the first major multi-layered protocol launch on Cardano.",
+        "summary_ja": "Midnightプレビューネットワークは1月7日にNIGHTトークンとネイティブアセットサポートで起動し、DjedステーブルコインとマルチチェーンDeFiインフラが本番対応を達成し、Cardanoの最初の主要な多層プロトコル起動を表している。",
+        "importance": 5
+      },
+      {
+        "category": "institutional",
+        "title_en": "ProShares ETF Inclusion & Google Validator Infrastructure Signal Institutional Maturity",
+        "title_ja": "ProShares ETF含有とGoogleバリデータインフラ機関的成熟を示唆",
+        "summary_en": "ADA's inclusion in ProShares Crypto ETF on Jan 9 combined with confirmed Google validator activity demonstrates institutional-grade infrastructure adoption and regulatory clarity under the Clarity Act, strengthening long-term adoption prospects.",
+        "summary_ja": "1月9日のProShares Crypto ETFへのADA含有がGoogle バリデータアクティビティの確認と組み合わさり、機関レベルのインフラ採用とClarity Act下での規制明確性を示し、長期採用見通しを強化した。",
+        "importance": 5
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Chimera Layer 2 & WASM Smart Contract Infrastructure Reaches Production Stage",
+        "title_ja": "Chimera Layer 2およびWASMスマートコントラクトインフラ本番段階到達",
+        "summary_en": "Chimera Layer 2 development office hours launched with Nightstream WASM implementation and enhanced developer education initiatives, establishing comprehensive scaling and development infrastructure for enterprise adoption.",
+        "summary_ja": "Chimera Layer 2開発オフィスアワーはNightstreamWASM実装と強化された開発者教育イニシアティブで起動し、エンタープライズ採用のための包括的なスケーリングと開発インフラストラクチャを確立した。",
+        "importance": 5
+      }
+    ],
+    "trends": [
+      {
+        "category": "ecosystem_adoption",
+        "trend": "rising",
+        "note_en": "Stablecoins, RWA tokenization, cross-chain DeFi, and institutional partnerships reached critical mass with Djed, Fluid Tokens, CIP-113, and multi-billion dollar partnerships launching or approving in January.",
+        "note_ja": "ステーブルコイン、RWAトークン化、クロスチェーンDeFi、機関的パートナーシップは1月にDjed、Fluid Tokens、CIP-113、数十億ドルのパートナーシップの起動または承認により臨界量に達した。"
+      },
+      {
+        "category": "governance_action",
+        "trend": "rising",
+        "note_en": "On-chain governance matured significantly with successful 70M ADA budget approval, Constitutional Committee expansion proposals, and enhanced DRep communication tools demonstrating decentralization progress.",
+        "note_ja": "オンチェーンガバナンスは70M ADA予算承認、憲法委員会拡大提案、強化されたDRep通信ツールによる分散化進捗の実証により大幅に成熟した。"
+      },
+      {
+        "category": "protocol_parameter",
+        "trend": "rising",
+        "note_en": "Protocol scaling advances accelerated with Ouroboros Leios CIP-0164 finalized, Midnight consensus updates released, and throughput optimization discussions dominating governance discourse throughout the month.",
+        "note_ja": "Ouroboros Leios CIP-0164確定、Midnight コンセンサス更新リリース、スループット最適化討論が月を通じてガバナンス談話を支配することで、プロトコルスケーリング進展が加速した。"
+      }
+    ],
+    "actionItems": [
+      {
+        "action_en": "Monitor Ouroboros Leios integration timeline and testnet milestones through February-March 2026 to ensure Q2 mainnet deployment; DReps should prepare governance votes on parameter adjustments required for activation.",
+        "action_ja": "2026年2月-3月を通じてOuroboros Leios統合タイムラインとテストネットマイルストーンを監視し、Q2メインネット配備を確保する; DRepsは活動化に必要なパラメータ調整に関するガバナンス投票に備えるべき。",
+        "audience": [
+          "DRep",
+          "SPO",
+          "CC"
+        ]
+      },
+      {
+        "action_en": "Track Midnight mainnet launch completion (Kukolu phase) and validator infrastructure readiness by end of Q1 2026; Constitutional Committee should establish governance framework for privacy layer parameter updates and cross-chain bridge security oversight.",
+        "action_ja": "2026年Q1末までにMidnightメインネット起動完了（Kukolu段階）とバリデータインフラ準備状況を追跡する; 憲法委員会はプライバシーレイヤーパラメータ更新とクロスチェーンブリッジセキュリティ監視のためのガバナンスフレームワークを確立すべき。",
+        "audience": [
+          "CC",
+          "SPO",
+          "DRep"
+        ]
+      }
+    ],
+    "generatedAt": "2026-03-06T15:37:48.363Z",
+    "stats": {
+      "totalTweets": 2314,
+      "totalHighlights": 240,
+      "daysWithData": 28
+    },
+    "apiUsage": {
+      "input_tokens": 2851,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2509,
       "service_tier": "standard",
       "inference_geo": "not_available"
     }

@@ -849,5 +849,142 @@
     "tweetCount": 97,
     "generatedAt": "2026-03-06T15:04:41.181Z",
     "backfilled": true
+  },
+  {
+    "date": "2026-02-28",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Circle's USDC to USDCx Bridge Now Open for Community Integration",
+        "title_ja": "CircleのUSDC→USDCxブリッジが誰でも統合可能に",
+        "summary_en": "Circle has published official step-by-step documentation enabling any developer to build USDC-to-USDCx bridges on Cardano, democratizing access to stablecoin integration. This positions Cardano as a uniquely partnered blockchain with Circle.",
+        "summary_ja": "Circleが公式ドキュメントを公開し、開発者は誰でもCardano上でUSDCからUSDCxへのブリッジを構築できるようになった。Cardanoの独自パートナーシップ地位を強化。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "Ecosystem_adoption",
+          "Developer"
+        ],
+        "sources": [
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Launch Drives $14M Injection, Becomes Second Highest DEX Volume Asset",
+        "title_ja": "USDCx発表後24時間で$14M注入、DEX出来高で$NIGHTに次ぐ第2位に",
+        "summary_en": "Within 24 hours of USDCx launch on Cardano, $14M was supplied to the ecosystem with total stablecoin supply reaching ~$48M. USDCx ranked second in DEX volume at 3.6M ADA, demonstrating strong market demand and DeFi momentum.",
+        "summary_ja": "USDCx発表24時間で$14M投入され、総供給量は$48Mに到達。DEX出来高は$NIGHTに次ぐ3.6M ADAで、DeFiの強い需要を示唆。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@cardanzo_tools",
+          "@NicolasC3rny"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Liqwid Lending Protocol Enables USDCx Lending/Borrowing with $3M+ TVL",
+        "title_ja": "Liqwidがカルダノ最大貸付プロトコルでUSDCx対応、$3M以上ロック",
+        "summary_en": "Cardano's largest lending protocol Liqwid launched USDCx lending and borrowing with over $3M already supplied. Supported collateral includes ADA, NIGHT, DJED, USDA, and USDM, strengthening DeFi composability.",
+        "summary_ja": "カルダノ最大の貸付プロトコルLiqwidが$3M以上の供給でUSDCx対応を開始。複数のステーブルコイン担保サポートがDeFi相互運用性を強化。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Protocol Upgrade Expected in 2026, Targeting 500-1000+ TPS",
+        "title_ja": "Ouroboros Leios 2026年導入予定、500-1000+ TPSを目指す",
+        "summary_en": "Charles Hoskinson confirms Ouroboros Leios launches this year, claiming it solves the blockchain trilemma by maintaining decentralization while scaling to 500-1000+ TPS. Current mainnet operates at ~0.4 TPS baseline.",
+        "summary_ja": "Charles HoskinssonがOuroboros Leiosが2026年の導入を確認。ブロックチェーン三者択一問題を解決し、スケーラビリティを大幅向上させる見込み。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "SPO",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@GrahamsNoPlus1"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Circle Confirms Cardano as Uniquely Selected Partner for xReserve Integration",
+        "title_ja": "CircleがCardanoをxReserve統合の選定パートナーとして確認",
+        "summary_en": "Circle confirmed that only select blockchain teams partnered with Circle can integrate xReserve, and Cardano successfully negotiated this exclusive partnership. This reflects Cardano's institutional standing and stablecoin infrastructure maturity.",
+        "summary_ja": "CircleがxReserve統合のための厳選パートナーシップでCardanoを選定。制度的地位と決済���ンフラの成熟度を示唆。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Institutional"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Txpipe Hosts First Pythathon at IOG, Advancing Pyth Network Integration",
+        "title_ja": "TxpipeがIOG主催の初Pythathonを実施、Pythネットワーク統合を推進",
+        "summary_en": "Txpipe is hosting Cardano's first Pythathon event at IOG offices, aligned with Charles Hoskinson's PENTAD vision. This initiatives supports Pyth Network integration for oracle infrastructure expansion.",
+        "summary_ja": "TxpipeがIOGでCardano初のPythathonを開催。Charles HoskinssonのPENTAD構想と連携し、Pythネットワーク統合を促進。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Developer"
+        ],
+        "sources": [
+          "@diegomac35"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "MinSwap Launches Deep USDCx Liquidity Pools for Cross-Ecosystem Efficiency",
+        "title_ja": "MinSwapがUSDCx深流動性プールを本格始動、エコシステム効率化へ",
+        "summary_en": "Minswap provides deep liquidity pools for USDCx since day one of launch with efficient routing capabilities. Platform aims to facilitate ecosystem-wide adoption through aligned LP economics and protocol incentives.",
+        "summary_ja": "MinswapがUSDCx上場初日から深流動性プールを提供。エコシステム全体の効率的な利用を目指す。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "CSWAP Launches ADA/USDCx Trading Pair with Protocol-Aligned LP Economics",
+        "title_ja": "CSWAPがADA/USDCx取引ペア推出、プロトコル連動型LP報酬を提供",
+        "summary_en": "CSWAP launched ADA/USDCx with lowest trading and batcher fees, emphasizing LP economics alignment with Cardano protocol growth. Strategy prioritizes retail and liquidity provider incentive alignment.",
+        "summary_ja": "CSWAPがADA/USDCx取引ペアを推出。最低取引手数料とプロトコル成長連動型報酬でLP参加を促進。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@CSWAP_Destroy"
+        ]
+      }
+    ],
+    "tweetCount": 104,
+    "generatedAt": "2026-03-06T15:37:28.037Z",
+    "backfilled": true
   }
 ]

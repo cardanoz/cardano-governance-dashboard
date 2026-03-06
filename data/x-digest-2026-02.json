@@ -1,0 +1,4166 @@
+[
+  {
+    "date": "2026-02-01",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens Reaches 5M ADA TVL with 6% APY Incentives",
+        "title_ja": "FluidTokensが500万ADAのTVLに到達、6%APYインセンティブを展開",
+        "summary_en": "FluidTokens DeFi protocol achieved 5M ADA total value locked with live lender incentives offering 6% guaranteed APY on ADA across multiple eligible markets (FLDT, SNEK, NIGHT, IAG, STRIKE). This represents significant growth in Cardano's lending ecosystem.",
+        "summary_ja": "FluidTokensが500万ADAのTVLを達成し、複数の適格市場にわたるADAに対する6%の保証APYインセンティブを提供開始。CardanoのレンディングエコシステムにおけるDeFi成長を示す。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Masumi Network Deploys on Hydra Layer 2 for Agent Coordination",
+        "title_ja": "MasumiネットワークがHydraレイヤー2にデプロイ、エージェント調整を実現",
+        "summary_en": "Masumi Network integration with Hydra enables AI agents to coordinate efficiently while maintaining low transaction costs. Cardano settlement layer combined with Hydra scalability provides trust and performance for agent-based systems.",
+        "summary_ja": "MasumiネットワークのHydra統合により、AIエージェントが低トランザクションコストで効率的に調整可能に。Cardanoの決済レイヤーとHydraのスケーラビリティがエージェントベースシステムに信頼と性能を提供。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Dev_tools",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@Cryptofly777",
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Major DRep Votes NO on Cardano DeFi Liquidity Budget Withdrawal Proposal",
+        "title_ja": "大規模DRepがCardano DeFiリキュイディティ予算引き出し提案に反対票",
+        "summary_en": "DRep ItsDave_ADA with 60.59M ADA voting power voted NO on the Cardano DeFi Liquidity Budget Withdrawal 1 governance action, noting difficulty in the decision despite recognizing the proposal's value. This reflects ongoing treasury allocation scrutiny.",
+        "summary_ja": "6,059万ADAの投票力を持つDRep ItsDave_ADAがCardano DeFiリキュイディティ予算引き出し提案1に反対票を投じた。提案の価値を認めながらも厳格な予算配分監視の姿勢を示す。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Governance_action",
+          "Holder"
+        ],
+        "sources": [
+          "@ItsDave_ADA"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Cardano Native Assets Confirmed Unfrozen via USDCx Integration",
+        "title_ja": "CardanoネイティブアセットがUSDCx統合で凍結不可性を確認",
+        "summary_en": "StakeWithPride highlights that ADA native assets cannot be frozen, contrasting with some blockchain implementations. USDCx deployment on Cardano benefits from this immutable asset characteristic, enhancing user protection.",
+        "summary_ja": "CardanoのネイティブアセットはUSDCxを含めて凍結不可という特性が確認された。これはCardanoの資産セキュリティ特性を強調し、ユーザー保護を向上させる。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "Holder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Launches Logan AI Agent for 24/7 Cardano Education",
+        "title_ja": "チャールズ・ホスキンソンがCardano教育用AIエージェント「Logan」をローンチ",
+        "summary_en": "Charles Hoskinson deployed Logan (Exit Liquidity Lobster), an autonomous AI agent on Moltbook for continuous Cardano educational content, governance updates, and ecosystem information. Represents integration of AI agents into Cardano's communication strategy.",
+        "summary_ja": "チャールズ・ホスキンソンがMoltbookにログイン（Exit Liquidity Lobster）という自動化AIエージェントをデプロイ。Cardano教育コンテンツ、ガバナンス更新、エコシステム情報の24時間配信を実現。",
+        "importance": 3,
+        "audience": [
+          "Governance_tool",
+          "Ecosystem_adoption",
+          "Builder"
+        ],
+        "sources": [
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Midnight Privacy Blockchain Expands with Japan Tour and Kumamoto Event",
+        "title_ja": "Midnightプライバシーブロックチェーンが日本ツアーで熊本イベント開催",
+        "summary_en": "Midnight Network conducted educational tour across Japan including Fukuoka and Kumamoto events with @IOGroup, promoting privacy-focused ZK technology adoption. Reflects institutional expansion into Asian markets for Cardano ecosystem.",
+        "summary_ja": "MidnightネットワークがIOGroupと共に日本ツアーを実施。福岡、熊本でのイベント開催によりプライバシーZK技術の採用を促進。Cardanoエコシステムのアジア���場への機関的拡大を示す。",
+        "importance": 3,
+        "audience": [
+          "Institutional",
+          "Ecosystem_adoption",
+          "Builder"
+        ],
+        "sources": [
+          "@taichiyokoyama"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Creators Building Sustainable On-Chain Careers at Nuluna Festival",
+        "title_ja": "Nuluna Festivalでクリエイターがオンチェーン持続可能キャリアを構築",
+        "summary_en": "Cardano official highlights creator economy discussion from Barcelona's Nuluna Festival, showcasing real on-chain ownership models, community engagement, and sustainable income opportunities for artists and builders on Cardano.",
+        "summary_ja": "Cardano公式がバルセロナのNuluna Festivalからクリエイターエコノミーディスカッションをハイライト。オンチェーン所有権モデル、コミュニティエンゲージメント、アーティスト向け持続可能収益機会を示す。",
+        "importance": 3,
+        "audience": [
+          "Ecosystem_adoption",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Governance Participation Emphasized for African Cardano Stakeholders in Voltaire Era",
+        "title_ja": "ボルテール��代のアフリカCardanoステークホルダーにガバナンス参加を強調",
+        "summary_en": "DRep Musa Ridwan Itopa promotes active governance delegation in Nigeria and Africa, emphasizing that staked ADA holders can delegate voting power to DReps for decentralized governance participation during Cardano's Voltaire phase.",
+        "summary_ja": "DRep Musa Ridwan ItopaがナイジェリアとアフリカのCardanoステークホルダーに対し、ADA投票権をDRepに委任して分散ガバナンスに参加することを推進。ボルテール段階での参加強化を強調。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Governance_tool",
+          "Holder"
+        ],
+        "sources": [
+          "@MusaRidwanItopa"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Agentic AI Goes Live on Sokosumi and Masumi Network",
+        "title_ja": "エージェント型AIがSokosumi・MasumiNetworkでライブスタート",
+        "summary_en": "Agentic AI functionality launches on Sokosumi and Masumi Network, enabling autonomous agent operations with dynamic pricing and refund mechanisms. Demonstrates Cardano's capability to support advanced agent-based protocols.",
+        "summary_ja": "エージェント型AIがSokosumi・MasumiNetworkでライブスタート。動的価格設定と��ファンドメカニズムを備えた自動エージェント操作が可能に。Cardanoが高度なエージェントベースプロトコルをサポート可能なことを実証。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Ecosystem_adoption",
+          "Dev_tools"
+        ],
+        "sources": [
+          "@Padierfind"
+        ]
+      }
+    ],
+    "tweetCount": 77,
+    "generatedAt": "2026-03-06T15:24:28.098Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-02",
+    "highlights": [
+      {
+        "category": "governance_action",
+        "title_en": "SPO Roundtable: Transaction and Block Memory Units Governance Action",
+        "title_ja": "SPOラウンドテーブル：トランザクション・ブロックメモリユニット ガバナンスアクション",
+        "summary_en": "Cardano official announces SPO Roundtable Talk on February 3rd discussing 'Increase Transaction and Block Memory Units (Part 1 of 2)' governance action to provide DApp developers greater flexibility in building and executing on Cardano.",
+        "summary_ja": "カルダノが2月3日のSPOラウンドテーブルでトランザクションおよびブロックメモリユニット増加のガバナンスアクション（第1部）を議論し、DAppデベロッパーの柔軟性向上を目指す。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Circle Integrates Native USDCx on Cardano via CNT",
+        "title_ja": "CircleがカルダノへネイティブUSDCxを統合（CNT経由）",
+        "summary_en": "USDCx (powered by Circle's xReserve protocol) launches natively on Cardano as a Cardano Native Token (CNT), not a bridge, representing a major institutional adoption milestone and ecosystem liquidity improvement.",
+        "summary_ja": "CircleがUSDCxをカルダノネイティブトークン（CNT）として直接展開し、機関投資家採用とエコシステム流動性の向上を実現。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@JuanitaJaramill"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "CGOV: New On-Chain Governance Insights Platform Launches",
+        "title_ja": "CGOV：オンチェーン・ガバナンス分析プラットフォームが始動",
+        "summary_en": "Mesh SDK and Sidan Lab introduce CGOV, a dedicated platform providing insights and overview of Cardano on-chain governance proposals, enhancing transparency and DRep decision-making.",
+        "summary_ja": "MeshSDKとSidanLabが共同でCGOVをリリース。カルダノのオンチェーン・ガバナンス提案の分析プラットフォームとして機能。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@meshsdk",
+          "@SLFMR1"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "FluidTokens Reaches 5M ADA TVL, Lend-Swap Fusion Coming",
+        "title_ja": "FluidTokens TVL 500万ADAを達成、貸出・スワップ統合機能来月",
+        "summary_en": "FluidTokens surpasses 5M ADA TVL milestone with upcoming feature enabling lend and swap in single transaction via SteelSwap integration, signaling DeFi momentum on Cardano.",
+        "summary_ja": "FluidTokensがTVL 500万ADAを達成。SteelSwap統合により単一トランザクション内の貸出・スワップが可能に。カルダノDeFi拡大の兆候。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@FluidTokens",
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Cardano Governance: Multi-Stakeholder Approval System Highlighted",
+        "title_ja": "カルダノ：複数ステークホルダー承認システム",
+        "summary_en": "TapTools emphasizes Cardano's advanced on-chain governance requiring transparent approval across DReps, SPOs, and Constitutional Committee—setting industry standard for decentralized decision-making.",
+        "summary_ja": "カルダノはDRep、SPO、憲法委員会による透明的な多層承認を要求し、業界最先端のガバナンスモデルを実現。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO"
+        ],
+        "sources": [
+          "@TapTools"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Privacy Layer Emphasizes Programmable Privacy with Compliance",
+        "title_ja": "Midnight：プログラマブルプライバシーとコンプライアンスの融合",
+        "summary_en": "Bigpey highlights Midnight's unique approach to privacy coins: selective privacy (hide what needs hiding, show what needs showing) enabling smart compliance—differentiating from all-or-nothing privacy competitors.",
+        "summary_ja": "Midnightはプログラマブルプライバシーでコンプライアンスに対応。選択的な情報開示により、従来のプライバシーコイン（全て隠蔽型）と差別化。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@bigpey"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Masumi Network: Enterprise-Ready AI Agent Payment Infrastructure",
+        "title_ja": "Masumi Network：エンタープライズAIエージェント決済インフラ",
+        "summary_en": "Padierfind showcases Masumi's 1.5-year development with live enterprise users, offering API standardization and paywall integration enabling AI agents to earn revenue directly on Cardano.",
+        "summary_ja": "Padierfindが1.5年の開発を経たMasumiを紹介。AIエージェントがカルダノ上で直接収益化できるペイウォール機能を提供。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "IOHK Enhances Security Infrastructure with HSM Key Management",
+        "title_ja": "IOHK：HSMキー管理システムでセキュリティ強化",
+        "summary_en": "Charles Hoskinson reports significant operational and environmental security improvements to Logan exit liquidity lobster infrastructure using HSM key management and containerized Docker system on WSL.",
+        "summary_ja": "IohkがHSMキー管理とDockerコンテナ化によりセキュリティ強化。ハッキング後の包括的な改善を実施。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Midnight Foundation Japan Tour 2026 Expansion",
+        "title_ja": "Midnight Foundation日本ツアー2026（沖縄開催）",
+        "summary_en": "Midnight ecosystem continues institutional outreach expansion with Japan tour reaching Okinawa, demonstrating Asia-focused adoption strategy for programmable privacy infrastructure.",
+        "summary_ja": "Midnight Foundationが日本ツアーを沖縄に拡大。アジア地域での機関投資家獲得戦略を推進。",
+        "importance": 2,
+        "audience": [
+          "Institutional"
+        ],
+        "sources": [
+          "@adamKDean",
+          "@btbfpark"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "MinSwap Token Buyback Program: >180K ADA Deployed in January",
+        "title_ja": "MinSwap：1月トークン買い戻し180,000ADA以上実施",
+        "summary_en": "MinSwap reports transparent live tracking of $MIN token buybacks using >180,000 ADA in January, demonstrating sustainable token economics and community value return mechanisms.",
+        "summary_ja": "Minswapがトークン買い戻しプログラムで月間180,000ADA以上を使用。透明性のあるコミュニティ還元メカニズムを実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      }
+    ],
+    "tweetCount": 97,
+    "generatedAt": "2026-03-06T15:24:57.400Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-03",
+    "highlights": [
+      {
+        "category": "dev_tools",
+        "title_en": "Yaci Store 2.0.0 Released - Production-Grade Cardano Data Infrastructure",
+        "title_ja": "Yaci Store 2.0.0リリース - 本番環境対応のCardanoデータインフラ",
+        "summary_en": "Cardano Foundation announces Yaci Store 2.0.0 with improved ledger/governance state derivation, new plugin framework, and production-grade performance enhancements for reliable DApp data access.",
+        "summary_ja": "Cardano Foundationが改善されたレジャー・ガバナンス状態導出、新プラグインフレームワーク、本番環境対応のパフォーマンス改善を備えたYaci Store 2.0.0をリリース。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "DRep",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "SPO Table Talk: Parameter Change GA Discussion on Plutus Execution Limits",
+        "title_ja": "SPOテーブルトーク：Plutus実行制限のパラメータ変更GAについて",
+        "summary_en": "Cardano hosts SPO Table Talk on February 3 at 7pm UTC to address questions about proposed Parameter Change Governance Action affecting Plutus execution limits.",
+        "summary_ja": "Cardanoは2月3日21時UTCにSPOテ��ブルトークを開催し、Plutus実行制限に関するパラメータ変更提案についての質問に対応。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDM/fGLD Liquidity Pool Live on Minswap - Tokenized Gold Trading",
+        "title_ja": "MinswapでUSDM/fGLDリクイディティプール稼働 - トークン化ゴールド取引開始",
+        "summary_en": "100,000 USD liquidity pool for USDM/fGLD now live on Minswap, enabling tokenized gold trading via DEX aggregators and arbitrage opportunities on Cardano.",
+        "summary_ja": "MinswapでUSDM/fGLDの100,000 USD流動性プールが稼働開始、DEX集約器を通じたトークン化ゴール取引と裁定取引を可能に。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Cardano Foundation at Digital Assets Forum London - February 5-6",
+        "title_ja": "ロンドンのDigital Assets ForumでCardano Foundation出展 - 2月5-6日",
+        "summary_en": "Cardano Foundation serves as Diamond sponsor at DAF London with keynotes from @F_Gregaard and @Thomas_ADA_, hosting booth with major ecosystem partners.",
+        "summary_ja": "Cardano FoundationがロンドンのDAFでダイヤモンドスポンサーとして出展、@F_Gregoardおよび@Thomas_ADAからの基調講演と複数エコシステムパートナーとのブース。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "Builder",
+          "DRep",
+          "Institutional"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "SuperNode (TxPipe) - Cardano Infrastructure Simplification Dev Office Hours",
+        "title_ja": "SuperNode（TxPipe）- Cardanoインフラ簡素化に関する開発者オフィスアワー",
+        "summary_en": "TxPipe's Santiago Carmuega presents SuperNode, a simplified and scalable Cardano infrastructure solution, at Cardano Dev Office Hours on February 6.",
+        "summary_ja": "TxPipeのSantiago Carmuegazが2月6日のCardano開発者オフィスアワーでSuperNodeを紹介、Cardanoインフラの簡素化とスケーラビリティを実現。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "SPO",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Logan Integration Tool - Custom Liquidity Solutions for Cardano Projects",
+        "title_ja": "Logan統合ツール - Cardanoプロジェクト向けカスタム流動性ソリューション",
+        "summary_en": "Charles Hoskinson announces Logan exit liquidity tool integration for Cardano projects, inviting documentation submissions for custom integration in next release.",
+        "summary_ja": "Charles HoskinsonがCardanoプロジェクト向けのLogan出口流動性ツール統合を発表、ドキュメント提出でカスタム統合を次リリースで実現予定。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens Reaches ATH TVL - 6% APY Lending Incentive Program",
+        "title_ja": "FluidTokens が過去最高TVLに達成 - 6% APYレンディングインセンティブプログラム",
+        "summary_en": "FluidTokens achieves all-time high TVL with new 6% APY lending incentive for ADA suppliers over 3 months, combining staking rewards and protocol incentives.",
+        "summary_ja": "FluidTokensが過去最高のTVLを達成、ADA供給者向けに3か月間の6% APYレンディングインセンティブプログラムを実施中。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Newsletter Revamp - Simply Blockchain Educational Initiative",
+        "title_ja": "Cardanoニュースレター刷新 - Simply Blockchainの実用教育イニシアティブ",
+        "summary_en": "Cardano Foundation launches Simply Blockchain newsletter focused on practical, everyday blockchain use-cases to simplify blockchain adoption.",
+        "summary_ja": "Cardano Foundationが実践的で日常的なブロックチェーン活用例に焦点を当てたSimply Blockchainニュースレターを立ち上げ。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      }
+    ],
+    "tweetCount": 104,
+    "generatedAt": "2026-03-06T15:25:23.586Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-04",
+    "highlights": [
+      {
+        "category": "institutional",
+        "title_en": "CME Launches Cardano Futures on February 9",
+        "title_ja": "CME、2月9日にカルダノ先物を開始",
+        "summary_en": "CME Group, the world's largest derivatives exchange, will launch cash-settled futures for Cardano ($ADA), marking significant institutional adoption and potential price catalyst.",
+        "summary_ja": "世界最大の先物取引所CME Groupが、カルダノ（$ADA）の現金決済先物を2月9日に開始予定。制度的採用と潜在的な価格上昇要因となる可能性がある。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@mahaliyus"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Protocol Version 11 Hard Fork Governance Actions Under Vote",
+        "title_ja": "プロトコルバージョン11ハードフォークのガバナンス投票進行中",
+        "summary_en": "Cardano governance voting on Protocol v11 hard fork naming (van Rossem) and DeFi Liquidity Budget actions, with DRep participation active and SPO Table Talk discussions underway.",
+        "summary_ja": "カルダノのプロトコルv11ハードフォーク命名（van Rossem）とDeFi流動性予算に関するガバナンス投��が進行中。DRep参加とSPOテーブルトーク討論が活発。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@YoroiWallet",
+          "@Cardano",
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Maintains Top 15 Position Among Major Assets",
+        "title_ja": "カルダノは主要資産の上位15位を維持",
+        "summary_en": "$ADA has remained in the top 15 since launch, rivaling only Bitcoin and Ethereum for market resilience and longevity in the cryptocurrency space.",
+        "summary_ja": "$ADAはローンチ以来上位15位を維持。ビットコインとイーサリアムのみと並んで、暗号資産市場での耐性と継続性を示している。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@TapTools"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Foundation January 2026 Progress Report Released",
+        "title_ja": "カルダノ財団2026年1月進捗報告書を発表",
+        "summary_en": "Cardano Foundation delivered on-chain audit firsts, enterprise use cases, improved developer tooling, and active DRep governance participation, demonstrating progress across adoption and technology.",
+        "summary_ja": "カルダノ財団がオンチェーン監査初例、エンタープライズユースケース、開発者ツール改善、DREPガバナンス参加を報告。採用と技術の進捗を実証。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Fluid Protocol Offers 6% APY Incentives; Community Calls for Adoption Focus",
+        "title_ja": "Fluid Protocolが6% APY報酬を提供; コミュニティが採用拡大を要求",
+        "summary_en": "Fluid offers guaranteed 6% APY on ADA with no liquidation, while community members emphasize need for circular economy and concrete adoption results over governance discussions.",
+        "summary_ja": "Fluidが非流動化型の保証6% APYを提供。コミュニティはガバナンス議論より具体的な採用結果と経済循環が必要と強調。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@FluidTokens",
+          "@HinsonSIDAN",
+          "@Btc4thepeople"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Japanese ADA Holders Express Governance Complexity Concerns",
+        "title_ja": "日本のADA��ルダーがガバナンスの複雑さに懸念を表明",
+        "summary_en": "Japanese community members criticize governance process as overly complicated, deterring everyday holders from participation and calling for more adoption-focused priorities.",
+        "summary_ja": "日本のコミュニティメンバーがガバナンスプロセスの過度な複雑さを批判。一般ホルダーの参加を妨げ、採用重視の優先順位を求める。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@cardano_gourmet"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "SPO Call Scheduled for February 5: Hard Fork Roadmap and Parameter Changes",
+        "title_ja": "2月5日SPOコール: ハードフォークロードマップとパラメータ変更",
+        "summary_en": "First SPO call of 2026 scheduled for February 5, featuring hard fork WG updates, live parameter change action, and roadmap discussions from core teams.",
+        "summary_ja": "2026年最初のSPOコールが2月5日に予定。ハードフォークWG更新、ライブパラメータ変更アクション、コアチームのロードマップ討論。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Blockchain Company Submits First Governance Action: Decentralization Progress",
+        "title_ja": "ブロックチェーン企業が最初のガバナンスアクションを提出: 分散化の進捗",
+        "summary_en": "New blockchain company competition submitting governance actions demonstrates Cardano's growing decentralization and increased stakeholder participation beyond core teams.",
+        "summary_ja": "新しいブロックチェーン企業がガバナンスアクションを提出。カルダノの分散化拡大とコアチーム外の利害関係者参加の増加を示す。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO"
+        ],
+        "sources": [
+          "@ChileStakepo"
+        ]
+      }
+    ],
+    "tweetCount": 77,
+    "generatedAt": "2026-03-06T15:25:47.794Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-05",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "Leios Scaling Protocol Reaches 1,000 TPS Milestone with Public Testnet Launch Planned",
+        "title_ja": "Leios スケーリングプロトコルが 1,000 TPS 達成、パブリックテストネット公開予定",
+        "summary_en": "IOG announced Leios will deliver 50x throughput increase, enabling SPOs to sustain operations from transaction fees alone. Next phase includes showcasing 1,000 TPS in controlled environment and launching public testnet for community integration.",
+        "summary_ja": "IOGがLeiosで50倍のスループット向上を発表。SPOがトランザクション手数料のみで運営持続可能に。次段階として1,000 TPSのデモとパブリックテストネット公開予定。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "DRep",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Included in Coinbase's COIN50 Index as 7th Largest Component",
+        "title_ja": "Cardanoが米Coinbaseの COIN50 インデックスに組み込まれ、7番目の規模",
+        "summary_en": "Coinbase launched COIN50 perpetual-style futures contract in the US, marking the first time American investors can gain exposure to top 50 digital assets through a single product. Cardano $ADA ranks as the 7th largest component.",
+        "summary_ja": "Coinbaseが米国初のCOIN50先物商品を開始。米国投資家が初めて単一商品でトップ50資産への露出が可能に。CardanoはADAで7番目の規模成分。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Institutional"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Foundation Releases Yaci Store 2.0 - Next-Generation On-Chain Data Indexer",
+        "title_ja": "Cardano Foundation、Yaci Store 2.0 リリース - 次世代オンチェーン データインデクサー",
+        "summary_en": "Yaci Store 2.0 provides developers with direct on-chain data access including governance state tracking and rewards data with modular plugins. Production-ready performance enables streamlined blockchain data indexing.",
+        "summary_ja": "Yaci Store 2.0はガバナンス状態と報酬追跡を含むオンチェーンデータへの直接アクセスを提供。モジュラープラグイン対応で本番環境対応のパフォーマンス実現。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@TapTools"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Indigo Protocol V3 Integrates Orcfax as Decentralized Oracle Solution",
+        "title_ja": "Indigo Protocol V3、Orcfax の分散型オラクルソリューション統合",
+        "summary_en": "Indigo Protocol finally decentralizes its Oracle solutions with Orcfax integration in V3, providing a best-in-class Cardano-native oracle without reliance on centralized entities.",
+        "summary_ja": "Indigo ProtocolがV3でOrcfax分散型オラクルを統合。Cardanoネイティブで中央管理者に依存しない最高水準のオラクルソリューション実現。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@IndigoPWG"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Minswap Boosts MIN-NIGHT Liquidity Pool with 70K ADA TVL Enhancement",
+        "title_ja": "Minswap、MIN-NIGHT リクイディティプール を 70K ADA で強化",
+        "summary_en": "Minswap added 70K ADA in TVL to strengthen $MIN's role as key trading avenue within Cardano ecosystem, while supporting Midnight ecosystem integration.",
+        "summary_ja": "Minswapが70K ADAのTVLを追加してMINの中核取引経路としての役割強化。Midnightエコシステム統合をサポート���",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Initiates Community Project Documentation Drive with Lace Integration",
+        "title_ja": "Charles Hoskkinson、Lace統合によるコミュニティプロジェクト文書化推進",
+        "summary_en": "Charles launched initiatives to catalog Cardano memecoin, NFT, and culture projects through integrated Lace wallet system, introducing plugin ecosystem ('Pluggy McPlugFace') for Logan project evaluation.",
+        "summary_ja": "CharlesがLace統合でCardanoメメコイン、NFT、文化プロジェクトのカタログ化を開始。Logan評価用プラグインシステム「Pluggy McPlugFace」導入。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Midnight Japan Tour 2026 Concludes Regional Tour, Arrives in Tokyo",
+        "title_ja": "Midnight Japan Tour 2026、東京での最終目的地に到着",
+        "summary_en": "Midnight Foundation concluded regional tour across Hokkaido, Osaka, Fukuoka, and Okinawa, now heading to Tokyo for final destination. Tour highlights Japan's grassroots Cardano community engagement despite language barriers.",
+        "summary_ja": "Midnightが北海道、大阪、福岡、沖縄のツアーを終了し東京へ。言語障壁を乗り越えた日本のCardanoコミュニティ参加を実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Community"
+        ],
+        "sources": [
+          "@taichiyokoyama"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Fluid Protocol Reaches Record Activity and TVL Metrics with Sustained Growth",
+        "title_ja": "Fluid Protocol、記録的なアクティビティと TVL で持続的成長達成",
+        "summary_en": "Fluid achieved record-breaking metrics across collateral deposits, unique wallets, and TVL, demonstrating robust lending protocol adoption within Cardano DeFi ecosystem.",
+        "summary_ja": "Fluidが担保預金、ユニークウォレット、TVLで過去最高を達成。Cardano DeFiエコシステム内の堅牢な融資プロトコル採用を実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "SPO Parameter Update Governance Action Vote - Immediate Submission Required",
+        "title_ja": "SPO パラメータ更新ガバナンス提案投票 - 緊急投票対応",
+        "summary_en": "ATADA Stakepool issued urgent call for all SPOs to submit votes on active parameter update governance action immediately.",
+        "summary_ja": "ATADAが全SPOに対し、アクティブなパラメータ更新ガバナンス提案への即時投票を要請。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "CC",
+          "DRep"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Multi-Vertical DeFi Platforms and DePIN Projects Positioning on Cardano and Midnight",
+        "title_ja": "マルチバーティカル DeFi プラットフォームが Cardano と Midnight に展開",
+        "summary_en": "ATLAS DEFI and House of Titans announced multi-year Cardano building experience with DeFi, NFT, and DePIN infrastructure expansion across Cardano and Midnight ecosystems.",
+        "summary_ja": "ATLAS DEFIとHouse of TitansがCardanoで複数年のDeFi・NFT実績を基に、CardanoとMidnightへのDePINインフラ展開を発表。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@ATLAS_DEFI_",
+          "@Titans_Depin"
+        ]
+      }
+    ],
+    "tweetCount": 116,
+    "generatedAt": "2026-03-06T15:26:19.334Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-06",
+    "highlights": [
+      {
+        "category": "key_person",
+        "title_en": "IOG Announces McMode for 2026",
+        "title_ja": "IOGが2026年のMcModeを発表",
+        "summary_en": "Charles Hoskinson announces McMode as IOG's 2026 innovation initiative, following the Wolf Mode introduction in 2024, signaling continued protocol development focus.",
+        "summary_ja": "チャールズ・ホスキンソンがIOGの2026年イノベーション「McMode」を発表。2024年のWolf Modeに続く重要な開発イニシアティブ。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Two Critical Governance Actions Approved by Cardano Foundation",
+        "title_ja": "カルダノ財団が2つの重要ガバナンスアクションを承認",
+        "summary_en": "Cardano Foundation votes YES on Net Change Limit (350M ADA ceiling, budget cycle realignment) and Increase Transaction/Block Memory Units (Part 1), improving developer flexibility and network scalability.",
+        "summary_ja": "カルダノ財団がNet Change Limitと取引・ブロックメモリユニット増加の2つの重要パラメータ変更に承認。スケーラビリティ向上とDX改善。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "SPO Community Urged to Vote on Live Parameter Proposals",
+        "title_ja": "SPOに対するガバナンスアクション投票の呼びかけ",
+        "summary_en": "Cardano Foundation calls for all ADA holders, DReps, and SPOs to review and vote on live governance proposals affecting core network parameters and developer experience.",
+        "summary_ja": "カルダノ財団がADA保有者、DRep、SPOに対しネットワークパラメータに影響する提案への投票を呼びかけ。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Major Gaming Partnership: AnvilDevAgency x InfinityRisingX",
+        "title_ja": "ゲーミング大型パートナーシップ発表：AnvilDevAgency x InfinityRisingX",
+        "summary_en": "AnvilDevAgency and InfinityRisingX announce strategic partnership to support Web3 gaming infrastructure on Cardano, signaling major ecosystem expansion in gaming vertical.",
+        "summary_ja": "AnvilDevAgencyとInfinityRisingXがCardanoでのWeb3ゲーミングインフラ支援の戦略的パートナーシップを発表。ゲーミング分野の大型展開。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@AnvilDevAgency",
+          "@keyofjoshua"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "AdaLink Onboards 89 Users in 48 Hours Post-Launch",
+        "title_ja": "AdaLinkが48時間で89新規ユーザーをオンボード",
+        "summary_en": "AdaLink launches successfully with 89 new users in first 48 hours; marketing initiatives begin next week to drive Cardano dApp adoption.",
+        "summary_ja": "AdaLinkが初期48時間で89新規ユーザーをオンボード。来週からマーケティング推進開始。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@AdaLink_io"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "L4VA Protocol Launches on Cardano Mainnet",
+        "title_ja": "L4VAプロトコルがCardanoメインネットでローンチ",
+        "summary_en": "L4VA Protocol goes live on Cardano mainnet with Oracle Vault alpha, enabling ORACLE token minting and early L4VA rewards for asset fractionalization applications.",
+        "summary_ja": "L4VA���ロトコルのメインネットローンチ。Oracle VaultでORACLEトークン生成開始。資産分割化プラットフォームとして機能。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@L4VAprotocol"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Japan Tour 2026 - Tokyo Meetup at Capacity",
+        "title_ja": "Midnight Japan Tour 2026 - 東京ミートアップが満席",
+        "summary_en": "Midnight technology promotional tour reaches Tokyo with high demand exceeding venue capacity; cancellations requested to manage attendance.",
+        "summary_ja": "Midnight Japan Tour 2026の東京ミートアップが会場キャパ超過。キャンセル対応要請。プライバシー技術の高い関心を示唆。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@btbfpark"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Cardano Foundation CEO Discusses Blockchain Market Infrastructure on CNBC",
+        "title_ja": "カルダノ財団CEOがCNBCでブロックチェーン市場基盤を論議",
+        "summary_en": "Cardano Foundation CEO Fredrik Gregaard appears on CNBC SquawkBox Europe highlighting blockchain's potential for efficient, accessible, trusted financial infrastructure.",
+        "summary_ja": "カルダノ財団CEOがCNBCに出演。ブロックチェーンによる金融市場基盤の効率性・アクセス性・信頼性向上の可能性を議論。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      }
+    ],
+    "tweetCount": 70,
+    "generatedAt": "2026-03-06T15:26:43.634Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-07",
+    "highlights": [
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Concludes Midnight Japan Tour 2026",
+        "title_ja": "チャールズ・ホスキンソン、Midnight日本ツアー2026を完了",
+        "summary_en": "IOHK Charles and Taichi Yokoyama completed the 5-city Midnight Japan Tour 2026 with final event in Tokyo, demonstrating strong community engagement across Hokkaido, Osaka, Fukuoka, Okinawa, and Tokyo. The tour showcased the warmth and passion of the Japanese Cardano community.",
+        "summary_ja": "IOHK Charles氏とTaichi Yokoyama氏は、東京での最終イベントを含む日本全5都市のMidnight Japan Tour 2026を完了。日本のCardanoコミュニティの温かさと熱量を確認。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@IOHK_Charles",
+          "@taichiyokoyama",
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Programmable Tokens (CIP-113) Development Phase",
+        "title_ja": "プログラム可能トークン（CIP-113）開発フェーズ",
+        "summary_en": "Cardano Developer Office Hour session detailed technical mechanics of programmable tokens (CIP-113), representing foundational evolution for asset capabilities on Cardano. Full recording available with key discussion on programmable token logic and implementation.",
+        "summary_ja": "CardanoのDeveloper Office Hourでプログラム可能トークンのCIP-113技術実装を解説。ネイティブトークンからプログラム可能トークンへの移行について議論。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Weekly Development Update #97: Hard Fork & Governance Progress",
+        "title_ja": "週次開発レポート#97：ハードフォーク & ガバナンス進捗",
+        "summary_en": "Intersect published development update #97 covering current governance actions, committee updates, and hard fork progress. Development team continues advancement on core infrastructure and protocol improvements.",
+        "summary_ja": "Intersect週次開発レポート#97公開。現在のガバナンス提案、委員会更新、ハードフォーク進捗をカバー。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Intersect Presence at Consensus Hong Kong 2026",
+        "title_ja": "Consensus Hong Kong 2026でのIntersect参加",
+        "summary_en": "Intersect will maintain Cardano Booth #3700 at Consensus Hong Kong 2026 (Feb 10+), connecting with global builders, enterprises, and Web3 community. Event features speakers from Binance, Solana, Cardano, JP Morgan, and Ethereum Foundation.",
+        "summary_ja": "IntersectはConsensus Hong Kong 2026でCardanoブース#3700を設置。Binance、Solana、JP Morgan等の大手スピーカーが参加。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@IntersectMBO",
+          "@RealityOnChain"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Node Performance Baseline Re-established for v10.5-10.6",
+        "title_ja": "ノードv10.5-10.6のパフォーマンスベースライン再確立",
+        "summary_en": "Latest development report shows significant improvements in tracing and tooling with performance baselines re-established for Node versions 10.5-10.6. Mithril 2603.1 distribution now includes DMQ support.",
+        "summary_ja": "最新開発レポートでトレーシングツール大幅改善。ノードv10.5-10.6のパフォーマンスベースライン再確立。Mithril 2603.1がDMQサポート搭載。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@taichiyokoyama"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "DRep Voting Reminder: Time-Sensitive Governance Actions",
+        "title_ja": "DRep投票リマインダー：緊急ガバナンス提案",
+        "summary_en": "ATADA Stakepool alerts DReps about urgent voting needs on pending governance actions with approaching deadlines. Discussion ongoing regarding voting weight distribution between SPOs and Mithril signers.",
+        "summary_ja": "ATADA Stakepoolが投票期限が迫ったガバナンス提案についてDRepに警告。SPOとMithril署名者の投票ウェイト分配について議論。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "SPO"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "BikeID Real-World Solutions Development",
+        "title_ja": "BikeID現実世界ソリューション開発",
+        "summary_en": "BikeID project continues pushing forward with partnership conversations and focus on real-world adoption. Seeking collaboration with other Cardano builders working on meaningful solutions.",
+        "summary_ja": "BikeIDプロジェクトがパートナーシップ交渉と実世界採用推進を継続。他のCardanoビルダーとの協業機���を模索中。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@BikeIDNumber"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano High Assurance Smart Contract Verification Tool Early Access",
+        "title_ja": "Cardano High Assurance検証ツール早期アクセス",
+        "summary_en": "Early access program now open for Cardano High Assurance smart contract verification tool. Developers building on Cardano encouraged to register for early access to this critical security tooling.",
+        "summary_ja": "Cardano High Assurance スマートコントラクト検証ツール早期アクセスプログラム受付開始。セキュリティ確保のための重要なツール。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@taichiyokoyama"
+        ]
+      }
+    ],
+    "tweetCount": 63,
+    "generatedAt": "2026-03-06T15:27:09.237Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-08",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano's Major 2026 Roadmap: Midnight Mainnet, USDCx, and Bitcoin Integration",
+        "title_ja": "Cardano2026年のロードマップ：Midnightメインネット、USDCx、Bitcoin統合",
+        "summary_en": "Cardano entities are coordinating major ecosystem launches in 2026 including Midnight mainnet with $NIGHT staking rewards for ADA holders, Circle's USDCx privacy stablecoin, and Bitcoin liquidity via FluidTokens. All Cardano entities ('The Pentad') are working together after years of separation.",
+        "summary_ja": "Cardanoエコシステムは2026年にMidnightメインネット（ADAステーカー向けNIGHTリワード）、Circle のUSDCxプライバシーステーブルコイン、FluidTokensを通じたBitcoin流動性などの主要な立ち上げを調整中。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@Sssebi"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Productization Strategy: OS Launch and Developer Onboarding",
+        "title_ja": "Midnightの製品化戦略：OSローンチと開発者オンボーディング",
+        "summary_en": "Sebastien Gllmt announces Midnight OS, a no-download platform launching later in 2026 to improve user and developer onboarding experience. Focus is on making Midnight's advanced tech accessible and enabling users to 'fall in love' with the platform.",
+        "summary_ja": "SebastienGllmtがMidnight OSを発表。2026年後半にローンチ予定。ダウンロード不要なプラットフォームで、ユーザーと開発者のオンボーディング体験を向上させる。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@SebastienGllmt"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "AI Agent Integration on Cardano: Masumi Network and Enterprise Adoption Growth",
+        "title_ja": "CardanoのAIエージェント統合：MasumiNetworkとエンタープライズ採用の成長",
+        "summary_en": "Masumi Network enables agent-to-agent communication on Cardano combining decentralized AI, decision logs, and stablecoin payments. Multiple projects (Padierf, Finest Tokenize, Iagon) advancing AI and RWA adoption on Cardano with real enterprise traction.",
+        "summary_ja": "MasumiNetworkがCardano上でエージェント間通信を実現。複数プロジェクト（Padierf、Finest Tokenize、Iagon）がAIおよびRWA採用を進める。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@Definews_Info",
+          "@mr_cata"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "CME Group Launches Cardano Futures on February 9, 2026",
+        "title_ja": "CMEグループ、2026年2月9日にCardanoフューチャーズをローンチ",
+        "summary_en": "CME Group is launching cryptocurrency futures for Cardano, Chainlink, and Stellar, expanding its crypto derivatives offerings. Futures markets open Sunday evenings, expanding institutional trading access to Cardano.",
+        "summary_ja": "CMEグループがCardano、Chainlink、Stellarのクリプト先物をローンチ。機関投資家のCardanoへのアクセスを拡大。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "CC",
+          "DRep"
+        ],
+        "sources": [
+          "@grok"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Node 10.5.4 Release Available for SPOs",
+        "title_ja": "Cardanoノード10.5.4リリースがSPO向けに利用可能",
+        "summary_en": "Cardano node version 10.5.4 is now available. SPOs should update their infrastructure to maintain network security and performance.",
+        "summary_ja": "Cardanoノードv10.5.4がリリース。SPOはネットワークセキュリティとパフォーマンスを維持��るため更新が必要。",
+        "importance": 4,
+        "audience": [
+          "SPO"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Cardano Network Parameters: Small Tweaks, No Hard Forks, Big Impact",
+        "title_ja": "Cardanoネットワークパラメータ：小さな調整で大きな影響",
+        "summary_en": "Cardano's protocol minor parameter adjustments maintain network stability without requiring hard forks, demonstrating efficient governance approach to network maintenance.",
+        "summary_ja": "Cardanoのプロトコルマイナーパラメータ調整はハードフォークなしでネットワーク安定性を維持。効率的なガバナンスアプローチを示す。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@LidoNation"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Cardano Foundation Podcast: Institutional Adoption of Tokenized Assets",
+        "title_ja": "Cardano Foundation Podcast：トークン化資産の機関採用",
+        "summary_en": "Cardano CF interviews LCX CEO Monty Metzger on tokenized assets and institutional demand. Discussion highlights Cardano's governance model advantages in institutional blockchain adoption.",
+        "summary_ja": "Cardano CFがLCX CEOとの対話を配信。トークン化資産と機関的需要、およびCardanoのガバナンスモデルの優位性を強調。",
+        "importance": 4,
+        "audience": [
+          "CC",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Midnight Network Expansion: Hong Kong Regional Hub and Global Developer Adoption",
+        "title_ja": "Midnightネットワーク拡大：香港地域ハブと世界的な開発者採用",
+        "summary_en": "Midnight network is expanding its regional presence with focus on Hong Kong. Charles Hoskinson's Tokyo event presentation highlighted Cardano's unique approach to product development and ecosystem collaboration.",
+        "summary_ja": "Midnightネットワークが香港での地域プレゼンス拡大。HoskinsonのTokyo イベント演説は、Cardanoの独自製品開発アプローチを強調。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@StakeWithPride",
+          "@Sssebi"
+        ]
+      }
+    ],
+    "tweetCount": 66,
+    "generatedAt": "2026-03-06T15:27:34.900Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-09",
+    "highlights": [
+      {
+        "category": "institutional",
+        "title_en": "CME Group Launches Cardano Futures Trading",
+        "title_ja": "CMEグループがCardanoの先物取引を開始",
+        "summary_en": "CME Group has officially launched futures contracts for Cardano ($ADA), alongside Chainlink and Stellar, marking a monumental step for institutional adoption and market access. This signals major institutional trading expansion and improved price discovery for Cardano.",
+        "summary_ja": "CMEグループがCardano ($ADA)の先物契約を正式に開始し、機関投資家への重要な一歩となりました。これは機関投資家向け取引の拡大と価格発見メカニズムの改善を示唆しています。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Institutional",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@BSCNews"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Van Rossem Hard Fork (Protocol V11) Scheduled for 2026",
+        "title_ja": "Van Rossum ハードフォーク（プロトコルV11）が2026年予定",
+        "summary_en": "The Van Rossem hard fork is slated to land on mainnet in 2026, bringing faster Plutus contracts, stronger cryptographic built-ins, and improved ledger and node security without disruption. Leios testnet is targeted for Q2 2026 in the Dijkstra hard fork.",
+        "summary_ja": "Van Rossum ハードフォークは2026年のメインネット導入予定で、Plutusコントラクトの高速化、強化された暗号化機能、および台帳とノードセキュリティの向上をもたらします。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "DRep",
+          "SPO",
+          "CC"
+        ],
+        "sources": [
+          "@adastackio",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "SPO Roundtable Focuses on Active Protocol Parameter Change Vote",
+        "title_ja": "SPOラウンドテーブルが進行中のプロトコルパラメータ変更投票に焦点",
+        "summary_en": "Recent SPO Roundtable discussions outlined an active protocol parameter proposal affecting smart contract capacity, node performance, and emphasized the critical importance of SPO participation in the governance vote.",
+        "summary_ja": "SPOラウンドテーブルは進行中のプロトコルパラメータ提案について、スマートコントラクト容量、ノードパフォーマンスへの影響、SPO投票参加の重要性を強調しました。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Demonstrates Network Resilience with Client Diversity",
+        "title_ja": "Cardanoがクライアント多様性によるネットワーク耐性を実証",
+        "summary_en": "Cardano experienced a temporary fork in 2025 when a bug in one node implementation occurred, but the network remained stable due to client diversity, demonstrating the value of decentralized infrastructure.",
+        "summary_ja": "2025年にノード実装のバグによる一時的なフォークが発生しましたが、クライアント多様性によりネットワークは安定を保ち、分散型インフラの価値を実証しました。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@SundaeSwap"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Foundation Emphasizes Long-term Adoption with Enterprise Partnerships",
+        "title_ja": "Midnight Foundationが企業パートナーシップによる長期採用を強調",
+        "summary_en": "Midnight Foundation President Fahmi Syed highlighted the importance of building long-term systems aligned with Cardano's vision to achieve real adoption from major corporations like Sony and Mitsubishi, signaling growing enterprise interest.",
+        "summary_ja": "Midnight Foundation会長は、Sony、三菱などの大企業からの実際の採用を実現するため、Cardanoのビジョンに合致した長期的システム構築の重要性を強調しました。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "New Plutus Builtins Ready for Development with Node Emulator",
+        "title_ja": "ノードエミュレーターで新しいPlutusビルトインが利用可能",
+        "summary_en": "Developers can now test upcoming hard fork Plutus builtins using the new JavaScript/TypeScript Node Emulator for transaction and scenario testing, with Scalus Club sessions demonstrating implementation and best practices.",
+        "summary_ja": "開発者は新しいJavaScript/TypeScriptノードエミュレーターを使用して、今後のハードフォークのPlutusビルトインをテストできるようになり、Scalus Clubが実装ベストプラクティスを展示しています。",
+        "importance": 3,
+        "audience": [
+          "Builder"
+        ],
+        "sources": [
+          "@atlanter",
+          "@lantr_io",
+          "@Scalus3"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Cardano Foundation Advances Trust and Integrity Economy at DAF Global",
+        "title_ja": "Cardano Foundationが信頼と誠実さの経済をDAF Globalで推進",
+        "summary_en": "Cardano Foundation showcased at Digital Asset Forum with keynotes on integrity economy, transferable trust via Veridian, and governance panels, emphasizing that infrastructure built on trust wins in digital assets.",
+        "summary_ja": "Cardano FoundationはDigital Asset Forumで誠実さの経済、Veridianを通じた信頼の移譲可能性、およびガバナンスパネルを紹介し、信頼に基づいたインフラが勝つことを強調しました。",
+        "importance": 3,
+        "audience": [
+          "Institutional",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens Launches ADA Lending Protocol with Fixed APY Incentives",
+        "title_ja": "FluidTokensが固定APYインセンティブ付きADA貸付プロトコルを開始",
+        "summary_en": "FluidTokens platform allows ADA holders to lend while maintaining staking rewards (6% APY incentivized), offering automated calendar features and full asset control, expanding DeFi utility on Cardano.",
+        "summary_ja": "FluidTokensプラットフォームはADA保有者がステーキン��報酬を保持しながら貸付でき、固定6% APYインセンティブ、自動カレンダー機能、完全な資産管理を提供します。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      }
+    ],
+    "tweetCount": 74,
+    "generatedAt": "2026-03-06T15:28:14.183Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-10",
+    "highlights": [
+      {
+        "category": "institutional",
+        "title_en": "CME Group Launches Cardano ADA Futures",
+        "title_ja": "CMEグループがCardano ADA先物を開始",
+        "summary_en": "CME Group officially announced the launch of Cardano $ADA futures contracts, marking a major institutional adoption milestone for Cardano alongside Chainlink and Stellar futures.",
+        "summary_ja": "CMEグループがCardano $ADA先物の公式開始を発表し、Chainlink・Stellarと並んでCardanoの機関投資家向け統合が進展。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Institutional",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@SiriusB12"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Rosetta Java v2.0.0 Released with Major Performance Improvements",
+        "title_ja": "Cardano Rosetta Java v2.0.0がリリース、パフォーマンス向上",
+        "summary_en": "Cardano Foundation released Rosetta Java v2.0.0 featuring upgrades to exchange integration stack, 30% faster sync time, and improved reliability for ecosystem integrations.",
+        "summary_ja": "Cardano FoundationがRosetta Java v2.0.0をリリース。取引所統合スタックの大幅アップグレード、同期速度30%向上、信頼性向上。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "SPO",
+          "Dev_tools"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Bitcoin-Cardano Cross-Chain Bridge Progressing Toward Launch",
+        "title_ja": "ビットコイン-Cardanoクロスチェーンブリッジが進展",
+        "summary_en": "Fluid Tokens reports the BTC ↔ ADA bridge is nearing completion, bringing major cross-chain liquidity capabilities to Cardano ecosystem.",
+        "summary_ja": "Fluid TokensがBTC ↔ ADAブリッジが間もなく完成と報告。Cardanoエコシステムに重大なクロスチェーン流動性をもたらす。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Summit Focus: Real-World Payment Adoption & Infrastructure Challenges",
+        "title_ja": "Cardanoサミット焦点：実世界の決済採用とインフラ課題",
+        "summary_en": "Real-world adoption tests show mixed results: Madrid runners successfully used Vespr wallet for ADA payments while revealing friction points; discussions highlight infrastructure scaling limitations as key adoption barrier.",
+        "summary_ja": "実世界でのCardano決済テストが進行中。Vespr導入成功一方で、スケーリング・手数料市場の問題が採用の課題として指摘される。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Diego_Torres_",
+          "@0xNLYFANS"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Africa Tech Summit 2026 Launching in Nairobi (Feb 13)",
+        "title_ja": "Cardano Africa Tech Summit 2026がナイロビで開催（2月13日）",
+        "summary_en": "Cardano Africa Tech Summit 2026 launches February 13 in Nairobi, Kenya in partnership with Intersect MBO, featuring regional developer and adoption focus.",
+        "summary_ja": "Cardano Africa Tech Summit 2026が2月13日にケニア・ナイロビで開催。Intersect MBOと協力し、アフリカのビルダー向上に焦点。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@_JKAbuuu26"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Plastiks.io Uses Cardano for Verifiable Plastic Recovery Data",
+        "title_ja": "Plastiks.ioがCardanoで廃プラ回収データの検証可能化",
+        "summary_en": "Plastiks.io leverages Cardano blockchain to create verifiable plastic recovery records supporting circular economy initiatives and transparent environmental reporting.",
+        "summary_ja": "Plastiks.ioがCardanoを使用して廃プラ回収データを検証可能な記録に変換。環境報告の透明性と循環経済を推進。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Yaci Store 2.0.0: Next Generation Cardano Indexing Solution",
+        "title_ja": "Yaci Store 2.0.0：次世代CardanoインデックスソリューションがDevに登場",
+        "summary_en": "Cardano Foundation introduces Yaci Store 2.0.0 with advanced indexing capabilities, featuring developer office hours session on February 13.",
+        "summary_ja": "Cardano FoundationがYaci Store 2.0.0を発表。次世代インデックス機能を搭載し、2月13日開発者向けセッション開催予定。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Dev_tools"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Payment Cards Launched at Berlin Summit: EMURGO & Gero Wallet Approaches",
+        "title_ja": "Cardano決済カード発表：EmuGoとGero Walletの異なるアプローチ",
+        "summary_en": "Cardano Summit Berlin 2025 saw EMURGO and Gero Wallet launch competing payment card solutions with different custody and UX strategies for real-world adoption.",
+        "summary_ja": "Berlin SummitでEMURGOとGero Walletが異なるアプローチで決済カードを発表。カストディと利便性で戦略が異なる。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@LidoNation"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Consensus Hong Kong 2026: Cardano Unified Global Events Strategy in Action",
+        "title_ja": "Consensus Hong Kong 2026：Cardanoの統一グローバル戦略が展開",
+        "summary_en": "Cardano Foundation presenting at Consensus Hong Kong 2026 with ecosystem partners; Spotlight Session featuring Charles Hoskinson, F_ZK, and Phillip Pon scheduled Thursday 15:00 HKT.",
+        "summary_ja": "Consensus Hong Kong 2026でCardano Foundation・エコシステムパートナーが参加。Charles Hoskinssonなど出席者のスポットライトセッション予定。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano",
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "AdaStat Explorer (M6) Milestone Confirmed: Privacy-Respecting Data Access",
+        "title_ja": "AdaStat Explorer（M6）マイルストーン確認：プライバシー保護データアクセス",
+        "summary_en": "Intersect MBO confirms Milestone 6 for Cardano Blockchain Explorer (AdaStat), ensuring continued free access to privacy-respecting explorer, API, and Telegram bot.",
+        "summary_ja": "Intersect MBOがCardano BlockchainエクスプローラーM6マイルストーン確認。無料でプライバシー保護型エクスプローラー・API・Telegram bot継続提供。",
+        "importance": 2,
+        "audience": [
+          "SPO",
+          "DRep"
+        ],
+        "sources": [
+          "@IntersectMBO"
+        ]
+      }
+    ],
+    "tweetCount": 104,
+    "generatedAt": "2026-03-06T15:28:43.003Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-11",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Masumi Network Demonstrates Agent-To-Agent Payment Stack at Scale",
+        "title_ja": "Masumi NetworkがAgent-To-Agent決済スタックを規模で実証",
+        "summary_en": "Padierfind reports Masumi has completed 23,000 Agent-To-Agent transactions with 50+ active agents over the past year on Cardano, demonstrating a functional stablecoin + blockchain + smart contract payment infrastructure ready for production use.",
+        "summary_ja": "PadierffindはMasumiが過去1年間にCardano上で23,000件のAgent-To-Agent取引を完了し、50以上のアクティブエージェントが稼働していることを報告。ステーブルコイン+ブロックチェーン+スマートコントラクト決済インフラの実用性を実証。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Governance Action Vote Update: Critical Parameter Change Approaching Threshold",
+        "title_ja": "ガバナンスアクション投票更新：重要なパラメータ変更が閾値に接近",
+        "summary_en": "ATADA_Stakepool reports SPO voting is 95% complete on an important parameter change governance action, with 2 days remaining. Notable that high-influence DReps and SPOs have not yet voted, creating urgency.",
+        "summary_ja": "ATADA_Stakepoolは重要なパラメータ変更ガバナンスアクションのSPO投票が95%完了し、2日以内の投票が必要と報告。有力なDRepと最高影響力SPOがまだ投票していない点が注目される。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "SPO",
+          "CC"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Fluid Tokens Bitcoin-Cardano Bridge Reaches Development Phase",
+        "title_ja": "Fluid TokensのBitcoin-Cardanoブリッジが開発段階に到達",
+        "summary_en": "Fluid Tokens and LANTR team launch draft v0 of BTC ↔ ADA bridge this week, with focus on secure SPO communication protocol design. Community feedback actively solicited for bridge flow demo.",
+        "summary_ja": "Fluid TokensとLANTR teamがBTC ↔ ADAブリッジのドラフトv0を今週ローンチ予定。SPO通信プロトコル設計のセキュリティに重点。コミュニティからのフィードバック募集中。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Highlights Midnight as Most Decentralized 2026 Protocol Launch",
+        "title_ja": "Charles HoskinsonがMidnightを2026年最も分散化されたプロトコルローンチと強調",
+        "summary_en": "In Consensus Hong Kong interviews, Hoskinson positions Midnight as Cardano's 2026 flagship with emphasis on decentralization and security credentials, addressing 'hard lessons' from ecosystem challenges.",
+        "summary_ja": "ConsensusHKのインタビューでHoskinsonはMidnightをCardanoの2026年旗艦プロジェクトとして位置づけ。分散化とセキュリティ認証を強調し、エコシステム課題からの教訓に対応。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@IOHK_Charles",
+          "@cwpaulm",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "DRep Quantumplation Publishes Governance Vote Rationale on DeFi Budget",
+        "title_ja": "DRep QuantumplationがDeFi予算に関するガバナンス投票根拠を公開",
+        "summary_en": "Quantumplation casts ABSTAIN vote on DeFi liquidity budget due to Sundae Labs service provider conflict-of-interest, emphasizing careful vote selection given security/time constraints of dRep responsibilities.",
+        "summary_ja": "QuantumplationがSundae Labsのサービスプロバイダー利益相反を理由にDeFi流動性予算へABSTAIN投票。dRep責務のセキュリティと時間的制約から慎重な投票選択を強調。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Governance"
+        ],
+        "sources": [
+          "@Quantumplation"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Cardano Unified Global Events Strategy Showcased at Consensus Hong Kong",
+        "title_ja": "Cardano統合グローバルイベント戦略がConsensusHKで展示",
+        "summary_en": "EMURGO leads coordinated Cardano ecosystem presence at Consensus HK in collaboration with Cardano Foundation and RareN, demonstrating unified marketing and community coordination at major industry conference.",
+        "summary_ja": "EMURGOがCardano Foundation・RareNと協力してConsensusHKで調整されたCardanoエコシステム展示を主導。主要業界カンファレンスでの統一マーケティングとコミュニティ協調を実証。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@emurgo_io",
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Academy Launches Free Blockchain Fundamentals Course",
+        "title_ja": "Cardano Academyが無料ブロックチェーン基礎コースをローンチ",
+        "summary_en": "Cardano Foundation releases self-paced, online fundamentals course covering blockchain consensus, real-world use cases, and applicability assessment for new participants.",
+        "summary_ja": "Cardano Foundationが自習型オンライン基礎コースをリリース。ブロックチェーンのコンセンサス、実世界ユースケース、適用性評価をカバー。新規参加者向け。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Newcomer"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Africa Blockchain Adoption Accelerating at Cardano Summit 2026",
+        "title_ja": "Cardano Africa Tech Summit 2026でアフリカのブロックチェーン採用が加速",
+        "summary_en": "Anzens reports Day 1 of Cardano Africa Tech Summit 2026 shows unprecedented momentum in blockchain adoption across African markets, with builders and developers demonstrating significant ecosystem energy.",
+        "summary_ja": "AnzensはCardano Africa Tech Summit 2026のDay 1でアフリカ全域のブロックチェーン採用の前例のない勢���を報告。ビルダーと開発者がエコシステムの大きなエネルギーを実証。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Institutional"
+        ],
+        "sources": [
+          "@AnzensOfficial"
+        ]
+      }
+    ],
+    "tweetCount": 105,
+    "generatedAt": "2026-03-06T15:29:11.755Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-12",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "LayerZero Integration: Cardano Achieves Major Interoperability Milestone",
+        "title_ja": "LayerZero統合：Cardanoが主要な相互運用性マイルストーンを達成",
+        "summary_en": "The Cardano steering committee (IOG, Cardano Foundation, EMURGO, Midnight, Intersect) approved integration with LayerZero, connecting Cardano to 70+ blockchains while preserving security and decentralization. This represents the largest interoperability unlock in Cardano's ecosystem.",
+        "summary_ja": "Cardanoの統治委員会がLayerZeroとの統合を承認し、70以上のブロックチェーンにCardanoを接続。セキュリティと分散化を維持しながら、Cardanoエコシステム最大の相互運用性をもたらす。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@IntersectMBO",
+          "@Cardano_CF",
+          "@emurgo_io",
+          "@IOGroup"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Stablecoin Launching on Cardano by End of February",
+        "title_ja": "USDCxステーブルコイン、2月末までにCardanoで公開予定",
+        "summary_en": "Charles Hoskinson confirmed USDC-based stablecoin (USDCx) will launch on Cardano by end of February 2026, enabling seamless integration with major wallets and exchanges. This major institutional asset arrival enhances Cardano's DeFi ecosystem.",
+        "summary_ja": "チャールズ・ホスキンソンがUSDCxステーブルコインの2月末までのCardano上での公開を確認。主要なウォレットと取引所との統合を可能にし、制度的資産をもたらす。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@IOHK_Charles",
+          "@bigpey"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Affiliate Network Mainnet Launch Confirmed for Late March 2026",
+        "title_ja": "Midnight関連ネットワーク、2026年3月末に本格稼働予定",
+        "summary_en": "Charles Hoskinson announced Midnight, the privacy-focused Cardano affiliate network, will launch mainnet in the last week of March 2026. This brings privacy and regulatory compliance capabilities to the Cardano ecosystem.",
+        "summary_ja": "プライバシー重視のCardano関連ネットワークMidnightが2026年3月末週に本格稼働開始。プライバシーとコンプライアンス機能をCardanoエコシステムにもたらす。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@IOHK_Charles",
+          "@StakeWithPride",
+          "@neo11941",
+          "@bigpey"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "FluidTokens Atomic Swap Now Live on Testnet for Multi-Chain Assets",
+        "title_ja": "FluidTokens原子スワップ、テストネットで複数チェーン対応で稼働開始",
+        "summary_en": "FluidTokens launched atomic swap functionality on testnet, enabling trustless peer-to-peer trades across ETH, ADA, and BTC. Users can link wallets and execute atomic on-chain swaps, improving cross-chain DeFi accessibility.",
+        "summary_ja": "FluidTokensがテストネット上でアトミックスワップ機能を開始。ETH、ADA、BTCを含む複数チェーン間でトラストレスなP2P取引が可能に。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "SundaeSwap Solves Slippage Problem for Large-Scale Stablecoin Trades",
+        "title_ja": "SundaeSwap、大規模なステーブルコイン取引のスリッページ問題を解決",
+        "summary_en": "SundaeSwap protocol deployment optimized stableswap parameters to solve slippage issues on large trades. Consistent pricing across larger trade sizes enables institutional-grade stablecoin trading on Cardano.",
+        "summary_ja": "SundaeSwapがステーブルスワップパラメータを最適化し、大規模取引のスリッページ問題を解決。機関級のステーブルコイン取引を実現。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@SundaeSwap"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Community Vote on Plutus Parameter Increases Pending SPO Approval",
+        "title_ja": "Plutusパラメータ増加に関する投票、SPO承認待ち",
+        "summary_en": "Constitutional Committee has approved governance action to increase Plutus parameters. DReps and SPOs are being urged to vote to enable higher script execution capacity on Cardano.",
+        "summary_ja": "憲法委員会がPlutusパラメータ増加を承認。DRepとSPOに投票を促す。Cardanoのスクリプト実行容量向上を目指す。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Project Catalyst Fund 15 Pause: Collaborative Restructuring Underway",
+        "title_ja": "Project Catalyst Fund 15一時��止：共同再構築進行中",
+        "summary_en": "Cardano Foundation, Project Catalyst team, and Intersect collaborating on strategic and operational restructuring following Fund 15 pause announcement. Joint efforts aim to improve Catalyst governance and funding mechanisms.",
+        "summary_ja": "CardanoファウンデーションとProject Catalystチームがトランザクション改革に協力。Fund 15の一時停止後の戦略と運用の再構築を進行中。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Pentad Leaders Aligned at Consensus Hong Kong 2026",
+        "title_ja": "Pentadリーダーら、Consensus Hong Kong 2026で一堂に",
+        "summary_en": "IOG, EMURGO, Midnight Foundation, Cardano Foundation, and Intersect representatives (including Charles Hoskinson) demonstrated unified vision at Consensus Hong Kong, emphasizing institutional-grade partnerships and global commercialization.",
+        "summary_ja": "Cardanoの5つのピラー機関のリーダーらがConsensus Hong Kongで統一されたビジョンを提示。制度的パートナーシップとグローバル商業化を強調。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@emurgo_io",
+          "@IOHK_Charles",
+          "@StakeWithPride",
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Multi-Language Smart Contract Ecosystem Documented",
+        "title_ja": "Cardanoマルチ言語スマートコントラクトエコシステムを文書化",
+        "summary_en": "Cardano Foundation published comprehensive guide to the diverse smart contract programming language landscape. Unlike most ecosystems, Cardano supports multiple on-chain languages, providing developer flexibility and reducing vendor lock-in.",
+        "summary_ja": "Cardano Foundationが多様なスマートコントラクト言語に関する総合ガイドを公開。複数の言語をサポートし、開発者に柔軟性をもたらす。",
+        "importance": 2,
+        "audience": [
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Foundation Launches Real-World Use Case Newsletter Series",
+        "title_ja": "Cardano Foundation、実世界ユースケースニュースレターシリーズを開始",
+        "summary_en": "Cardano Foundation announced monthly newsletter covering blockchain applications in supply chains, digital identity, and governance. Focus shifts from hype to practical clarity on real-world adoption.",
+        "summary_ja": "Cardano Foundationが月刊ニュースレターを開始。サプライチェーン、デジタルID、ガバナンスの実世界応用を取り扱う。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      }
+    ],
+    "tweetCount": 122,
+    "generatedAt": "2026-03-06T15:29:45.293Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-13",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "LayerZero Integration & USDCx Launch Transform Cardano Infrastructure",
+        "title_ja": "LayerZeroとUSDCxがCardanoインフラを変革",
+        "summary_en": "Cardano is closing major infrastructure gaps with LayerZero integration connecting to 160+ blockchains and USDCx launching by end of February with direct CEX rails. Citadel Securities' LayerZero investment signals institutional RWA preparation.",
+        "summary_ja": "CardanoはLayerZero統合（160以上のブロックチェーン接続）とUSDCx立ち上げ（2月末）により主要インフラギャップを解消。Citadel Securitiesの投資はRWA機関化を示唆。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@TapTools",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Spring: USDCx, LayerZero, and Midnight Mainnet Within 75 Days",
+        "title_ja": "Cardano Spring：75日以内にUSDCx、LayerZero、Midnight展開",
+        "summary_en": "Major ecosystem milestones converging in February-March: USDCx live this month, LayerZero integration confirmed, and Midnight mainnet before end of March represent significant growth catalyst.",
+        "summary_ja": "2月～3月の主要マイルストーン：USDCx今月立ち上げ、LayerZero統合確認、Midnight3月末前メインネット化は成長触媒を示す。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Cryptofly777"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Cardano Hard Fork v11 Readiness: Superior Protocol Design Demonstrated",
+        "title_ja": "Cardano Hard Forkバージョン11準備完了：優れたプロトコル設計実証",
+        "summary_en": "Scalus 0.15 release demonstrates protocol readiness with new optimizations, built-in types, and ledger rules. Charles Hoskinson highlights Cardano's superior design: hard fork completed in 14 hours vs Ethereum's 6 months.",
+        "summary_ja": "Scalus 0.15リリースが新最適化と台帳ルール対応を実証。Hoskinsonが強調：Cardanoは14時間でハードフォーク完了（Ethereumは6ヶ月）。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@Scalus3",
+          "@lantr_io"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Institutional RWA Integration: Strike DeFi V2 and fGLD LayerZero Partnership",
+        "title_ja": "機関向けRWA統合：StrikeのDeFi V2とfGLDのLayerZero提携",
+        "summary_en": "Strike expanding beyond perps to become flagship Cardano DeFi platform at V2 launch. fGLD positioned as primary RWA vehicle with LayerZero integration for scaling institutional volume and TVL.",
+        "summary_ja": "StrikeがperpsからDeFi統合フラッグシップへ拡大。fGLDがLayerZeroとRWA統合の中核。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@blockjock2017",
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Privacy Blockchain: Google & Telegram Support Signals Enterprise Adoption",
+        "title_ja": "Midnightプライベート・ブロックチェーン：GoogleとTelegramサポートが企業導入を示唆",
+        "summary_en": "Midnight mainnet launching late March with Google and Telegram backing creates long-term investment thesis. Privacy-first infrastructure opening institutional and enterprise market opportunities.",
+        "summary_ja": "GoogleとTelegramサポート下、Midnight3月末メインネット化。プライバシー優先インフラが機関・企業市場機会を開く。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Midnight1194",
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "DeFi Yield Opportunities: Fluid Tokens Guarantees 6-8% APY on Cardano",
+        "title_ja": "DeFiイールド機会：Fluid TokensがCardanoで6-8%APY保証",
+        "summary_en": "Fluid Tokens offering guaranteed 6% APY (75 days remaining) and 8% lend APY on HOSKY market demonstrates maturing DeFi infrastructure and retail yield opportunities on Cardano.",
+        "summary_ja": "Fluid Tokensが6-8%保証APYを提供。HOSKYで最高利回り実現。小売向けイールド機会の成熟を示す。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Emphasizes Values-First Development Philosophy",
+        "title_ja": "Charles Hoskinson：価値主導開発哲学を強調",
+        "summary_en": "IOHK founder advocates for building fundamentally good projects with empathy and kindness rather than profit-driven approaches, setting cultural tone for Cardano ecosystem development.",
+        "summary_ja": "IOHK創業者が利益駆動型ではなく倫理的で良い事業構築を主張。Cardanoエコシステム文化基調を設定。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Plutus Developer Experience Enhanced: Scalus 0.15.1 with TxBuilder Updates",
+        "title_ja": "Plutus開発者体験向上：Scalus 0.15.1とTxBuilderアップデート",
+        "summary_en": "Scalus 0.15.1 on Maven Central includes protocol v11 hard fork readiness, improved TxBuilder with .draft() and .scriptContext(), JS/TS Cardano node emulator, and new design patterns for developers.",
+        "summary_ja": "Scalus 0.15.1がプロトコルv11対応、TxBuilder改善、JS/TSエミュレータを提供。開発者体験を強化。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Dev"
+        ],
+        "sources": [
+          "@Scalus3",
+          "@atlanter"
+        ]
+      }
+    ],
+    "tweetCount": 96,
+    "generatedAt": "2026-03-06T15:30:11.657Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-14",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "LayerZero Integration Unlocks Cross-Chain Interoperability for Cardano",
+        "title_ja": "LayerZero統合がCardanoのクロスチェーン相互運用性を解放",
+        "summary_en": "LayerZero Core integration connects Cardano to 160+ chains through a chain-agnostic messaging layer with billions in cross-chain volume already processed. This represents a major interoperability milestone for the ecosystem.",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@EdnStuff"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "CME Group Launches ADA Futures Contracts with Major Institutional Trading",
+        "title_ja": "CMEグループがADAフューチャーズ契約をローンチ、大手機関投資家が取引",
+        "summary_en": "CME Group launched new futures contracts for ADA, LINK, and XLM with major firms like FalconX and Wintermute executing early trades. This signals institutional adoption and increased market legitimacy.",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Institutional",
+          "Builder"
+        ],
+        "sources": [
+          "@Gucci_Clarity"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "DZ Bank Offers ADA to Retail Customers Under MiCAR Approval",
+        "title_ja": "DZ銀行、MiCAR認可下でリテール顧客にADAを提供",
+        "summary_en": "Germany's second-largest bank DZ Bank launched meinKrypto service offering BTC, ETH, ADA, and LTC to retail customers under MiCAR regulatory approval. This represents significant mainstream banking integration.",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Institutional"
+        ],
+        "sources": [
+          "@theunhashed"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet Launch Approaching with ZK Privacy Infrastructure",
+        "title_ja": "MidnightメインネットローンチとZKプライバシーインフラストラクチャの接近",
+        "summary_en": "Midnight mainnet launch scheduled for March 2026 with ZK proof technology and the NIGHT token driving privacy-enabled applications. This represents a major protocol expansion for Cardano's ecosystem.",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@OldGrowthCrypto"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Charles Hoskinson Clarifies Equal Governance Standing Under Cardano Rules",
+        "title_ja": "Charles HoskinsonがCardanoルール下での平等なガバナンス立場を明確化",
+        "summary_en": "Charles Hoskinson publicly stated he has no special rights or control over Cardano beyond any ADA holder, and governance rules apply equally to him. This emphasizes the decentralized governance model.",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Governance"
+        ],
+        "sources": [
+          "@ItsDave_ADA"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Liqwid Integration of Stablecoin Markets (PYUSD, EURC) Enhances DeFi Infrastructure",
+        "title_ja": "LiqwidのステーブルコインマーケットPYUSD、EURC統合がDeFiインフラを強化",
+        "summary_en": "Liqwid integrating major stablecoin markets including PYUSD ($3.9B) and EURC ($458M) to serve as infrastructure layer for real capital on Cardano, enabling diversified markets and higher capital efficiency.",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@AngeIdusTX"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "DRep Quality and Enterprise Experience Critical to Cardano Adoption Strategy",
+        "title_ja": "DRep品質と企業経験がCardano採用戦略に重要",
+        "summary_en": "Governance delegates should have established enterprise success and adoption expertise. Current governance challenges partly stem from delegation to individuals without proven business track records.",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@NaVi_GaT0R"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "CIP Process Maturation Driven by Community Contributors",
+        "title_ja": "CIPプロセス成熟化はコミュニティ貢献者により推進",
+        "summary_en": "Robert Phair recognized for behind-the-scenes work on Cardano's CIP process through editing, reviewing, and coordination. This demonstrates community-driven governance infrastructure development.",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@DenicioBernier",
+          "@ShidiUg"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Africa Tech Summit Highlights Financial Systems and Identity Innovation",
+        "title_ja": "Cardano Africa Tech SummitがNairobiで金融システムとアイデンティティ革新をハイライト",
+        "summary_en": "Cardano Africa Tech Summit 2025 in Nairobi focused on leveraging Africa's demographic and digitization opportunities to rethink financial systems, identity, and governance infrastructure.",
+        "importance": 3,
+        "audience": [
+          "Ecosystem",
+          "Builder"
+        ],
+        "sources": [
+          "@OfficialKavinda"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Bitcoin Liquidity Integration Planned for Cardano DeFi Ecosystem",
+        "title_ja": "CardanoDeFiエコシステムのためのBitcoin流動性統合が計画中",
+        "summary_en": "Cross-chain Bitcoin liquidity integration planned for 2026, creating new opportunities for BTC to enter Cardano DeFi markets with focus on utility and sustainable growth via Minswap DEX.",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@lichenb2b"
+        ]
+      }
+    ],
+    "tweetCount": 52,
+    "generatedAt": "2026-03-06T15:30:36.262Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-15",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Stablecoin Gap Finally Closing with USDCx Rollout",
+        "title_ja": "Cardano のステーブルコイン格差が USDCx ロールアウトで解消",
+        "summary_en": "Major stablecoin adoption initiative announced with USDCx rollout paired with LayerZero integration, enabling seamless cross-chain liquidity flows and addressing years of DeFi adoption lag behind Ethereum and Solana.",
+        "summary_ja": "USDCx ロールアウトと LayerZero 統合により、ステーブルコイン採用が大幅に進展。数年間の DeFi 採用の遅れが解決される見込み。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Dr_shwetaPHD"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Rosetta Java Implementation Enhances Blockchain Integration Efficiency",
+        "title_ja": "Rosetta Java 実装がブロックチェーン統合効率を向上",
+        "summary_en": "Cardano released Rosetta Java implementation transitioning from TypeScript, offering faster sync times, better efficiency, and improved blockchain integrations for developers.",
+        "summary_ja": "TypeScript から Java への移行により、同期時間の短縮と効率向上を実現。開発者向けブロックチェーン統合を改善。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Dev_tools"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Charles Hoskinson Reaffirms Cardano's Decentralized Governance Structure",
+        "title_ja": "Charles Hoskinson が Cardano の分散ガバナンス構造を再確認",
+        "summary_en": "IOHK founder emphasizes he holds no special power over Cardano and is bound by protocol governance like any other participant, reinforcing decentralization principles.",
+        "summary_ja": "IOHK 創設者は Cardano に対する特別な権限を持たず、プロトコルに従うと強調。分散化原則を強化。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Governance",
+          "Holder"
+        ],
+        "sources": [
+          "@danamphred"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Critical Issue Identified in Plutus Parameter Governance Action",
+        "title_ja": "Plutus パラメータガバナンス提案で重大な問題が発見",
+        "summary_en": "ATADA Stakepool reports that a governance action using identical parent hash as previous Plutus parameter update will be ruled invalid, regardless of voting outcome.",
+        "summary_ja": "ATADA Stakepool が Plutus パラメータ更新提案の親ハッシュの重複により、ガバナンス提案が無効になると警告。",
+        "importance": 4,
+        "audience": [
+          "CC",
+          "DRep",
+          "SPO"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "DRep Voting Power Utilization Remains Critical Ecosystem Challenge",
+        "title_ja": "DRep 投票権の活用が重要課題として残存",
+        "summary_en": "Community leaders emphasize DReps must monitor governance action participation rates and ensure voting power is not wasted, highlighting slow progress in certain governance proposals.",
+        "summary_ja": "DRep 投票権の有効活用が求められており、特定のガバナンス提案では進捗が遅い状況。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@IAGONAUTMANNY"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Enterprise Adoption and Real-World Use Cases Driving Cardano Utility",
+        "title_ja": "企業採用と実世界ユースケースが Cardano の有用性を推進",
+        "summary_en": "Identity systems, supply chain tracking, financial services, and government/NGO projects demonstrate Cardano's enterprise integration capabilities and long-term sustainability vision.",
+        "summary_ja": "ID システム、サプライチェーン追跡、金融サービス、政府・NGO プロジェクトにより Cardano の実用性が実証される。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@OlivierMWATSIM1"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Decentralized Order Book DEX Infrastructure Now Available to Cardano Builders",
+        "title_ja": "分散型オーダーブック DEX インフラが Cardano ビルダーに開放",
+        "summary_en": "GeniusYield deployed first 100% decentralized order book DEX and core tooling as free ecosystem resources, eliminating infrastructure building burden for Cardano projects.",
+        "summary_ja": "GeniusYield が 100% 分散型オーダーブック DEX と基本ツールを無料提供。プロジェクトの構築負担を軽減。",
+        "importance": 3,
+        "audience": [
+          "Builder"
+        ],
+        "sources": [
+          "@GeniusyieldO"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "SyncAI Network Launches Autonomous DRep Agent and Governance Platform",
+        "title_ja": "SyncAI Network が自律型 DRep エージェントとガバ��ンス プラットフォームを起動",
+        "summary_en": "SyncAI Network delivered Autonomous DRep AI Agent, SyncGovHub governance platform, and CANDI AI agent with 80+ integrated Cardano tools to streamline governance participation.",
+        "summary_ja": "SyncAI Network が自律 DRep AI エージェント、ガバナンス プラットフォーム、80+ Cardano ツール統合 AI エージェントを提供。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@SyncAI_Network"
+        ]
+      }
+    ],
+    "tweetCount": 67,
+    "generatedAt": "2026-03-06T15:31:00.189Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-16",
+    "highlights": [
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Java Developer Initiative with Free JCon Tickets",
+        "title_ja": "CardanoのJavaデベロッパー向けイニシアティブとJConチケット無料配布",
+        "summary_en": "Cardano Foundation offering free tickets to JCon conference for Java developers building on Cardano, with access to testing tools like Yaci and Cardano Client Library. Direct engagement opportunity for Java ecosystem expansion.",
+        "summary_ja": "Cardano FoundationがCardano上でJavaを用いて開発するデベロッパー向けにJConカンファレンスの無料チケットを配布。YaciやCardano Client Libraryなどのテストツールへのアクセスを提供。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Dev_tools"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens Enables Gold-Collateralized ADA Borrowing",
+        "title_ja": "FluidTokensが金担保によるADA借入を実現",
+        "summary_en": "FluidTokens launches capability to borrow ADA using Gold (fGLD) as collateral, expanding DeFi utility. Offers 6% guaranteed APY on liquidity deployment with multiple market support.",
+        "summary_ja": "FluidTokensが金（fGLD）を担保と���てADAを借入できる機能をローンチ。流動性配置時に6%の固定APYを提供。複数市場対応。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@FluidTokens",
+          "@finest_tokenize"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Parameter Change Governance Action Passes - Transaction/Block Memory Units Increased",
+        "title_ja": "パラメータ変更ガバナンスアクションが承認 - トランザクション/ブロックメモリユニット増加",
+        "summary_en": "Parameter Change GA to increase transaction and block memory units has successfully passed. This locks out competing parameter change proposals and represents important protocol capacity expansion.",
+        "summary_ja": "トランザクションおよびブロックメモリユニット増加のパラメータ変更GAが承認可決。プロトコル容量拡張の重要な決定。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "SPO",
+          "CC"
+        ],
+        "sources": [
+          "@Cerkoryn"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "GovActions Bot Open-Sourced with AI-Assisted Development",
+        "title_ja": "GovActionsボットがオープンソース化 - AI支援開発で実現",
+        "summary_en": "Cardano governance tracking bot GovActions launched in October 2024 is now being open-sourced. Developer credits agentic AI coding tools for enabling progress despite full-time CTO responsibilities.",
+        "summary_ja": "2024年10月にローンチされたCardanoガバナンス追跡ボットGovActionsがオープンソース化。エージェントAIコーディングツールが開発を加速。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@semsorock",
+          "@nbxcom"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Governance Retrospective Scheduled - Community Review of System Effectiveness",
+        "title_ja": "Cardanoガバナンスレトロスペクティブ開催予定 - システム有効性の検証",
+        "summary_en": "Governance retrospective event scheduled for Wednesday featuring Tom Voltaire and other key figures to assess Cardano's governance mechanisms - what works, what's broken, and what truly matters.",
+        "summary_ja": "水曜日にCardanoガバナンスのレトロスペクティブイベント開催予定。Tom Voltaireら主要人物が参加し、仕組みの評価を実施。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@cryptstitution",
+          "@Tom_Voltaire",
+          "@FannyFNY_"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "LayerZero Integration Enables Omnichain Cardano Applications",
+        "title_ja": "LayerZero統合がOmnichainなCardanoアプリケーションを実現",
+        "summary_en": "LayerZero deployment on Cardano enables truly omnichain capabilities for swaps, lending, liquidations, and governance across multiple chains securely and decentralizedly. Critical infrastructure for DeFi expansion.",
+        "summary_ja": "CardanoへのLayerZero統合により、複数チェーン間でのスワップ、レンディング、清算、ガバナンスがセキュアに実現。DeFi拡大の重要インフラ。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@DanogoFinance",
+          "@AdeyemoseunAyo2"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Levvy Finance V3 Ships on Mainnet After 68-Page Audit and 3-Month Delay",
+        "title_ja": "Levvy Finance V3がメインネットデプロイ - 68ページ監査後",
+        "summary_en": "Levvy Finance quietly deployed V3 on Cardano mainnet in December 2025 following rigorous 68-page audit, 173 bug-fix commits, and team disruptions. Demonstrates quality-over-hype approach in DeFi development.",
+        "summary_ja": "Levvy Financeが2025年12月にV3をメインネットにデプロイ。68ページの監査と173のバグ修正コミット。品質重視のアプローチを実証。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@saibdev",
+          "@levvyfinance"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Automated Governance Filter & Summary Tool Proposed for Community Discussion",
+        "title_ja": "ガバナンスアクション用自動フィルタ・要約ツール提案",
+        "summary_en": "Gimbalabs proposes building automated governance action filter and summary tool with human-in-the-loop review during Open Spaces. Addresses information overload in governance participation.",
+        "summary_ja": "Gimbalabsがガバナンスアクション用自動フィルタリング・要約ツール構築を提案。人間によるレビュープロセス付き。ガバナンス参加の情報過多に対応。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@gimbalabs"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Project Catalyst Continuation Approved via Governance Action with Strong DRep Support",
+        "title_ja": "Project Catalyst継続がガバナンスアクション承認 - DRep支持",
+        "summary_en": "Project Catalyst continuation including significant treasury allocation was approved via governance action with strong dRep support, demonstrating democratic community endorsement of funding mechanisms.",
+        "summary_ja": "Project Catalyst継続が重要な予算配分を含めてガバナンスアクションで承認。DRepからの強固な支持を獲得。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@RodrigoPacini"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Governance Hub Enhanced with Vote Lists and WebSocket Streaming",
+        "title_ja": "Cardanoガバナンスハブ強化 - 投票リスト表示とWebSocket対応",
+        "summary_en": "Cardano Cube's Governance Hub updated with governance action vote lists and real-time WebSocket streaming for automatic activity updates. Improves governance transparency and monitoring.",
+        "summary_ja": "Cardano Cubeのガバナンスハブがガバナンスアクション投票リスト表示とWebSocketリアルタイムストリーミングに対応。ガバナンス透明性向上。",
+        "importance": 2,
+        "audience": [
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@lacepool_com"
+        ]
+      }
+    ],
+    "tweetCount": 76,
+    "generatedAt": "2026-03-06T15:31:30.033Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-17",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Protocol Update: 50x Throughput Improvement Coming",
+        "title_ja": "Ouroboros Leios プロトコル更新：50倍のスループット改善が予定中",
+        "summary_en": "Cardano's Ouroboros Leios received 94 updates this week with testnet planned for Q2 2026. The protocol upgrade will increase Layer-1 capacity from 10 TPS to 500 TPS, with Dijkstra hard fork deployment targeted for 2026.",
+        "summary_ja": "Cardano の Ouroboros Leios が先週94回のアップデートを受け、Q2 2026 にテストネット予定。プロトコルアップグレードはレイヤー1容量を10 TPSから500 TPSに増加させ、Dijkstra ハードフォークは2026年をターゲット。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Foundation Approves DeFi Liquidity Budget Withdrawal 1",
+        "title_ja": "Cardano Foundation が DeFi流動性予算引き出し1号を承認",
+        "summary_en": "The Cardano Foundation voted YES on the DeFi Liquidity Budget: Withdrawal 1, commending risk management disclosure while recommending further transparency improvements for future withdrawals.",
+        "summary_ja": "Cardano Foundation が DeFi 流動性予算第1号引き出しに賛成票を投じ、リスク管理の開示を評価しながら、将来の引き出しに向けてさらなる透明性改善を推奨。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Cardano Foundation Leading Institutional Adoption Track at Paris Startup Week",
+        "title_ja": "Cardano Foundation がパリスタートアップウィークの機関投資家採用トラックをリード",
+        "summary_en": "Cardano CF is leading the Institutional Adoption Track at Paris StartInBlock competition, offering $10M+ in prizes for infrastructure solutions addressing governance, security, payments, identity, and compliance.",
+        "summary_ja": "Cardano CF はパリの StartInBlock コンペティションで機関投資家採用トラックをリードしており、ガバナンス、セキュリティ、決済、ID、コンプライアンスに対応するインフラソリューション向けに1000万ドル以上の賞金を提供。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Midnight Platform Presentation & Google Cloud Partnership Announced",
+        "title_ja": "Midnight プラットフォームプレゼンテーションと Google Cloud パートナーシップが発表",
+        "summary_en": "Charles Hoskinson highlighted Midnight as a fundamentally different platform at Consensus. Google Cloud partnership with Midnight announced, indicating enterprise-grade infrastructure integration.",
+        "summary_ja": "Charles Hoskinson は Consensus で Midnight を根本的に異なるプラットフォームとして強調。Google Cloud との Midnight パートナーシップが発表され、エンタープライズグレードのインフラストラクチャ統合を示唆。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "SPO"
+        ],
+        "sources": [
+          "@IOHK_Charles",
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Node 10.6.2 Pre-Release Expected This Week with Hard Fork Functionality",
+        "title_ja": "Cardano Node 10.6.2 プリリリースが今週予定、ハードフォーク機能を搭載",
+        "summary_en": "Pre-release Cardano Node 10.6.2 expected this week includes core hard fork functionality and will enable early testing on SanchoNet for stakeholder validation before final deployment.",
+        "summary_ja": "Cardano Node 10.6.2 プリリリースが今週予定で、コアハードフォーク機能を含み、SanchoNet での初期テストを可能にして、最終展開前のステークホルダー検証を実現。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@martin_musagara",
+          "@gomadrep"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "CME Group Launches ADA Futures Trading, Cardano Reaches Major Institutional Milestone",
+        "title_ja": "CME グループが ADA 先物取引を開始、Cardano は主要機関投資家マイルストーン達成",
+        "summary_en": "CME Group officially launched ADA Futures on February 9, 2026, marking a significant institutional adoption milestone for Cardano with regulated derivatives trading now available.",
+        "summary_ja": "CME グループが2月9日、2026年に ADA 先物を正式に開始し、規制付きデリバティブ取引が利用可能になり、Cardano の重要な機関投資家採用マイルストーン達成。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "SPO",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano_Jitsu"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Community Member Participation in Governance Voting with Detailed On-Chain Feedback",
+        "title_ja": "コミュニティメンバーが詳細なオンチェーンフィードバックでガバナンス投票に参加",
+        "summary_en": "DRep Cerkoryn voted YES on three Cardano governance proposals and provided detailed on-chain metadata rationale for each, exemplifying engaged governance participation despite technical limitations.",
+        "summary_ja": "DRep Cerkoryn が 3つの Cardano ガバナンス提案に投票し、各提案に対してオンチェーンメタデータで詳細な根拠を提供し、技術的制限にもかかわらずエンゲージした投票参加を例示。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@Cerkoryn"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Charli3 Oracle Infrastructure Deep Dive at Cardano Dev Office Hours",
+        "title_ja": "Cardano Dev Office Hours での Charli3 オラクルインフラストラクチャ深掘り",
+        "summary_en": "Cardano hosting developer office hours on February 20 featuring Charli3 Managing Director discussing Push/Pull Oracles, Cardano API, Dendrite tooling, and 2026 vision for decentralized data infrastructure.",
+        "summary_ja": "Cardano が2月20日にデベロッパーオフィスアワーを開催し、Charli3 マネージングディレクターが Push/Pull オラクル、Cardano API、Dendrite ツーリング、分散データインフラの2026年ビジョンを討論。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      }
+    ],
+    "tweetCount": 86,
+    "generatedAt": "2026-03-06T15:31:55.911Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-18",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Circle USDCx Integration Coming to Cardano",
+        "title_ja": "CircleのUSDCx安定資産がCardanoに統合予定",
+        "summary_en": "Circle's USDCx stablecoin integration to Cardano is expected within 10 days, marking a major institutional adoption milestone for the ecosystem.",
+        "summary_ja": "CircleのUSDCx安定資産がCardanoに統合される予定で、今後10日以内に実現される見込み。エコシステムの機関投資家採用における重要なマイルストーン。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardanians_io"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Governance Action: Transaction and Block Memory Units Increased (Part 1)",
+        "title_ja": "ガバナンスアクション：トランザクション・ブロックメモリユニット増加（第1部）",
+        "summary_en": "Epoch 614 activated a governance action increasing Transaction and Block Memory Units, with Part 2 of the upgrade still pending. Protocol parameters are now live on chain.",
+        "summary_ja": "エポック614で、トランザクション・ブロックメモリユニットを増加させるガバナンスア��ションが有効化された。第2部はまだ保留中。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Real-World USDA Payment Pilot Success in Kenya",
+        "title_ja": "ケニアにおけるUSDA実払いパイロット成功",
+        "summary_en": "Anzens reports first USDA payment for coffee in Kenya, settled in real-time to merchant's M-Pesa wallet, demonstrating Cardano's capability for retail speed and integration.",
+        "summary_ja": "AnsensがケニアでUSDaを使用したコーヒー購入の初取引を報告。リアルタイム決済がM-Pesaウォレットに直接送信され、Cardanoの小売用途での速度と統合能力を実証。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Midnight Federated Mainnet Nodes: Google and Major Operators Announced",
+        "title_ja": "Midnightフェデレーテッドメインネットノード：Googleおよびメジャーオペレーターがアナウンス",
+        "summary_en": "Google, Alphaton, Blockdaemon, and Shielded operate 4 of 10 announced Midnight federated mainnet nodes, with 13 nodes on preprod. Google will operate nodes on both Midnight and Cardano.",
+        "summary_ja": "Google、Alphaton、Blockdaemon、Shieldedが10個のMidnightフェデレーテッドメインネットノードのうち4個を運用。GoogleはMidnightとCardano両方のノードを運用する。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Privacy Chain Launch Late March 2026",
+        "title_ja": "Midnight プライバシーチェーン2026年3月下旬ローンチ予定",
+        "summary_en": "NIGHT token anticipates Cardano's biggest event of 2026 with Midnight mainnet launch expected in late March, described as 'Zcash with smart contracts'.",
+        "summary_ja": "NIGHT トークンが2026年の最大イベントであるMidnightメインネットローンチを予想。3月下旬予定で「スマートコントラクト付きZcash」と説明される。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Im_Aman2",
+          "@StakeWithPrise"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Minswap Maintains Highest Transaction Count on Cardano",
+        "title_ja": "MinswapがCardano上で最高のトランザクション数を維持",
+        "summary_en": "Minswap recorded highest transaction count on Cardano over the past 30 days, demonstrating strong DEX adoption as ecosystem consolidates quality projects.",
+        "summary_ja": "Minswapは過去30日間でCardano上で最高のトランザクション数を記録。エコシステムが質の高いプロジェクトに統合される中、DEXの強い採用を実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Fluid Tokens Advances DeFi Product Suite with Fixed APY and Loan Management",
+        "title_ja": "Fluid TokensがDeFi製品スイートを固定APYとローン管理で強化",
+        "summary_en": "Fluid Tokens launches unique features including 6% fixed guaranteed APY, staking rewards retention during liquidity deployment, and calendar-based loan management tools.",
+        "summary_ja": "Fluid Tokensが固定6% APY保証、流動性配備中のステーキング報酬保持、カレンダーベースのローン管理ツールなどを含む革新的機能をローンチ。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Ecosystem Consolidation: Quality Projects Survive Bear Market",
+        "title_ja": "Cardanoエコシステム統合：質の高いプロジェクトが熊市を生き残る",
+        "summary_en": "From 100+ projects in 2021, only the strongest remain in 2026. Midnight's privacy-focused development represents real long-term adoption over speculation.",
+        "summary_ja": "2021年の100以上のプロジェクトから、2026年に残るのは最強のプロジェクトのみ。Midnightのプライバシー重視の開発は、投機ではなく実質的な長期採用を表現。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@MinswapIntern"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Adam K Dean Completes World Tour of Cardano Community Engagement",
+        "title_ja": "Adam K DeanがCardanoコミュニティ世界ツアーを完了",
+        "summary_en": "Adam K Dean concludes extensive global community engagement tour, confirming Cardano community remains passionate and dedicated across multiple continents.",
+        "summary_ja": "Adam K DeanがCardanoコミュニティとの大規模な���界ツアーを完了。複数大陸にわたってコミュニティが熱心で献身的であることを確認。",
+        "importance": 2,
+        "audience": [
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@adamKDean"
+        ]
+      }
+    ],
+    "tweetCount": 94,
+    "generatedAt": "2026-03-06T15:32:23.039Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-19",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Integration: Cardano Gains Access to $70B+ USDC Ecosystem",
+        "title_ja": "USDCx統合：Cardanoが70B+ドルのUSDCエコシステムへアクセス",
+        "summary_en": "Circle integration agreement brings USDCx (functionally equivalent to native USDC with privacy layers) to Cardano, unlocking access to the massive USDC ecosystem and significantly expanding stablecoin utility on the network.",
+        "summary_ja": "Circle統合契約によりUSDCx（プライバシー層付きの機能的にUSDCと同等）がCardanoに導入され、巨大なUSDCエコシステムへのアクセスが開放され、ネットワーク上のステーブルコイン機能が大幅に拡張される。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@dangambardello"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Constitutional Committee Size Reduced from 7 to 5 Members",
+        "title_ja": "憲法委員会の規模が7人から5人に削減",
+        "summary_en": "Cardano Foundation, voting as DRep, approved governance proposal to reduce minimum CC size to 5, creating buffer against governance stalls from member resignations or removals.",
+        "summary_ja": "Cardano FoundationがDRepとして投票し、CC最小規模を5人に削減する提案を承認。メンバーの辞任や除外によるガバナンス停止を防ぐバッファを作成。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Midnight Privacy Protocol Advances with Zero-Knowledge Compliance Tech",
+        "title_ja": "Midnightプライバシープロトコルがゼロ知識コンプライアンス技術で前進",
+        "summary_en": "Midnight Foundation demonstrates scalable, compliance-ready zero-knowledge privacy technology at Consensus Hong Kong, positioning Cardano as leader in privacy-focused blockchain infrastructure.",
+        "summary_ja": "Midnight Foundationが香港Consensusでスケーラブルでコンプライアンス対応のゼロ知識プライバシー技術を実証。Cardanoをプライバシー重視のブロックチェーンインフラのリーダーとして位置付け。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@BlocksterCom"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Strike Protocol V2 Mainnet Launch on Cardano Within 3 Months",
+        "title_ja": "Strike ProtocolがCardanoでV2メインネット3ヶ月以内にローンチ",
+        "summary_en": "Strike Perps announces V2 mainnet launch on Cardano alongside Solana expansion, native mobile app, and Strike token availability, signaling major DeFi infrastructure development.",
+        "summary_ja": "Strike PerpsがCardanoでのV2メインネット、Solana展開、ネイティブモバイルアプリ、Strikeトークン利用可能化を発表。重要なDeFiインフラ開発を示唆。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@strikeperps"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Cardano-Sancho Testnet Successfully Upgraded to Protocol Version 11",
+        "title_ja": "Cardano-SanchoテストネットがプロトコルV11にアップグレード",
+        "summary_en": "ATADA Stakepool confirms successful intra-era hardfork upgrade to protocol v11 on Sancho testnet, advancing governance infrastructure testing.",
+        "summary_ja": "ATADA StakepoolがSanchoテストネット上のプロトコルV11へのイントラエラハードフォークアップグレード成功を確認。ガバナンスインフラのテスト進行。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Indigo Protocol Deploys Capital into iUSD/USDA Pool via SundaeSwap",
+        "title_ja": "Indigo ProtocolがSundaeSwap経由でiUSD/USDプールに資本配置",
+        "summary_en": "Indigo Protocol executes approved governance proposal to deploy capital, increasing liquidity for iUSD/USDA stableswap and LP participation, demonstrating active DeFi coordination.",
+        "summary_ja": "Indigo Protocolが承認されたガバナンス提案を実行し資本配置。iUSD/USDステーブルスワップとLP参加の流動性を増加。DeFi調整の実践を実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@SundaeSwap"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Coinbase Crypto-Backed Loans Now Support ADA as Collateral",
+        "title_ja": "Coinbaseの暗号担保ローンがADAを担保として対応開始",
+        "summary_en": "Coinbase adds ADA to supported collateral assets for crypto-backed USDC loans, alongside Doge, XRP, and LTC, expanding institutional financial integration.",
+        "summary_ja": "CoinbaseがADAを暗号担保USDCローンの対応担保資産に追加。Doge、XRP、LTC���同時。機関投資家向け金融統合を拡大。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Institution"
+        ],
+        "sources": [
+          "@cwpaulm",
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Major SPOs Selected as Midnight Mainnet Supervalidators",
+        "title_ja": "大手SPOがMidnightメインネットスーパーバリデータに選定",
+        "summary_en": "Four of 10 Midnight mainnet supervalidator slots assigned to SPOs including StakeWithPride, indicating strong SPO participation in privacy protocol infrastructure.",
+        "summary_ja": "Midnightメインネット10個のスーパーバリデータスロットのうち4つがStakeWithPrideを含むSPOに割り当て。プライバシープロトコルインフラへの強いSPO参加を示唆。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "DRep"
+        ],
+        "sources": [
+          "@StakeWithPride",
+          "@cwpaulm"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Real-World Adoption: Coffee Purchase with USDA Settles via M-Pesa in Nairobi",
+        "title_ja": "現実利用：USDAでのコーヒー購入がNairobiでM-Pesaに決済",
+        "summary_en": "EMURGO highlights Anzens partnership demonstrating instant settlement to merchant M-Pesa wallets with 1% cost in Kenya, validating emerging market financial infrastructure use case.",
+        "summary_ja": "EMURGOがAnzens提携を強調。ケニアでM-Pesaマーチャント決済が即座に1%費用で実現。新興市場金融インフラの利用ケースを検証。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@emurgo_io"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "FluidTokens Launches 6% Fixed APY Lending Program with Enhanced Security Focus",
+        "title_ja": "FluidTokensがセキュリティ重視の6%固定APYレンディングプログラムを開始",
+        "summary_en": "FluidTokens launches 3-month guaranteed 6% APY lending with explicit focus on security transparency, liquidation mechanics clarity, and non-custodial architecture for ADA DeFi participants.",
+        "summary_ja": "FluidTokensが3ヶ月間保証6% APYレンディングを開始。セキュリティ透明性、清算メカニクス明確化、非カストディ建築にフォーカス。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      }
+    ],
+    "tweetCount": 97,
+    "generatedAt": "2026-03-06T15:32:52.320Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-20",
+    "highlights": [
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Declares Victory Over Blockchain Trilemma with Leios Launch",
+        "title_ja": "Leios立ち上げでブロックチェーン・トリレンマ解決を宣言",
+        "summary_en": "Charles Hoskinson announced Cardano has solved the blockchain trilemma through Leios launch, claiming the network achieves decentralization, phenomenal on-chain governance, and scalability simultaneously.",
+        "summary_ja": "Charles Hoskinssonがレイオス立ち上げでCardanoがブロックチェーン・トリレンマを解決したと発表。分散性、優れたオンチェーン・ガバナンス、スケーラビリティを同時に達成したと主張。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Stablecoin Reaches 53M Supply; LayerZero Integration Opens 8 Major Stablecoins",
+        "title_ja": "USDCx供給量5300万達成、LayerZero統合で8つのメジャーステーブルコイン実現へ",
+        "summary_en": "USDCx supply surpassed 53 million tokens ahead of launch. Charles Hoskinson confirmed LayerZero integration could unlock 8 major stablecoins for Cardano, with timeline dependent on implementation details.",
+        "summary_ja": "USDCx供給量が5300万トークンを突破。Hoskinssonがレイヤーゼロ統合で8つのメジャーステーブルコイン実現の可能性を確認。タイムラインは実装次第。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@sergiu_cazan"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Constitutional Committee Minimum Members Reduced from 7 to 5",
+        "title_ja": "憲法委員会最小構成人数が7名から5名に削減",
+        "summary_en": "Cardano Foundation voted YES on reducing Constitutional Committee minimum members from 7 to 5 to mitigate governance stagnation risks from unexpected vacancies.",
+        "summary_ja": "Cardano Foundationが憲法委員会の最小構成人数を7名から5名に削減する提案にYES投票。予期しない欠員によるガバナンス停滞リスク軽減が背景。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@SIPO_Tokyo"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Builder DAO Enters Governance Round 2 with 6M ADA Distribution",
+        "title_ja": "Cardano Builder DAOがガバナンス第2ラウンド開始、600万ADAsを配布",
+        "summary_en": "Cardano Builder DAO launched Round 2 of governance to distribute 6M ADA to teams already driving on-chain activity, accelerating ecosystem development.",
+        "summary_ja": "Cardano Builder DAOがガバナンス第2ラウンドを開始、オンチェーン活動を推進するチームに600万ADAを配布。エコシステム開発を加速。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@TapTools"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "USDCx Demonstrates Non-Seizable Stablecoin Advantages Over USDC",
+        "title_ja": "USDCxがUSTC比での没収不可ステーブルコインの優位性を実証",
+        "summary_en": "USDCx cannot be seized, frozen, clawed back, or zeroed out, unlike traditional USDC, positioning Cardano as a superior platform for censorship-resistant finance.",
+        "summary_ja": "USDCxは没収、凍結、チャージバック、ゼロアウトが不可能。従来のUSCDと異なり、Cardanoを検閲耐性ファイナンスの優れたプラットフォームとして位置付け。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano TVL Increased 170% Since End of 2025; Messari State of Report Underestimates Growth",
+        "title_ja": "Cardano TVL、2025年末比170%増加。Messariレポートは成長を過小評価",
+        "summary_en": "FluidTokens reported Cardano's TVL grew approximately 170% since December 31, 2025 Messari report snapshot, significantly outpacing analyst expectations.",
+        "summary_ja": "FluidTokensが報告によると、Cardano TVLは2025年12月31日のMessariレポート以降170%増加。アナリスト予想を大きく上回る成長。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "ODATANO Bridges Cardano to Enterprise World with SAP OData Integration",
+        "title_ja": "ODATANOがCardanoをエンタープライズ世界へ、SAP OData統合実現",
+        "summary_en": "ODATANO launched SAP CAP-based OData V4 service enabling enterprise integration with multi-backend orchestration and CIP-30 wallet signing support.",
+        "summary_ja": "ODATANOがSAP CAP基盤OData V4サービスを立ち上げ。マルチバックエンド・オーケ��トレーション、CIP-30ウォレット署名対応でエンタープライズ統合を実現。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@maxalxweber"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Privacy Network Positioned for 2026 Wave; Already in Beta with Alpha Capabilities",
+        "title_ja": "Midnight隠秘ネットワーク、2026年波に向けて位置付け。既にベータでアルファ機能搭載",
+        "summary_en": "Midnight protocol continues development with beta release demonstrating alpha-level capabilities, positioned to make significant waves in privacy-focused blockchain adoption.",
+        "summary_ja": "Midnightプロトコルがベータ版で既にアルファレベルの機能を実証。隠秘重視のブロックチェーン採用で大きな波を起こす準備整う。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "SyncGovHub Enables Direct Appreciation Payments to DReps for Governance Work",
+        "title_ja": "SyncGovHubがDRepへの直接感謝支払い機能を実現",
+        "summary_en": "SyncGovHub introduced tipping functionality allowing ADA holders to directly reward DReps for their governance contributions and dedication.",
+        "summary_ja": "SyncGovHubがチップ機能を導入。ADAホルダーがガバナンス貢献に対するDRepへの直接報酬を可能に。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@SyncAI_Network"
+        ]
+      }
+    ],
+    "tweetCount": 92,
+    "generatedAt": "2026-03-06T15:33:18.854Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-21",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "Leios Prototype Demonstrates Major Throughput Upgrade Path",
+        "title_ja": "Leiosプロトタイプが大幅なスループット向上を実証",
+        "summary_en": "IOG confirms Leios prototype shows clear end-to-end behavior, targeting 500 TPS in initial release with Q2 public testnet and Dijkstra hard fork deployment this year—a 50x improvement from current 10 TPS.",
+        "summary_ja": "IOGはLeiosプロトタイプが明確な動作を実証し、初回リリースで500 TPSを目指すことを確認。Q2パブリックテストネット予定、Dijkstraハードフォーク導入は本年度予定。現在の10 TPSから50倍の向上。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Pyth Oracle Integration and LayerZero Bridge Enable Cardano Interoperability",
+        "title_ja": "PythオラクルとLayerZeroブリッジがCardanoの相互運用性を実現",
+        "summary_en": "Charles Hoskinson announces Tier-1 Pyth Oracle integration and LayerZero connection to 80+ blockchains, transforming Cardano from isolated blockchain to fully interconnected ecosystem enabling cross-chain liquidity and value transfer.",
+        "summary_ja": "Charles HoskinsonがTier-1 PythオラクルとLayerZero統合を発表。Cardanoは80以上のブロックチェーンに接続され、隔離されたブロックチェーンから完全に相互接続されたエコシステムへ変革。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Fireblocks Integration via Iagon Brings Enterprise-Grade Cardano Infrastructure",
+        "title_ja": "IagonによるFireblocks統合がエンタープライズグレードのCardano基盤を実現",
+        "summary_en": "Iagon and Fireblocks integration now provides full $ADA and CNT support for global institutions, making Cardano operationally ready for banks, fintechs, exchanges, and custodians—critical institutional adoption infrastructure.",
+        "summary_ja": "IagonとFireblocksの統合により、$ADAとCNTの完全サポートがグローバル機関向けに提供。銀行、フィンテック、取引所、カストディアンに対するCardanoの機関的採用インフラが完成。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@IAGONAUTMANNY"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Node v10.6.2 Released with Structural Improvements and Protocol Upgrade Preparation",
+        "title_ja": "Cardanoノードv10.6.2がリリース、構造的改善とプロトコル升級に対応",
+        "summary_en": "IOG and Intersect launch Node v10.6.2 with structural improvements, tracing enhancements, and preparation for upcoming protocol upgrades—maintaining network stability and enabling next-generation features.",
+        "summary_ja": "IOGとIntersectがノードv10.6.2をリリース。構造的改善、トレーシング強化、今後のプロトコル升級への対応を実現し、ネットワーク安定性を維持。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "DRep",
+          "CC",
+          "Builder"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Strike v2 Mainnet Expansion Signals Multi-Chain Liquid Staking Momentum",
+        "title_ja": "Strike v2メインネット拡大がマルチチェーン流動性ステーキングの勢いを示唆",
+        "summary_en": "Strike targets v2 mainnet launch on Cardano and Solana within 3 months with native mobile app, liquid staking, and exchange listings, demonstrating rapid cross-chain expansion and developer agility.",
+        "summary_ja": "StrikeがCardanoとSolana上でv2メインネット3ヶ月内の立ち上げを目指す。ネイティブモバイルアプリ、流動性ステーキング、取引所上場を予定し、迅速なマルチチェーン拡大を実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Midnight Tokenomics Framework: DUST Energy System and Capacity Exchange Model",
+        "title_ja": "Midnightトークノミクス：DUSTエネルギーシステムと容量交換モデル",
+        "summary_en": "Midnight introduces NIGHT tokenomics with decaying DUST energy resource (non-tradable) exchangeable through capacity exchange via SundaeSwap, creating novel economic model for Layer-2 transaction fee management.",
+        "summary_ja": "Midnightが時間減衰型DUSTエネルギーシステムを導入。NIGHTトークノミクスで、売却不可のDUSTリソースをSundaeSwap経由で容量交換可能。Layer-2トランザクション費用の新しい経済モデル。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Africa Tech Summit in Nairobi Demonstrates Strong Community-Led Adoption",
+        "title_ja": "ナイロビCardanoアフリカテックサミットがコミュニティ主導の採用を実証",
+        "summary_en": "Cardano Summit 2025 final stop in Nairobi, organized by Wada_org, attracted full attendance, hackathon teams, and serious builders—reinforcing Cardano's grassroots global adoption momentum across Africa.",
+        "summary_ja": "CardanoサミットNairobi最終回がWada_orgにより主催。満席、ハッカソンチーム、真摯なビルダー参加で、アフリカを含むCardanoのグラスルーツグローバル採用の勢いを強化。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Cosmos-Cardano IBC Bridge Architecture Enables Cross-Chain Interoperability",
+        "title_ja": "Cosmos-Cardano IBCブリッジがクロスチェーン相互運用性を実現",
+        "summary_en": "Developer Office Hour demonstrates Cosmos-Cardano IBC bridge architecture with live cross-chain communication demo, advancing critical interoperability infrastructure for mature blockchain ecosystem.",
+        "summary_ja": "Developer Office Hourが、ライブクロスチェーン通信デモを含むCosmos-Cardano IBCブリッジアーキテクチャを実演。成熟したブロックチェーンエコシステムの相互運用性インフラを前進。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      }
+    ],
+    "tweetCount": 88,
+    "generatedAt": "2026-03-06T15:34:10.273Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-22",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "van Rossem Hard Fork Confirmed for March 2026",
+        "title_ja": "van Rossum ハードフォークが2026年3月に確認される",
+        "summary_en": "Charles Hoskinson confirms Cardano's next hard fork (Protocol Version 11, van Rossem Hard Fork) is on track for next month. The upgrade enhances network performance and improves Plutus capabilities without changing transaction structures.",
+        "summary_ja": "チャールズ・ホスキンソンが、カルダノの次のハードフォーク（プロトコルバージョン11、van Rossum ハードフォーク）が来月予定通りに予定されていることを確認しました。アップグレードはネットワークパフォーマンスを向上させ、トランザクション構造を変更せずにPlutus機能を改善します。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@ManuelOnchain",
+          "@cryptohdaily",
+          "@CardanoFeed"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Leios L1 Scaling Prototype: 50x Throughput Increase Targeted",
+        "title_ja": "Leios L1スケーリングプロトタイプ：50倍のスループット向上を目指す",
+        "summary_en": "IOG's Leios prototype advancing in devnet with ambitious goal to scale from ~10 TPS to 500 TPS. Public testnet expected end Q2 2026, with mainnet deployment via Dijkstra hard fork later in 2026.",
+        "summary_ja": "IOGのLeiosプロトタイプがdevnetで進展し、約10 TPSから500 TPSへのスケーリングを目指しています。パブリックテストネットは2026年第2四半期末を予定し、Dijkstra ハードフォーク経由のメインネット展開は2026年後半を予定しています。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@danamphred"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet Launch Imminent; $NIGHT Token Momentum Building",
+        "title_ja": "Midnightメインネット起動が間近；$NIGHTトークンの勢いが構築中",
+        "summary_en": "Midnight privacy platform has announced mainnet launch date. $NIGHT token has surged to 47,000+ holders pre-launch with expectations to reach 100,000 by end of March, signaling strong ecosystem preparation and builder alignment.",
+        "summary_ja": "Midnight プライバシープラットフォームがメインネット起動日を発表しました。$NIGHTトークンはローンチ��に47,000人以上のホルダーに急増し、3月末までに100,000人に達することが予想されており、強力なエコシステムの準備とビルダーの一致を示唆しています。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@StakeWithPride",
+          "@NightSwapLabs",
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "New Tx3 Toolkit for JetBrains IDEs Enhances Developer Experience",
+        "title_ja": "JetBrains IDE向けの新しいTx3ツールキットが開発者体験を向上させる",
+        "summary_en": "Community developer launches open-source Tx3 toolkit for JetBrains IDEs to significantly improve developer experience when working with Tx3 transaction construction, addressing productivity gaps in current development workflows.",
+        "summary_ja": "コミュニティ開発者がJetBrains IDE向けのオープンソースTx3ツールキットを起動し、Tx3トランザクション構築時の開発者体験を大幅に向上させ、現在の開発ワークフローの生産性ギャップに対処しています。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@adamKDean"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Governance Transparency Concerns Raised Over Hard Fork Announcement",
+        "title_ja": "ハードフォークの発表をめぐるガバナンスの透明性上の懸念が提起される",
+        "summary_en": "Community member questions Cardano's decentralization, noting many were unaware of the upcoming hard fork details before the announcement, raising concerns about governance communication and DRep/community consultation processes.",
+        "summary_ja": "コミュニティメンバーがカルダノの分散化に疑問を呈し、多くの人がアナウンスメント前にアップグレードの詳細について知らなかったこと指摘し、ガバナンスコミュニケーションとDRep/コミュニティ協議プロセスに関する懸念を提起しています。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@0xNLYFANS"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Coinbase Integration: ADA as Collateral for Loans Up to 100k USDC",
+        "title_ja": "Coinbase統合：最大100k USDCのローン担保としてのADA",
+        "summary_en": "Coinbase now accepts Cardano (ADA) as collateral for loans up to 100,000 USDC, representing significant institutional adoption and accessibility expansion for ADA holders seeking liquidity without selling.",
+        "summary_ja": "Coinbaseはカルダノ（ADA）を最大100,000 USDCのローンの担保として受け入れるようになり、機関投資家による採用の拡大とADAホルダーが売却せずに流動性を求めるためのアクセスの拡大を表しています。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Institution"
+        ],
+        "sources": [
+          "@ADA_HBAR"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Tokenized Equity Framework Proposed for Cardano Ecosystem",
+        "title_ja": "カルダノエコシステムの仮想化された株式フレームワークが提案される",
+        "summary_en": "Community member proposes tokenized company shares framework viable in Switzerland with minimal documentation changes, potentially enabling corporate equity issuance on Cardano with minimal compliance overhead.",
+        "summary_ja": "コミュニティメンバーがスイスで実行可能なトークン化された企業株式フレームワークを提案し、文書変更を最小限に抑え、カルダノ上の企業資本金発行をコンプライアンスオーバーヘッドで可能にする可能性があります。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Hard Fork Performance Upgrades: Smart Contract & Security Enhancements",
+        "title_ja": "ハードフォークのパフォーマンスアップグレード：スマートコントラクト＆セキュリティの強化",
+        "summary_en": "Upcoming hard fork includes smart contract performance boosts, ledger improvements, enhanced node security, and new cryptographic features designed to deliver efficiency and scalability for dApps without transaction structure changes.",
+        "summary_ja": "今後のハードフォークには、スマートコントラクトのパフォーマンス向上、台帳の改善、ノードセキュリティの強化、およびトランザクション構造を変更せずにdAppsに効率性とスケーラビリティを提供するために設計された新しい暗号化機能が含まれます。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@A3Cpool_Shawn"
+        ]
+      }
+    ],
+    "tweetCount": 79,
+    "generatedAt": "2026-03-06T15:34:39.250Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-23",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Petrobras Implements Cardano for Immutable Attendance Verification",
+        "title_ja": "ペトロブラスがCardanoを使用して改ざん不可能な出席証明を実装",
+        "summary_en": "Petrobras has deployed Cardano-based NFC smart cards to generate cryptographically signed, immutable proof of attendance records. This marks a significant real-world enterprise adoption of Cardano's blockchain infrastructure.",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Protocol Advances with 50x Throughput Improvement Target",
+        "title_ja": "Ouroboros Leiosプロトコルが50倍のスループット改善を目指して進展",
+        "summary_en": "Cardano's Ouroboros Leios received 147 updates this week, with plans to increase Layer-1 TPS from 10 to 500 in the first release. Public testnet scheduled for end of Q2, with mainnet deployment targeted for the Dijkstra hard fork later in 2026.",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "SPO",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Intersect Town Hall Scheduled for February 26 with Protocol Updates",
+        "title_ja": "2月26日のIntersectタウンホールでプロトコル更新を討議",
+        "summary_en": "Intersect will host a town hall on February 26 at 12:00 PM UTC covering Protocol Version 11 hard fork, active governance decisions, and delivery assurance. Cross-Ecosystem Roundtable on supply chain adoption scheduled for the same day.",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@IntersectMBO",
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Anzens Delivers Mobile App and MPC Wallet Infrastructure Milestone",
+        "title_ja": "AnzensがモバイルアプリとMPCウォレット基盤マイルストーンを達成",
+        "summary_en": "Anzens completed Milestone 2 with iOS/Android mobile application launch and Multi-Party Computation wallet integration supporting USDA and asset conversion functionality, enabling fiat on-ramp/off-ramp pathways.",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens Smart Account Audit Complete; BTC-ADA Bridge Nears Launch",
+        "title_ja": "FluidTokensのスマートアカウント監査完了、BTC-ADAブリッジが近づく",
+        "summary_en": "FluidTokens completed audits for Smart Account and Fluidly Atomic Swap infrastructure, with Bitcoin-side testers secured. The platform will support USDCx lending and borrowing from launch, bringing regulated stablecoin adoption to Cardano.",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "SNEK Token Achieves 2 Billion ADA Trading Volume Milestone",
+        "title_ja": "SNEKトークンが20億ADAの取引高マイルストーン達成",
+        "summary_en": "SNEK has surpassed 2 billion ADA in cumulative trading volume since launch, demonstrating significant DeFi activity and community engagement on the Cardano ecosystem.",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@splashprotocol"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Cardano Governance Model Gains International Academic Recognition",
+        "title_ja": "Cardanoガバナンスモデルが国際的学術的認識を獲得",
+        "summary_en": "Research published in The Edge Malaysia, supported by EMURGO and @unimalaya, demonstrates Cardano's decentralized governance model's potential for real-world implementation in Southeast Asia governance systems.",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@emurgo_io"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Protocol Version 11 Hard Fork Implementation Updates",
+        "title_ja": "プロトコルバージョン11ハードフォーク実装アップデート",
+        "summary_en": "Cardano continues advancement toward the next hard fork iteration with multiple governance discussions ongoing. Specific technical parameters and timing will be addressed at the February 26 Intersect Town Hall.",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO"
+        ],
+        "sources": [
+          "@IntersectMBO"
+        ]
+      }
+    ],
+    "tweetCount": 76,
+    "generatedAt": "2026-03-06T15:35:01.507Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-24",
+    "highlights": [
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Foundation to Assume Stewardship of Project Catalyst",
+        "title_ja": "カルダノ財団がProject Catalystの運営を引き継ぎ",
+        "summary_en": "IOG and Cardano Foundation have agreed to transition Project Catalyst stewardship to the Foundation, with community conversations to follow. Intersect will continue as Treasury Administrator for Catalyst-approved DRep funds.",
+        "summary_ja": "IOGとカルダノ財団がProject Catalystの運営権をカルダノ財団に移譲することで合意。Intersectは引き続きガバナンス資金の管理者として機能する。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@Catalyst_onX",
+          "@Cardano_CF",
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet Launch in March with Major Validator Partners",
+        "title_ja": "3月のMidnightメインネット立ち上げ、大手バリデーターが参加",
+        "summary_en": "Midnight scheduled for March 2026 launch with prominent validators including eToro and partnerships with MoneyGram (2x Western Union volume), signaling major institutional adoption of Cardano's privacy-focused partner chain.",
+        "summary_ja": "Midnight は3月のメインネット立ち上げを予定し、eToro、MoneyGramなどの大手機関がバリデーターおよびパートナーとして参加。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "Holder",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@StakeWithPride",
+          "@DexHunterIO"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Circle Stablecoin Goes Live on Cardano",
+        "title_ja": "カルダノ上でUSDCx（Circle発行）がライブ",
+        "summary_en": "FluidTokens and Liqwid Finance enabling USDCx (Circle's native Cardano stablecoin) with regular and premier market options. Represents tier-1 regulated dollar stablecoin infrastructure for Cardano DeFi.",
+        "summary_ja": "FluidTokensとLiqwidがカルダノ上でUSDCx（Circle発行）を有効化。規制対象の一流ドルステーブルコイン基盤構築。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@FluidTokens",
+          "@liqwidfinance"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Real Gold Lending (fGLD) Launches on Cardano DeFi",
+        "title_ja": "カルダノDeFiで実物金担保貸借（fGLD）がライブ",
+        "summary_en": "FluidTokens launches fGLD enabling lending and borrowing of real gold on Cardano with 5% base interest and full liquidation mechanisms, expanding DeFi asset classes.",
+        "summary_ja": "FluidTokensが実物金担保のfGLDをカルダノで立ち上げ。5%の基本金利と完全清算メカニズムを提供。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@FluidTokens",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Real-World Adoption: BikeID Integration with Cardano",
+        "title_ja": "実世界採用：BikeIDがカルダノと統合",
+        "summary_en": "Cardano Foundation partnering with BikeID and EcoBike to submit joint proposal for verifiable, decentralized data infrastructure for cycling ecosystems, demonstrating blockchain use in urban mobility.",
+        "summary_ja": "カルダノ財団がBikeIDおよびEcoBikeと協働し、自転車エコシステムに検証可能な分散型データを統合する共同提案を提出。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@DanielKurpisz"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Rosetta API Evolution: Version 2.1.0 Update Discussion",
+        "title_ja": "Rosetta API進化：バージョン2.1.0アップデート",
+        "summary_en": "Cardano Foundation hosting developer office hours (Feb 27) featuring Mateusz Czeladka discussing Rosetta 1.2.0 → 2.1.0 evolution, roadmap, and upcoming priorities for infrastructure development.",
+        "summary_ja": "カルダノ財団がRosetta APIの進化（1.2.0→2.1.0）について開発者向けセッションを開催予定（2月27日）。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@Cardano",
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Web3 Gaming Integration: Ale & Axes on Cardano",
+        "title_ja": "Web3ゲーム統合：Ale & Axesがカルダノをサポート",
+        "summary_en": "Tavern Studios' Ale & Axes, a browser-based RPG, now integrated with Cardano blockchain for core game mechanics and digital assets, expanding gaming ecosystem.",
+        "summary_ja": "Tavern StudiosのAle & Axes（ブラウザRPG）がカルダノの中核ゲームメカニクスとデジタル資産に統合。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Minswap $MIN Buyback Acceleration Ahead of USDCx Launch",
+        "title_ja": "Minswap の$MIN買い戻し加速、USDCx立ち上げ前に",
+        "summary_en": "Minswap token buyback rate approaching 3x daily emissions, signaling market strength and ecosystem confidence. $NIGHT thaw allocation claiming window open for Meowdrop LPs.",
+        "summary_ja": "Minswapの日次買い戻し率が日次発行の3倍近くに。$NIGHT配分クレーム期間がMeowdrop LPに対して開放中。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      }
+    ],
+    "tweetCount": 115,
+    "generatedAt": "2026-03-06T15:35:29.203Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-25",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Launch Week: 8 of 10 Supernodes Announced, City Launch Tomorrow",
+        "title_ja": "Midnight launch週：10個中8個のスーパーノード発表、都市ローンチは明日",
+        "summary_en": "Midnight, a major privacy-focused project on Cardano, is launching Midnight City tomorrow with 8 of 10 supernodes announced. Charles Hoskinson highlighted Midnight as a $1B+ project with Tier-1 listings and partnerships like Google, demonstrating Cardano's ecosystem strength.",
+        "summary_ja": "CardanoのプライバシープロジェクトMidnightがMidnight Cityを明日ローンチ。10個中8個のスーパーノードが発表され、Googleなどとのパートナーシップを持つ10億ドル超のプロジェクトとして位置付けられている。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@StakeWithPride",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "2026 Cardano Budget Event: DReps and Governance Leaders Meet in Tokyo",
+        "title_ja": "2026年Cardano予算イベント：東京でDRepsとガバナンスリーダーが集会",
+        "summary_en": "Intersect MBO and EMURGO hosted the 2026 Cardano Budget session in Tokyo, bringing together SPOs, DReps, and ADA holders to discuss budget timelines, decision points, and updates from the 2025 cycle.",
+        "summary_ja": "IntersectMBOとEMURGOが東京で2026年Cardano予算セッションを開催。SPOs、DReps、ADAホルダーが参加し、予算タイムライン、決定ポイント、2025年サイクルの更新について討議。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@taichiyokoyama",
+          "@emurgo_io",
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Spring '26 Cardano Accelerator Program Cohort Launched with 5 Projects",
+        "title_ja": "Spring '26 Cardano加速器プログラムコホート：5プロジェクトがローンチ",
+        "summary_en": "Cardano Foundation announced the Spring 2026 Accelerator Program cohort including TotoFinance, Libertum, NobonHQ, Colossus Italy, and TheMint Assets. Participants receive technical mentorship, consulting support, and in-person collaboration through the Venture Hub.",
+        "summary_ja": "Cardano Foundationが2026年Spring加速器プログラムを発表。TotoFinance、Libertum、NobonHQ、Colossus Italy、TheMint Assetsが参加し、技術メンタリングとコンサルティ��グサポートを受ける。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Cardano Foundation Emphasizes Energy Efficiency of Proof-of-Stake Model",
+        "title_ja": "Cardano Foundation：PoSモデルのエネルギー効率を強調",
+        "summary_en": "Cardano Foundation highlighted how proof-of-stake differs from proof-of-work, with block production based on stake rather than computing power, enabling Cardano to maintain security without industrial-scale mining energy consumption.",
+        "summary_ja": "Cardano FoundationがProof-of-Stakeの利点を説明。ブロック生成がコンピューティング能力ではなくステーク量に基づき、産業規模のマイニングなしでセキュリティを維持できることを強調。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Tokenization of Real-World Assets Reshaping Global Finance on Cardano",
+        "title_ja": "現実資産のトークン化がCardanoで世界金融を再形成",
+        "summary_en": "EMURGO CEO Phillip Pon participated in Tokyo Blockchain Summit 2026 discussing RWA tokenization with leaders from Stellar, Ondo Finance, Pruvidence Finance, Sony Innovation Fund, discussing how adoption will reshape global finance.",
+        "summary_ja": "EMURGO CEOがTokyo Blockchain Summit 2026でRWAトークン化について討議。Stellar、Ondo Finance、Sony Innovation Fundなどとともに、トークン化が世界金融をいかに再形成するかについて言及。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Institutional",
+          "Holder"
+        ],
+        "sources": [
+          "@emurgo_io"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens Enables Gold Tokenization (fGLD) Lending on Cardano",
+        "title_ja": "FluidTokens：Cardanoでのゴールドトークン化（fGLD）レンディングが稼働",
+        "summary_en": "FluidTokens launched fGLD (tokenized gold) on Cardano, allowing users to borrow ADA using gold as collateral directly on-chain, expanding DeFi capabilities and real-world asset integration.",
+        "summary_ja": "FluidTokensがCardano上でfGLD（ゴールドトークン化）をローンチ。ユーザーがゴールドを担保にしてADAを借りられるようになり、DeFi機能とRWA統合が拡大。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "ada_stat Explorer Milestone 7 Delivered: Continuous Service Maintenance",
+        "title_ja": "ada_stat Explorer マイルストーン7達成：継続的サービス保守",
+        "summary_en": "Milestone 7 for ada_stat explorer confirmed, ensuring continued availability of Cardano explorer tools, API, and Telegram bot during January 2026 maintenance period.",
+        "summary_ja": "ada_stat explorerのマイルストーン7が達成され、2026年1月のメンテナンス期間中もCardano explorerツール、API、Telegram botの継続的な利用可能性が確保された。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO",
+          "Developer"
+        ],
+        "sources": [
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Historic Week for Cardano: Minswap Announcement Builds Momentum",
+        "title_ja": "Cardanoにとって歴史的な週：Minswap発表がモメンタムを構築",
+        "summary_en": "Minswap DEX announced a historic week for Cardano with major developments expected on Friday, signaling significant ecosystem activity and community anticipation.",
+        "summary_ja": "Minswap DEXがCardanoにとって歴史��な週を発表。金曜日に重要な展開が予定されており、エコシステムの活発さとコミュニティの期待感を示唆。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cross-Ecosystem Roundtable: Addressing Supply Chain Adoption Gaps",
+        "title_ja": "クロスエコシステム円卓会議：サプライチェーン採用ギャップの対応",
+        "summary_en": "Cardano announced a Cross Ecosystem Roundtable Talk on supply chain management adoption, exploring what works, what doesn't, and necessary changes for blockchain integration in supply chains.",
+        "summary_ja": "Cardanoがサプライチェーン管理採用に関するクロスエコシステム円卓会議を開催。ブロックチェーンのサプライチェーン統合のための課題と必要な変更について探索。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      }
+    ],
+    "tweetCount": 113,
+    "generatedAt": "2026-03-06T15:35:58.223Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-26",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet Launch Confirmed with Zswap Integration",
+        "title_ja": "Midnightメインネット上線確定、Zswap統合",
+        "summary_en": "Midnight mainnet will launch with Zswap featuring full smart-contract privacy rules from day one. Azure Confidential Compute L2 processes AI agent transactions at 14 TPS with 1-second finality. Composable Smart Contracts will arrive post-launch.",
+        "summary_ja": "Midnightメインネットは完全なスマートコントラクトプライバシーを備えたZswapとともに上線。Azure Confidential Compute L2で14 TPSの速度と1秒のファイナリティを実現。合成スマートコントラクトはメインネット後に到来。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@StakeWithPride",
+          "@Cardano_Power",
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Stablecoin Launch Targets February on Cardano",
+        "title_ja": "USDCxステーブルコイン、2月中のCardano上線を予定",
+        "summary_en": "USDCx backed 1:1 by USDC through Circle's xReserve infrastructure set to launch in February, significantly enhancing liquidity and enabling DeFi growth on Cardano with major institutional backing.",
+        "summary_ja": "Circle xReserveで裏付けされたUSDCxが2月中に上線予定。Cardanoの流動性向上とDeFi成長を推進し、機関投資家の支援を獲得。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Agent-to-Agent Network Momentum: Masumi and Multi-Company Deployment",
+        "title_ja": "エージェント間ネットワーク急速成長：Masumi主導、複数企業デプロイメント",
+        "summary_en": "Masumi Network scaling with Web2 companies deploying AI agents on Cardano. Multiple sources confirm billions of agents will use blockchain for payments, identity, decision logging, and discovery—now entering mainstream onboarding phase.",
+        "summary_ja": "MasumiネットワークはWeb2企業とのAIエージェントデプロイメントで拡大。数十億のエージェントがブロックチェーンを採用する段階へ移行。主流採用のオンボーディング開始。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@Padierfind",
+          "@angrycryptoshow",
+          "@SebastienGllmt"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "DeFi Infrastructure Expansion: FluidTokens, Strike Perps, Metal Pay Integration",
+        "title_ja": "DeFiインフラ拡張：FluidTokens、Strikeパープス、Metal Pay統合",
+        "summary_en": "Multiple DeFi platforms expanding on Cardano: FluidTokens adds gold-backed lending (fGLD), Strike launches first perpetual futures venue, Metal X DEX integrates ADA with fiat on/off ramps. Atlas Perps Aggregator positioning for multi-platform fragmentation.",
+        "summary_ja": "複数のDeFiプラットフォームがCardano上で拡張：FluidTokensはfGLD担保ローン追加、Strikeはパープス市場開始、Metal XはフィアットランプとADA統合。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@FluidTokens",
+          "@angrycryptoshow",
+          "@Apex_333"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Amaru Treasury Withdrawal Governance Action Approved",
+        "title_ja": "Amaru財務引き出しガバナンスアクション承認",
+        "summary_en": "DReps voting YES on Amaru Treasury Withdrawal 2026 governance action. Amaru node by Pragma offers open-source, community-funded infrastructure with Zero-Knowledge features and Raspberry Pi compatibility.",
+        "summary_ja": "DRepsがAmaru Treasury Withdrawal 2026ガバナンスアクションに投票承認。Pragmaが開発したAmaruノードはゼロ知識証明機能とRaspberry Pi対応を提供。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@ATADA_Stakepool",
+          "@SundaeSwap"
+        ]
+      },
+      {
+        "category": "security",
+        "title_en": "Post-Quantum Cryptography Risks: Ed25519 and BLS Vulnerability Discussion",
+        "title_ja": "量子耐性暗号化リスク：Ed25519およびBLS脆弱性の議論",
+        "summary_en": "Community discussion highlights potential Shor's Algorithm threats to Ed25519 and BLS signatures on quantum computers, enabling private key derivation from public addresses and governance vote forgery. Post-quantum migration planning required.",
+        "summary_ja": "Ed25519およびBLS署名の量子コンピュータによる脆弱性を議論。公開鍵から秘密鍵導出およびガバナンス投票改ざんのリスク。量子耐性移行計画が必要。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "SPO",
+          "DRep"
+        ],
+        "sources": [
+          "@Cerkoryn"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano-Signer 1.35.0 Release with Export Functionality",
+        "title_ja": "Cardano-Signer 1.35.0リリース、エクスポート機能搭載",
+        "summary_en": "cardano-signer 1.35.0 Export Edition enables developers to export functions for easy integration into custom modules and applications, enhancing developer toolkit flexibility.",
+        "summary_ja": "cardano-signer 1.35.0がエクスポート機能でリリース。開発者は関数をエクスポート可能となり、カスタムモジュール統合が簡素化。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "DRep Community Engagement: Delegation and Governance Participation",
+        "title_ja": "DRepコミュニティ参加：委任およびガバナンス活動",
+        "summary_en": "Active DReps engaging community on delegation opportunities and governance responsibilities. Discussion emphasizes Cardano as blockchain, not voting platform, with governance as supporting feature not primary usecase.",
+        "summary_ja": "DRepsがコミュニティ参加とガバナンス責任について言及。Cardanoはブロックチェーンであり投票プラットフォームではないという認識強調。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@Cerkoryn",
+          "@ATADA_Stakepool"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Major Tech Companies Supporting Midnight Infrastructure",
+        "title_ja": "Midnight基盤を支援する大手テック企業",
+        "summary_en": "Microsoft, Google, and Amazon backing Midnight development. Azure Confidential Compute enables privacy-preserving computation layer supporting enterprise adoption of privacy-first blockchain applications.",
+        "summary_ja": "MicrosoftおよびGoogleがMidnight開発をサポート。Azure Confidential Computeは企業向けプライバシー優先ブロックチェーン採用を可能化。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@StakeWithPride",
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Music NFT Integration: Song Marketplace with Scarce Assets",
+        "title_ja": "ミュージックNFT統合：Song Marketplace稀少資産リリース",
+        "summary_en": "Song protocol expanding with unique music assets (200-unit limited release) demonstrating quality and scarcity-based NFT utility on Cardano ecosystem.",
+        "summary_ja": "Songプロトコルが200ユニット限定リリースの稀少ミュージック資産で拡張。Cardanoエコシステムのスケーラビリティを実証。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@nejccimSelan4"
+        ]
+      }
+    ],
+    "tweetCount": 103,
+    "generatedAt": "2026-03-06T15:36:29.164Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-27",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Stablecoin Launch on Cardano - Major DeFi Milestone",
+        "title_ja": "Cardanoへの USDCx ステーブルコイン展開 - DeFi 主要マイルストーン",
+        "summary_en": "13.8M USDCx has been minted on Cardano with official launch scheduled for 2026-02-27/28, marking a critical infrastructure upgrade for Cardano DeFi ecosystem. Circle stablecoin integration expected to drive significant liquidity and adoption across DEXs.",
+        "summary_ja": "Cardanoで1380万 USDCx がミントされ、公式展開は本日または明日予定。DeFi インフラの重要なアップグレードとなり、DEX全体の流動性と採用を促進する見込み。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardanians_io",
+          "@CardanoAftrDark"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Tachys CIP-177 - Layer 2 Speed Enhancement Under Community Review",
+        "title_ja": "Ouroboros Tachys CIP-177 - レイヤー2 高速化の コミュニティ審査進行中",
+        "summary_en": "CIP-177 proposing 4x speed improvement for Cardano partner chains through Ouroboros Tachys consensus protocol is generating significant community discussion. Apex Fusion collaboration demonstrates commitment to interoperability improvements.",
+        "summary_ja": "Cardanoパートナーチェーンの4倍高速化を提案するCIP-177が活発なコミュニティ議論を生成中。Apex Fusionとの協業により相互運用性向上への確約を実証。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@ApexFusion",
+          "@flantoshi"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Google Cloud Joins Midnight Mainnet as Validator - Enterprise Integration",
+        "title_ja": "Google Cloud - Midnight フェデレーテッド メインネット バリデーターに参加",
+        "summary_en": "Google Cloud confirmed as Midnight validator during federated mainnet launch and already operating Cardano stake pool on preview testnet. Demonstrates major institutional enterprise validation of Cardano's privacy-focused sidechain.",
+        "summary_ja": "Google CloudがMidnightフェデレーテッドメインネットローンチ時のバリデーターに確定。プレビューテストネットでCardanoステークプール運用中。Cardanoのプライバシー重視サイドチェーンへの大手エンタープライズ検証。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@Cardanians_io"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Wanchain Bridge Cross-Chain Volume Exceeds $130M - Cardano Liquidity Expansion",
+        "title_ja": "Wancainブリッジのクロスチェーン取引高が 1.3億ドル超え - Cardano 流動性拡大",
+        "summary_en": "$130M+ in cross-chain volume routed through Wanchain bridge connecting Cardano with Bitcoin, Solana and other chains. Real on-chain activity growth demonstrates Cardano's interoperability infrastructure maturation.",
+        "summary_ja": "Wancainブリッジを経由したCardano、Bitcoin、Solana間のクロスチェーン取引高が1.3億ドル超。Cardanoの相互運用性インフラ成熟度を示すオンチェーン活動の実質的な成長。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@0x_trophy"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "DRep Delegation UI Innovation - 'Delegate & Change' Visualization Demo",
+        "title_ja": "DRep委任UI革新 - 「Delegate & Change」ビジュアライゼーション デモ",
+        "summary_en": "Community member @Hardfork_OT showcases innovative DRep delegation visualization interface enabling wallet-connected delegation management. Addresses governance accessibility and decentralization participation improvements.",
+        "summary_ja": "@Hardfork_OT がDRep委任ビジュアライゼーション UI デモを公開。ウォレット接続型委任管理で、ガバナンス アクセシビリティと分散化参加を向上。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@Hardfork_OT"
+        ]
+      },
+      {
+        "category": "constitution_budget",
+        "title_en": "Constitutional Amendment Process and Compensation Framework - Pre-Implementation Caution",
+        "title_ja": "憲法修正プロセスと報酬枠組み - 実装前の慎重論",
+        "summary_en": "@shaggyrax raises critical concern: governance proposals should pause until constitution workstreams complete amendments process and establish SPO/CC/DRep treasury compensation mechanisms required for long-term Cardano sustainability.",
+        "summary_ja": "@shaggyrax が重要な懸念を提起：憲法ワークストリーム（修正プロセス、SPO/CC/DRep報酬枠組み）完成まで提案を一時停止すべき。長期的なCardano持続性に必須。",
+        "importance": 4,
+        "audience": [
+          "CC",
+          "DRep",
+          "SPO"
+        ],
+        "sources": [
+          "@shaggyrax"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Eryx zkBridge Milestone 4 Completed - Aiken Validator Logic Delivered",
+        "title_ja": "Eryx zkBridge マイルストーン 4 完了 - Aiken バリデーター ロジック納品",
+        "summary_en": "@eryxcoop successfully completed Milestone 4 delivering Aiken validator logic for minting bridged tokens on destination chains. Advances zero-knowledge bridge infrastructure on Cardano.",
+        "summary_ja": "@eryxcoop がマイルストーン4を完了。宛先チェーンで委譲トークンをミントするためのAikenバリデーターロジックを納品。Cardanoのゼロ知識ブリッジインフラを進展。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@IntersectMBO"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Supply Chain Adoption Roundtable - Enterprise Use Case Validation",
+        "title_ja": "サプライチェーン採用ラウンドテーブル - エンタープライズユースケース検証",
+        "summary_en": "Cardano Foundation hosted supply chain management discussion with speakers from Traceability, Zengate, Plastiks and other organizations. Demonstrates active enterprise engagement validating real-world blockchain adoption pathways.",
+        "summary_ja": "Cardano Foundation がサプライチェーン管理ラウンドテーブルを開催。複数企業参加で実世界ブロックチェーン採用経路を検証。エンタープライズ関与の拡大。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardano"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Reaffirms Cardano Competition Strength - Enterprise Partnership Potential",
+        "title_ja": "Charles Hoskinson が Cardano の競争力を再確認 - エンタープライズ提携の可能性",
+        "summary_en": "Charles Hoskinson states 'Cardano is still fighting' with capability to launch Tier 1 projects and maintain major partnerships including potential Google relationships. Reaffirms protocol viability amid market competition.",
+        "summary_ja": "Charles Hoskinson が「Cardanoはまだ戦っている」と再確認。Tier 1 プロジェクト展開とGoogle含む主要提携維持の能力を強調。市場競争下でのプロトコル存続性を再確認。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardanians_io"
+        ]
+      }
+    ],
+    "tweetCount": 72,
+    "generatedAt": "2026-03-06T15:37:00.797Z",
+    "backfilled": true
+  },
+  {
+    "date": "2026-02-28",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Circle's USDC to USDCx Bridge Now Open for Community Integration",
+        "title_ja": "CircleのUSDC→USDCxブリッジが誰でも統合可能に",
+        "summary_en": "Circle has published official step-by-step documentation enabling any developer to build USDC-to-USDCx bridges on Cardano, democratizing access to stablecoin integration. This positions Cardano as a uniquely partnered blockchain with Circle.",
+        "summary_ja": "Circleが公式ドキュメントを公開し、開発者は誰でもCardano上でUSDCからUSDCxへのブリッジを構築できるようになった。Cardanoの独自パートナーシップ地位を強化。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "Ecosystem_adoption",
+          "Developer"
+        ],
+        "sources": [
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Launch Drives $14M Injection, Becomes Second Highest DEX Volume Asset",
+        "title_ja": "USDCx発表後24時間で$14M注入、DEX出来高で$NIGHTに次ぐ第2位に",
+        "summary_en": "Within 24 hours of USDCx launch on Cardano, $14M was supplied to the ecosystem with total stablecoin supply reaching ~$48M. USDCx ranked second in DEX volume at 3.6M ADA, demonstrating strong market demand and DeFi momentum.",
+        "summary_ja": "USDCx発表24時間で$14M投入され、総供給量は$48Mに到達。DEX出来高は$NIGHTに次ぐ3.6M ADAで、DeFiの強い需要を示唆。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@cardanzo_tools",
+          "@NicolasC3rny"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Liqwid Lending Protocol Enables USDCx Lending/Borrowing with $3M+ TVL",
+        "title_ja": "Liqwidがカルダノ最大貸付プロトコルでUSDCx対応、$3M以上ロック",
+        "summary_en": "Cardano's largest lending protocol Liqwid launched USDCx lending and borrowing with over $3M already supplied. Supported collateral includes ADA, NIGHT, DJED, USDA, and USDM, strengthening DeFi composability.",
+        "summary_ja": "カルダノ最大の貸付プロトコルLiqwidが$3M以上の供給でUSDCx対応を開始。複数のステーブルコイン担保サポートがDeFi相互運用性を強化。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Protocol Upgrade Expected in 2026, Targeting 500-1000+ TPS",
+        "title_ja": "Ouroboros Leios 2026年導入予定、500-1000+ TPSを目指す",
+        "summary_en": "Charles Hoskinson confirms Ouroboros Leios launches this year, claiming it solves the blockchain trilemma by maintaining decentralization while scaling to 500-1000+ TPS. Current mainnet operates at ~0.4 TPS baseline.",
+        "summary_ja": "Charles HoskinssonがOuroboros Leiosが2026年の導入を確認。ブロックチェーン三者択一問題を解決し、スケーラビリティを大幅向上させる見込み。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "SPO",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@GrahamsNoPlus1"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Circle Confirms Cardano as Uniquely Selected Partner for xReserve Integration",
+        "title_ja": "CircleがCardanoをxReserve統合の選定パートナーとして確認",
+        "summary_en": "Circle confirmed that only select blockchain teams partnered with Circle can integrate xReserve, and Cardano successfully negotiated this exclusive partnership. This reflects Cardano's institutional standing and stablecoin infrastructure maturity.",
+        "summary_ja": "CircleがxReserve統合のための厳選パートナーシップでCardanoを選定。制度的地位と決済���ンフラの成熟度を示唆。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Institutional"
+        ],
+        "sources": [
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Txpipe Hosts First Pythathon at IOG, Advancing Pyth Network Integration",
+        "title_ja": "TxpipeがIOG主催の初Pythathonを実施、Pythネットワーク統合を推進",
+        "summary_en": "Txpipe is hosting Cardano's first Pythathon event at IOG offices, aligned with Charles Hoskinson's PENTAD vision. This initiatives supports Pyth Network integration for oracle infrastructure expansion.",
+        "summary_ja": "TxpipeがIOGでCardano初のPythathonを開催。Charles HoskinssonのPENTAD構想と連携し、Pythネットワーク統合を促進。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Developer"
+        ],
+        "sources": [
+          "@diegomac35"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "MinSwap Launches Deep USDCx Liquidity Pools for Cross-Ecosystem Efficiency",
+        "title_ja": "MinSwapがUSDCx深流動性プールを本格始動、エコシステム効率化へ",
+        "summary_en": "Minswap provides deep liquidity pools for USDCx since day one of launch with efficient routing capabilities. Platform aims to facilitate ecosystem-wide adoption through aligned LP economics and protocol incentives.",
+        "summary_ja": "MinswapがUSDCx上場初日から深流動性プールを提供。エコシステム全体の効率的な利用を目指す。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "CSWAP Launches ADA/USDCx Trading Pair with Protocol-Aligned LP Economics",
+        "title_ja": "CSWAPがADA/USDCx取引ペア推出、プロトコル連動型LP報酬を提供",
+        "summary_en": "CSWAP launched ADA/USDCx with lowest trading and batcher fees, emphasizing LP economics alignment with Cardano protocol growth. Strategy prioritizes retail and liquidity provider incentive alignment.",
+        "summary_ja": "CSWAPがADA/USDCx取引ペアを推出。最低取引手数料とプロトコル成長連動型報酬でLP参加を促進。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@CSWAP_Destroy"
+        ]
+      }
+    ],
+    "tweetCount": 104,
+    "generatedAt": "2026-03-06T15:37:28.037Z",
+    "backfilled": true
+  }
+]
