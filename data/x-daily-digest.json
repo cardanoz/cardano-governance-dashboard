@@ -1,1 +1,192 @@
-[]
+[
+  {
+    "date": "2026-03-06",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano ADA Now Accepted at 137 SPAR Supermarkets in Switzerland",
+        "title_ja": "スイスのSPAR137店舗でADA決済が利用可能に",
+        "summary_en": "Cardano Foundation partnered with DFX Swiss and Brick Towers to enable ADA payments at 137 SPAR supermarket locations across Switzerland through Open Crypto Pay infrastructure. This marks a significant milestone for real-world retail adoption of Cardano.",
+        "summary_ja": "Cardano FoundationがDFX SwissおよびBrick Towersと提携し、Open Crypto Pay インフラストラクチャを通じてスイス全域の137のSPAR店舗でADA決済を実現。日常生活でのCardano利用の大きな前進。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@BSCNews",
+          "@TapTools",
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Leios Testnet Planned for June 2026 - Major Scalability Breakthrough",
+        "title_ja": "Leiosテストネットが2026年6月に予定 - スケーラビリティの大きなブレークスルー",
+        "summary_en": "SPO call confirmed potential Leios testnet launch for June 2026, addressing the blockchain trilemma of decentralization, security, and scalability. Charles Hoskinson indicates this represents solving crypto's hardest problem.",
+        "summary_ja": "SPO呼び出しでLeiosテストネットの2026年6月予定を確認。ブロックチェーンの三大課題（分散性・セキュリティ・スケーラビリティ）を同時に解決する見込み。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "SPO",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@RickMcCracken",
+          "@theunhashed"
+        ]
+      },
+      {
+        "category": "constitution_budget",
+        "title_en": "Cardano 2026 Budget Process Framework Proposed - Major Governance Improvement",
+        "title_ja": "2025年の教訓を反映した2026年予算プロセスフレームワークが提案",
+        "summary_en": "Intersect submitted a refreshed framework for Cardano's 2026 budget cycle with standardized proposals, strategic Vision 2030 alignment, and clearer milestone-based funding. An Info Action is now live for community review and DRep voting.",
+        "summary_ja": "IntersectがCardano 2026年度予算サイクルの改定フレームワークを提案。標準化された提案、Vision 2030との整合、明確なマイルストーンベースの資金配分を含む。Info Actionが投票用に公開中。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@IntersectMBO",
+          "@JBriggsLondon",
+          "@radioastro"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano TVL Surpasses 500M ADA - USDC Growth Driving Expansion",
+        "title_ja": "CardanoのTVLが5億ADAを突破 - USDCの成長が推進力",
+        "summary_en": "Cardano total value locked has exceeded 500 million ADA, driven by rapid growth of USDC on the network. This demonstrates growing DeFi liquidity and stablecoin adoption on Cardano.",
+        "summary_ja": "CardanoのTVLが5億ADAを突破。ネットワーク上のUSDC成長が主な推進力。DeFi流動性とステーブルコイン採用の拡大を示唆。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@TapTools"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "CIP-113 Enables RWAs and Advanced Interoperability - Technology Stack Maturation",
+        "title_ja": "CIP-113がRWAと高度な相互運用性を実現 - 技術スタックの成熟",
+        "summary_en": "Cardano Foundation CEO Frederik Gregaard announced CIP-113 provides capabilities for RWAs and other applications, marking technology stack maturity. Focus areas include TradFi integration and food security applications.",
+        "summary_ja": "Cardano Foundation CEOがCIP-113はRWAおよび他の用途に能力を提供することを発表。技術スタックとインターオペラビリティスタックが成熟段階に。TradFi・食糧安全保障などに対応。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "World Mobile Team Launches Network Builder Affiliate Program and AirNode Platform",
+        "title_ja": "World Mobile TeamがNetwork Builder Affiliate ProgramとAirNode Platformを公開",
+        "summary_en": "World Mobile activated phone plans, Network Builder affiliate program, and new AirNode Platform. Network Builder Auction Batch 4 opens March 11, entering the next phase of decentralized telecom.",
+        "summary_ja": "World MobileがPhone Plans、Network Builder Affiliate Program、新AirNode Platformを公開。3月11日にNetwork Builder Auction Batch 4がオープン。分散型通信インフラの次段階へ。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@WorldMobileTeam"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Network Token NIGHT Surpasses 52,000 Unique Holders",
+        "title_ja": "Midnight NetworkトークンNIGHTが52,000人のユニークホルダーを突破",
+        "summary_en": "Midnight's NIGHT token has exceeded 52,000 unique holders on Cardano according to cexplorer, demonstrating growing adoption of Cardano's privacy-focused smart contract platform.",
+        "summary_ja": "MidnightのNIGHTトークンがCardano上で52,000人のユニークホルダーを突破。プライバシー重視のスマートコントラクトプラットフォームの採用拡大を示唆。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapIntern"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Charles Hoskinson on Crypto Bill: Bad Legislation Worse Than No Regulation",
+        "title_ja": "Charles Hoskinsonが指摘：悪い暗号資産法は規制なしより悪い",
+        "summary_en": "Charles Hoskinson stated that a bad crypto bill is worse than no bill, emphasizing principles-based approach without making all cryptos securities by default. Legacy coins like ADA likely to be grandfathered in.",
+        "summary_ja": "Charles Hoskinsonは悪い暗号資産法が規制なしより悪いと主張。新規プロジェクトが有価証券として分類されると流動性危機に直面。ADAなどの既存コインはグランドファーザーされる可能性。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@IOHK_Charles"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Strike Tokens Staked Value Exceeds 50M ADA - DeFi Growth Momentum",
+        "title_ja": "StrikeトークンのステークされたADAが5000万を突破 - DeFi成長勢い",
+        "summary_en": "Strike staking has surpassed 50 million ADA in total value locked, with over $900,000 available liquidity and 25% utilization providing optimal trading conditions on the derivatives platform.",
+        "summary_ja": "Strikeのステーク総額が5000万ADAを突破��流動性と取引条件が最適化。9000万ドル以上の利用可能流動性と25%の利用率。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@strikeperps",
+          "@TapTools"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano Foundation and IOG Support Buidler Fest v3 in Buenos Aires - Developer Community Gathering",
+        "title_ja": "Cardano FoundationとIOGがブエノスアイレスのBuidler Fest v3を支援",
+        "summary_en": "Buidler Fest v3 scheduled for March 24-25 in Buenos Aires features Midnight Network participation. Mint spot available as Cardano Foundation and IOG support the 2-day developer gathering.",
+        "summary_ja": "Buidler Fest v3が3月24-25日ブエノスアイレスで開催。Midnight Networkも参加。Cardano FoundationおよびIOGがサポート。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep",
+          "SPO"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@IOGroup",
+          "@adamKDean"
+        ]
+      }
+    ],
+    "tweetCount": 481,
+    "generatedAt": "2026-03-06T11:52:57.347Z",
+    "apiUsage": {
+      "input_tokens": 10076,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2778,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+]
