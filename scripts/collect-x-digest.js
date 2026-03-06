@@ -33,7 +33,7 @@ const TIER1_ACCOUNTS = [
   // Institutional / Official
   { username: "InputOutputHK", category: "institutional", label: "IOG" },
   { username: "Cardano", category: "institutional", label: "Cardano Official" },
-  { username: "CardanoStworking", category: "institutional", label: "Cardano Foundation" },
+  { username: "Cardano_CF", category: "institutional", label: "Cardano Foundation" },
   { username: "IntersectMBO", category: "institutional", label: "Intersect" },
   { username: "emurgo_io", category: "institutional", label: "EMURGO" },
   { username: "Catalyst_onX", category: "institutional", label: "Project Catalyst" },
@@ -163,13 +163,12 @@ async function collectTier1() {
         console.log(`    [DEBUG] Response preview: ${JSON.stringify(res).slice(0, 300)}`);
       }
 
-      // Handle various response formats
+      // Response format: { status, data: { tweets: [...] }, has_next_page, next_cursor }
       let accountTweets = [];
-      if (Array.isArray(res.tweets)) accountTweets = res.tweets;
+      if (Array.isArray(res.data?.tweets)) accountTweets = res.data.tweets;
+      else if (Array.isArray(res.tweets)) accountTweets = res.tweets;
       else if (Array.isArray(res.data)) accountTweets = res.data;
-      else if (Array.isArray(res)) accountTweets = res;
-      else if (res.tweets && typeof res.tweets === "object") accountTweets = Object.values(res.tweets);
-      else console.log(`    [WARN] Unexpected response format: ${Object.keys(res || {})}`);
+      else console.log(`    [WARN] Unexpected response format: ${JSON.stringify(res).slice(0, 200)}`);
 
       let count = 0;
 
@@ -229,13 +228,12 @@ async function collectTier2() {
         console.log(`    [DEBUG] Search preview: ${JSON.stringify(res).slice(0, 300)}`);
       }
 
-      // Handle various response formats
+      // Response format: { status, data: { tweets: [...] }, has_next_page, next_cursor }
       let searchTweets = [];
-      if (Array.isArray(res.tweets)) searchTweets = res.tweets;
+      if (Array.isArray(res.data?.tweets)) searchTweets = res.data.tweets;
+      else if (Array.isArray(res.tweets)) searchTweets = res.tweets;
       else if (Array.isArray(res.data)) searchTweets = res.data;
-      else if (Array.isArray(res)) searchTweets = res;
-      else if (res.tweets && typeof res.tweets === "object") searchTweets = Object.values(res.tweets);
-      else console.log(`    [WARN] Unexpected search response format: ${Object.keys(res || {})}`);
+      else console.log(`    [WARN] Unexpected search response format: ${JSON.stringify(res).slice(0, 200)}`);
 
       let count = 0;
 
