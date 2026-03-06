@@ -1511,6 +1511,2032 @@
       ],
       "votingPattern_en": "Consistently votes 'Yes' on governance proposals that strengthen constitutional frameworks, support community-backed initiatives with clear oversight mechanisms, and advance Cardano's technical or regional development, while selectively voting 'No' on measures that reduce institutional checks or oversight capacity.",
       "votingPattern_ja": "憲法的枠組みを強化し、明確な監視メカニズムを備えたコミュニティ支持のイニシアティブを支持し、カルダノの技術的または地域的発展を促進するガバナンス提案に一貫して「賛成」票を投じ、制度的チェックまたは監視能力を削減する対策に対しては選別的に「反対」票を投じます。"
+    },
+    "drep1ygvgk3899qm38zth07z5clhfjvzfhe2mf2kvkqrfxp93r5srjre5s": {
+      "lastAnalyzedVoteCount": 81,
+      "lastAnalyzedAt": "2026-03-05T23:58:35.868Z",
+      "tendencySummary_en": "AltcoinOracle prioritizes core engineering and treasury protection, voting YES on infrastructure and DeFi proposals that demonstrate clear value while opposing marketing and exchange listing expenditures. The DRep shows a disciplined approach to capital allocation, supporting only well-structured initiatives with measurable returns or technical merit.",
+      "tendencySummary_ja": "AltcoinOracleはコアエンジニアリングと財務管理を優先し、明確な価値を示すインフラとDeFi提案にはYESを投票する一方、マーケティングと取引所リスティング支出に反対しています。このDRepは資本配分に対して厳格なアプローチを示しており、測定可能なリターンまたは技術的メリットを持つ適切に構造化されたイニシアチブのみをサポートしています。",
+      "keyPositions_en": [
+        "Core engineering is the top priority for treasury allocation",
+        "Opposes marketing and exchange listing expenditures from the treasury",
+        "Supports DeFi infrastructure with clear revenue streams (e.g., 4% returns)",
+        "Demands transparency and clear deliverables for large capital requests",
+        "Committed to decentralization and real-world asset (RWA) investments"
+      ],
+      "keyPositions_ja": [
+        "コアエンジニアリングが財務配分の最優先事項で���る",
+        "財務からのマーケティングと取引所リスティング支出に反対する",
+        "明確な収益ストリーム（例：4%リターン）を持つDeFiインフラストラクチャをサポートする",
+        "大規模な資本要求に対して透明性と明確な成果物を要求する",
+        "分散化と現実資産（RWA）投資にコミットしている"
+      ],
+      "votingPattern_en": "AltcoinOracle votes YES on technical infrastructure and DeFi proposals with clear economic justification (73.7% YES rate), but consistently votes NO on treasury expenditures for marketing, events, and listings deemed inefficient or poorly structured (27.5% NO rate).",
+      "votingPattern_ja": "AltcoinOracleは明確な経済的根拠を持つ技術インフラとDeFi提案にはYESを投票し（YES率73.7%）、マーケティング、イベント、非効率または不適切に構造化されたリスティングのための財務支出には一貫してNOを投票しています（NO率27.5%）。"
+    },
+    "drep1ywuk39acvmkzda9e8kfmy7fwf946jd5uaa4l696atlas66s68f0fl": {
+      "lastAnalyzedVoteCount": 46,
+      "lastAnalyzedAt": "2026-03-05T23:58:44.171Z",
+      "tendencySummary_en": "Porto Cripto DRep demonstrates a strong preference for ecosystem development and infrastructure initiatives, voting yes on 32 proposals while opposing only 9. Their voting approach is highly principled, emphasizing clear specifications, measurable KPIs, and community alignment—they abstain or reject proposals lacking concrete details or lacking integrated planning with broader governance initiatives.",
+      "tendencySummary_ja": "Porto Cripto DRepはエコシステム開発とインフラストラクチャ計画を強く支持する傾向を示し、32件の提案に賛成票を投じる一方、9件のみに反対している。彼らの投票アプローチは極めて原則的であり、明確な仕様、測定可能なKPI、コミュニティのアライメントを重視している。具体的な詳細や広範なガバナンス計画との統合を欠く提案については、棄権または拒否する。",
+      "keyPositions_en": [
+        "Strong support for critical infrastructure development (stablecoins, bridges, oracles) as essential for DeFi and TradFi adoption",
+        "Emphasis on transparent, well-documented proposals with clear KPIs, budgets, and audit mechanisms before treasury approval",
+        "Commitment to community-driven governance maturation through Intersect frameworks and constitutional improvements",
+        "Strategic opposition to vague or under-specified token listing proposals, demanding concrete exchange partnerships",
+        "Support for ecosystem global expansion beyond US/Europe and marketing initiatives that strengthen Cardano's visibility"
+      ],
+      "keyPositions_ja": [
+        "DeFiとTradFi採用に必須として、ステーブルコイン、ブリッジ、オラクルなどの重要インフラ開発への強力な支持",
+        "財務省の承認前に、明確なKPI、予算、監査メカニズムを備えた透明性の高い文書化された提案の強調",
+        "Intersectフレームワークと憲法改正を通じたコミュニティ主導のガバナンス成熟化への取り組み",
+        "曖昧または不十分に指定されたトークンリスティング提案への戦略的反対、具体的な取引所パートナーシップの要求",
+        "米国/ヨーロッパ以外のエコシステムのグローバル拡張とCardanoの可視性を強化するマーケティング計画への支持"
+      ],
+      "votingPattern_en": "Porto Cripto votes affirmatively on proposals advancing Cardano's strategic infrastructure, governance maturation, and community consensus-building, but consistently rejects or abstains from initiatives lacking specificity, adequate risk management, or integrated planning with established governance structures.",
+      "votingPattern_ja": "Porto Cripto DRepはCardanoの戦略的インフラストラクチャ、ガバナンス成熟化、コミュニティコンセンサス構築を促進する提案に肯定的に投票するが、具体性、適切なリスク管理、または確立されたガバナンス構造との統合された計画を欠く計画には一貫して反対または棄権する。"
+    },
+    "drep1yfkcs4npza5kvnrruwnjahs6ptj9g2zhuju6vu2xvsnx0mqvry3vp": {
+      "lastAnalyzedVoteCount": 42,
+      "lastAnalyzedAt": "2026-03-05T23:58:49.445Z",
+      "tendencySummary_en": "Jefeweiss demonstrates a strong affinity for approval, voting Yes on 29 out of 42 governance proposals (69%). With minimal rationale documentation (only 2 of 42 votes explained), the voting pattern suggests either general alignment with Cardano Foundation initiatives or limited engagement in detailed proposal evaluation.",
+      "tendencySummary_ja": "Jefeweissは42件のガバナンス提案のうち29件に賛成票を投じており（69%）、強い承認傾向を示しています。投票根拠の記録がほとんどない（42件中わずか2件）ことから、Cardano財団の取り組みとの全般的な整合性、または詳細な提案評価への関与の限定性を示唆しています。",
+      "keyPositions_en": [
+        "Approves withdrawal and fund management confirmations",
+        "Supports institutional continuity measures",
+        "High approval rate for governance proposals",
+        "Minimal documented reasoning for voting decisions",
+        "Prefers administrative confirmations over substantive changes"
+      ],
+      "keyPositions_ja": [
+        "引き出しと資金管理の確認を承認",
+        "制度的継続性措置をサポート",
+        "ガバナンス提案に対する高い承認率",
+        "投票決定に対する文書化された根拠が最小限",
+        "実質的な変更よりも行政確認を優先"
+      ],
+      "votingPattern_en": "Jefeweiss votes predominantly in favor of proposals (Yes 69%, No 17%, Abstain 14%) with extremely limited voting rationale documentation, suggesting passive alignment rather than active critical evaluation.",
+      "votingPattern_ja": "Jefeweissは提案に圧倒的に賛成票を投じ（賛成69%、反対17%、棄権14%）、投票根拠の文書化が極めて限定的であり、積極的な批判的評価というより受動的な整合性を示唆しています。"
+    },
+    "drep1yfg2u28p4xuh5u5lv839vcfd6k2knptfw0avtefpyw4x3dsu5pu25": {
+      "lastAnalyzedVoteCount": 45,
+      "lastAnalyzedAt": "2026-03-05T23:58:55.499Z",
+      "tendencySummary_en": "Coin Ceylon demonstrates a strongly pro-governance and ecosystem-focused voting pattern, with an overwhelming 93% approval rate (42 Yes votes vs 3 No votes). The DRep prioritizes long-term sustainability, infrastructure development, and strategic ecosystem growth over short-term cost reduction, selectively opposing proposals that could compromise Cardano's foundational financial resilience.",
+      "tendencySummary_ja": "Coin Ceylonは圧倒的な93%の承認率（賛成42票対反対3票）で、ガバナンスとエコシステム重視の投票パターンを示しています。このDRepは、短期的なコスト削減よりもカルダノの長期的な持続可能性、インフラ開発、戦略的なエコシステム成長を優先し、財務的な回復力を損なう可能性のある提案に選別的に反対しています。",
+      "keyPositions_en": [
+        "Supports ecosystem budget allocations and strategic infrastructure investments (275M ADA Intersect budget approval)",
+        "Opposes Treasury tax reductions that could undermine long-term sustainability and innovation capacity",
+        "Prioritizes foundational ecosystem resilience and financial stability over short-term efficiency gains",
+        "Values comprehensive governance context and transparent rationale communication with the community",
+        "Focuses on enabling emerging market opportunities and strategic partnerships for Cardano growth"
+      ],
+      "keyPositions_ja": [
+        "エコシステム予算配分と戦略的インフラ投資を支持（275M ADA Intersect予算承認）",
+        "長期的な持続可能性とイノベーション能力を損なう可能性のある財務税削減に反対",
+        "短期的な効率性向上よりもエコシステムの基盤的回復力と財務安定性を優先",
+        "コミュニティとの包括的なガバナンスコンテキストと透明な根拠説明の伝達を重視",
+        "カルダノの成長を実現する新興市場機会と戦略的パートナーシップを支援することに焦点"
+      ],
+      "votingPattern_en": "Coin Ceylon votes predominantly YES on constructive ecosystem proposals while strategically opposing fiscal reductions that could compromise Cardano's foundational capacity for innovation and long-term development.",
+      "votingPattern_ja": "Coin Ceylonは建設的なエコシステム提案に圧倒的にYESで投票する一方、カルダノのイノベーション基盤と長期開発能力を損なう可能性のある財政削減に戦略的に反対しています。"
+    },
+    "drep1yt4vlxgkllldxtwrmzj2ymwnc5qw0cmzvkn4nxpxkpgt4fgwj36md": {
+      "lastAnalyzedVoteCount": 46,
+      "lastAnalyzedAt": "2026-03-05T23:58:59.879Z",
+      "tendencySummary_en": "MOKSH is a strong proponent of ecosystem progress and streamlining, consistently voting to remove barriers and minimize disruptions to Cardano's development. With an 80% yes-vote ratio, this DRep prioritizes pragmatic advancement over cautionary approaches.",
+      "tendencySummary_ja": "MOKSHはエコシステムの進展と合理化の強力な支持者であり、バリアの除去とCardanoの開発への中断を最小化することに一貫して投票しています。80%のイエス投票比率により、このDRepは慎重なアプローチよりも実用的な進歩を優先しています。",
+      "keyPositions_en": [
+        "Removing barriers to ecosystem progress",
+        "Minimizing disruptions to development",
+        "Supporting pragmatic advancement",
+        "Favoring streamlined governance decisions"
+      ],
+      "keyPositions_ja": [
+        "エコシステムの進歩へのバリア除去",
+        "開発への中断を最小化",
+        "実用的な進歩の支持",
+        "合理化されたガバナンス決定を支持"
+      ],
+      "votingPattern_en": "MOKSH demonstrates a clear pro-progression bias with strong support for proposals that remove obstacles, though limited rationale documentation (4 of 46 votes) suggests either efficiency-focused voting or selective engagement.",
+      "votingPattern_ja": "MOKSHは障害物を取り除く提案���強力なサポートを示す明確な進歩志向のバイアスを示していますが、限定的な根拠文書化（46投票中4投票）は効率指向の投票または選別的な関与を示唆しています。"
+    },
+    "drep1yt9xg7l0dlgxj3lyewmndzrq5wzj3f4nusdkpfa9n7zf4ssayqnk0": {
+      "lastAnalyzedVoteCount": 66,
+      "lastAnalyzedAt": "2026-03-05T23:59:06.384Z",
+      "tendencySummary_en": "Tobias Ilskov demonstrates strong support for Intersect Budget Proposals, honoring prior community consensus and committing to proposals that received 50%+ DRep backing. He selectively opposes initiatives misaligned with his values, particularly meme coins and unnecessary expenditures, while supporting infrastructure investments and constitutional refinements that benefit the ecosystem.",
+      "tendencySummary_ja": "トビアス・イルスコフ氏は、Intersect予算提案に対して強い支持を示しており、事前のコミュニティコンセンサスを尊重し、50%以上のDRep支持を得た提案にコミットしています。彼は価値観に沿わないイニシアティブ、特にミームコインや不必要な支出に選別的に反対しつつ、エコシステムの利益になるインフラ投資と憲法改正を支持しています。",
+      "keyPositions_en": [
+        "Strongly supports bundled Intersect Budget Proposals based on prior 50%+ community consensus",
+        "Opposes meme coin funding (SNEK listing fees) as detrimental to Cardano's reputation",
+        "Advocates for open-source community governance platforms despite higher costs",
+        "Supports constitutional amendments that refine and improve governance frameworks",
+        "Questions DRep compensation structure while maintaining governance commitment"
+      ],
+      "keyPositions_ja": [
+        "事前の50%以上のコミュニティコンセンサスに基づいてバンドルされたIntersect予算提案を強く支持",
+        "ミームコイン資金(SNEK上場手数料)にはCardanoの評判を損なうため反対",
+        "より高いコストにもかかわらず、オープンソースのコミュニティ管理プラットフォームを提唱",
+        "ガバナンスフレームワークを改善する憲法改正を支持",
+        "DRep報酬体系に疑問を呈しながら、ガバナンスコミットメントを維持"
+      ],
+      "votingPattern_en": "Ilskov votes affirmatively on proposals meeting community benchmarks and supporting ecosystem infrastructure, but strategically opposes spending on non-value-adding assets while maintaining principled skepticism about governance incentive structures.",
+      "votingPattern_ja": "イルスコフ氏は、コミュニティベンチマークを満たし、エコシステムインフラを支援する提案に肯定的に投票しますが、価値を追加しない資産への支出には戦略的に反対し、ガバナンスインセンティブ構造に対する原則的懐疑を維持しています。"
+    },
+    "drep1yfya5pwcm2zw0e60c3pkqscq6spge7m0k6jtxkfsymv68gs2z56e5": {
+      "lastAnalyzedVoteCount": 28,
+      "lastAnalyzedAt": "2026-03-05T23:59:15.573Z",
+      "tendencySummary_en": "Dr. Dhaliwal demonstrates a cautiously optimistic approach to Cardano governance, generally supporting proposals that advance ecosystem needs like liquidity and node diversity while consistently raising concerns about budget efficiency, transparency, and potential conflicts of interest. They vote strategically, willing to support initiatives with reservations and using abstentions to signal conditional approval pending clarifications on costs, governance standards, and vendor selection criteria.",
+      "tendencySummary_ja": "ダリワル博士はカルダノガバナンスに対して慎重に楽観的なアプローチを示しており、流動性やノード多様性の向上など、エコシステムの必要性を推し進める提案を一般的にサポートしながら、予算効率性、透明性、利益相反の可能性について一貫して懸念を表明しています。戦略的に投票し、留保条件付きでイニシアチブをサポートし、棄権票を使用してコスト、ガバナンス基準、ベンダー選択基準の説明待ちの条件付き承認を示しています。",
+      "keyPositions_en": [
+        "Demands transparency and detailed financial breakdown, particularly scrutinizing high budget allocations (3.5M ADA legal costs, expensive jurisdiction setup)",
+        "Supports ecosystem infrastructure needs (liquidity, node diversity) when proposed by trustworthy, transparent teams",
+        "Opposes proposals with conflicts of interest and insufficient governance standards or vendor selection criteria",
+        "Emphasizes importance of fair compensation for work while questioning cost-effectiveness relative to market alternatives",
+        "Advocates for establishing standardized processes to prevent favoritism in future grant and listing decisions"
+      ],
+      "keyPositions_ja": [
+        "特に高い予算配分（340万ADA法務費、高額な管轄地設定）を精査し、透明性と詳細な財務内訳を要求",
+        "信頼できる透明性の高いチームによって提案される場合、流動性やノード多様性などのエコシステムインフラニーズをサポート",
+        "利益相反があり、ガバナンス基準またはベンダー選択基準が不十分な提案に反対",
+        "仕事に対する公正な補償の重要性を強調しながら、市場代替案との比較における費用対効果に疑問を呈する",
+        "将来の助成金およびリスティング決定における偏向を防ぐための標準化されたプロセスの確立を提唱"
+      ],
+      "votingPattern_en": "Dr. Dhaliwal votes affirmatively for proposals advancing core ecosystem needs when presented by transparent teams, employs abstention strategically to signal conditional support requiring clarification on budgets and governance, and votes negatively on initiatives with excessive costs, poor jurisdiction choice, or insufficient standardization processes.",
+      "votingPattern_ja": "ダリワル博士は透明性の高いチームによって提示されるコアエコシステムニーズを推し進める提案に対して肯定的に投票し、棄権を戦略的に使用して予算とガバナンスの明確化を必要とする条件付きサポートを示し、過度なコスト、不適切な管轄地選択、または不十分な標準化プロセスを持つイニシアチブに対して否定的に投票しています。"
+    },
+    "drep1ytn29gxylzlrhzmkt4c75w7qmesxqc248r9089f0pvuysdqeva6ht": {
+      "lastAnalyzedVoteCount": 61,
+      "lastAnalyzedAt": "2026-03-05T23:59:21.574Z",
+      "tendencySummary_en": "Giovanni Gargiulo is a strong proponent of community-driven projects and ecosystem expansion, showing overwhelming support for initiatives that demonstrate practical utility and market integration. His voting pattern reflects confidence in emerging projects despite limited formal safeguards, prioritizing innovation and growth over risk mitigation.",
+      "tendencySummary_ja": "ジョバンニ・ガルジューロは、実用的な機能とマーケット統合を実証するイニシアティブに対して圧倒的な支援を示す、コミュニティ主導のプロジェクトとエコシステム拡張の強固な支持者です。彼の投票パターンは、リスク軽減よりもイノベーションと成長を優先しながら、正式な保証の制限にもかかわらず新興プロジェクトへの自信を反映しています。",
+      "keyPositions_en": [
+        "Supports projects with demonstrated CEX integration and market traction",
+        "Values multi-functional ecosystems beyond speculative memecoin status",
+        "Willing to support projects lacking formal collateral or binding agreements",
+        "Prioritizes practical utility and revenue-generating applications",
+        "Advocates for ecosystem expansion and native asset integration"
+      ],
+      "keyPositions_ja": [
+        "CEX統合と市場牽引力を実証するプロジェクトを���持",
+        "投機的なミームコイン以上の多機能エコシステムを重視",
+        "正式な担保や拘束力のある合意がないプロジェクトを支援する意思がある",
+        "実用的な機能と収益を生み出すアプリケーションを優先",
+        "エコシステム拡張とネイティブアセット統合を提唱"
+      ],
+      "votingPattern_en": "Giovanni demonstrates a highly affirmative voting pattern (88.5% Yes rate) with minimal engagement in detailed rationale documentation, suggesting confident but relatively passive participation in governance decisions.",
+      "votingPattern_ja": "ジョバンニは詳細な根拠文書への最小限の関与を伴う非常に肯定的な投票パターン(イエス率88.5%)を示しており、ガバナンス決定への確かな関与は示唆していますが、相対的には受動的です。"
+    },
+    "drep1ygm547mhyuh70yjt2ewg078dc33jcrcym9pwf6svyj37enq8jqzqa": {
+      "lastAnalyzedVoteCount": 7,
+      "lastAnalyzedAt": "2026-03-05T23:59:27.330Z",
+      "tendencySummary_en": "Kaizen Crypto demonstrates a balanced, community-focused voting approach with selective engagement on governance matters. The DRep shows support for grassroots community initiatives and ecosystem development while maintaining a cautious stance on broader policy changes, as evidenced by their abstention pattern.",
+      "tendencySummary_ja": "Kaizen Cryptoは、ガバナンス問題への選別的な関与を伴う、バランスの取れたコミュニティ志向の投票アプローチを示しています。DRepは草の根コミュニティイニシアティブとエコシステム開発への支持を示す一方で、棄権パターンで証明されているように、より広い政策変更に対して慎重な姿勢を保っています。",
+      "keyPositions_en": [
+        "Supports community-led grassroots initiatives and events over top-down funding approaches",
+        "Values personal verification and direct experience when evaluating ecosystem contributions",
+        "Advocates for supporting independent community builders lacking treasury resources",
+        "Emphasizes the importance of onboarding and community awareness programs",
+        "Selective engagement on major protocol parameter changes requiring deeper analysis"
+      ],
+      "keyPositions_ja": [
+        "トップダウン資金配分よりもコミュニティ主導の草の根イニシアテ��ブとイベントをサポート",
+        "エコシステム貢献を評価する際に個人的検証と直接経験を重視",
+        "財務資源のない独立したコミュニティビルダーの支援を提唱",
+        "オンボーディングとコミュニティ認識プログラムの重要性を強調",
+        "より深い分析を必要とする主要プロトコルパラメータ変更への選別的関与"
+      ],
+      "votingPattern_en": "The DRep votes affirmatively on community-building proposals with documented individual impact while exercising caution through abstention on major fiscal and protocol decisions, suggesting a preference for verified, grassroots initiatives over systemic changes.",
+      "votingPattern_ja": "DRepは個人的な影響が記録されているコミュニティ構築提案には肯定的に投票し、主要な財政およびプロトコル決定について棄権により慎重さを行使しており、システム的変更よりも検証済みの草の根イニシアティブへの好みを示唆しています。"
+    },
+    "drep1ytcw6qzpqqclx2yd0zy64ztvlkkhnf6yrzza8whgnq4vz5gh89626": {
+      "lastAnalyzedVoteCount": 86,
+      "lastAnalyzedAt": "2026-03-05T23:59:37.144Z",
+      "tendencySummary_en": "BWtake is a strongly pro-ecosystem DRep who consistently votes YES on strategic infrastructure investments, governance maturation, and brand-building initiatives for Cardano. They demonstrate sophisticated analysis of institutional design, risk management, and long-term ecosystem development while maintaining healthy scrutiny of treasury expenditures and insisting on transparency, KPIs, and accountability measures.",
+      "tendencySummary_ja": "BWtakeはCardanoの戦略的インフラ投資、ガバナンス成熟化、ブランド確立に対して一貫してYESで投票する生態系支持派のDRepです。制度設計、リスク管理、長期的なエコシステム発展について高度な分析を示す一方で、トレジャリー支出に対する健全な精査姿勢を保ち、透明性、KPI、説明責任を求めています。",
+      "keyPositions_en": [
+        "Supports unified global marketing strategy and brand establishment (.ada/.cardano domains) as essential for Cardano's competitive positioning",
+        "Advocates for decentralized governance through community-led initiatives and transparent Constitutional Committee elections over centralized control",
+        "Opposes partisan treasury support (SNEK example) without broader, equitable frameworks; demands neutrality in public funding",
+        "Backs critical financial infrastructure (stablecoins, oracles, custody, bridges) as necessary prerequisites for DeFi expansion and adoption",
+        "Emphasizes accountability through KPIs, third-party audits, milestone verification, and clear surplus fund returns in all major treasury withdrawals"
+      ],
+      "keyPositions_ja": [
+        "Cardanoの競争力強化に向けたグローバル統一マーケティング戦略とブランド確立（.ada/.cardanoドメイン取得）を支持",
+        "コミュニティ主導型イニシアティブと透明な憲法委員会選挙による分散型ガバナンスを推進し、中央集権的統制に反対",
+        "包括的かつ公平な支援枠組みがない限り、特定トークン（SNEK）への党派的なトレジャリー支援に反対し、公的資金の中立性を要求",
+        "DeFi拡大と採用促進に必要な重要な金融インフラ（ステーブルコイン、オラクル、カストディ、ブリッジ）の整備を支持",
+        "全ての大規模トレジャリー引き出しにおいてKPI、第三者監査、マイルストーン検証、余剰金確実返還による説明責任を強調"
+      ],
+      "votingPattern_en": "BWtake votes YES on ~90% of proposals (77/86 votes), but applies rigorous conditional support requiring transparency improvements, KPI specifications, conflict-of-interest safeguards, and accountability mechanisms; strategically votes NO only on proposals lacking proper guardrails or limiting Cardano's future optionality.",
+      "votingPattern_ja": "BWtakeは提案の約90%でYESを投票（77/86票）していますが、透明性の改善、KPI仕様、利益相反防止、説明責任メカニズムを要求する厳密な条件付き支持を適用しており、適切なガードレール欠如またはCardanoの将来の選択肢を制限する提案に対してのみ戦略的にNOを投票しています。"
+    },
+    "drep1y2lhe7wn2sr6vme8gnca4jrkhv47uh3tklsykmrqvwzdq4g5s8wju": {
+      "lastAnalyzedVoteCount": 56,
+      "lastAnalyzedAt": "2026-03-05T23:59:45.570Z",
+      "tendencySummary_en": "Mike Rogero is a principled, governance-focused DRep who prioritizes fiscal discipline, anti-corruption safeguards, and fair allocation of public treasury funds. He votes 'Yes' on legitimate governance processes and ecosystem infrastructure while voting 'No' on proposals that risk regulatory capture, favor commercial winners, lack budgetary controls, or bypass proper Catalyst frameworks.",
+      "tendencySummary_ja": "マイク・ロジェロは原則に基づいた統治志向のDRepであり、財政規律、腐敗防止措置、公共財務の公正配分を優先する。彼は正当な統治プロセスとエコシステムインフラに「はい」と投票し、規制当局による支配のリスク、商業的勝者の優遇、予算管理の欠如、または適切なCatalystフレームワークの回避を伴う提案に「いいえ」と投票する。",
+      "keyPositions_en": [
+        "Opposes IOG-led fund allocation processes as regulatory capture, even when intentions are good",
+        "Rejects special treatment for commercial ventures like Snek; public funds should not pick winners",
+        "Demands budget requirements as treasury safeguards to prevent abuse and spending without constraints",
+        "Supports previously ratified proposals while opposing attempts to circumvent established governance processes",
+        "Requires rigorous risk analysis for financial instruments; questions loan proposals with insufficient interest rates relative to risk"
+      ],
+      "keyPositions_ja": [
+        "意図が良好でも、IOG主導の資金配分プロセスを規制当局による支配として反対する",
+        "Snekなどの商業企業への特別待遇を拒否し、公的資金は勝者を選別すべきではないと主張",
+        "予算要件を財務上の保護手段として要求し、制約なしの支出と濫用を防止する",
+        "以前に承認された提案を支持し、確立された統治プロセスを回避する試みに反対する",
+        "金融商品の厳密なリスク分析を要求し、リスク相対的に不十分な利率のローン提案に異議を唱える"
+      ],
+      "votingPattern_en": "Rogero votes affirmatively on ecosystem infrastructure, ratified governance processes, and fraud-prevention measures, but consistently opposes treasury withdrawals lacking budgetary safeguards, proposals creating unfair competitive advantages, and attempts to circumvent established Catalyst evaluation frameworks.",
+      "votingPattern_ja": "ロジェロはエコシステムインフラ、承認された統治プロセス、詐欺防止措置に肯定的に投票する一方で、予算上の保護手段を欠く財務引き出し、不公正な競争上の優位を生み出す提案、および確立されたCatalyst評価フレームワークを回避する試みに一貫し���反対する。"
+    },
+    "drep1ythej7tvvq0tgat3l7ge6q40uarj02qmml5puzzgr00sd0gqtdeld": {
+      "lastAnalyzedVoteCount": 55,
+      "lastAnalyzedAt": "2026-03-05T23:59:50.783Z",
+      "tendencySummary_en": "Bamboo_Drep demonstrates a cautiously supportive approach with emphasis on risk management and accountability. They tend to approve proposals but frequently express concerns about insufficient collateral, unclear metrics, cost justification, and team performance standards.",
+      "tendencySummary_ja": "Bamboo_Drepはリスク管理と説明責任を重視する慎重で支持的なアプローチを示しています。提案を承認する傾向がありますが、担保不足、不明確なメトリクス、コスト正当性、およびチームパフォーマンス基準に関する懸念を頻繁に表明しています。",
+      "keyPositions_en": [
+        "Requires adequate collateral and risk mitigation mechanisms for financial proposals",
+        "Demands clear budget justification and cost-benefit analysis for all expenditures",
+        "Expects active community engagement and demonstrable performance from funded roles",
+        "Supports ecosystem development but with transparent metrics and accountability measures",
+        "Prioritizes quality and commitment over quantity in team member selection"
+      ],
+      "keyPositions_ja": [
+        "金融提案に対する適切な担保とリスク軽減メカニズムを要求",
+        "すべての支出に対する明確な予算正当性とコスト便益分析を要求",
+        "資金提供を受けた役職からの積極的なコミュニティ参加と実証可能なパフォーマンスを期待",
+        "透明なメトリクスと説明責任措置によるエコシステム開発を支持",
+        "チームメンバー選定において量より品質とコミットメントを優先"
+      ],
+      "votingPattern_en": "Bamboo_Drep votes predominantly 'Yes' (64%) but frequently withholds votes through 'Abstain' and 'No' when proposals lack adequate collateral, transparent metrics, cost justification, or evidence of team accountability.",
+      "votingPattern_ja": "Bamboo_Drepは主に「Yes」(64%)に投票しますが、担保不足、透明性のあるメトリクス不足、コスト正当性不足、またはチーム説明責任の証拠がない場合、「Abstain」および「No」を通じて投票を控える傾向があります。"
+    },
+    "drep1ytnvazqpsj98pu7w6vtmeddcy9pnn6y6nl0psr5ajzge52s82zz8t": {
+      "lastAnalyzedVoteCount": 57,
+      "lastAnalyzedAt": "2026-03-05T23:59:56.373Z",
+      "tendencySummary_en": "LEADStakePool demonstrates a pragmatic, community-consulted voting approach that favors experimental governance and parameter adjustments while maintaining fiscal responsibility. They show flexibility in accepting community decisions and prioritize clarity in proposal implementation, occasionally voting against measures due to procedural concerns rather than philosophical opposition.",
+      "tendencySummary_ja": "LEADStakePoolは、コミュニティとの協議に基づいた実用的な投票姿勢を示しており、財政的責任を維持しながら実験的なガバナンスとパラメータ調整を支持しています。彼らはコミュニティの決定を受け入れる柔軟性を示し、哲学的な反対というより手続き上の懸念により時折反対票を投じます。",
+      "keyPositions_en": [
+        "Supports parameter experimentation with reversibility safeguards",
+        "Prioritizes node diversity and network infrastructure improvements",
+        "Emphasizes clear communication and proper proposal formatting",
+        "Respects community consensus and avoids redundant proposals",
+        "Delegates internally consult stakeholders for voting decisions"
+      ],
+      "keyPositions_ja": [
+        "可逆性の安全措置を備えたパラメータ実験を支持",
+        "ノード多様性とネットワークインフラの改善を優先",
+        "明確なコミュニケーションと適切な提案フォーマットを強調",
+        "コミュニティのコンセンサスを尊重し、冗長な提案を回避",
+        "代議員が投票決定のためにステークホルダーと内部協議を実施"
+      ],
+      "votingPattern_en": "LEADStakePool votes predominantly in favor (42 Yes vs 13 No, 76% approval rate) with selective procedural objections, showing conditional support that depends on implementation quality and community clarity rather than ideological opposition.",
+      "votingPattern_ja": "LEADStakePoolは圧倒的に賛成票を投じており（42賛成対13反対、76％の承認率）、手続き上の選別的な異議を示しており、イデオロギー的反対というより実装品質とコミュニティの明確性に依存する条件付きサポートを示しています。"
+    },
+    "drep1y2u2848fer43ghnyhyadhaqd2ek4q9x09h2y0sxev5gklcgnx3qyp": {
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-06T00:00:01.810Z",
+      "tendencySummary_en": "This DRep demonstrates a deliberative voting approach with a strong yes bias (71% yes votes), showing willingness to reconsider positions when gaining clarity on proposals. They maintain firm stances on poorly justified funding requests and prioritize transparency in impact assessment before supporting expenditures.",
+      "tendencySummary_ja": "このDRepは慎重な投票アプローチを示し、強いイエスバイアス（投票の71%がイエス）を持ち、提案について明確性を得た場合に立場を再考する意思を示しています。不十分に正当化された資金要求に対して堅い姿勢を保ち、支出を支持する前に影響評価の透明性を優先しています。",
+      "keyPositions_en": [
+        "Requires clear explanation and justification for funding amounts",
+        "Emphasizes transparency in proposal impact assessment",
+        "Open to reconsidering votes with additional clarity on proposals",
+        "Skeptical of high budget requests without demonstrated impact",
+        "Maintains firm final decisions and discourages persuasion attempts"
+      ],
+      "keyPositions_ja": [
+        "資金額に対する明確な説明と正当性を要求",
+        "提案の影響評価における透明性を重視",
+        "提案に関する追加の明確性があれば投票を再考することに前向き",
+        "実証された影響がない高い予算要求に懐疑的",
+        "最終決定を維持し、説得の試みを阻止する"
+      ],
+      "votingPattern_en": "Predominantly approves proposals (71% yes) but selectively rejects those with inadequate impact justification or excessive budget requests, with demonstrated capacity for vote reconsideration when provided additional information.",
+      "votingPattern_ja": "提案を圧倒的に承認（71%がイエス）しますが、不十分な影響正当化または過度な予算要求を持つものを選別的に却下し、追加情報が提供されたときに投票を再考する能力を示しています。"
+    },
+    "drep1yte3chru8m7d3gzgpwvmgan0gjfxru9r9cyvrkkcerc0wcg6qfvtc": {
+      "lastAnalyzedVoteCount": 86,
+      "lastAnalyzedAt": "2026-03-06T00:00:09.452Z",
+      "tendencySummary_en": "Varavas is a thoughtful, principle-driven DRep who prioritizes ecosystem fundamentals, technological innovation, and fiscal responsibility over speculative ventures. They demonstrate strong support for core infrastructure, DeFi development, and governance improvements, while consistently rejecting poorly justified expenditures, community projects better suited for Catalyst, and proposals lacking transparency or strategic clarity.",
+      "tendencySummary_ja": "Varavasは思慮深い原則主義的なDRepであり、投機的事業よりもエコシステムの基礎、技術革新、および財政責任を優先します。コアインフラストラクチャ、DeFi開発、ガバナンス改善への強力なサポートを示す一方で、正当化が不十分な支出、Catalystに適したコミュニティプロジェクト、および透明性または戦略的明確性に欠けるプロポーザルを一貫して拒否しています。",
+      "keyPositions_en": [
+        "Strong support for DeFi infrastructure and stablecoin initiatives as essential ecosystem development",
+        "Prioritizes core technical development and tooling (Python libraries, GovTools, parameter optimization) over marketing expenditures",
+        "Demands transparency, detailed financial planning, and revenue models for treasury withdrawals",
+        "Rejects funding for exchange listings and speculative token promotion regardless of community tactics",
+        "Supports governance improvements and constitutional refinements that strengthen the ecosystem's institutional framework"
+      ],
+      "keyPositions_ja": [
+        "DeFiインフラストラクチャとステーブルコイン提案をエコシステム開発に不可欠なものとして強力にサポート",
+        "マーケティング支出よりもコアな技術開発とツール(Pythonライブラリ、GovTools、パラメータ最適化)を優先",
+        "財務計画の詳細、収益モデル、および予算引き出しの透明性を要求",
+        "コミュニティの戦術に関わらず、取引所上場と投機的なトークン宣伝のための資金提供を拒否",
+        "エコシステムの制度的枠組みを強化するガバナンス改善および憲法改正をサポート"
+      ],
+      "votingPattern_en": "Varavas votes affirmatively on strategic ecosystem investments with clear execution plans and governance improvements, votes negatively on insufficiently justified expenditures and speculative ventures, and strategically abstains when community divisions prevent consensus-building.",
+      "votingPattern_ja": "Varavasは明確な実行計画とガバナンス改善を伴う戦略的なエコシステム投資に肯定的に投票し、正当化が不十分な支出と投機的事業に否定的に投票し、コミュニティの分裂がコンセンサス構築を妨げる場合は戦略的に棄権します。"
+    },
+    "drep1ygpzpm4q38rfueu2use5te4ylykn4smvs7cxj2ggvktcjkqpxhvf4": {
+      "lastAnalyzedVoteCount": 15,
+      "lastAnalyzedAt": "2026-03-06T00:00:15.541Z",
+      "tendencySummary_en": "Viet_Cardano_Community is a community-aligned DRep that strongly supports governance modernization, treasury responsibility, and ecosystem development initiatives. They prioritize constitutional alignment, community consultation, and strategic investments in Cardano's infrastructure while maintaining fiscal discipline through withdrawal guardrails.",
+      "tendencySummary_ja": "Viet_Cardano_Communityはコミュニティ志向のDRepで、ガバナンスの近代化、財務責任、およびエコシステム開発イニシアチブを強く支持しています。彼らは憲法上の調整、コミュニティ協議、および撤退ガードレールを通じた財政規律を維持しながらCardanoのインフラへの戦略的投資を優先しています。",
+      "keyPositions_en": [
+        "Strong support for CIP-1694 on-chain governance transition and Constitutional framework implementation",
+        "Advocates for responsible treasury management with clear withdrawal limits and guardrails",
+        "Prioritizes ecosystem development and infrastructure investment over short-term staking reward increases",
+        "Emphasizes community consultation and representative democracy in decision-making",
+        "Supports strategic growth initiatives like liquidity expansion and tier-1 exchange listings"
+      ],
+      "keyPositions_ja": [
+        "CIP-1694オンチェーンガバナンス移行と憲法枠組み実装への強力な支持",
+        "明確な撤退制限とガードレールを伴う責任ある財務管理を推進",
+        "短期的なステーキング報酬増加よりもエコシステム開発とインフラ投資を優先",
+        "意思決定における コミュニティ協議と代表民主主義を強調",
+        "流動性拡大とティア1取引所上場などの戦略的成長イニシアチブをサポート"
+      ],
+      "votingPattern_en": "Consistently votes YES (67% affirmative rate) on governance reforms and ecosystem development proposals that align with community consultation and constitutional principles, with selective NO votes on treasury reduction proposals lacking concrete impact evidence.",
+      "votingPattern_ja": "コミュニティ協議と憲法原則に沿ったガバナンス改革とエコシステム開発提案に一貫してYES投票(肯定率67%)を行い、具体的な影響証拠を欠く財務削減提案に対しては慎重にNO投票を行う。"
+    },
+    "drep1ygchkruw5xgrm5fkatqnytpe04h5tjeqr0ly8ylgefxmrxgcm6lwf": {
+      "lastAnalyzedVoteCount": 2,
+      "lastAnalyzedAt": "2026-03-06T00:00:20.297Z",
+      "tendencySummary_en": "This DRep demonstrates cautious, risk-averse governance with emphasis on long-term ecosystem sustainability over short-term reward improvements. They prioritize detailed financial analysis and are skeptical of proposals dependent on speculative assumptions like sustained price appreciation.",
+      "tendencySummary_ja": "このDRepは長期的なエコシステムの持続可能性を重視する慎重でリスク回避的なガバナンスアプローチを示しています。短期的な報酬改善よりも詳細な財務分析と持続可能性を優先し、継続的な価格上昇などの投機的な前提に依存する提案に懐疑的です。",
+      "keyPositions_en": [
+        "Opposes treasury cut reduction without guaranteed funding mechanisms",
+        "Prioritizes long-term ecosystem sustainability over immediate staking rewards",
+        "Skeptical of proposals relying on speculative ADA price appreciation assumptions",
+        "Emphasizes risk assessment and potential jeopardy to protocol health",
+        "Favors detailed financial justification in governance proposals"
+      ],
+      "keyPositions_ja": [
+        "保証された資金メカニズムのない財務削減に反対",
+        "即座的なステーキング報酬よりも長期的なエコシステムの持続可能性を優先",
+        "ADA価格上昇の投機的な前提に依存する提案に懐疑的",
+        "プロトコル健全性への潜在的な危険性とリスク評価を重視",
+        "ガバナンス提案における詳細な財務上の正当性を支持"
+      ],
+      "votingPattern_en": "Conservative voter who requires substantive risk mitigation and clear financial sustainability arguments before supporting significant treasury mechanism changes.",
+      "votingPattern_ja": "重大な財務メカニズムの変更を支持する前に、実質的なリスク軽減と明確な財務持続可能性の論証を必要とする保守的な投票者。"
+    },
+    "drep1y26ppxzudkhtak4y7kc2rag9ezq7szje78aetxge3pg5w7qwthkqv": {
+      "lastAnalyzedVoteCount": 37,
+      "lastAnalyzedAt": "2026-03-06T00:00:26.233Z",
+      "tendencySummary_en": "DRep #42 is a strong supporter of Cardano's long-term strategic development and ecosystem growth, consistently voting yes on initiatives that advance scalability, technology improvements, and governance structures. They oppose short-term cost-cutting measures and demand high standards for governance submissions, including proper documentation and constitutional compliance.",
+      "tendencySummary_ja": "DRep #42はCardanoの長期的な戦略的発展とエコシステム成長を強く支持し、スケーラビリティ、技術改善、ガバナンス構造を推進するイニシアティブに一貫して賛成票を投じています。短期的なコスト削減施策に反対し、適切なドキュメンテーションと憲法遵守を含むガバナンス提出物に高い基準を要求しています。",
+      "keyPositions_en": [
+        "Prioritize long-term ecosystem development over short-term treasury tax reductions",
+        "Support scaling improvements including Leios, Hydra, and Midgard protocols",
+        "Require high governance submission standards with verifiable data and proper documentation",
+        "Oppose undersized Constitutional Committee structures; advocate for 9-member committees with 7-member quorum",
+        "Emphasize strategic investments in marketing, dApp development, and core infrastructure"
+      ],
+      "keyPositions_ja": [
+        "短期的な財務税減税よりも長期的なエコシステム開発を優先する",
+        "Leios、Hydra、Midgardプロトコルを含むスケーリング改善を支持する",
+        "検証可能なデータと適切なドキュメンテーションを備えた高いガバナンス提出基準を要求する",
+        "規模の小さい憲法委員会構造に反対し、9人委員会と7人の定足数を支持する",
+        "マーケティング、dApp開発、コアインフラストラクチャへの戦略的投資を強調する"
+      ],
+      "votingPattern_en": "DRep #42 demonstrates a strong yes-bias (83.8% yes votes) with selective opposition focused on governance quality, constitutional compliance, and structural insufficiency rather than ideological disagreement.",
+      "votingPattern_ja": "DRep #42は強い賛成傾向(投票の83.8%が賛成)を示し、イデオロギー的不同意というより、ガバナンス品質、憲法遵守、構造的不十分さに焦点を当てた選別的な反対を行っています。"
+    },
+    "drep1ytxr0lhg5j72wysva9ac2gsn4lck4gyen8ywxkqfchsqg3qs8uy44": {
+      "lastAnalyzedVoteCount": 85,
+      "lastAnalyzedAt": "2026-03-06T00:00:33.689Z",
+      "tendencySummary_en": "GAIA demonstrates a fiscally conservative approach, opposing excessive spending and vague proposals while supporting well-executed projects with proven track records. The DRep shows strong skepticism toward the Cardano Foundation and EMURGO's use of genesis ADA, believing these entities should fund infrastructure rather than burdening the community treasury.",
+      "tendencySummary_ja": "GAIAは財政的に保守的なアプローチを示し、過度な支出と曖昧な提案に反対しながら、実績のある実行能力を持つプロジェクトをサポートしています。このDRepはCardanoファウンデーションとEMURGOのジェネシスADA使用に対して強い懐疑的姿勢を示し、これらの機関がコミュニティトレジャリーに負担をかけるのではなく、インフラストラクチャに資金を供給すべきだと考えています。",
+      "keyPositions_en": [
+        "Opposes for-profit services requesting community funding without equity offerings or alternative revenue sources",
+        "Demands concrete budgeting plans and adequate justification before approving large NCL amounts",
+        "Criticizes Cardano Foundation and EMURGO for failing to use genesis ADA for infrastructure responsibilities",
+        "Supports proven teams with demonstrated delivery capabilities and cost management",
+        "Values constitutional improvements and governance process refinements that enhance clarity"
+      ],
+      "keyPositions_ja": [
+        "株式提供または代替収益源なしでコミュニティ資金を要求する営利サービスに反対",
+        "大規模なNCL金額を承認する前に、具体的な予算計画と適切な正当性を要求",
+        "インフラ責任にジェネシスADAを使用しなかったCardanoファウンデーションとEMURGOを批判",
+        "実証済みの配信能力とコスト管理を持つ証明済みチームをサポート",
+        "明確性を高める憲法改善とガバナンスプロセス改善を重視"
+      ],
+      "votingPattern_en": "GAIA votes affirmatively on proposals from credible teams delivering tangible results and constitutional improvements, but consistently rejects proposals with insufficient justification, excessive budgets without plans, or those that burden the treasury instead of leveraging founding entity resources.",
+      "votingPattern_ja": "GAIAは信頼できるチームからの具体的な成果と憲法改善に関する提案には肯定的に投票しますが、正当性が不十分な提案、計画のない過度な予算、またはファウンディングエンティティのリソースを活用する代わりにトレジャリーに負担をかけるものには一貫して反対票を投じます。"
+    },
+    "drep1yg5pzxhp0lu0m7757ww2hke8qhcuqgqt3c2ezphngwytz4gjr6yge": {
+      "lastAnalyzedVoteCount": 50,
+      "lastAnalyzedAt": "2026-03-06T00:00:41.822Z",
+      "tendencySummary_en": "Medusa DRep demonstrates a highly critical and fiscally conservative voting pattern, frequently rejecting proposals due to concerns about budget overestimation, lack of transparency, and preference for merit-based smaller allocations over bulk treasury withdrawals. The DRep, with technical expertise as a developer and DevOps specialist, applies rigorous scrutiny to funding requests and actively manages conflicts of interest through abstention.",
+      "tendencySummary_ja": "Medusa DRepは予算過大見積もり、透明性の欠如、一括資金引き出しより価値ベースの小規模配分を好む懸念から提案を頻繁に却下する、極めて批判的で財政的に保守的な投票パターンを示しています。開発者およびDevOps専門家としての技術専門知識を持つDRepは、資金要求に対して厳格な精査を適用し、棄権を通じて利益相反を積極的に管理しています。",
+      "keyPositions_en": [
+        "Demands detailed budget justification and mathematical proof of necessity before approving treasury funding",
+        "Opposes large bulk treasury withdrawals in favor of multiple smaller proposals evaluated on individual merit",
+        "Rejects private companies and closed projects receiving ecosystem funding from treasury",
+        "Actively abstains when potential conflicts of interest exist (developer/maintainer status)",
+        "Skeptical of proposals lacking transparent breakdown and preferring Catalyst Fund submission instead"
+      ],
+      "keyPositions_ja": [
+        "資金提供承認前に詳細な予算正当化と必要性の数学的証拠を要求する",
+        "一括資金引き出しに反対し、個々の価値に基づいて評価される複数の小規模提案を支持",
+        "プライベート企業とエコシステム資金を受け取るクローズドプロジェクトを却下",
+        "潜在的な利益相反が存在する場合（開発者/メンテナー地位）に積極的に棄権",
+        "透明な内訳を欠いた提案に懐疑的でCatalyst Fund提案を優先"
+      ],
+      "votingPattern_en": "Medusa DRep votes 'No' predominantly (52% of votes) when proposals involve insufficient budget justification, commercial subsidies, or lack transparency; votes 'Yes' (28%) selectively when projects promote ecosystem competition and are clearly open-source; uses 'Abstain' (20%) strategically to manage personal conflicts of interest.",
+      "votingPattern_ja": "Medusa DRepは予算正当化不足、商業補助、または透明性欠如の提案で圧倒的に「反対」投票（投票の52%）し、生態系競争を促進し明確にオープンソースの場合に選別的に「賛成」（28%）投票し、個人的な利益相反を管理するために「棄権」（20%）を戦略的に使用します。"
+    },
+    "drep1yt20gpewasr2rn9qsc0puxl0f2g53a9yevdcv0c3saq8xugngks5l": {
+      "lastAnalyzedVoteCount": 2,
+      "lastAnalyzedAt": "2026-03-06T00:00:45.422Z",
+      "tendencySummary_en": "This DRep demonstrates a reformist approach to constitutional governance, actively supporting improvements to the Cardano Constitution. With a strong yes-voting record on constitutional matters, they advocate for transparency and clarity in amendment processes.",
+      "tendencySummary_ja": "このDRepは、Cardanoの憲法ガバナンスに対して改革志向的なアプローチを示しており、憲法改善への支持を積極的に表明しています。憲法に関する事項での強い可決投票記録を持ち、修正プロセスにおける透明性と明確性を主張しています。",
+      "keyPositions_en": [
+        "Supports ongoing constitutional improvements and amendments",
+        "Advocates for clear summary documentation of constitutional changes",
+        "Prioritizes transparency in amendment proposal overviews"
+      ],
+      "keyPositions_ja": [
+        "憲法の継続的な改善と修正を支持",
+        "憲法変更の明確な要約文書化を提唱",
+        "修正案概要における透明性を優先"
+      ],
+      "votingPattern_en": "Consistently votes in favor of constitutional governance proposals with a focus on procedural clarity and transparency requirements.",
+      "votingPattern_ja": "手続きの明確性と透明性要件に焦点を当てた憲法ガバナンス提案に対して、一貫して賛成票を投じています。"
+    },
+    "drep1y290s8rwsezxkct6urmqne8tc92wqtltal8dfxfk45xj6eqn2mgfx": {
+      "lastAnalyzedVoteCount": 59,
+      "lastAnalyzedAt": "2026-03-06T00:00:50.373Z",
+      "tendencySummary_en": "SAGAN Stake Pool demonstrates a strong preference for maintaining high standards and decentralization principles, voting affirmatively on the vast majority of proposals (46 Yes votes) while selectively opposing measures that could compromise network integrity. The DRep shows cautious skepticism toward changes that reduce minimum requirements, viewing such modifications as potential pathways to centralization.",
+      "tendencySummary_ja": "SAGAN Stake Poolは、高い基準と分散化の原則を維持することを強く支持し、提案の大多数に肯定票を投じる（46票の賛成）一方で、ネットワークの完全性を損なう可能性のある対策を選別的に反対しています。DRepは最低要件を削減する変更に対して慎重な懐疑的姿勢を示し、そのような修正を中央集約化への潜在的な道と見なしています。",
+      "keyPositions_en": [
+        "Opposes reduction of minimum requirements as a path to centralization",
+        "Advocates for maintaining high consensus standards",
+        "Supports decentralization principles in network governance",
+        "Broadly supportive of protocol proposals (79% approval rate)"
+      ],
+      "keyPositions_ja": [
+        "最低要件の削減を中央集約化への道として反対",
+        "高いコンセンサス基準の維持を主張",
+        "ネットワークガバナンスにおける分散化の原則を支持",
+        "プロトコル提案への幅広い支持（承認率79%）"
+      ],
+      "votingPattern_en": "SAGAN demonstrates a highly affirmative voting pattern with selective but principled opposition to proposals that could compromise decentralization, as evidenced by an 81% approval rate and focused criticism of measures reducing minimum requirements.",
+      "votingPattern_ja": "SAGANは、最低要件を削減する対策への焦点化された批判と81%の承認率によって証明される、分散化を損なう可能性のある提案への選別的かつ原則的な反対を伴う、極めて肯定的な投票パターンを示しています。"
+    },
+    "drep1y2crkcnrqs0q7wwzjllgtk95kv7hry7zwzydtrv5glm5n7g78lard": {
+      "lastAnalyzedVoteCount": 12,
+      "lastAnalyzedAt": "2026-03-06T00:00:56.160Z",
+      "tendencySummary_en": "This DRep demonstrates a pragmatic approach favoring ecosystem development and established entities, while maintaining fiscal discipline on larger asks. They support initiatives that directly benefit Cardano's growth but require clarity and proportionate resource allocation for approval.",
+      "tendencySummary_ja": "このDRepは、エコシステム開発と確立されたエンティティを支持する実用的なアプローチを示しており、より大きな予算要求に対しては財政的規律を維持しています。Cardanoの成長に直接的に利益をもたらすイニシアティブを支持していますが、承認には明確性と適切なリソース配分を要求しています。",
+      "keyPositions_en": [
+        "Supports proven, accountable entities contributing to Cardano ecosystem (SNEK case)",
+        "Requires project clarity and justification proportional to funding amount requested",
+        "Advocates for incremental funding approach (suggests 450K ADA starting point)",
+        "Prioritizes Cardano's growth and marketing needs",
+        "Emphasizes Web3 principles of accountability in lending decisions"
+      ],
+      "keyPositions_ja": [
+        "Cardanoエコシステムに貢献する実績のある説明責任のあるエンティティを支持（SNEK事例）",
+        "資金要求額に比例したプロジェクトの明確性と正当化を要求",
+        "段階的な資金提供アプローチを提唱（450K ADAの開始ポイントを提案）",
+        "Cardanoの成長とマーケティング需要を優先視",
+        "融資決定における説明責任のWeb3原則を強調"
+      ],
+      "votingPattern_en": "Votes predominantly yes (75% approval rate) on established initiatives and ecosystem essentials while conditionally rejecting proposals lacking sufficient clarity or requesting disproportionate initial funding.",
+      "votingPattern_ja": "確立されたイニシアティブとエコシステムの必需品に関してはほぼ賛成票（75%の承認率）を投じ、一方で十分な明確性を欠くまたは不相応な初期資金を要求する提案には条件付きで反対票を投じています。"
+    },
+    "drep1ygj02llvuusnhphvhlxf7d2cxhs53twjnwwl5at3zwht4xc6xdgl4": {
+      "lastAnalyzedVoteCount": 76,
+      "lastAnalyzedAt": "2026-03-06T00:01:03.330Z",
+      "tendencySummary_en": "Nimuë demonstrates a pragmatic, consensus-oriented approach favoring treasury withdrawals aligned with approved budgets while maintaining principled positions on constitutional governance. She balances flexibility on lower-stakes proposals with firm skepticism toward inadequately vetted major governance documents, and opposes redundant or oversized budget requests.",
+      "tendencySummary_ja": "ニミュエは、承認された予算に沿った財務引き出しを支持する実用的でコンセンサス志向のアプローチを示し、同時に憲法的ガバナンスに関する原則的立場を保つ。低リスクの提案では柔軟性を示しながら、十分な検証を経ていない主要なガバナンス文書に対しては強い懐疑的態度を保ち、冗長または過度な予算要求に反対している。",
+      "keyPositions_en": [
+        "Approve treasury withdrawals for budgets already approved in Ekklesia",
+        "Oppose constitution replacements lacking sufficient community consultation and input",
+        "Support pragmatic governance decisions to prevent governance shutdowns",
+        "Oppose inflated compensation requests without cost breakdowns",
+        "Redirect proposals more suitable for Catalyst to that funding mechanism"
+      ],
+      "keyPositions_ja": [
+        "エクレシア投票で既に承認された予算に関連する財務引き出しを承認",
+        "十分なコミュニティ協議と合意を欠く憲法改正案に反対",
+        "ガバナンスの停止を防ぐための実用的なガバナンス決定を支持",
+        "コスト内訳がない膨らんだ補償要求に反対",
+        "Catalystに適した提案をそのファンディング機構にリダイレクト"
+      ],
+      "votingPattern_en": "Nimuë votes YES on 84% of proposals, typically approving budget-aligned treasury withdrawals and constitutional appointments while voting NO on unvetted major governance reforms, oversized budget requests, and proposals better suited to alternative funding mechanisms.",
+      "votingPattern_ja": "ニミュエは提案の84%でYES投票を行い、一般的には予算に沿った財務引き出しと憲法上の任命を承認する一方で、検証されていない主要なガバナンス改革、過度な予算要求、および代替ファンディング機構に適した提案にはNOを投票する。"
+    },
+    "drep1y2t3t35yx7j8nnh3wkqn2zzhgwqksksn85zv62pjrwzjawczwgyv7": {
+      "lastAnalyzedVoteCount": 74,
+      "lastAnalyzedAt": "2026-03-06T00:01:11.818Z",
+      "tendencySummary_en": "No stress is a pragmatic DRep who supports well-reasoned public goods funding and technical improvements while maintaining fiscal responsibility and governance efficiency. They favor projects with clear community benefit and proven execution, but push back on large expenditures without transparent cost breakdowns, private company favoritism, and scope creep.",
+      "tendencySummary_ja": "No stressは、実績のある公共財への資金配分と技術改善を支持する実務的なDRepであり、同時に財政責任とガバナンス効率を維持しています。コミュニティへの利益が明確で実行能力が証明されたプロジェクトを支持する一方で、透明性のないコスト構造、民間企業への優遇、スコープクリープに異議を唱えます。",
+      "keyPositions_en": [
+        "Supports streamlined, lightweight governance with minimal intermediaries and maximum community decision-making power",
+        "Backs open-source projects and technical infrastructure that expand developer accessibility (Typescript tooling, UTxO RPC, light clients)",
+        "Opposes large private company funding and cherry-picking winners; prefers competitive multi-party approaches to public goods",
+        "Demands cost transparency and line-item breakdowns; skeptical of large asks without detailed justifications",
+        "Favors incremental, phased approaches (crawl-walk-run) for major initiatives with proven team execution"
+      ],
+      "keyPositions_ja": [
+        "最小限の仲介者とコミュニティの意思決定権を最大化するスリムで軽量なガバナンスを支持",
+        "開発者アクセス性を拡大するオープンソースプロジェクトと技術インフラストラクチャ(Typescriptツール、UTxO RPC、ライトクライアント)を支持",
+        "大規模な民間企業資金提供と勝者選別に反対; 公共財への競争的な複数当事者アプローチを優先",
+        "コスト透明性と費用項目明細を要求; 詳細な正当性なしの大型要求に懐疑的",
+        "実績のあるチーム実行による主要施策への段階的、段階的なアプローチ(段階的展開)を支持"
+      ],
+      "votingPattern_en": "Votes Yes on technical improvements and public goods with clear community usage, No on under-justified large expenses and private company picks, and abstains when proposal effectiveness is uncertain or governance standards are compromised.",
+      "votingPattern_ja": "コミュニティの利用が明確な技術改善と公共財にはYes投票、正当性に欠ける大型支出と民間企業選別にはNo投票、提案の有効性が不確実またはガバナンス基準が損なわれている場合は棄権投票します。"
+    },
+    "drep1y2f5m5mn48q65xkw65q2kfd2tkakz3lh8553ugmcsq0ahnsl2nfcj": {
+      "lastAnalyzedVoteCount": 77,
+      "lastAnalyzedAt": "2026-03-06T00:01:16.825Z",
+      "tendencySummary_en": "HenriqC demonstrates a strong pro-governance voting pattern, supporting proposals that address ecosystem pain points and show credible execution plans. They favor experimental treasury uses and initiatives with proven track records, while maintaining scrutiny on procedural integrity.",
+      "tendencySummary_ja": "HenriqC は、エコシステムの課題に対処し、信頼できる実行計画を示す提案を支持する強い親ガバナンス投票パターンを示しています。実績のあるイニシアティブと実験的な財務局の使用を支持しながら、手続きの完全性に厳しく目を向けています。",
+      "keyPositions_en": [
+        "Supports coordinated budget proposals that maintain structural integrity",
+        "Favors solutions addressing established ecosystem pain points",
+        "Backs initiatives with proven track records and credible teams",
+        "Endorses experimental treasury mechanisms that guide future endeavors",
+        "Emphasizes proper procedural processes for governance decisions"
+      ],
+      "keyPositions_ja": [
+        "構造的完全性を維持する調整予算提案を支持",
+        "確立されたエコシステムの課題に対処するソリューションを支持",
+        "実績のある信頼できるチームによるイニシアティブを支持",
+        "将来の取り組みを導く実験的な財務メカニズムを支持",
+        "ガバナンス決定の適切な手続きプロセスを強調"
+      ],
+      "votingPattern_en": "Highly supportive voter (93% yes rate) who evaluates proposals on merit including feasibility, ecosystem benefit, team credibility, and procedural correctness, with occasional dissent on process grounds.",
+      "votingPattern_ja": "実現可能性、エコシステム利益、チームの信頼性、手続きの正確性を含むメリットに基づいて提案を評価し、手続きの根拠に基づいて時折異議を唱える非常に支持的な投票者（93%の投票率）。"
+    },
+    "drep1y204jqvq0hu4m26gsaskmaas8vju2ls30hh2s0dhpj03t9qafvuzl": {
+      "lastAnalyzedVoteCount": 29,
+      "lastAnalyzedAt": "2026-03-06T00:01:21.160Z",
+      "tendencySummary_en": "Clarity Cofounder DRep demonstrates a strongly pro-development voting stance, overwhelmingly supporting governance proposals with 25 affirmative votes versus only 2 rejections. Their minimal rationale provision and growth-focused reasoning suggest prioritization of ecosystem expansion and technical advancement.",
+      "tendencySummary_ja": "Clarity Cofounder DRepは強い開発支持投票姿勢を示しており、25の肯定票に対してわずか2票の否決票しかない圧倒的なサポート比率を保有しています。最小限の根拠提供と成長志向の理由付けから、エコシステムの拡大と技術的進展の優先順位付けが示唆されます。",
+      "keyPositions_en": [
+        "Strong support for ecosystem growth initiatives",
+        "Pro-development governance stance",
+        "Minimal critical scrutiny of proposals",
+        "Growth-centric decision-making framework"
+      ],
+      "keyPositions_ja": [
+        "エコシステム成長イニシアティブへの強力なサポート",
+        "開発志向のガバナンス立場",
+        "提案に対する最小限の批判的審査",
+        "成長中心の意思決定枠組み"
+      ],
+      "votingPattern_en": "This DRep exhibits a permissive voting pattern with overwhelming approval (89% yes rate) and minimal dissent, indicating a trust-based approach to governance participation.",
+      "votingPattern_ja": "このDRepは圧倒的な承認率（89%の賛成率）と最小限の異議を示す許容的な投票パターンを示しており、ガバナンス参加への信頼ベースのアプローチを示唆しています。"
+    },
+    "drep1yf7rhr6k8gfecdn8z5r38uqyaafcfr785lsgzsvc7ye3m9g3z20kj": {
+      "lastAnalyzedVoteCount": 64,
+      "lastAnalyzedAt": "2026-03-06T00:01:28.673Z",
+      "tendencySummary_en": "Tony Boersma is a fiscally conservative DRep who prioritizes public goods, open-source infrastructure, and ecosystem-wide benefits over private company subsidies or niche initiatives. He supports strategic investments with clear accountability, strong governance oversight, and proven demand, while opposing duplicative efforts, excessive spending, and proposals that lack transparency or external validation.",
+      "tendencySummary_ja": "トニー・ボースマは、私的企業への補助金やニッチなイニシアティブよりも、公共財、オープンソースインフラ、エコシステム全体の利益を優先する財政的に保守的なDRepです。明確な説明責任、強力なガバナンス監視、実証された需要を備えた戦略的投資をサポートし、重複した努力、過度な支出、透明性や外部検証が不足している提案に反対しています。",
+      "keyPositions_en": [
+        "Reject Treasury subsidies for private company growth, exchange listings, and individual asset promotion",
+        "Require open-source licensing and transparency for Treasury-funded infrastructure",
+        "Support developer-focused initiatives with broad ecosystem impact (Python, quadratic funding mechanisms)",
+        "Demand independent external oversight and accountability mechanisms for major governance proposals",
+        "Oppose duplicative efforts and favor consolidation of similar initiatives to maximize Treasury efficiency"
+      ],
+      "keyPositions_ja": [
+        "民間企業の成長、取引所上場、個別資産促進へのトレジャリー補助金を拒否",
+        "トレジャリー資金を使用するインフラにオープンソースライセンスと透明性を要求",
+        "広範なエコシステム影響を持つ開発者向けイニシアティブ（Python、二次資金メカニズム）をサポート",
+        "主要なガバナンス提案に対する独立した外部監督と説明責任メカニズムを要求",
+        "重複した努力に反対し、トレジャリー効率を最大化するための同様のイニシアティブの統合を支持"
+      ],
+      "votingPattern_en": "Boersma votes Yes for foundational infrastructure with ecosystem-wide benefits and proper governance safeguards, but votes No for proposals lacking transparency, duplicating existing efforts, subsidizing private entities, or pursuing objectives more suited to Project Catalyst.",
+      "votingPattern_ja": "ボースマはエコシステム全体の利益と適切なガバナンス保護措置を備えた基本インフラのためにYesに投票しますが、透明性が不足している、既存の取り組みを複製している、民間企業を補助している、またはプロジェクト・カタリストに適した目的を追求している提案にはNoに投票します。"
+    },
+    "drep1ygjtfnv5htpyk6d7zgk58munrxsn3sesegycq0l8qwyv9ps7rynm9": {
+      "lastAnalyzedVoteCount": 11,
+      "lastAnalyzedAt": "2026-03-06T00:01:33.531Z",
+      "tendencySummary_en": "SAKE demonstrates a pragmatic voting approach, accepting proposals with incomplete details if adequate oversight mechanisms are present. This DRep shows strong support for governance initiatives while maintaining conditional approval based on institutional safeguards rather than comprehensive planning.",
+      "tendencySummary_ja": "SAKEは、適切な監視メカニズムが存在する場合、詳細が不完全な提案を承認する実用的な投票アプローチを示しています。本DRepは、包括的な計画ではなく制度的セーフガードに基づいた条件付き承認を維持しながら、ガバナンスイニシアチブへの強い支持を示しています。",
+      "keyPositions_en": [
+        "Accepts incomplete proposals if oversight structures are in place",
+        "Values governance committee and institutional accountability",
+        "Prioritizes proposal importance and potential impact over plan completeness",
+        "Requires demonstrated oversight mechanisms as approval conditions"
+      ],
+      "keyPositions_ja": [
+        "監視構造が存在する場合、不完全な提案を受け入れる",
+        "ガバナンス委員会と制度的説明責任を重視",
+        "計画の完全性よりも提案の重要性と潜在的な影響を優先",
+        "承認条件として実証された監視メカニズムが必要"
+      ],
+      "votingPattern_en": "Consistently votes YES (91% approval rate) with minimal abstentions, relying on operational oversight rather than detailed proposal specifications as the basis for support.",
+      "votingPattern_ja": "詳細な提案仕様ではなく運用上の監視に依存して、最小限の棄権で一貫してYESに投票する(承認率91%)。"
+    },
+    "drep1ytd8ewnp38xz5469g63yw34ev9q9cch2hcyp332t8cqpzzqh23ykc": {
+      "lastAnalyzedVoteCount": 16,
+      "lastAnalyzedAt": "2026-03-06T00:01:39.379Z",
+      "tendencySummary_en": "Dmitrii Gartung demonstrates a pragmatic approach favoring DeFi incentivization and treasury-based development over direct reward increases. He prioritizes clear governance structures and decentralized proposal documentation while maintaining a cautious stance on centralized infrastructure dependencies.",
+      "tendencySummary_ja": "ドミトリー・ガルツングは、直接的な報酬引き上げよりもDeFiインセンティブとトレジャリーベースの開発を優先する実用的なアプローチを示しています。彼は明確なガバナンス構造と分散型提案ドキュメンテーションを重視しながら、中央集約的インフラ依存性に対して慎重な姿勢を保っています。",
+      "keyPositions_en": [
+        "Oppose direct staking reward increases in favor of treasury-based funding mechanisms",
+        "Prioritize DeFi ecosystem incentivization for long-term holder value",
+        "Require clear vision and roadmaps for governance proposals",
+        "Reject centralized document hosting (Google Docs) for on-chain proposals",
+        "Support treasury allocation for development and liquidity provision"
+      ],
+      "keyPositions_ja": [
+        "トレジャリーベースの資金メカニズムを優先し、直接的なステーキング報酬引き上げに反対",
+        "長期的なホルダー価値のためのDeFiエコシステムインセンティブを優先化",
+        "ガバナンス提案に対して明確なビジョンとロードマップを要求",
+        "オンチェーン提案のための中央集約的なドキュメントホスティング（Google Docs）を拒否",
+        "開発と流動性提供のためのトレジャリー配分を支持"
+      ],
+      "votingPattern_en": "Selective voter with low rationale provision (19% with comments) who leans toward approval (67% Yes) while strategically opposing reward inflation and enforcing decentralization standards.",
+      "votingPattern_ja": "コメント提供率が低い（19%）選別的な投票者で、承認傾向（67% Yes）を示しながら報酬インフレーションに戦略的に反対し、分散化基準を強制している。"
+    },
+    "drep1ytdj0mu4kfhzekjx8yragvc64fcvkxp435fcxytv2kg7l2qpyccd5": {
+      "lastAnalyzedVoteCount": 19,
+      "lastAnalyzedAt": "2026-03-06T00:01:45.116Z",
+      "tendencySummary_en": "BankFi demonstrates a balanced but cautious approach to governance, with nearly equal support and opposition votes. The DRep prioritizes transparency, clear enforcement mechanisms, and risk-adjusted financial terms, particularly skeptical of treasury funding for private entities without robust repayment schedules and collateral structures.",
+      "tendencySummary_ja": "BankFiはガバナンスに対してバランスの取れた慎重なアプローチを示しており、ほぼ同数の支持票と反対票を投じています。このDRepは透明性、明確な執行メカニズム、リスク調整された財務条件を優先し、特に堅牢な返済スケジュールと担保構造のない民間企業への財務支援に懐疑的です。",
+      "keyPositions_en": [
+        "Demands transparency and clear enforcement mechanisms for loans, especially regarding collateral and revenue obligations",
+        "Opposes treasury funding for private for-profit entities without risk-adjusted repayment schedules",
+        "Supports strategic investments in founding entities when aligned with community goals",
+        "Distinguishes between public infrastructure investment and private company funding models",
+        "Emphasizes need for historical data and risk analysis before treasury commitments"
+      ],
+      "keyPositions_ja": [
+        "特に担保および収益義務に関する、ローンの透明性および明確な執行メカニズムを要求する",
+        "リスク調整返済スケジュールなしの民間営利企業への財務支援に反対",
+        "コミュニティ目標と一致する場合、創業企業への戦略的投資を支持",
+        "公共インフラ投資と民間企業の資金調達モデルを区別",
+        "財務コミットメント前に歴史的データとリスク分析の必要性を強調"
+      ],
+      "votingPattern_en": "BankFi votes with careful deliberation on a near 50/50 basis, supporting proposals with strong community backing and founding entity involvement while consistently rejecting those lacking transparency, clear repayment terms, or appropriate risk frameworks.",
+      "votingPattern_ja": "BankFiはほぼ50/50のベースで慎重な検討を行い、コミュニティの強い支持と創業企業の関与がある提案を支持する一方で、透明性、明確な返済条件、または適切なリスク枠組みの欠如する提案を一貫して拒否します。"
+    },
+    "drep1yt67l7we0xtkl9v8krjlkjm6g9g9khqvecndevz44n3lcdc9rg2ur": {
+      "lastAnalyzedVoteCount": 4,
+      "lastAnalyzedAt": "2026-03-06T00:01:49.842Z",
+      "tendencySummary_en": "This DRep demonstrates strong support for Cardano's strategic direction, voting affirmatively on roadmap initiatives that align with the protocol's long-term vision. They show high confidence in the development trajectory and governance decisions, with minimal dissent.",
+      "tendencySummary_ja": "このDRepはCardanoの戦略的方向性に対して強い支持を示しており、プロトコルの長期的ビジョンに合致するロードマップイニシアチブに肯定投票しています。開発軌跡とガバナンス決定に高い信頼を持ち、異議はほとんどありません。",
+      "keyPositions_en": [
+        "Supports well-socialized and consensus-driven roadmap items",
+        "Believes current initiatives are necessary for Cardano's promise fulfillment",
+        "Favors continuity with established development direction",
+        "Confident in governance process and stakeholder communication"
+      ],
+      "keyPositions_ja": [
+        "十分に周知されたコンセンサスベースのロードマップ項目を支持",
+        "現在のイニシアチブはCardanoの約束実現に必要と信じる",
+        "確立された開発方向の継続性を支持",
+        "ガバナンスプロセスと利害関係者コミュニケーションに信頼を持つ"
+      ],
+      "votingPattern_en": "Predominantly supportive voter (75% Yes rate) with selective opposition, relying on established governance consensus rather than detailed individual rationale articulation.",
+      "votingPattern_ja": "確立されたガバナンスコンセンサスに依存し、詳細な個別根拠の明確化よりも、選別的な反対を伴う支持的投票傾向（賛成率75％）を示しています。"
+    },
+    "drep1ytmr6kcyhmj3pp62peueqyc85fl5qvsp8mpkwsplg629alqkp478c": {
+      "lastAnalyzedVoteCount": 10,
+      "lastAnalyzedAt": "2026-03-06T00:01:55.259Z",
+      "tendencySummary_en": "Arturo demonstrates a strong pro-governance evolution stance, favoring initiatives that enhance transparency and community-driven decision-making in Cardano's governance framework. However, he shows principled opposition to expedited constitutional changes, advocating instead for inclusive, deliberative processes that mirror the original Constitutional Workshops.",
+      "tendencySummary_ja": "アルトゥーロはCardanoのガバナンス枠組みの透明性と コミュニティ主導の意思決定を強化するイニシアティブを支持する、ガバナンス進化に強く賛成する立場を示しています。しかし、性急な憲法改正に対しては原則的に反対し、元の憲法ワークショップに匹敵する包括的で熟議的なプロセスを主張しています。",
+      "keyPositions_en": [
+        "Supports data-driven governance metrics and transparency initiatives",
+        "Advocates for community-shaped improvement through workshops and surveys",
+        "Opposes constitutional amendments without broad, inclusive deliberation",
+        "Emphasizes the Constitution as a foundational social contract, not merely technical",
+        "Favors structured consultation processes matching the scope of original Constitutional Workshops"
+      ],
+      "keyPositions_ja": [
+        "データ駆動型のガバナンス指標と透明性イニシアティブを支持",
+        "ワークショップと調査を通じたコミュニティ主導の改善を提唱",
+        "広範で包括的な熟議なしの憲法改正に反対",
+        "憲法を技術的要素ではなく基本的な社会契約として強調",
+        "元の憲法ワークショップの規模に匹敵する構造化協議プロセスを支持"
+      ],
+      "votingPattern_en": "Arturo votes predominantly affirmatively (70% Yes votes) on governance evolution proposals while selectively opposing constitutional changes lacking adequate community consultation and deliberative processes.",
+      "votingPattern_ja": "アルトゥーロはガバナンス進化提案に対して圧倒的に肯定的に投票する傾向（70%の賛成投票）がある一方で、十分なコミュニティ協議と熟議プロセスを欠く憲法改正に対して選別的に反対しています。"
+    },
+    "drep1yghm3canzwv736un9usqrxpfvxrm68k9hz0ppvrxe7n7lfgmsxru8": {
+      "lastAnalyzedVoteCount": 75,
+      "lastAnalyzedAt": "2026-03-06T00:02:00.807Z",
+      "tendencySummary_en": "taichiyokayama is a strongly supportive DRep who overwhelmingly votes Yes (62/75 votes) while maintaining principled positions on fiscal responsibility. They prioritize constitutional clarity, treasury sustainability, and community education, acting as a bridge between the Japanese and global Cardano communities.",
+      "tendencySummary_ja": "taichiyokayamaは圧倒的にYes投票（75票中62票）を行う強力なサポーター的DRepであり、財政責任に関する原則的立場を貫いています。憲法の明確性、財務の持続可能性、コミュニティ教育を優先し、日本とグローバルなCardanoコミュニティの架け橋として機能しています。",
+      "keyPositions_en": [
+        "Supports clearer and more detailed constitutional frameworks that reduce financial risks",
+        "Opposes treasury tax reductions that compromise long-term ecosystem sustainability",
+        "Values research and development investment as foundation for ecosystem growth",
+        "Emphasizes community education and international bridge-building in Cardano governance",
+        "Prioritizes decentralization efforts and infrastructure improvements over short-term gains"
+      ],
+      "keyPositions_ja": [
+        "より詳細で明確な憲法枠組みを支持し、財務リスク軽減を推進",
+        "長期的エコシステム持続可能性を損なう財務税削減に反対",
+        "研究開発投資をエコシステム成長の基礎として重視",
+        "Cardanoガバナンスにおけるコミュニティ教育と国際的橋渡しを強調",
+        "短期的利益よりも分散化と インフラ改善を優先"
+      ],
+      "votingPattern_en": "Overwhelmingly approves governance proposals (83% Yes rate) while selectively opposing measures that conflict with constitutional principles or long-term ecosystem sustainability, with very few abstentions indicating strong conviction.",
+      "votingPattern_ja": "ガバナンス提案を圧倒的に承認する（Yes率83%）一方で、憲法原則または長期的エコシステム持続可能性と矛盾する措置を選別的に反対し、棄権がほぼないことから強い信念を示しています。"
+    },
+    "drep1ytamqncvuz2r0atkwxwgcn5zmgxm09j0g2lgcrp7ddqfsfcsgnr8s": {
+      "lastAnalyzedVoteCount": 20,
+      "lastAnalyzedAt": "2026-03-06T00:02:09.024Z",
+      "tendencySummary_en": "FAIR Pool #01 demonstrates a fiscally conservative and evidence-based voting approach, strongly prioritizing treasury sustainability, measurable deliverables, and governance stability. The DRep consistently opposes proposals lacking clear KPIs, Budget Info actions, or detailed implementation plans, while supporting initiatives with concrete roadmaps and transparent accountability mechanisms.",
+      "tendencySummary_ja": "FAIR Pool #01は、財政的に保守的かつ証拠ベースの投票姿勢を示しており、財務の継続可能性、測定可能な成果物、およびガバナンスの安定性を強く優先しています。このDRepは、明確なKPI、予算情報アクション、または詳細な実装計画が欠けているプロポーザルに一貫して反対し、具体的なロードマップと透明性のあるアカウンタビリティメカニズムを備たイニシアティブを支持しています。",
+      "keyPositions_en": [
+        "Demands KPI-backed delivery plans and measurable accountability metrics for all funding proposals",
+        "Opposes frequent changes to core governance parameters without significant new market conditions or data",
+        "Prioritizes incremental constitutional changes over comprehensive overhauls to maintain governance stability",
+        "Supports infrastructure investments with transparent treasury administration and concrete milestones",
+        "Advocates for well-funded treasury reserves to ensure ecosystem resilience and long-term sustainability"
+      ],
+      "keyPositions_ja": [
+        "すべての資金提案に対してKPIに基づく配信計画と測定可能なアカウンタビリティメトリクスを要求",
+        "重要な市場条件やデータの変化なしにコアガバナンスパラメータの頻繁な変更に反対",
+        "ガバナンスの安定性を維持するため、包括的なオーバーホールよりも段階的な憲法改正を優先",
+        "透明性のある財務管理と具体的なマイルストーンを備えたインフラ投資を支持",
+        "生態系の回復力と長期的な持続可能性を確保するためのよく資金提供されている財務準備を提唱"
+      ],
+      "votingPattern_en": "FAIR Pool #01 votes strategically based on proposal rigor and governance principles: Yes for well-documented infrastructure with accountability, constitution legitimization, and reimbursements with clear justification; No for budget proposals lacking KPIs, incomplete frameworks, overly broad unfunded initiatives, and premature parameter changes without sufficient justification.",
+      "votingPattern_ja": "FAIR Pool #01は、提案の厳密性とガバナンス原則に基づいて戦略的に投票します。アカウンタビリティを持つ十分に文書化されたインフラストラクチャ、憲法の正当化、明確な正当化を持つ払い戻しに対してはYes。KPIが欠けている予算提案、不完全なフレームワーク、過度に広い未資金イニシアティブ、および十分な正当化がない早すぎるパラメータ変更に対してはNo。"
+    },
+    "drep1yf2yd8jgdvmtm7jqmvvl0rmw7yprv5723y8h6tjnwfmcejq476nsl": {
+      "lastAnalyzedVoteCount": 13,
+      "lastAnalyzedAt": "2026-03-06T00:02:15.628Z",
+      "tendencySummary_en": "Alex BKV is a technically-oriented DRep who supports strategic infrastructure and ecosystem development initiatives, showing strong approval for technical improvements (Amaru node), strategic positioning (domains, stablecoins), and fair remediation efforts. However, they exercise fiscal caution and demand accountability, voting against large unallocated treasury withdrawals while pragmatically accepting imperfect proposals when the alternative is worse.",
+      "tendencySummary_ja": "Alex BKVは技術志向のDRepであり、戦略的インフラとエコシステム開発イニシアチブを支持し、技術的改善（Amaruノード）、戦略的ポジショニング（ドメイン、ステーブルコイン）、公正な救済努力に対して強い承認を示しています。しかし、彼らは財政上の慎重さを発揮し説明責任を要求し、大規模な未配分の財務引き出しに反対票を投じる一方で、より悪い代替案があれば不完全な提案を現実的に受け入れています。",
+      "keyPositions_en": [
+        "Prioritizes technical merit and decentralization (supports Amaru Rust-based node implementation)",
+        "Demands clear allocation details and accountability mechanisms for large treasury withdrawals",
+        "Recognizes strategic importance of ecosystem positioning (domains, stablecoins) despite concerns",
+        "Supports fair remediation and bug-related compensation as ethical obligations",
+        "Takes pragmatic approach: accepts imperfect proposals when alternatives cause greater harm"
+      ],
+      "keyPositions_ja": [
+        "技術的価値と分散化を優先（Amaruのさびベースのノード実装をサポート）",
+        "大規模な財務引き出しのための明確な配分詳細と説明責任メカニズムを要求",
+        "懸念があるにもかかわらず、エコシステムポジショニング（ドメイン、ステーブルコイン）の戦略的重要性を認識",
+        "公正な救済とバグ関連の補償を倫理的義務としてサポート",
+        "実用的なアプローチ：より大きな害をもたらす代替案がある場合、不完全な提案を受け入れる"
+      ],
+      "votingPattern_en": "Votes yes for technical infrastructure improvements, strategic ecosystem initiatives, and fair remediation with clear justification, but votes no on large unallocated treasury proposals lacking accountability mechanisms.",
+      "votingPattern_ja": "明確な正当性のある技術的インフラ改善、戦略的エコシステムイニシアチブ、公正な救済に対してはイエスに投票し、説明責任メカニズムを欠く大規模な未配分の財務提案にはノーに投票します。"
+    },
+    "drep1ygqlu72zwxszcx0kqdzst4k3g6fxx4klwcmpk0fcuujskvg3pmhgs": {
+      "lastAnalyzedVoteCount": 17,
+      "lastAnalyzedAt": "2026-03-06T00:02:20.686Z",
+      "tendencySummary_en": "C2VN demonstrates a strongly supportive voting stance, approving 10 out of 17 votes with a clear preference for community-honoring governance decisions. The DRep shows particular enthusiasm for initiatives that recognize contributions to the Cardano ecosystem and maintain community values.",
+      "tendencySummary_ja": "C2VNは強気な投票姿勢を示しており、17票中10票の承認に明確な傾向を持っています。コミュニティへの貢献を認識し、エコシステムの価値を維持するイニシアティブに特に熱心です。",
+      "keyPositions_en": [
+        "Supports naming decisions that honor community contributors and their legacy",
+        "Values community-driven governance and recognition of individual contributions",
+        "Advocates for preserving Cardano ecosystem history through meaningful gestures",
+        "Prioritizes votes reflecting community appreciation and knowledge-sharing culture"
+      ],
+      "keyPositions_ja": [
+        "コミュニティの貢献者とその遺産を尊重する命名決定を支持",
+        "コミュニティ主導のガバナンスと個人の貢献認識を重視",
+        "意味のあるジェスチャーを通じてCardanoエコシステムの歴史を保全することを提唱",
+        "コミュニティの感謝と知識共有文化を反映する投票を優先"
+      ],
+      "votingPattern_en": "C2VN votes affirmatively on the majority of proposals (10 Yes vs 5 No, 2 Abstain), with strong support for community-oriented initiatives and limited engagement with detailed voting rationales despite significant stake holdings.",
+      "votingPattern_ja": "C2VNは提案の大多数に肯定的に投票し(10票の賛成対5票の反対、2票の棄権)、コミュニティ志向のイニシアティブを強力に支持していますが、大規模なステーク保有にもかかわらず詳細な投票根拠との関与は限定的です。"
+    },
+    "drep1yfsgx4dqfcxxs0ms533twzs7w0cvw8vq8qwzmjyrp280jfsl8gusv": {
+      "lastAnalyzedVoteCount": 63,
+      "lastAnalyzedAt": "2026-03-06T00:02:30.302Z",
+      "tendencySummary_en": "Dan is a thoughtful, infrastructure-focused DRep who strongly supports ecosystem development initiatives that build lasting technical foundations, improve governance processes, and expand Cardano's global reach. He votes pragmatically, carefully scrutinizing budget proportionality and demanding transparency in proposal design, often preferring Catalyst funding for early-stage projects while reserving treasury withdrawals for mature, well-structured initiatives with clear ROI.",
+      "tendencySummary_ja": "Danは思慮深いインフラ志向のDRepであり、持続的な技術基盤を構築し、ガバナンスプロセスを改善し、Cardanoのグローバルリーチを拡大するエコシステム開発イニシアチブを強く支持しています。彼は実用的に投票し、予算の妥当性を慎重に精査し、提案設計の透明性を要求し、初期段階プロジェクトについてはCatalystファンディングを好む傾向があり、成熟した実績のあるイニシアチブについてはトレジャリー引き出しを留保しています。",
+      "keyPositions_en": [
+        "Prioritizes foundational infrastructure (stablecoins, oracles, custody, cross-chain bridges) as essential for ecosystem growth and TVL expansion",
+        "Strongly supports hardware wallet compatibility maintenance and Cardano Ledger app modernization to ensure user accessibility",
+        "Advocates for structured governance improvements and constitutional clarity with proper community consultation processes",
+        "Skeptical of closed-source, vendor-dependent services and proposals lacking transparent management criteria and long-term sustainability plans",
+        "Emphasizes fiscal responsibility by questioning budget proportionality and promoting Catalyst as appropriate for early-stage projects"
+      ],
+      "keyPositions_ja": [
+        "ステーブルコイン、オラクル、カストディ、クロスチェーンブリッジなどの基礎インフラをエコシステム成長とTVL拡大に不可欠なものとして優先",
+        "ユーザーアクセシビリティを確保するためのハードウェアウォレット互換性保守とCardano Ledgerアプリの近代化を強く支持",
+        "適切なコミュニティ協議を伴う構造化されたガバナンス改善と憲法的明確性を提唱",
+        "クローズドソース、ベンダー依存サービス、および透明な管理基準と長期持続可能性計画が欠落している提案に懐疑的",
+        "予算配分の妥当性に異議を唱え、初期段階プロジェクトに対する適切なファンディングメカニズムとしてCatalystを促進することで財政責任を強調"
+      ],
+      "votingPattern_en": "Dan votes affirmatively for well-structured, mature proposals with clear technical or governance value and transparent management, votes against those lacking accountability or sustainability plans, and strategically abstains when concepts have merit but execution details, process quality, or budget proportionality remain unclear.",
+      "votingPattern_ja": "Danは明確な技術またはガバナンス価値と透明な管理を備えた構造化された成熟提案に肯定的に投票し、説明責任または持続可能性計画が欠落しているものに反対投票し、概念にメリットがあるが実行詳細、プロセス品質、または予算配分の妥当性が不明確な場合は戦略的に棄権します。"
+    },
+    "drep1y2r5pajz7vvw8v0kvf4968gjwua077n25k75mv3ne7vd6cc7rw8p5": {
+      "lastAnalyzedVoteCount": 21,
+      "lastAnalyzedAt": "2026-03-06T00:02:35.203Z",
+      "tendencySummary_en": "ACL-CardanoLand demonstrates a strong pro-governance stance, overwhelmingly voting yes (89.5%) on proposals while supporting pragmatic treasury management frameworks. The DRep favors mechanisms that establish guardrails while preserving decentralized decision-making authority on individual spending matters.",
+      "tendencySummary_ja": "ACL-CardanoLandは強力な親ガバナンス姿勢を示し、提案に対して圧倒的多数の賛成投票(89.5%)を行っており、実践的な財務管理フレームワークを支持しています。このDRepは個別支出事項における分散意思決定権を保持しながら、安全装置を確立するメカニズムを支持しています。",
+      "keyPositions_en": [
+        "Supports treasury withdrawal limits as guardrails for planning purposes",
+        "Favors decentralized voting on individual budget and withdrawal requests",
+        "Advocates for pragmatic frameworks that enable forward progress in governance",
+        "Opposes measures that concentrate spending authority away from DReps"
+      ],
+      "keyPositions_ja": [
+        "計画目的のための財務引き出し制限を安全装置として支持",
+        "個別予算および引き出し要求に関する分散投票を支持",
+        "ガバナンスの進展を実現する実践的なフレームワークを提唱",
+        "支出権限をDRepsから遠ざける措置に反対"
+      ],
+      "votingPattern_en": "ACL-CardanoLand exhibits a consistently affirmative voting pattern with minimal dissent, favoring proposals that establish structured treasury management while maintaining distributed decision-making authority.",
+      "votingPattern_ja": "ACL-CardanoLandは最小限の異議を伴う一貫した肯定的投票パターンを示し、分散意思決定権を維持しながら構造化された財務管理を確立する提案を支持しています。"
+    },
+    "drep1y2ecrj7jd9alaxumvm49hgng9rp239nda5ucegd05ndvxfqftwr9f": {
+      "lastAnalyzedVoteCount": 61,
+      "lastAnalyzedAt": "2026-03-06T00:02:41.273Z",
+      "tendencySummary_en": "Voice of the People prioritizes technical development and infrastructure over marketing, believing that protocol improvements and developer tools will organically build Cardano's reputation. They support treasury-funded initiatives that enhance scalability, security, and ecosystem functionality, while opposing marketing-focused proposals and those with unclear ROI or excessive costs.",
+      "tendencySummary_ja": "Voice of the Peopleは技術開発とインフラストラクチャをマーケティングよりも優先し、プロトコルの改善と開発者ツールがCardanoの評判を自然に構築すると考えています。スケーラビリティ、セキュリティ、およびエコシステム機能を強化するトレジャリー資金イニシアティブをサポートする一方で、マーケティング重視の提案やROIが不透明で過度なコストの提案に反対しています。",
+      "keyPositions_en": [
+        "Prioritize technical development and infrastructure over marketing initiatives",
+        "Support treasury funding for protocol scalability (Leios, Hydra) and developer tools",
+        "Oppose high-cost marketing proposals and speculative ventures with unproven conversion metrics",
+        "Favor maintenance of critical infrastructure and hardware compatibility for user security",
+        "Support governance decentralization through tools like GovTool and developer accessibility initiatives"
+      ],
+      "keyPositions_ja": [
+        "マーケティングイニシアティブよりも技術開発とインフラストラクチャを優先する",
+        "プロトコルスケーラビリティ（Leios、Hydra）と開発者ツールのトレジャリー資金をサポート",
+        "高コストのマーケティング提案と未証明の変換メトリクスを持つ投機的なベンチャーに反対",
+        "ユーザーセキュリティのための重要なインフラストラクチャとハードウェア互換性の保守を支持",
+        "GovToolと開発者アクセシビリティイニシアティブを通じたガバナンスの分散化をサポート"
+      ],
+      "votingPattern_en": "Consistently votes 'Yes' for technical development and infrastructure proposals while voting 'No' for marketing, branding, and high-risk ventures, demonstrating a clear protocol-first approach to treasury allocation.",
+      "votingPattern_ja": "技術開発とインフラストラクチャ提案に一貫して「Yes」投票し、マーケティング、ブランディング、および高リスク事業には「No」投票し、トレジャリー配分へのプロトコル優先アプローチを明確に示しています。"
+    },
+    "drep1yff7cs985wzeu2jjx48sld002rleqsrz8qtt3hp8whk9vnc5vq23n": {
+      "lastAnalyzedVoteCount": 25,
+      "lastAnalyzedAt": "2026-03-06T00:02:46.547Z",
+      "tendencySummary_en": "BreadAndRoses demonstrates a strongly pro-governance stance with overwhelming support (84% Yes votes) for treasury and constitutional measures. The DRep appears to prioritize enabling Cardano's operational framework and institutional structures, despite minimal engagement with detailed voting rationales.",
+      "tendencySummary_ja": "BreadAndRoses は圧倒的な賛成票（84%）により、ガバナンスと憲法的措置に対して強く支持的な姿勢を示しています。詳細な投票根拠への関与は最小限ですが、Cardanoの運用枠組みと制度構造の有効化を優先する傾向があります。",
+      "keyPositions_en": [
+        "Support for establishing formal treasury spending limits (Net Change Limit framework)",
+        "Favor constitutional governance structures and budget authorization mechanisms",
+        "Prioritize enabling ecosystem-wide operational capacity over constraint",
+        "Support systematic governance frameworks for multi-year financial planning"
+      ],
+      "keyPositions_ja": [
+        "正式な財務支出制限（Net Change Limitフレームワーク）の確立を支持",
+        "憲法的ガバナンス構造および予算認可メカニズムを支持",
+        "制約よりもエコシステム規模の運用能力を優先化",
+        "複数年の財政計画のための体系的なガバナンスフレームワークを支持"
+      ],
+      "votingPattern_en": "BreadAndRoses votes affirmatively on institutional and budgetary governance proposals with limited rationale documentation, suggesting confidence in Cardano's governance framework while maintaining low engagement transparency.",
+      "votingPattern_ja": "BreadAndRoses は根拠説明文書が限定的である機関および予算ガバナンス提案に肯定的に投票しており、Cardanoのガバナンスフレームワークへの信頼を示唆する一方で、低い透明性の関与を維持しています。"
+    },
+    "drep1ytcypl8fyuvm2epkjz2m4wzf24y26vj998wj4cvu7nnpgygh2sltr": {
+      "lastAnalyzedVoteCount": 68,
+      "lastAnalyzedAt": "2026-03-06T00:02:52.580Z",
+      "tendencySummary_en": "RABIT demonstrates pragmatic governance approach, supporting foundational constitutional frameworks and procedural legitimacy while maintaining critical stance on technical implementation details. The DRep favors decentralization improvements and percentage-based mechanisms over fixed parameters, showing preference for flexibility and evidence-based policy design.",
+      "tendencySummary_ja": "RABITは実用的なガバナンスアプローチを示しており、基礎的な憲法的枠組みと手続き的正当性を支持しながら、技術的実装の詳細に対して批判的立場を維持しています。DRepは分散化改善とパーセンテージベースのメカニズムを固定パラメータより優先し、柔軟性と証拠に基づいたポリシー設計を好みます。",
+      "keyPositions_en": [
+        "Increase K parameter to 1000 to enhance pool decentralization and reduce saturation",
+        "Support constitutional foundations and governance processes as starting point for iterative improvement",
+        "Advocate for percentage-based Net Change Limits instead of fixed-amount mechanisms",
+        "Require transparency and research foundations for treasury-related proposals",
+        "Evaluate budget proposals through procedural legitimacy while reserving judgment on individual withdrawal proposals"
+      ],
+      "keyPositions_ja": [
+        "分散化を強化し飽和を軽減するためK値を1000に引き上げ",
+        "反復的改善のための出発点として憲法的基礎とガバナンスプロセスを支持",
+        "固定金額メカニズムではなくパーセンテージベースの純変更制限を主張",
+        "財務関連提案に透明性と研究基盤を要求",
+        "手続き的正当性を通じて予算提案を評価しながら個別の引き出し提案の判断を保留"
+      ],
+      "votingPattern_en": "RABIT votes pragmatically on governance structure and constitutional matters with Yes votes, applies critical scrutiny to technical proposals requiring percentage-based alternatives to fixed parameters, and withholds support for incomplete or non-transparent information actions.",
+      "votingPattern_ja": "RABITはガバナンス構造と憲法的事項に対して実用的にイエス投票し、固定パラメータに対するパーセンテージベースの代替案を必要とする技術的提案に批判的精査を適用し、不完全または非透明な情報提供への支持を保留します。"
+    },
+    "drep1y28jk3gffhcecfhwaf73nfef833q8twqnhw8h7n60kelxus4xlej4": {
+      "lastAnalyzedVoteCount": 14,
+      "lastAnalyzedAt": "2026-03-06T00:02:57.781Z",
+      "tendencySummary_en": "Michele_Harmonic demonstrates a pragmatic, context-responsive voting approach that values institutional coordination and mutual accountability. They shift positions based on evolving information and demonstrate willingness to trust governance bodies when external actors provide additional market balance.",
+      "tendencySummary_ja": "Michele_Harmonicは、制度的調整と相互説明責任を重視する実用的で文脈に応じた投票アプローチを示しています。進化する情報に基づいて立場を変え、外部アクターが追加の市場バランスを提供する場合にガバナンス機関への信頼を示す意欲があります。",
+      "keyPositions_en": [
+        "Values institutional trust and committee member goodwill",
+        "Considers external market actors and competitive balance as risk mitigation",
+        "Willing to shift votes when new information changes risk calculus",
+        "Focuses on protocol interest over personal preferences",
+        "Supports coordinated multi-entity approaches to market participation"
+      ],
+      "keyPositions_ja": [
+        "制度的信頼と委員会メンバーの善意を重視",
+        "外部市場アクターと競争的バランスをリスク軽減として考慮",
+        "新しい情報がリスク計算を変える場合に投票を変更する意思がある",
+        "個人的な好みよりもプロトコルの利益に焦点を当てる",
+        "市場参加への協調的な複数エンティティアプローチをサポート"
+      ],
+      "votingPattern_en": "Strategically adaptive voting that emphasizes checks-and-balances through institutional trust and third-party market participation rather than opposing decisions outright.",
+      "votingPattern_ja": "決定に直接反対するのではなく、制度的信頼と第三者市場参加を通じたチェックアンドバランスを強調する戦略的に適応的な投票パターン。"
+    },
+    "drep1y2gh7lj3jt89vs63rtr4vj5g4ulxhmp7t0dkh6hcel90mlsujgqlu": {
+      "lastAnalyzedVoteCount": 81,
+      "lastAnalyzedAt": "2026-03-06T00:03:05.701Z",
+      "tendencySummary_en": "Kevin_ALBERT demonstrates a fiscally conservative approach to treasury management, consistently supporting measured spending caps and infrastructure investments while opposing speculative or project-specific subsidies. He prioritizes core protocol development, public goods, and ecosystem-wide tools over individual token promotions or unproven stablecoin strategies.",
+      "tendencySummary_ja": "Kevin_ALBERTは、財務的に慎重な姿勢を示し、測定された支出上限とインフラ投資を一貫してサポートする一方で、投機的またはプロジェクト特有の補助金に反対しています。彼は個別トークンの促進や検証されていないステーブルコイン戦略よりも、コアプロトコル開発、公共財、エコシステム全体のツールを優先します。",
+      "keyPositions_en": [
+        "Supports treasury Net Change Limits (300M-350M ADA range) with fiscal discipline and reserve preservation",
+        "Opposes treasury funding for single-token CEX listings and project-specific marketing (SNEK precedent concern)",
+        "Backs core infrastructure and scalability improvements (Leios, Hydra, Rust node implementation)",
+        "Rejects large-scale stablecoin liquidity funds due to centralization and regulatory risks",
+        "Favors Constitution refinements and governance streamlining for faster, transparent execution"
+      ],
+      "keyPositions_ja": [
+        "財政規律と準備金保全を伴う財務省純変化制限（3億～3億5000万ADA範囲）をサポート",
+        "単一トークンのCEX上場とプロジェクト特有のマーケティングへの財務省資金提供に反対（SNEK前例の懸念）",
+        "コアインフラとスケーラビリティの改善（Leios、Hydra、Rustノード実装）を支持",
+        "中央集権化と規制リスクのため大規模ステーブルコイン流動性ファンドを拒否",
+        "より迅速で透明な実行のための憲法の精緻化とガバナンス合理化を支持"
+      ],
+      "votingPattern_en": "Votes YES on structural governance improvements, infrastructure development, and treasury management frameworks while voting NO on speculative ventures, token-specific subsidies, and centralized financial strategies that lack clear public-good justification.",
+      "votingPattern_ja": "構造的なガバナンス改善、インフラ開発、財務管理フレームワークにはYESを投票し、投機的なベンチャー、トークン特有の補助金、明確な公共財の正当性を欠ける集中化された金融戦略にはNOを投票しています。"
+    },
+    "drep1y296zyw2r8rcsy7slkd7l687hh88xc0m6ac2y3h2r3mvsdgc9q6yy": {
+      "lastAnalyzedVoteCount": 25,
+      "lastAnalyzedAt": "2026-03-06T00:03:13.430Z",
+      "tendencySummary_en": "8Ball demonstrates fiscal conservatism with a preference for stringent budget controls and accountability in treasury withdrawals, consistently advocating for lower Net Change Limits and opposing what he perceives as excessive spending. He supports technological advancement and decentralization initiatives when they align with community-driven, merit-based approaches, but opposes large consolidated budgets and funding mechanisms that lack transparency or bypass proper governance structures.",
+      "tendencySummary_ja": "8Ballは財政的保守主義を示しており、予算管理の厳格化と資金引き出しの説明責任を一貫して支持し、より低いNet Change Limitsを提唱しています。技術的進歩と分散化イニシアチブをコミュニティ主導で成績ベースのアプローチと一致する場合に支持していますが、透明性を欠く大規模な統合予算と適切なガバナンス構造を回避する資金メカニズムに反対しています。",
+      "keyPositions_en": [
+        "Supports lower NCL (200-300M ADA) to enforce fiscal discipline and increase proposal accountability",
+        "Opposes large consolidated budgets like Intersect's 275M ADA package in favor of individual project-based treasury withdrawals",
+        "Advocates for decentralization and single pool protection against multi-pool consolidation",
+        "Supports Cardano's scalability roadmap (Leios, Hydra, Peras) and merit-based node competition",
+        "Demands greater budget transparency and cost-benefit clarity for treasury-funded initiatives"
+      ],
+      "keyPositions_ja": [
+        "提案責任を高めるため200-300M ADAの低いNCLを支持する",
+        "個別プロジェクトベースの資金引き出しを支持し、Intersectの275M ADA統合予算パッケージに反対",
+        "マルチプール統合に対する単一プールの保護と分散化を提唱",
+        "成績ベースのノード競争とCardanoのスケーラビリティロードマップ(Leios、Hydra、Peras)を支持",
+        "資金提供イニシアチブの予算透明性とコスト効果分析の向上を要求"
+      ],
+      "votingPattern_en": "8Ball votes strategically based on fiscal responsibility and governance structure, supporting scalability and community-driven initiatives while opposing consolidated budgets lacking transparency, with a 60% No vote rate reflecting skepticism toward large treasury allocations without detailed justification.",
+      "votingPattern_ja": "8Ballは財政責任とガバナンス構造に基づいて戦略的に投票し、スケーラビリティとコミュニティ主導のイニシアチブを支持しながら、透明性を欠く統合予算に反対しており、60%のNo投票率は詳細な正当性なしに大規模な資金配分に対する懸念を反映しています。"
+    },
+    "drep1yvve4554njxyun2s5p9q70v88d5jl7r0h34pjhw5f5tmw3sjtrutp": {
+      "lastAnalyzedVoteCount": 38,
+      "lastAnalyzedAt": "2026-03-06T00:03:20.874Z",
+      "tendencySummary_en": "The Dutch DRep demonstrates a strong pro-governance infrastructure and ecosystem development stance, consistently supporting treasury allocations for established teams with proven track records while maintaining rigorous scrutiny of proposals lacking transparency, proper process, or sufficient technical clarity. They prioritize deliberative governance processes, constitutional soundness, and open-source principles, while opposing rushed decisions and meme token initiatives.",
+      "tendencySummary_ja": "Dutch DRepは実績のある確立されたチームへの財務配分を一貫して支持する一方で、透明性、適切なプロセス、または十分な技術的明確性に欠ける提案に対しては厳密な精査を行うなど、ガバナンスインフラとエコシステム開発に対する強い支持姿勢を示しています。彼らは思慮深いガバナンスプロセス、憲法的健全性、オープンソース原則を優先し、性急な決定とミームトークンイニシアティブに反対しています。",
+      "keyPositions_en": [
+        "Support infrastructure development with proven teams (Amaru, Blockfrost, TWEAG, MLabs)",
+        "Require transparent processes and proper governance procedures before major economic changes",
+        "Prioritize open-source and constitutional soundness in governance tooling",
+        "Oppose treasury spending on speculative/meme token initiatives",
+        "Favor conservative budget limits that encourage essential spending prioritization"
+      ],
+      "keyPositions_ja": [
+        "実績のあるチーム（Amaru、Blockfrost、TWEAG、MLabs）によるインフラ開発を支持",
+        "主要な経済変更前に透明なプロセスと適切なガバナンス手続きを要求",
+        "ガバナンスツールにおけるオープンソースと憲法的健全性を優先",
+        "投機的/ミームトークンイニシアティブへの財務支出に反対",
+        "必須支出の優先順位付けを促す保守的な予算制限を支持"
+      ],
+      "votingPattern_en": "The Dutch DRep votes affirmatively on budget proposals from established entities with proven delivery records and clear governance alignment, but votes negatively on economically significant changes lacking robust evidence, proposals with unverifiable documentation, or initiatives introducing protocol changes without sufficient community engagement.",
+      "votingPattern_ja": "Dutch DRepは実績があり明確なガバナンス適合性を持つ確立された事業体からの予算提案に肯定的に投票する一方、堅牢な証拠を欠く経済的に重要な変更、検証不可能な文書を含む提案、または十分なコミュニティエンゲージメントなしにプロトコル変更を導入するイニシアティブに対しては否定的に投票します。"
+    },
+    "drep1ytkzpmmukjy6qn6xd5skqm0ypcj5juw9rxddr5mmlzgjvtcghwqjr": {
+      "lastAnalyzedVoteCount": 82,
+      "lastAnalyzedAt": "2026-03-06T00:03:27.398Z",
+      "tendencySummary_en": "This Corrosion is a pragmatic scaling advocate who prioritizes Cardano's technical growth and infrastructure development, but demands rigorous accountability, clear legal frameworks, and transparent governance processes. They support ambitious initiatives that promise ecosystem value while firmly opposing proposals lacking proper documentation, conflict-of-interest safeguards, and demonstrated competence.",
+      "tendencySummary_ja": "This Corrosionは実用的なスケーリング推進派であり、Cardanoの技術的成長とインフラ開発を優先しながらも、厳密な説明責任、明確な法的枠組み、透明なガバナンスプロセスを要求しています。生態系価値を約束する野心的なイニシアチブを支持する一方で、適切な文書化、利益相反セーフガード、実証された能力を欠くプロポーザルに強く反対しています。",
+      "keyPositions_en": [
+        "Governance must prioritize scaling and technical infrastructure development",
+        "Proposals require rigorous legal review and clear contractual terms before support",
+        "Conflict-of-interest violations and fiduciary breaches are disqualifying factors",
+        "Funding requests should demonstrate cost discipline and avoid unreasonable price increases",
+        "Strategic frameworks should balance high-level vision without micromanaging operations"
+      ],
+      "keyPositions_ja": [
+        "ガバナンスはスケーリングと技術インフラ開発を優先すべき",
+        "プロポーザルはサポート前に厳密な法的審査と明確な契約条件が必要",
+        "利益相反違反と信認義務違反は却下要因である",
+        "資金要求は費用規律を示し、不合理な価格上昇を避けるべき",
+        "戦略的枠組みは高度なビジョンのバランスと運用管理干渉の回避のバランスが必要"
+      ],
+      "votingPattern_en": "This Corrosion votes affirmatively on scaling proposals with credible teams and proven demand, but consistently rejects inadequately documented financial arrangements, governance conflicts-of-interest, and wasteful spending regardless of perceived importance.",
+      "votingPattern_ja": "This Corrosionは信頼できるチームと実証された需要を持つスケーリングプロポーザルには肯定的に投票しますが、不十分に文書化された財務取決め、ガバナンスの利益相反、および認識される重要性に関わらず無駄な支出に一貫して反対します。"
+    },
+    "drep1y26dxtv63ax74jqs20h9xw5m7559q4e53tkh2xqwknmw2nstuepzv": {
+      "lastAnalyzedVoteCount": 72,
+      "lastAnalyzedAt": "2026-03-06T00:03:33.112Z",
+      "tendencySummary_en": "This DRep demonstrates a strong affinity for approving governance proposals, voting 'Yes' on 50 out of 72 votes (69% approval rate). They appear to take a pragmatic approach, supporting proposals involving minor technical adjustments while maintaining some skepticism, as evidenced by their abstentions and limited rationale documentation.",
+      "tendencySummary_ja": "このDRepは強いガバナンス提案承認傾向を示しており、72票中50票で「はい」に投票しています（69%の承認率）。軽微な技術的調整に関連する提案を支持しながら、節度を保つ実用的なアプローチを取っており、棄権と限定的な根拠文書化がその証拠です。",
+      "keyPositions_en": [
+        "Supports minor technical corrections that do not warrant Constitutional Convention proceedings",
+        "Maintains approval-focused voting pattern with selective skepticism",
+        "Demonstrates pragmatic governance approach to protocol adjustments",
+        "Open to abstention when additional clarity or context may be needed"
+      ],
+      "keyPositions_ja": [
+        "憲法会議の開催を正当化しない軽微な技術的修正を支持",
+        "選別的な懐疑を伴う承認重視の投票パターンを維持",
+        "プロトコル調整への実用的ガバナンスアプローチを実証",
+        "追加の明確性または文脈が必要な場合に棄権する傾向"
+      ],
+      "votingPattern_en": "Strongly approval-oriented (69% Yes votes) with measured restraint, voting No on 10% of proposals and abstaining on 21%, suggesting a generally supportive but not unconditionally permissive governance stance.",
+      "votingPattern_ja": "提案の69%で「はい」投票する強い承認志向で、10%の提案で反対、21%で棄権する慎重な抑制を示しており、一般的に支持的だが無条件に許容的ではないガバナンス姿勢を示唆しています。"
+    },
+    "drep1y23djskdpwsutv5xz34dz4nmkhvqfdxnmu7r7cfye4e2exc5slwpf": {
+      "lastAnalyzedVoteCount": 81,
+      "lastAnalyzedAt": "2026-03-06T00:03:40.912Z",
+      "tendencySummary_en": "CaFi demonstrates a strongly pro-development stance, consistently supporting ecosystem infrastructure, developer tools, and strategic initiatives that expand Cardano's capabilities. They favor proposals with clear technical merit, established teams, and tangible benefits to decentralization and developer accessibility, while being cautious about vague marketing strategies and unproven experimental models.",
+      "tendencySummary_ja": "CaFiは強いプロ開発姿勢を示しており、エコシステムインフラ、開発者ツール、カルダノの機能を拡張する戦略的イニシアティブを一貫して支持しています。技術的価値が明確で、確立されたチームを持ち、分散化と開発者アクセス性に具体的な利益をもたらす提案を支持する一方で、曖昧なマーケティング戦略と証明されていない実験的モデルに対しては慎重です。",
+      "keyPositions_en": [
+        "Strong support for developer-focused infrastructure (PyCardano, Plutarch, Maestro, TypeScript/Python tools)",
+        "Backing established ecosystem contributors with proven track records (Tweag, Eternl, Cexplorer.io)",
+        "Enthusiastic support for DeFi and interoperability solutions (DEX on Hydra, zero-knowledge bridges)",
+        "Conditional skepticism toward marketing proposals lacking specific, measurable impact targets",
+        "Support for governance innovation and on-chain decentralization initiatives"
+      ],
+      "keyPositions_ja": [
+        "開発者向けインフラの強力なサポート（PyCardano、Plutarch、Maestroなど）",
+        "実績のある確立されたエコシステム貢献者への支持（Tweag、Eternl、Cexplorer.io）",
+        "DeFiと相互運用性ソリューションへの熱心なサポート（Hydra上のDEX、ゼロ知識ブリッジ）",
+        "具体的で測定可能なインパクトターゲットを欠くマーケティング提案への慎重な懐疑",
+        "ガバナンス革新とオンチェーン分散化イニシアティブの支持"
+      ],
+      "votingPattern_en": "CaFi votes predominantly YES (84% approval rate) on infrastructure, developer tools, and ecosystem expansion proposals with clear technical merit and experienced teams, while voting NO or ABSTAIN on ambiguous marketing initiatives, experimental models, or proposals lacking specific impact metrics.",
+      "votingPattern_ja": "CaFiは明確な技術的価値と経験豊富なチームを持つインフラ、開発者ツール、エコシステム拡張提案に対して圧倒的にYES票（承認率84%）を投じる一方、曖昧なマーケティングイニシアティブ、実験的モデル、または具体的なインパクト指標を欠く提案に対してはNOまたはABSTAIN票を投じます。"
+    },
+    "drep1y20w8vxwd3venlvp0muxwzmdlr7a006dpz580czmaj422sqng6fkg": {
+      "lastAnalyzedVoteCount": 84,
+      "lastAnalyzedAt": "2026-03-06T00:03:47.280Z",
+      "tendencySummary_en": "Andreas Sosilo demonstrates a fiscally conservative approach to Cardano governance, prioritizing open-source tools and long-term growth while imposing a strict 250 million ADA budget cap on funding proposals. He votes strategically to maintain governance integrity, supports constitutional updates that preserve core principles, and actively avoids conflicts of interest through abstention.",
+      "tendencySummary_ja": "Andreas Sosiloはカルダノガバナンスに対して財政的に慎重なアプローチを示し、オープンソースツールと長期的な成長を優先しながら、資金提案に対して2億5,000万ADAの厳格な予算上限を課しています。彼は戦略的に投票してガバナンスの完全性を維持し、コア原則を保護する憲法改正を支持し、棄権を通じて利益相反を積極的に回避しています。",
+      "keyPositions_en": [
+        "Enforces strict 250 million ADA budget cap on funding proposals to ensure fiscal responsibility",
+        "Supports transparent, community-driven Constitutional Committee elections and decentralization",
+        "Opposes reducing Constitutional Committee minimum size below 7 to maintain governance checks and balances",
+        "Supports Net Change Limit of 300 million ADA as responsible treasury protection",
+        "Abstains from votes involving personal conflicts of interest with affiliated organizations"
+      ],
+      "keyPositions_ja": [
+        "財政責任を確保するために資金提案に対して2億5,000万ADAの厳格な予算上限を実施",
+        "透明性が高く、コミュニティ主導の憲法委員会選挙と地方分権を支持",
+        "ガバナンスの抑制と均衡を維持するために憲法委員会の最小規模を7以下に減らすことに反対",
+        "責任ある財務保護として300万ADAの純変化制限を支持",
+        "関連組織との個人的な利益相反に関連する投票から棄権"
+      ],
+      "votingPattern_en": "Sosilo votes YES selectively on governance and constitutional matters aligned with his principles, votes NO consistently on funding proposals exceeding his budget threshold, and strategically abstains when personal conflicts arise.",
+      "votingPattern_ja": "Sosiloは彼の原則に合致したガバナンスおよび憲法上の問題に対して選別的にYESに投票し、予算閾値を超える資金提案に対して一貫してNOに投票し、個人的な利益相反が生じた場合に戦略的に棄権します。"
+    },
+    "drep1ytmpyezpmhxy7u2v7mx8fsrcnzzcqrlhek5drnauazqtr8ga7tzur": {
+      "lastAnalyzedVoteCount": 3,
+      "lastAnalyzedAt": "2026-03-06T00:03:52.991Z",
+      "tendencySummary_en": "ILIJA demonstrates a pragmatic, growth-oriented approach to Cardano ecosystem development, prioritizing strategic investments in stablecoins and governance clarity over speculative or unsustainable initiatives. They favor community-driven proposals that address genuine ecosystem gaps and support long-term sustainability through thoughtful capital allocation.",
+      "tendencySummary_ja": "ILIJAはCardanoエコシステムの開発において実用的で成長志向のアプローチを示しており、思索的または持続不可能なイニシアティブよりもステーブルコイン戦略投資とガバナンスの明確化を優先しています。真の生態系のギャップに対処し、熟考された資本配分を通じた長期的な持続可能性を支持するコミュニティ主導の提案を支持しています。",
+      "keyPositions_en": [
+        "Support strategic stablecoin ecosystem development to address liquidity and adoption gaps",
+        "Emphasize long-term sustainability over short-term spending guarantees",
+        "Require organic growth and project maturity before major capital commitments",
+        "Value community-driven governance processes and stakeholder input",
+        "Advocate for clarity frameworks that position Cardano competitively"
+      ],
+      "keyPositions_ja": [
+        "流動性と採用ギャップに対処するための戦略的なステーブルコイン生態系開発をサポート",
+        "短期的な支出保証よりも長期的な持続可能性を強調",
+        "大規模な資本投入前に有機的成長とプロジェクト成熟度を要求",
+        "コミュニティ主導のガバナンスプロセスとステークホルダー投入を評価",
+        "Cardanoを競争的に位置付ける明確性フレームワークを提唱"
+      ],
+      "votingPattern_en": "ILIJA votes selectively in favor of ecosystem infrastructure and governance clarity proposals while opposing initiatives lacking sustainable growth fundamentals, demonstrating a balanced view that supports impactful community-validated investments.",
+      "votingPattern_ja": "ILIJAは生態系インフラとガバナンス明確化提案に対して選別的に投票する一方、持続可能な成長基盤を欠いているイニシアティブに反対し、影響力のあるコミュニティ検証済み投資を支持するバランスの取れた見方を示しています。"
+    },
+    "drep1ygeyfh8nm03dnl5a2hxdtv09pu7uhep9l0cpg0zpr60jqys05cku2": {
+      "lastAnalyzedVoteCount": 55,
+      "lastAnalyzedAt": "2026-03-06T00:04:00.449Z",
+      "tendencySummary_en": "Cash demonstrates a strong pro-development bias, consistently voting yes for proposals from trusted teams with clear deliverables and reasonable budget allocations. They actively participate in governance discussions (Product Committee member) and carefully evaluate proposals based on team track record, FTE value, and ecosystem impact, though they occasionally abstain when proposals lack clarity or present conflicts of interest.",
+      "tendencySummary_ja": "Cashは信頼できるチームからの明確な成果物と妥当な予算配分を持つ提案に対して強い親開発的バイアスを示し、一貫してイエスに投票しています。ガバナンス議論に積極的に参加し（製品委員会メンバー）、チームの実績、FTE価値、エコシステム影響に基づいて提案を慎重に評価していますが、提案が不明確または利益相反がある場合は時々棄権します。",
+      "keyPositions_en": [
+        "Values team track record and proven delivery capability as primary voting criterion",
+        "Advocates for critical infrastructure and developer tooling support (Lucid, Python, ZK, node implementations)",
+        "Prefers proposals with clear budget breakdowns, FTE analysis, and defined outputs",
+        "Supports Intersect and Product Committee as essential coordination layers for ecosystem",
+        "Emphasizes ecosystem growth initiatives including exchange listings and stablecoin liquidity"
+      ],
+      "keyPositions_ja": [
+        "チームの実績と実証済みの納品能力を投票判断の主要基準として重視",
+        "重要なインフラストラクチャと開発者ツール支援を提唱（Lucid、Python、ZK、ノード実装など）",
+        "明確な予算内訳、FTE分析、定義された成果物を含む提案を好む",
+        "エコシステムの本質的な調整層としてIntersectと製品委員会を支持",
+        "取引所上場と安定資産流動性を含むエコシステム成長イニシアティブを強調"
+      ],
+      "votingPattern_en": "Cash votes yes on 80% of proposals when they trust the executing team and identify clear ecosystem value, but votes no or abstains when proposals lack budgetary transparency, contain potential conflicts of interest, or better fit alternative funding mechanisms like Catalyst.",
+      "votingPattern_ja": "Cashは実行チームを信頼し明確なエコシステム価値を識別した場合の提案の80%に投票し、予算の透明性が欠ける、利益相反の可能性がある、またはCatalystなどの代替ファンディングメカニズムに適している場合は棄権またはノーに投票します。"
+    },
+    "drep1yt5qwxtmcsns42cjtn7w97ws4vxvxs28hr85rfkn7gd7gmgypa5d7": {
+      "lastAnalyzedVoteCount": 21,
+      "lastAnalyzedAt": "2026-03-06T00:04:05.049Z",
+      "tendencySummary_en": "TOPO demonstrates a strongly pro-governance stance, overwhelmingly supporting constitutional and development initiatives with a 2:1 Yes-to-No voting ratio. The DRep shows appreciation for community efforts and appears optimistic about Cardano's direction, though provides minimal detailed rationale for voting decisions.",
+      "tendencySummary_ja": "TOPOは強いガバナンス支持姿勢を示しており、憲法およ開発イニシアチブを圧倒的に支持し、投票比率が2:1のYes対Noとなっている。このDRepはコミュニティの努力に感謝を示し、カルダノの方向性について楽観的であるが、投票決定の詳細な根拠をほとんど提供していない。",
+      "keyPositions_en": [
+        "Strong support for Cardano constitutional governance frameworks",
+        "Appreciates and ratifies community-driven development efforts",
+        "Supportive of infrastructure and protocol improvement proposals",
+        "Values transparency in major ecosystem decisions"
+      ],
+      "keyPositions_ja": [
+        "カルダノの憲法的ガバナンスフレームワークへの強い支持",
+        "コミュニティ主導の開発努力への感謝と支持",
+        "インフラおよびプロトコル改善提案への支持",
+        "主要なエコシステム決定における透明性の評価"
+      ],
+      "votingPattern_en": "TOPO votes affirmatively on most proposals with a clear pro-development bias, rarely opposing initiatives and providing minimal written justification for decisions.",
+      "votingPattern_ja": "TOPOはほとんどの提案に肯定的に投票し、明確な開発支持の偏りを示し、イニシアチブに反対することはまれで、決定の書面による根拠をほとんど提供しない。"
+    },
+    "drep1y2dnsj0taktxwmzwf4a7sp0mg3rvm3jsetag0h0m83khs3c7d3l6x": {
+      "lastAnalyzedVoteCount": 85,
+      "lastAnalyzedAt": "2026-03-06T00:04:10.586Z",
+      "tendencySummary_en": "AtlasHub demonstrates a cautious, detail-oriented approach to governance with a strong emphasis on legal clarity and constitutional integrity. The DRep votes affirmatively on most proposals (62 Yes vs 20 No) but opposes changes that involve ambiguous language, unexplained side effects, or reductions in institutional safeguards.",
+      "tendencySummary_ja": "AtlasHubは法的明確性と憲法的完全性を重視する慎重で細部志向のガバナンスアプローチを示しています。DRepは大多数の提案に賛成票を投じる（62賛成対20反対）一方で、曖昧な表現、説明されていない副作用、または機関的保障の低下を伴う変更に反対しています。",
+      "keyPositions_en": [
+        "Opposes proposals with poor legal writing and ambiguous definitions",
+        "Rejects actions that arbitrarily expand institutional membership beyond constitutional limits",
+        "Demands clarity on distinctions between Ada Owners and Ada Holders",
+        "Supports maintaining minimum requirements for Constitutional Committee standards",
+        "Requires transparent reasoning and predictable consequences for governance changes"
+      ],
+      "keyPositions_ja": [
+        "法的記述が不十分で定義が曖昧な提案に反対",
+        "憲法上の限度を超えて恣意的に機関メンバーを拡大する行為を拒否",
+        "ADAオーナーとADAホルダー間の区別に関する明確性を要求",
+        "憲法委員会の最小要件維持を支持",
+        "ガバナンス変更に対する透明な理由付けと予測可能な結果を要求"
+      ],
+      "votingPattern_en": "AtlasHub consistently votes No on proposals containing legal ambiguities, unexplained institutional changes, or constitutional weakening, while maintaining a generally supportive stance toward well-defined governance proposals.",
+      "votingPattern_ja": "AtlasHubは法的曖昧性、説明されていない機関変更、または憲法的弱体化を含む提案に一貫してNo票を投じる一方で、明確に定義されたガバナンス提案に対して一般的に支持的な姿勢を保っています。"
+    },
+    "drep1y25qrh4rgk2z2msscgavrul9s4zl39d5p7kz9q6r4a2lqpsa68pza": {
+      "lastAnalyzedVoteCount": 4,
+      "lastAnalyzedAt": "2026-03-06T00:04:16.807Z",
+      "tendencySummary_en": "Montrasi demonstrates a cautious, principle-driven approach to governance, supporting procedural continuity while firmly opposing constitutional changes and treasury misallocation. The DRep prioritizes transparency, constitutional adherence, and protection of community funds from inappropriate commercial subsidization.",
+      "tendencySummary_ja": "Montrasi は手続き的連続性を支持する一方で、憲法改正と財務管理の不適切な使用に強く反対する慎重で原則的なガバナンスアプローチを示しています。このDRepは透明性、憲法遵守、コミュニティ資金の不適切な商業補助からの保護を優先しています。",
+      "keyPositions_en": [
+        "Support CC election ratification for governance continuity and constitutional adherence",
+        "Oppose rushed constitutional amendments lacking transparent justification and detailed change explanation",
+        "Reject treasury withdrawals for commercial token exchange listings as inappropriate use of public funds",
+        "Demand clear communication and transparency in governance proposals affecting constitutional matters",
+        "Protect community treasury from establishing precedents of subsidizing individual commercial projects"
+      ],
+      "keyPositions_ja": [
+        "ガバナンス継続性と憲法遵守のためのCC選挙批准を支持",
+        "透明な正当性と詳細な変更説明を欠く急速な憲法改正に反対",
+        "商業的トークン取引所リストのための財務引き出しを公開資金の不適切な使用として拒否",
+        "憲法事項に影響する統治提案における明確な通信と透明性を要求",
+        "個々の商業プロジェクトを補助する先例からコミュニティ財務を保護"
+      ],
+      "votingPattern_en": "Montrasi votes selectively (1 Yes, 3 No) with a strong preference for rejecting proposals that lack transparency, rush constitutional processes, or misuse community resources, while supporting procedurally sound governance continuity measures.",
+      "votingPattern_ja": "Montrasi は選別的に投票し（1賛成、3反対）、透明性を欠く提案、憲法プロセスを急ぐ提案、またはコミュニティリソースを悪用する提案を拒否する強い傾向を示す一方で、手続き的に健全なガバナンス継続措置を支持しています。"
+    },
+    "drep1ytd7s3he5rgxhkx0t2vnun25wy3t263877czxw8nelcld8ce66v4c": {
+      "lastAnalyzedVoteCount": 64,
+      "lastAnalyzedAt": "2026-03-06T00:04:24.294Z",
+      "tendencySummary_en": "Yosh demonstrates a pragmatic, pro-ecosystem approach with strong support for initiatives that advance Cardano's critical infrastructure and liquidity needs, while maintaining healthy skepticism about governance concentration risks. They prioritize practical solutions executed by capable entities (Founding Entities, Midnight Foundation) over theoretical ideals, though they flag concerns about financial oversight, accountability mechanisms, and the need for clearer management protocols.",
+      "tendencySummary_ja": "Yosh は、ガバナンス集中化のリスクについて健全な懐疑心を保ちながら、Cardano の重要インフラストラクチャと流動性ニーズを促進するイニシアチブを強く支持する実用的でエコシステム親和的なアプローチを示しています。彼らは理論的な理想よりも能力のあるエンティティ（Founding Entities、Midnight Foundation）による実践的なソリューションを優先しますが、財務監視、説明責任メカニズム、より明確な管理プロトコルの必要性についての懸念を指摘しています。",
+      "keyPositions_en": [
+        "Critical infrastructure and liquidity initiatives should be prioritized despite execution risks when capable entities are available",
+        "Founding Entities and Midnight Foundation are better positioned than distributed developers for complex, high-stakes implementations",
+        "Financial oversight and management protocols must be clearly structured, especially for large fund allocations (70M ADA+)",
+        "Governance concentration in Constitutional Committee creates risk and requires careful monitoring",
+        "Constitutional Committee must be fully seated before governance can function effectively"
+      ],
+      "keyPositions_ja": [
+        "能力のあるエンティティが利用可能な場合、実行リスクにもかかわらず重要インフラと流動性イニシアチブを優先すべき",
+        "Founding Entities と Midnight Foundation は分散開発者よりも複雑で高リスクの実装に適している",
+        "特に大規模な資金配分（70M ADA以上）では、財務監視と管理プロトコルを明確に構成する必要がある",
+        "Constitutional Committee へのガバナンス集中化はリスクを生み出し、慎重な監視が必要",
+        "ガバナンスが効果的に機能する前に Constitutional Committee は完全に構成される必要がある"
+      ],
+      "votingPattern_en": "Yosh votes overwhelmingly YES (56/64) on proposals advancing ecosystem infrastructure, liquidity, and governance completion while maintaining selective skepticism toward governance changes that consolidate power without sufficient debate or transparent protocols.",
+      "votingPattern_ja": "Yosh はエコシステムインフラ、流動性、ガバナンス完成を促進する提案に圧倒的に YES（56/64）を投票する一方で、十分な議論や透明なプロトコルなしに権力を集中させるガバナンス変更に対しては選別的な懐疑心を保ちます。"
+    },
+    "drep1y2wtls7xh3a8gyepk540dgtzjzalk086gp4www6y0k0xjmqyk6gma": {
+      "lastAnalyzedVoteCount": 30,
+      "lastAnalyzedAt": "2026-03-06T00:04:32.654Z",
+      "tendencySummary_en": "SudoScientist is a rigorous governance-focused DRep who prioritizes clear administrative processes, defined milestones, and transparent budget accountability over project merit alone. They demonstrate strong support for proven teams with track records (Vacuumlabs, Ledger integration) and community engagement mechanisms, while systematically rejecting vague proposals and unilateral constitutional amendments that bypass proper collective procedures.",
+      "tendencySummary_ja": "SudoScientist は厳格なガバナンス重視の DRep であり、プロジェクトの長所だけではなく、明確な行政プロセス、定義されたマイルストーン、透明な予算説明責任を優先しています。実績のあるチーム（VacuumLabs、Ledger統合）とコミュニティエンゲージメントメカニズムに強い支持を示す一方で、曖昧なプロポーザルと適切な集団手続きを迂回する一方的な憲法修正案を体系的に拒否しています。",
+      "keyPositions_en": [
+        "Administrative clarity and defined budgets are prerequisites for proposal approval, not secondary considerations",
+        "Proven track records and existing team credibility (Vacuumlabs, Ledger) warrant funding over unproven entities",
+        "Constitutional amendments must follow collective community processes, not be unilaterally proposed by influential actors",
+        "Real-world user onboarding and direct audience engagement justify funding for community-facing projects",
+        "Off-chain data proposals and copyright concerns require specialized consideration beyond general approaches"
+      ],
+      "keyPositions_ja": [
+        "行政上の明確性と定義されたバジェットはプロポーザル承認の前提条件であり、二次的な考慮事項ではありません",
+        "実績のあるチームの信頼性（VacuumLabs、Ledger）は未証明のエンティティよりも資金を正当化します",
+        "憲法修正案は影響力のある個人による一方的な提案ではなく、集団的なコミュニティプロセスに従う必要があります",
+        "実世界ユーザーのオンボーディングと直接的なオーディエンスエンゲージメントはコミュニティ向けプロジェクトの資金を正当化します",
+        "オフチェーンデータプロポーザルと著作権の懸念は一般的なアプローチを超えた特別な考慮を必要とします"
+      ],
+      "votingPattern_en": "SudoScientist votes yes for established tools with proven developers and clear deliverables, and yes for mechanisms that enhance governance transparency and community participation, while voting no for vaguely-scoped proposals lacking budget specifics, unilateral constitutional amendments bypassing collective processes, and low-impact vanity initiatives.",
+      "votingPattern_ja": "SudoScientist は実績のある開発者と明確な成果物を持つ確立されたツール、およびガバナンス透明性とコミュニティ参加を強化するメカニズムに投票し、予算仕様に欠ける曖昧なスコープのプロポーザル、集団プロセスを迂回する一方的な憲法修正案、および低影響のバニティイニシアティブには投票しません。"
+    },
+    "drep1ygehgu65kchqm929zp69xhl06hqkpcjv0rzy44sx40qhufqgh3xv2": {
+      "lastAnalyzedVoteCount": 33,
+      "lastAnalyzedAt": "2026-03-06T00:04:40.623Z",
+      "tendencySummary_en": "AdaLovelace777 is a fiscally conservative yet pragmatic voter who strongly prioritizes treasury protection and sustainability while supporting strategic ecosystem investments that demonstrate clear value propositions. They advocate for measured spending limits, rigorous vetting of proposals, and transparency in governance, though they show flexibility when compromises align with long-term ecosystem health.",
+      "tendencySummary_ja": "AdaLovelace777は、財政的に保守的かつ実用的な投票者であり、財務保護と持続可能性を優先しながら、明確な価値提案を示す戦略的なエコシステム投資を支持しています。彼らは測定された支出制限、提案の厳密な精査、ガバナンスの透明性を提唱していますが、妥協が長期的なエコシステムの健全性と一致する場合には柔軟性を示します。",
+      "keyPositions_en": [
+        "Treasury protection through conservative Net Change Limits (preferring 100-250M ADA over 300-350M)",
+        "Support for infrastructure investments that address ecosystem gaps (stablecoins, oracles, bridges, governance tools)",
+        "Emphasis on transparency, clear cost breakdowns, and proven track records before funding",
+        "Advocacy for mobile governance platforms and accessibility improvements to increase participation",
+        "Opposition to speculative or high-risk proposals lacking guarantees or collateral"
+      ],
+      "keyPositions_ja": [
+        "保守的なNet Change Limits（300-350M ADAより100-250M ADAを選好）を通じた財務保護",
+        "エコシステムギャップに対応するインフラ投資の支持（ステーブルコイン、オラクル、ブリッジ、ガバナンスツール）",
+        "資金提供前の透明性、明確なコスト内訳、実績のある実績への強調",
+        "参加を増やすためのモバイルガバナンスプラットフォームとアクセシビリティ改善への提唱",
+        "保証または担保を欠く投機的または高リスク提案への反対"
+      ],
+      "votingPattern_en": "Votes yes on well-vetted infrastructure projects with clear benefits and governance improvements, votes no on speculative ventures lacking transparency or excessive budget requests, and occasionally votes no on net change limit proposals that exceed fiscally responsible thresholds.",
+      "votingPattern_ja": "明確なメリットとガバナンス改善を備えた十分に精査されたインフラプロジェクトに投票し、透明性または過度な予算要求を欠く投機的ベンチャーに投票せず、財政的に責任のある閾値を超えるnet change limit提案に時々投票しません。"
+    },
+    "drep1yt56tpzpzu58zy7pz4zwfp32rq95tj3xfxmdrg8k3qhxjlccp47cn": {
+      "lastAnalyzedVoteCount": 66,
+      "lastAnalyzedAt": "2026-03-06T00:04:47.664Z",
+      "tendencySummary_en": "Manuel SNAKE demonstrates a strong pro-governance stance with a 81% approval rate (46 Yes vs 11 No votes), favoring ambitious community-driven initiatives that strengthen Cardano's infrastructure. However, the DRep maintains principled opposition when proposals lack transparency or proposer identity accountability, showing selective but reasoned voting discipline.",
+      "tendencySummary_ja": "Manuel SNAKEは81%の承認率（46票の賛成対11票の反対）で強いガバナンス支持姿勢を示し、Cardanoのインフラを強化する野心的なコミュニティ主導型イニシアチブを支持しています。ただし、提案が透明性や提案者の身元説明責任を欠く場合には原則的な反対を示し、選別的だが合理的な投票規律を維持しています。",
+      "keyPositions_en": [
+        "Supports holistic, community-driven technical roadmaps that advance Cardano's decentralized infrastructure leadership",
+        "Opposes proposals from anonymous or unidentified proposers lacking transparency and accountability",
+        "Advocates for cautious, data-driven budgeting guardrails with Net Change Limits to protect Treasury principal",
+        "Favors ecosystem expansion with measured financial safeguards and audit workflow refinement",
+        "Values adaptability and scalability as foundational principles for Cardano's long-term viability"
+      ],
+      "keyPositions_ja": [
+        "Cardanoの分散型インフラ指導力を向上させるホリスティックなコミュニティ主導型ロードマップを支持",
+        "透明性と説明責任を欠く匿名の提案者または身元不明な提案者からの提案に反対",
+        "財務省元本を保護するためのネット変更限度額を伴う慎重でデータ駆動型の予算ガードレールを提唱",
+        "測定可能な財務的セーフガードと監査ワークフローの改善を伴うエコシステム拡張を支持",
+        "適応性とスケーラビリティをCardanoの長期的な存続のための基本原則として重視"
+      ],
+      "votingPattern_en": "Manuel SNAKE votes predominantly in favor of governance proposals (81% Yes rate) while maintaining firm ethical boundaries by rejecting anonymous proposals, demonstrating outcome-focused yet accountability-conscious voting behavior.",
+      "votingPattern_ja": "Manuel SNAKEはガバナンス提案に圧倒的に賛成（81%の賛成率）する傍ら、匿名提案を拒否することで厳格な倫理的境界を維持しており、成果志向的かつ説明責任意識のある投票行動を示しています。"
+    },
+    "drep1yt8trnz8e5cnylmyygt0pyzrfw92rt9s42kg8t4rhm6t0dstyvmdn": {
+      "lastAnalyzedVoteCount": 80,
+      "lastAnalyzedAt": "2026-03-06T00:04:56.262Z",
+      "tendencySummary_en": "jonahkoch is a principled treasury steward who prioritizes measurable impact, accountability mechanisms, and ecosystem infrastructure over speculative ventures. He supports strategic investments in proven projects with clear execution tracks and measurable returns, while consistently opposing proposals that lack transparency, governance safeguards, or misuse public funds for private commercial benefit.",
+      "tendencySummary_ja": "jonahkochは測定可能な成果、説明責任メカニズム、エコシステムインフラを優先する原則的な財務管理者です。明確な実行計画と測定可能な収益を持つ実績のあるプロジェクトへの戦略的投資を支持する一方で、透明性、ガバナンス保障、または公的資金の私的商業利用の欠如を一貫して反対します。",
+      "keyPositions_en": [
+        "Supports infrastructure investments with measurable ROI and transparent accountability (GovTool, stablecoin liquidity, exchange infrastructure)",
+        "Requires rigorous testing and proof-of-concept before large treasury allocations; opposes unproven business models",
+        "Opposes constitutional changes that eliminate treasury safeguards (Budget Info Actions) without adequate community deliberation",
+        "Favors strategic market-making and adoption initiatives over speculative or private commercial ventures",
+        "Demands governance transparency and rejects ad-hoc decision-making that bypasses proper constitutional processes"
+      ],
+      "keyPositions_ja": [
+        "測定可能なROIと透明な説明責任を備えたインフラストラクチャ投資を支持（GovTool、ステーブルコイン流動性、取引所インフラ）",
+        "大規模な財務配分の前に厳密なテストと概念実証が必要；未証明のビジネスモデルに反対",
+        "コミュニティ審議なしに財務保障を排除する憲法改正に反対（予算情報アクション）",
+        "投機的または民間商業事業よりも戦略的な市場形成と採用イニシアティブを支持",
+        "ガバナンスの透明性を要求し、適切な憲法プロセスを迂回するアドホック意思決定を拒否"
+      ],
+      "votingPattern_en": "jonahkoch votes yes for infrastructure, proven projects with execution tracks and measured returns; votes no for unproven commercial ventures, constitutionally unsafe governance changes, and proposals lacking transparency; votes abstain when proposals are procedurally rendered obsolete or require data-driven assessment without sufficient metrics.",
+      "votingPattern_ja": "jonahkochは実行実績と測定可能な収益を持つインフラと実績プロジェクトに投票YES；証明されていない商業事業、憲法的に危険なガバナンス変更、透明性を欠く提案に投票NO；提案が手続き上廃止されるか、十分なメトリクスなしのデータ駆動評価が必要な場合に投票棄権します。"
+    },
+    "drep1ytuufvd6maykgfcp20fxgpx7g6a9z2suchqehfejwdsx8cgpx80yg": {
+      "lastAnalyzedVoteCount": 63,
+      "lastAnalyzedAt": "2026-03-06T00:05:04.878Z",
+      "tendencySummary_en": "Will Norris is a highly principled, constitutionally-focused DRep who votes overwhelmingly YES (61/63) on proposals that advance Cardano's infrastructure, strategic growth, and governance clarity. His voting reflects deep analysis of constitutional compliance, long-term ecosystem competitiveness, and measurable accountability, while his rare NO votes stem from insufficient detail, unanswered implementation questions, or governance risks rather than ideological opposition.",
+      "tendencySummary_ja": "ウィル・ノリスは原則的で憲法重視のDRepであり、カルダノのインフラ、戦略的成長、ガバナンス明確化を推進する提案に圧倒的にYES（61/63）で投票しています。彼の投票行動は憲法準拠性、長期的なエコシステム競争力、測定可能な説明責任の詳細な分析を反映しており、稀なNO投票は理想的反対というより、実装の詳細不足、未回答の質問、またはガバナンスリスクに由来しています。",
+      "keyPositions_en": [
+        "Constitutional compliance and rigorous governance guardrails are non-negotiable prerequisites for support",
+        "Strategic infrastructure investments (custody, oracles, stablecoins, cross-chain bridges) are essential for institutional adoption and competitiveness",
+        "Transparency, measurable KPIs, and accountability mechanisms must accompany all treasury allocations",
+        "Stablecoin liquidity and DeFi ecosystem development are critical priorities, though algorithmic stablecoins (DJED) warrant inclusion",
+        "Governance clarity, proposal documentation immutability, and reduced operational friction strengthen long-term decentralization"
+      ],
+      "keyPositions_ja": [
+        "憲法準拠性と厳密なガバナンスガードレールは支持の絶対条件",
+        "戦略的インフラ投資（カストディ、オラクル、ステーブルコイン、クロスチェーンブリッジ）は機関投資家採用と競争力に不可欠",
+        "すべての財務配分には透明性、測定可能なKPI、説明責任メカニズムが必須",
+        "ステーブルコイン流動性とDeFiエコシステム開発は重要な優先事項だが、アルゴリズムステーブルコイン（DJED）も考慮対象",
+        "ガバナンス明確化、提案ドキュメント不変性、運用摩擦の削減は長期分散化を強化"
+      ],
+      "votingPattern_en": "Will Norris votes YES on constitutionally sound proposals that advance infrastructure, strategic growth, and governance clarity, but votes NO only when implementation details are vague, accountability mechanisms are absent, or governance safeguards are insufficient—demonstrating conviction-driven voting based on substantive scrutiny rather than blanket alignment.",
+      "votingPattern_ja": "ウィル・ノリスはインフラ、戦略的成長、ガバナンス明確化を推進する憲法的に適切な提案にYESで投票しますが、実装の詳細が曖昧、説明責任メカニズムが不足、またはガバナンス保護措置が不十分な場合のみNOで投票し、一律的な整列ではなく実質的精査に基づく信念駆動型投票を示します。"
+    },
+    "drep1ytgsdkfznvjnwdxrzvf8x6tn4ctfukqqphsammzkfwatgsqgnpf2w": {
+      "lastAnalyzedVoteCount": 58,
+      "lastAnalyzedAt": "2026-03-06T00:05:12.042Z",
+      "tendencySummary_en": "Latam Cardano strongly supports public goods, ecosystem infrastructure, and community-driven initiatives that enhance Cardano's governance and adoption, while opposing proposals lacking transparent, inclusive community processes or benefiting private interests. The DRep emphasizes transparency, democratic participation, and sustainable development over rushed decision-making.",
+      "tendencySummary_ja": "Latam Cardanoは、透明性に欠け、包括的なコミュニティプロセスを経ていない提案や民間利益を優先する提案に反対しつつ、ガバナンス強化とエコシステム成長に貢献する公共財およびインフラを強く支持しています。適切なコミュニティ参加と持続可能な開発を重視しています。",
+      "keyPositions_en": [
+        "Strong support for public goods and community-owned infrastructure (GovTool, governance frameworks)",
+        "Prioritizes transparent, inclusive, and democratically-conducted governance processes over rushed implementations",
+        "Opposes proposals lacking proper community consultation or mismatched budget specifications",
+        "Supports ecosystem development initiatives that address critical gaps (DeFi liquidity, business development, adoption)",
+        "Believes compensation for governance roles is necessary but prefers performance-linked frameworks"
+      ],
+      "keyPositions_ja": [
+        "公共財およびコミュニティ所有インフラ（GovTool、ガバナンスフレームワーク）への強い支持",
+        "拙速な実装よりも透明性、包括的で民主的なガバナンスプロセスを優先",
+        "適切なコミュニティ協議やマッチした予算仕様を欠く提案に反対",
+        "重要な課題に対応するエコシステム開発イニシアティブを支持（DeFi流動性、ビジネス開発、採用促進）",
+        "ガバナンス役職の報酬は必要だが、業績連動型フレームワークを推奨"
+      ],
+      "votingPattern_en": "Latam Cardano votes affirmatively for well-structured, transparent proposals aligned with ecosystem development and public goods provision, while consistently voting against proposals perceived as lacking community legitimacy, misrepresenting budgets, or pursuing private profit through treasury funding.",
+      "votingPattern_ja": "Latam Cardanoは、透明性が高く、エコシステム開発と公共財提供に適合した構造的に適切な提案に肯定票を投じる一方で、コミュニティの正統性を欠き、予算に矛盾があり、または財務から民間利益を追求する提案に一貫して反対投票を行っています。"
+    },
+    "drep1y2y3euudfnw48xeulsfupsttlx8c4xphhaw90d66dvcrazgjdm5uc": {
+      "lastAnalyzedVoteCount": 83,
+      "lastAnalyzedAt": "2026-03-06T00:05:21.860Z",
+      "tendencySummary_en": "TriangleForces is a fiscally disciplined, skeptical DRep who demands rigorous financial governance, transparent deliverables, and measurable KPIs before approving treasury expenditures. They consistently reject proposals lacking legal clarity, collateral protections, or evidence of non-duplication, while supporting infrastructure investments with proven track records and constitutional necessity.",
+      "tendencySummary_ja": "TriangleForces は厳格な財政規律を求める懐疑的な DRep であり、財務管理の透明性、成果物の明確化、測定可能な KPI を承認前に要求します。法的明確性、担保保護、または重複排除の証拠を欠く提案を一貫して拒否し、実績のある基盤インフラと憲法上の必要性を伴う投資を支持します。",
+      "keyPositions_en": [
+        "Requires enforceable legal contracts, collateral mechanisms, and auditable financial metrics for all treasury loans and major expenditures",
+        "Opposes generic ecosystem spending without competitive costings, clear value differentiation, or evidence of non-duplication with existing initiatives",
+        "Supports critical developer infrastructure and tooling (e.g., PyCardano) with proven utility and reasonable budgets relative to ecosystem impact",
+        "Advocates for constitutional fiscal guardrails, hard treasury caps tied to realized income, and strict audit requirements regardless of transaction size",
+        "Rejects speculative ventures and meme-token strategies while supporting stablecoin liquidity and institutional infrastructure as strategic necessities"
+      ],
+      "keyPositions_ja": [
+        "すべての財務的貸出と大規模支出に対して、強制力のある法的契約、担保メカニズム、および監査可能な財務指標を要求する",
+        "競争力のあるコスト見積もり、明確な価値差別化、または既存イニシアチブとの重複排除の証拠なしに、一般的なエコシステム支出に反対する",
+        "実績のある有用性と生態系への影響に対する合理的な予算を備えた重要な開発者インフラとツール（例：PyCardano）を支持する",
+        "憲法上の財政ガードレール、実現された収入に結び付けられた厳格な財務上限、および取引規模に関係なく監査要件を要求する",
+        "投機的なベンチャーとミームトークン戦略を拒否しながら、安定した通貨流動性と機関投資家インフラを戦略的必須要素として支持する"
+      ],
+      "votingPattern_en": "TriangleForces votes 'No' on under-specified proposals lacking financial rigor, legal protections, or measurable outcomes (55 votes), 'Yes' selectively on infrastructure with clear utility, constitutional necessity, or fiscal discipline enforcement (28 votes), and provides detailed technical and business-minded rationales emphasizing treasury stewardship and long-term protocol viability.",
+      "votingPattern_ja": "TriangleForces は、財務的厳格性、法的保護、または測定可能な成果を欠く仕様不足の提案に「反対」票を投じ（55票）、明確な有用性、憲法上の必要性、または財政規律の実施を伴うインフラに選択的に「賛成」票を投じ（28票）、財務管理と長期的なプロトコル生存可能性を強調する詳細な技術的およびビジネス志向の理由を提供します。"
+    },
+    "drep1ydwtnlvdd8atlj5c5ylgw4kg5e640vyt8resattrjmwufyg4qclf7": {
+      "lastAnalyzedVoteCount": 76,
+      "lastAnalyzedAt": "2026-03-06T00:05:29.722Z",
+      "tendencySummary_en": "drep.collective demonstrates a principled, governance-focused voting approach with strong emphasis on fiscal discipline, accountability, and ecosystem infrastructure development. They favor proposals with clear KPIs, measurable outcomes, and transparent stewardship, while opposing changes that lack explicit ownership or premature modifications to foundational structures.",
+      "tendencySummary_ja": "drep.collectiveは、財政規律、説明責任、エコシステムインフラ開発を重視した原則的なガバナンス中心の投票姿勢を示しています。明確なKPI、測定可能な成果、透明性のある管理体制を備えた提案を支持する一方で、明示的な所有権を欠くまたは基礎的な構造の時期尚早な変更に反対しています。",
+      "keyPositions_en": [
+        "Requires clear accountability, authorship, and measurable KPIs for treasury and governance proposals",
+        "Supports fiscal discipline with Net Change Limits aligned to historical treasury inflows",
+        "Prefers consortium-based Constitutional Committee representation over single-person seats",
+        "Opposes premature constitutional amendments before observing existing framework performance",
+        "Champions infrastructure development and practical Layer-2 scaling solutions like Hydra"
+      ],
+      "keyPositions_ja": [
+        "財務およびガバナンス提案に対して、明確な説明責任、著作権、および測定可能なKPIを要求",
+        "過去の財務流入に合致した純変化上限による財政規律を支持",
+        "単一人物の席よりもコンソーシアム型の憲法委員会代表を優先",
+        "既存フレームワークのパフォーマンス観察前の時期尚早な憲法改正に反対",
+        "Hydraなどのインフラ開発と実践的なLayer-2スケーリングソリューションを推進"
+      ],
+      "votingPattern_en": "Highly selective voter (11 rationales of 76 votes) who consistently votes YES on well-structured, accountable proposals with proven track records and clear KPIs, while voting NO on governance changes lacking explicit stewardship or those that deviate from fiscal sustainability principles.",
+      "votingPattern_ja": "76票中11の根拠を持つ選別的な投票者であり、実績のある構造化された説明責任のある提案で明確なKPIを持つものに一貫してYESを投票し、明示的な管理体制を欠くまたは財政的持続可能性の原則から逸脱するガバナンス変更にNOを投票しています。"
+    },
+    "drep1y26nj0u86z00s2c6yteecduedrzxxrxrn39th5mau0h0r5gszp025": {
+      "lastAnalyzedVoteCount": 78,
+      "lastAnalyzedAt": "2026-03-06T00:05:38.334Z",
+      "tendencySummary_en": "ADAR_Chris demonstrates a pragmatic, framework-driven approach to governance voting with a strong preference for treasury accountability and measurable returns. They favor infrastructure and ecosystem development proposals but scrutinize ad-hoc spending, require clear ROI mechanisms, and oppose policies that lack transparency or bypass established governance processes.",
+      "tendencySummary_ja": "ADAR_Chrisは実用的でフレームワーク志向のガバナンス投票姿勢を示しており、財務説明責任と測定可能なリターンを強く求めています。インフラとエコシステム開発提案を支持する一方で、恣意的な支出に疑問を呈し、明確なROIメカニズムを要求し、透明性を欠く政策や確立されたガバナンスプロセスを迂回するものに反対しています。",
+      "keyPositions_en": [
+        "Supports stablecoin liquidity and on/off ramp infrastructure with treasury return mechanisms",
+        "Requires clear ROI, measurable outcomes, and detailed execution plans for treasury withdrawals",
+        "Opposes ad-hoc spending outside core budgeting frameworks; prefers Catalyst for non-essential funding",
+        "Advocates for maintaining audit provisions and governance friction to prevent budget manipulation",
+        "Supports governance framework development and parameter changes recommended by technical committees"
+      ],
+      "keyPositions_ja": [
+        "財務リターンメカニズムを備えた安定資産流動性とオンオフランプインフラストラクチャをサポート",
+        "財務支出に対して明確なROI、測定可能な成果、詳細な実行計画を要求",
+        "コア予算枠外の恣意的な支出に反対し、非必須資金調達にはCatalystを優先",
+        "監査規定とガバナンス摩擦を維持し、予算操作を防ぐことを主張",
+        "技術委員会が推奨するガバナンスフレームワーク開発およびパラメータ変更をサポート"
+      ],
+      "votingPattern_en": "ADAR_Chris votes YES on infrastructure, DeFi, governance, and community-approved continuations (77% approval rate), but votes NO on proposals lacking clarity, requiring arbitrary thresholds, bypassing established processes, or lacking treasury return mechanisms.",
+      "votingPattern_ja": "ADAR_Chrisはインフラ、DeFi、ガバナンス、およびコミュニティが承認した継続事項にYESを投じ(77%の承認率)、明確性を欠く、恣意的な閾値が必要、確立されたプロセスを迂回する、または財務リターンメカニズムを欠く提案にはNOを投じています。"
+    },
+    "drep1yf05mscx9y53363vc2zqc6jk0gqn6yvh8rz4lznv64ewl3cnmpwqu": {
+      "lastAnalyzedVoteCount": 3,
+      "lastAnalyzedAt": "2026-03-06T00:05:42.628Z",
+      "tendencySummary_en": "Unable to analyze - voting rationales are corrupted HTML markup rather than readable text. Cannot determine voting tendency without substantive rationale content.",
+      "tendencySummary_ja": "分析不可 - 投票根拠が読み取り可能なテキストではなく、破損したHTMLマークアップです。実質的な根拠内容がないため、投票傾向を判断できません。",
+      "keyPositions_en": [
+        "Unable to determine from corrupted data"
+      ],
+      "keyPositions_ja": [
+        "破損したデータから判断不可"
+      ],
+      "votingPattern_en": "Pattern cannot be determined due to missing rationale content.",
+      "votingPattern_ja": "根拠内容が不足しているため、パターンを判断できません。"
+    },
+    "drep1yfqt3wt0v2uvhawx9anzfqty4x7gwwu04wzr9ucga4yd7mct7dup8": {
+      "lastAnalyzedVoteCount": 36,
+      "lastAnalyzedAt": "2026-03-06T00:05:48.945Z",
+      "tendencySummary_en": "Talos demonstrates strong support for transparent, community-driven governance with rigorous fiscal oversight. They consistently back proposals with clear deliverables, accountability mechanisms, and proven track records, while rejecting those lacking transparency, specificity, or proper justification.",
+      "tendencySummary_ja": "Talosは透明性のあるコミュニティ主導のガバナンスと厳格な財政監督を強く支持しており、明確な成果物、説明責任メカニズム、実績のある提案を一貫して支持する一方で、透明性、具体性、または適切な正当化を欠く提案を拒否しています。",
+      "keyPositions_en": [
+        "Transparent, accountability-driven treasury management with auditable spending mechanisms",
+        "Support for decentralized governance frameworks that balance fiscal responsibility with ecosystem growth",
+        "Demand for granular budget breakdowns and measurable KPIs with anti-gaming safeguards",
+        "Preference for proven track records and demonstrated fiscal stewardship in fund management",
+        "Opposition to confidentiality clauses and opaque spending plans that undermine community oversight"
+      ],
+      "keyPositions_ja": [
+        "監査可能な支出メカニズムを備えた透明性と説明責任のある財務管理",
+        "財政責任とエコシステム成長のバランスを取る分散ガバナンスフレームワークの支持",
+        "不正操作防止策を備えた細粒度の予算内訳と測定可能なKPIの要求",
+        "資金管理における実績と実証済みの財政的誠実さの支持",
+        "コミュニティの監督を損なう機密保持条項と不透明な支出計画への反対"
+      ],
+      "votingPattern_en": "Talos votes affirmatively on well-specified proposals with transparent mechanisms, measurable outcomes, and proven team performance, while consistently rejecting those lacking granular justification, accountability structures, or adequate anti-gaming safeguards.",
+      "votingPattern_ja": "Talosは透明なメカニズム、測定可能な成果、実績のあるチームパフォーマンスを持つ十分に具体化された提案に肯定的に投票し、細粒度の正当化、説明責任構造、または適切な不正操作防止策を欠く提案は一貫して拒否しています。"
+    },
+    "drep1yghx9vl2f4kwrdgz7s4vpn2zcyxvsrws23hfhyatj35v7ls69he2u": {
+      "lastAnalyzedVoteCount": 11,
+      "lastAnalyzedAt": "2026-03-06T00:05:53.747Z",
+      "tendencySummary_en": "ada_ddy demonstrates a pragmatic approach to treasury governance, accepting high spending limits as reasonable safeguards despite personal preferences for lower expenditure. The DRep shows fiscal conservatism tempered by recognition of practical constraints and projected treasury sustainability.",
+      "tendencySummary_ja": "ada_ddyは財務管理に実用的なアプローチを示し、個人的な支出削減の好みにもかかわらず高い支出制限を合理的なセーフガードとして受け入れています。このDRepは予測される財務流入と持続可能性の実際的な制約を認識した、慎重な財政保守主義を示しています。",
+      "keyPositions_en": [
+        "Supports spending limits as reasonable safeguards for treasury management",
+        "Prioritizes fiscal discipline and avoiding treasury overspending",
+        "Accepts practical constraints over idealistic spending thresholds",
+        "Recognizes importance of treasury inflow buffers"
+      ],
+      "keyPositions_ja": [
+        "財務管理のための合理的なセーフガードとして支出制限を支持",
+        "財政規律と財務の過度な支出回避を優先",
+        "理想主義的な支出閾値より実際的な制約を受け入れ",
+        "財務流入バッファの重要性を認識"
+      ],
+      "votingPattern_en": "ada_ddy votes affirmatively on treasury governance matters while maintaining a conservative fiscal stance, though provides minimal rationale documentation for voting decisions (1 of 11 votes explained).",
+      "votingPattern_ja": "ada_ddyは保守的な財政姿勢を維持しながら財務管理事項に肯定的に投票していますが、投票決定の根拠文書化は最小限です（11票中1票のみ説明）。"
+    },
+    "drep1y269ehxj30k4vfzfc2z84v0xykd3amuy2xn0kv9zf8rhcec2fg2jr": {
+      "lastAnalyzedVoteCount": 84,
+      "lastAnalyzedAt": "2026-03-06T00:06:01.954Z",
+      "tendencySummary_en": "MREDGARCROSS is a strongly pro-development DRep who consistently votes YES on infrastructure, governance, and ecosystem-strengthening initiatives while rejecting meme projects and excessive Treasury spending. They prioritize long-term network decentralization, institutional adoption, and responsible fiscal management over populist or speculative funding requests.",
+      "tendencySummary_ja": "MREDGARCROSSは、インフラストラクチャ、ガバナンス、エコシステム強化イニシアチブに一貫してYESを投じる強い開発志向のDRepであり、ミームプロジェクトと過度な財務支出を拒否しています。彼らはポピュリスト的または投機的な資金要求よりも、長期的なネットワーク分散化、機関投資家採用、および責任ある財政管理を優先しています。",
+      "keyPositions_en": [
+        "Support critical infrastructure (stablecoins, oracles, bridges, institutional custody) for DeFi and RWA scaling",
+        "Oppose Treasury funding for meme tokens and duplicate/low-value projects without clear ecosystem benefit",
+        "Favor decentralization increases (pool K parameter expansion, committee expansion for governance resilience)",
+        "Support governance tool maintenance (GovTool funding) and constitutional clarity updates",
+        "Oppose excessive compensation and ad-hoc Treasury reimbursements that lack systematic justification"
+      ],
+      "keyPositions_ja": [
+        "DeFiとRWAスケーリング向けの重要インフラ（ステーブルコイン、オラクル、ブリッジ、機関投資家向けカストディ）をサポート",
+        "明確なエコシステム利益がないミームトークンと重複/低価値プロジェクトへの財務資金をこばむ",
+        "分散化の増加（プールKパラメータ拡張、ガバナンス回復力向けの委員会拡張）を支持",
+        "ガバナンスツール保守（GovTool資金）と憲法明確化アップデートをサポート",
+        "体系的な正当化を欠く過度な報酬とアドホック財務払戻を反対"
+      ],
+      "votingPattern_en": "Votes YES for strategic treasury allocations with clear technical/governance value and measurable outcomes; votes NO on low-impact initiatives, meme-related projects, and spending proposals lacking transparent accountability or cost-benefit justification.",
+      "votingPattern_ja": "明確な技術的/ガバナンス価値と測定可能な成果を持つ戦略的な財務配分にYESを投じ、低影響イニシアチブ、ミーム関連プロジェクト、および透明性のある説明責任または費用対効果の正当化を欠く支出提案にNOを投じます。"
+    },
+    "drep1yt980cvgswpfg949jvns2mvhs2v6kcmmqwyas84dk25svrclc3mal": {
+      "lastAnalyzedVoteCount": 7,
+      "lastAnalyzedAt": "2026-03-06T00:06:06.051Z",
+      "tendencySummary_en": "This DRep strongly supports governance framework improvements that enhance security, accountability, and clarity. They prioritize concrete, enforceable rules over vague expectations and demonstrate confidence in community-driven refinement processes.",
+      "tendencySummary_ja": "このDRepは、セキュリティ、説明責任、明確性を向上させるガバナンスフレームワークの改善を強く支持しています。曖昧な期待よりも具体的で実行可能なルールを優先し、コミュニティ主導の改善プロセスに信頼を置いています。",
+      "keyPositions_en": [
+        "Immutability of proposal documents protects governance integrity",
+        "Universal audit safeguards on all treasury withdrawals enhance accountability",
+        "Enforceable rules are preferable to non-binding expectations",
+        "Community feedback should directly shape governance updates",
+        "Governance clarity improves implementation predictability"
+      ],
+      "keyPositions_ja": [
+        "提案文書の不変性はガバナンスの完全性を保護する",
+        "すべての財務引き出しに対する普遍的な監査保護により説明責任が向上する",
+        "拘束力のないルールより実行可能なルールが優先される",
+        "コミュニティのフィードバックはガバナンス更新に直接反映されるべき",
+        "ガバナンスの明確性は実装の予測可能性を向上させる"
+      ],
+      "votingPattern_en": "Unanimous support (7/7 Yes votes) for governance improvements with emphasis on security, auditability, and community consensus-building.",
+      "votingPattern_ja": "セキュリティ、監査可能性、およびコミュニティのコンセンサス構築を強調する、ガバナンス改善への満場一致の支持（7/7の賛成投票）。"
+    },
+    "drep1ytnjaqmwq9qk9yv2a5ff79qj2r2mgmcmpm0683993ssy86s77kavf": {
+      "lastAnalyzedVoteCount": 8,
+      "lastAnalyzedAt": "2026-03-06T00:06:12.194Z",
+      "tendencySummary_en": "LALKUL demonstrates a pragmatic, process-oriented approach to governance, prioritizing treasury sustainability and procedural integrity while supporting measured fiscal adjustments. They favor ecosystem continuity and structured decision-making over radical changes, opposing proposals that lack proper formatting or create unnecessary disruption to established governance frameworks.",
+      "tendencySummary_ja": "LALKULは、ガバナンスに対して実用的でプロセス指向のアプローチを示し、財務の持続可能性と手続きの完全性を優先しながら、測定された財政調整をサポートしています。彼らは、適切な形式を欠いたり、確立されたガバナンスフレームワークに不要な混乱を引き起こす提案に反対し、根本的な変更よりもエコシステムの継続性と構造化された意思決定を支持しています。",
+      "keyPositions_en": [
+        "Treasury sustainability and adequate funding mechanisms are critical for long-term ecosystem decentralization",
+        "Procedural compliance and proper formatting requirements are essential to governance integrity",
+        "Measured, gradual adjustments to parameters are preferable to sudden significant changes mid-cycle",
+        "Supporting ecosystem continuity and existing initiatives takes precedence over process perfectionism",
+        "Structured, transparent fiscal management with clear governance trajectory is necessary"
+      ],
+      "keyPositions_ja": [
+        "財務の持続可能性と適切な資金メカニズムは、長期的なエコシステムの分散化にとって重要",
+        "手続きコンプライアンスと適切なフォーマット要件はガバナンスの完全性に不可欠",
+        "サイクル中途での急激な大幅な変更よりも、測定された段階的な調整が望ましい",
+        "プロセスの完全性よりもエコシステムの継続性と既存イニシアティブのサポートが優先される",
+        "明確なガバナンス軌道を持つ構造化された透明な財務管理が必要"
+      ],
+      "votingPattern_en": "LALKUL votes based on procedural rigor, treasury sustainability concerns, and operational continuity, opposing disruptive changes while supporting measured adjustments that align with community sentiment and maintain ecosystem stability.",
+      "votingPattern_ja": "LALKULは手続きの厳密性、財務の持続可能性への懸念、および運用上の継続性に基づいて投票し、破壊的な変更に反対しながら、コミュニティの感情と一致し、エコシステムの安定性を維持する測定された調整をサポートしています。"
+    },
+    "drep1ytd2mf58tfqv78z7e99fy0gnmfep0kscclnwpvx7qvwpc5srxwg5g": {
+      "lastAnalyzedVoteCount": 66,
+      "lastAnalyzedAt": "2026-03-06T00:06:19.059Z",
+      "tendencySummary_en": "Crypto Eats Legacy is a strongly pro-ecosystem DRep with an 89% yes-vote ratio who prioritizes initiatives that drive adoption, liquidity, and tangible growth over fiscal conservatism. They support strategic partnerships with IO, community projects with demonstrated competence, and treasury allocations that advance DeFi infrastructure and global expansion, while occasionally questioning valuation rather than merit.",
+      "tendencySummary_ja": "Crypto Eats Legacyは89%のイエス投票率を持つ強気なエコシステム志向のDRepであり、財政的保守性よりも採用、流動性、および実質的な成長を促進するイニシアチブを優先します。IO との戦略的パートナーシップ、実績のあるコミュニティプロジェクト、DeFiインフラストラクチャとグローバル拡大を進める財務配分をサポートしますが、メリットではなく評価に疑問を呈することがあります。",
+      "keyPositions_en": [
+        "Supports strategic partnerships with Input Output for ecosystem development",
+        "Favors treasury allocation for DeFi infrastructure and stablecoin liquidity initiatives",
+        "Backs adoption-focused initiatives including geographic expansion and governance accessibility",
+        "Values community projects with demonstrated track records and repayment capacity",
+        "Questions pricing/valuation but not underlying merit of ecosystem-building proposals"
+      ],
+      "keyPositions_ja": [
+        "エコシステム開発のためのInput Outputとの戦略的パートナーシップをサポート",
+        "DeFiインフラストラクチャおよびステーブルコイン流動性イニシアチブの財務配分を支持",
+        "地理的拡大とガバナンスアクセシビリティを含む採用重視イニシアチブを支持",
+        "実績と返済能力を実証したコミュニティプロジェクトを重視",
+        "価格/評価に疑問を呈するがエコシステム構築提案の基本的メリットには反対しない"
+      ],
+      "votingPattern_en": "Overwhelmingly votes yes on initiatives that demonstrate ecosystem growth potential, adoption benefits, or DeFi advancement, with rare no votes reserved primarily for perceived overpricing rather than fundamental opposition.",
+      "votingPattern_ja": "エコシステム成長の可能性、採用上の利益、またはDeFi進歩を示すイニシアチブに圧倒的にはいと投票し、レアなノー投票は基本的な反対ではなく主に過度な価格設定の認識のために留保されています。"
+    },
+    "drep1ytwlmrm6ksc8sa5fdhm63prqve6hjzvghdc3053zwz6hyeg0ayhg2": {
+      "lastAnalyzedVoteCount": 53,
+      "lastAnalyzedAt": "2026-03-06T00:06:28.944Z",
+      "tendencySummary_en": "Crypto_Oaj is a technically-focused DRep who prioritizes infrastructure development, developer tools, and open-source innovation while maintaining strict fiscal discipline and skepticism toward centralized services, Intersect-administered proposals, and inefficiently-budgeted projects. They consistently vote YES for foundational technical infrastructure (research, data nodes, developer libraries) but vote NO on marketing initiatives, privatized SaaS subsidies, and governance structures that exclude sanctioned regions like Iran.",
+      "tendencySummary_ja": "Crypto_Oajは技術志向のDRepで、インフラストラクチャ開発、開発者ツール、オープンソースイノベーションを優先しながら、厳密な財政規律を維持し、集中型サービス、Intersectが管理する提案、予算効率の悪いプロジェクトに対して懐疑的です。基礎的な技術インフラ（研究、データノード、開発者ライブラリ）にはYESを継続的に投票しますが、マーケティングイニシアチブ、民営化されたSaaS補助金、イランなどの制裁地域を除外するガバナンス構造にはNOを投票します。",
+      "keyPositions_en": [
+        "Strong support for foundational research and protocol innovation (Ouroboros Omega, ZKPs, quantum-resistant cryptography)",
+        "Prioritizes decentralized infrastructure over centralized services (Blockfrost alternative, data node accessibility)",
+        "Advocates for developer ecosystem tools (Lucid Evolution, OpShin, Scalus, Dolos) that lower barriers to entry",
+        "Opposes treasury funding for centralized SaaS, marketing events, and exchange listing fees without clear ROI metrics",
+        "Rejects all Intersect-administered proposals due to exclusion of Iranian DReps from membership and governance participation"
+      ],
+      "keyPositions_ja": [
+        "基礎研究とプロトコルイノベーション（Ouroboros Omega、ZKPs、耐量子暗号）への強力なサポート",
+        "集中型サービスより分散型インフラを優先（Blockfrost代替案、データノードアクセシビリティ）",
+        "参入障壁を低くする開発者エコシステムツール（Lucid Evolution、OpShin、Scalus、Dolos）を提唱",
+        "明確なROIメトリクスなしに集中型SaaS、マーケティングイベント、取引所上場手数料への財務支援に反対",
+        "イランのDRepをメンバーシップとガバナンス参加から除外していることを理由にIntersectが管理するすべての提案を拒否"
+      ],
+      "votingPattern_en": "Crypto_Oaj votes YES for high-leverage technical infrastructure and developer tools with clear ecosystem value and proven traction, while voting NO on high-cost proposals lacking cost-efficiency justification, marketing initiatives without measurable KPIs, centralized services disguised as community projects, and any governance structures administered by Intersect that perpetuate exclusionary practices.",
+      "votingPattern_ja": "Crypto_Oajは明確なエコシステム価値と実績のある高レバレッジの技術インフラと開発者ツールにYESを投票し、コスト効率の正当性に欠ける高コスト提案、測定可能なKPIなしのマーケティングイニシアチブ、コミュニティプロジェクトとして装う集中型サービス、排除的慣行を永続させるIntersectが管理するガバナンス構造にNOを投票します。"
+    },
+    "drep1ytrg2ruc44lutzd5tqw5m49rk9lxmrpjs85k8l2qsntvgls0mez9v": {
+      "lastAnalyzedVoteCount": 19,
+      "lastAnalyzedAt": "2026-03-06T00:06:33.384Z",
+      "tendencySummary_en": "This DRep demonstrates strong support for project funding and team execution capability, with a heavily pro-approval voting pattern (89.5% Yes votes). They prioritize backing teams with demonstrated track records and tangible progress.",
+      "tendencySummary_ja": "このDRepは、プロジェクト資金調達とチーム実行能力への強力なサポートを示しており、大きな賛成投票パターン（89.5%）を持っています。彼らは実証済みの実績と具体的な進捗を持つチームの支援を優先します。",
+      "keyPositions_en": [
+        "Strongly favors funding teams with proven execution track records",
+        "Values demonstrated traction and concrete progress over theoretical proposals",
+        "Maintains high approval rate for supported initiatives",
+        "Willing to take calculated risks on capable teams"
+      ],
+      "keyPositions_ja": [
+        "実績のあるチームへの資金提供を強く支持",
+        "理論的な提案よりも実証済みの進捗と具体的な成果を重視",
+        "支援イニシアティブに対して高い承認率を維持",
+        "能力のあるチームへの計算された支持をいとわない"
+      ],
+      "votingPattern_en": "Strongly biased toward approval (17 Yes, 2 No) with minimal abstention, suggesting a selective but committed approach to backing capable project teams.",
+      "votingPattern_ja": "承認への強い偏向（17賛成、2反対）で棄権はほぼなく、能力のあるプロジェクトチームを支援する選別的かつ献身的なアプローチを示唆しています。"
+    },
+    "drep1y2dptycrks2ggae95leeh66m0l0svet98c44hl4rmaec7as6hgpp3": {
+      "lastAnalyzedVoteCount": 55,
+      "lastAnalyzedAt": "2026-03-06T00:06:41.809Z",
+      "tendencySummary_en": "This DRep strongly prioritizes funding essential infrastructure, developer tooling, and strategic research that advance Cardano's long-term ecosystem resilience and scalability. They demonstrate careful governance stewardship by requiring strong oversight mechanisms, constitutional compliance, and transparent processes, while opposing poorly-structured proposals or those bypassing established community input procedures.",
+      "tendencySummary_ja": "このDRepは、カルダノの長期的なエコシステムの回復力とスケーラビリティを促進する基本インフラストラクチャ、開発者ツール、戦略的研究への資金提供を強く優先しています。厳格な監視メカニズム、憲法遵守、透明なプロセスを要求し、構造の不十分な提案や確立されたコミュニティ入力手順を迂回する提案に反対することで、慎重なガバナンス管理を実証しています。",
+      "keyPositions_en": [
+        "Strongly supports foundational infrastructure funding (zkFold, Pallas, Cardano.nix, Dolos) with emphasis on developer experience and ecosystem resilience",
+        "Advocates for open-source sustainability and structured funding models for maintainers through transparent governance processes",
+        "Requires constitutional compliance, immutable documentation, and multi-party oversight mechanisms before supporting treasury withdrawals",
+        "Opposes hastily-drafted proposals lacking sufficient detail, community input, or established amendment procedures",
+        "Supports strategic research and cross-chain interoperability initiatives that enhance Cardano's competitive positioning"
+      ],
+      "keyPositions_ja": [
+        "開発者体験とエコシステムの回復力を強調して、基礎インフラストラクチャ資金（zkFold、Pallas、Cardano.nix、Dolosなど）を強く支持",
+        "透明なガバナンスプロセスを通じたメンテナーのためのオープンソース持続可能性と構造化された資金調達モデルを提唱",
+        "財務引き出し前に憲法遵守、不変のドキュメンテーション、多党間の監視メカニズムを要求",
+        "十分な詳細、コミュニティ入力、または確立された修正手順を欠く急いで起草された提案に反対",
+        "カルダノの競争力を高める戦略的研究とクロスチェーン相互運用性イニシアチブを支持"
+      ],
+      "votingPattern_en": "Votes YES for well-structured infrastructure and research proposals with clear community consensus and oversight mechanisms; votes NO on under-developed proposals, those lacking community input, or bypassing constitutional processes; occasionally abstains to highlight governance/compliance issues requiring correction.",
+      "votingPattern_ja": "明確なコミュニティコンセンサスと監視メカニズムを備えた構造化されたインフラストラクチャおよび研究提案にはYESで投票。コミュニティ入力に欠ける、または憲法プロセスを迂回する未発展の提案にはNOで投票。修正が必要なガバナンス/コンプライアンスの問題を強調するため、時折棄権投票。"
+    },
+    "drep1y2g4glhstuxelr2se766kvz0sszwhucypr6yu4986njhzhq3ua0q9": {
+      "lastAnalyzedVoteCount": 9,
+      "lastAnalyzedAt": "2026-03-06T00:06:46.585Z",
+      "tendencySummary_en": "This DRep demonstrates strong support for constitutional governance, voting yes on 8 of 9 proposals with only 1 no vote. They prioritize moving the Cardano ecosystem forward through ratification despite acknowledging imperfections, emphasizing the constitution's flexibility as a 'living document' that can evolve.",
+      "tendencySummary_ja": "このDRepは憲法的ガバナンスに強い支持を示しており、9件中8件の提案に賛成票を投じ、反対票は1件のみです。完璧性よりもCardanoエコシステムの前進を優先し、憲法を進化可能な「生きた文書」として柔軟に解釈しています。",
+      "keyPositions_en": [
+        "Supports constitutional ratification despite imperfections",
+        "Views constitution as living document subject to evolution",
+        "Prioritizes ecosystem progress and community advancement",
+        "Acknowledges need for clarification in some statements",
+        "Favors pragmatic governance over perfectionism"
+      ],
+      "keyPositions_ja": [
+        "不完全性にもかかわらず憲法批准を支持",
+        "憲法を進化可能な「生きた文書」と解釈",
+        "エコシステムの進展とコミュニティの発展を優先",
+        "いくつかの声明の明確化の必要性を認識",
+        "完璧主義より実用的ガバナンスを支持"
+      ],
+      "votingPattern_en": "Strongly yes-leaning voting behavior (89% approval rate) with a pragmatic approach to governance that accepts incremental improvement over comprehensive perfection.",
+      "votingPattern_ja": "実用的なガバナンスアプローチに基づいた強い賛成傾向（承認率89%）で、包括的な完璧性よりも段階的改善を受け入れる姿勢を示しています。"
+    },
+    "drep1yfzqgvegtv8utkvlyhfa07u0un3dml0v9pvxjuumjcfswsgdfj50g": {
+      "lastAnalyzedVoteCount": 2,
+      "lastAnalyzedAt": "2026-03-06T00:06:51.654Z",
+      "tendencySummary_en": "This DRep advocates for systemic improvements to Cardano's governance model, particularly criticizing the simplistic 1-token-1-vote approach as unrepresentative and exclusionary. They simultaneously champion aggressive investment and growth strategies to enhance adoption and real-world utility, demonstrating a balance between governance reform concerns and ambitious expansion goals.",
+      "tendencySummary_ja": "このDRepはCardanoのガバナンスモデルの抜本的改善を提唱しており、特に1トークン1投票という単純なアプローチが代表性に欠け、参入障壁が高いと批判しています。同時に、採用と実世界での有用性を強化するための積極的な投資と成長戦略を支持しており、ガバナンス改革への懸念と野心的な拡大目標のバランスを示しています。",
+      "keyPositions_en": [
+        "Opposes 1-token-1-vote model due to lack of representativeness",
+        "Advocates for weighted voting considering contributions and knowledge",
+        "Supports increased investment in growth and adoption",
+        "Emphasizes need for real-world use cases and transaction volume",
+        "Believes proactive expansion is necessary to remain competitive"
+      ],
+      "keyPositions_ja": [
+        "代表性の欠如により1トークン1投票モデルに反対",
+        "貢献度と知識を考慮した加重投票の推進",
+        "成長と採用への投資増加の支持",
+        "実世界のユースケースと取引量の必要性を強調",
+        "競争力を維持するには積極的な拡大が必要と信じている"
+      ],
+      "votingPattern_en": "Mixed voter with reform-minded governance criticism paired with growth-focused adoption strategy, indicating they balance idealistic systemic improvements with pragmatic expansion needs.",
+      "votingPattern_ja": "改革志向のガバナンス批判と成長重視の採用戦略を組み合わせた混合型投票者で、理想的なシステム改善と実用的な拡大ニーズのバランスを取っていることを示しています。"
+    },
+    "drep1ytyemm3feqw3y7tsct90xt835tre4aewhe97dlcwx5l9lccmjmd4h": {
+      "lastAnalyzedVoteCount": 28,
+      "lastAnalyzedAt": "2026-03-06T00:06:56.843Z",
+      "tendencySummary_en": "This DRep demonstrates a cautious, risk-aware voting approach with a strong preference for fiscal responsibility and structural efficiency. They show willingness to support proposals but require specific conditions be met, such as proper collateral requirements and reasonable fund allocations.",
+      "tendencySummary_ja": "このDRepは慎重でリスク意識が高い投票アプローチを示しており、財政的責任と構造的効率性を強く重視しています。彼らは提案を支持する意思を示していますが、適切な担保要件や妥当な資金配分などの特定の条件を満たすことを要求しています。",
+      "keyPositions_en": [
+        "Requires collateral/security measures for loan-type proposals",
+        "Concerned about excessive per-person fund allocations",
+        "Skeptical of creating redundant foundations and organizational overhead",
+        "Willing to reconsider 'No' votes if proposals are properly restructured",
+        "Favors fiscal prudence in treasury allocation"
+      ],
+      "keyPositions_ja": [
+        "ローン型提案に担保・セキュリティ対策を要求",
+        "個人当たりの過度な資金配分に懸念",
+        "冗長な基金や組織的オーバーヘッドの創設に懐疑的",
+        "提案が適切に再構成されれば反対票の再検討に応じる姿勢",
+        "財務管理における慎重さを重視"
+      ],
+      "votingPattern_en": "Predominantly supportive (Yes: 19 vs No: 9) with selective opposition based on structural concerns, collateral requirements, and fund allocation reasonableness rather than ideological opposition.",
+      "votingPattern_ja": "イデオロギー的反対というより、構造的懸念、担保要件、資金配分の合理性に基づいた選別的な反対を伴う圧倒的支持的投票パターン（Yes: 19対No: 9）。"
+    },
+    "drep1yg4mxhwlct5crvnkqpqy06l6lrszn0f4cyc5k2hv0pk8xhsvluu37": {
+      "lastAnalyzedVoteCount": 25,
+      "lastAnalyzedAt": "2026-03-06T00:07:03.792Z",
+      "tendencySummary_en": "Angel Castillo is a fiscally disciplined infrastructure-focused voter who prioritizes strategic, long-term ecosystem investments with proven teams and clear technical impact. He supports foundational tooling, scalability solutions, and decentralization initiatives while rejecting proposals lacking detailed budgets or clear ecosystem-wide value.",
+      "tendencySummary_ja": "Angel Castilloは、実績のあるチームと明確な技術的影響力を持つ戦略的で長期的なエコシステム投資を優先する、財政規律のあるインフラ重視の投票者です。基礎的なツール、スケーラビリティソリューション、分散化イニシアティブをサポートする一方で、詳細な予算または明確なエコシステム全体の価値を欠く提案は拒否します。",
+      "keyPositions_en": [
+        "Prioritizes layer-2 scaling solutions (ZK rollups, Amaru, Midgard) as critical to Cardano's future",
+        "Demands fiscal discipline and detailed budget justifications, rejecting high-cost proposals without clear ROI",
+        "Backs decentralization and infrastructure diversification over single-point dependencies",
+        "Supports long-term ecosystem strengthening through foundational tooling and open-source infrastructure",
+        "Favors transparent, audited governance structures and DRep-led democratic processes"
+      ],
+      "keyPositions_ja": [
+        "レイヤー2スケーリングソリューション（ZKロールアップ、Amaru、Midgard）をCardanoの将来に不可欠と優先",
+        "財政規律と詳細な予算正当化を要求し、明確なROIのない高額提案を拒否",
+        "単一障害点への依存を排除し、分散化とインフラの多様化をサポート",
+        "基盤的なツール・オープンソースインフラを通じた長期的なエコシステム強化を支持",
+        "透明性のある監査済み統治構造とDRep主導の民主的プロセスを支持"
+      ],
+      "votingPattern_en": "Votes YES on strategically aligned, technically sound proposals with proven teams and reasonable budgets; votes NO on proposals lacking adequate justification, unclear ecosystem value, or budgets perceived as excessive relative to deliverables.",
+      "votingPattern_ja": "戦略的に一致し、技術的に健全で、実績のあるチームと合理的な予算を持つ提案にはYES投票し、適切な正当化、不明確なエコシステム価値、または成果物に対して過度と思われる予算を欠く提案にはNO投票します。"
+    },
+    "drep1ygr93aecehnm95wr7ufpd2m6jyh2mc8vnr77f0w33g8upyc6m8ayz": {
+      "lastAnalyzedVoteCount": 20,
+      "lastAnalyzedAt": "2026-03-06T00:07:09.605Z",
+      "tendencySummary_en": "Dynamic Strategies demonstrates a clear pro-governance stance with a 68% approval rate (13 Yes votes vs 6 No votes), indicating strong support for most proposals brought before the community. The DRep shows selective engagement with only minimal abstention, suggesting a deliberate and somewhat decisive voting approach despite limited rationale transparency.",
+      "tendencySummary_ja": "Dynamic Strategiesは明確なガバナンス支持姿勢を示しており、68%の承認率（13票の賛成対6票の反対）で、コミュニティに提出されたほとんどの提案に対する強い支持を示しています。DRepは最小限の棄権のみで選別的な参加を示しており、限定的な根拠の透明性にもかかわらず、意図的かつやや決定的な投票アプローチを示唆しています。",
+      "keyPositions_en": [
+        "Strong support for governance proposals and ecosystem initiatives",
+        "Selective and deliberate voting approach to community matters",
+        "Minimal use of abstention despite limited transparency",
+        "Generally favorable stance toward protocol development measures"
+      ],
+      "keyPositions_ja": [
+        "ガバナンス提案とエコシステム計画への強い支持",
+        "コミュニティ問題に対する選別的かつ意図的な投票アプローチ",
+        "限定的な透明性にもかかわらず棄権の最小限の使用",
+        "プロトコル開発措置に対する一般的に好意的なスタンス"
+      ],
+      "votingPattern_en": "Dynamic Strategies votes affirmatively on the majority of proposals with occasional strategic rejections, reflecting a confidence-based approach that generally endorses ecosystem development while maintaining selective scrutiny.",
+      "votingPattern_ja": "Dynamic Strategiesはほとんどの提案に賛成票を投じ、時折戦略的な却下を行い、エコシステム開発を一般的に支持しながら選別的な精査を維持する信頼ベースのアプローチを反映しています。"
+    },
+    "drep1yfeqm8wfd2h9pf2c9y934qskuw3z04selrpr7esf4gdsl2c5zvpgf": {
+      "lastAnalyzedVoteCount": 61,
+      "lastAnalyzedAt": "2026-03-06T00:07:17.115Z",
+      "tendencySummary_en": "KryptoLabs demonstrates a generally supportive stance toward ecosystem development initiatives, voting YES on 40 proposals they deem beneficial for Cardano's growth. However, they exercise selective skepticism regarding commercial ventures seeking treasury subsidies, commercially-viable projects that should secure private funding, and proposals that violate constitutional procedures, voting NO on 13 such proposals.",
+      "tendencySummary_ja": "KryptoLabsはCardanoの成長に有益と判断した提案に対して40票のYESを投じ、エコシステム開発イニシアティブに概ね好意的なスタンスを示しています。一方、民間資金調達が可能な商業ベンチャーへの財務支援、憲法手続き違反の提案に対しては選別的な懐疑性を示し、13票のNOを投じています。",
+      "keyPositions_en": [
+        "Supports ecosystem infrastructure and developer tools that benefit the Cardano community",
+        "Opposes treasury funding for commercially-viable ventures that should seek private investment",
+        "Requires strict adherence to constitutional procedures for treasury withdrawals",
+        "Values community engagement and inclusive decision-making in governance matters",
+        "Prioritizes long-term ecosystem sustainability over subsidizing non-self-sustaining projects"
+      ],
+      "keyPositions_ja": [
+        "Cardanoコミュニティに利益をもたらすエコシステムインフラと開発者ツールを支持",
+        "民間投資を求めるべき商業的に実行可能なベンチャーへの財務支援に反対",
+        "財務引き出しの厳密な憲法手続き遵守を要求",
+        "ガバナンス問題におけるコミュニティエンゲージメントと包括的な意思決定を重視",
+        "自立的でないプロジェクトへの補助よりも長期的なエコシステム持続性を優先"
+      ],
+      "votingPattern_en": "KryptoLabs votes YES predominantly for community-supporting proposals and governance initiatives after stakeholder engagement, but votes NO on commercially-profitable projects seeking treasury subsidies and procedurally non-compliant proposals, while abstaining strategically to avoid conflicts of interest and for proposals lacking sufficient detail on budget allocation and sustainability.",
+      "votingPattern_ja": "KryptoLabsはステークホルダーエンゲージメント後のコミュニティ支援提案とガバナンスイニシアティブに主にYESで投票し、商業的利益が見込めるプロジェクトの財務補助と手続き違反の提案にはNOで投票し、利益相反を回避するため、また予算配分と持続可能性の詳細が不足している提案に対して戦略的に棄権しています。"
+    },
+    "drep1ygwscks2yt0na4fqpcdyqn0fare5v48y0mjgn2g478lnx8gue393e": {
+      "lastAnalyzedVoteCount": 14,
+      "lastAnalyzedAt": "2026-03-06T00:07:24.491Z",
+      "tendencySummary_en": "Rod G. is a strongly pro-governance and infrastructure-focused DRep who votes affirmatively on proposals that advance Cardano's decentralized governance frameworks, technical robustness, and ecosystem development. He demonstrates pragmatic optimism, acknowledging imperfections while supporting initiatives that represent meaningful progress toward a mature, competitive blockchain ecosystem.",
+      "tendencySummary_ja": "Rod G.は、Cardanoの分散型ガバナンスフレームワーク、技術的堅牢性、およびエコシステム開発を促進する提案に肯定的に投票する、強力なガバナンス・インフラストラクチャ重視のDRepです。彼は不完全さを認めながらも成熟した競争力のあるブロックチェーンエコシステムへの進展を表すイニシアティブを支援する、実用的楽観主義を示します。",
+      "keyPositions_en": [
+        "Strong advocate for decentralized governance tools and constitutional frameworks that enable community participation",
+        "Prioritizes ecosystem infrastructure development including node diversity, stablecoins, bridges, and oracles for competitive positioning",
+        "Supports foundational collaborations between major Cardano entities (IOG, CF, EMURGO, Midnight, Intersect) for long-term viability",
+        "Values transparency, auditability, and fairness in governance processes with verifiable on-chain outcomes",
+        "Embraces pragmatic incrementalism, accepting imperfect solutions that represent measurable progress over status quo"
+      ],
+      "keyPositions_ja": [
+        "コミュニティ参加を可能にする分散型ガバナンスツールと憲法的枠組みの強力な支持者",
+        "競争力を維持するためのノード多様性、ステーブルコイン、ブリッジ、オラクルなどのエコシステムインフラ開発を優先",
+        "長期的な存続性のための主要Cardanoエンティティ間（IOG、CF、EMURGO、Midnight、Intersect）の基本的コラボレーションを支持",
+        "検証可能なオンチェーン成果を備えた透明性、監査可能性、ガバナンスプロセスの公正性を重視",
+        "不完全なソリューションが現状に対する測定可能な進展を表す場合、それを受け入れる実用的増分主義を採用"
+      ],
+      "votingPattern_en": "Rod G. demonstrates overwhelming support for governance advancement and infrastructure proposals (11 Yes votes vs. 1 No) with selective abstention, indicating a consistent conviction-driven approach aligned with Cardano's long-term institutional development and ecosystem maturation.",
+      "votingPattern_ja": "Rod G.はガバナンス進展とインフラストラクチャ提案に圧倒的な支持を示し（11票の賛成対1票の反対）、選別的な棄権を行っており、Cardanoの長期的な機関的発展とエコシステム成熟に一貫して信念に基づいたアプローチを示しています。"
+    },
+    "drep1yfx2476p8smc8dyuvgz0lkgwgzdyuuaw9293ncnswy8cfac4xu0z3": {
+      "lastAnalyzedVoteCount": 14,
+      "lastAnalyzedAt": "2026-03-06T00:07:31.007Z",
+      "tendencySummary_en": "This DRep prioritizes fiscal responsibility and practical adoption over speculative projects, demanding transparent fund allocation and measurable real-world use cases. They strongly advocate for foundational infrastructure improvements (USDC integration, liquidity) and DRep power distribution limits before funding new initiatives.",
+      "tendencySummary_ja": "このDRepは投機的プロジェクトよりも財政責任と実用的な採用を優先し、透明な資金配分と測定可能な実世界のユースケースを要求しています。新規イニシアティブの資金提供前に、基礎インフラの改善（USDC統合、流動性）とDRep権力の分散を強く主張しています。",
+      "keyPositions_en": [
+        "Oppose wasteful spending and demand transparent accounting of fund allocation and project budgets",
+        "Prioritize USDC integration and liquidity expansion as foundational infrastructure before new projects",
+        "Support DRep power limits to prevent wallet-owner concentration and ensure decentralized governance",
+        "Reject meme coins and non-essential projects with unclear real-world utility",
+        "Support constitutional updates while maintaining skepticism toward initiatives lacking concrete delivery history"
+      ],
+      "keyPositions_ja": [
+        "浪費的な支出に反対し、資金配分とプロジェクト予算の透明性を要求",
+        "新規プロジェクト前に、USDC統合と流動性拡大を基礎インフラとして優先",
+        "DRep権力の制限を支持し、ウォレット所有者による集中化を防止し分散ガバナンスを確保",
+        "メムコインと実世界での有用性が不明確な非本質的プロジェクトを拒否",
+        "憲法更新を支持しながら、具体的な実績を欠くイニシアティブに対する懐疑心を維持"
+      ],
+      "votingPattern_en": "Votes based on pragmatic cost-benefit analysis, supporting infrastructure-focused initiatives and constitutional governance while consistently rejecting projects perceived as wasteful, speculative, or lacking concrete delivery mechanisms and real-world applicability.",
+      "votingPattern_ja": "実用的なコスト便益分析に基づいて投票し、インフラ重視のイニシアティブと憲法的ガバナンスを支持する一方で、浪費的、投機的、または具体的な実行メカニズムと実世界での適用性を欠いると認識されるプロジェクトを一貫して拒否しています。"
+    },
+    "drep1y279cte2lujj9lde4lmz07wsku5fvra69htrleyx9ahr60cn42uaa": {
+      "lastAnalyzedVoteCount": 51,
+      "lastAnalyzedAt": "2026-03-06T00:07:39.012Z",
+      "tendencySummary_en": "CardaFlow is a thoughtful, governance-focused DRep who strongly supports constitutional improvements, institutional development, and infrastructure investments, while exercising fiscal conservatism on treasury spending. They prioritize Bitcoin-denominated assets over USD stablecoins, reject memecoin funding, and advocate for evidence-based decision-making with clear frameworks before major expenditures.",
+      "tendencySummary_ja": "CardaFlowは思慮深いガバナンス重視のDRepであり、憲法的改善、機関開発、インフラストラクチャ投資を強く支持する一方で、財務支出に対して慎重です。ビットコイン建ての資産をUSDステーブルコインより優先し、ミームコイン資金を拒否し、大規模支出前に明確なフレームワークと証拠に基づく意思決定を提唱しています。",
+      "keyPositions_en": [
+        "Supports Constitutional Committee expansion and governance infrastructure improvements",
+        "Opposes USD stablecoin treasury funding; prefers Bitcoin-denominated DeFi investments",
+        "Advocates for stricter budget frameworks with reduced NCL limits (50-100M initially) and comprehensive outcomes reporting",
+        "Rejects memecoin ecosystem funding and treasury loans without audited smart contracts",
+        "Supports Ekklesia temp check alignment and institution-building over speculative spending"
+      ],
+      "keyPositions_ja": [
+        "憲法委員会の拡大とガバナンスインフラの改善を支持",
+        "USD建てステーブルコイン財務資金に反対；ビットコイン建てDeFi投資を優先",
+        "より厳格な予算枠組み、削減されたNCL限度額（初期段階で50-100M）、包括的な成果報告を提唱",
+        "監査済みスマートコントラクトなしのミームコイン生態系資金と財務ローンを拒否",
+        "Ekklesia暫定チェック整合と機関構築を投機的支出より支持"
+      ],
+      "votingPattern_en": "CardaFlow votes affirmatively for governance improvements, constitutional amendments, institutional development, and infrastructure investments aligned with Ekklesia consensus, while consistently rejecting treasury withdrawals exceeding prudent spending limits, USD stablecoin liquidity, and proposals lacking transparent frameworks or community consensus.",
+      "votingPattern_ja": "CardaFlowはガバナンス改善、憲法修正、機関開発、およびEkklesiaコンセンサスに沿ったインフラストラクチャ投資に肯定的に投票する一方で、慎重な支出限度額を超える財務引き出し、USDステーブルコイン流動性、および透明なフレームワークまたはコミュニティコンセンサスを欠く提案を一貫して拒否します。"
+    },
+    "drep1yfcxs7sxzjd2ls7gjjftqmn58gg2q5fjwdcaznu0jh3uvpgceznnu": {
+      "lastAnalyzedVoteCount": 78,
+      "lastAnalyzedAt": "2026-03-06T00:07:43.696Z",
+      "tendencySummary_en": "This DRep demonstrates a strongly pro-governance stance with an overwhelming yes-voting pattern (89.7% yes votes), showing support for institutional development and compensation frameworks. With minimal rationales provided, voting behavior suggests alignment with constitutional governance improvements and financial sustainability measures.",
+      "tendencySummary_ja": "このDRepは圧倒的な賛成投票パターン（89.7%の賛成）を示し、制度開発と報酬枠組みへの強い支持を示唆しています。提供されたレーショナルが最小限であることから、憲法的ガバナンス改善と財政持続可能性対策との一致を示しています。",
+      "keyPositions_en": [
+        "Supports fair Constitutional Committee compensation",
+        "Favors professional governance structures",
+        "Endorses institutional financial sustainability",
+        "Pro-development on governance measures"
+      ],
+      "keyPositions_ja": [
+        "憲法委員会の公正な報酬に賛成",
+        "専門的なガバナンス構造を支持",
+        "機関的財政持続可能性を推進",
+        "ガバナンス施策の開発に肯定的"
+      ],
+      "votingPattern_en": "Highly affirmative voter with minimal engagement in detailed rationale provision, suggesting either passive approval-based voting or strong pre-existing alignment with governance proposals.",
+      "votingPattern_ja": "詳細なレーショナル提供への関与が最小限の高度に肯定的な投票者で、受動的な承認ベースの投票または既存のガバナンス提案との強い一致を示唆しています。"
+    },
+    "drep1y22hlaj8wuyygpnjy5cf96tg9tgvjrz39kxvqgv898uj9scfc55t7": {
+      "lastAnalyzedVoteCount": 50,
+      "lastAnalyzedAt": "2026-03-06T00:07:52.343Z",
+      "tendencySummary_en": "Maureen is a fiscally skeptical DRep who demands concrete deliverables, measurable outcomes, and accountability from treasury proposals. She votes against vague funding requests and partnerships lacking demonstrated ROI, but surprisingly supports strategic ecosystem infrastructure plays and controversial positions when presented with compelling rationale for long-term community benefit.",
+      "tendencySummary_ja": "Maureen は財政的に懐疑的なDRepであり、財務提案に対して具体的な成果物、測定可能な成果、および説明責任を要求します。彼女は不明確な資金配分と実績がないパートナーシップに投票しませんが、長期的なコミュニティ利益のための説得力のある根拠が提示されると、戦略的なエコシステムインフラの取り組みと物議を醸す立場を驚くほど支持します。",
+      "keyPositions_en": [
+        "Demands specific KPIs, deliverables, and measurable outcomes before approving large treasury expenditures",
+        "Opposes funding organizations with weak track records (e.g., EMURGO) or unclear business models (e.g., Eternl wallet subsidies)",
+        "Supports ecosystem infrastructure that removes barriers for developers and enables broader participation",
+        "Pragmatically embraces controversial but community-validated initiatives (meme coins, exchange listings) when they drive real adoption",
+        "Prefers focused, achievable execution over ambitious multi-project proposals with unclear priorities"
+      ],
+      "keyPositions_ja": [
+        "大規模な財務支出の承認前に、特定のKPI、成果物、および測定可能な成果を要求する",
+        "実績の弱い組織（EMURGOなど）または不明確なビジネスモデル（Eternallyウォレット補助金など）への資金提供に反対する",
+        "開発者の障壁を取り除き、より広範な参加を可能にするエコシステムインフラストラクチャをサポートする",
+        "実際の導入を促進するコミュニティで検証された物議を醸す取り組み（ミームコイン、取引所のリスティングなど）を実用的に採用する",
+        "野心的で優先順位が不明確な複数プロジェクト提案よりも、焦点を絞った達成可能な実行を優先する"
+      ],
+      "votingPattern_en": "Maureen votes 'No' on vague, large-scale spending proposals and partnerships lacking demonstrable value or execution clarity, but votes 'Yes' on infrastructure improvements, governance reforms with clear benefits, and strategic ecosystem plays with validated community support despite their unconventional nature.",
+      "votingPattern_ja": "Maureen は不明確で大規模な支出提案と実証可能な価値または実行の明確さを欠くパートナーシップに対して「いいえ」に投票しますが、インフラストラクチャの改善、明確な利益を持つガバナンス改革、および従来の性質にもかかわらず検証されたコミュニティサポートを持つ戦略的なエコシステムの取り組みに対して「はい」に投票します。"
+    },
+    "drep1yfqg3v85wl8hpz082yh55hppys5z6803mquqgvdfw78qg9qwr3a4h": {
+      "lastAnalyzedVoteCount": 41,
+      "lastAnalyzedAt": "2026-03-06T00:07:57.717Z",
+      "tendencySummary_en": "Gersongomes demonstrates a strongly affirmative voting pattern with 36 Yes votes against only 5 No votes, showing high confidence in governance proposals. They tend to trust development teams and favor proposals they perceive as strategically beneficial for Cardano's ecosystem development, particularly those supporting DeFi growth and treasury sustainability.",
+      "tendencySummary_ja": "Gersongonesは36の賛成票対5の反対票の強く肯定的な投票パターンを示し、ガバナンス提案に高い信頼を示しています。開発チームを信頼し、カルダノのエコシステム発展、特にDeFi成長と財務持続性をサポートする提案を好む傾向があります。",
+      "keyPositions_en": [
+        "Supports DeFi initiatives and ecosystem expansion at strategic moments",
+        "Prioritizes treasury sustainability and financial responsibility",
+        "Trusts experienced development teams implementing proposals",
+        "Favors opportunities for native stablecoin growth and liquidity",
+        "Values proposals with clear ecosystem-wide advantages"
+      ],
+      "keyPositions_ja": [
+        "戦略的な時期のDeFiイニシアチブとエコシステム拡大をサポート",
+        "財務の持続可能性と金銭的責任を優先",
+        "提案を実装する経験豊富な開発チームを信頼",
+        "ネイティブステーブルコインの成長と流動性の機会を支持",
+        "明確なエコシステム全体の利点を持つ提案を評価"
+      ],
+      "votingPattern_en": "Consistently votes Yes on proposals perceived as strategically sound and beneficial to Cardano's growth, with minimal critical examination indicated by very low rationale-attachment rate (2/41 votes).",
+      "votingPattern_ja": "カルダノの成長に戦略的に妥当で有益と認識された提案に一貫して賛成票を投じ、非常に低い根拠添付率（41票中2票）で示されるように批判的検証はほぼない。"
+    },
+    "drep1yfcgvh8rum7a9ma4gwgwuwutdu0dnrzaj98jytwyfqzd87q2nehvm": {
+      "lastAnalyzedVoteCount": 41,
+      "lastAnalyzedAt": "2026-03-06T00:08:04.950Z",
+      "tendencySummary_en": "Reshma_Mohan is a pragmatic and inclusive governance advocate who strongly supports proposals that advance Cardano's infrastructure, constitutional framework, and treasury management. Their voting pattern reflects deep engagement with ecosystem needs, prioritizing proposals with clear relevance, reasonable budgets, transparent processes, and community-driven development.",
+      "tendencySummary_ja": "Reshma_Mohanは実用的で包括的なガバナンス提唱者であり、Cardanoのインフラ、憲法フレームワーク、および財務管理を促進する提案を強く支持しています。彼らの投票パターンはエコシステムのニーズへの深い関与を反映し、明確な関連性、合理的な予算、透明なプロセス、およびコミュニティ主導の開発を優先しています。",
+      "keyPositions_en": [
+        "Strong support for governance infrastructure improvements and transparent treasury management",
+        "Emphasis on constitutional clarity, enforceability, and safeguards protecting community interests",
+        "Backing ecosystem development proposals addressing critical gaps in DeFi infrastructure and tooling",
+        "Commitment to inclusive, community-driven governance with proper oversight and accountability mechanisms",
+        "Support for careful, measured technical upgrades with demonstrated safety and network capacity verification"
+      ],
+      "keyPositions_ja": [
+        "ガバナンスインフラストラクチャの改善と透明な財務管理への強い支持",
+        "憲法の明確さ、実行可能性、およびコミュニティの利益を保護するセーフガードの強調",
+        "DeFiインフラストラクチャとツーリングの重要なギャップに対応するエコシステム開発提案の支援",
+        "適切な監視と説明責任メカニズムを備えた包括的でコミュニティ主導のガバナンスへのコミットメント",
+        "実証された安全性とネットワーク容量検証を備えた慎重で段階的な技術的アップグレードへの支持"
+      ],
+      "votingPattern_en": "Reshma_Mohan votes Yes on well-reasoned proposals with clear ecosystem relevance and transparent governance processes (75% Yes rate), occasionally abstains when proposals lack sufficient clarity or detail, and rarely opposes unless fundamental concerns about governance integrity or community inclusion arise.",
+      "votingPattern_ja": "Reshma_Mohanは、明確なエコシステムの関連性と透明なガバナンスプロセスを備えた十分に根拠のある提案に投票します（75%のYesレート）。提案に十分な明確さや詳細が欠けている場合は時折棄権し、ガバナンスの完全性またはコミュニティ包含に関する根本的な懸念が生じない限り、ほとんど反対しません。"
+    },
+    "drep1ytkt0vvxqlwmws5n04ud2q3sk0yu9lh65arkp2suaqdgmgqgrza6c": {
+      "lastAnalyzedVoteCount": 16,
+      "lastAnalyzedAt": "2026-03-06T00:08:12.017Z",
+      "tendencySummary_en": "This DRep demonstrates progressive governance preferences, strongly supporting constitutional modernization and strategic ecosystem infrastructure investments while opposing wasteful treasury spending on centralized exchange listings. They balance idealism with pragmatism, accepting imperfect proposals when the opportunity cost of inaction exceeds implementation risks.",
+      "tendencySummary_ja": "このDRepは進歩的なガバナンス志向を示しており、憲法の現代化と戦略的なエコシステムインフラ投資を強く支持する一方で、中央集約的な取引所上場への無駄な財務支出に反対しています。理想主義と実用主義のバランスを取り、行動しないことの機会費用が実装リスクを上回る場合、不完全な提案を受け入れています。",
+      "keyPositions_en": [
+        "Supports ratification of the Delegate-Approved Cardano Constitution as necessary evolution from temporary Interim Constitution",
+        "Advocates for treasury tax reduction from 20% to 10% given substantial accumulated reserves (~1.7B ADA)",
+        "Opposes funding centralized exchange listing fees as inefficient treasury allocation",
+        "Supports foundational infrastructure investments despite imperfect proposals, prioritizing opportunity cost mitigation",
+        "Favors elected constitutional committee governance model for transparent decision-making"
+      ],
+      "keyPositions_ja": [
+        "暫定憲法からの必要な進化として、委任承認されたCardano憲法の批准を支持",
+        "相当な蓄積準備金（約17億ADA）を考慮し、財務税を20%から10%への削減を提唱",
+        "中央集約的な取引所上場手数料への資金提供を非効率な財務配分として反対",
+        "機会費用軽減を優先し、不完全な提案にもかかわらず基礎的インフラ投資を支持",
+        "透明な意思決定のための選出された憲法委員会ガバナンスモデルを支持"
+      ],
+      "votingPattern_en": "Predominantly affirmative voting (10 Yes vs 6 No) with selective opposition focused on frivolous spending, suggesting a constructive reformist approach that votes for systemic improvements while maintaining fiscal discipline.",
+      "votingPattern_ja": "建設的な改革主義的アプローチを示唆する、軽率な支出に限定的に反対する圧倒的な肯定投票（10賛成対6反対）で、財政規律を維持しながらシステム改善に投票しています。"
+    },
+    "drep1yf94hp0xetd87e5stlxwrtlqwjq6qhqx6zfdu94wdr5dfagp38nd4": {
+      "lastAnalyzedVoteCount": 15,
+      "lastAnalyzedAt": "2026-03-06T00:08:18.241Z",
+      "tendencySummary_en": "A$Y is a consensus-focused DRep who supports proposals when major stakeholders are aligned and when changes are well-tested, measured, and include proper oversight. They prioritize network stability, decentralization, and gradual implementation over rapid change.",
+      "tendencySummary_ja": "A$Yは、主要なステークホルダーが一致し、変更がよくテストされ、測定され、適切な監視を含む場合に提案をサポートするコンセンサス志向のDRepです。彼らはネットワークの安定性、分散化、段階的な実装を急速な変化よりも優先します。",
+      "keyPositions_en": [
+        "Supports ecosystem alignment when major players (IOG, EMURGO, Intersect, Foundation, Midnight) agree on direction",
+        "Favors gradual, measured parameter increases that are testnet-validated and avoid network risk",
+        "Values decentralization protections including net change limits to prevent stake concentration",
+        "Prefers transparent oversight mechanisms and clear reporting requirements for fund deployments",
+        "Supports infrastructure and foundation-building phases before larger spending commitments"
+      ],
+      "keyPositions_ja": [
+        "主要プレイヤー（IOG、EMURGO、Intersect、Foundation、Midnight）の方向性が一致する場合のエコシステム全体の調整をサポート",
+        "テストネット検証済みでネットワークリスク回避の、段階的で測定された量的パラメータ増加を支持",
+        "ステーク集中を防ぐための純変更制限を含む分散化保護を重視",
+        "資金配分の透明性監視メカニズムと明確なレポート要件を支持",
+        "大規模支出コミットメントの前に、インフラストラクチャと基盤構築段階をサポート"
+      ],
+      "votingPattern_en": "Strong YES voter (12/15 votes) who conducts due diligence on each proposal, supporting well-researched changes with stakeholder buy-in and opposing or abstaining from measures lacking clear rationale or consensus.",
+      "votingPattern_ja": "各提案について精査を行う強いYES投票者（15票中12票）で、ステークホルダーの支持がある十分に研究された変更をサポートし、明確な理由またはコンセンサスを欠く対策に反対または棄権しています。"
+    },
+    "drep1y2rajzp3da0scf8whz35eug0grlfn284f54ldlwnxx97fjg2xpcwt": {
+      "lastAnalyzedVoteCount": 77,
+      "lastAnalyzedAt": "2026-03-06T00:08:24.443Z",
+      "tendencySummary_en": "VNEconomics prioritizes long-term ecosystem development and treasury sustainability over short-term incentives, favoring substantial funding for development, marketing, and DApp support. The DRep demonstrates a data-driven approach that questions assumptions and emphasizes the need for detailed planning, timelines, and measurable outcomes in governance proposals.",
+      "tendencySummary_ja": "VNEconomics は短期的なインセンティブよりも長期的なエコシステム開発と財務の持続可能性を優先し、開発、マーケティング、DAppサポートへの充実した資金を支持しています。このDRepはデータ主導型のアプローチを示し、仮定に疑問を呈し、ガバナンス提案における詳細な計画、タイムライン、測定可能な成果の必要性を強調しています。",
+      "keyPositions_en": [
+        "Oppose treasury contribution reductions without empirical evidence of positive impact",
+        "Prioritize ecosystem development funding over short-term staking reward increases",
+        "Require detailed timelines, expected results, and success metrics in proposals",
+        "Advocate for strategic treasury management to minimize ADA price volatility",
+        "Support marketing and DApp liquidity initiatives for sustainable long-term growth"
+      ],
+      "keyPositions_ja": [
+        "実証的な効果の根拠なしに財務貢献削減に反対",
+        "短期的なステーキング報酬増加よりエコシステム開発資金を優先",
+        "提案に詳細なタイムライン、予想される結果、成功指標を要求",
+        "ADА価格変動を最小化するための戦略的財務管理を支持",
+        "持続可能な長期成長のためのマーケティングおよびDApp流動性支援を支持"
+      ],
+      "votingPattern_en": "VNEconomics votes predominantly yes (57 affirmative votes) with measured nos (16) and rare abstentions (4), suggesting general support for governance participation with selective criticism on treasury allocation and proposal specificity.",
+      "votingPattern_ja": "VNEconomicsは圧倒的なイエス投票（57票）と測定されたノー票（16票）、稀な棄権（4票）で投票しており、財務配分と提案の具体性に関する選別的な批判を伴う、ガバナンス参加への一般的なサポートを示唆しています。"
+    },
+    "drep1y23kumvpqgal3t6v4tamwrprjya453p3djam0eqg63usm9su77hjl": {
+      "lastAnalyzedVoteCount": 43,
+      "lastAnalyzedAt": "2026-03-06T00:08:31.425Z",
+      "tendencySummary_en": "Marketing DRep demonstrates a thoughtful, ecosystem-focused voting approach that prioritizes long-term Cardano growth over short-term gains. They favor proposals with clear roadmaps, sustainable treasury management, and critical infrastructure improvements, while opposing duplicative efforts, premature changes, and insufficiently justified governance actions.",
+      "tendencySummary_ja": "マーケティングDRepは、短期的な利益よりもCardanoの長期的な成長を優先する思慮深いエコシステム中心の投票アプローチを示しています。明確なロードマップ、持続可能な資金管理、重要なインフラストラクチャの改善を支持する一方、重複する取り組み、時期尚早な変更、正当性が不十分なガバナンス提案に反対しています。",
+      "keyPositions_en": [
+        "Prioritizes long-term ecosystem development and sustainability over immediate financial gains",
+        "Supports treasury management with clear spending caps and financial safeguards",
+        "Advocates for critical blockchain infrastructure improvements to enable stablecoin adoption",
+        "Opposes duplicative governance proposals and favors consolidation with existing budget processes",
+        "Values transparency, clear rationales, and inter-committee cooperation in governance submissions"
+      ],
+      "keyPositions_ja": [
+        "即座の金銭的利益よりも長期的なエコシステム開発と持続可能性を優先",
+        "明確な支出上限と財務的保障手段による資金管理を支持",
+        "ステーブルコイン採用を実現するための重要なブロックチェーンインフラストラクチャの改善を提唱",
+        "重複するガバナンス提案に反対し、既存の予算プロセスとの統合を支持",
+        "ガバナンス提出物における透明性、明確な根拠、委員会間協力の価値を重視"
+      ],
+      "votingPattern_en": "This DRep votes affirmatively for well-justified proposals addressing infrastructure needs and treasury sustainability while voting negatively on shortsighted measures, duplicative efforts, and premature constitutional amendments lacking comprehensive analysis.",
+      "votingPattern_ja": "このDRepは、インフラストラクチャのニーズと資金管理の持続可能性に対処する十分に正当化された提案に肯定的に投票する一方、近視眼的な措置、重複する取り組み、包括的な分析を欠く時期尚早の憲法改正案に否定的に投票しています。"
+    },
+    "drep1yt7hfdllz0l707unkh9g2fs9e35dl6d94tvjynnh4t5gw6gcmn4jn": {
+      "lastAnalyzedVoteCount": 68,
+      "lastAnalyzedAt": "2026-03-06T00:08:37.432Z",
+      "tendencySummary_en": "This DRep demonstrates strong support for community-vetted projects and ecosystem development initiatives, particularly favoring proposals that have undergone rigorous selection processes and show transparent fund management through smart contracts. They are selective critics, opposing only proposals they deem vague or inefficient in resource allocation.",
+      "tendencySummary_ja": "このDRepは、厳格な選別プロセスを経た、コミュニティ支持のプロジェクトとエコシステム開発イニシアティブに強く支持する傾向を示しています。特にスマートコントラクトを通じた透明な資金管理を重視し、曖昧または非効率なリソース配分の提案のみに反対する選別的な批評家です。",
+      "keyPositions_en": [
+        "Supports projects that pass community temperature checks and demonstrate strong grassroots backing",
+        "Values transparency and accountability in fund distribution, especially through smart contract mechanisms",
+        "Prefers consolidated, efficient funding structures administered by established organizations like Intersect",
+        "Critical of vague proposals lacking clear implementation details",
+        "Questions excessive funding for routine maintenance activities"
+      ],
+      "keyPositions_ja": [
+        "コミュニティの温度測定に合格し、強いボトムアップの支持を示すプロジェクトを支持",
+        "特にスマートコントラクトメカニズムを通じた資金配分の透明性と説明責任を重視",
+        "Intersectなどの確立された機関が管理する統合的で効率的な資金構造を好む",
+        "明確な実装詳細を欠く曖昧な提案に批判的",
+        "日常的なメンテナンス活動に対する過剰な資金配分に疑問を呈する"
+      ],
+      "votingPattern_en": "Overwhelmingly supportive voter (91% yes rate) who backs established projects with community validation and transparent governance structures, while selectively opposing proposals with unclear objectives or questionable value-for-money.",
+      "votingPattern_ja": "確立されたプロジェクトとコミュニティ検証および透明なガバナンス構造を持つプロジェクトを支持する圧倒的な支持者（91%の承認率）であり、目的が不明確または費用対効果が疑わしい提案のみに選別的に反対します。"
+    },
+    "drep1ygwxycfhkjd8skrgjzns3dq2360xj80khyqwwyyzqf8a4mcqrz7jj": {
+      "lastAnalyzedVoteCount": 3,
+      "lastAnalyzedAt": "2026-03-06T00:08:43.431Z",
+      "tendencySummary_en": "This DRep demonstrates a fiscally conservative approach to treasury fund allocation, prioritizing risk management and proper institutional boundaries. They oppose loans without robust repayment mechanisms and redirect proposals to appropriate existing organizations rather than funding duplicative efforts.",
+      "tendencySummary_ja": "このDRepは財務の厳格な管理を重視し、リスク管理と適切な機関の役割分担を優先する保守的なスタンスを示しています。彼らは返済メカニズムのないローンに反対し、重複する提案は既存の適切な組織にリダイレクトします。",
+      "keyPositions_en": [
+        "Loans require enforceable repayment mechanisms with equal risk distribution between creditor and debtor",
+        "DReps must function as underwriters with clear contractual provisions for treasury loans",
+        "Treasury funds should not duplicate functions already assigned to organizations like Cardano Foundation",
+        "Proposal writers should collaborate with existing funded institutions (Cardano Foundation, Emurgo) rather than seeking treasury alternatives"
+      ],
+      "keyPositions_ja": [
+        "ローンには債権者と債務者の間でリスクを均等に分配する強制力のある返済メカニズムが必要",
+        "DRepは財務ローンに対して明確な契約条項を伴う引受人として機能すべき",
+        "財務基金はCardano Foundationなどの機関に既に割り当てられた機能を複製すべきでない",
+        "提案者は財務代替案を求めるのではなく、既存の資金供給されている機関(Cardano Foundation、Emurgo)と協力すべき"
+      ],
+      "votingPattern_en": "Predominantly opposes treasury funding when proper controls are absent or when proposals duplicate existing institutional missions.",
+      "votingPattern_ja": "適切な管理体制が不在の場合、または既存の機関の任務と重複する場合に、財務基金への資金提供に主に反対します。"
     }
   },
   "proposalCache": {
