@@ -1,0 +1,54 @@
+name: Build & Deploy (Pre-compile JSX)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check if pre-compilation is needed
+        id: check
+        run: |
+          if grep -q 'id="app-source"' index.html; then
+            echo "needs_build=true" >> $GITHUB_OUTPUT
+            echo "JSX source found — pre-compilation needed"
+          else
+            echo "needs_build=false" >> $GITHUB_OUTPUT
+            echo "Already compiled — skipping"
+          fi
+
+      - name: Install Babel
+        if: steps.check.outputs.needs_build == 'true'
+        run: npm install @babel/standalone
+
+      - name: Backup source, then pre-compile JSX → JS
+        if: steps.check.outputs.needs_build == 'true'
+        run: |
+          cp index.html index-src.html
+          node scripts/build-precompile.js
+
+      - name: Commit optimized build (keep source backup)
+        if: steps.check.outputs.needs_build == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html index-src.html
+          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Build: pre-compile JSX (remove babel-standalone from runtime)" && git pull --rebase && git push)
