@@ -3958,33 +3958,34 @@ function AIAnalysisTab({ aiDrepTendencies, aiProposalReasons, aiActionTypeSummar
   };
 
   const tabs = [
-    {key:"tendencies",label:T.ai_tab_drep},
-    {key:"reasons",label:T.ai_tab_reasons},
-    {key:"types",label:T.ai_tab_types},
-    {key:"predict",label:T.ai_tab_predict}
+    {key:"tendencies",label:T.ai_tab_drep,icon:"👥",desc:lang==="ja"?"DRep別の投票パターン":"Voting patterns by DRep"},
+    {key:"reasons",label:T.ai_tab_reasons,icon:"📋",desc:lang==="ja"?"GA別の賛否理由":"Reasons for/against each GA"},
+    {key:"types",label:T.ai_tab_types,icon:"📊",desc:lang==="ja"?"タイプ別の投票傾向":"Trends by action type"},
+    {key:"predict",label:T.ai_tab_predict,icon:"🔮",desc:lang==="ja"?"AIによる投票予測":"AI-powered vote prediction"}
   ];
 
   return E("div", {className:"card",style:{padding:0}},
-    // Header
-    E("div", {style:{padding:"12px 20px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}},
-      E("h2", {style:{color:"var(--accent2)",margin:0,fontSize:16}}, "🤖 "+T.ai_title),
-      aiMeta && E("span", {style:{color:"var(--text2)",fontSize:10,opacity:0.7}},
-        `${T.ai_generated}: ${fmtDate(aiMeta.generatedAt)} · API: ${aiMeta.api_calls} calls · $${aiMeta.estimated_cost_usd?.toFixed(3) || "?"}`)
-    ),
-    // Sub-tabs (prominent, right below header)
-    E("div", {style:{display:"flex",gap:0,borderBottom:"2px solid var(--border)",background:"var(--bg)",overflowX:"auto"}},
+    // Sub-tab selector (card-style buttons)
+    E("div", {style:{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,padding:"14px 16px",borderBottom:"1px solid var(--border)"}},
       tabs.map(t =>
         E("button", {
           key:t.key,
           onClick:()=>{setSubtab(t.key);setExpandedRows({});},
           style:{
-            padding:"10px 18px",fontSize:12,fontWeight:subtab===t.key?700:500,
-            background:subtab===t.key?"var(--bg3)":"transparent",
-            border:"none",borderBottom:subtab===t.key?"2px solid var(--accent2)":"2px solid transparent",
-            color:subtab===t.key?"var(--accent2)":"var(--text2)",cursor:"pointer",
-            whiteSpace:"nowrap",transition:"all .15s"
+            padding:"10px 12px",fontSize:12,fontWeight:600,
+            background:subtab===t.key?"var(--accent)":"var(--bg3)",
+            border:subtab===t.key?"1px solid var(--accent)":"1px solid var(--border)",
+            borderRadius:8,
+            color:subtab===t.key?"#fff":"var(--text2)",cursor:"pointer",
+            whiteSpace:"nowrap",transition:"all .15s",
+            display:"flex",flexDirection:"column",alignItems:"center",gap:3,
+            textAlign:"center",lineHeight:1.3
           }
-        }, t.label)
+        },
+          E("span",{style:{fontSize:18}},t.icon),
+          E("span",{style:{fontSize:11,fontWeight:700}},t.label),
+          E("span",{style:{fontSize:9,opacity:subtab===t.key?0.85:0.55,fontWeight:400}},t.desc)
+        )
       )
     ),
     // Content
@@ -4757,7 +4758,7 @@ function App() {
         <button className={`tab-btn ${tab==="drep-hub"?"active":""}`} onClick={()=>setTab("drep-hub")}>{"📢 "+T.tab_drep_hub}</button>
         <button className={`tab-btn ${tab==="tx-analysis"?"active":""}`} onClick={()=>setTab("tx-analysis")}>{"📊 "+T.tab_tx_analysis}</button>
         */}
-        <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}>{"🤖 AI"+(lang==="ja"?"分析":"Analysis")}</button>
+        <button className={`tab-btn ${tab==="ai"?"active":""}`} onClick={()=>setTab("ai")}>{"🤖 AI "+(lang==="ja"?"Analysis":"Analysis")}</button>
       </div>
 
       {/* DRep Hub & Tx Analysis: hidden until ready for production */}
