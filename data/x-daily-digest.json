@@ -165,6 +165,197 @@
     }
   },
   {
+    "date": "2026-02-27",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano ADA Payment Integration at 137 SPAR Stores in Switzerland",
+        "title_ja": "スイスのSPAR137店舗でCardano ADA決済が開始",
+        "summary_en": "Cardano Foundation announced that ADA is now accepted at 137 SPAR supermarket locations across Switzerland through DFX Swiss and Brick Towers' Open Crypto Pay platform. This marks a significant milestone for real-world cryptocurrency adoption in retail commerce.",
+        "summary_ja": "Cardano FoundationがスイスのスーパーマーケットチェーンSPAR137店舗でADA決済を開始したと発表。DFX SwissとBrick Towersの「Open Crypto Pay」プラットフォームを通じて実現し、実店舗でのクリプト決済の重要なマイルストーン。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Ecosystem_adoption",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano_CF",
+          "@BSCNews",
+          "@dvizh_com",
+          "@ResmanExchange",
+          "@Cardano_Power",
+          "@TapTools",
+          "@SIPO_Tokyo"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Cardano Budget Process Framework 2026 Submitted for Governance",
+        "title_ja": "2026年度カルダノ予算プロセスフレームワークが提出",
+        "summary_en": "Intersect has submitted a refreshed Cardano Budget Process Framework for 2026, introducing standardized proposal processes, milestone-based funding, and clearer review stages. Community feedback was incorporated before formal submission as an Info Action.",
+        "summary_ja": "Intersectが2026年度のCardano予算プロセスフレームワークを提出。標準化された提案プロセス、マイルストーン基盤の資金配分、明確なレビュー段階を導入。コミュニティフィードバックを反映したもの。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@IntersectMBO",
+          "@JBriggsLondon",
+          "@radioastro",
+          "@Nomos_guild"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Testnet Planned for June 2026",
+        "title_ja": "Ouroboros Leios テストネット2026年6月予定",
+        "summary_en": "SPO call confirmed that Leios testnet is planned for June 2026, with the protocol upgrade expected this year. Leios aims to solve the blockchain trilemma (decentralization, security, scalability) simultaneously.",
+        "summary_ja": "SPOコールでLeios テストネットが2026年6月に予定されていることが確認。プロトコルアップグレードは今年実施予定。Leiosは分散性、セキュリ���ィ、スケーラビリティの同時実現を目指す。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@RickMcCracken",
+          "@theunhashed",
+          "@whaleUTXO"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Protocol Version 11 Hard Fork Candidate Entering Final Testing Phase",
+        "title_ja": "プロトコルバージョン11 ハードフォーク候補が最終テスト段階へ",
+        "summary_en": "Node 10.7.0 released with SanchoNet already upgraded to Protocol Version 11 for feature testing. This intra-era upgrade will improve Plutus performance, add cryptographic functions, and enhance network security.",
+        "summary_ja": "Node 10.7.0リリース。SanchoNetはプロトコルバージョン11にアップグレード済みで機能テスト進行中。Plutusの高速化、新しい暗号機能、ネットワークセキュリティ向上を含む。",
+        "importance": 5,
+        "audience": [
+          "SPO",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@cardano_updates",
+          "@SIPO_Tokyo",
+          "@ADA_Stakepool"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Cardano Stablecoin Market Cap Expanding with 8-Figure ADA Liquidity Boost",
+        "title_ja": "カルダノステーブルコイン市場が急拡大、8桁のADA流動性増加",
+        "summary_en": "Cardano stablecoin ecosystem showing rapid growth with significant liquidity increases. USDCx integration and multiple stablecoin options are driving ecosystem maturity and adoption.",
+        "summary_ja": "カルダノステーブルコイン市場が急速に成長中。USDCx統合や複数のステーブルコイン選択肢がエコシステムの成熟度と採用を推進。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem_adoption"
+        ],
+        "sources": [
+          "@TapTools",
+          "@Diyon_Bitrue"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Yoroi Wallet Addressing Governance Delegation UX Concerns",
+        "title_ja": "Yoroi ウォレットがガバナンス委任UXの懸念に対応",
+        "summary_en": "Yoroi Wallet is addressing community feedback regarding governance delegation experience with a comprehensive response. This addresses one of Cardano's known UX challenges in the governance space.",
+        "summary_ja": "Yoroi ウォレットがガバナンス委任体験に関するコミュニティフィードバックに対応。カルダノのガバナンスUX課題の一つに対する包括的な対応予定。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@YoroiWallet",
+          "@vesprwallet"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "New Tx3 Toolkit Plugin Released for JetBrains IDEs",
+        "title_ja": "JetBrains IDE向け新Tx3 ツールキットプラグインリリース",
+        "summary_en": "Adam K Dean released Tx3 Toolkit plugin for JetBrains IDEs, providing syntax highlighting, code folding, linting, and error annotations for developers using TxPipe's Tx3 framework.",
+        "summary_ja": "Adam K DeanがJetBrains IDE向けTx3 ツールキットプラグインをリリース。構文ハイライト、コードフォーディング、リンティング、エラーアノテーションを提供。",
+        "importance": 3,
+        "audience": [
+          "Builder"
+        ],
+        "sources": [
+          "@adamKDean"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Cardano Foundation CEO Frederik Gregaard on RWA Capabilities and CIP-113",
+        "title_ja": "Cardano Foundation CEO Frederik Gregaard がRWA機能とCIP-113について言及",
+        "summary_en": "Cardano Foundation CEO Frederik Gregaard stated that CIP-113 will provide RWA capabilities and highlighted Cardano's maturity in technology and interoperability stacks, positioning it for TradFi and beyond.",
+        "summary_ja": "Cardano Foundation CEO���CIP-113はRWA機能を提供し、技術スタックと相互運用性スタックの成熟性を強調。TradFiとそれ以上への展開を位置づけ。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "DRep"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@funkyhiro2009"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Buidler Fest v3 in Buenos Aires, March 24-25 with Midnight Network",
+        "title_ja": "ブエノスアイレスのBuidler Fest v3、3月24-25日 Midnight Network参加",
+        "summary_en": "Buidler Fest v3 confirmed for March 24-25 in Buenos Aires with Midnight Network participation. Cardano Foundation is supporting this annual gathering of developers and builders.",
+        "summary_ja": "Buidler Fest v3がブエノスアイレスで3月24-25日に開催。Midnight Networkが参加予定。Cardano Foundation がこの年次開発者集会をサポート。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@IOGroup",
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "ADA Derivatives Trading Dominates with $32.37B Volume Over 30 Days",
+        "title_ja": "ADA先物取引が30日で324億ドルのボリュームで支配",
+        "summary_en": "ADA derivatives trading has dominated market activity with futures volume reaching $32.37B over the past 30 days, representing over 90% of total trading volume compared to $3.36B spot volume.",
+        "summary_ja": "ADA先物取引が過去30日間で324億ドルのボリューム達成し、取引量全体の90%以上を占有。現物取引は336億ドル。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Trader"
+        ],
+        "sources": [
+          "@TapTools"
+        ]
+      }
+    ],
+    "tweetCount": 335,
+    "generatedAt": "2026-03-06T11:06:25.543Z",
+    "apiUsage": {
+      "input_tokens": 10965,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2597,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
     "date": "2025-03-08",
     "highlights": [
       {
