@@ -4367,58 +4367,71 @@ function App() {
     const meta = await metaRes.json();
     const v = "?v=" + (meta.updated_ts || Date.now());
 
-    setStage("Loading static data…");
-    const [drepsRes, proposalsRes, votesRes, simRes, ccMembersRes, ccVotesRes, ccRatRes, histRes, drepRatRes, spoVotesRes, spoPoolsRes, govInfoRes] = await Promise.all([
+    // ── Phase 1: Critical data only (fast initial render ~3.8MB) ──
+    setStage("Loading core data…");
+    const [drepsRes, proposalsRes, votesRes, govInfoRes, ccMembersRes, ccVotesRes] = await Promise.all([
       fetch(base + "dreps.json" + v),
       fetch(base + "proposals.json" + v),
       fetch(base + "votes.json" + v),
-      fetch(base + "simulator.json" + v),
+      fetch(base + "governance-info.json" + v).catch(() => null),
       fetch(base + "cc-members.json" + v).catch(() => null),
-      fetch(base + "cc-votes.json" + v).catch(() => null),
-      fetch(base + "cc-rationales.json" + v).catch(() => null),
-      fetch(base + "drep-history.json" + v).catch(() => null),
-      fetch(base + "drep-rationales.json" + v).catch(() => null),
-      fetch(base + "spo-votes.json" + v).catch(() => null),
-      fetch(base + "spo-pools.json" + v).catch(() => null),
-      fetch(base + "governance-info.json" + v).catch(() => null)
+      fetch(base + "cc-votes.json" + v).catch(() => null)
     ]);
     if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
 
     const drepsData = await drepsRes.json();
     const proposalsData = await proposalsRes.json();
-    const votesData = await votesRes.json();   // flat map: "drepId__propKey" → "Yes"/"No"/"Abstain"
-
-    // Rebuild votes into the format the dashboard expects: { "drepId__propKey": "Yes", ... }
-    // The static votes.json is already in that format
+    const votesData = await votesRes.json();
     setDreps(drepsData);
     setAllDreps(drepsData);
     setProposals(proposalsData);
     setVotes(votesData);
-    // Load CC data if available
-    try {
-      if (ccMembersRes && ccMembersRes.ok) setCCMembers(await ccMembersRes.json());
-      if (ccVotesRes && ccVotesRes.ok) setCCVotes(await ccVotesRes.json());
-      if (ccRatRes && ccRatRes.ok) setCCRationales(await ccRatRes.json());
-    } catch(e) { console.warn("CC data load error:", e); }
-    // Load DRep rationales if available
-    try {
-      if (drepRatRes && drepRatRes.ok) setDrepRationales(await drepRatRes.json());
-    } catch(e) { console.warn("DRep rationales load error:", e); }
-    // Load SPO data if available
-    try {
-      if (spoVotesRes && spoVotesRes.ok) setSpoVotes(await spoVotesRes.json());
-      if (spoPoolsRes && spoPoolsRes.ok) setSpoPoolInfo(await spoPoolsRes.json());
-      if (spoVotesRes && spoVotesRes.ok) spoLoadedRef.current = true;
-    } catch(e) { console.warn("SPO data load error:", e); }
-    // Load governance info if available
     try {
       if (govInfoRes && govInfoRes.ok) setGovInfo(await govInfoRes.json());
     } catch(e) { console.warn("Governance info load error:", e); }
-    // Load stake history if available
     try {
-      if (histRes && histRes.ok) setStakeHistory(await histRes.json());
-    } catch(e) { console.warn("History data load error:", e); }
-    // Load AI analysis data (lazy — non-blocking)
+      if (ccMembersRes && ccMembersRes.ok) setCCMembers(await ccMembersRes.json());
+      if (ccVotesRes && ccVotesRes.ok) setCCVotes(await ccVotesRes.json());
+    } catch(e) { console.warn("CC data load error:", e); }
+
+    // ── Phase 2: Deferred data (non-blocking, loads in background) ──
+    // Heavy files: drep-rationales(7.5MB), simulator(1.3MB), spo-pools(1.3MB), cc-rationales(1.2MB)
+    Promise.all([
+      fetch(base + "drep-rationales.json" + v).catch(() => null),
+      fetch(base + "spo-votes.json" + v).catch(() => null),
+      fetch(base + "spo-pools.json" + v).catch(() => null),
+      fetch(base + "cc-rationales.json" + v).catch(() => null),
+      fetch(base + "simulator.json" + v).catch(() => null),
+      fetch(base + "drep-history.json" + v).catch(() => null)
+    ]).then(async ([drepRatRes, spoVotesRes, spoPoolsRes, ccRatRes, simRes, histRes]) => {
+      try { if (drepRatRes && drepRatRes.ok) setDrepRationales(await drepRatRes.json()); } catch(e) { console.warn("DRep rationales load error:", e); }
+      try {
+        if (spoVotesRes && spoVotesRes.ok) { setSpoVotes(await spoVotesRes.json()); spoLoadedRef.current = true; }
+        if (spoPoolsRes && spoPoolsRes.ok) setSpoPoolInfo(await spoPoolsRes.json());
+      } catch(e) { console.warn("SPO data load error:", e); }
+      try { if (ccRatRes && ccRatRes.ok) setCCRationales(await ccRatRes.json()); } catch(e) { console.warn("CC rationales load error:", e); }
+      try {
+        if (simRes && simRes.ok) {
+          const simData = await simRes.json();
+          // Pre-populate vote data for simulator
+          const vd = simData.drepVoteCounts || {};
+          const maxVotes = simData.maxVotes || 0;
+          const flatExpirations = simData.proposalExpirations || {};
+          const drepVotedProposals = {};
+          if (simData.drepVotedProposals) {
+            Object.entries(simData.drepVotedProposals).forEach(([id, arr]) => {
+              drepVotedProposals[id] = new Set(arr);
+            });
+          }
+          window.__simVoteRaw = { proposalExpirations: flatExpirations, drepVotedProposals };
+          setVoteData(vd);
+          setTotalActions(maxVotes);
+          voteDataLoadedRef.current = true;
+        }
+      } catch(e) { console.warn("Simulator load error:", e); }
+      try { if (histRes && histRes.ok) setStakeHistory(await histRes.json()); } catch(e) { console.warn("History load error:", e); }
+    });
+    // ── Phase 3: AI analysis data (also non-blocking) ──
     Promise.all([
       fetch(base + "ai-drep-tendencies.json" + v).catch(() => null),
       fetch(base + "ai-proposal-reasons.json" + v).catch(() => null),
@@ -4442,26 +4455,7 @@ function App() {
     });
     gaMapRef.current = gaMap;
 
-    // Pre-load simulator data if available
-    if (simRes.ok) {
-      try {
-        const simData = await simRes.json();
-        // Pre-populate vote data for simulator
-        const vd = simData.drepVoteCounts || {};
-        const maxVotes = simData.maxVotes || 0;
-        const flatExpirations = simData.proposalExpirations || {};
-        const drepVotedProposals = {};
-        if (simData.drepVotedProposals) {
-          Object.entries(simData.drepVotedProposals).forEach(([id, arr]) => {
-            drepVotedProposals[id] = new Set(arr);
-          });
-        }
-        window.__simVoteRaw = { proposalExpirations: flatExpirations, drepVotedProposals };
-        setVoteData(vd);
-        setTotalActions(maxVotes);
-        voteDataLoadedRef.current = true;
-      } catch(e) { console.warn("Simulator data parse error:", e); }
-    }
+    // Simulator data is loaded in Phase 2 (deferred) — no blocking here
 
     // Show data freshness
     const age = Math.round((Date.now() - new Date(meta.updated_at).getTime()) / 60000);
