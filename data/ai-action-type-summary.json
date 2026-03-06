@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-06T13:21:35.073Z",
+  "generatedAt": "2026-03-06T15:00:04.665Z",
   "actionTypes": {
     "InfoAction": {
       "count": 30,
-      "summary_en": "This InfoAction establishes a Net Change Limit (NCL) of 300 million ADA for the Cardano Treasury across epochs 613-713 (approximately 16 months). The proposal reflects fiscal discipline by setting spending limits below previous year inflows, with support from those favoring conservative treasury management during uncertain market conditions, though opposition exists from those believing the limit remains too high or that individual proposal evaluation matters more than aggregate caps.",
-      "summary_ja": "このInfoActionは、エポック613～713期間（約16ヶ月間）のCardanoトレジャリーの純変化限度額（NCL）を3億ADAに設定するものです。前年度の流入額以下に支出限度を設定することで財政規律を反映しており、市場の不確実性の中での保守的なトレジャリー管理を支持する者から支持を受けていますが、この限度額がなお高すぎると考える者や、集計上限よりも個別提案の評価が重要だと考える者からの反対も存在します。",
+      "summary_en": "InfoActions regarding Net Change Limits (NCL) for Cardano Treasury management receive mixed voting with majority support. These proposals establish spending ceilings for multi-epoch periods, with Yes voters emphasizing fiscal responsibility and alignment with treasury inflows, while No voters argue the limits are either too high (enabling excessive spending) or too restrictive (limiting ecosystem development). Key considerations include ADA price volatility, treasury sustainability, and the need for transparent budget accountability.",
+      "summary_ja": "Cardanoトレジャリー管理のための純変更限度額(NCL)に関するInfoActionsは、賛成票が多数派となる混合的な投票を受けています。これらの提案は複数エポック期間の支出上限を設定するもので、賛成票投票者は財政責任とトレジャリー流入との一致を強調し、反対票投票者は限度額が高すぎるか(過度な支出を可能にする)、または制限的すぎるか(エコシステム開発を制限する)と主張しています。主な検討事項には、ADA価格変動性、トレジャリーの持続可能性、および透明な予算説明責任の必要性が含まれます。",
       "typicalReasonsYes_en": [
-        "Conservative fiscal discipline aligned with actual treasury inflows and current market conditions",
-        "Prevents excessive spending while preserving ability to fund critical infrastructure and ecosystem development",
-        "Reasonable first step for maturing governance that can be adjusted in future governance actions",
-        "More prudent than higher 350M ADA alternative given ADA price volatility and lower reserve levels"
+        "Conservative fiscal discipline aligned with actual treasury inflows and current market conditions (lower ADA price)",
+        "Practical governance framework that enables ecosystem development while preventing treasury depletion",
+        "Reasonable first step toward sustainable treasury management with flexibility for future adjustments through governance",
+        "Prudent approach that signals fiscal responsibility and avoids excessive spending"
       ],
       "typicalReasonsYes_ja": [
-        "実際のトレジャリー流入額と現在の市場状況に整合した保守的な財政規律",
-        "過度な支出を防ぎながら、重要なインフラとエコシステム開発資金確保の能力を維持",
-        "成熟するガバナンスの合理的な第一歩であり、将来のガバナンスアクションで調整可能",
-        "ADA価格変動と準備金水準低下を考慮した、より慎重な350M ADA代替案より優れた選択"
+        "実際のトレジャリー流入および現在の市場状況(ADA価格の低下)に一致した保守的な財政規律",
+        "トレジャリーの枯渇を防ぎながらエコシステム開発を可能にする実用的なガバナンス枠組み",
+        "ガバナンスを通じた将来の調整の柔軟性を持つ持続可能なトレジャリー管理への合理的な最初のステップ",
+        "財政責任を示し、過度な支出を回避する慎重なアプローチ"
       ],
       "typicalReasonsNo_en": [
-        "300M ADA limit is still excessive; stricter 200-250M ADA cap needed to grow treasury reserves",
-        "Prior year 2025 budget outcomes lack transparent analysis and accountability before approving 2026 spending",
-        "Individual proposals should be evaluated on merit, not constrained by aggregate budget ceiling",
-        "Current governance maturity insufficient; mechanisms for measuring effectiveness and ROI remain underdeveloped"
+        "Proposed limit is still too high and treats NCL as a spending target rather than a guardrail, leading to treasury depletion",
+        "Lack of transparent reporting and accountability for prior year spending before approving future budgets",
+        "Insufficient flexibility to fund quality proposals; higher limits needed to avoid rejecting valuable ecosystem initiatives",
+        "Price-based reasoning is flawed; NCL should not be adjusted based on short-term ADA price volatility"
       ],
       "typicalReasonsNo_ja": [
-        "300M ADAの限度額はなお過度であり、トレジャリー準備金を増やすためには200～250M ADAの厳密な上限が必要",
-        "2026年の支出承認��に、2025年度予算成果の透明性のある分析と説明責任が欠如している",
-        "個別提案はメリットに基づいて評価されるべきであり、集計予算上限に制約されるべきではない",
-        "現在のガバナンス成熟度は不十分であり、有効性とROI測定メカニズムはまだ発展途上"
+        "提案された限度額は依然として高すぎ、NCLをガードレールではなく支出目標として扱い、トレジャリー枯渇につながる",
+        "将来の予算を承認する前に、前年度の支出に関する透明な報告と説明責任の欠如",
+        "質の高い提案に資金を供給するための柔軟性が不十分で、価値あるエコシステムイニシアチブを拒否しないためにより高い限度額が必要",
+        "価格ベースの理由付けに欠陥があり、NCLは短期的なADA価格変動に基づいて調整されるべきではない"
       ]
     },
     "TreasuryWithdrawals": {

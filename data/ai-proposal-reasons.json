@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-03-06T13:21:34.408Z",
+  "generatedAt": "2026-03-06T14:59:54.905Z",
   "proposals": {
     "e9693ed6b6465b2b46daaf641486a12b4b2946081634b5967b9d98897b0598fa#0": {
       "title": "Cardano Budget Process Framework (facilitated by Intersect)",
       "type": "InfoAction",
       "submittedEpoch": 0,
       "stats": {
-        "votedWithRationale": 1,
+        "votedWithRationale": 2,
         "votedWithoutRationale": 3,
-        "notVoted": 1589,
-        "notVotedTotalStake": "5831278761149480",
+        "notVoted": 1588,
+        "notVotedTotalStake": "5794075000449036",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -53,11 +53,11 @@
           }
         ],
         "yesBreakdown": {
-          "total": 4,
-          "withRationale": 1,
+          "total": 5,
+          "withRationale": 2,
           "withoutRationale": 3,
-          "totalStake": "26679732608009",
-          "withRationaleStake": "638109123827",
+          "totalStake": "63883493308453",
+          "withRationaleStake": "37841869824271",
           "withoutRationaleStake": "26041623484182",
           "withoutRationaleDreps": [
             {
@@ -95,13 +95,24 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Support for structured and transparent treasury management process",
-          "reason_ja": "構造化された透明性のある財務管理プロセスへの支持",
+          "reason_en": "Support for structured and transparent Treasury budget process",
+          "reason_ja": "Treasury予算プロセスの構造化と透明性の向上を支持",
           "totalStake": "638109123827",
           "dreps": [
             {
               "name": "MREDGARCROSS",
               "stake": "638109123827"
+            }
+          ]
+        },
+        {
+          "reason_en": "Framework appears reasonable and practical for Treasury management",
+          "reason_ja": "Treasury管理のための実用的で妥当なフレームワーク",
+          "totalStake": "37203760700444",
+          "dreps": [
+            {
+              "name": "Big Lazy Cat",
+              "stake": "37203760700444"
             }
           ]
         }
