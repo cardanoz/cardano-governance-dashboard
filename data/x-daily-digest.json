@@ -1,5 +1,170 @@
 [
   {
+    "date": "2026-03-20",
+    "highlights": [
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "ADA Payment Integration Live at 137 SPAR Supermarkets in Switzerland",
+        "title_ja": "スイスの137店舗のSPARスーパーでADA支払いが開始",
+        "summary_en": "Cardano Foundation partnered with DFX Swiss and BrickTowers to enable real-time, low-cost ADA payments at 137 SPAR locations across Switzerland, marking a significant milestone in mainstream retail cryptocurrency adoption and proving blockchain utility in everyday commerce.",
+        "summary_ja": "カルダノ財団がDFX SwissおよびBrickTowersと提携し、スイス全域の137店舗で実時間、低コストのADA支払いを実現。日常商取引におけるブロックチェーン利用の実証となる主流小売業での暗号資産採用の重要なマイルストーン。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Cardano_CF"
+        ]
+      },
+      {
+        "category": "constitution_budget",
+        "title_en": "Cardano 2026 Budget Process Framework Submitted for Community Approval",
+        "title_ja": "カルダノ2026年予算プロセスフレームワークが承認待ち",
+        "summary_en": "Intersect submitted a refreshed budgeting framework for Cardano's 2026 budget cycle as an Info Action, incorporating lessons from 2025 and improved ecosystem strategy. The framework received broad community support and is ready for DRep voting.",
+        "summary_ja": "Intersectがカルダノ2026年度予算サイクル向けに改訂予算フレームワークをInfo Actionとして提出。2025年の教訓とエコシステム戦略の進展を反映し、広範なコミュニティサポートを獲得、DRep投票準備完了。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@IntersectMBO",
+          "@NicolasC3rny",
+          "@JBriggsLondon"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Testnet Planned for June 2026 - Addressing Crypto Trilemma",
+        "title_ja": "Ouroboros Leios テストネットが2026年6月予定 - 暗号資産トリレンマへの対応",
+        "summary_en": "Cardano leadership announced Ouroboros Leios is scheduled for testnet in June 2026, claiming it will solve the blockchain trilemma by achieving decentralization, security, and scalability simultaneously. This represents major progress toward addressing fundamental protocol limitations.",
+        "summary_ja": "カルダノ指導部がOuroboros Leiosを2026年6月のテストネット予定と発表。分散性、セキュリティ、スケ��ラビリティを同時実現することでブロックチェーンのトリレンマ解決を主張。基本的なプロトコル制限の克服へ向けた重要な進展。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@RickMcCracken",
+          "@theunhashed"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Multiple Infrastructure Releases: Hydra 1.3.0, Dolos 1.0.0-RC12, and Blockfrost Updates",
+        "title_ja": "複数のインフラリリース：Hydra 1.3.0、Dolos 1.0.0-RC12など",
+        "summary_en": "Key infrastructure components including Hydra 1.3.0, Dolos 1.0.0-rc.12, and Blockfrost backend updates were released, providing enhanced tools for developers building on Cardano with improved performance and stability.",
+        "summary_ja": "Hydra 1.3.0、Dolos 1.0.0-rc.12、Blockfrostバックエンドアップデートを含む主要インフラコンポーネントがリリース。カルダノ開発者向けの性能・安定性向上ツール提供。",
+        "importance": 3,
+        "audience": [
+          "Builder"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "CIP-113 and New dRep Requirement Removal Proposals Advance Protocol Development",
+        "title_ja": "CIP-113とdRep要件廃止提案がプロトコル開発を進展",
+        "summary_en": "Cardano Foundation CEO announced CIP-113 will provide RWA and interoperability capabilities, while new CIPs proposing removal of dRep requirements for withdrawing staking rewards were introduced, representing governance modernization efforts.",
+        "summary_ja": "カルダノ財団CEOがCIP-113はRWAおよび相互運用性機能を提供すると発表。ステーキング報酬引き出しのdRep要件廃止を提案する新CIPが提出され、ガバナンス近代化の取り組みが進展。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@Cerkoryn",
+          "@angrycryptoshow"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Builder Fest v3 Brings Cardano Ecosystem Together in Buenos Aires, March 24-25",
+        "title_ja": "Builder Fest v3 が3月24-25日ブエノスアイレスでカルダノエコシステムを結集",
+        "summary_en": "IOG and Cardano Foundation jointly support Builder Fest v3 in Buenos Aires (March 24-25), bringing together developers and the Midnight Network team for a 2-day gathering focused on shipping and ecosystem collaboration.",
+        "summary_ja": "IOGとカルダノ財団がブエノスアイレスのBuilder Fest v3をサポート（3月24-25日）。開発者とMidnight Networkチームを集め、実装と生態系コラボレーション重視の2日間イベント開催。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@IOGroup",
+          "@Cardano_CF",
+          "@adamKDean"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "BeginWallet Launches Frictionless Crypto Payment Links on Cardano",
+        "title_ja": "BeginWalletがカルダノで摩擦のない暗号支払いリンクを開始",
+        "summary_en": "BeginWallet introduced simple crypto payment links supporting QR codes and deep links, launching first on Cardano with plans for additional chains. This addresses adoption barriers by enabling frictionless payment experiences.",
+        "summary_ja": "BeginWalletがQRコードおよびディープリンク対応のシンプル暗号支払いリンクを導入。カルダノで最初にローンチ、追加チェーン予定。支払い体験の摩擦減少による採用促進。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "CIP-0177 Proposes Ouroboros Tachys for Partner Chain Integration",
+        "title_ja": "CIP-0177がパートナーチェーン統合向けOuroboros Tachysを提案",
+        "summary_en": "CIP-0177 proposes Ouroboros Tachys to enable faster partner chains while maintaining ecosystem compatibility. Contributors suggest leveraging L1 stake distribution for partner chain fee distribution directly to delegators.",
+        "summary_ja": "CIP-0177はエコシステム互換性を維持しつつ高速パートナーチェーンを実現するOuroboros Tachysを提案。L1ステーク分布を活用したパートナーチェーン手数料の委任者直接配分を提唱。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@hal_eight",
+          "@therealdisasm"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "FluidTokens and Smart Accounts Simplify Cardano DeFi Access",
+        "title_ja": "FluidTokensとスマートアカウントがカルダノDeFiアクセスを簡素化",
+        "summary_en": "FluidTokens introduced Smart Accounts enabling users to migrate USDC, swap tokens, and access DeFi without traditional Cardano wallets. This removes barriers to mass adoption by making DeFi accessible through a single transaction.",
+        "summary_ja": "FluidTokensがスマートアカウントを導入。従来のカルダノウォレットなし���USDC移行、トークンスワップ、DeFiアクセスが可能に。単一トランザクションでの大量採用へのバリア除去。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano_Power",
+          "@DanogoFinance"
+        ]
+      }
+    ],
+    "tweetCount": 98,
+    "generatedAt": "2026-03-06T09:54:39.333Z",
+    "apiUsage": {
+      "input_tokens": 7281,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2545,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
     "date": "2025-03-08",
     "highlights": [
       {
