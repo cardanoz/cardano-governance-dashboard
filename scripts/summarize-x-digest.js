@@ -107,31 +107,80 @@ function callClaude(systemPrompt, userMessage, maxTokens = 2048) {
   });
 }
 
+// ─── Load previous highlights for dedup ─────────────────────────────────────
+
+function loadPreviousHighlights() {
+  const dailyPath = path.join(DATA_DIR, "x-daily-digest.json");
+  try {
+    const existing = JSON.parse(fs.readFileSync(dailyPath, "utf-8"));
+    const digests = Array.isArray(existing) ? existing : [existing];
+    // Collect title_en from last 3 digests for dedup
+    const titles = [];
+    for (const d of digests.slice(0, 3)) {
+      for (const h of d.highlights || []) {
+        if (h.title_en) titles.push(h.title_en);
+      }
+    }
+    return titles;
+  } catch (_) {
+    return [];
+  }
+}
+
+// ─── Load last summarized tweet IDs ─────────────────────────────────────────
+
+function loadSummarizedIds() {
+  const idPath = path.join(DATA_DIR, "x-summarized-ids.json");
+  try {
+    return new Set(JSON.parse(fs.readFileSync(idPath, "utf-8")));
+  } catch (_) {
+    return new Set();
+  }
+}
+
+function saveSummarizedIds(ids) {
+  const idPath = path.join(DATA_DIR, "x-summarized-ids.json");
+  // Keep only last 2000 IDs to prevent unbounded growth
+  const arr = [...ids].slice(-2000);
+  fs.writeFileSync(idPath, JSON.stringify(arr));
+}
+
 // ─── Build daily digest ─────────────────────────────────────────────────────
 
 async function buildDailyDigest(tweets) {
   console.log("\n=== Building Daily Digest ===");
 
+  // Load already-summarized tweet IDs
+  const summarizedIds = loadSummarizedIds();
+  console.log(`  Previously summarized IDs: ${summarizedIds.size}`);
+
   // Filter to last 24h tweets
   const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-  const recent = tweets.filter((t) => new Date(t.createdAt || 0).getTime() > oneDayAgo);
+  let recent = tweets.filter((t) => new Date(t.createdAt || 0).getTime() > oneDayAgo);
 
   if (recent.length === 0) {
     console.log("  No tweets in last 24h, using last 48h...");
     const twoDaysAgo = Date.now() - 48 * 60 * 60 * 1000;
-    recent.push(...tweets.filter((t) => new Date(t.createdAt || 0).getTime() > twoDaysAgo));
+    recent = tweets.filter((t) => new Date(t.createdAt || 0).getTime() > twoDaysAgo);
   }
 
-  console.log(`  Tweets to summarize: ${recent.length}`);
+  console.log(`  Tweets in time window: ${recent.length}`);
 
-  if (recent.length === 0) {
-    console.log("  No tweets to summarize");
+  // Remove already-summarized tweets
+  const newTweets = recent.filter((t) => !summarizedIds.has(t.id));
+  console.log(`  New (unsummarized) tweets: ${newTweets.length}`);
+
+  if (newTweets.length === 0) {
+    console.log("  No new tweets to summarize — skipping");
     return null;
   }
 
+  // Sort by engagement (likes + retweets) to prioritize impactful tweets
+  newTweets.sort((a, b) => ((b.likes || 0) + (b.retweets || 0)) - ((a.likes || 0) + (a.retweets || 0)));
+
   // Group by category
   const grouped = {};
-  for (const t of recent) {
+  for (const t of newTweets) {
     const cat = t.category || "other";
     if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push(t);
@@ -142,10 +191,16 @@ async function buildDailyDigest(tweets) {
   for (const [cat, catTweets] of Object.entries(grouped)) {
     const label = CATEGORIES[cat]?.en || cat;
     tweetText += `\n## ${label}\n`;
-    for (const t of catTweets.slice(0, 20)) {
-      // Limit per category
-      tweetText += `- @${t.author}: ${t.text.slice(0, 280)} [${t.likes || 0} likes]\n`;
+    for (const t of catTweets.slice(0, 15)) {
+      tweetText += `- @${t.author}: ${t.text.slice(0, 280)} [${t.likes || 0}♥ ${t.retweets || 0}RT]\n`;
     }
+  }
+
+  // Load previous highlights for dedup instruction
+  const prevTitles = loadPreviousHighlights();
+  let dedupInstruction = "";
+  if (prevTitles.length > 0) {
+    dedupInstruction = `\n\nIMPORTANT — AVOID REPEATING these topics from previous digests (find NEW angles or skip if no new development):\n${prevTitles.map((t) => `- "${t}"`).join("\n")}`;
   }
 
   const systemPrompt = `You are a Cardano governance analyst creating a daily digest for DReps, CC members, SPOs, and ADA holders.
@@ -165,10 +220,11 @@ Output ONLY valid JSON (no markdown, no explanation). The JSON should have this 
     }
   ]
 }
-Select the TOP 5-10 most important items across all categories. Rate importance 1-5 (5=critical).
-Category keys: governance_action, constitution_budget, protocol_parameter, network_ops, security, ecosystem_adoption, dev_tools, institutional, key_person, governance_tool, spo`;
+Select the TOP 5-10 most important NEW items across all categories. Rate importance 1-5 (5=critical).
+Focus on what is NEW or CHANGED today. Do NOT repeat topics that were already covered in previous digests unless there is a significant new development.
+Category keys: governance_action, constitution_budget, protocol_parameter, network_ops, security, ecosystem_adoption, dev_tools, institutional, key_person, governance_tool, spo${dedupInstruction}`;
 
-  const userMsg = `Analyze these Cardano-related tweets from the last 24 hours and create a daily digest:\n${tweetText}`;
+  const userMsg = `Analyze these NEW Cardano-related tweets (not previously summarized) and create today's daily digest:\n${tweetText}`;
 
   try {
     const { text, usage } = await callClaude(systemPrompt, userMsg, 3000);
@@ -182,9 +238,16 @@ Category keys: governance_action, constitution_budget, protocol_parameter, netwo
 
     const digest = JSON.parse(jsonStr);
     digest.date = digest.date || new Date().toISOString().split("T")[0];
-    digest.tweetCount = recent.length;
+    digest.tweetCount = newTweets.length;
     digest.generatedAt = new Date().toISOString();
     digest.apiUsage = usage;
+
+    // Mark these tweets as summarized
+    for (const t of newTweets) {
+      if (t.id) summarizedIds.add(t.id);
+    }
+    saveSummarizedIds(summarizedIds);
+    console.log(`  Marked ${newTweets.length} tweets as summarized (total tracked: ${summarizedIds.size})`);
 
     return digest;
   } catch (err) {
