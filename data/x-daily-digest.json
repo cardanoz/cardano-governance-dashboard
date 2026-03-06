@@ -1,190 +1,147 @@
 [
   {
-    "date": "2026-03-06",
+    "date": "2025-01-16",
     "highlights": [
       {
-        "category": "ecosystem_adoption",
-        "title_en": "Cardano ADA Now Accepted at 137 SPAR Supermarkets in Switzerland",
-        "title_ja": "スイスのSPAR137店舗でADA決済が利用可能に",
-        "summary_en": "Cardano Foundation partnered with DFX Swiss and Brick Towers to enable ADA payments at 137 SPAR supermarket locations across Switzerland through Open Crypto Pay infrastructure. This marks a significant milestone for real-world retail adoption of Cardano.",
-        "summary_ja": "Cardano FoundationがDFX SwissおよびBrick Towersと提携し、Open Crypto Pay インフラストラクチャを通じてスイス全域の137のSPAR店舗でADA決済を実現。日常生活でのCardano利用の大きな前進。",
+        "category": "institutional",
+        "title_en": "Cardano Integrated into Archax's Regulated Tokenization Engine",
+        "title_ja": "Archaxのトークン化エンジンへのCardano統合完了",
+        "summary_en": "Cardano is now integrated into Archax Exchange's tokenization platform, enabling regulated RWA issuance directly on Cardano. MembersCap's Fund I tokens (MCM) now operate within Archax's regulated infrastructure, marking a major milestone for institutional adoption.",
+        "summary_ja": "Archaxのトークン化エンジンへCardanoが統合され、規制枠内でのRWA発行が可能に。MembersCap Fund Iトークン（MCM）がArchaxの規制インフラで運用開始。機関投資家向けインフラの重要なマイルストーン。",
         "importance": 5,
         "audience": [
           "Holder",
           "Builder",
-          "Ecosystem"
+          "Institutional",
+          "CC"
         ],
         "sources": [
-          "@MinswapIntern",
-          "@BSCNews",
-          "@TapTools",
-          "@Cardano_CF"
-        ]
-      },
-      {
-        "category": "protocol_parameter",
-        "title_en": "Leios Testnet Planned for June 2026 - Major Scalability Breakthrough",
-        "title_ja": "Leiosテストネットが2026年6月に予定 - スケーラビリティの大きなブレークスルー",
-        "summary_en": "SPO call confirmed potential Leios testnet launch for June 2026, addressing the blockchain trilemma of decentralization, security, and scalability. Charles Hoskinson indicates this represents solving crypto's hardest problem.",
-        "summary_ja": "SPO呼び出しでLeiosテストネットの2026年6月予定を確認。ブロックチェーンの三大課題（分散性・セキュリティ・スケーラビリティ）を同時に解決する見込み。",
-        "importance": 5,
-        "audience": [
-          "DRep",
-          "SPO",
-          "Builder",
-          "Holder"
-        ],
-        "sources": [
-          "@RickMcCracken",
-          "@theunhashed"
-        ]
-      },
-      {
-        "category": "constitution_budget",
-        "title_en": "Cardano 2026 Budget Process Framework Proposed - Major Governance Improvement",
-        "title_ja": "2025年の教訓を反映した2026年予算プロセスフレームワークが提案",
-        "summary_en": "Intersect submitted a refreshed framework for Cardano's 2026 budget cycle with standardized proposals, strategic Vision 2030 alignment, and clearer milestone-based funding. An Info Action is now live for community review and DRep voting.",
-        "summary_ja": "IntersectがCardano 2026年度予算サイクルの改定フレームワークを提案。標準化された提案、Vision 2030との整合、明確なマイルストーンベースの資金配分を含む。Info Actionが投票用に公開中。",
-        "importance": 4,
-        "audience": [
-          "DRep",
-          "CC",
-          "Holder"
-        ],
-        "sources": [
-          "@IntersectMBO",
-          "@JBriggsLondon",
-          "@radioastro"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "Cardano TVL Surpasses 500M ADA - USDC Growth Driving Expansion",
-        "title_ja": "CardanoのTVLが5億ADAを突破 - USDCの成長が推進力",
-        "summary_en": "Cardano total value locked has exceeded 500 million ADA, driven by rapid growth of USDC on the network. This demonstrates growing DeFi liquidity and stablecoin adoption on Cardano.",
-        "summary_ja": "CardanoのTVLが5億ADAを突破。ネットワーク上のUSDC成長が主な推進力。DeFi流動性とステーブルコイン採用の拡大を示唆。",
-        "importance": 4,
-        "audience": [
-          "Holder",
-          "Builder",
-          "Ecosystem"
-        ],
-        "sources": [
-          "@MinswapIntern",
-          "@TapTools"
-        ]
-      },
-      {
-        "category": "protocol_parameter",
-        "title_en": "CIP-113 Enables RWAs and Advanced Interoperability - Technology Stack Maturation",
-        "title_ja": "CIP-113がRWAと高度な相互運用性を実現 - 技術スタックの成熟",
-        "summary_en": "Cardano Foundation CEO Frederik Gregaard announced CIP-113 provides capabilities for RWAs and other applications, marking technology stack maturity. Focus areas include TradFi integration and food security applications.",
-        "summary_ja": "Cardano Foundation CEOがCIP-113はRWAおよび他の用途に能力を提供することを発表。技術スタックとインターオペラビリティスタックが成熟段階に。TradFi・食糧安全保障などに対応。",
-        "importance": 4,
-        "audience": [
-          "Builder",
-          "DRep",
-          "Holder"
-        ],
-        "sources": [
-          "@angrycryptoshow",
           "@Cardano_CF"
         ]
       },
       {
         "category": "ecosystem_adoption",
-        "title_en": "World Mobile Team Launches Network Builder Affiliate Program and AirNode Platform",
-        "title_ja": "World Mobile TeamがNetwork Builder Affiliate ProgramとAirNode Platformを公開",
-        "summary_en": "World Mobile activated phone plans, Network Builder affiliate program, and new AirNode Platform. Network Builder Auction Batch 4 opens March 11, entering the next phase of decentralized telecom.",
-        "summary_ja": "World MobileがPhone Plans、Network Builder Affiliate Program、新AirNode Platformを公開。3月11日にNetwork Builder Auction Batch 4がオープン。分散型通信インフラの次段階へ。",
+        "title_en": "Cardano Foundation Plans Eight-Figure ADA Injection for Stablecoin Liquidity by End of March",
+        "title_ja": "Cardano財団が3月末までにステーブルコイン流動性向上のため8桁のADAを注入予定",
+        "summary_en": "The Cardano Foundation is anticipated to inject an eight-figure amount of ADA into liquidity pools to accelerate growth of Cardano-based stablecoins by March. This represents a major initiative to strengthen the stablecoin ecosystem infrastructure.",
+        "summary_ja": "Cardano財団が3月末までに8桁のADAをステーブルコイン流動性に投入し、生態系の加速を計画。ステーブルコイン基盤の強化を目指す重要なイニシアティブ。",
         "importance": 4,
         "audience": [
+          "Holder",
           "Builder",
-          "Holder",
-          "Ecosystem"
-        ],
-        "sources": [
-          "@WorldMobileTeam"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "Midnight Network Token NIGHT Surpasses 52,000 Unique Holders",
-        "title_ja": "Midnight NetworkトークンNIGHTが52,000人のユニークホルダーを突破",
-        "summary_en": "Midnight's NIGHT token has exceeded 52,000 unique holders on Cardano according to cexplorer, demonstrating growing adoption of Cardano's privacy-focused smart contract platform.",
-        "summary_ja": "MidnightのNIGHTトークンがCardano上で52,000人のユニークホルダーを突破。プライバシー重視のスマートコントラクトプラットフォームの採用拡大を示唆。",
-        "importance": 3,
-        "audience": [
-          "Holder",
-          "Builder"
+          "DRep"
         ],
         "sources": [
           "@MinswapIntern"
         ]
       },
       {
-        "category": "institutional",
-        "title_en": "Charles Hoskinson on Crypto Bill: Bad Legislation Worse Than No Regulation",
-        "title_ja": "Charles Hoskinsonが指摘：悪い暗号資産法は規制なしより悪い",
-        "summary_en": "Charles Hoskinson stated that a bad crypto bill is worse than no bill, emphasizing principles-based approach without making all cryptos securities by default. Legacy coins like ADA likely to be grandfathered in.",
-        "summary_ja": "Charles Hoskinsonは悪い暗号資産法が規制なしより悪いと主張。新規プロジェクトが有価証券として分類されると流動性危機に直面。ADAなどの既存コインはグランドファーザーされる可能性。",
-        "importance": 4,
+        "category": "governance_action",
+        "title_en": "Critical DRep Concentration Concern: CR10 Exceeds 48% Threshold",
+        "title_ja": "DRep集中度の危機：CR10が48%を超過",
+        "summary_en": "Analysis reveals that the top 10 DReps control over 48% of voting power, creating governance risks including vulnerability to attacks, power entrenchment, and barriers to new participants. This concentration threatens ecosystem diversity and democratic governance.",
+        "summary_ja": "トップ10 DRepが48%以上の投票力を掌握。ガバナンス攻撃への脆弱性、権力集中、新規参入障壁など深刻なリスクが顕在化。生態系の多様性と民主的ガバナンスを脅かす。",
+        "importance": 5,
         "audience": [
-          "Holder",
           "DRep",
-          "Builder"
+          "CC",
+          "Holder"
         ],
         "sources": [
-          "@MinswapIntern",
-          "@IOHK_Charles"
+          "@hix_coffeepool"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ballot on Inactive Stake Expiry Duration: 73 Epochs (1 Year) vs 438 Epochs (6 Years)",
+        "title_ja": "非活動ステーク有効期限の投票：73エポック（1年）vs 438エポック（6年）",
+        "summary_en": "A community ballot determines the expiry duration for dormant stake that hasn't transacted in X time. Currently ~6 billion ADA is dormant, making this parameter critical to avoid mass stake expiration. Solution is live on PreProd pending Koios infrastructure fix.",
+        "summary_ja": "1年間取引のない非活動ステークの有効期限を決定する投票が実施中。約60億ADAが影響を受ける可能性。PreProdで稼働中だがKoiosバグ修正待ち。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@Cerkoryn"
         ]
       },
       {
         "category": "dev_tools",
-        "title_en": "Strike Tokens Staked Value Exceeds 50M ADA - DeFi Growth Momentum",
-        "title_ja": "StrikeトークンのステークされたADAが5000万を突破 - DeFi成長勢い",
-        "summary_en": "Strike staking has surpassed 50 million ADA in total value locked, with over $900,000 available liquidity and 25% utilization providing optimal trading conditions on the derivatives platform.",
-        "summary_ja": "Strikeのステーク総額が5000万ADAを突破��流動性と取引条件が最適化。9000万ドル以上の利用可能流動性と25%の利用率。",
+        "title_en": "CIP-0171 Final Call: On-Chain Smart Contract Bytecode Verification Progresses to Last Check",
+        "title_ja": "CIP-0171最終検討段階へ：オンチェーン・スマートコントラクト・バイトコード検証",
+        "summary_en": "CIP-0171 for on-chain smart contract bytecode verification has progressed to Last Check phase in the CIP process. This standardization effort is critical infrastructure for smart contract auditing and security.",
+        "summary_ja": "スマートコントラクト・バイトコード検証のCIP-0171がCIPプロセスの最終検討段階へ進行。スマートコントラクト監査・セキュリティの重要インフラ。",
         "importance": 3,
         "audience": [
-          "Holder",
-          "Builder"
+          "Builder",
+          "Developer"
         ],
         "sources": [
-          "@strikeperps",
-          "@TapTools"
+          "@Ryun1_"
         ]
       },
       {
         "category": "ecosystem_adoption",
-        "title_en": "Cardano Foundation and IOG Support Buidler Fest v3 in Buenos Aires - Developer Community Gathering",
-        "title_ja": "Cardano FoundationとIOGがブエノスアイレスのBuidler Fest v3を支援",
-        "summary_en": "Buidler Fest v3 scheduled for March 24-25 in Buenos Aires features Midnight Network participation. Mint spot available as Cardano Foundation and IOG support the 2-day developer gathering.",
-        "summary_ja": "Buidler Fest v3が3月24-25日ブエノスアイレスで開催。Midnight Networkも参加。Cardano FoundationおよびIOGがサポート。",
+        "title_en": "Sokosumi AI Coworkers Platform Onboards 119 Users in Single Batch",
+        "title_ja": "Sokosumi AI協働プラットフォーム、一度に119人のユーザーをオンボード",
+        "summary_en": "Sokosumi, a Cardano-based AI coworkers platform, demonstrates significant adoption momentum by onboarding 119 users simultaneously. This signals growing real-world utilization of Cardano infrastructure for AI/productivity services.",
+        "summary_ja": "CardanoベースのSokosumi AI協働プラットフォームが119人を一括オンボード。Cardanoインフラの実用的利用が加速。",
         "importance": 3,
         "audience": [
           "Builder",
-          "DRep",
-          "SPO"
+          "Holder",
+          "Ecosystem"
         ],
         "sources": [
-          "@Cardano_CF",
-          "@IOGroup",
-          "@adamKDean"
+          "@Padierfind"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "DRep UI/UX Usability Gap: Governance Interface Falls Behind Staking Standards",
+        "title_ja": "DRep UI/UX問題：ガバナンスUIがステーキング水準に遅れ",
+        "summary_en": "SPO feedback highlights critical DRep governance UI shortcomings compared to staking interfaces: DReps are not searchable by name/ID, requiring users to find exact match IDs from third-party sources. This UX friction impedes democratic participation.",
+        "summary_ja": "DRepガバナンスUIがステーキングUIの水準に達していない。DRep検索が不便で、ユーザーが外部ソースからIDを探す必要。民主的参加を阻害する。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@HephyPool"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Buidler Fest v3 Buenos Aires (March 24): Midnight Network Joins IOG-Backed Developer Gathering",
+        "title_ja": "Buidler Fest v3ブエノスアイレス（3月24日）：Midnight Networkが参加",
+        "summary_en": "Buidler Fest v3 returns to Buenos Aires on March 24 with Midnight Network joining the developer gathering, signaling IOG backing and continued ecosystem momentum from Latin America. This convergence demonstrates the multi-project nature of Cardano growth.",
+        "summary_ja": "Buidler Fest v3がブエノスアイレスで3月24日開催。Midnight NetworkとIOGが参加。ラテンアメリカからのエコシステム成長が加速。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Cardano_Power"
         ]
       }
     ],
-    "tweetCount": 481,
-    "generatedAt": "2026-03-06T11:52:57.347Z",
+    "tweetCount": 28,
+    "generatedAt": "2026-03-06T12:55:13.693Z",
     "apiUsage": {
-      "input_tokens": 10076,
+      "input_tokens": 3029,
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
       "cache_creation": {
         "ephemeral_5m_input_tokens": 0,
         "ephemeral_1h_input_tokens": 0
       },
-      "output_tokens": 2778,
+      "output_tokens": 2120,
       "service_tier": "standard",
       "inference_geo": "not_available"
     }

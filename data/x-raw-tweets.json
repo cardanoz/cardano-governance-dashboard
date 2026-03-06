@@ -1,5 +1,348 @@
 [
   {
+    "id": "2029902397053751487",
+    "text": "cardanoが信頼されてきており嬉しい限りです。\n簡単にまとめてみました。\nhttps://t.co/Q5igDmrYdm",
+    "author": "ccsp_chapao",
+    "authorLabel": "chapao【CCSP】",
+    "createdAt": "Fri Mar 06 12:50:19 +0000 2026",
+    "tier": 2,
+    "category": "ecosystem_adoption",
+    "searchLabel": "Ecosystem & Adoption",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/ccsp_chapao/status/2029902397053751487"
+  },
+  {
+    "id": "2029899879170945391",
+    "text": "@HanShawnity you just did",
+    "author": "ADAFrog_Pool",
+    "authorLabel": "ADAFrog Pool",
+    "createdAt": "Fri Mar 06 12:40:19 +0000 2026",
+    "tier": 1,
+    "category": "spo",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/ADAFrog_Pool/status/2029899879170945391"
+  },
+  {
+    "id": "2029899798468514242",
+    "text": "The Core Issue: CR10 (Top 10 Concentration Rate) exceeds 48% This creates tangible risks:\n- Voting power controlled by a minority\n- Vulnerability to governance attacks\n- Power entrenchment and corruption risks\n- Barriers to new DRep entry\n- Exclusion of diverse voices\n\nI am sharing my Two-layered Solution:\n1️⃣ Hard Cap at 87M (1.5% limit)\n✅ Structurally limits single DRep influence\n✅ Increases cost of multi-DRep splitting\n✅ Expands opportunities for new/small DReps\n\n2️⃣ Annual 1-2 Delegation Resets\n✅ Breaks default delegation inertia\n✅ Periodically raises governance awareness\n✅ Reduces passive delegation\n✅ Encourages conscious re-selection (Combined with staking reward lock)\n✅ Reduces delegation on inactive DReps\n✅ Provides entry opportunities for new DReps\nWhile this creates some UX friction for users, requiring delegation review 1-2 times per year can increase governance engagement.\nThis would lead Cardano towards a healthier ecosystem.\n#CardanoGovernance #Target15",
+    "author": "hix_coffeepool",
+    "authorLabel": "hix Cardano-SPO |COFFE|（カルダノSPO）",
+    "createdAt": "Fri Mar 06 12:40:00 +0000 2026",
+    "tier": 2,
+    "category": "security",
+    "searchLabel": "Security & Incidents",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/hix_coffeepool/status/2029899798468514242"
+  },
+  {
+    "id": "2029899697733923092",
+    "text": "Cardanoは現在、@ArchaxExのトークン化エンジンに統合されました。これは@Cardano_CFの機関向けインフラにおける次のマイルストーンです。\n\nこれにより：\n\n- CardanoベースのMembersCap's Fund Iトークン（MCMトークン）のすべてが、Archaxの規制されたインフラ内に配置されるようになります\n\n- Archaxを通じたCardano上でのRWAのシンプルなトークン化が現実となります\n\n- Archaxを通じてCardano上で発行されるあらゆる将来のトークンが、初日から同じ規制されたフレーム��ーク内で開始されます\n\nこれはCardanoと世界をつなぐ仕事です。",
+    "author": "Tora_KBL",
+    "authorLabel": "Tora KBL",
+    "createdAt": "Fri Mar 06 12:39:36 +0000 2026",
+    "tier": 2,
+    "category": "ecosystem_adoption",
+    "searchLabel": "Ecosystem & Adoption",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/Tora_KBL/status/2029899697733923092"
+  },
+  {
+    "id": "2029899634106069357",
+    "text": "@ItsDave_ADA @CardanoAdvocate meaning we can solve the yoroi issue now, but doesn’t change that dynamic of mitigating capture",
+    "author": "ADAFrog_Pool",
+    "authorLabel": "ADAFrog Pool",
+    "createdAt": "Fri Mar 06 12:39:21 +0000 2026",
+    "tier": 1,
+    "category": "spo",
+    "likes": 1,
+    "retweets": 0,
+    "url": "https://x.com/ADAFrog_Pool/status/2029899634106069357"
+  },
+  {
+    "id": "2029899354748699054",
+    "text": "@ItsDave_ADA @CardanoAdvocate aside from introducing an even more negative UX, let’s play this one out\n\nwhen it’s time to reset delegation, who gets it faster?\n\ncommunity dRep delegation will lag dRep incumbents providing mass-usage services (eg large entities delegating mass stake on behalf of users)",
+    "author": "ADAFrog_Pool",
+    "authorLabel": "ADAFrog Pool",
+    "createdAt": "Fri Mar 06 12:38:14 +0000 2026",
+    "tier": 1,
+    "category": "spo",
+    "likes": 1,
+    "retweets": 0,
+    "url": "https://x.com/ADAFrog_Pool/status/2029899354748699054"
+  },
+  {
+    "id": "2029899237366841421",
+    "text": "Don't mind us, just onboarding 119 people at a time to our AI Coworkers on @Sokosumi. https://t.co/sxkGU4O1zT",
+    "author": "Padierfind",
+    "authorLabel": "Padierfind",
+    "createdAt": "Fri Mar 06 12:37:46 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 4,
+    "retweets": 1,
+    "url": "https://x.com/Padierfind/status/2029899237366841421"
+  },
+  {
+    "id": "2029899235282292769",
+    "text": "@GrahamsNoPlus1 @RodrigoPacini @AbirdcalledPx @earncoinpool @Star_Forge_Pool Not sure what you mean?  This doesn't really have anything to do with pool retirement.  It's for delegators who haven't made a single Tx in their wallet in X amount of time.\n\nAt some point their stake should be declared \"lost\" and no longer count for rewards/voting power.",
+    "author": "Cerkoryn",
+    "authorLabel": "Cerkoryn",
+    "createdAt": "Fri Mar 06 12:37:46 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 2,
+    "retweets": 0,
+    "url": "https://x.com/Cerkoryn/status/2029899235282292769"
+  },
+  {
+    "id": "2029898988564951290",
+    "text": "@RodrigoPacini @AbirdcalledPx @GrahamsNoPlus1 @earncoinpool @Star_Forge_Pool Primarily concerns about how much stake could be affected.\n\nIf you look at how much stake hasn't moved in a year it's about 6 billion ADA, which is a LOT of stake to expire all at once. https://t.co/ZSrMnSHJPK",
+    "author": "Cerkoryn",
+    "authorLabel": "Cerkoryn",
+    "createdAt": "Fri Mar 06 12:36:47 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 1,
+    "retweets": 0,
+    "url": "https://x.com/Cerkoryn/status/2029898988564951290"
+  },
+  {
+    "id": "2029898584712265815",
+    "text": "@RodrigoPacini @AbirdcalledPx @GrahamsNoPlus1 @earncoinpool @Star_Forge_Pool We have been ready and waiting for a couple months now.  It has been live ok PreProd on Ekklesia, but there is a breaking upstream bug in Koios that we are waiting on a fix for before we can send it live.",
+    "author": "Cerkoryn",
+    "authorLabel": "Cerkoryn",
+    "createdAt": "Fri Mar 06 12:35:10 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/Cerkoryn/status/2029898584712265815"
+  },
+  {
+    "id": "2029898540877488410",
+    "text": "EVENT SIGNAL: \nBuenos Aires — March 24. Buidler Fest gathers Cardano builders, and this time Midnight Network joins the room. IOG backing signals a community that ships, not just talks. Ecosystem momentum from Latin America continues to accelerate. #Cardano https://t.co/yhjU74KEpr",
+    "author": "Cardano_Power",
+    "authorLabel": "Cardano Power",
+    "createdAt": "Fri Mar 06 12:35:00 +0000 2026",
+    "tier": 1,
+    "category": "ecosystem_adoption",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/Cardano_Power/status/2029898540877488410"
+  },
+  {
+    "id": "2029898427853615530",
+    "text": "Final call to review for CIP-0171? | On-chain Smart Contract Bytecode Verification\n\nthis is standard behind https://t.co/2UnDNyi482 and has been progressed to Last Check in the CIP process.",
+    "author": "Ryun1_",
+    "authorLabel": "Ryun1",
+    "createdAt": "Fri Mar 06 12:34:33 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 3,
+    "retweets": 2,
+    "url": "https://x.com/Ryun1_/status/2029898427853615530"
+  },
+  {
+    "id": "2029897553026633863",
+    "text": "Hey awesome Cardano , Midnight and Apex Fusion communities \nEncryption free message incoming https://t.co/ncKGUnXD4D",
+    "author": "Cardano_Power",
+    "authorLabel": "Cardano Power",
+    "createdAt": "Fri Mar 06 12:31:04 +0000 2026",
+    "tier": 1,
+    "category": "ecosystem_adoption",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/Cardano_Power/status/2029897553026633863"
+  },
+  {
+    "id": "2029896346279215211",
+    "text": "@blinklabs_io you tell us, you're the Go experts 😏",
+    "author": "blockfrost_io",
+    "authorLabel": "Blockfrost",
+    "createdAt": "Fri Mar 06 12:26:17 +0000 2026",
+    "tier": 1,
+    "category": "dev_tools",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/blockfrost_io/status/2029896346279215211"
+  },
+  {
+    "id": "2029892446453150051",
+    "text": "Creating exciting ways to engage developers and entrepreneurs is how you build a winning chain, @MidnightNtwrk obviously understands this and are doing a great job with outreach utilizing this platform-https://t.co/WDTlhC6JB3 if you or someone you know might be interested in this please make sure to forward it to them.  Do the work and get paid the $$ its that simple (my fav kind) @midnight_jpn @LidoNation",
+    "author": "blockjock2017",
+    "authorLabel": "Blockjock",
+    "createdAt": "Fri Mar 06 12:10:47 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 2,
+    "retweets": 0,
+    "url": "https://x.com/blockjock2017/status/2029892446453150051"
+  },
+  {
+    "id": "2029892090654532051",
+    "text": "Cardano ($ADA) is now a payment option at 137 SPAR supermarkets throughout Switzerland. 🇨🇭\nThe Cardano Foundation partnered with @DFX_swiss to enable this integration.\nTransactions process in real time, bypassing any centralized exchange.",
+    "author": "alanotte23",
+    "authorLabel": "Antonio Lanotte",
+    "createdAt": "Fri Mar 06 12:09:22 +0000 2026",
+    "tier": 2,
+    "category": "ecosystem_adoption",
+    "searchLabel": "Ecosystem & Adoption",
+    "likes": 2,
+    "retweets": 0,
+    "url": "https://x.com/alanotte23/status/2029892090654532051"
+  },
+  {
+    "id": "2029891200912666979",
+    "text": "@RodrigoPacini @AbirdcalledPx @GrahamsNoPlus1 @earncoinpool @Star_Forge_Pool https://t.co/NgmXJih97C\n\nhttps://t.co/87YyrGFq3i\n\nhttps://t.co/HN49iEMc2G",
+    "author": "Cerkoryn",
+    "authorLabel": "Cerkoryn",
+    "createdAt": "Fri Mar 06 12:05:50 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 0,
+    "retweets": 0,
+    "url": "https://x.com/Cerkoryn/status/2029891200912666979"
+  },
+  {
+    "id": "2029890981739315462",
+    "text": "@RodrigoPacini @AbirdcalledPx @GrahamsNoPlus1 @earncoinpool @Star_Forge_Pool Excellent question.\n\nWe have a ballot made to ask the community what they think it should be set to initially between 73 epochs (1 year) and 438 epochs (6 years)\n\nAlso some other helpful supporting links and research we've put together to go along with it. https://t.co/k48ZXtOL52",
+    "author": "Cerkoryn",
+    "authorLabel": "Cerkoryn",
+    "createdAt": "Fri Mar 06 12:04:58 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 2,
+    "retweets": 0,
+    "url": "https://x.com/Cerkoryn/status/2029890981739315462"
+  },
+  {
+    "id": "2029890800843125088",
+    "text": "Cardano just took another step toward real-world adoption.\n\n$ADA can now be used to pay at 137 Spar supermarkets in Switzerland via DFX.\n\nMore utility, more real world use cases.\n\nAre you bullish anon? https://t.co/GaA5P7TSSp",
+    "author": "crowdtrendz",
+    "authorLabel": "CrowdTrendz",
+    "createdAt": "Fri Mar 06 12:04:15 +0000 2026",
+    "tier": 2,
+    "category": "ecosystem_adoption",
+    "searchLabel": "Ecosystem & Adoption",
+    "likes": 4,
+    "retweets": 0,
+    "url": "https://x.com/crowdtrendz/status/2029890800843125088"
+  },
+  {
+    "id": "2029890136356397363",
+    "text": "@RodrigoPacini @Cardano_CF @earncoinpool https://t.co/KsJwYeI9yc",
+    "author": "Cerkoryn",
+    "authorLabel": "Cerkoryn",
+    "createdAt": "Fri Mar 06 12:01:36 +0000 2026",
+    "tier": 1,
+    "category": "key_person",
+    "likes": 2,
+    "retweets": 0,
+    "url": "https://x.com/Cerkoryn/status/2029890136356397363"
+  },
+  {
+    "id": "2029890082233061423",
+    "text": "GitHub Weekly Development Activity:\n\n#1: 128 Cardano Node\n#2: 125 Masumi\n#3: 120 DeltaDeFi\n#4: 110 Mithril\n#5: 98 Scalus\n#6: 74 https://t.co/4FX7ktS18m\n#7: 73 Blockfrost\n#8: 68 Flux Point Studios\n#9: 56 Cardano Foundation\n#10: 52 Amaru https://t.co/ItoA8FKTrb",
+    "author": "ProofOfCardano",
+    "authorLabel": "Proof of Cardano",
+    "createdAt": "Fri Mar 06 12:01:23 +0000 2026",
+    "tier": 2,
+    "category": "network_ops",
+    "searchLabel": "Network Operations",
+    "likes": 1,
+    "retweets": 1,
+    "url": "https://x.com/ProofOfCardano/status/2029890082233061423"
+  },
+  {
+    "id": "2029889935692697988",
+    "text": "@CardanoLeo 嘻嘻",
+    "author": "strikeperps",
+    "authorLabel": "Strike Perps",
+    "createdAt": "Fri Mar 06 12:00:48 +0000 2026",
+    "tier": 1,
+    "category": "ecosystem_adoption",
+    "likes": 1,
+    "retweets": 0,
+    "url": "https://x.com/strikeperps/status/2029889935692697988"
+  },
+  {
+    "id": "2029889775562563834",
+    "text": "インターセクトが「2026年予算フレームワーク」のInfoアクションを提出しました。これは「予算決定のプロセス」についての提案となっています。面白い内容のため、全文翻訳を掲載しました☕️\n🇯🇵DRepの皆さんはぜひご一読を\n【全文翻訳】2026年インターセクト予算プロセス\nhttps://t.co/zbevBDavg0",
+    "author": "hix_coffeepool",
+    "authorLabel": "hix Cardano-SPO |COFFE|（カルダノSPO）",
+    "createdAt": "Fri Mar 06 12:00:10 +0000 2026",
+    "tier": 2,
+    "category": "constitution_budget",
+    "searchLabel": "Constitution & Budget",
+    "likes": 2,
+    "retweets": 0,
+    "url": "https://x.com/hix_coffeepool/status/2029889775562563834"
+  },
+  {
+    "id": "2029889769514082412",
+    "text": "Learn more about Archax: https://t.co/PqMMbPjDZv",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Fri Mar 06 12:00:09 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 3,
+    "retweets": 0,
+    "url": "https://x.com/Cardano_CF/status/2029889769514082412"
+  },
+  {
+    "id": "2029889766120931833",
+    "text": "Cardano is now integrated into @ArchaxEx’s tokenization engine, a next milestone for Cardano's institutional infrastructure.\n\nThis means:\n∙ All Cardano based MembersCap’s Fund I tokens (MCM tokens) now sit within Archax's regulated infrastructure\n\n∙ Straightforward tokenization of RWAs through Archax on Cardano is now a reality\n\n∙ Any future tokens issued through Archax on Cardano start from day one inside that same regulated framework\n\nThis is the work that bridges Cardano and the world.",
+    "author": "Cardano_CF",
+    "authorLabel": "Cardano Foundation",
+    "createdAt": "Fri Mar 06 12:00:08 +0000 2026",
+    "tier": 1,
+    "category": "institutional",
+    "likes": 81,
+    "retweets": 21,
+    "url": "https://x.com/Cardano_CF/status/2029889766120931833"
+  },
+  {
+    "id": "2029889744180576307",
+    "text": "You wake up tomorrow and find 30 million $ADA in your wallet.  \n\nWhat’s the first thing you do?",
+    "author": "MinswapIntern",
+    "authorLabel": "Minswap Intern",
+    "createdAt": "Fri Mar 06 12:00:03 +0000 2026",
+    "tier": 1,
+    "category": "ecosystem_adoption",
+    "likes": 14,
+    "retweets": 0,
+    "url": "https://x.com/MinswapIntern/status/2029889744180576307"
+  },
+  {
+    "id": "2029889737167651033",
+    "text": "The @Cardano_CF  is anticipated to inject an eight-figure amount of Cardano $ADA in liquidity to accelerate the growth of #Cardano stablecoins by the end of March.\n\nWhat are your thoughts on it?",
+    "author": "MinswapIntern",
+    "authorLabel": "Minswap Intern",
+    "createdAt": "Fri Mar 06 12:00:01 +0000 2026",
+    "tier": 1,
+    "category": "ecosystem_adoption",
+    "likes": 14,
+    "retweets": 1,
+    "url": "https://x.com/MinswapIntern/status/2029889737167651033"
+  },
+  {
+    "id": "2029889146882261332",
+    "text": "@InputEndorsers They participated in SanchoNet pre-gov. The governance UI/UX should have mirrored the staking UI/UX on day one. DReps listed and searchable by name or ID. Not \"enter exact match for DRep ID here... after you've gone and found one from a third-party source, or you know, click this button here and hand your vote over to us\".",
+    "author": "HephyPool",
+    "authorLabel": "Hephy Pool",
+    "createdAt": "Fri Mar 06 11:57:40 +0000 2026",
+    "tier": 1,
+    "category": "spo",
+    "likes": 3,
+    "retweets": 0,
+    "url": "https://x.com/HephyPool/status/2029889146882261332"
+  },
+  {
     "id": "2029886383146275145",
     "text": "@Vivek4real_ Add the integration with #Cardano and #Midnight into the mix. Problem solved. \n\nWould love to get @BTC_OS and @IOHK_Charles views on this.",
     "author": "TradingCam",
@@ -21,7 +364,7 @@
     "tier": 2,
     "category": "ecosystem_adoption",
     "searchLabel": "Ecosystem & Adoption",
-    "likes": 3,
+    "likes": 8,
     "retweets": 0,
     "url": "https://x.com/Rypto__/status/2029886339613696404"
   },
@@ -33,7 +376,7 @@
     "createdAt": "Fri Mar 06 11:39:07 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 0,
+    "likes": 2,
     "retweets": 0,
     "url": "https://x.com/DeOpenSourceGuy/status/2029884476625670594"
   },
@@ -45,7 +388,7 @@
     "createdAt": "Fri Mar 06 11:32:34 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 0,
+    "likes": 4,
     "retweets": 0,
     "url": "https://x.com/blockfrost_io/status/2029882828477936115"
   },
@@ -57,8 +400,8 @@
     "createdAt": "Fri Mar 06 11:32:01 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 2,
-    "retweets": 0,
+    "likes": 13,
+    "retweets": 1,
     "url": "https://x.com/blockfrost_io/status/2029882691676516858"
   },
   {
@@ -69,7 +412,7 @@
     "createdAt": "Fri Mar 06 11:30:33 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 3,
+    "likes": 4,
     "retweets": 0,
     "url": "https://x.com/NicolasC3rny/status/2029882320308535588"
   },
@@ -81,7 +424,7 @@
     "createdAt": "Fri Mar 06 11:28:19 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 1,
+    "likes": 2,
     "retweets": 0,
     "url": "https://x.com/NicolasC3rny/status/2029881759525990591"
   },
@@ -93,8 +436,8 @@
     "createdAt": "Fri Mar 06 11:26:39 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 8,
-    "retweets": 2,
+    "likes": 22,
+    "retweets": 3,
     "url": "https://x.com/JaromirTesar/status/2029881341123150066"
   },
   {
@@ -105,7 +448,7 @@
     "createdAt": "Fri Mar 06 11:24:01 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 3,
+    "likes": 4,
     "retweets": 0,
     "url": "https://x.com/DaniVibesADA/status/2029880676367974458"
   },
@@ -117,8 +460,8 @@
     "createdAt": "Fri Mar 06 11:23:03 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 2,
-    "retweets": 0,
+    "likes": 3,
+    "retweets": 1,
     "url": "https://x.com/DaniVibesADA/status/2029880432666325164"
   },
   {
@@ -203,7 +546,7 @@
     "createdAt": "Fri Mar 06 11:10:44 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 2,
+    "likes": 3,
     "retweets": 0,
     "url": "https://x.com/Ryun1_/status/2029877332492619987"
   },
@@ -216,7 +559,7 @@
     "tier": 2,
     "category": "ecosystem_adoption",
     "searchLabel": "Ecosystem & Adoption",
-    "likes": 3,
+    "likes": 4,
     "retweets": 0,
     "url": "https://x.com/ActuCryptoCT/status/2029876087690256667"
   },
@@ -265,8 +608,8 @@
     "tier": 2,
     "category": "ecosystem_adoption",
     "searchLabel": "Ecosystem & Adoption",
-    "likes": 73,
-    "retweets": 12,
+    "likes": 219,
+    "retweets": 36,
     "url": "https://x.com/BSCNews/status/2029875640124739801"
   },
   {
@@ -277,7 +620,7 @@
     "createdAt": "Fri Mar 06 11:04:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 2,
+    "likes": 3,
     "retweets": 1,
     "url": "https://x.com/Cardano_Power/status/2029875639256272911"
   },
@@ -289,7 +632,7 @@
     "createdAt": "Fri Mar 06 11:04:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 4,
+    "likes": 9,
     "retweets": 2,
     "url": "https://x.com/CardanoFeed/status/2029875640837476753"
   },
@@ -301,7 +644,7 @@
     "createdAt": "Fri Mar 06 11:00:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 8,
+    "likes": 13,
     "retweets": 0,
     "url": "https://x.com/MinswapIntern/status/2029874633059553590"
   },
@@ -314,7 +657,7 @@
     "tier": 2,
     "category": "constitution_budget",
     "searchLabel": "Constitution & Budget",
-    "likes": 0,
+    "likes": 1,
     "retweets": 0,
     "url": "https://x.com/QuasarSure/status/2029874398841217130"
   },
@@ -339,7 +682,7 @@
     "createdAt": "Fri Mar 06 10:38:46 +0000 2026",
     "tier": 1,
     "category": "governance_tool",
-    "likes": 3,
+    "likes": 5,
     "retweets": 0,
     "url": "https://x.com/Intersect_MCC/status/2029869288832782497"
   },
@@ -364,8 +707,8 @@
     "createdAt": "Fri Mar 06 10:30:03 +0000 2026",
     "tier": 1,
     "category": "governance_tool",
-    "likes": 19,
-    "retweets": 1,
+    "likes": 45,
+    "retweets": 4,
     "url": "https://x.com/YoroiWallet/status/2029867097283764430"
   },
   {
@@ -439,8 +782,8 @@
     "createdAt": "Fri Mar 06 09:46:38 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 27,
-    "retweets": 5,
+    "likes": 39,
+    "retweets": 8,
     "url": "https://x.com/GoMaestroOrg/status/2029856169842594235"
   },
   {
@@ -464,8 +807,8 @@
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
-    "likes": 50,
-    "retweets": 2,
+    "likes": 51,
+    "retweets": 3,
     "url": "https://x.com/MEXC_Official/status/2029852211166011776"
   },
   {
@@ -477,7 +820,7 @@
     "tier": 2,
     "category": "ecosystem_adoption",
     "searchLabel": "Ecosystem & Adoption",
-    "likes": 7,
+    "likes": 8,
     "retweets": 0,
     "url": "https://x.com/DAF_Global/status/2029851039436873766"
   },
@@ -514,7 +857,7 @@
     "createdAt": "Fri Mar 06 09:24:20 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 1,
+    "likes": 11,
     "retweets": 0,
     "url": "https://x.com/Padierfind/status/2029850557582586270"
   },
@@ -563,7 +906,7 @@
     "createdAt": "Fri Mar 06 09:03:43 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 7,
+    "likes": 8,
     "retweets": 0,
     "url": "https://x.com/CardanoFeed/status/2029845368582651978"
   },
@@ -575,8 +918,8 @@
     "createdAt": "Fri Mar 06 09:00:59 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 22,
-    "retweets": 3,
+    "likes": 32,
+    "retweets": 5,
     "url": "https://x.com/Cardano_CF/status/2029844682818179186"
   },
   {
@@ -587,7 +930,7 @@
     "createdAt": "Fri Mar 06 09:00:02 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 26,
+    "likes": 33,
     "retweets": 1,
     "url": "https://x.com/MinswapIntern/status/2029844443105481183"
   },
@@ -613,7 +956,7 @@
     "tier": 2,
     "category": "constitution_budget",
     "searchLabel": "Constitution & Budget",
-    "likes": 15,
+    "likes": 18,
     "retweets": 11,
     "url": "https://x.com/IntersectSriL/status/2029839558054137928"
   },
@@ -662,8 +1005,8 @@
     "createdAt": "Fri Mar 06 08:12:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 26,
-    "retweets": 5,
+    "likes": 31,
+    "retweets": 6,
     "url": "https://x.com/Cardano_Power/status/2029832353825341756"
   },
   {
@@ -674,7 +1017,7 @@
     "createdAt": "Fri Mar 06 08:03:27 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 41,
+    "likes": 42,
     "retweets": 5,
     "url": "https://x.com/CardanoFeed/status/2029830202470039574"
   },
@@ -712,7 +1055,7 @@
     "createdAt": "Fri Mar 06 07:56:06 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 14,
+    "likes": 16,
     "retweets": 1,
     "url": "https://x.com/MinswapIntern/status/2029828352899699198"
   },
@@ -1053,8 +1396,8 @@
     "createdAt": "Fri Mar 06 05:47:23 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 35,
-    "retweets": 1,
+    "likes": 39,
+    "retweets": 2,
     "url": "https://x.com/JaromirTesar/status/2029795959928979737"
   },
   {
@@ -1104,7 +1447,7 @@
     "createdAt": "Fri Mar 06 05:21:18 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 93,
+    "likes": 96,
     "retweets": 4,
     "url": "https://x.com/Sssebi/status/2029789396833124703"
   },
@@ -1287,8 +1630,8 @@
     "createdAt": "Fri Mar 06 04:02:13 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 43,
-    "retweets": 14,
+    "likes": 48,
+    "retweets": 16,
     "url": "https://x.com/adamKDean/status/2029769492939915675"
   },
   {
@@ -1323,7 +1666,7 @@
     "createdAt": "Fri Mar 06 03:43:27 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 2,
+    "likes": 3,
     "retweets": 0,
     "url": "https://x.com/MicheleHarmonic/status/2029764770019057738"
   },
@@ -1399,7 +1742,7 @@
     "createdAt": "Fri Mar 06 02:55:24 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 1,
+    "likes": 2,
     "retweets": 0,
     "url": "https://x.com/adamKDean/status/2029752681049550934"
   },
@@ -1418,7 +1761,7 @@
   },
   {
     "id": "2029752458587885636",
-    "text": "@RuLooking4This2 @Quantumplation It's a step, but I doubt that many of our dApps will implement this into their UX as their priority (rightly so) is making money, not guilting you for your DRep choices. Also, I don't believe that our average monthly users engaging in 'regular' Cardano activities like utilizing dApps are the problem. I believe it is largely passive stakers who do not regularly use/interact with the chain and its community that are behind this \"lazy\" delegation using Yoroi/Emurgo. That's just a hunch though, I haven't done any analysis on the average size/activity of any of the wallets delegated to Emurgo/Yoroi",
+    "text": "It's a step, but I doubt that many of our dApps will implement this into their UX as their priority (rightly so) is making money, not guilting you for your DRep choices. Also, I don't believe that our average monthly users engaging in 'regular' Cardano activities like utilizing dApps are the problem. I believe it is largely passive stakers who do not regularly use/interact with the chain and its community that are behind this \"lazy\" delegation using Yoroi/Emurgo. That's just a hunch though, I haven't done any analysis on the average size/activity of any of the wallets delegated to Emurgo/Yoroi",
     "author": "adamKDean",
     "authorLabel": "Adam Dean",
     "createdAt": "Fri Mar 06 02:54:31 +0000 2026",
@@ -1436,8 +1779,8 @@
     "createdAt": "Fri Mar 06 02:53:35 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 15,
-    "retweets": 1,
+    "likes": 19,
+    "retweets": 2,
     "url": "https://x.com/CardanoFeed/status/2029752224465731668"
   },
   {
@@ -1498,8 +1841,8 @@
     "createdAt": "Fri Mar 06 02:21:54 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 49,
-    "retweets": 8,
+    "likes": 53,
+    "retweets": 9,
     "url": "https://x.com/adamKDean/status/2029744248371957966"
   },
   {
@@ -1522,7 +1865,7 @@
     "createdAt": "Fri Mar 06 02:15:04 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 8,
+    "likes": 9,
     "retweets": 0,
     "url": "https://x.com/Quantumplation/status/2029742528606396582"
   },
@@ -1585,8 +1928,8 @@
     "createdAt": "Fri Mar 06 02:02:45 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 216,
-    "retweets": 25,
+    "likes": 221,
+    "retweets": 27,
     "url": "https://x.com/TapTools/status/2029739430576058697"
   },
   {
@@ -1843,7 +2186,7 @@
     "createdAt": "Fri Mar 06 00:46:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 28,
+    "likes": 29,
     "retweets": 9,
     "url": "https://x.com/Cardano_Power/status/2029720114099323011"
   },
@@ -1939,7 +2282,7 @@
     "createdAt": "Fri Mar 06 00:33:24 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 5,
+    "likes": 6,
     "retweets": 1,
     "url": "https://x.com/blockjock2017/status/2029716943775666665"
   },
@@ -1987,7 +2330,7 @@
     "createdAt": "Fri Mar 06 00:28:58 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 2,
+    "likes": 3,
     "retweets": 1,
     "url": "https://x.com/blockjock2017/status/2029715827256066352"
   },
@@ -2181,7 +2524,7 @@
     "createdAt": "Thu Mar 05 23:20:35 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 3,
+    "likes": 4,
     "retweets": 0,
     "url": "https://x.com/HephyPool/status/2029698620321067098"
   },
@@ -2289,7 +2632,7 @@
     "createdAt": "Thu Mar 05 23:07:13 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 67,
+    "likes": 68,
     "retweets": 7,
     "url": "https://x.com/TapTools/status/2029695256443126253"
   },
@@ -2307,13 +2650,13 @@
   },
   {
     "id": "2029693219471347903",
-    "text": "🚨🌐Cardano次期ハードフォークが目前へ──Node 10.7.0がエコシステム統合の起点に\n\nCardanoのアップグレード状況について、Intersectから最新の「Upgrade Bulletin #6」が公開されました。\n\n今回のポイントは、次期ハードフォーク候補リリース（HFC）に向けた最終段階に入ってきたという点です。\nまず現在の状況ですが、テストネットの SanchoNet はすでに新しいCardanoノードにアップグレードされており、Protocol Version 11 の機能テストが進められています。\n\nまた、Plutusの新しいコストモデルも準備が進んでおり、すでにSanchoNetではテスト可能な状態になっています。\n現在公開されているノードは Cardano Node 10.6.2。\n\nこれは約3週間前にリリースされたもので、ハードフォークに関する機能をテストできるバージョンですが、メインネット用の正式なハードフォーク候補ではありません。\n次に予定されているのが Cardano Node 10.7.0 です。\n\nこのバージョンは\n・1週間以内のリリース予定\n・メインネットハードフォーク候補（HFC）になる予定\n・エコシステムツールとの統合ポイントになる\nとされており、リリース後は\n\nPreview → PreProd → Mainnet\n\nという順番でネットワークがフォークされる見込みです。\n\nただし、パフォーマンス結果や統合テストの状況によっては、さらに小さなマイナーアップデートが追加される可能性もあります。\n\nまた今回のアップグレードは、単なるハードフォーク対応だけではなく、新機能も含む大きなノードアップデートになる予定です。\n\nそのため、ウォレット、dApp、インフラ、ツールなど、エコシステム全体がNode 10.7への統合作業を開始することが重要とされています。\n\nコミュニティ向けの動きとしては、今週から\n・Hard Forkワーキンググループが毎週ミーティング\n・毎週木曜日にXスペース開催（日本時間だと深夜）\nなど、アップグレードに向けた情報共有も強化されます。\n\nCardanoの大型アップグレードは、\n\nノード → テストネット → エコシステ���統合 → メインネット\n\nという段階的プロセスで進みます。",
+    "text": "🚨🌐Cardano次期ハードフォークが目前へ──Node 10.7.0がエコシステム統合の起点に\n\nCardanoのアップグレード状況について、Intersectから最新の「Upgrade Bulletin #6」が公開されました。\n\n今回のポイントは、次期ハードフォーク候補リリース（HFC）に向けた最終段階に入ってきたという点です。\nまず現在の状況ですが、テストネットの SanchoNet はすでに新しいCardanoノードにアップグレードされており、Protocol Version 11 の機能テストが進められています。\n\nまた、Plutusの新しいコストモデルも準備が進んでおり、すでにSanchoNetではテスト可能な状態になっています。\n現在公開されているノードは Cardano Node 10.6.2。\n\nこれは約3週間前にリリースされたもので、ハードフォークに関する機能をテストできるバージョンですが、メインネット用の正式なハードフォーク候補ではありません。\n次に予定��れているのが Cardano Node 10.7.0 です。\n\nこのバージョンは\n・1週間以内のリリース予定\n・メインネットハードフォーク候補（HFC）になる予定\n・エコシステムツールとの統合ポイントになる\nとされており、リリース後は\n\nPreview → PreProd → Mainnet\n\nという順番でネットワークがフォークされる見込みです。\n\nただし、パフォーマンス結果や統合テストの状況によっては、さらに小さなマイナーアップデートが追加される可能性もあります。\n\nまた今回のアップグレードは、単なるハードフォーク対応だけではなく、新機能も含む大きなノードアップデートになる予定です。\n\nそのため、ウォレット、dApp、インフラ、ツールなど、エコシステム全体がNode 10.7への統合作業を開始することが重要とされています。\n\nコミュニティ向けの動きとしては、今週から\n・Hard Forkワーキンググループが毎週ミーティング\n・毎週木曜日にXスペース開催（日本時間だと深夜）\nなど、アップグレードに向けた情報共有も強化されます。\n\nCardanoの大型アップグレードは、\n\nノード → テストネット → エコシステム統合 → メイ��ネット\n\nという段階的プロセスで進みます。",
     "author": "SIPO_Tokyo",
     "authorLabel": "SIPO Tokyo",
     "createdAt": "Thu Mar 05 22:59:08 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 10,
+    "likes": 11,
     "retweets": 0,
     "url": "https://x.com/SIPO_Tokyo/status/2029693219471347903"
   },
@@ -2373,7 +2716,7 @@
     "createdAt": "Thu Mar 05 22:28:51 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 1,
+    "likes": 2,
     "retweets": 0,
     "url": "https://x.com/TapTools/status/2029685599683179002"
   },
@@ -2403,14 +2746,14 @@
   },
   {
     "id": "2029680236363911240",
-    "text": "🚨🇨🇭スイスのスーパーでADA決済が現実に──Cardanoが「日常インフラ」に近づく大きな一歩\n\nCardano Foundationの発表によると、スイス国内のスーパー「SPAR」137店舗で、暗号資産ADAによる支払いが可能になりました。\n\nこれは、スイスの暗号決済インフラ企業https://t.co/8MhFTxeM1QとFinTech企業Brick Towersとの連携によって実現したものです。\n基盤となっているのは、https://t.co/8MhFTxeM1Qが開発した暗号決済標準「Open Crypto Pay」です。\n\nこの仕組みによって、ユーザーはネイティブADAウォレットから直接、レジでADA支払いができるようになります。\nしかも、中央集権型取引所を経由せず、リアルタイムで決済が処理されます。\n\n小売業者にとってもメリットがあります。\n従来のカード決済や決済プロバイダーと比較して、手数料をおよそ3分の1程度まで削減できる可能性があるとのことです。\nこれは、ブロックチェーン決済が単なる技術的実験ではなく、経済的にも意味を持つことを示しています。\n\nさらに、https://t.co/8MhFTxeM1Qはオンランプ／オフランプの仕組みを提供しており、ADAと法定通貨の交換も直接行えます。\nつまり、銀行システムとCardanoエコシステムの橋渡しをする役割も担っています。\n\n加えて、Brick TowersのFinTechアプリ「urble」では、ADAを使った貯蓄機能も提供されます。\n子どもや家族のための貯蓄目標を設定し、デジタル資産を長期的な資産形成に活用できる仕組みです。\n\nCardano FoundationのCEO、フレデリック・グレガード氏は次のように述べています。\n\n「ブロックチェーンが“見えないインフラ”になり、ADAで支払うことがカードと同じくらい自然になったとき、金融の本当の変革が始まる」\n\n今回の取り組みは、その未来に向けた一つの重要なステップと言えそうです。\n👇\nhttps://t.co/R3Rl6Cc4fK",
+    "text": "🚨🇨🇭スイスのスーパーでADA決済が現実に──Cardanoが「日常インフラ」に近づく大きな一歩\n\nCardano Foundationの発表によると、スイス国内のスーパー「SPAR」137店舗で、暗号資産ADAによる支払いが可能になりました。\n\nこれは、スイスの暗号決済インフラ企業https://t.co/8MhFTxeM1QとFinTech企業Brick Towersとの連携によって実現したものです。\n基盤となっているのは、https://t.co/8MhFTxeM1Qが開発した暗号決済標準「Open Crypto Pay」です。\n\nこの仕組みによって、ユーザーはネイティブADAウォレットから直接、レジでADA支払いができるようになります。\nしかも、中央集権型取��所を経由せず、リアルタイムで決済が処理されます。\n\n小売業者にとってもメリットがあります。\n従来のカード決済や決済プロバイダーと比較して、手数料をおよそ3分の1程度まで削減できる可能性があるとのことです。\nこれは、ブロックチェーン決済が単なる技術的実験ではなく、経済的にも意味を持つことを示しています。\n\nさらに、https://t.co/8MhFTxeM1Qはオンランプ／オフランプの仕組みを提供しており、ADAと法定通貨の交換も直接行えます。\nつまり、銀行システムとCardanoエコシステムの橋渡しをする役割も担っています。\n\n加えて、Brick TowersのFinTechアプリ「urble」では、ADAを使った貯蓄機能も提供されます。\n子どもや家族のための貯蓄目標を設定し、デジタル資産を長期的な資産形成に活用できる仕組みです。\n\nCardano FoundationのCEO、フレデリック・グレガード氏は次のように述べています。\n\n「ブロックチェーンが“見えないインフラ”になり、ADAで支払うことがカードと同じくらい自然になったとき、金融の本当の変革が始まる」\n\n今回の取り組みは、その未来に向けた一つの重要なステップと��えそうです。\n👇\nhttps://t.co/R3Rl6Cc4fK",
     "author": "SIPO_Tokyo",
     "authorLabel": "SIPO Tokyo",
     "createdAt": "Thu Mar 05 22:07:32 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 38,
-    "retweets": 7,
+    "likes": 39,
+    "retweets": 8,
     "url": "https://x.com/SIPO_Tokyo/status/2029680236363911240"
   },
   {
@@ -2421,7 +2764,7 @@
     "createdAt": "Thu Mar 05 22:06:09 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 6,
+    "likes": 7,
     "retweets": 0,
     "url": "https://x.com/Cerkoryn/status/2029679886298644666"
   },
@@ -2488,7 +2831,7 @@
   },
   {
     "id": "2029677388792311978",
-    "text": "ニュース動向 in エポック616\n\nINDEX\n\n・『世界が揺れる中で、静かに積��上がる設計──接続・証明・拡張。Cardanoが“次の金融レール”へ進む春』 USDCx・Midnight・Leiosが示す「制御された透明性」への構造転換\n・AIはもう戦場にいる──米軍がClaudeを軍事作戦で使用との報道\n・AIと軍事の新章──OpenAIが「戦争省」と結んだ合意、その中身と余白\n・CMEが握った“価格の心臓部”──暗号資産市場は新フェーズへ\n・ADA、機関マネーの正式ルートへ──CME上場が意味するもの\n・TVLの“質”が動いた日 ― USDCxがもたらすオンチェーン転換\n・SIPO DRep：『Amaru Treasury Withdrawal 2026』提案をどう考えるか― SIPO DRepの分析と「Yes」評価、スタンス\n・チャールズ・ホスキンソン氏動画「H.R. 3633 and the Idiocy of the Masses」全翻訳：H.R.3633を巡る激論──「悪法は無法より悪い」理由\n・トランプ大統領が銀行に警告――“暗号産業を止めるな” 米国の金融覇権を巡る新しい戦線\n・Cardanoガバナンスの実像：数字から見えた課題と、SIPOが考える次のステップ\n・内部告発は“勇気”ではなく“インフラ”の問題──Midnightが示す新しい社会基盤\n・KrakenがFRB決済ネットワークに直結──暗号資産が“金融インフラ”へ進化する瞬間\n・Midnightの技術中核を担う「Aliit Fellowship」第2期募集開始\n・Cardano × Midnightで“完全プライベート予測市場”が誕生へ\n・Xが銀行になる日：イーロン・マスク氏が描く“金融OS”の正体\n・Midnight開発が着実に前進：Testnet-02で400万ブロック達成、NIGHT償還は5億超へ\n・“暗号資産で覇権を取る”──トランプ発言が示す米国の新しい国家戦略\n・BTCが“金融インフラ”になる日：モルガン・スタンレーのSEC提出書類\n・AI革命はビットコインをどう変えるのか？──NYDIGレポートが示す“本当の論点\n\nエポック616終了時点ステーキング動向\n\n・ステーキング動向 in エポック616\n・SIPO、SIPO2、SIPO3エポック616ステーキング報告\n・SIPOエポック616ステーキング報告\n・SIPO2エポック616ステーキング報告\n・SIPO3エポック616ステーキング報告\n👇\nhttps://t.co/vVE1cmw2sU\n\n#Cardano #ADA \n\n3/n",
+    "text": "ニュース動向 in エポック616\n\nINDEX\n\n・『世界が揺れ��中で、静かに積み上がる設計──接続・証明・拡張。Cardanoが“次の金融レール”へ進む春』 USDCx・Midnight・Leiosが示す「制御された透明性」への構造転換\n・AIはもう戦場にいる──米軍がClaudeを軍事作戦で使用との報道\n・AIと軍事の新章──OpenAIが「戦争省」と結んだ合意、その中身と余白\n・CMEが握った“価格の心臓部”──暗号資産市場は新フェーズへ\n・ADA、機関マネーの正式ルートへ──CME上場が意味するもの\n・TVLの“質”が動いた日 ― USDCxがもたらすオンチェーン転換\n・SIPO DRep：『Amaru Treasury Withdrawal 2026』提案をどう考えるか― SIPO DRepの分析と「Yes」評価、スタンス\n・チャールズ・ホスキンソン氏動画「H.R. 3633 and the Idiocy of the Masses」全翻訳：H.R.3633を巡る激論──「悪法は無法より悪い」理由\n・トランプ大統領が銀行に警告――“暗号産業を止めるな” 米国の金融覇権を巡る新しい戦線\n・Cardanoガバナンスの実像：数字から見えた課題と、SIPOが考える次のステップ\n・内部告発は“勇気”ではなく“インフラ”の問題──Midnightが示す新しい社会基盤\n・KrakenがFRB決済ネットワークに直結──暗号資産が“金融インフラ”へ進化する瞬間\n・Midnightの技術中核を担う「Aliit Fellowship」第2期募集開始\n・Cardano × Midnightで“完全プライベート予測市場”が誕生へ\n・Xが銀行になる日：イーロン・マスク氏が描く“金融OS”の正体\n・Midnight開発が着実に前進：Testnet-02で400万ブロック達成、NIGHT償還は5億超へ\n・“暗号資産で覇権を取る”──トランプ発言が示す米国の新しい国家戦略\n・BTCが“金融インフラ”になる日：モルガン・スタンレーのSEC提出書類\n・AI革命はビットコインをどう変えるのか？──NYDIGレポートが示す“本当の論点\n\nエポック616終了時点ステーキング動向\n\n・ステーキング動向 in エポック616\n・SIPO、SIPO2、SIPO3エポック616ステーキング報告\n・SIPOエポック616ステーキング報告\n・SIPO2エポック616ステーキング報告\n・SIPO3エポック616ステーキング報告\n👇\nhttps://t.co/vVE1cmw2sU\n\n#Cardano #ADA \n\n3/n",
     "author": "SIPO_Tokyo",
     "authorLabel": "SIPO Tokyo",
     "createdAt": "Thu Mar 05 21:56:13 +0000 2026",
@@ -2525,7 +2868,7 @@
   },
   {
     "id": "2029677183925637166",
-    "text": "エポックな日々：616\n\n世界秩序の転換点──戦争・AI・暗号資産が作る次の金融システム\n🔽\nhttps://t.co/MWqpjAivV3\n\nエポックな日々616を公開しました。\n\n今回の記事では、\n\n・中東情勢やウクライナ戦争などの地政学\n・米国の暗号資産政策（GENIUS Act / Clarity Act）\n・CBDCを2030年まで止めるという動き\n・KrakenがFRB決済ネットワークに直結したニュース\n・ウォール街やCrypto企業の銀行化\n・X Moneyが描く「金融OS」\n・AIエージェントによるマシン経済\n\nこうした一見バラバラに見える出来事を、\n\n「金融インフラの再設計」\n\nという視点で整理してみました。\n\n最近のニュースを見ていると、暗号資産は単なる投資市場というより、\n\n金融インフラの議論の中心\n\nに入り始めているようにも見えます。\n\n例えば、\n\nKrakenがFRBのマスターアカウントを取得し、中央銀行の決済レイヤーに直接接続しました。\n\nウォール街ではビットコインが金融資産として扱われ始めています。\n\nさらにCrypto企業が銀行ライセンスを取得する流れも出てきました。\n\nそしてイーロン・マスクのXは、SNSを超えて「金融OS」を作ろうとしている可能性があります。\n\nつまり今起きているのは\n\nCrypto vs 金融\n\nではなく、\n\nCrypto × 金融\n\nという融合のプロセスなのかもしれません。\n\nさらにここに加わるのがAIです。\n\nAIエージェントがウォレットを持ち、���払いを行い、経済活動を行う世界。\n\nいわゆる「マシン経済」です。\n\nもしこの世界が実現するとすれば、AIにとって使いやすい金融インフラは\n\n銀行口座ではなく\nブロックチェーン\n\nになる可能性があります。\n\nそしてこの文脈の中で、CardanoとMidnightの役割も少し整理してみました。\n\nCardanoは金融インフラとしての制度設計を重視するブロックチェーン。\n\nMidnightは、規制とプライバシーのバランスを取る「選択的プライバシー」を目指すネットワークです。\n\nもしブロックチェーンが本当に金融インフラになるのであれば、\n\n・安全性\n・持続性\n・ガバナンス\n・プライバシー\n\nといった要素は避けて通れません。\n\nその意味で、今の暗号資産の世界は単なる投資市場ではなく、\n\n次の金融秩序の実験場\n\nとも言えるのではないでしょうか。\n\n地政学\n国家政策\n金融インフラ\nAI\n\nこれらが同時に動いている今、\n\n世界はもしかすると\n\n金融再起動の時代\n\nに入りつつあるのかもしれません。\n\nよろしければぜひ記事をご覧ください。\n👇\nhttps://t.co/MWqpjAivV3\n\n#Cardano #ADA #カルダノ\n#Midnight #USDCx\n#Leios #Hydra #Mithril\n#ブロックチェーン #暗号資産\n#オンチェーンガバナンス #DRep\n#プライバシー #ZK #MPC #TEE\n#ステーブルコイン\n1/n",
+    "text": "エポックな日々：616\n\n世界秩序の転換点──戦争・AI・暗号資産が作る次の金融システム\n🔽\nhttps://t.co/MWqpjAivV3\n\nエポックな日々616を公開しました。\n\n今回の記事では、\n\n・中東情勢やウクライナ戦争などの地政学\n・米国の暗号資産政策（GENIUS Act / Clarity Act）\n・CBDCを2030年まで止めるという動き\n・KrakenがFRB決済ネットワークに直結したニュース\n・ウォール街やCrypto企業の銀行化\n・X Moneyが描く「金融OS」\n・AIエージェントによるマシン経済\n\nこうした一見バラバラに見える出来事を、\n\n「金融インフラの再設計」\n\nという視点で整理してみました。\n\n最近のニュースを見ていると、暗号資産は単なる投資市場というより、\n\n金融インフラの議論の中心\n\nに入り始めているようにも見えます。\n\n例えば、\n\nKrakenがFRBのマスターアカウントを取得し、中央銀行の決済レイヤーに直接接続しました。\n\nウォール街ではビットコインが金融資産として扱われ始めています。\n\nさらにCrypto企業が銀行ライセンスを取得する流れも出てきました。\n\nそしてイーロン・マスクのXは、SNSを超えて「金融OS」を作ろうとしている可能性があります。\n\nつまり今起きているのは\n\nCrypto vs 金融\n\nではなく、\n\nCrypto × 金融\n\nという融合のプロセスなのかもしれません。\n\nさらにここに加わるのがAIです。\n\nAIエージェントがウォレットを持ち、支払いを行い、経済活動を行う世界。\n\nいわゆる「マシン経済」です。\n\nもしこの世界が実現するとすれば、AIにとって使いやすい金融インフラは\n\n銀行口座ではなく\nブロックチェーン\n\nになる可能性があります。\n\nそしてこの文脈の中で、CardanoとMidnightの役割も少し整理してみました。\n\nCardanoは金融インフラとしての制度設計を重視するブロックチェーン。\n\nMidnightは、規制とプライバシーのバランスを取る「選択的プライバシー」を目指すネットワークです。\n\nもしブロックチェーンが本当に金融インフラになるのであれば、\n\n・安全性\n・持続性\n・ガバナンス\n・プライバシー\n\nといった要素は避けて通れません。\n\nその意味で、今の暗号資産の世界は単なる投資市場ではなく、\n\n次の金融秩序の実験場\n\nとも言えるのではないでしょうか。\n\n地政学\n国家政策\n金融インフラ\nAI\n\nこれらが同時に動いている今、\n\n世界はもしかすると\n\n金融再起動の時代\n\nに入りつつあるのかもしれません。\n\nよろしければぜひ記事をご覧ください。\n👇\nhttps://t.co/MWqpjAivV3\n\n#Cardano #ADA #カルダノ\n#Midnight #USDCx\n#Leios #Hydra #Mithril\n#ブロックチェーン #暗号資産\n#オンチェーンガバナンス #DRep\n#プライバシー #ZK #MPC #TEE\n#ステーブルコイン\n1/n",
     "author": "SIPO_Tokyo",
     "authorLabel": "SIPO Tokyo",
     "createdAt": "Thu Mar 05 21:55:24 +0000 2026",
@@ -2580,7 +2923,7 @@
     "tier": 2,
     "category": "protocol_parameter",
     "searchLabel": "Protocol & Parameters",
-    "likes": 9,
+    "likes": 10,
     "retweets": 2,
     "url": "https://x.com/whaleUTXO/status/2029676073726959763"
   },
@@ -2724,7 +3067,7 @@
     "createdAt": "Thu Mar 05 21:37:42 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 64,
+    "likes": 65,
     "retweets": 3,
     "url": "https://x.com/StakeWithPride/status/2029672729654518236"
   },
@@ -2772,8 +3115,8 @@
     "createdAt": "Thu Mar 05 21:10:11 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 117,
-    "retweets": 7,
+    "likes": 120,
+    "retweets": 8,
     "url": "https://x.com/TapTools/status/2029665803344515491"
   },
   {
@@ -2796,7 +3139,7 @@
     "createdAt": "Thu Mar 05 21:00:02 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 199,
+    "likes": 200,
     "retweets": 8,
     "url": "https://x.com/MinswapIntern/status/2029663249327870279"
   },
@@ -2892,7 +3235,7 @@
     "createdAt": "Thu Mar 05 20:38:05 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 20,
+    "likes": 21,
     "retweets": 3,
     "url": "https://x.com/CardanoFeed/status/2029657725496447215"
   },
@@ -2928,8 +3271,8 @@
     "createdAt": "Thu Mar 05 20:36:26 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 138,
-    "retweets": 7,
+    "likes": 143,
+    "retweets": 9,
     "url": "https://x.com/TapTools/status/2029657309253881943"
   },
   {
@@ -3120,8 +3463,8 @@
     "createdAt": "Thu Mar 05 20:21:02 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 12,
-    "retweets": 1,
+    "likes": 14,
+    "retweets": 2,
     "url": "https://x.com/CardanoRami/status/2029653433402499266"
   },
   {
@@ -3144,13 +3487,13 @@
     "createdAt": "Thu Mar 05 20:20:12 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 298,
-    "retweets": 45,
+    "likes": 314,
+    "retweets": 47,
     "url": "https://x.com/TapTools/status/2029653224760954886"
   },
   {
     "id": "2029652457500934167",
-    "text": "🔧 Protocol Version 11 Hard Fork steht bevor! 🚀\n\nCardano bereitet ein wichtiges Intra-Era-Upgrade vor, das die Performance massiv verbessern wird:\n\n✅ Plutus Smart Contracts schneller & günstiger\n✅ Neue kryptografische Funktionen\n✅ Verbesserte Netzwerk-Sicherheit\n✅ Node 10.6.2 bereits released\n\nDas Upgrade ist Non-Breaking - heißt: Keine Störungen für User oder dApps. Das ist die Vorbereitung auf das große Leios-Upgrade, das Cardano auf 1.000+ TPS bringen soll.\n\n#Cardano #ADA #HardFork #ProtocolUpgrade #Plutus #SmartContracts\n\nEin Hard Fork ist ein größeres Netzwerk-Upgrade. 'Intra-Era' bedeutet, dass es innerhalb der aktuellen Entwicklungsphase (Basho) stattfindet, ohne die gesamte Architektur zu ändern. Plutus ist die Smart-Contract-Sprache von Cardano - schnellere Contracts bedeuten günstigere Transaktionen und komplexere dApps werden möglich. Die neuen kryptografischen Funktionen bereiten das Netzwerk auch auf zukünftige Bedrohungen (z.B. Quantum Computing) vor. Für Staker ändert sich nichts - deine ADA sind sicher. Aber das Ökosystem wird attraktiver für Entwickler, was langfristig mehr Aktivität und Wert ins Netzwerk bringen kann.\n\nhttps://t.co/d5ngOH9vdX",
+    "text": "🔧 Protocol Version 11 Hard Fork steht bevor! 🚀\n\nCardano bereitet ein wichtiges Intra-Era-Upgrade vor, das die Performance massiv verbessern wird:\n\n✅ Plutus Smart Contracts schneller & günstiger\n✅ Neue kryptografische Funktionen\n��� Verbesserte Netzwerk-Sicherheit\n✅ Node 10.6.2 bereits released\n\nDas Upgrade ist Non-Breaking - heißt: Keine Störungen für User oder dApps. Das ist die Vorbereitung auf das große Leios-Upgrade, das Cardano auf 1.000+ TPS bringen soll.\n\n#Cardano #ADA #HardFork #ProtocolUpgrade #Plutus #SmartContracts\n\nEin Hard Fork ist ein größeres Netzwerk-Upgrade. 'Intra-Era' bedeutet, dass es innerhalb der aktuellen Entwicklungsphase (Basho) stattfindet, ohne die gesamte Architektur zu ändern. Plutus ist die Smart-Contract-Sprache von Cardano - schnellere Contracts bedeuten günstigere Transaktionen und komplexere dApps werden möglich. Die neuen kryptografischen Funktionen bereiten das Netzwerk auch auf zukünftige Bedrohungen (z.B. Quantum Computing) vor. Für Staker ändert sich nichts - deine ADA sind sicher. Aber das Ökosystem wird attraktiver für Entwickler, was langfristig mehr Aktivität und Wert ins Netzwerk bringen kann.\n\nhttps://t.co/d5ngOH9vdX",
     "author": "ADA_Stakepool",
     "authorLabel": "Cardano Stakepool Germany",
     "createdAt": "Thu Mar 05 20:17:09 +0000 2026",
@@ -3229,8 +3572,8 @@
     "createdAt": "Thu Mar 05 20:09:34 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 129,
-    "retweets": 23,
+    "likes": 131,
+    "retweets": 24,
     "url": "https://x.com/IOGroup/status/2029650548400464124"
   },
   {
@@ -3253,7 +3596,7 @@
     "createdAt": "Thu Mar 05 20:08:58 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 66,
+    "likes": 67,
     "retweets": 7,
     "url": "https://x.com/StakeWithPride/status/2029650398383067640"
   },
@@ -3445,7 +3788,7 @@
     "createdAt": "Thu Mar 05 19:33:53 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 37,
+    "likes": 38,
     "retweets": 5,
     "url": "https://x.com/CardanoFeed/status/2029641567674249495"
   },
@@ -3469,7 +3812,7 @@
     "createdAt": "Thu Mar 05 19:33:52 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 26,
+    "likes": 28,
     "retweets": 3,
     "url": "https://x.com/CardanoFeed/status/2029641564541051390"
   },
@@ -3555,7 +3898,7 @@
     "tier": 2,
     "category": "protocol_parameter",
     "searchLabel": "Protocol & Parameters",
-    "likes": 38,
+    "likes": 43,
     "retweets": 6,
     "url": "https://x.com/angrycryptoshow/status/2029637101197873334"
   },
@@ -3689,7 +4032,7 @@
     "createdAt": "Thu Mar 05 18:55:21 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 11,
+    "likes": 12,
     "retweets": 2,
     "url": "https://x.com/AichiStakePool/status/2029631870829482332"
   },
@@ -3787,8 +4130,8 @@
     "createdAt": "Thu Mar 05 18:20:55 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 351,
-    "retweets": 38,
+    "likes": 360,
+    "retweets": 39,
     "url": "https://x.com/TapTools/status/2029623204743106925"
   },
   {
@@ -3847,7 +4190,7 @@
     "createdAt": "Thu Mar 05 18:04:28 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 5,
+    "likes": 8,
     "retweets": 0,
     "url": "https://x.com/TapTools/status/2029619064109420844"
   },
@@ -3859,8 +4202,8 @@
     "createdAt": "Thu Mar 05 18:04:10 +0000 2026",
     "tier": 1,
     "category": "dev_tools",
-    "likes": 67,
-    "retweets": 13,
+    "likes": 71,
+    "retweets": 14,
     "url": "https://x.com/TapTools/status/2029618991275331770"
   },
   {
@@ -3871,7 +4214,7 @@
     "createdAt": "Thu Mar 05 18:01:03 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 150,
+    "likes": 154,
     "retweets": 24,
     "url": "https://x.com/Cardano_CF/status/2029618206285943199"
   },
@@ -3896,7 +4239,7 @@
     "createdAt": "Thu Mar 05 18:00:01 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 115,
+    "likes": 116,
     "retweets": 8,
     "url": "https://x.com/MinswapIntern/status/2029617945303994469"
   },
@@ -3944,7 +4287,7 @@
     "createdAt": "Thu Mar 05 17:50:38 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 43,
+    "likes": 45,
     "retweets": 2,
     "url": "https://x.com/adamKDean/status/2029615584422543697"
   },
@@ -4298,7 +4641,7 @@
     "createdAt": "Thu Mar 05 17:00:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 50,
+    "likes": 51,
     "retweets": 2,
     "url": "https://x.com/MinswapIntern/status/2029602842567225743"
   },
@@ -4322,7 +4665,7 @@
     "createdAt": "Thu Mar 05 16:47:29 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 108,
+    "likes": 109,
     "retweets": 22,
     "url": "https://x.com/strikeperps/status/2029599693064290718"
   },
@@ -4359,7 +4702,7 @@
     "tier": 1,
     "category": "spo",
     "likes": 11,
-    "retweets": 4,
+    "retweets": 5,
     "url": "https://x.com/P2PValidator/status/2029598712247333053"
   },
   {
@@ -4370,7 +4713,7 @@
     "createdAt": "Thu Mar 05 16:41:29 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 129,
+    "likes": 132,
     "retweets": 8,
     "url": "https://x.com/Cardano_CF/status/2029598183257489648"
   },
@@ -4626,8 +4969,8 @@
     "createdAt": "Thu Mar 05 16:14:27 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 140,
-    "retweets": 21,
+    "likes": 144,
+    "retweets": 22,
     "url": "https://x.com/JaromirTesar/status/2029591377667899693"
   },
   {
@@ -4651,7 +4994,7 @@
     "createdAt": "Thu Mar 05 16:13:57 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 8,
+    "likes": 10,
     "retweets": 0,
     "url": "https://x.com/AdamRusch/status/2029591252618924379"
   },
@@ -4663,7 +5006,7 @@
     "createdAt": "Thu Mar 05 16:10:19 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 60,
+    "likes": 62,
     "retweets": 22,
     "url": "https://x.com/IntersectMBO/status/2029590341033283667"
   },
@@ -4675,7 +5018,7 @@
     "createdAt": "Thu Mar 05 16:08:34 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 104,
+    "likes": 106,
     "retweets": 16,
     "url": "https://x.com/Quantumplation/status/2029589900010328515"
   },
@@ -4749,7 +5092,7 @@
     "createdAt": "Thu Mar 05 15:51:21 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 19,
+    "likes": 23,
     "retweets": 4,
     "url": "https://x.com/therealdisasm/status/2029585565042049077"
   },
@@ -4821,7 +5164,7 @@
     "createdAt": "Thu Mar 05 15:26:56 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 0,
+    "likes": 1,
     "retweets": 0,
     "url": "https://x.com/WingRiderscom/status/2029579419518427220"
   },
@@ -4907,13 +5250,13 @@
     "createdAt": "Thu Mar 05 15:00:02 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 119,
+    "likes": 120,
     "retweets": 11,
     "url": "https://x.com/MinswapIntern/status/2029572651652383100"
   },
   {
     "id": "2029572481590472781",
-    "text": "@Apex_333 @pyro_ae I don't disagree that there's been a big missing piece in terms of project capitalization. I don't know that Catalyst (as an innovation fund) is the right way to approach that though. I also think there should/must be multiple different funding streams and formats (public vote vs. expert review panel, etc) so that projects can find/get the help they need without a big \"come one, come all\" cluster-F that Catalyst rounds generally end up being.\n\nWhat you're describing is not a \"grant\" for innovation (i.e. you need capital to scale your proven business model) because you've already acknowledged that you have a profitable business, so any capital injection to scale should/must come with some equity stake/loan terms to return that capital investment (hopefully).",
+    "text": "I don't disagree that there's been a big missing piece in terms of project capitalization. I don't know that Catalyst (as an innovation fund) is the right way to approach that though. I also think there should/must be multiple different funding streams and formats (public vote vs. expert review panel, etc) so that projects can find/get the help they need without a big \"come one, come all\" cluster-F that Catalyst rounds generally end up being.\n\nWhat you're describing is not a \"grant\" for innovation (i.e. you need capital to scale your proven business model) because you've already acknowledged that you have a profitable business, so any capital injection to scale should/must come with some equity stake/loan terms to return that capital investment (hopefully).",
     "author": "adamKDean",
     "authorLabel": "Adam Dean",
     "createdAt": "Thu Mar 05 14:59:21 +0000 2026",
@@ -5009,7 +5352,7 @@
   },
   {
     "id": "2029569292715610150",
-    "text": "@jonahkoch @QuasarSure @RuLooking4This2 The \"problem\" if you will is that Emurgo/Yoroi are not \"bad\" DReps (and they are well-funded to continue the cycle). So the concept of social credit, etc doesn't really apply. It's not that they are not being \"good\" participants in governance but using their incumbent advantage to heavily favor delegation to their DRep(s) has created a very not-good power distribution in Cardano governance.",
+    "text": "The \"problem\" if you will is that Emurgo/Yoroi are not \"bad\" DReps (and they are well-funded to continue the cycle). So the concept of social credit, etc doesn't really apply. It's not that they are not being \"good\" participants in governance but using their incumbent advantage to heavily favor delegation to their DRep(s) has created a very not-good power distribution in Cardano governance.",
     "author": "adamKDean",
     "authorLabel": "Adam Dean",
     "createdAt": "Thu Mar 05 14:46:41 +0000 2026",
@@ -5069,7 +5412,7 @@
   },
   {
     "id": "2029567117864079551",
-    "text": "@marshosaurus @QuasarSure @RuLooking4This2 I'm not convinced that this would materially change the needle too much as people would use the same wallet interface and be prompted right back to delegation to Emurgo/Yoroi/Eternl/Wallet-of-your-choice, just on a different time horizon.\n\nThe decay function really only protects against \"dead\" wallets where the user has lost keys but it remains active and counted forever as long as that SPO/DRep continue to be active",
+    "text": "I'm not convinced that this would materially change the needle too much as people would use the same wallet interface and be prompted right back to delegation to Emurgo/Yoroi/Eternl/Wallet-of-your-choice, just on a different time horizon.\n\nThe decay function really only protects against \"dead\" wallets where the user has lost keys but it remains active and counted forever as long as that SPO/DRep continue to be active",
     "author": "adamKDean",
     "authorLabel": "Adam Dean",
     "createdAt": "Thu Mar 05 14:38:03 +0000 2026",
@@ -5105,7 +5448,7 @@
   },
   {
     "id": "2029566538001650001",
-    "text": "@lacepool_com @emurgo_io @phillip_pon It's a bad look (and potentially getting close to being declared a security territory ~20% control arguably per Charles' recent video). You say \"they are able to fix it\" but what can they do now that the power has been lazily delegated to them? They could update the interfaces to prevent additional delegation (possibly) but there is no way to shed some delegation without fully retiring as a DRep and I'm not sure that is the right thing to -force- them to do either... it's a tricky situation :-\\",
+    "text": "It's a bad look (and potentially getting close to being declared a security territory ~20% control arguably per Charles' recent video). You say \"they are able to fix it\" but what can they do now that the power has been lazily delegated to them? They could update the interfaces to prevent additional delegation (possibly) but there is no way to shed some delegation without fully retiring as a DRep and I'm not sure that is the right thing to -force- them to do either... it's a tricky situation :-\\",
     "author": "adamKDean",
     "authorLabel": "Adam Dean",
     "createdAt": "Thu Mar 05 14:35:44 +0000 2026",
@@ -5123,13 +5466,13 @@
     "createdAt": "Thu Mar 05 14:34:00 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 246,
-    "retweets": 24,
+    "likes": 249,
+    "retweets": 25,
     "url": "https://x.com/Sssebi/status/2029566099550044603"
   },
   {
     "id": "2029565806192017895",
-    "text": "@CSWAP_Destroy @emurgo_io @Cardano_CF @IntersectMBO I don't know what the Constitution would do... perhaps if you run an application (as a DRep) that is in violation then any withdraw from the Treasury becomes Unconstitutional? But Emurgo can nearly unilaterally stonewall and hold the Treasury hostage with the amount of delegation they currently have, so you end up in a stalemate :-\\ They also now that they have amassed this voting power have no way to shed or get rid of it (sans retiring their DRep entirely I suppose)",
+    "text": "I don't know what the Constitution would do... perhaps if you run an application (as a DRep) that is in violation then any withdraw from the Treasury becomes Unconstitutional? But Emurgo can nearly unilaterally stonewall and hold the Treasury hostage with the amount of delegation they currently have, so you end up in a stalemate :-\\ They also now that they have amassed this voting power have no way to shed or get rid of it (sans retiring their DRep entirely I suppose)",
     "author": "adamKDean",
     "authorLabel": "Adam Dean",
     "createdAt": "Thu Mar 05 14:32:50 +0000 2026",
@@ -5143,10 +5486,11 @@
     "id": "2029565469435277693",
     "text": "@ApexFusion @ApexFusion @filipblagojevi8 @phil_uplc \n\nRegarding the discussion about Tachys on the Cardano L1, I'm curios about compatibility with Leios.\n\nWould it even be compatible or is it one vs. the other?  My understanding is that we couldn't have both.",
     "author": "Cerkoryn",
-    "authorLabel": "Cerkoryn",
+    "authorLabel": "$cerkoryn | dRep",
     "createdAt": "Thu Mar 05 14:31:30 +0000 2026",
-    "tier": 1,
-    "category": "key_person",
+    "tier": 2,
+    "category": "protocol_parameter",
+    "searchLabel": "Protocol & Parameters",
     "likes": 0,
     "retweets": 0,
     "url": "https://x.com/Cerkoryn/status/2029565469435277693"
@@ -5183,13 +5527,13 @@
     "createdAt": "Thu Mar 05 14:30:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 673,
-    "retweets": 108,
+    "likes": 683,
+    "retweets": 111,
     "url": "https://x.com/MinswapIntern/status/2029565093831496169"
   },
   {
     "id": "2029564822220939537",
-    "text": "@CryptoNewbyX @CSWAP_Destroy @emurgo_io @Cardano_CF @IntersectMBO 1. Delegation IS linked to -withdrawing- staking rewards, meaning for users who don't care but just want their staking rewards, they delegate to the first DRep presented to them to \"check the box\" and get their bacon\n2. Yoroi + Eternl DReps are so powerful because they are the two most popular wallets and both have default interfaces that make it \"easy\" to simply delegate to their DRep.\n\nOne can argue that there is a certain amount of personal responsibility that should be involved, but the design of the system (forcing a delegation in order to claim rewards) has lent itself to the passive majority (not on Twitter, not using dApps, etc) simply checking the box and moving on with their life, still blissfully unaware of governance activity or responsibility",
+    "text": "1. Delegation IS linked to -withdrawing- staking rewards, meaning for users who don't care but just want their staking rewards, they delegate to the first DRep presented to them to \"check the box\" and get their bacon\n2. Yoroi + Eternl DReps are so powerful because they are the two most popular wallets and both have default interfaces that make it \"easy\" to simply delegate to their DRep.\n\nOne can argue that there is a certain amount of personal responsibility that should be involved, but the design of the system (forcing a delegation in order to claim rewards) has lent itself to the passive majority (not on Twitter, not using dApps, etc) simply checking the box and moving on with their life, still blissfully unaware of governance activity or responsibility",
     "author": "adamKDean",
     "authorLabel": "Adam Dean",
     "createdAt": "Thu Mar 05 14:28:55 +0000 2026",
@@ -5207,7 +5551,7 @@
     "createdAt": "Thu Mar 05 14:25:49 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 165,
+    "likes": 168,
     "retweets": 23,
     "url": "https://x.com/CardanoRami/status/2029564041333776620"
   },
@@ -5485,7 +5829,7 @@
     "createdAt": "Thu Mar 05 14:00:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 70,
+    "likes": 71,
     "retweets": 9,
     "url": "https://x.com/MinswapIntern/status/2029557543320850496"
   },
@@ -5811,8 +6155,8 @@
     "createdAt": "Thu Mar 05 12:00:00 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 182,
-    "retweets": 19,
+    "likes": 188,
+    "retweets": 21,
     "url": "https://x.com/MinswapIntern/status/2029527346269888624"
   },
   {
@@ -6016,7 +6360,7 @@
     "createdAt": "Thu Mar 05 11:06:22 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 0,
+    "likes": 1,
     "retweets": 0,
     "url": "https://x.com/DeOpenSourceGuy/status/2029513849268011488"
   },
@@ -6200,7 +6544,7 @@
     "createdAt": "Thu Mar 05 10:06:38 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 273,
+    "likes": 275,
     "retweets": 28,
     "url": "https://x.com/Sssebi/status/2029498816857092522"
   },
@@ -6224,7 +6568,7 @@
     "createdAt": "Thu Mar 05 10:00:16 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 720,
+    "likes": 724,
     "retweets": 166,
     "url": "https://x.com/Cardano_CF/status/2029497214196679124"
   },
@@ -6492,7 +6836,7 @@
     "createdAt": "Thu Mar 05 07:02:03 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 105,
+    "likes": 106,
     "retweets": 12,
     "url": "https://x.com/StakeWithPride/status/2029452362797203864"
   },
@@ -6541,13 +6885,13 @@
     "createdAt": "Thu Mar 05 06:32:51 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 132,
+    "likes": 133,
     "retweets": 14,
     "url": "https://x.com/MinswapDEX/status/2029445015530029389"
   },
   {
     "id": "2029444660603855340",
-    "text": "CTEC Governance Action情報✅\n\n各種ガバナンス提案について、DRepとして投票しています\n\nカルダノネットワークの発展（特��技術面）に寄与するかどうかを重点にしています\n\n詳細は以下でご確認ください↓\n\nhttps://t.co/PMcfNxeLmq\n\n今後もDRepやSPO活動を頑張ります😊\n\nADA \nCardano\nカルダノ",
+    "text": "CTEC Governance Action情報✅\n\n各種ガバナンス提案について、DRepとして投票しています\n\nカルダノネットワークの発展（特に���術面）に寄与するかどうかを重点にしています\n\n詳細は以下でご確認ください↓\n\nhttps://t.co/PMcfNxeLmq\n\n今後もDRepやSPO活動を頑張ります😊\n\nADA \nCardano\nカルダノ",
     "author": "Crown_Tech1021",
     "authorLabel": "CTEC : Stake Pool operated by Crown-Tech,Inc.",
     "createdAt": "Thu Mar 05 06:31:27 +0000 2026",
@@ -6815,7 +7159,7 @@
   },
   {
     "id": "2029395361001837024",
-    "text": "@Quantumplation @adamKDean 🤣🤣����🤣🤣🤣",
+    "text": "@Quantumplation @adamKDean 🤣��🤣🤣🤣🤣",
     "author": "therealdisasm",
     "authorLabel": "Disasm",
     "createdAt": "Thu Mar 05 03:15:33 +0000 2026",
@@ -6945,7 +7289,7 @@
     "createdAt": "Thu Mar 05 01:47:31 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 24,
+    "likes": 25,
     "retweets": 1,
     "url": "https://x.com/therealdisasm/status/2029373208390996319"
   },
@@ -7750,15 +8094,15 @@
   {
     "id": "2029283660872945839",
     "text": "@juanant33714905 Jajajajajajajaajjaajajjajaajajjaajaj\nDéjate de joder! Un rug pull pedorro el scam más grande de la historia \n\nPara ...jajajajajajjjjj",
-    "author": "CriptogirlB",
-    "authorLabel": "WHITE pool Cardano 🤍Euge Blue Sky",
+    "author": "unknown",
+    "authorLabel": "unknown",
     "createdAt": "Wed Mar 04 19:51:41 +0000 2026",
     "tier": 2,
     "category": "security",
     "searchLabel": "Security & Incidents",
     "likes": 0,
     "retweets": 0,
-    "url": "https://x.com/CriptogirlB/status/2029283660872945839"
+    "url": "https://x.com/unknown/status/2029283660872945839"
   },
   {
     "id": "2029282893420478521",
@@ -7768,8 +8112,8 @@
     "createdAt": "Wed Mar 04 19:48:38 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 141,
-    "retweets": 19,
+    "likes": 142,
+    "retweets": 20,
     "url": "https://x.com/CardanoRami/status/2029282893420478521"
   },
   {
@@ -7948,7 +8292,7 @@
     "createdAt": "Wed Mar 04 18:54:17 +0000 2026",
     "tier": 1,
     "category": "spo",
-    "likes": 82,
+    "likes": 84,
     "retweets": 12,
     "url": "https://x.com/StakeWithPride/status/2029269216084611522"
   },
@@ -8020,7 +8364,7 @@
     "createdAt": "Wed Mar 04 18:38:45 +0000 2026",
     "tier": 1,
     "category": "ecosystem_adoption",
-    "likes": 78,
+    "likes": 79,
     "retweets": 7,
     "url": "https://x.com/WorldMobileTeam/status/2029265307098071515"
   },
@@ -8200,7 +8544,7 @@
     "createdAt": "Wed Mar 04 17:47:00 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 85,
+    "likes": 86,
     "retweets": 10,
     "url": "https://x.com/ArmyofSpies/status/2029252283234697408"
   },
@@ -8212,7 +8556,7 @@
     "createdAt": "Wed Mar 04 17:32:01 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 218,
+    "likes": 219,
     "retweets": 33,
     "url": "https://x.com/MidnightNtwrk/status/2029248513377485061"
   },
@@ -8338,7 +8682,7 @@
   },
   {
     "id": "2029237537009729891",
-    "text": "Midnight最新ブログ、Midnight Cityについて。\n\n🔹選択的開示が体感できる\nPublic modeではほとんどの情報を開示しない。\nAuditor modeモードでは特定の組織だけに特定の情報のみが開示。\nGod modeは全データ開示だが、本来はこの状態にはならない（Midnight Cityだけのチート設定）\n\n🔹大容量のトランザクションも処理\n専用の２層検証システムで、個々のトランザクションをしっかり検証して安全を保障\n\n🔹自立AIエージェント\n全登場キャラクターにGoogle Geminiを搭載し、人格も設定され、自立してメッセージを送ったり取引する。多くの人が多くのトランザクションを生成する。\n\n🔹今後は？\n行動できる範囲の拡大、自分で設定したエージェントの生成やチャットなど。ネットワークの成長に合わせてMidnight Cityも拡大する。\n\n専用のDiscordチャンネルで細かいイベントやアップデートも確認できますよ✨\n\nhttps://t.co/ILAI9HaZdE",
+    "text": "Midnight最新ブログ、Midnight Cityについて。\n\n🔹選択的開示が体感できる\nPublic modeではほとんどの情報を開示しない。\nAuditor modeモードでは特定の組織だけに特定���情報のみが開示。\nGod modeは全データ開示だが、本来はこの状態にはならない（Midnight Cityだけのチート設定）\n\n🔹大容量のトランザクションも処理\n専用の２層検証システムで、個々のトランザクションをしっかり検証して安全を保障\n\n🔹自立AIエージェント\n全登場キャラクターにGoogle Geminiを搭載し、人格も設定され、自立してメッセージを送ったり取引する。多くの人が多くのトランザクションを生成する。\n\n🔹今後は？\n行動できる範囲の拡大、自分で設定したエージェントの生成やチャットなど。ネットワークの成長に合わせてMidnight Cityも拡大する。\n\n専用のDiscordチャンネルで細かいイベントやアップデートも確認できますよ✨\n\nhttps://t.co/ILAI9HaZdE",
     "author": "AichiStakePool",
     "authorLabel": "Aichi Stake Pool",
     "createdAt": "Wed Mar 04 16:48:24 +0000 2026",
@@ -8422,7 +8766,7 @@
   },
   {
     "id": "2029231754825945252",
-    "text": "@NightSkyNow go back? 👀",
+    "text": "@NightSkyNow go back? ���",
     "author": "gravitycardano",
     "authorLabel": "Gravity Cardano",
     "createdAt": "Wed Mar 04 16:25:26 +0000 2026",
@@ -8513,7 +8857,7 @@
     "createdAt": "Wed Mar 04 15:37:46 +0000 2026",
     "tier": 1,
     "category": "key_person",
-    "likes": 435,
+    "likes": 436,
     "retweets": 34,
     "url": "https://x.com/Sssebi/status/2029219758717943857"
   },
@@ -8806,7 +9150,7 @@
     "createdAt": "Wed Mar 04 13:57:47 +0000 2026",
     "tier": 1,
     "category": "institutional",
-    "likes": 153,
+    "likes": 154,
     "retweets": 24,
     "url": "https://x.com/Cardano_CF/status/2029194599038636328"
   },
