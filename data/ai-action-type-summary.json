@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-06T21:45:47.122Z",
+  "generatedAt": "2026-03-06T22:50:40.102Z",
   "actionTypes": {
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoActions about Treasury Net Change Limits (NCL) receive mixed support, with 68% voting Yes and 32% voting No. Voters supporting the 300M ADA NCL emphasize fiscal discipline aligned with treasury inflows and current market conditions, while opponents argue the limit is either too high (risking treasury depletion) or too restrictive (limiting ecosystem investment opportunities).",
-      "summary_ja": "トレジャリー純変化限度額（NCL）に関するInfoActionは意見が分かれており、68%がYes、32%がNoで投票しています。300M ADAのNCLを支持する投票者は、トレジャリーの流入と現在の市場状況に合わせた財政規律を強調していますが、反対派はこの限度額が高すぎる（トレジャリー枯渇のリスク）か制限的すぎる（エコシステム投資機会の制限）と主張しています。",
+      "summary_en": "InfoActions regarding Cardano's Net Change Limit (NCL) for Treasury management receive mixed support, with 67.5% voting Yes, reflecting ongoing debate about fiscal discipline versus ecosystem funding flexibility. Supporters favor establishing a clear spending limit aligned with treasury inflows and market conditions, while opponents argue the limit is either too high (risking treasury depletion) or unnecessarily restrictive (constraining ecosystem development).",
+      "summary_ja": "CardanoのNet Change Limit（NCL）に関するInfoActionは賛否が分かれており、賛成票が67.5%を占めています。支持者は入金実績と市場状況に合わせた明確な支出上限の設定を支持し、反対者は上限が高すぎてトレジャリーを枯渇させるリスク、または生態系開発を不必要に制限していると主張しています。",
       "typicalReasonsYes_en": [
-        "Fiscal discipline aligned with treasury inflows and conservative market conditions",
-        "Necessary guardrail to establish governance framework and avoid stalling treasury operations",
-        "Prudent approach reflecting lower ADA price and reserve depletion concerns",
-        "Reasonable balance between supporting ecosystem development and maintaining long-term sustainability"
+        "Establishes necessary fiscal discipline aligned with actual treasury inflows and conservative spending approach",
+        "Allows governance process to continue functioning without stalling ecosystem infrastructure and development initiatives",
+        "Responsive to current market conditions and ADA price volatility, ensuring responsible capital management",
+        "Represents improvement over previous proposals and can be revised through future governance actions"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー流入と保守的な市場���況に沿った財政規律",
-        "ガバナンスフレームワークを確立しトレジャリー運用の停滞を回避するための必要な措置",
-        "ADA価格の低下と準備金枯渇への懸念を反映した慎重なアプローチ",
-        "エコシステム開発サポートと長期的持続可能性維持のバランス"
+        "実際のトレジャリー入金に合わせた財政規律を確立し、保守的な支出アプローチを実現する",
+        "エコシステムのインフラストラクチャと開発イニシアチブを停滞させずに、ガバナンスプロセスを継続可能にする",
+        "現在の市場状況とADA価格の変動性に対応し、責任ある資本管理を確保する",
+        "以前の提案よりも改善され、将来のガバナンスアクションで見直しが可能である"
       ],
       "typicalReasonsNo_en": [
-        "300M ADA limit is too high and enables treasury depletion rather than growth",
-        "Lack of transparent reporting and effectiveness metrics from prior year budget execution",
-        "NCL should be lower (200-250M ADA) to enforce strict prioritization and treasury preservation",
-        "Higher flexibility (350M ADA) needed to avoid rejecting valuable ecosystem proposals"
+        "NCL is still too high and encourages wasteful spending; lower limits (200-250M ADA) would force better prioritization",
+        "Previous year's budget outcomes lack transparent reporting and review before approving new spending authority",
+        "Unnecessary restriction on ecosystem flexibility; higher ceilings provide needed funding for quality proposals that might be rejected",
+        "Governance maturity insufficient to ensure effectiveness measurement and accountability for treasury spending"
       ],
       "typicalReasonsNo_ja": [
-        "300M ADAの限度額が高すぎてトレジャリー成長ではなく枯渇を招く",
-        "前年度予算執行の透明性報告と効果測定の欠如",
-        "厳密な優先順位付けとトレジャリー保全を強制するにはNCLをさらに低く（200-250M ADA）すべき",
-        "価値あるエコシステム提案の却下を避けるためにはより高い柔軟性（350M ADA）が必要"
+        "NCLがまだ高すぎて浪費を助長する；より低い上限（200～250M ADA）がより良い優先順位付けを強制する",
+        "前年度の予算結果が透明に報告・検証されないまま新���い支出権限を承認している",
+        "生態系の柔軟性を不必要に制限；より高い上限が質の高い提案の実現に必要な資金を提供する",
+        "トレジャリー支出の効果測定と説明責任を確保するガバナンスの成熟度が不十分である"
       ]
     },
     "TreasuryWithdrawals": {
       "count": 47,
-      "summary_en": "Treasury Withdrawal proposals show strong support (77% approval rate) primarily for projects demonstrating proven track records, clear deliverables, and strategic value to Cardano's infrastructure. Opposition stems from concerns about budget justification, fiscal responsibility during market downturns, governance transparency, and questions about necessity or cost-effectiveness. Abstentions typically reflect constitutional compliance issues or desire for more specificity before committing funds.",
-      "summary_ja": "Treasury Withdrawal提案は、実績のあるチーム、明確な成果物、Cardanoインフラへの戦略的価値を示すプロジェクトに対して強い支持を受けている（承認率77%）。反対は予算正当性の懸念、弱気市場での財政責任、ガバナンス透明性、必要性またはコスト効率性への疑問から生じている。棄権票は通常、憲法遵守問題またはファンド支出前により詳細な情報を望む立場を反映している。",
+      "summary_en": "Treasury withdrawal proposals for Cardano show strong support for strategic infrastructure investments that advance ecosystem resilience and decentralization. Voters favor well-established teams with proven track records, clear budgets, and transparent delivery plans, though concerns exist around fiscal responsibility, budget assumptions, and constitutional compliance in bear market conditions.",
+      "summary_ja": "Cardanoの財務引き出し提案は、エコシステムの強化と分散化を進める戦略的インフラ投資に対する強い支持を示しています。投票者は実績のあるチーム、明確な予算、透明な実行計画を支持する一方で、弱気相場環境における財政責任、予算仮定、憲法遵守に関する懸念が存在します。",
       "typicalReasonsYes_en": [
-        "Proven team track record with demonstrated delivery capability and past unused contingency fund returns to treasury",
-        "Strategic infrastructure investment (node diversity, decentralization) that reduces single-point-of-failure risks",
-        "Clear budget breakdown, detailed roadmap with specific milestones, KPIs, and security audit commitments",
-        "Addressing critical ecosystem needs such as protocol implementation resilience or essential DeFi infrastructure"
+        "Team has strong track record of delivery and fiscal responsibility (returning unused funds)",
+        "Proposal addresses critical infrastructure needs for decentralization and network resilience",
+        "Well-structured budget with clear milestones, KPIs, and detailed financial breakdowns",
+        "Strategic long-term value justifies investment despite bear market conditions"
       ],
       "typicalReasonsYes_ja": [
-        "過去の未使用予算の返還実績を含む実行能力の証明されたチーム",
-        "単一障害点リスクを軽減するノード多様性や分散化などの戦略的インフラ投資",
-        "活動ごとの詳細な予算内訳、具体的なマイルストーン、KPI、セキュリティ監査コミットメント",
-        "プロトコル実装の耐障害性やDeFiインフラなどの重要なエコシステムニーズへの対応"
+        "チームが実績のある実行能力と会計責任を示している（未使用資金の返還）",
+        "分散化とネットワーク耐性のための重要インフラニーズに対応",
+        "明確なマイルストーン、KPI、詳細な財務内訳を含む適切に構造化された予算",
+        "強気相場環境にもかかわらず、投資を正当化する長期的な戦略的価値"
       ],
       "typicalReasonsNo_en": [
-        "Fiscal responsibility concerns, especially during bearish markets or when proposals assume unrealistic ADA price assumptions",
-        "Lack of transparency in governance structure, budget itemization, or leadership qualifications of oversight committees",
-        "Redundancy or inefficiency (e.g., funding multiple implementations of same solution when one exists)",
-        "Missing verification standards, unclear product specifications, or insufficient justification for why ecosystem needs the proposal"
+        "Budget assumes unrealistic ADA price or lacks fiscal responsibility during market downturns",
+        "Lack of specificity in deliverables, KPIs, or verifiable acceptance criteria for major funding",
+        "Constitutional compliance concerns or governance process issues with Treasury delegation",
+        "Redundancy with existing initiatives or unclear necessity for ecosystem benefit"
       ],
       "typicalReasonsNo_ja": [
-        "特に弱気市場下または非現実的なADA価格仮定を前提とした提案での財政責任の懸��",
-        "ガバナンス構造、予算項目内訳、または監視委員会の指導者適格性の透明性の欠如",
-        "既存ソリューション時の重複投資やプロセス効率化、または同一ソリューションの複数実装への資金提供",
-        "検証基準の欠落、製品仕様の不明確さ、またはエコシステムが提案を必要とする理由の不十分な正当化"
+        "非現実的なADA価格仮定または弱気相場時の会計責任の欠如",
+        "大型資金に対する成果物、KPI、検証可能な受入基準の仕様不足",
+        "憲法遵守の懸念または財務委任に関するガバナンスプロセスの問題",
+        "既存イニシアチブとの重複または生態系利益に対する必要性の不明確さ"
       ]
     },
     "ParameterChange": {
