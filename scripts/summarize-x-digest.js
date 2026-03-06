@@ -57,6 +57,13 @@ function utcYesterday() {
   return d.toISOString().split("T")[0];
 }
 
+/** Remove lone surrogates and other invalid Unicode from text */
+function sanitizeText(str) {
+  if (!str) return "";
+  return str.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/g, "")
+            .replace(/(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
+}
+
 // ─── Category definitions ───────────────────────────────────────────────────
 
 const CATEGORIES = {
@@ -287,7 +294,7 @@ async function buildDailyDigest(tweets) {
     const label = CATEGORIES[cat]?.en || cat;
     tweetText += `\n## ${label}\n`;
     for (const t of catTweets.slice(0, 15)) {
-      tweetText += `- @${t.author}: ${t.text.slice(0, 280)} [${t.likes || 0}♥ ${t.retweets || 0}RT]\n`;
+      tweetText += `- @${t.author}: ${sanitizeText(t.text).slice(0, 280)} [${t.likes || 0}♥ ${t.retweets || 0}RT]\n`;
     }
   }
 

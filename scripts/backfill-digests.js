@@ -156,6 +156,14 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/** Remove lone surrogates and other invalid Unicode from text */
+function sanitizeText(str) {
+  if (!str) return "";
+  // Remove lone surrogates (U+D800–U+DFFF) that break JSON encoding
+  return str.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/g, "")
+            .replace(/(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, "");
+}
+
 // ─── Date helpers ────────────────────────────────────────────────────────────
 
 function dateRange(fromStr, toStr) {
@@ -224,7 +232,7 @@ async function collectForDate(dateStr) {
         const authorName = t.author?.userName || t.user?.screen_name || "unknown";
         tweets.push({
           id,
-          text: t.text || t.full_text || "",
+          text: sanitizeText(t.text || t.full_text || ""),
           author: authorName,
           createdAt: t.createdAt || t.created_at,
           category: batch.category === "mixed" ? guessCategoryFromAuthor(authorName) : batch.category,
@@ -303,7 +311,7 @@ async function summarizeForDate(dateStr, tweets) {
     const label = CATEGORIES[cat] || cat;
     tweetText += `\n## ${label}\n`;
     for (const t of catTweets.slice(0, 10)) {
-      tweetText += `- @${t.author}: ${t.text.slice(0, 280)} [${t.likes || 0}♥ ${t.retweets || 0}RT]\n`;
+      tweetText += `- @${t.author}: ${sanitizeText(t.text).slice(0, 280)} [${t.likes || 0}♥ ${t.retweets || 0}RT]\n`;
     }
   }
 
