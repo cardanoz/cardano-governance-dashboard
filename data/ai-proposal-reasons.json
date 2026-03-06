@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-06T00:31:51.833Z",
+  "generatedAt": "2026-03-06T03:12:49.620Z",
   "proposals": {
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "title": "Amaru Treasury Withdrawal 2026",
@@ -36489,8 +36489,8 @@
       "submittedEpoch": 0,
       "stats": {
         "votedWithRationale": 0,
-        "votedWithoutRationale": 1,
-        "notVoted": 1592
+        "votedWithoutRationale": 3,
+        "notVoted": 1590
       },
       "yesReasons": [],
       "noReasons": [],
