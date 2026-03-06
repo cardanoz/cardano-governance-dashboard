@@ -1,0 +1,106 @@
+[
+  {
+    "month": "2026-03",
+    "summary_en": "March 2026 demonstrated Cardano's maturation as a multi-layered ecosystem with major institutional adoption, infrastructure upgrades, and privacy integration. CME's ADA futures launch and Swiss retail adoption signified institutional mainstream acceptance, while Midnight's mainnet activation and Leios testnet planning advanced the protocol layer. Stablecoin infrastructure (USDCx reaching $47M supply) and DeFi protocol launches (Strike V2, Bodega prediction markets) accelerated ecosystem growth, with governance focusing on parameter optimization and budget framework updates.",
+    "summary_ja": "2026年3月はCardanoのマルチレイヤーエコシステム成熟を示し、機関投資家採用、インフラ整備、プライバシー統合で大きな進展があった。CMEのADA先物上場とスイス小売採用により機関投資家の主流受け入れが確認され、Midnightメインネット起動とLeiosテストネット計画がプロトコル層を推進した。ステーブルコイン基盤（USDCx供給$47M到達）とDeFiプロトコル立ち上げがエコシステム成長を加速させ、ガバナンスはパラメータ最適化と予算枠組み更新に焦点を当てた。",
+    "topHighlights": [
+      {
+        "category": "institutional",
+        "title_en": "CME Group Launches 24/7 ADA Futures Trading",
+        "title_ja": "CMEグループが24/7 ADA先物取引を開始",
+        "summary_en": "CME's addition of ADA to its crypto futures suite with 24/7 trading marked the first major institutional derivatives venue for Cardano, legitimizing ADA as an institutional asset class.",
+        "summary_ja": "CMEがCardanoの初の主要機関デリバティブ取引所としてADAを先物スイートに追加し、24/7取引でADAを機関投資家資産として正当化した。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet Launch & Privacy Layer Activation",
+        "title_ja": "Midnightメインネット起動とプライバシーレイヤー有効化",
+        "summary_en": "Midnight's late March mainnet activation introduced the first privacy-preserving smart contract layer to Cardano, enabling applications like Bodega's fully private prediction markets and expanding ecosystem use cases.",
+        "summary_ja": "Midnightの3月末メインネット起動により、Cardanoに初のプライバシー保護スマートコントラクトレイヤーが導入され、Bodegaの完全プライベート予測市場などを有効化した。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Stablecoin Infrastructure Reaches $47M Supply",
+        "title_ja": "USDCxステーブルコイン基盤が$47M供給に到達",
+        "summary_en": "Circle's xReserve-backed USDCx stablecoin achieved rapid adoption on Cardano with 40% weekly growth, establishing robust liquidity infrastructure for DeFi protocols and real-world payments.",
+        "summary_ja": "CircleのxReserve裏付けUSDCxがCardanoで40%週間成長で急速採用され、DeFiプロトコルと実世界決済の堅牢な流動性基盤を確立した。",
+        "importance": 5
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Ouroboros Leios Testnet Planned for June 2026",
+        "title_ja": "Ouroboros Leios テストネット2026年6月予定",
+        "summary_en": "Leios testnet planning and Apex Fusion's Ouroboros Tachýs advancement (sub-second block times) signaled imminent consensus layer upgrades addressing the throughput-decentralization-security trilemma.",
+        "summary_ja": "LeiosテストネットプランニングとApex FusionのOutoboros Tachýs進展（サブ秒ブロック時間）は、スループット・分散・セキュリティのトリレンマに対処する間近のコンセンサス層アップグレードを示唆した。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Swiss Retail Adoption: 137 Supermarkets Accept ADA",
+        "title_ja": "スイス小売採用：137のスーパーがADAを受け入れ",
+        "summary_en": "Spar supermarkets in Switzerland enabling ADA payments across 137 stores demonstrated mainstream real-world adoption beyond financial infrastructure.",
+        "summary_ja": "スイスのSparスーパーマーケット137店舗でのADA決済実現により、金融インフラを超えた主流的な実世界採用が証明された。",
+        "importance": 5
+      }
+    ],
+    "trends": [
+      {
+        "category": "ecosystem_adoption",
+        "trend": "rising",
+        "note_en": "DeFi protocol launches, stablecoin infrastructure growth, and real-world payment integration accelerated throughout March, establishing Cardano as a production-ready blockchain.",
+        "note_ja": "DeFiプロトコル立ち上げ、ステーブルコイン基盤成長、実世界決済統合が3月全体で加速し、Cardanoをプロダクションレディなブロックチェーンとして確立した。"
+      },
+      {
+        "category": "protocol_parameter",
+        "trend": "rising",
+        "note_en": "Major consensus layer upgrades (Leios, Ouroboros Tachýs) moved from research to testnet planning, with pool parameter optimization discussions indicating active governance refinement.",
+        "note_ja": "Leios、Ouroboros Tachýsなど主要コンセンサス層アップグレードが研究からテストネット計画に移行し、プール目標パラメータ倍増提案がガバナンス改善を示唆した。"
+      },
+      {
+        "category": "institutional",
+        "trend": "rising",
+        "note_en": "CME futures launch and BlockSign institutional reporting integration signaled sustained momentum in attracting regulated financial institutions and enterprise adoption.",
+        "note_ja": "CME先物上場とBlockSign機関投資家報告統合により、規制金融機関とエンタープライズ採用の持続的な勢いが示された。"
+      }
+    ],
+    "actionItems": [
+      {
+        "action_en": "Monitor Leios testnet launch in June 2026 and evaluate community feedback on consensus layer upgrades; DReps should prepare governance positions on Ouroboros Tachýs parameter adoption and pool target K doubling proposals.",
+        "action_ja": "2026年6月のLeiosテストネット立ち上げを監視し、コンセンサス層アップグレードのコミュニティフィードバックを評価する。DRepsはOutoboros Tachýsパラメータ採用とプール目標K倍増提案のガバナンスポジション準備が必要。",
+        "audience": [
+          "DRep",
+          "governance_tool"
+        ]
+      },
+      {
+        "action_en": "Track stablecoin ecosystem health (USDCx, FluidTokens smart accounts) and DeFi protocol maturation (Strike V2, Bodega); assess regulatory implications of retail ADA payments in Switzerland for future compliance frameworks.",
+        "action_ja": "ステーブルコインエコシステムの健全性（USDCx、FluidTokensスマートアカウント）とDeFiプロトコル成熟度を追跡。スイスの小売ADA決済の規制含意を評価し、将来のコンプライアンス枠組みに反映させる。",
+        "audience": [
+          "SPO",
+          "CC",
+          "DRep"
+        ]
+      }
+    ],
+    "generatedAt": "2026-03-06T15:07:09.727Z",
+    "stats": {
+      "totalTweets": 610,
+      "totalHighlights": 49,
+      "daysWithData": 6
+    },
+    "apiUsage": {
+      "input_tokens": 1684,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2174,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+]
