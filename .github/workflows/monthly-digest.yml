@@ -1,0 +1,52 @@
+name: Monthly Digest Generation
+
+on:
+  # Every Friday at 06:00 UTC — script checks isLastFridayOfMonth internally
+  schedule:
+    - cron: '0 6 * * FRI'
+  workflow_dispatch:
+    inputs:
+      month:
+        description: 'Target month (YYYY-MM), leave empty for current month'
+        required: false
+      force:
+        description: 'Force run even if not last Friday'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  generate-monthly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate monthly digest
+        env:
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          if [ -n "${{ github.event.inputs.month }}" ]; then
+            ARGS="$ARGS --month ${{ github.event.inputs.month }}"
+          fi
+          node scripts/generate-monthly-digest.js $ARGS
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/x-monthly-digest.json
+          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Update monthly digest $(date -u +'%Y-%m-%d %H:%M UTC')" && git pull --rebase && git push)

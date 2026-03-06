@@ -9210,11 +9210,78 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
   const E = React.createElement;
   const [filter, setFilter] = React.useState("all");
   const [expandedIdx, setExpandedIdx] = React.useState({});
+  const [selectedDate, setSelectedDate] = React.useState(null);
+  const [viewMode, setViewMode] = React.useState("daily"); // "daily" | "monthly"
+  const [digestIndex, setDigestIndex] = React.useState(null);
+  const [monthCache, setMonthCache] = React.useState({}); // { "2026-03": [...] }
+  const [monthlyDigests, setMonthlyDigests] = React.useState(null);
+  const [selectedMonth, setSelectedMonth] = React.useState(null);
+  const [showOlderDates, setShowOlderDates] = React.useState(false);
+  const [loadingMonth, setLoadingMonth] = React.useState(false);
+
+  const base = "https://cardanoz.github.io/cardano-governance-dashboard/data/";
+  const v = "?v=" + Date.now();
 
   const L = (obj, field) => {
     if (!obj) return "";
     return obj[field + "_" + lang] || obj[field + "_en"] || obj[field] || "";
   };
+
+  // ─── Load digest index + monthly digest on mount ──
+  React.useEffect(() => {
+    fetch(base + "x-digest-index.json" + v).then(r => r.ok ? r.json() : null).then(idx => {
+      if (idx) {
+        setDigestIndex(idx);
+        // Auto-select latest available date
+        if (idx.months && idx.months.length > 0) {
+          const latestMonth = idx.months[0];
+          setSelectedMonth(latestMonth);
+          const days = idx.days?.[latestMonth] || [];
+          if (days.length > 0) setSelectedDate(days[days.length - 1]);
+          // Load the latest month's data
+          fetchMonthData(latestMonth);
+        }
+      }
+    }).catch(() => {});
+    fetch(base + "x-monthly-digest.json" + v).then(r => r.ok ? r.json() : null).then(data => {
+      if (data) setMonthlyDigests(Array.isArray(data) ? data : [data]);
+    }).catch(() => {});
+  }, []);
+
+  // Also seed monthCache from xDailyDigest (backward compat)
+  React.useEffect(() => {
+    if (xDailyDigest && Array.isArray(xDailyDigest) && xDailyDigest.length > 0) {
+      // Group by month
+      const byMonth = {};
+      for (const d of xDailyDigest) {
+        const m = d.date ? d.date.slice(0, 7) : null;
+        if (m) { if (!byMonth[m]) byMonth[m] = []; byMonth[m].push(d); }
+      }
+      setMonthCache(prev => {
+        const next = { ...prev };
+        for (const [m, digests] of Object.entries(byMonth)) {
+          if (!next[m] || next[m].length < digests.length) next[m] = digests;
+        }
+        return next;
+      });
+      // Set selectedDate if not yet set
+      if (!selectedDate && xDailyDigest[0]?.date) {
+        setSelectedDate(xDailyDigest[0].date);
+        setSelectedMonth(xDailyDigest[0].date.slice(0, 7));
+      }
+    }
+  }, [xDailyDigest]);
+
+  function fetchMonthData(monthStr) {
+    if (monthCache[monthStr]) return;
+    setLoadingMonth(true);
+    fetch(base + "x-digest-" + monthStr + ".json" + v).then(r => r.ok ? r.json() : null).then(data => {
+      if (data && Array.isArray(data)) {
+        setMonthCache(prev => ({ ...prev, [monthStr]: data }));
+      }
+      setLoadingMonth(false);
+    }).catch(() => setLoadingMonth(false));
+  }
 
   // Category display info
   const CAT_INFO = {
@@ -9243,37 +9310,115 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
     governance_tool: { en: "Gov Tool", ja: "ガバナンスツール" },
     spo: { en: "SPO", ja: "SPO" },
   };
-  // Audience filter options
   const AUDIENCES = ["all","DRep","CC","SPO","Holder","Builder"];
 
-  // Get the latest daily digest
-  const digest = Array.isArray(xDailyDigest) ? xDailyDigest[0] : xDailyDigest;
+  // ─── Find digest for selected date ──
+  function findDigest(dateStr) {
+    if (!dateStr) return null;
+    const month = dateStr.slice(0, 7);
+    const monthData = monthCache[month] || [];
+    const found = monthData.find(d => d.date === dateStr);
+    if (found) return found;
+    // Fallback: search xDailyDigest
+    if (Array.isArray(xDailyDigest)) {
+      return xDailyDigest.find(d => d.date === dateStr) || null;
+    }
+    return null;
+  }
+
+  const digest = viewMode === "daily" ? findDigest(selectedDate) : null;
   const highlights = digest?.highlights || [];
-
-  // Filter by audience
-  const filtered = filter === "all"
-    ? highlights
-    : highlights.filter(h => (h.audience || []).includes(filter));
-
-  // Sort by importance desc
+  const filtered = filter === "all" ? highlights : highlights.filter(h => (h.audience || []).includes(filter));
   const sorted = [...filtered].sort((a, b) => (b.importance || 0) - (a.importance || 0));
 
   const toggleExpand = i => setExpandedIdx(p => ({ ...p, [i]: !p[i] }));
 
-  // Importance badge
   const impBadge = (imp) => {
     const colors = { 5: "#ef4444", 4: "#f59e0b", 3: "#3b82f6", 2: "#6b7280", 1: "#9ca3af" };
-    return E("span", {
-      style: {
-        display: "inline-flex", alignItems: "center", justifyContent: "center",
-        width: 22, height: 22, borderRadius: "50%",
-        background: colors[imp] || "#6b7280", color: "#fff",
-        fontSize: 11, fontWeight: 700, flexShrink: 0
-      }
-    }, imp);
+    return E("span", { style: {
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      width: 22, height: 22, borderRadius: "50%",
+      background: colors[imp] || "#6b7280", color: "#fff", fontSize: 11, fontWeight: 700, flexShrink: 0
+    }}, imp);
   };
 
-  if (!digest || highlights.length === 0) {
+  // ─── Available dates for navigation ──
+  const allAvailableDates = React.useMemo(() => {
+    const dates = new Set();
+    // From index
+    if (digestIndex?.days) {
+      for (const days of Object.values(digestIndex.days)) {
+        for (const d of days) dates.add(d);
+      }
+    }
+    // From monthCache
+    for (const digests of Object.values(monthCache)) {
+      for (const d of digests) { if (d.date) dates.add(d.date); }
+    }
+    // From xDailyDigest
+    if (Array.isArray(xDailyDigest)) {
+      for (const d of xDailyDigest) { if (d.date) dates.add(d.date); }
+    }
+    return [...dates].sort().reverse(); // newest first
+  }, [digestIndex, monthCache, xDailyDigest]);
+
+  const recentDates = showOlderDates ? allAvailableDates : allAvailableDates.slice(0, 7);
+
+  // ─── Date navigation helpers ──
+  function navigateDate(direction) {
+    const idx = allAvailableDates.indexOf(selectedDate);
+    if (idx < 0) return;
+    const newIdx = idx + (direction === "prev" ? 1 : -1);
+    if (newIdx >= 0 && newIdx < allAvailableDates.length) {
+      const newDate = allAvailableDates[newIdx];
+      setSelectedDate(newDate);
+      setExpandedIdx({});
+      const newMonth = newDate.slice(0, 7);
+      if (newMonth !== selectedMonth) {
+        setSelectedMonth(newMonth);
+        fetchMonthData(newMonth);
+      }
+    }
+  }
+
+  function selectDate(d) {
+    setSelectedDate(d);
+    setExpandedIdx({});
+    setViewMode("daily");
+    const m = d.slice(0, 7);
+    if (m !== selectedMonth) {
+      setSelectedMonth(m);
+      fetchMonthData(m);
+    }
+  }
+
+  // ─── Month selector ──
+  const availableMonths = React.useMemo(() => {
+    const months = new Set();
+    if (digestIndex?.months) digestIndex.months.forEach(m => months.add(m));
+    for (const k of Object.keys(monthCache)) months.add(k);
+    return [...months].sort().reverse();
+  }, [digestIndex, monthCache]);
+
+  function selectMonth(m) {
+    setSelectedMonth(m);
+    fetchMonthData(m);
+    // Select latest date in that month
+    const days = digestIndex?.days?.[m] || [];
+    const monthData = monthCache[m] || [];
+    const allDays = [...new Set([...days, ...monthData.map(d => d.date)])].sort();
+    if (allDays.length > 0) {
+      setSelectedDate(allDays[allDays.length - 1]);
+    }
+    setShowOlderDates(true);
+    setViewMode("daily");
+  }
+
+  // ─── Monthly digest for selected month ──
+  const currentMonthlyDigest = monthlyDigests?.find(d => d.month === selectedMonth) || null;
+
+  // ─── Render: No data state ──
+  if (allAvailableDates.length === 0 && !digest) {
     return E("div", { className: "card", style: { padding: "32px 24px", textAlign: "center" } },
       E("div", { style: { fontSize: 40, marginBottom: 12 } }, "📡"),
       E("div", { style: { fontSize: 15, color: "var(--text2)", marginBottom: 8 } },
@@ -9283,8 +9428,135 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
     );
   }
 
+  // ─── Render highlights list (reused for daily view) ──
+  const renderHighlights = (items) => {
+    if (items.length === 0) {
+      return E("div", { style: { padding: "20px 16px", textAlign: "center", color: "var(--text3)", fontSize: 13 } },
+        lang === "ja" ? "該当するハイライトがありません" : "No highlights match this filter");
+    }
+    return items.map((h, i) => {
+      const catInfo = CAT_INFO[h.category] || { icon: "📌", color: "#6b7280" };
+      const catLabel = CAT_LABELS[h.category] || {};
+      const expanded = expandedIdx[i];
+      return E("div", { key: i, style: {
+        padding: "10px 16px", borderBottom: i < items.length - 1 ? "1px solid var(--border)" : "none",
+        cursor: "pointer", transition: "background .15s",
+      }, onClick: () => toggleExpand(i),
+        onMouseEnter: e => e.currentTarget.style.background = "var(--bg3)",
+        onMouseLeave: e => e.currentTarget.style.background = "transparent",
+      },
+        E("div", { style: { display: "flex", alignItems: "flex-start", gap: 8 } },
+          impBadge(h.importance),
+          E("div", { style: { flex: 1, minWidth: 0 } },
+            E("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 4, alignItems: "center" } },
+              E("span", { style: {
+                fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 4,
+                background: catInfo.color + "22", color: catInfo.color, border: "1px solid " + catInfo.color + "44"
+              }}, catInfo.icon + " " + (catLabel[lang] || catLabel.en || h.category)),
+              ...(h.audience || []).map(a => E("span", { key: a, style: {
+                fontSize: 9, padding: "1px 4px", borderRadius: 3,
+                background: "var(--bg3)", color: "var(--text3)", border: "1px solid var(--border)"
+              }}, a))
+            ),
+            E("div", { style: { fontSize: 13, fontWeight: 600, lineHeight: 1.4, color: "var(--text1)" } }, L(h, "title")),
+            expanded && E("div", { style: { marginTop: 6 } },
+              E("div", { style: { fontSize: 12, lineHeight: 1.6, color: "var(--text2)", marginBottom: 6 } }, L(h, "summary")),
+              (h.sources || []).length > 0 && E("div", { style: { fontSize: 10, color: "var(--text3)" } },
+                "Sources: " + h.sources.map(s => s.startsWith("@") ? s : "@" + s).join(", "))
+            ),
+            !expanded && E("div", { style: { fontSize: 11, color: "var(--text3)", marginTop: 2 } },
+              "▸ " + (lang === "ja" ? "詳細を表示" : "Show details"))
+          )
+        )
+      );
+    });
+  };
+
+  // ─── Render monthly digest view ──
+  const renderMonthlyView = () => {
+    if (!currentMonthlyDigest) {
+      return E("div", { style: { padding: "24px 16px", textAlign: "center", color: "var(--text3)" } },
+        E("div", { style: { fontSize: 28, marginBottom: 8 } }, "📅"),
+        E("div", { style: { fontSize: 13 } },
+          lang === "ja"
+            ? `${selectedMonth || ""}の月間ダイジェストはまだ作成されていません`
+            : `Monthly digest for ${selectedMonth || ""} not yet generated`),
+        E("div", { style: { fontSize: 11, marginTop: 4, color: "var(--text3)" } },
+          lang === "ja" ? "月末の金曜日に自動生成されます" : "Auto-generated on the last Friday of each month")
+      );
+    }
+    const md = currentMonthlyDigest;
+    return E("div", { style: { padding: 0 } },
+      // Monthly summary
+      E("div", { style: { padding: "16px", borderBottom: "1px solid var(--border)" } },
+        E("div", { style: { fontSize: 14, fontWeight: 700, marginBottom: 8, color: "var(--text1)" } },
+          lang === "ja" ? "月間サマリー" : "Monthly Summary"),
+        E("div", { style: { fontSize: 13, lineHeight: 1.7, color: "var(--text2)" } }, L(md, "summary"))
+      ),
+      // Top highlights
+      md.topHighlights && md.topHighlights.length > 0 && E("div", { style: { padding: "12px 16px", borderBottom: "1px solid var(--border)" } },
+        E("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 8, color: "var(--text1)" } },
+          lang === "ja" ? "主要トピック" : "Top Highlights"),
+        ...md.topHighlights.map((h, i) => {
+          const catInfo = CAT_INFO[h.category] || { icon: "📌", color: "#6b7280" };
+          return E("div", { key: i, style: { padding: "6px 0", borderBottom: i < md.topHighlights.length - 1 ? "1px solid var(--border)" : "none" } },
+            E("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 3 } },
+              impBadge(h.importance),
+              E("span", { style: { fontSize: 10, padding: "1px 6px", borderRadius: 4, background: catInfo.color + "22", color: catInfo.color, fontWeight: 600 } },
+                catInfo.icon + " " + (CAT_LABELS[h.category]?.[lang] || h.category)),
+              E("span", { style: { fontSize: 13, fontWeight: 600 } }, L(h, "title"))
+            ),
+            E("div", { style: { fontSize: 12, color: "var(--text2)", marginLeft: 30 } }, L(h, "summary"))
+          );
+        })
+      ),
+      // Trends
+      md.trends && md.trends.length > 0 && E("div", { style: { padding: "12px 16px", borderBottom: "1px solid var(--border)" } },
+        E("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 8, color: "var(--text1)" } },
+          lang === "ja" ? "トレンド" : "Trends"),
+        ...md.trends.map((tr, i) => {
+          const trendIcon = tr.trend === "rising" ? "📈" : tr.trend === "declining" ? "📉" : "➡️";
+          const catInfo = CAT_INFO[tr.category] || { icon: "📌", color: "#6b7280" };
+          return E("div", { key: i, style: { display: "flex", gap: 6, alignItems: "center", padding: "4px 0" } },
+            E("span", null, trendIcon),
+            E("span", { style: { fontSize: 10, padding: "1px 6px", borderRadius: 4, background: catInfo.color + "22", color: catInfo.color, fontWeight: 600 } },
+              CAT_LABELS[tr.category]?.[lang] || tr.category),
+            E("span", { style: { fontSize: 12, color: "var(--text2)" } }, L(tr, "note"))
+          );
+        })
+      ),
+      // Action items
+      md.actionItems && md.actionItems.length > 0 && E("div", { style: { padding: "12px 16px" } },
+        E("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 8, color: "var(--text1)" } },
+          lang === "ja" ? "注目ポイント" : "Action Items"),
+        ...md.actionItems.map((ai, i) =>
+          E("div", { key: i, style: { display: "flex", gap: 6, alignItems: "flex-start", padding: "4px 0" } },
+            E("span", { style: { color: "var(--accent)" } }, "▸"),
+            E("div", null,
+              E("div", { style: { fontSize: 12, color: "var(--text2)" } }, L(ai, "action")),
+              ai.audience && E("div", { style: { fontSize: 9, color: "var(--text3)", marginTop: 2 } },
+                ai.audience.join(" · "))
+            )
+          )
+        )
+      ),
+      // Stats
+      md.stats && E("div", { style: { padding: "8px 16px", borderTop: "1px solid var(--border)", fontSize: 10, color: "var(--text3)" } },
+        `${md.stats.daysWithData || 0} days · ${md.stats.totalTweets || 0} tweets · ${md.stats.totalHighlights || 0} highlights`)
+    );
+  };
+
+  // ─── Main render ──
+  const pilStyle = (active) => ({
+    padding: "4px 10px", fontSize: 11, fontWeight: active ? 700 : 400,
+    borderRadius: 12, border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
+    background: active ? "var(--accent)" : "transparent",
+    color: active ? "#fff" : "var(--text2)", cursor: "pointer", transition: "all .15s",
+    whiteSpace: "nowrap"
+  });
+
   return E("div", { className: "card", style: { padding: 0 } },
-    // Header
+    // ── Header ──
     E("div", { style: {
       padding: "14px 16px", borderBottom: "1px solid var(--border)",
       display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8
@@ -9293,114 +9565,238 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
         E("span", { style: { fontSize: 20 } }, "📡"),
         E("span", { style: { fontSize: 15, fontWeight: 700 } },
           lang === "ja" ? "Cardano ガバナンスダイジェスト" : "Cardano Governance Digest"),
-        E("span", { style: {
-          fontSize: 10, background: "var(--accent)", color: "#fff",
-          padding: "2px 6px", borderRadius: 4, fontWeight: 600
-        }}, "β")
+        E("span", { style: { fontSize: 10, background: "var(--accent)", color: "#fff", padding: "2px 6px", borderRadius: 4, fontWeight: 600 }}, "β")
       ),
-      E("div", { style: { fontSize: 11, color: "var(--text3)" } },
-        digest.date + " · " + (digest.tweetCount || 0) + " tweets analyzed")
+      viewMode === "daily" && digest && E("div", { style: { fontSize: 11, color: "var(--text3)" } },
+        digest.date + " · " + (digest.tweetCount || 0) + " tweets")
     ),
 
-    // Audience filter
+    // ── Date navigation row ──
     E("div", { style: {
-      padding: "10px 16px", borderBottom: "1px solid var(--border)",
+      padding: "8px 16px", borderBottom: "1px solid var(--border)",
+      display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center"
+    }},
+      // Monthly digest button
+      E("button", { onClick: () => setViewMode(viewMode === "monthly" ? "daily" : "monthly"),
+        style: { ...pilStyle(viewMode === "monthly"), fontWeight: 600 }
+      }, "📅 " + (lang === "ja" ? "月間" : "Monthly")),
+      E("span", { style: { width: 1, height: 18, background: "var(--border)", margin: "0 4px" } }),
+      // Prev button
+      E("button", { onClick: () => navigateDate("prev"),
+        disabled: allAvailableDates.indexOf(selectedDate) >= allAvailableDates.length - 1,
+        style: { ...pilStyle(false), opacity: allAvailableDates.indexOf(selectedDate) >= allAvailableDates.length - 1 ? 0.3 : 1, padding: "4px 8px" }
+      }, "←"),
+      // Date pills
+      ...recentDates.map(d => {
+        const dayNum = d.slice(8); // "06"
+        const monthDay = d.slice(5); // "03-06"
+        return E("button", { key: d, onClick: () => selectDate(d),
+          style: pilStyle(viewMode === "daily" && selectedDate === d)
+        }, monthDay);
+      }),
+      // Next button
+      E("button", { onClick: () => navigateDate("next"),
+        disabled: allAvailableDates.indexOf(selectedDate) <= 0,
+        style: { ...pilStyle(false), opacity: allAvailableDates.indexOf(selectedDate) <= 0 ? 0.3 : 1, padding: "4px 8px" }
+      }, "→"),
+      // Show older / month selector
+      !showOlderDates && allAvailableDates.length > 7 && E("button", {
+        onClick: () => setShowOlderDates(true),
+        style: { ...pilStyle(false), fontSize: 10 }
+      }, lang === "ja" ? "過去を表示..." : "Show older..."),
+      // Month selector (when expanded)
+      showOlderDates && availableMonths.length > 1 && E("select", {
+        value: selectedMonth || "",
+        onChange: e => selectMonth(e.target.value),
+        style: { fontSize: 11, padding: "3px 6px", borderRadius: 6, border: "1px solid var(--border)",
+          background: "var(--bg2)", color: "var(--text2)", cursor: "pointer" }
+      }, ...availableMonths.map(m => E("option", { key: m, value: m }, m)))
+    ),
+
+    // ── Audience filter (daily view only) ──
+    viewMode === "daily" && E("div", { style: {
+      padding: "8px 16px", borderBottom: "1px solid var(--border)",
       display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center"
     }},
       E("span", { style: { fontSize: 11, color: "var(--text3)", marginRight: 4 } },
         lang === "ja" ? "対象:" : "For:"),
-      ...AUDIENCES.map(a =>
-        E("button", {
-          key: a,
-          onClick: () => setFilter(a),
-          style: {
-            padding: "3px 10px", fontSize: 11, fontWeight: filter === a ? 700 : 500,
-            borderRadius: 12,
-            border: filter === a ? "1px solid var(--accent)" : "1px solid var(--border)",
-            background: filter === a ? "var(--accent)" : "transparent",
-            color: filter === a ? "#fff" : "var(--text2)",
-            cursor: "pointer", transition: "all .15s"
-          }
-        }, a === "all" ? (lang === "ja" ? "すべて" : "All") : a)
-      )
+      ...AUDIENCES.map(a => E("button", { key: a, onClick: () => setFilter(a),
+        style: { padding: "3px 10px", fontSize: 11, fontWeight: filter === a ? 700 : 500, borderRadius: 12,
+          border: filter === a ? "1px solid var(--accent)" : "1px solid var(--border)",
+          background: filter === a ? "var(--accent)" : "transparent",
+          color: filter === a ? "#fff" : "var(--text2)", cursor: "pointer", transition: "all .15s"
+        }
+      }, a === "all" ? (lang === "ja" ? "すべて" : "All") : a))
     ),
 
-    // Highlights list
-    E("div", { style: { padding: "8px 0" } },
-      sorted.length === 0
-        ? E("div", { style: { padding: "20px 16px", textAlign: "center", color: "var(--text3)", fontSize: 13 } },
-            lang === "ja" ? "該当するハイライトがありません" : "No highlights match this filter")
-        : sorted.map((h, i) => {
-          const catInfo = CAT_INFO[h.category] || { icon: "📌", color: "#6b7280" };
-          const catLabel = CAT_LABELS[h.category] || {};
-          const expanded = expandedIdx[i];
+    // ── Loading indicator ──
+    loadingMonth && E("div", { style: { padding: "12px 16px", textAlign: "center", color: "var(--text3)", fontSize: 12 } },
+      lang === "ja" ? "読み込み中..." : "Loading..."),
 
-          return E("div", {
-            key: i,
-            style: {
-              padding: "10px 16px",
-              borderBottom: i < sorted.length - 1 ? "1px solid var(--border)" : "none",
-              cursor: "pointer",
-              transition: "background .15s",
-            },
-            onClick: () => toggleExpand(i),
-            onMouseEnter: e => e.currentTarget.style.background = "var(--bg3)",
-            onMouseLeave: e => e.currentTarget.style.background = "transparent",
-          },
-            // Row: importance badge + category + title
-            E("div", { style: { display: "flex", alignItems: "flex-start", gap: 8 } },
-              impBadge(h.importance),
-              E("div", { style: { flex: 1, minWidth: 0 } },
-                // Category tag + audience tags
-                E("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 4, alignItems: "center" } },
-                  E("span", {
-                    style: {
-                      fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 4,
-                      background: catInfo.color + "22", color: catInfo.color, border: "1px solid " + catInfo.color + "44"
-                    }
-                  }, catInfo.icon + " " + (catLabel[lang] || catLabel.en || h.category)),
-                  ...(h.audience || []).map(a =>
-                    E("span", {
-                      key: a,
-                      style: {
-                        fontSize: 9, padding: "1px 4px", borderRadius: 3,
-                        background: "var(--bg3)", color: "var(--text3)", border: "1px solid var(--border)"
-                      }
-                    }, a)
-                  )
-                ),
-                // Title
-                E("div", { style: { fontSize: 13, fontWeight: 600, lineHeight: 1.4, color: "var(--text1)" } },
-                  L(h, "title")),
-                // Summary (expanded)
-                expanded && E("div", { style: { marginTop: 6 } },
-                  E("div", { style: { fontSize: 12, lineHeight: 1.6, color: "var(--text2)", marginBottom: 6 } },
-                    L(h, "summary")),
-                  (h.sources || []).length > 0 && E("div", { style: { fontSize: 10, color: "var(--text3)" } },
-                    "Sources: " + h.sources.map(s => s.startsWith("@") ? s : "@" + s).join(", "))
-                ),
-                // Expand hint
-                !expanded && E("div", { style: { fontSize: 11, color: "var(--text3)", marginTop: 2 } }, "▸ " +
-                  (lang === "ja" ? "詳細を表示" : "Show details"))
-              )
-            )
-          );
-        })
-    ),
+    // ── Content area ──
+    viewMode === "monthly"
+      ? renderMonthlyView()
+      : E("div", { style: { padding: "8px 0" } },
+          !digest
+            ? E("div", { style: { padding: "20px 16px", textAlign: "center", color: "var(--text3)", fontSize: 13 } },
+                lang === "ja" ? "この日のダイジェストはありません" : "No digest for this date")
+            : renderHighlights(sorted)
+        ),
 
-    // Footer
+    // ── Subscribe section ──
+    E(GovHubSubscribeForm, { lang: lang }),
+
+    // ── Footer ──
     E("div", { style: {
       padding: "10px 16px", borderTop: "1px solid var(--border)",
-      fontSize: 10, color: "var(--text3)", display: "flex", justifyContent: "space-between",
-      flexWrap: "wrap", gap: 4
+      fontSize: 10, color: "var(--text3)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 4
     }},
-      E("span", null,
-        lang === "ja"
-          ? `生成: ${new Date(digest.generatedAt).toLocaleString("ja-JP")} · 出典: X (Twitter)`
-          : `Generated: ${new Date(digest.generatedAt).toLocaleString("en-US")} · Source: X (Twitter)`),
-      E("span", null,
-        lang === "ja" ? "Claude Haiku による要約" : "Summarized by Claude Haiku")
+      E("span", null, viewMode === "daily" && digest
+        ? (lang === "ja"
+          ? `生成: ${new Date(digest.generatedAt).toLocaleString("ja-JP")} · 出典: X`
+          : `Generated: ${new Date(digest.generatedAt).toLocaleString("en-US")} · Source: X`)
+        : (lang === "ja" ? "出典: X (Twitter)" : "Source: X (Twitter)")),
+      E("span", null, lang === "ja" ? "Claude Haiku による要約" : "Summarized by Claude Haiku")
     )
+  );
+}
+
+// ─── Subscribe Form sub-component ───────────────────────────────────────────
+function GovHubSubscribeForm({ lang }) {
+  const E = React.createElement;
+  const [open, setOpen] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [frequency, setFrequency] = React.useState("daily");
+  const [categories, setCategories] = React.useState([]);
+  const [status, setStatus] = React.useState(null); // null | "sending" | "success" | "error"
+  const [errorMsg, setErrorMsg] = React.useState("");
+
+  const NOTIFY_API = "https://digest-notify.adatool.workers.dev";
+
+  const ALL_CATS = [
+    { key: "governance_action", en: "GA & Voting", ja: "GA・投票" },
+    { key: "constitution_budget", en: "Constitution & Budget", ja: "憲法・予算" },
+    { key: "protocol_parameter", en: "Protocol & Params", ja: "プロトコル" },
+    { key: "security", en: "Security", ja: "セキュリティ" },
+    { key: "ecosystem_adoption", en: "Ecosystem", ja: "エコシステム" },
+    { key: "dev_tools", en: "Dev Tools", ja: "開発ツール" },
+    { key: "institutional", en: "Official", ja: "公式" },
+    { key: "spo", en: "SPO", ja: "SPO" },
+    { key: "key_person", en: "Key Person", ja: "キーパーソン" },
+    { key: "governance_tool", en: "Gov Tool", ja: "ガバナンスツール" },
+    { key: "network_ops", en: "Network Ops", ja: "ネットワーク" },
+  ];
+
+  function toggleCat(key) {
+    setCategories(prev => prev.includes(key) ? prev.filter(c => c !== key) : [...prev, key]);
+  }
+
+  async function handleSubmit() {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setErrorMsg(lang === "ja" ? "有効なメールアドレスを入力してください" : "Please enter a valid email");
+      setStatus("error");
+      return;
+    }
+    setStatus("sending");
+    try {
+      const res = await fetch(NOTIFY_API + "/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, frequency, categories }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setStatus("success");
+      } else {
+        setErrorMsg(data.error || "Subscription failed");
+        setStatus("error");
+      }
+    } catch (err) {
+      setErrorMsg("Network error");
+      setStatus("error");
+    }
+  }
+
+  if (!open) {
+    return E("div", { style: { padding: "12px 16px", borderTop: "1px solid var(--border)", textAlign: "center" } },
+      E("button", { onClick: () => setOpen(true), style: {
+        padding: "8px 20px", fontSize: 12, fontWeight: 600, borderRadius: 8,
+        border: "1px solid var(--accent)", background: "transparent",
+        color: "var(--accent)", cursor: "pointer", transition: "all .15s"
+      }}, "📧 " + (lang === "ja" ? "ダイジェスト通知を受け取る" : "Subscribe to Digest Notifications"))
+    );
+  }
+
+  if (status === "success") {
+    return E("div", { style: { padding: "20px 16px", borderTop: "1px solid var(--border)", textAlign: "center" } },
+      E("div", { style: { fontSize: 28, marginBottom: 8 } }, "✅"),
+      E("div", { style: { fontSize: 13, color: "var(--text2)" } },
+        lang === "ja" ? "確認メールを送信しました。メール内のリンクをクリックして登録を完了してください。"
+          : "Confirmation email sent! Click the link in the email to activate your subscription."),
+      E("button", { onClick: () => { setOpen(false); setStatus(null); }, style: {
+        marginTop: 12, padding: "4px 12px", fontSize: 11, borderRadius: 6,
+        border: "1px solid var(--border)", background: "transparent", color: "var(--text3)", cursor: "pointer"
+      }}, lang === "ja" ? "閉じる" : "Close")
+    );
+  }
+
+  return E("div", { style: { padding: "16px", borderTop: "1px solid var(--border)" } },
+    E("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 } },
+      E("span", { style: { fontSize: 13, fontWeight: 700, color: "var(--text1)" } },
+        "📧 " + (lang === "ja" ? "通知設定" : "Notification Settings")),
+      E("button", { onClick: () => setOpen(false), style: {
+        background: "none", border: "none", color: "var(--text3)", cursor: "pointer", fontSize: 16
+      }}, "✕")
+    ),
+    // Email input
+    E("div", { style: { marginBottom: 12 } },
+      E("input", { type: "email", value: email, onChange: e => { setEmail(e.target.value); setStatus(null); },
+        placeholder: lang === "ja" ? "メールアドレス" : "Email address",
+        style: { width: "100%", padding: "8px 12px", fontSize: 13, borderRadius: 6,
+          border: "1px solid var(--border)", background: "var(--bg2)", color: "var(--text1)",
+          boxSizing: "border-box" }
+      })
+    ),
+    // Frequency
+    E("div", { style: { marginBottom: 12 } },
+      E("div", { style: { fontSize: 11, color: "var(--text3)", marginBottom: 6 } },
+        lang === "ja" ? "頻度:" : "Frequency:"),
+      E("div", { style: { display: "flex", gap: 8 } },
+        ["daily", "monthly"].map(f =>
+          E("label", { key: f, style: { display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "var(--text2)", cursor: "pointer" } },
+            E("input", { type: "radio", name: "freq", value: f, checked: frequency === f,
+              onChange: () => setFrequency(f) }),
+            f === "daily" ? (lang === "ja" ? "日次" : "Daily") : (lang === "ja" ? "月次" : "Monthly")
+          )
+        )
+      )
+    ),
+    // Categories
+    E("div", { style: { marginBottom: 12 } },
+      E("div", { style: { fontSize: 11, color: "var(--text3)", marginBottom: 6 } },
+        lang === "ja" ? "カテゴリ (未選択=全て):" : "Categories (none = all):"),
+      E("div", { style: { display: "flex", gap: 4, flexWrap: "wrap" } },
+        ALL_CATS.map(c =>
+          E("button", { key: c.key, onClick: () => toggleCat(c.key), style: {
+            padding: "3px 8px", fontSize: 10, borderRadius: 10,
+            border: categories.includes(c.key) ? "1px solid var(--accent)" : "1px solid var(--border)",
+            background: categories.includes(c.key) ? "var(--accent)" : "transparent",
+            color: categories.includes(c.key) ? "#fff" : "var(--text3)",
+            cursor: "pointer", transition: "all .15s"
+          }}, c[lang] || c.en)
+        )
+      )
+    ),
+    // Error message
+    status === "error" && E("div", { style: { fontSize: 11, color: "#ef4444", marginBottom: 8 } }, errorMsg),
+    // Submit
+    E("button", { onClick: handleSubmit, disabled: status === "sending", style: {
+      width: "100%", padding: "10px", fontSize: 13, fontWeight: 600, borderRadius: 8,
+      border: "none", background: "var(--accent)", color: "#fff", cursor: status === "sending" ? "wait" : "pointer",
+      opacity: status === "sending" ? 0.6 : 1, transition: "opacity .15s"
+    }}, status === "sending"
+      ? (lang === "ja" ? "送信中..." : "Sending...")
+      : (lang === "ja" ? "登録する" : "Subscribe"))
   );
 }
 

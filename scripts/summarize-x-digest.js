@@ -6,9 +6,12 @@
  * using Claude Haiku, outputs structured digest files.
  *
  * Output:
- *   data/x-daily-digest.json   — today's digest (highlights per category)
- *   data/x-weekly-digest.json  — weekly summary (updated on Sundays or when 7+ days accumulated)
+ *   data/x-digest-YYYY-MM.json — monthly partitioned daily digests (permanent)
+ *   data/x-daily-digest.json   — latest 7 days (backward compat)
+ *   data/x-digest-index.json   — available months/dates index
  *   data/x-digest-meta.json    — updated with summarization stats
+ *
+ * All date boundaries use UTC (UTC 0:00 – 23:59:59).
  *
  * Usage: CLAUDE_API_KEY=xxx node scripts/summarize-x-digest.js
  */
@@ -25,6 +28,35 @@ if (!CLAUDE_API_KEY) {
 
 const DATA_DIR = path.join(__dirname, "..", "data");
 
+// ─── UTC date helpers ────────────────────────────────────────────────────────
+
+/** Get today's date string in UTC: "YYYY-MM-DD" */
+function utcToday() {
+  return new Date().toISOString().split("T")[0];
+}
+
+/** Get UTC month string: "YYYY-MM" */
+function utcMonth(dateStr) {
+  return dateStr ? dateStr.slice(0, 7) : new Date().toISOString().slice(0, 7);
+}
+
+/** Get UTC day start (00:00:00.000Z) for a date string */
+function utcDayStart(dateStr) {
+  return new Date(dateStr + "T00:00:00.000Z").getTime();
+}
+
+/** Get UTC day end (23:59:59.999Z) for a date string */
+function utcDayEnd(dateStr) {
+  return new Date(dateStr + "T23:59:59.999Z").getTime();
+}
+
+/** Get yesterday's date in UTC */
+function utcYesterday() {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().split("T")[0];
+}
+
 // ─── Category definitions ───────────────────────────────────────────────────
 
 const CATEGORIES = {
@@ -39,21 +71,6 @@ const CATEGORIES = {
   key_person: { ja: "キーパーソン", en: "Key Persons" },
   governance_tool: { ja: "ガバナンスツール", en: "Governance Tools" },
   spo: { ja: "SPO関連", en: "SPO Related" },
-};
-
-// Audience tags per category
-const AUDIENCE_TAGS = {
-  governance_action: ["DRep", "CC"],
-  constitution_budget: ["DRep", "CC"],
-  protocol_parameter: ["DRep", "CC", "SPO"],
-  network_ops: ["SPO"],
-  security: ["DRep", "CC", "SPO", "Holder", "Builder"],
-  ecosystem_adoption: ["Holder", "DRep"],
-  dev_tools: ["Builder"],
-  institutional: ["DRep", "CC", "SPO", "Holder"],
-  key_person: ["DRep", "CC", "SPO", "Holder"],
-  governance_tool: ["DRep", "CC"],
-  spo: ["SPO"],
 };
 
 // ─── Claude API Helper ──────────────────────────────────────────────────────
@@ -107,24 +124,90 @@ function callClaude(systemPrompt, userMessage, maxTokens = 2048) {
   });
 }
 
-// ─── Load previous highlights for dedup ─────────────────────────────────────
+// ─── Monthly file I/O helpers ───────────────────────────────────────────────
 
-function loadPreviousHighlights() {
-  const dailyPath = path.join(DATA_DIR, "x-daily-digest.json");
+function monthlyFilePath(monthStr) {
+  return path.join(DATA_DIR, `x-digest-${monthStr}.json`);
+}
+
+function loadMonthlyDigests(monthStr) {
   try {
-    const existing = JSON.parse(fs.readFileSync(dailyPath, "utf-8"));
-    const digests = Array.isArray(existing) ? existing : [existing];
-    // Collect title_en from last 3 digests for dedup
-    const titles = [];
-    for (const d of digests.slice(0, 3)) {
-      for (const h of d.highlights || []) {
-        if (h.title_en) titles.push(h.title_en);
-      }
-    }
-    return titles;
+    return JSON.parse(fs.readFileSync(monthlyFilePath(monthStr), "utf-8"));
   } catch (_) {
     return [];
   }
+}
+
+function saveMonthlyDigests(monthStr, digests) {
+  fs.writeFileSync(monthlyFilePath(monthStr), JSON.stringify(digests, null, 2));
+}
+
+// ─── Digest index management ────────────────────────────────────────────────
+
+function loadDigestIndex() {
+  const indexPath = path.join(DATA_DIR, "x-digest-index.json");
+  try {
+    return JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+  } catch (_) {
+    return { months: [], days: {}, lastUpdated: null };
+  }
+}
+
+function saveDigestIndex(index) {
+  const indexPath = path.join(DATA_DIR, "x-digest-index.json");
+  fs.writeFileSync(indexPath, JSON.stringify(index, null, 2));
+}
+
+function updateDigestIndex(dateStr) {
+  const index = loadDigestIndex();
+  const month = utcMonth(dateStr);
+
+  // Add month if new
+  if (!index.months.includes(month)) {
+    index.months.push(month);
+    index.months.sort().reverse(); // newest first
+  }
+
+  // Add date to month's day list
+  if (!index.days[month]) index.days[month] = [];
+  if (!index.days[month].includes(dateStr)) {
+    index.days[month].push(dateStr);
+    index.days[month].sort(); // chronological
+  }
+
+  index.lastUpdated = new Date().toISOString();
+  saveDigestIndex(index);
+  console.log(`  Index updated: ${index.months.length} months, ${dateStr} added`);
+}
+
+// ─── Load previous highlights for dedup ─────────────────────────────────────
+
+function loadPreviousHighlights() {
+  // Try loading from current month's file first, then daily digest
+  const month = utcMonth();
+  const monthDigests = loadMonthlyDigests(month);
+  const titles = [];
+  // Get last 3 digests
+  const recent = monthDigests.slice(-3);
+  for (const d of recent) {
+    for (const h of d.highlights || []) {
+      if (h.title_en) titles.push(h.title_en);
+    }
+  }
+  // Fallback to x-daily-digest.json if no monthly data yet
+  if (titles.length === 0) {
+    try {
+      const dailyPath = path.join(DATA_DIR, "x-daily-digest.json");
+      const existing = JSON.parse(fs.readFileSync(dailyPath, "utf-8"));
+      const digests = Array.isArray(existing) ? existing : [existing];
+      for (const d of digests.slice(0, 3)) {
+        for (const h of d.highlights || []) {
+          if (h.title_en) titles.push(h.title_en);
+        }
+      }
+    } catch (_) {}
+  }
+  return titles;
 }
 
 // ─── Load last summarized tweet IDs ─────────────────────────────────────────
@@ -150,21 +233,33 @@ function saveSummarizedIds(ids) {
 async function buildDailyDigest(tweets) {
   console.log("\n=== Building Daily Digest ===");
 
+  const today = utcToday();
+  const yesterday = utcYesterday();
+  console.log(`  Target date (UTC): ${today}`);
+
   // Load already-summarized tweet IDs
   const summarizedIds = loadSummarizedIds();
   console.log(`  Previously summarized IDs: ${summarizedIds.size}`);
 
-  // Filter to last 24h tweets
-  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-  let recent = tweets.filter((t) => new Date(t.createdAt || 0).getTime() > oneDayAgo);
+  // Filter tweets to today's UTC window (00:00 – 23:59 UTC)
+  const todayStart = utcDayStart(today);
+  const todayEnd = utcDayEnd(today);
+  let recent = tweets.filter((t) => {
+    const ts = new Date(t.createdAt || 0).getTime();
+    return ts >= todayStart && ts <= todayEnd;
+  });
 
+  // Fallback: if no tweets today, include yesterday's UTC window too
   if (recent.length === 0) {
-    console.log("  No tweets in last 24h, using last 48h...");
-    const twoDaysAgo = Date.now() - 48 * 60 * 60 * 1000;
-    recent = tweets.filter((t) => new Date(t.createdAt || 0).getTime() > twoDaysAgo);
+    console.log("  No tweets in today's UTC window, including yesterday...");
+    const yesterdayStart = utcDayStart(yesterday);
+    recent = tweets.filter((t) => {
+      const ts = new Date(t.createdAt || 0).getTime();
+      return ts >= yesterdayStart && ts <= todayEnd;
+    });
   }
 
-  console.log(`  Tweets in time window: ${recent.length}`);
+  console.log(`  Tweets in UTC window: ${recent.length}`);
 
   // Remove already-summarized tweets
   const newTweets = recent.filter((t) => !summarizedIds.has(t.id));
@@ -206,7 +301,7 @@ async function buildDailyDigest(tweets) {
   const systemPrompt = `You are a Cardano governance analyst creating a daily digest for DReps, CC members, SPOs, and ADA holders.
 Output ONLY valid JSON (no markdown, no explanation). The JSON should have this structure:
 {
-  "date": "YYYY-MM-DD",
+  "date": "${today}",
   "highlights": [
     {
       "category": "category_key",
@@ -237,7 +332,7 @@ Category keys: governance_action, constitution_budget, protocol_parameter, netwo
     }
 
     const digest = JSON.parse(jsonStr);
-    digest.date = digest.date || new Date().toISOString().split("T")[0];
+    digest.date = today; // Always use UTC today
     digest.tweetCount = newTweets.length;
     digest.generatedAt = new Date().toISOString();
     digest.apiUsage = usage;
@@ -256,72 +351,37 @@ Category keys: governance_action, constitution_budget, protocol_parameter, netwo
   }
 }
 
-// ─── Build weekly digest ────────────────────────────────────────────────────
+// ─── Save daily digest to monthly file + backward-compat + index ────────────
 
-async function buildWeeklyDigest(dailyDigests) {
-  console.log("\n=== Building Weekly Digest ===");
+function saveDailyDigest(daily) {
+  const dateStr = daily.date;
+  const month = utcMonth(dateStr);
 
-  if (!dailyDigests || dailyDigests.length === 0) {
-    console.log("  No daily digests available");
-    return null;
-  }
+  // ── 1. Save to monthly file (permanent accumulation) ──
+  const monthDigests = loadMonthlyDigests(month);
+  // Remove same-date entry if exists (re-run safety)
+  const filtered = monthDigests.filter((d) => d.date !== dateStr);
+  filtered.push(daily);
+  filtered.sort((a, b) => (a.date || "").localeCompare(b.date || "")); // chronological
+  saveMonthlyDigests(month, filtered);
+  console.log(`  Monthly file saved → x-digest-${month}.json (${filtered.length} days)`);
 
-  // Combine all highlights from daily digests
-  let allHighlights = "";
-  for (const d of dailyDigests) {
-    allHighlights += `\n### ${d.date}\n`;
-    for (const h of d.highlights || []) {
-      allHighlights += `- [${h.category}] ${h.title_en}: ${h.summary_en} (importance: ${h.importance})\n`;
-    }
-  }
-
-  const systemPrompt = `You are a Cardano governance analyst creating a weekly summary.
-Output ONLY valid JSON:
-{
-  "weekStart": "YYYY-MM-DD",
-  "weekEnd": "YYYY-MM-DD",
-  "summary_en": "3-5 sentence overall English summary of the week",
-  "summary_ja": "週間全体の日本語要約（3-5文）",
-  "topTopics": [
-    {
-      "topic_en": "Topic name",
-      "topic_ja": "トピック名",
-      "summary_en": "Brief summary",
-      "summary_ja": "要約",
-      "trend": "rising|stable|declining",
-      "audience": ["DRep", "CC", "SPO"]
-    }
-  ],
-  "actionItems": [
-    {
-      "action_en": "What stakeholders should pay attention to",
-      "action_ja": "注目すべきポイント",
-      "audience": ["DRep"]
-    }
-  ]
-}`;
-
-  const userMsg = `Summarize this week's Cardano governance activity into a weekly digest:\n${allHighlights}`;
-
+  // ── 2. Update backward-compat x-daily-digest.json (latest 7 days) ──
+  const dailyPath = path.join(DATA_DIR, "x-daily-digest.json");
+  let recent7 = [];
   try {
-    const { text, usage } = await callClaude(systemPrompt, userMsg, 3000);
-    console.log(`  Claude usage: ${usage.input_tokens} in / ${usage.output_tokens} out`);
+    recent7 = JSON.parse(fs.readFileSync(dailyPath, "utf-8"));
+    if (!Array.isArray(recent7)) recent7 = [recent7];
+  } catch (_) {}
+  recent7 = recent7.filter((d) => d.date !== dateStr);
+  recent7.push(daily);
+  recent7.sort((a, b) => (b.date || "").localeCompare(a.date || "")); // newest first
+  if (recent7.length > 7) recent7 = recent7.slice(0, 7);
+  fs.writeFileSync(dailyPath, JSON.stringify(recent7, null, 2));
+  console.log(`  Backward-compat saved → x-daily-digest.json (${recent7.length} days)`);
 
-    let jsonStr = text.trim();
-    if (jsonStr.startsWith("```")) {
-      jsonStr = jsonStr.replace(/^```json?\n?/, "").replace(/\n?```$/, "");
-    }
-
-    const weekly = JSON.parse(jsonStr);
-    weekly.generatedAt = new Date().toISOString();
-    weekly.dailyDigestCount = dailyDigests.length;
-    weekly.apiUsage = usage;
-
-    return weekly;
-  } catch (err) {
-    console.error(`  ✗ Claude error: ${err.message}`);
-    return null;
-  }
+  // ── 3. Update digest index ──
+  updateDigestIndex(dateStr);
 }
 
 // ─── Main ───────────────────────────────────────────────────────────────────
@@ -330,6 +390,8 @@ async function main() {
   console.log("╔══════════════════════════════════════════════╗");
   console.log("║  X Digest Summarizer (Claude Haiku)          ║");
   console.log("╚══════════════════════════════════════════════╝");
+  console.log(`  UTC now: ${new Date().toISOString()}`);
+  console.log(`  UTC date: ${utcToday()}`);
 
   // Load raw tweets
   const rawPath = path.join(DATA_DIR, "x-raw-tweets.json");
@@ -344,52 +406,9 @@ async function main() {
   // Build daily digest
   const daily = await buildDailyDigest(tweets);
   if (daily) {
-    const dailyPath = path.join(DATA_DIR, "x-daily-digest.json");
-
-    // Merge with existing daily digests (keep 7 days)
-    let existingDaily = [];
-    try {
-      const existing = JSON.parse(fs.readFileSync(dailyPath, "utf-8"));
-      existingDaily = Array.isArray(existing) ? existing : [existing];
-    } catch (_) {}
-
-    // Remove entries older than 7 days
-    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    existingDaily = existingDaily.filter(
-      (d) => new Date(d.generatedAt || d.date || 0).getTime() > sevenDaysAgo
-    );
-
-    // Remove today's entry if exists, add new one
-    const today = new Date().toISOString().split("T")[0];
-    existingDaily = existingDaily.filter((d) => d.date !== today);
-    existingDaily.push(daily);
-    existingDaily.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-
-    fs.writeFileSync(dailyPath, JSON.stringify(existingDaily, null, 2));
-    console.log(`  Daily digest saved → ${dailyPath}`);
-
-    // Build weekly digest on Sundays or if 7+ daily digests
-    const dayOfWeek = new Date().getDay(); // 0=Sunday
-    if (dayOfWeek === 0 || existingDaily.length >= 7) {
-      const weekly = await buildWeeklyDigest(existingDaily);
-      if (weekly) {
-        const weeklyPath = path.join(DATA_DIR, "x-weekly-digest.json");
-
-        // Keep history of weekly digests (last 4 weeks)
-        let existingWeekly = [];
-        try {
-          const existing = JSON.parse(fs.readFileSync(weeklyPath, "utf-8"));
-          existingWeekly = Array.isArray(existing) ? existing : [existing];
-        } catch (_) {}
-        existingWeekly.push(weekly);
-        if (existingWeekly.length > 4) existingWeekly = existingWeekly.slice(-4);
-
-        fs.writeFileSync(weeklyPath, JSON.stringify(existingWeekly, null, 2));
-        console.log(`  Weekly digest saved → ${weeklyPath}`);
-      }
-    } else {
-      console.log(`  Weekly digest: skipped (day=${dayOfWeek}, dailyCount=${existingDaily.length})`);
-    }
+    saveDailyDigest(daily);
+  } else {
+    console.log("  No daily digest generated (no new tweets)");
   }
 
   // Update meta

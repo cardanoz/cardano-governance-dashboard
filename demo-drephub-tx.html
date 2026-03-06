@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adatool — DRep Hub & Tx Analysis Demo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0d13;--bg2:#111621;--bg3:#181e2c;--bg4:#1f2738;--border:#262f42;--border2:#333e55;--text:#e8ecf4;--text2:#8692ab;--accent:#3b82f6;--accent2:#60a5fa;--yes:#34d399;--no:#f87171;--abstain:#fbbf24;--nv:#4b5563}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;padding:14px 18px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+a{color:var(--accent2);text-decoration:none}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;transition:all .15s}
+.btn:hover{background:var(--bg4);border-color:var(--border2)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2)}
+.tab-bar{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:14px}
+.tab-btn{flex:1;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;background:transparent;color:var(--text2);transition:all .15s}
+.tab-btn.active{background:var(--accent);color:#fff}
+.tab-btn:hover:not(.active){background:var(--bg3)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const E = React.createElement;
+
+// ═══════════════════════════════════════════════════
+// Helpers
+// ═══════════════════════════════════════════════════
+function actionColor(t) {
+  const m = {ParameterChange:"#f59e0b",HardForkInitiation:"#ef4444",TreasuryWithdrawals:"#3b82f6",
+    NoConfidence:"#dc2626",UpdateCommittee:"#8b5cf6",new_committee:"#8b5cf6",NewConstitution:"#14b8a6",InfoAction:"#6b7280"};
+  return m[t]||"#6b7280";
+}
+
+// ═══════════════════════════════════════════════════
+// DRep Hub — Unified Governance Digest
+// ═══════════════════════════════════════════════════
+function DRepHubTab({ lang }) {
+  const [showNotifPanel, setShowNotifPanel] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [notif, setNotif] = React.useState({newGa:true,urgent:true,signals:true,digest:true,weekly:false});
+  const [saved, setSaved] = React.useState(false);
+  const [filter, setFilter] = React.useState("all");
+  const [expandedItems, setExpandedItems] = React.useState({});
+
+  const sentimentColor = s => s==="positive"?"var(--yes)":s==="negative"?"var(--no)":s==="mixed"?"var(--abstain)":"var(--text2)";
+  const sentimentLabel = s => ({positive:lang==="ja"?"ポジティブ":"Positive",negative:lang==="ja"?"ネガティブ":"Negative",mixed:lang==="ja"?"混合":"Mixed",neutral:lang==="ja"?"中立":"Neutral"}[s]||s);
+  const voteColor = v => v==="Yes"?"var(--yes)":v==="No"?"var(--no)":"var(--abstain)";
+  const priorityColor = p => p==="high"?"var(--no)":p==="medium"?"var(--abstain)":"var(--text2)";
+  const toggleExpand = id => setExpandedItems(prev => ({...prev, [id]: !prev[id]}));
+
+  // ── Demo GA data ──
+  const gaItems = [
+    {id:"ga_1",type:"ga",date:"E621",sortKey:1000,title:"Amaru Treasury Withdrawal 2026",actionType:"TreasuryWithdrawals",yc:45,nc:3,ac:8,expiration:621},
+    {id:"ga_2",type:"ga",date:"E619",sortKey:999,title:"Reduce minimum Constitutional Committee size (committeeMinSize) from 7 to 5",actionType:"ParameterChange",yc:120,nc:15,ac:12,expiration:619},
+    {id:"ga_3",type:"ga",date:"E618",sortKey:998,title:"Net Change Limit of 300 Million ADA for Epochs 613–713",actionType:"InfoAction",yc:180,nc:8,ac:20,expiration:618},
+    {id:"ga_4",type:"ga",date:"E614",sortKey:997,title:"Cardano DeFi Liquidity Budget - Withdrawal 1",actionType:"TreasuryWithdrawals",yc:95,nc:22,ac:11,expiration:614},
+  ];
+
+  const alertItems = [
+    {id:"alert_1",type:"alert",date:"2026-03-05",sortKey:1100,priority:"high",
+      title:lang==="ja"?"投票期限迫る — 未投票GAあり":"Vote Deadline Approaching — Unvoted GAs Remain",
+      desc:lang==="ja"?"今エポック末に期限を迎えるGAがあります。未投票のDRepは早めの対応を。":"GAs expiring this epoch. DReps who haven't voted should act soon.",daysLeft:2},
+    {id:"alert_2",type:"alert",date:"2026-03-04",sortKey:1099,priority:"medium",
+      title:lang==="ja"?"CC委員の任期満了が近い":"CC Member Terms Expiring Soon",
+      desc:lang==="ja"?"2名のCC委員の任期が今月末に満了。UpdateCommitteeアクションが必要になる可能性。":"2 CC members' terms expiring end of month. May require UpdateCommittee action.",daysLeft:25},
+    {id:"alert_3",type:"alert",date:"2026-03-03",sortKey:1098,priority:"medium",
+      title:lang==="ja"?"[草案] エコシステム助成金プログラム — フィードバック募集中":"[Draft] Ecosystem Grant Program — Seeking Feedback",
+      desc:lang==="ja"?"年間₳2Mの助成金プログラム草案。Cardano Forumで議論中。":"Draft for annual ₳2M grant program. Under discussion on Cardano Forum.",responses:18},
+  ];
+
+  const discussionItems = [
+    {id:"disc_1",type:"discussion",date:"2026-03-04",sortKey:996,source:"X (Twitter)",sentiment:"mixed",
+      title:lang==="ja"?"憲法v2.4の賛否議論 — 主要DRepの立場が分かれる":"Constitution v2.4 Debate — Major DReps Split",
+      desc:lang==="ja"?"拘束力のない条項の削除を支持する声と慎重な声が混在。主要DRepの多くは条件付き賛成。":"Mixed views on removing non-binding provisions. Most major DReps conditionally supportive.",
+      mentions:["Cardano Foundation","YUTA","Intersect"]},
+    {id:"disc_2",type:"discussion",date:"2026-03-03",sortKey:995,source:"Cardano Forum",sentiment:"positive",
+      title:lang==="ja"?"トレジャリー引き出しの透明性基準が前進":"Treasury Withdrawal Transparency Standards Advancing",
+      desc:lang==="ja"?"監査要件と透明性基準について議論が進展。定期報告義務と第三者監査の導入を推進。":"Progress on audit requirements and transparency standards. Community pushing for regular reporting.",
+      mentions:["Cerkoryn","Adam Dean","CardanoSphere"]},
+    {id:"disc_3",type:"discussion",date:"2026-03-02",sortKey:994,source:"Discord",sentiment:"neutral",
+      title:lang==="ja"?"DRep報酬モデルの比較検討が活発化":"DRep Reward Model Comparison Gaining Traction",
+      desc:lang==="ja"?"投票率ペナルティ＋根拠提出ボーナスの組み合わせが有力。":"Vote-rate penalty + rationale bonus combination gaining favor.",
+      mentions:["SIPO DRep","Phil UPLC","Goofycrisp"]},
+    {id:"disc_4",type:"discussion",date:"2026-03-01",sortKey:993,source:"Telegram",sentiment:"negative",
+      title:lang==="ja"?"パラメータ変更提案に技術コミュニティが懸念":"Technical Community Concerns on Parameter Change Proposal",
+      desc:lang==="ja"?"max_tx_size増加提案に対し、ネットワーク負荷への影響を懸念する声。":"Concerns about max_tx_size increase — network load impact worries.",
+      mentions:["IOG","Tweag","Well-Typed"]},
+  ];
+
+  const signalItems = [
+    {id:"sig_1",type:"signal",date:"2026-03-06",sortKey:992,drep:"Cardano Foundation",ga:"Constitution v2.4",vote:"Yes",confidence:85,
+      reason:lang==="ja"?"透明性と説明責任の向上を支持":"Supports improved transparency and accountability"},
+    {id:"sig_2",type:"signal",date:"2026-03-07",sortKey:991,drep:"YUTA",ga:"Treasury Withdrawal ₳500K",vote:"Yes",confidence:75,
+      reason:lang==="ja"?"エコシステム発展のための適切な投資":"Appropriate investment for ecosystem development"},
+    {id:"sig_3",type:"signal",date:"2026-03-06",sortKey:990,drep:"Yoroi Wallet",ga:"Constitution v2.4",vote:"Yes",confidence:70,
+      reason:lang==="ja"?"条件付き賛成 — タイムラインの明確化が必要":"Conditional yes — timeline needs clarification"},
+    {id:"sig_4",type:"signal",date:"2026-03-08",sortKey:989,drep:"Army of Spies",ga:"Treasury Withdrawal ₳500K",vote:"No",confidence:80,
+      reason:lang==="ja"?"監査メカニズムが不十分":"Insufficient audit mechanisms"},
+    {id:"sig_5",type:"signal",date:"2026-03-09",sortKey:988,drep:"Everstake",ga:"Param Change: max_tx_size",vote:"Abstain",confidence:60,
+      reason:lang==="ja"?"技術的な影響評価がさらに必要":"Need more technical impact assessment"},
+  ];
+
+  const allItems = [...gaItems,...alertItems,...discussionItems,...signalItems]
+    .sort((a,b)=>{if(a.type==="alert"&&b.type!=="alert")return -1;if(b.type==="alert"&&a.type!=="alert")return 1;return(b.sortKey||0)-(a.sortKey||0);});
+  const filtered = filter==="all"?allItems:allItems.filter(i=>i.type===filter);
+
+  const typeBadge = (type) => {
+    const map = {
+      ga:{icon:"📢",label:lang==="ja"?"新GA":"New GA",bg:"rgba(59,130,246,.12)",color:"var(--accent2)",border:"rgba(59,130,246,.3)"},
+      alert:{icon:"🚨",label:lang==="ja"?"アラート":"Alert",bg:"rgba(248,113,113,.12)",color:"var(--no)",border:"rgba(248,113,113,.3)"},
+      discussion:{icon:"💬",label:lang==="ja"?"議論":"Discussion",bg:"rgba(139,92,246,.12)",color:"#a78bfa",border:"rgba(139,92,246,.3)"},
+      signal:{icon:"📡",label:lang==="ja"?"シグナル":"Signal",bg:"rgba(52,211,153,.12)",color:"var(--yes)",border:"rgba(52,211,153,.3)"},
+    };
+    const m=map[type]||map.discussion;
+    return E("span",{style:{fontSize:9,fontWeight:700,padding:"2px 7px",borderRadius:4,background:m.bg,color:m.color,border:`1px solid ${m.border}`,whiteSpace:"nowrap"}},m.icon+" "+m.label);
+  };
+
+  const filters = [
+    {key:"all",label:lang==="ja"?"すべて":"All",count:allItems.length},
+    {key:"ga",label:lang==="ja"?"新GA":"GAs",count:gaItems.length},
+    {key:"alert",label:lang==="ja"?"アラート":"Alerts",count:alertItems.length},
+    {key:"discussion",label:lang==="ja"?"議論":"Discussion",count:discussionItems.length},
+    {key:"signal",label:lang==="ja"?"シグナル":"Signals",count:signalItems.length},
+  ];
+
+  const handleNotifSave = () => { setSaved(true); setTimeout(()=>setSaved(false),2000); };
+  const toggleNotif = key => setNotif(prev=>({...prev,[key]:!prev[key]}));
+  const ToggleSwitch = ({on,onClick}) => E("button",{onClick,style:{
+    position:"relative",width:40,height:22,borderRadius:11,border:"none",cursor:"pointer",
+    background:on?"var(--accent)":"var(--border2)",transition:"background .2s",padding:0,flexShrink:0}},
+    E("span",{style:{position:"absolute",top:2,left:on?20:2,width:18,height:18,borderRadius:9,
+      background:"#fff",transition:"left .2s",boxShadow:"0 1px 3px rgba(0,0,0,.3)"}})
+  );
+
+  const renderItem = (item) => {
+    const isExpanded = !!expandedItems[item.id];
+    if (item.type==="ga") {
+      const aType=item.actionType;
+      const shortType = aType.replace("TreasuryWithdrawals","Treasury").replace("ParameterChange","Param").replace("HardForkInitiation","HardFork")
+        .replace("NoConfidence","NoConf").replace("UpdateCommittee","CC Update").replace("NewConstitution","Constitution");
+      return E("div",{key:item.id,style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:8,padding:"10px 14px",marginBottom:6,borderLeft:`3px solid ${actionColor(aType)}`}},
+        E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,flexWrap:"wrap"}},
+          E("div",{style:{display:"flex",gap:6,alignItems:"center",flex:1,minWidth:0}},
+            typeBadge("ga"),
+            E("span",{style:{fontSize:9,fontWeight:600,padding:"2px 5px",borderRadius:3,background:actionColor(aType)+"18",color:actionColor(aType)}},shortType),
+            E("span",{style:{fontSize:10,color:"var(--text2)"}},item.date)),
+          E("div",{style:{display:"flex",gap:8,fontSize:10,fontWeight:600,flexShrink:0}},
+            E("span",{style:{color:"var(--yes)"}},"Y:"+item.yc),E("span",{style:{color:"var(--no)"}},"N:"+item.nc),E("span",{style:{color:"var(--abstain)"}},"A:"+item.ac))),
+        E("div",{style:{marginTop:4,fontSize:12,fontWeight:600,color:"var(--text)",cursor:"pointer",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:isExpanded?"normal":"nowrap"},onClick:()=>toggleExpand(item.id)},item.title),
+        item.expiration&&E("div",{style:{marginTop:3,fontSize:9,color:"var(--text2)"}},(lang==="ja"?"有効期限: Epoch ":"Expires: Epoch ")+item.expiration)
+      );
+    }
+    if (item.type==="alert") {
+      return E("div",{key:item.id,style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:8,padding:"10px 14px",marginBottom:6,borderLeft:`3px solid ${priorityColor(item.priority)}`}},
+        E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,flexWrap:"wrap"}},
+          E("div",{style:{display:"flex",gap:6,alignItems:"center"}},
+            typeBadge("alert"),
+            item.priority&&E("span",{style:{fontSize:8,fontWeight:700,padding:"1px 5px",borderRadius:3,color:priorityColor(item.priority),background:item.priority==="high"?"rgba(248,113,113,.1)":"rgba(251,191,36,.1)"}},item.priority.toUpperCase()),
+            E("span",{style:{fontSize:10,color:"var(--text2)"}},item.date)),
+          item.daysLeft!=null&&E("span",{style:{fontSize:10,color:"var(--no)",fontWeight:700}},lang==="ja"?"残り"+item.daysLeft+"日":item.daysLeft+"d left")),
+        E("div",{style:{marginTop:4,fontSize:12,fontWeight:600,color:"var(--text)"}},item.title),
+        E("div",{style:{marginTop:3,fontSize:11,color:"var(--text2)",lineHeight:1.5}},item.desc),
+        item.responses!=null&&E("div",{style:{marginTop:4,fontSize:10,color:"var(--accent2)",fontWeight:600}},item.responses+" "+(lang==="ja"?"件の回答":"responses"))
+      );
+    }
+    if (item.type==="discussion") {
+      return E("div",{key:item.id,style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:8,padding:"10px 14px",marginBottom:6,borderLeft:"3px solid #8b5cf6"}},
+        E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,flexWrap:"wrap"}},
+          E("div",{style:{display:"flex",gap:6,alignItems:"center"}},
+            typeBadge("discussion"),
+            E("span",{style:{fontSize:9,padding:"2px 5px",borderRadius:4,background:"var(--bg3)",color:"var(--accent2)",fontWeight:600}},item.source),
+            E("span",{style:{fontSize:10,color:"var(--text2)"}},item.date)),
+          E("span",{style:{fontSize:9,padding:"2px 7px",borderRadius:8,fontWeight:600,color:sentimentColor(item.sentiment),
+            background:item.sentiment==="positive"?"rgba(52,211,153,.1)":item.sentiment==="negative"?"rgba(248,113,113,.1)":item.sentiment==="mixed"?"rgba(251,191,36,.1)":"rgba(75,85,99,.1)"}},sentimentLabel(item.sentiment))),
+        E("div",{style:{marginTop:4,fontSize:12,fontWeight:600,color:"var(--text)"}},item.title),
+        E("div",{style:{marginTop:3,fontSize:11,color:"var(--text2)",lineHeight:1.5}},item.desc),
+        item.mentions&&E("div",{style:{marginTop:5,display:"flex",gap:4,flexWrap:"wrap"}},
+          item.mentions.map((m,j)=>E("span",{key:j,style:{fontSize:8,padding:"1px 5px",borderRadius:3,background:"var(--border)",color:"var(--text2)"}},m)))
+      );
+    }
+    if (item.type==="signal") {
+      return E("div",{key:item.id,style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:8,padding:"10px 14px",marginBottom:6,borderLeft:`3px solid ${voteColor(item.vote)}`}},
+        E("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,flexWrap:"wrap"}},
+          E("div",{style:{display:"flex",gap:6,alignItems:"center"}},
+            typeBadge("signal"),
+            E("span",{style:{fontSize:11,fontWeight:700,color:"var(--text)"}},item.drep),
+            E("span",{style:{fontSize:10,color:"var(--text2)"}},item.date)),
+          E("div",{style:{display:"flex",gap:6,alignItems:"center"}},
+            E("span",{style:{fontSize:11,fontWeight:700,color:voteColor(item.vote)}},item.vote),
+            E("span",{style:{fontSize:9,padding:"2px 6px",borderRadius:10,fontWeight:600,
+              background:item.confidence>=70?"rgba(52,211,153,.15)":item.confidence>=40?"rgba(251,191,36,.15)":"rgba(248,113,113,.15)",
+              color:item.confidence>=70?"var(--yes)":item.confidence>=40?"var(--abstain)":"var(--no)"}},item.confidence+"%"))),
+        E("div",{style:{marginTop:4,fontSize:11,color:"var(--text2)"}},
+          E("span",{style:{color:"var(--text)",fontWeight:500}},item.ga)," — ",item.reason)
+      );
+    }
+    return null;
+  };
+
+  return E("div",{className:"card",style:{padding:0}},
+    E("div",{style:{padding:"12px 20px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}},
+      E("div",null,
+        E("h2",{style:{color:"var(--accent2)",margin:0,fontSize:16}},"📢 DRep Hub (β)"),
+        E("p",{style:{color:"var(--text2)",fontSize:10,margin:"2px 0 0"}},
+          lang==="ja"?"ガバナンスの全体像をここ1つで — GA・アラート・議論・シグナルを統合表示"
+            :"Your single source for governance — GAs, alerts, discussions & signals in one feed")),
+      E("button",{onClick:()=>setShowNotifPanel(!showNotifPanel),
+        style:{fontSize:18,background:showNotifPanel?"var(--accent)":"var(--bg3)",border:"1px solid var(--border)",
+          borderRadius:8,width:36,height:36,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",
+          color:showNotifPanel?"#fff":"var(--text2)",transition:"all .15s"}},showNotifPanel?"✕":"🔔")),
+    showNotifPanel&&E("div",{style:{padding:"12px 20px",borderBottom:"1px solid var(--border)",background:"var(--bg3)"}},
+      E("div",{style:{maxWidth:500,margin:"0 auto"}},
+        E("div",{style:{fontSize:12,fontWeight:700,color:"var(--text)",marginBottom:10}},"🔔 "+(lang==="ja"?"通知設定":"Notification Settings")),
+        E("div",{style:{display:"flex",gap:6,marginBottom:12}},
+          E("input",{type:"email",value:email,onChange:e=>setEmail(e.target.value),placeholder:lang==="ja"?"メールアドレス…":"Email address…",
+            style:{flex:1,padding:"6px 10px",fontSize:11,borderRadius:6,border:"1px solid var(--border)",background:"var(--bg2)",color:"var(--text)"}}),
+          E("button",{onClick:handleNotifSave,className:"btn btn-primary",style:{fontSize:11,padding:"6px 14px"}},
+            saved?(lang==="ja"?"保存済":"Saved!"):(lang==="ja"?"保存":"Save"))),
+        [{key:"newGa",label:lang==="ja"?"新しいGA":"New GAs",icon:"📢"},
+         {key:"urgent",label:lang==="ja"?"緊急アラート":"Urgent Alerts",icon:"🚨"},
+         {key:"digest",label:lang==="ja"?"議論ダイジェスト":"Discussion Digest",icon:"💬"},
+         {key:"signals",label:lang==="ja"?"DRepシグナル":"DRep Signals",icon:"📡"},
+         {key:"weekly",label:lang==="ja"?"週次まとめ":"Weekly Summary",icon:"📋"}].map(n=>
+          E("div",{key:n.key,style:{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"5px 0",borderBottom:"1px solid var(--border)"}},
+            E("span",{style:{fontSize:11,color:"var(--text)"}},n.icon+" "+n.label),
+            E(ToggleSwitch,{on:!!notif[n.key],onClick:()=>toggleNotif(n.key)}))),
+        E("div",{style:{textAlign:"center",marginTop:8,fontSize:9,color:"var(--text2)",opacity:0.7}},
+          lang==="ja"?"デモ: 設定はブラウザ内のみに保存されます":"Demo: preferences saved in browser only"))),
+    E("div",{style:{display:"flex",gap:4,padding:"10px 16px",borderBottom:"1px solid var(--border)",background:"var(--bg)",overflowX:"auto",flexWrap:"wrap"}},
+      filters.map(f=>E("button",{key:f.key,onClick:()=>setFilter(f.key),style:{
+        padding:"5px 12px",fontSize:11,fontWeight:filter===f.key?700:500,borderRadius:16,cursor:"pointer",
+        background:filter===f.key?"var(--accent)":"var(--bg3)",color:filter===f.key?"#fff":"var(--text2)",
+        border:filter===f.key?"1px solid var(--accent)":"1px solid var(--border)",transition:"all .15s",whiteSpace:"nowrap"}},f.label+" ("+f.count+")"))),
+    E("div",{style:{padding:"6px 16px",background:"var(--bg3)",fontSize:9,color:"var(--accent2)",borderBottom:"1px solid var(--border)"}},
+      "ℹ️ "+(lang==="ja"?"デモ用サンプルデータ":"Sample data for demonstration")+" — "+(lang==="ja"?"自動収集パイプライン接続後に実データへ切り替わります":"Will switch to live data once the automated collection pipeline is connected")),
+    E("div",{style:{padding:"12px 16px",maxHeight:"75vh",overflowY:"auto"}},
+      filtered.length===0?E("div",{style:{textAlign:"center",padding:30,color:"var(--text2)",fontSize:12}},lang==="ja"?"該当するアイテムがありません":"No items match this filter"):filtered.map(item=>renderItem(item)))
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// Transaction Analysis Tab
+// ═══════════════════════════════════════════════════
+function TransactionAnalysisTab({ lang }) {
+  const epochData = [
+    {epoch:616,total:412850,simple:198168,smart:214682,daily_avg:82570},
+    {epoch:615,total:398420,simple:191242,smart:207178,daily_avg:79684},
+    {epoch:614,total:425100,simple:204048,smart:221052,daily_avg:85020},
+    {epoch:613,total:389760,simple:187085,smart:202675,daily_avg:77952},
+    {epoch:612,total:405300,simple:194544,smart:210756,daily_avg:81060},
+    {epoch:611,total:378900,simple:181872,smart:197028,daily_avg:75780},
+  ];
+  const projectData = [
+    {name:"SundaeSwap",txCount:52340,color:"#8b5cf6"},{name:"Minswap",txCount:48720,color:"#3b82f6"},
+    {name:"JPG Store",txCount:35890,color:"#f59e0b"},{name:"Liqwid Finance",txCount:28450,color:"#06b6d4"},
+    {name:"Lenfi (Aada)",txCount:18930,color:"#34d399"},{name:"DexHunter",txCount:15670,color:"#f87171"},
+    {name:"Optim Finance",txCount:12340,color:"#a78bfa"},{name:"Splash Protocol",txCount:9850,color:"#fbbf24"},
+    {name:"Indigo Protocol",txCount:8760,color:"#14b8a6"},{name:"WingRiders",txCount:7520,color:"#fb923c"},
+    {name:"Levvy Finance",txCount:5430,color:"#e879f9"},
+    {name:lang==="ja"?"その他":"Others",txCount:21782,color:"#6b7280"},
+  ];
+
+  const latest = epochData[0];
+  const totalProjectTx = projectData.reduce((s,p)=>s+p.txCount,0);
+  const smartPct = (latest.smart/latest.total*100).toFixed(1);
+  const simplePct = (latest.simple/latest.total*100).toFixed(1);
+
+  const Section = ({title,children}) => E("div",{style:{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:10}},
+    E("div",{style:{fontSize:13,fontWeight:700,color:"var(--accent2)",marginBottom:8}},title),children);
+
+  const thS = {padding:"5px 8px",fontSize:10,fontWeight:600,textAlign:"left",borderBottom:"1px solid var(--border)"};
+
+  return E("div",{style:{maxWidth:900,margin:"0 auto"}},
+    E("div",{className:"card",style:{padding:"16px 20px",marginBottom:12}},
+      E("h2",{style:{color:"var(--accent2)",margin:0,fontSize:16,marginBottom:4}},"📊 "+(lang==="ja"?"トランザクション分析 (β)":"Transaction Analysis (β)")),
+      E("p",{style:{color:"var(--text2)",fontSize:11,margin:0}},lang==="ja"?"Cardanoネットワークのトランザクション内訳":"Cardano network transaction breakdown"),
+      E("p",{style:{color:"var(--abstain)",fontSize:10,margin:"4px 0 0",fontStyle:"italic"}},
+        lang==="ja"?"※ サンプルデータです。データパイプライン接続後に自動更新されます。":"※ Sample data. Will auto-update once the data pipeline is connected.")),
+
+    E(Section,{title:"📈 "+(lang==="ja"?"概要 (Epoch "+latest.epoch+")":"Overview (Epoch "+latest.epoch+")")},
+      E("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:8,marginBottom:8}},
+        ...[
+          {label:lang==="ja"?"総トランザクション":"Total Txs",value:latest.total.toLocaleString(),color:"#3b82f6"},
+          {label:lang==="ja"?"単純送金":"Simple Transfers",value:latest.simple.toLocaleString(),sub:simplePct+"%",color:"#34d399"},
+          {label:lang==="ja"?"スマートコントラクトTx":"Smart Contract Txs",value:latest.smart.toLocaleString(),sub:smartPct+"%",color:"#8b5cf6"},
+          {label:lang==="ja"?"日次平均":"Daily Average",value:latest.daily_avg.toLocaleString(),color:"#f59e0b"},
+        ].map(({label,value,sub,color},i)=>E("div",{key:i,style:{background:"var(--bg3)",borderRadius:8,padding:"10px 12px",borderLeft:`3px solid ${color}`}},
+          E("div",{style:{fontSize:9,color:"var(--text2)",textTransform:"uppercase",letterSpacing:".05em",marginBottom:2}},label),
+          E("div",{style:{fontSize:18,fontWeight:700,color}},value),
+          sub&&E("div",{style:{fontSize:10,color:"var(--text2)",marginTop:1}},sub)))),
+      E("div",{style:{display:"flex",height:10,borderRadius:5,overflow:"hidden",background:"var(--border)",marginTop:4}},
+        E("div",{style:{width:simplePct+"%",background:"#34d399"}}),E("div",{style:{width:smartPct+"%",background:"#8b5cf6"}})),
+      E("div",{style:{display:"flex",justifyContent:"space-between",fontSize:9,color:"var(--text2)",marginTop:4}},
+        E("span",null,"🟩 "+(lang==="ja"?"単純送金":"Simple")+": "+simplePct+"%"),
+        E("span",null,"🟪 "+(lang==="ja"?"スマートコントラクト":"Smart Contract")+": "+smartPct+"%"))),
+
+    E(Section,{title:"📅 "+(lang==="ja"?"エポック別推移":"Epoch History")},
+      E("div",{style:{overflowX:"auto"}},
+        E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead",null,E("tr",null,
+            E("th",{style:{...thS,color:"var(--text2)"}},"Epoch"),
+            E("th",{style:{...thS,color:"var(--text2)",textAlign:"right"}},lang==="ja"?"合計":"Total"),
+            E("th",{style:{...thS,color:"#34d399",textAlign:"right"}},lang==="ja"?"単純送金":"Simple"),
+            E("th",{style:{...thS,color:"#8b5cf6",textAlign:"right"}},lang==="ja"?"スマコン":"Smart"),
+            E("th",{style:{...thS,color:"var(--text2)",textAlign:"right"}},lang==="ja"?"日次平均":"Daily Avg"),
+            E("th",{style:{...thS,color:"var(--text2)",textAlign:"center"}},lang==="ja"?"トレンド":"Trend"))),
+          E("tbody",null,epochData.map((ep,i)=>{
+            const prev=epochData[i+1];const change=prev?((ep.total-prev.total)/prev.total*100).toFixed(1):null;
+            return E("tr",{key:ep.epoch,style:{borderBottom:"1px solid var(--border)"}},
+              E("td",{style:{padding:"6px 8px",fontWeight:600,color:"var(--accent2)"}},ep.epoch),
+              E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text)"}},ep.total.toLocaleString()),
+              E("td",{style:{padding:"6px 8px",textAlign:"right",color:"#34d399"}},ep.simple.toLocaleString()),
+              E("td",{style:{padding:"6px 8px",textAlign:"right",color:"#8b5cf6"}},ep.smart.toLocaleString()),
+              E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text2)"}},ep.daily_avg.toLocaleString()),
+              E("td",{style:{padding:"6px 8px",textAlign:"center",fontSize:10,fontWeight:600,
+                color:change===null?"var(--text2)":Number(change)>=0?"var(--yes)":"var(--no)"}},
+                change===null?"—":(Number(change)>=0?"+":"")+change+"%"));}))))),
+
+    E(Section,{title:"🏗 "+(lang==="ja"?"プロジェクト/プロトコル別":"By Project/Protocol")+" (Epoch "+latest.epoch+")"},
+      E("div",{style:{overflowX:"auto"}},
+        E("table",{style:{width:"100%",borderCollapse:"collapse",fontSize:11}},
+          E("thead",null,E("tr",null,
+            E("th",{style:{...thS,color:"var(--text2)"}},"Project"),
+            E("th",{style:{...thS,color:"var(--text2)",textAlign:"right"}},"Tx Count"),
+            E("th",{style:{...thS,color:"var(--text2)",textAlign:"right"}},"Share"),
+            E("th",{style:{...thS,color:"var(--text2)",textAlign:"left",minWidth:120}},""))),
+          E("tbody",null,projectData.sort((a,b)=>b.txCount-a.txCount).map((p,i)=>{
+            const pct=totalProjectTx>0?(p.txCount/totalProjectTx*100):0;
+            return E("tr",{key:i,style:{borderBottom:"1px solid var(--border)"}},
+              E("td",{style:{padding:"6px 8px",fontWeight:600,color:p.color}},p.name),
+              E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text)"}},p.txCount.toLocaleString()),
+              E("td",{style:{padding:"6px 8px",textAlign:"right",color:"var(--text2)"}},pct.toFixed(1)+"%"),
+              E("td",{style:{padding:"6px 8px"}},
+                E("div",{style:{height:8,borderRadius:4,overflow:"hidden",background:"var(--border)",width:"100%"}},
+                  E("div",{style:{height:"100%",width:pct+"%",background:p.color,borderRadius:4}}))));})))),
+      E("div",{style:{marginTop:8,fontSize:10,color:"var(--text2)",textAlign:"right"}},
+        (lang==="ja"?"スマートコントラクトTx合計: ":"Smart Contract Txs total: ")+totalProjectTx.toLocaleString()))
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// App Shell
+// ═══════════════════════════════════════════════════
+function App() {
+  const [tab, setTab] = React.useState("drep-hub");
+  const [lang, setLang] = React.useState("ja");
+
+  return E("div",{style:{minHeight:"100vh",maxWidth:1200,margin:"0 auto"}},
+    E("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10,flexWrap:"wrap",gap:8}},
+      E("h1",{style:{fontSize:19,fontWeight:800,letterSpacing:"-.02em",margin:0}},"Adatool Demo"),
+      E("div",{style:{display:"flex",gap:6,alignItems:"center"}},
+        E("div",{style:{display:"flex",border:"1px solid var(--border)",borderRadius:6,overflow:"hidden"}},
+          ["en","ja"].map(l=>E("button",{key:l,onClick:()=>setLang(l),style:{padding:"4px 10px",fontSize:11,fontWeight:600,border:"none",cursor:"pointer",
+            background:lang===l?"var(--accent)":"var(--bg3)",color:lang===l?"#fff":"var(--text2)"}},l==="en"?"EN":"日本語"))))),
+    E("div",{className:"tab-bar"},
+      E("button",{className:`tab-btn ${tab==="drep-hub"?"active":""}`,onClick:()=>setTab("drep-hub")},"📢 DRep Hub"),
+      E("button",{className:`tab-btn ${tab==="tx"?"active":""}`,onClick:()=>setTab("tx")},"📊 "+(lang==="ja"?"Tx分析":"Tx Analysis"))),
+    tab==="drep-hub"
+      ? E(DRepHubTab,{lang})
+      : E(TransactionAnalysisTab,{lang})
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(E(App));
+</script>
+</body>
+</html>

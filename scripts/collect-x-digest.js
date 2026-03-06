@@ -325,10 +325,10 @@ async function collectTier1() {
       }
 
       console.log(`    → ${count} tweets (last 48h)`);
-      await sleep(5500); // Rate limit: free tier = 1 req per 5 seconds
+      await sleep(300); // Rate limit: paid tier — generous limits
     } catch (err) {
       console.error(`    ✗ Error fetching @${account.username}: ${err.message}`);
-      await sleep(5500); // Also wait on error
+      await sleep(1000); // Wait a bit on error before retry
     }
   }
 
@@ -395,10 +395,10 @@ async function collectTier2() {
       }
 
       console.log(`    → ${count} tweets`);
-      await sleep(5500); // Rate limit: free tier = 1 req per 5 seconds
+      await sleep(300); // Rate limit: paid tier — generous limits
     } catch (err) {
       console.error(`    ✗ Error searching "${search.label}": ${err.message}`);
-      await sleep(5500); // Also wait on error
+      await sleep(1000); // Wait a bit on error before retry
     }
   }
 

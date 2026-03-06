@@ -1,0 +1,21 @@
+name = "digest-notify"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+DIGEST_BASE_URL = "https://cardanoz.github.io/cardano-governance-dashboard/data/"
+SITE_URL = "https://adatool.net"
+
+# Secrets (set via `wrangler secret put`):
+#   RESEND_API_KEY   — Resend email API key
+#   NOTIFY_API_KEY   — API key for trigger-send endpoint (from GitHub Actions)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "digest-subscriptions"
+database_id = "TO_BE_CREATED"
+# Create with: wrangler d1 create digest-subscriptions
+# Then update database_id above
+
+# To initialize the database:
+# wrangler d1 execute digest-subscriptions --file=./schema.sql
