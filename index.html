@@ -9211,9 +9211,10 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
   const [filter, setFilter] = React.useState("all");
   const [expandedIdx, setExpandedIdx] = React.useState({});
   const [selectedDate, setSelectedDate] = React.useState(null);
-  const [viewMode, setViewMode] = React.useState("daily"); // "daily" | "monthly"
+  const [viewMode, setViewMode] = React.useState("daily"); // "daily" | "weekly" | "monthly"
   const [digestIndex, setDigestIndex] = React.useState(null);
   const [monthCache, setMonthCache] = React.useState({}); // { "2026-03": [...] }
+  const [weeklyDigests, setWeeklyDigests] = React.useState(null);
   const [monthlyDigests, setMonthlyDigests] = React.useState(null);
   const [selectedMonth, setSelectedMonth] = React.useState(null);
   const [showOlderDates, setShowOlderDates] = React.useState(false);
@@ -9242,6 +9243,9 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
           fetchMonthData(latestMonth);
         }
       }
+    }).catch(() => {});
+    fetch(base + "x-weekly-digest.json" + v).then(r => r.ok ? r.json() : null).then(data => {
+      if (data) setWeeklyDigests(Array.isArray(data) ? data : [data]);
     }).catch(() => {});
     fetch(base + "x-monthly-digest.json" + v).then(r => r.ok ? r.json() : null).then(data => {
       if (data) setMonthlyDigests(Array.isArray(data) ? data : [data]);
@@ -9414,6 +9418,20 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
     setViewMode("daily");
   }
 
+  // ─── Weekly digest: find the week containing selectedDate ──
+  function getISOWeekLabel(dateStr) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr + "T00:00:00Z");
+    const tmp = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+    tmp.setUTCDate(tmp.getUTCDate() + 4 - (tmp.getUTCDay() || 7));
+    const yr = tmp.getUTCFullYear();
+    const jan4 = new Date(Date.UTC(yr, 0, 4));
+    const wk = Math.ceil(((tmp - jan4) / 86400000 + 1) / 7);
+    return yr + "-W" + String(wk).padStart(2, "0");
+  }
+  const selectedWeekLabel = getISOWeekLabel(selectedDate);
+  const currentWeeklyDigest = weeklyDigests?.find(d => d.week === selectedWeekLabel) || null;
+
   // ─── Monthly digest for selected month ──
   const currentMonthlyDigest = monthlyDigests?.find(d => d.month === selectedMonth) || null;
 
@@ -9470,6 +9488,69 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
         )
       );
     });
+  };
+
+  // ─── Render weekly digest view ──
+  const renderWeeklyView = () => {
+    if (!currentWeeklyDigest) {
+      return E("div", { style: { padding: "24px 16px", textAlign: "center", color: "var(--text3)" } },
+        E("div", { style: { fontSize: 28, marginBottom: 8 } }, "📆"),
+        E("div", { style: { fontSize: 13 } },
+          lang === "ja"
+            ? `${selectedWeekLabel || ""}の週次ダイジェストはまだ作成されていません`
+            : `Weekly digest for ${selectedWeekLabel || ""} not yet generated`),
+        E("div", { style: { fontSize: 11, marginTop: 4, color: "var(--text3)" } },
+          lang === "ja" ? "毎週月曜に自動生成されます" : "Auto-generated every Monday")
+      );
+    }
+    const wd = currentWeeklyDigest;
+    return E("div", { style: { padding: 0 } },
+      // Weekly summary
+      E("div", { style: { padding: "16px", borderBottom: "1px solid var(--border)" } },
+        E("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 } },
+          E("div", { style: { fontSize: 14, fontWeight: 700, color: "var(--text1)" } },
+            lang === "ja" ? "週間サマリー" : "Weekly Summary"),
+          E("div", { style: { fontSize: 11, color: "var(--text3)" } },
+            `${wd.startDate || ""} → ${wd.endDate || ""}`)
+        ),
+        E("div", { style: { fontSize: 13, lineHeight: 1.7, color: "var(--text2)" } }, L(wd, "summary"))
+      ),
+      // Top highlights
+      wd.topHighlights && wd.topHighlights.length > 0 && E("div", { style: { padding: "12px 16px", borderBottom: "1px solid var(--border)" } },
+        E("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 8, color: "var(--text1)" } },
+          lang === "ja" ? "今週のトピック" : "This Week's Highlights"),
+        ...wd.topHighlights.map((h, i) => {
+          const catInfo = CAT_INFO[h.category] || { icon: "📌", color: "#6b7280" };
+          return E("div", { key: i, style: { padding: "6px 0", borderBottom: i < wd.topHighlights.length - 1 ? "1px solid var(--border)" : "none" } },
+            E("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 3 } },
+              impBadge(h.importance),
+              E("span", { style: { fontSize: 10, padding: "1px 6px", borderRadius: 4, background: catInfo.color + "22", color: catInfo.color, fontWeight: 600 } },
+                catInfo.icon + " " + (CAT_LABELS[h.category]?.[lang] || h.category)),
+              E("span", { style: { fontSize: 13, fontWeight: 600 } }, L(h, "title"))
+            ),
+            E("div", { style: { fontSize: 12, color: "var(--text2)", marginLeft: 30 } }, L(h, "summary"))
+          );
+        })
+      ),
+      // Action items
+      wd.actionItems && wd.actionItems.length > 0 && E("div", { style: { padding: "12px 16px" } },
+        E("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 8, color: "var(--text1)" } },
+          lang === "ja" ? "来週の注目" : "Next Week Watch"),
+        ...wd.actionItems.map((ai, i) =>
+          E("div", { key: i, style: { display: "flex", gap: 6, alignItems: "flex-start", padding: "4px 0" } },
+            E("span", { style: { color: "var(--accent)" } }, "▸"),
+            E("div", null,
+              E("div", { style: { fontSize: 12, color: "var(--text2)" } }, L(ai, "action")),
+              ai.audience && E("div", { style: { fontSize: 9, color: "var(--text3)", marginTop: 2 } },
+                ai.audience.join(" · "))
+            )
+          )
+        )
+      ),
+      // Stats
+      wd.stats && E("div", { style: { padding: "8px 16px", borderTop: "1px solid var(--border)", fontSize: 10, color: "var(--text3)" } },
+        `${wd.stats.daysWithData || 0} days · ${wd.stats.totalTweets || 0} tweets · ${wd.stats.totalHighlights || 0} highlights`)
+    );
   };
 
   // ─── Render monthly digest view ──
@@ -9576,6 +9657,10 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
       padding: "8px 16px", borderBottom: "1px solid var(--border)",
       display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center"
     }},
+      // Weekly digest button
+      E("button", { onClick: () => setViewMode(viewMode === "weekly" ? "daily" : "weekly"),
+        style: { ...pilStyle(viewMode === "weekly"), fontWeight: 600 }
+      }, "📆 " + (lang === "ja" ? "週間" : "Weekly")),
       // Monthly digest button
       E("button", { onClick: () => setViewMode(viewMode === "monthly" ? "daily" : "monthly"),
         style: { ...pilStyle(viewMode === "monthly"), fontWeight: 600 }
@@ -9636,6 +9721,8 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
     // ── Content area ──
     viewMode === "monthly"
       ? renderMonthlyView()
+      : viewMode === "weekly"
+      ? renderWeeklyView()
       : E("div", { style: { padding: "8px 0" } },
           !digest
             ? E("div", { style: { padding: "20px 16px", textAlign: "center", color: "var(--text3)", fontSize: 13 } },

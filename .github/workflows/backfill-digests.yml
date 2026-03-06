@@ -35,6 +35,29 @@ jobs:
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
         run: node scripts/backfill-digests.js --from ${{ inputs.from_date }} --to ${{ inputs.to_date }}
 
+      - name: Generate weekly summaries
+        env:
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: |
+          # Generate weekly digests for all weeks in range
+          node -e "
+            const s = new Date('${{ inputs.from_date }}T00:00:00Z');
+            const e = new Date('${{ inputs.to_date }}T00:00:00Z');
+            const seen = new Set();
+            for (let d = new Date(s); d <= e; d.setUTCDate(d.getUTCDate() + 1)) {
+              const tmp = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+              tmp.setUTCDate(tmp.getUTCDate() + 4 - (tmp.getUTCDay() || 7));
+              const yr = tmp.getUTCFullYear();
+              const jan4 = new Date(Date.UTC(yr, 0, 4));
+              const wk = Math.ceil(((tmp - jan4) / 86400000 + 1) / 7);
+              const label = yr + '-W' + String(wk).padStart(2, '0');
+              if (!seen.has(label)) { seen.add(label); console.log(label); }
+            }
+          " | while read WEEK; do
+            echo "Generating weekly digest for $WEEK..."
+            node scripts/generate-weekly-digest.js --force --week "$WEEK" || true
+          done
+
       - name: Generate monthly summaries
         env:
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
@@ -49,5 +72,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/x-digest-*.json data/x-daily-digest.json data/x-digest-index.json
+          git add data/x-weekly-digest.json 2>/dev/null || true
           git add data/x-monthly-digest.json 2>/dev/null || true
           git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Backfill digests ${{ inputs.from_date }} to ${{ inputs.to_date }}" && git pull --rebase && git push)

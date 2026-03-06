@@ -1,0 +1,48 @@
+name: Weekly Digest
+
+on:
+  schedule:
+    - cron: '0 7 * * MON'  # Every Monday at 07:00 UTC (16:00 JST)
+  workflow_dispatch:
+    inputs:
+      week:
+        description: 'Target week (YYYY-Wnn), leave empty for previous week'
+        required: false
+      force:
+        description: 'Force run (skip day check)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  weekly-digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate weekly digest
+        env:
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: |
+          ARGS="--force"
+          if [ -n "${{ inputs.week }}" ]; then
+            ARGS="$ARGS --week ${{ inputs.week }}"
+          fi
+          node scripts/generate-weekly-digest.js $ARGS
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/x-weekly-digest.json 2>/dev/null || true
+          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Update weekly digest $(date -u +'%Y-%m-%d %H:%M UTC')" && git pull --rebase && git push)
