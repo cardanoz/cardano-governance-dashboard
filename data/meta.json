@@ -1,19 +1,19 @@
 {
-  "updated_at": "2026-03-06T15:55:21.655Z",
-  "updated_ts": 1772812521655,
+  "updated_at": "2026-03-06T17:15:15.010Z",
+  "updated_ts": 1772817315010,
   "drep_count": 1593,
   "proposal_count": 90,
   "vote_count": 17732,
-  "api_calls": 202,
-  "fetch_duration_ms": 84603,
+  "api_calls": 2096,
+  "fetch_duration_ms": 962634,
   "max_votes": 120,
   "current_epoch": 617,
   "cached_expired_votes": 17408,
-  "metadata_from_cache": true,
+  "metadata_from_cache": false,
   "stake_source": "koios_live",
   "votes_from_cache": true,
   "cc_from_cache": true,
   "spo_from_cache": false,
   "spo_vote_count": 2984,
-  "spo_pool_count": 6118
+  "spo_pool_count": 6119
 }
