@@ -157,7 +157,20 @@ async function collectTier1() {
         userName: account.username,
       });
 
-      const accountTweets = res.tweets || res.data || [];
+      // Debug: log response structure for first account
+      if (account === TIER1_ACCOUNTS[0]) {
+        console.log(`    [DEBUG] Response keys: ${Object.keys(res || {})}`);
+        console.log(`    [DEBUG] Response preview: ${JSON.stringify(res).slice(0, 300)}`);
+      }
+
+      // Handle various response formats
+      let accountTweets = [];
+      if (Array.isArray(res.tweets)) accountTweets = res.tweets;
+      else if (Array.isArray(res.data)) accountTweets = res.data;
+      else if (Array.isArray(res)) accountTweets = res;
+      else if (res.tweets && typeof res.tweets === "object") accountTweets = Object.values(res.tweets);
+      else console.log(`    [WARN] Unexpected response format: ${Object.keys(res || {})}`);
+
       let count = 0;
 
       for (const t of accountTweets) {
@@ -185,9 +198,10 @@ async function collectTier1() {
       }
 
       console.log(`    → ${count} tweets (last 48h)`);
-      await sleep(300); // Rate limit buffer
+      await sleep(5500); // Rate limit: free tier = 1 req per 5 seconds
     } catch (err) {
       console.error(`    ✗ Error fetching @${account.username}: ${err.message}`);
+      await sleep(5500); // Also wait on error
     }
   }
 
@@ -209,7 +223,20 @@ async function collectTier2() {
         queryType: "Latest",
       });
 
-      const searchTweets = res.tweets || res.data || [];
+      // Debug: log response structure for first search
+      if (search === TIER2_SEARCHES[0]) {
+        console.log(`    [DEBUG] Search response keys: ${Object.keys(res || {})}`);
+        console.log(`    [DEBUG] Search preview: ${JSON.stringify(res).slice(0, 300)}`);
+      }
+
+      // Handle various response formats
+      let searchTweets = [];
+      if (Array.isArray(res.tweets)) searchTweets = res.tweets;
+      else if (Array.isArray(res.data)) searchTweets = res.data;
+      else if (Array.isArray(res)) searchTweets = res;
+      else if (res.tweets && typeof res.tweets === "object") searchTweets = Object.values(res.tweets);
+      else console.log(`    [WARN] Unexpected search response format: ${Object.keys(res || {})}`);
+
       let count = 0;
 
       for (const t of searchTweets) {
@@ -242,9 +269,10 @@ async function collectTier2() {
       }
 
       console.log(`    → ${count} tweets`);
-      await sleep(500); // Rate limit buffer
+      await sleep(5500); // Rate limit: free tier = 1 req per 5 seconds
     } catch (err) {
       console.error(`    ✗ Error searching "${search.label}": ${err.message}`);
+      await sleep(5500); // Also wait on error
     }
   }
 
