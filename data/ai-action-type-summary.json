@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-06T09:59:03.101Z",
+  "generatedAt": "2026-03-06T10:59:03.129Z",
   "actionTypes": {
     "InfoAction": {
       "count": 30,
-      "summary_en": "The 300M ADA Net Change Limit for Epochs 613–713 reflects a cautious fiscal approach, with supporters viewing it as prudent treasury management aligned with annual inflows and current market conditions. Opponents argue it's still excessive, lacks adequate accountability mechanisms, and unnecessarily constrains the ecosystem's growth potential given that NCLs are governance ceilings rather than mandatory spending targets.",
-      "summary_ja": "エポック613～713の3億ADA純変化上限は、慎重な財政運営アプローチを反映し、支持者は年間流入高と現在の市場条件に適合した賢明な資金管理と見なしています。反対者は、依然として過度であり、適切な説明責任メカニズムが不足しており、NCLが義務的支出目標ではなくガバナンス上限であることを踏まえると、エコシステムの成長可能性を不必要に制約していると主張しています。",
+      "summary_en": "This InfoAction establishes a Net Change Limit (NCL) of 300 million ADA for the Cardano Treasury across epochs 613-713 (approximately 16 months). The proposal reflects fiscal discipline by setting spending limits below previous year inflows, with support from those favoring conservative treasury management during uncertain market conditions, though opposition exists from those believing the limit remains too high or that individual proposal evaluation matters more than aggregate caps.",
+      "summary_ja": "このInfoActionは、エポック613～713期間（約16ヶ月間）のCardanoトレジャリーの純変化限度額（NCL）を3億ADAに設定するものです。前年度の流入額以下に支出限度を設定することで財政規律を反映しており、市場の不確実性の中での保守的なトレジャリー管理を支持する者から支持を受けていますが、この限度額がなお高すぎると考える者や、集計上限よりも個別提案の評価が重要だと考える者からの反対も存在します。",
       "typicalReasonsYes_en": [
-        "Conservative fiscal discipline aligned with 2025 treasury inflows (~306-307M ADA) and current ADA price volatility",
-        "Prudent reduction from the previous 350M ADA proposal, signaling responsible governance maturity",
-        "Necessary guardrail that can be adjusted in future governance actions without stalling treasury operations",
-        "Sustainable balance between funding ecosystem needs (infrastructure, security, scalability) and maintaining long-term treasury viability"
+        "Conservative fiscal discipline aligned with actual treasury inflows and current market conditions",
+        "Prevents excessive spending while preserving ability to fund critical infrastructure and ecosystem development",
+        "Reasonable first step for maturing governance that can be adjusted in future governance actions",
+        "More prudent than higher 350M ADA alternative given ADA price volatility and lower reserve levels"
       ],
       "typicalReasonsYes_ja": [
-        "2025年の資金流入（約306-307M ADA）と現在のADA価格変動性に合致した保守的な財政規律",
-        "以前の350M ADA案からの慎重な削減で、責任あるガバナンス成熟度を示す",
-        "将来のガバナンスアクションで調整可能な必要不可欠な保護手段であり、資金運用停滞を招かない",
-        "エコシステムニーズ（インフラ、セキュリティ、スケーラビリティの資金）と長期的な資金庫存続性維持のバランス"
+        "実際のトレジャリー流入額と現在の市場状況に整合した保守的な財政規律",
+        "過度な支出を防ぎながら、重要なインフラとエコシステム開発資金確保の能力を維持",
+        "成熟するガバナンスの合理的な第一歩であり、将来のガバナンスアクションで調整可能",
+        "ADA価格変動と準備金水準低下を考慮した、より慎重な350M ADA代替案より優れた選択"
       ],
       "typicalReasonsNo_en": [
-        "300M ADA is still excessive; stricter limits (200-250M) needed to enforce real fiscal discipline and treasury growth",
-        "NCL functions as a de facto spending target rather than a ceiling, creating 'earn it, burn it' cycle instead of long-term treasury sustainability",
-        "Lack of transparent reporting, evaluation mechanisms, and accountability for prior year spending before approving new budgets",
-        "Premature approval without addressing governance maturity, proposal quality metrics, and mid-term review mechanisms"
+        "300M ADA limit is still excessive; stricter 200-250M ADA cap needed to grow treasury reserves",
+        "Prior year 2025 budget outcomes lack transparent analysis and accountability before approving 2026 spending",
+        "Individual proposals should be evaluated on merit, not constrained by aggregate budget ceiling",
+        "Current governance maturity insufficient; mechanisms for measuring effectiveness and ROI remain underdeveloped"
       ],
       "typicalReasonsNo_ja": [
-        "3億ADAはなお過度である。200～250M ADAへの厳格化により、真の財政規律と資金庫成長強制が必要",
-        "NCLは上限ではなく事実上の支出目標として機能し、『稼いだら使う』サイクルを生み、長期的資金庫持続性を損なう",
-        "新年度予算承認前に、前年度支出の透明性報告、評価メカニズム、説明責任欠如に対処必要",
-        "ガバナンス成熟度、提案品質指標、中期レビューメカニズム未整備のまま早急に承認する危険性"
+        "300M ADAの限度額はなお過度であり、トレジャリー準備金を増やすためには200～250M ADAの厳密な上限が必要",
+        "2026年の支出承認��に、2025年度予算成果の透明性のある分析と説明責任が欠如している",
+        "個別提案はメリットに基づいて評価されるべきであり、集計予算上限に制約されるべきではない",
+        "現在のガバナンス成熟度は不十分であり、有効性とROI測定メカニズムはまだ発展途上"
       ]
     },
     "TreasuryWithdrawals": {
       "count": 47,
-      "summary_en": "Treasury withdrawal proposals on Cardano show strong support when backed by proven track records, clear delivery milestones, and strategic infrastructure value—particularly for critical initiatives like node diversity. However, opposition emerges around budget concerns, fiscal responsibility during bearish markets, lack of specificity, and questions about whether treasury funds are the appropriate mechanism for certain ecosystem projects.",
-      "summary_ja": "Cardanoの財務引き出し提案は、実績、明確なマイルストーン、戦略的インフラの価値によって支持される場合に強い支持を受けます。一方、市況悪化時の予算懸念、仕様の不明確さ、特定プロジェクトに対する財務メカニズムの適切性に関する疑問から反対が生じています。",
+      "summary_en": "Treasury Withdrawals on Cardano show strong support (77% Yes votes) primarily for projects demonstrating proven track records, clear deliverables, and strategic value to ecosystem infrastructure. Opposition focuses on budget concerns, lack of specificity, constitutional compliance issues, and questions about necessity or cost-effectiveness in the current market environment.",
+      "summary_ja": "CardanoのTreasury Withdrawalは、実績のあるチーム、明確な成果物、エコシステムインフラへの戦略的価値を示すプロジェクトが強い支持（賛成77%）を得ています。反対票は予算懸念、具体性の不足、憲法遵守問題、および現在の市場環境での必要性やコスト効率性への疑問に焦点を当てています。",
       "typicalReasonsYes_en": [
-        "Strong team track record with proven delivery history and financial stewardship (e.g., returning unused funds)",
-        "Critical infrastructure investment for decentralization and network resilience (e.g., node diversity reducing single-client dependency)",
-        "Clear, detailed budget breakdown with defined milestones, KPIs, and security measures",
-        "Strategic long-term value addressing fundamental ecosystem needs despite short-term market conditions"
+        "Proven team track record with successful delivery history and fiscal responsibility (e.g., returning unused funds)",
+        "Critical infrastructure investment for decentralization and network resilience (node diversity, protocol security)",
+        "Clear budget breakdown, detailed roadmap with concrete milestones and KPIs",
+        "Strategic value addressing essential but underappreciated ecosystem needs"
       ],
       "typicalReasonsYes_ja": [
-        "実績のあるチームの確実な成果実績と財務管理（未使用資金の返納など）",
-        "分散化とネットワーク耐障害性のための重要インフラ投資（ノード多様性によるシングルクライアント依存リスク低減など）",
-        "明確な予算内訳、定義されたマイルストーン、KPI、セキュリティ対策",
-        "短期的市況にもかかわらず基本的なエコシステムニーズに対応する戦略的長期価値"
+        "過去の実績と成功した納品実績、財政的責任ある運営実績（未使用資金の返還な���）",
+        "分散化とネットワーク耐障害性のための重要なインフラ投資（ノード多様性、プロトコルセキュリティ）",
+        "明確な予算内訳、具体的なマイルストーンとKPIを含む詳細なロードマップ",
+        "本質的だが過小評価されているエコシステムニーズに対処する戦略的価値"
       ],
       "typicalReasonsNo_en": [
-        "Budget and fiscal responsibility concerns, especially during bearish markets or when ADA price assumptions are unrealistic",
-        "Lack of specificity, verifiable delivery standards, acceptance criteria, and clear product/service definition",
-        "Redundancy or questioning whether treasury is appropriate funding mechanism (e.g., alternative Rust implementation when one exists)",
-        "Governance and transparency issues including lack of accountability structures, undisclosed decision-makers, or constitutional non-compliance"
+        "Budget concerns in bearish market conditions; proposal assumes unrealistic ADA price assumptions (e.g., $0.40 when trading at $0.28)",
+        "Lack of specificity, unclear deliverables, or missing acceptance criteria and verifiable delivery standards",
+        "Constitutional compliance violations or governance process concerns (e.g., improper purse-of-power delegation)",
+        "Redundancy or inefficiency concerns (e.g., funding multiple implementations of the same solution already funded elsewhere)"
       ],
       "typicalReasonsNo_ja": [
-        "特に弱気市場や非現実的なADA価格想定がある場合の予算と財政責任の懸念",
-        "仕様の不明確さ、検証可能な配信基準、受け入れ基準、製品/サービス定義の欠如",
-        "冗長性またはトレジャリーが適切な資金メカニズムであるかどうかの疑問（既存のRust実装がある場合など）",
-        "未公表の決定者や憲法違反を含む説明責任構造の欠如、透明性の問題"
+        "弱気市場環境での予算懸念；提案が非現実的なADA価格想定（例：$0.28での取引時に$0.40を想定）",
+        "具体性の不足、明確でない成果物、または受け入れ基準と検証可能な納品基準の欠如",
+        "憲法遵守違反またはガバナンスプロセス懸念（例：不適切な財務管理権委譲）",
+        "冗長性また��効率性の懸念（例：他の場所で既に資金提供されている同じソリューションの複数の実装資金提供）"
       ]
     },
     "ParameterChange": {
