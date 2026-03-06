@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'scripts/build-precompile.js'
+      - '.github/workflows/build-deploy.yml'
   workflow_dispatch:
 
 permissions:
