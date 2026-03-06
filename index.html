@@ -9204,6 +9204,207 @@ function AIAnalysisTab({
 }
 
 // ════════════════════════════════════════════════════════════════
+// Gov Hub Tab (β) — X Digest / Governance News Feed
+// ════════════════════════════════════════════════════════════════
+function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
+  const E = React.createElement;
+  const [filter, setFilter] = React.useState("all");
+  const [expandedIdx, setExpandedIdx] = React.useState({});
+
+  const L = (obj, field) => {
+    if (!obj) return "";
+    return obj[field + "_" + lang] || obj[field + "_en"] || obj[field] || "";
+  };
+
+  // Category display info
+  const CAT_INFO = {
+    governance_action: { icon: "🗳️", color: "#3b82f6" },
+    constitution_budget: { icon: "📜", color: "#8b5cf6" },
+    protocol_parameter: { icon: "⚙️", color: "#f59e0b" },
+    network_ops: { icon: "🖧", color: "#10b981" },
+    security: { icon: "🛡️", color: "#ef4444" },
+    ecosystem_adoption: { icon: "🌍", color: "#06b6d4" },
+    dev_tools: { icon: "🔧", color: "#a855f7" },
+    institutional: { icon: "🏛️", color: "#6366f1" },
+    key_person: { icon: "👤", color: "#ec4899" },
+    governance_tool: { icon: "🔗", color: "#14b8a6" },
+    spo: { icon: "🏊", color: "#f97316" },
+  };
+  const CAT_LABELS = {
+    governance_action: { en: "GA & Voting", ja: "GA・投票" },
+    constitution_budget: { en: "Constitution & Budget", ja: "憲法・予算" },
+    protocol_parameter: { en: "Protocol & Params", ja: "プロトコル" },
+    network_ops: { en: "Network Ops", ja: "ネットワーク" },
+    security: { en: "Security", ja: "セキュリティ" },
+    ecosystem_adoption: { en: "Ecosystem", ja: "エコシステム" },
+    dev_tools: { en: "Dev Tools", ja: "開発ツール" },
+    institutional: { en: "Official", ja: "公式" },
+    key_person: { en: "Key Person", ja: "キーパーソン" },
+    governance_tool: { en: "Gov Tool", ja: "ガバナンスツール" },
+    spo: { en: "SPO", ja: "SPO" },
+  };
+  // Audience filter options
+  const AUDIENCES = ["all","DRep","CC","SPO","Holder","Builder"];
+
+  // Get the latest daily digest
+  const digest = Array.isArray(xDailyDigest) ? xDailyDigest[0] : xDailyDigest;
+  const highlights = digest?.highlights || [];
+
+  // Filter by audience
+  const filtered = filter === "all"
+    ? highlights
+    : highlights.filter(h => (h.audience || []).includes(filter));
+
+  // Sort by importance desc
+  const sorted = [...filtered].sort((a, b) => (b.importance || 0) - (a.importance || 0));
+
+  const toggleExpand = i => setExpandedIdx(p => ({ ...p, [i]: !p[i] }));
+
+  // Importance badge
+  const impBadge = (imp) => {
+    const colors = { 5: "#ef4444", 4: "#f59e0b", 3: "#3b82f6", 2: "#6b7280", 1: "#9ca3af" };
+    return E("span", {
+      style: {
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+        width: 22, height: 22, borderRadius: "50%",
+        background: colors[imp] || "#6b7280", color: "#fff",
+        fontSize: 11, fontWeight: 700, flexShrink: 0
+      }
+    }, imp);
+  };
+
+  if (!digest || highlights.length === 0) {
+    return E("div", { className: "card", style: { padding: "32px 24px", textAlign: "center" } },
+      E("div", { style: { fontSize: 40, marginBottom: 12 } }, "📡"),
+      E("div", { style: { fontSize: 15, color: "var(--text2)", marginBottom: 8 } },
+        lang === "ja" ? "ダイジェストデータはまだありません" : "No digest data available yet"),
+      E("div", { style: { fontSize: 12, color: "var(--text3)" } },
+        lang === "ja" ? "X Digestパイプラインが日次15:00 JSTに自動実行されます" : "X Digest pipeline runs daily at 15:00 JST")
+    );
+  }
+
+  return E("div", { className: "card", style: { padding: 0 } },
+    // Header
+    E("div", { style: {
+      padding: "14px 16px", borderBottom: "1px solid var(--border)",
+      display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8
+    }},
+      E("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
+        E("span", { style: { fontSize: 20 } }, "📡"),
+        E("span", { style: { fontSize: 15, fontWeight: 700 } },
+          lang === "ja" ? "Cardano ガバナンスダイジェスト" : "Cardano Governance Digest"),
+        E("span", { style: {
+          fontSize: 10, background: "var(--accent)", color: "#fff",
+          padding: "2px 6px", borderRadius: 4, fontWeight: 600
+        }}, "β")
+      ),
+      E("div", { style: { fontSize: 11, color: "var(--text3)" } },
+        digest.date + " · " + (digest.tweetCount || 0) + " tweets analyzed")
+    ),
+
+    // Audience filter
+    E("div", { style: {
+      padding: "10px 16px", borderBottom: "1px solid var(--border)",
+      display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center"
+    }},
+      E("span", { style: { fontSize: 11, color: "var(--text3)", marginRight: 4 } },
+        lang === "ja" ? "対象:" : "For:"),
+      ...AUDIENCES.map(a =>
+        E("button", {
+          key: a,
+          onClick: () => setFilter(a),
+          style: {
+            padding: "3px 10px", fontSize: 11, fontWeight: filter === a ? 700 : 500,
+            borderRadius: 12,
+            border: filter === a ? "1px solid var(--accent)" : "1px solid var(--border)",
+            background: filter === a ? "var(--accent)" : "transparent",
+            color: filter === a ? "#fff" : "var(--text2)",
+            cursor: "pointer", transition: "all .15s"
+          }
+        }, a === "all" ? (lang === "ja" ? "すべて" : "All") : a)
+      )
+    ),
+
+    // Highlights list
+    E("div", { style: { padding: "8px 0" } },
+      sorted.length === 0
+        ? E("div", { style: { padding: "20px 16px", textAlign: "center", color: "var(--text3)", fontSize: 13 } },
+            lang === "ja" ? "該当するハイライトがありません" : "No highlights match this filter")
+        : sorted.map((h, i) => {
+          const catInfo = CAT_INFO[h.category] || { icon: "📌", color: "#6b7280" };
+          const catLabel = CAT_LABELS[h.category] || {};
+          const expanded = expandedIdx[i];
+
+          return E("div", {
+            key: i,
+            style: {
+              padding: "10px 16px",
+              borderBottom: i < sorted.length - 1 ? "1px solid var(--border)" : "none",
+              cursor: "pointer",
+              transition: "background .15s",
+            },
+            onClick: () => toggleExpand(i),
+            onMouseEnter: e => e.currentTarget.style.background = "var(--bg3)",
+            onMouseLeave: e => e.currentTarget.style.background = "transparent",
+          },
+            // Row: importance badge + category + title
+            E("div", { style: { display: "flex", alignItems: "flex-start", gap: 8 } },
+              impBadge(h.importance),
+              E("div", { style: { flex: 1, minWidth: 0 } },
+                // Category tag + audience tags
+                E("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 4, alignItems: "center" } },
+                  E("span", {
+                    style: {
+                      fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 4,
+                      background: catInfo.color + "22", color: catInfo.color, border: "1px solid " + catInfo.color + "44"
+                    }
+                  }, catInfo.icon + " " + (catLabel[lang] || catLabel.en || h.category)),
+                  ...(h.audience || []).map(a =>
+                    E("span", {
+                      key: a,
+                      style: {
+                        fontSize: 9, padding: "1px 4px", borderRadius: 3,
+                        background: "var(--bg3)", color: "var(--text3)", border: "1px solid var(--border)"
+                      }
+                    }, a)
+                  )
+                ),
+                // Title
+                E("div", { style: { fontSize: 13, fontWeight: 600, lineHeight: 1.4, color: "var(--text1)" } },
+                  L(h, "title")),
+                // Summary (expanded)
+                expanded && E("div", { style: { marginTop: 6 } },
+                  E("div", { style: { fontSize: 12, lineHeight: 1.6, color: "var(--text2)", marginBottom: 6 } },
+                    L(h, "summary")),
+                  (h.sources || []).length > 0 && E("div", { style: { fontSize: 10, color: "var(--text3)" } },
+                    "Sources: " + h.sources.map(s => s.startsWith("@") ? s : "@" + s).join(", "))
+                ),
+                // Expand hint
+                !expanded && E("div", { style: { fontSize: 11, color: "var(--text3)", marginTop: 2 } }, "▸ " +
+                  (lang === "ja" ? "詳細を表示" : "Show details"))
+              )
+            )
+          );
+        })
+    ),
+
+    // Footer
+    E("div", { style: {
+      padding: "10px 16px", borderTop: "1px solid var(--border)",
+      fontSize: 10, color: "var(--text3)", display: "flex", justifyContent: "space-between",
+      flexWrap: "wrap", gap: 4
+    }},
+      E("span", null,
+        lang === "ja"
+          ? `生成: ${new Date(digest.generatedAt).toLocaleString("ja-JP")} · 出典: X (Twitter)`
+          : `Generated: ${new Date(digest.generatedAt).toLocaleString("en-US")} · Source: X (Twitter)`),
+      E("span", null,
+        lang === "ja" ? "Claude Haiku による要約" : "Summarized by Claude Haiku")
+    )
+  );
+}
+
+// ════════════════════════════════════════════════════════════════
 // Governance Data Tab (β) — Treasury, Protocol Params, Network Info
 // ════════════════════════════════════════════════════════════════
 function GovernanceDataTab({
@@ -10120,6 +10321,8 @@ function App() {
   const [aiProposalReasons, setAiProposalReasons] = React.useState(null);
   const [aiActionTypeSummary, setAiActionTypeSummary] = React.useState(null);
   const [aiMeta, setAiMeta] = React.useState(null);
+  const [xDailyDigest, setXDailyDigest] = React.useState(null);
+  const [xDigestMeta, setXDigestMeta] = React.useState(null);
   const spoLoadedRef = React.useRef(false);
   const loadedPageRef = React.useRef(1);
   const gaMapRef = React.useRef({});
@@ -10252,8 +10455,8 @@ function App() {
         console.warn("History load error:", e);
       }
     });
-    // ── Phase 3: AI analysis data (also non-blocking) ──
-    Promise.all([fetch(base + "ai-drep-tendencies.json" + v).catch(() => null), fetch(base + "ai-proposal-reasons.json" + v).catch(() => null), fetch(base + "ai-action-type-summary.json" + v).catch(() => null), fetch(base + "ai-meta.json" + v).catch(() => null)]).then(async ([dtRes, prRes, atsRes, metaRes]) => {
+    // ── Phase 3: AI analysis data + X digest (non-blocking) ──
+    Promise.all([fetch(base + "ai-drep-tendencies.json" + v).catch(() => null), fetch(base + "ai-proposal-reasons.json" + v).catch(() => null), fetch(base + "ai-action-type-summary.json" + v).catch(() => null), fetch(base + "ai-meta.json" + v).catch(() => null), fetch(base + "x-daily-digest.json" + v).catch(() => null), fetch(base + "x-digest-meta.json" + v).catch(() => null)]).then(async ([dtRes, prRes, atsRes, metaRes, xDailyRes, xMetaRes]) => {
       try {
         if (dtRes && dtRes.ok) setAiDrepTendencies(await dtRes.json());
       } catch (e) {}
@@ -10265,6 +10468,12 @@ function App() {
       } catch (e) {}
       try {
         if (metaRes && metaRes.ok) setAiMeta(await metaRes.json());
+      } catch (e) {}
+      try {
+        if (xDailyRes && xDailyRes.ok) setXDailyDigest(await xDailyRes.json());
+      } catch (e) {}
+      try {
+        if (xMetaRes && xMetaRes.ok) setXDigestMeta(await xMetaRes.json());
       } catch (e) {}
     });
     setIsDemo(false);
@@ -10845,7 +11054,15 @@ function App() {
   }, T.tab_govdata || "Protocol Info"), /*#__PURE__*/React.createElement("button", {
     className: `tab-btn ${tab === "ai" ? "active" : ""}`,
     onClick: () => setTab("ai")
-  }, "🤖 AI " + (lang === "ja" ? "Analysis" : "Analysis"))), tab === "ai" ? /*#__PURE__*/React.createElement(AIAnalysisTab, {
+  }, "🤖 AI " + (lang === "ja" ? "Analysis" : "Analysis")), /*#__PURE__*/React.createElement("button", {
+    className: `tab-btn ${tab === "govhub" ? "active" : ""}`,
+    onClick: () => setTab("govhub")
+  }, "📡 Gov Hub")), tab === "govhub" ? /*#__PURE__*/React.createElement(GovHubTab, {
+    xDailyDigest: xDailyDigest,
+    xDigestMeta: xDigestMeta,
+    T: T,
+    lang: lang
+  }) : tab === "ai" ? /*#__PURE__*/React.createElement(AIAnalysisTab, {
     aiDrepTendencies: aiDrepTendencies,
     aiProposalReasons: aiProposalReasons,
     aiActionTypeSummary: aiActionTypeSummary,
