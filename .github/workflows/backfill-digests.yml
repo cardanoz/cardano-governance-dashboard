@@ -1,0 +1,52 @@
+name: Backfill Digests
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_date:
+        description: 'Start date (YYYY-MM-DD)'
+        required: true
+        default: '2026-01-01'
+      to_date:
+        description: 'End date (YYYY-MM-DD)'
+        required: true
+        default: '2026-03-06'
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120  # Backfill can take a while
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run backfill
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: node scripts/backfill-digests.js --from ${{ inputs.from_date }} --to ${{ inputs.to_date }}
+
+      - name: Generate monthly summaries
+        env:
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        run: |
+          # Generate monthly summary for each month in range
+          node scripts/generate-monthly-digest.js --force --month 2026-01 || true
+          node scripts/generate-monthly-digest.js --force --month 2026-02 || true
+          node scripts/generate-monthly-digest.js --force --month 2026-03 || true
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/x-digest-*.json data/x-daily-digest.json data/x-monthly-digest.json data/x-digest-index.json
+          git diff --cached --quiet && echo "No changes to commit" || (git commit -m "Backfill digests ${{ inputs.from_date }} to ${{ inputs.to_date }}" && git pull --rebase && git push)

@@ -302,10 +302,10 @@ async function collectTier1() {
       let count = 0;
 
       for (const t of accountTweets) {
-        // Only include tweets from last 48h
+        // Only include tweets from last 7 days
         const createdAt = new Date(t.createdAt || t.created_at || 0);
-        const hoursDiff = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60);
-        if (hoursDiff > 48) continue;
+        const daysDiff = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
+        if (daysDiff > 7) continue;
 
         const text = t.text || t.full_text || "";
 
@@ -371,10 +371,10 @@ async function collectTier2() {
         // Post-filter noise
         if (isNoise(text)) continue;
 
-        // Only last 48h
+        // Only include tweets from last 7 days
         const createdAt = new Date(t.createdAt || t.created_at || 0);
-        const hoursDiff = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60);
-        if (hoursDiff > 48) continue;
+        const daysDiff = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
+        if (daysDiff > 7) continue;
 
         const authorName = t.author?.userName || t.user?.screen_name || "unknown";
 

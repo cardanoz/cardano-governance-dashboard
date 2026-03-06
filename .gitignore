@@ -1,0 +1,9 @@
+# Backfill cache (raw tweets per date — large, not needed in repo)
+data/backfill/
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
