@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-07T04:42:37.201Z",
+  "generatedAt": "2026-03-07T06:09:23.801Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 48,
-      "summary_en": "Treasury withdrawals for Cardano show strong support (77% Yes) primarily for strategic infrastructure projects like Amaru node diversity, with voter confidence driven by team track records and clear delivery milestones. Opposition focuses on budget concerns, fiscal responsibility during market downturns, lack of specificity, and constitutional compliance issues.",
-      "summary_ja": "Cardanoの財務引き出し提案は、特にAmaruノード多様性などの戦略的インフラプロジェクトについて強力な支持（77%賛成）を示しており、投票者の信頼はチームの実績と明確なデリバリーマイルストーンに基づいています。反対は予算懸念、市場低迷時の財政責任、具体性の欠如、憲法遵守の問題に焦点を当てています。",
+      "summary_en": "Treasury Withdrawal proposals for Cardano show strong support for strategic investments in ecosystem infrastructure, particularly node diversity and critical development work. However, concerns center on budget justification, fiscal responsibility during market downturns, and governance process transparency.",
+      "summary_ja": "Cardanoのトレジャリー引き出し提案は、ノードの多様性や重要な開発作業など、エコシステムインフラへの戦略的投資に対して強い支持を示しています。しかし、予算正当性、市場低迷時の財政責任、ガバナンスプロセスの透明性に関する懸念が存在します。",
       "typicalReasonsYes_en": [
-        "Team has proven track record with transparent delivery and returning unused funds to treasury",
-        "Strategic importance for network decentralization and resilience (node diversity, avoiding single-implementation risks)",
-        "Well-structured proposals with clear milestones, KPIs, and detailed budget breakdowns",
-        "Critical infrastructure that addresses unsexy but essential blockchain foundation needs"
+        "Addresses critical infrastructure needs like node diversity and decentralization to reduce single points of failure",
+        "Team demonstrates strong track record with transparent delivery, cost control, and accountability (e.g., returning unused funds)",
+        "Strategic long-term investment in ecosystem resilience and security despite short-term market conditions",
+        "Well-documented proposals with clear budgets, milestones, and cost-benefit analysis justifying the expenditure"
       ],
       "typicalReasonsYes_ja": [
-        "チームが透明性のある実績を示し、未使用資金をトレジャリーに返金している",
-        "ネットワーク分散化とレジリエンスの戦略的重要性（ノード多様性、単一実装リスク回避）",
-        "明確なマイルストーン、KPI、詳細な予算内訳を備えた構造化提案",
-        "ブロックチェーン基盤として不可欠だが見落とされやすいインフラの提供"
+        "ノード多様性の向上とネットワーク分散化による単一障害点のリスク軽減という重要なインフラ需要に��応",
+        "透明性の高い実績、費用管理、説明責任を示すチーム（未使用資金の返還など）",
+        "短期的な市場状況にもかかわらず、エコシステムのレジリエンスとセキュリティへの長期的戦略投資",
+        "明確な予算、マイルストーン、費用対効果分析を備えた十分に記録された提案"
       ],
       "typicalReasonsNo_en": [
-        "Budget assumptions misaligned with current market conditions (assumes $0.40 ADA, actual $0.28); fiscal responsibility concerns",
-        "Lack of transparency and specificity: missing acceptance criteria, KPIs, product definitions, or concrete delivery standards",
-        "Constitutional non-compliance or governance concerns about DRep overreach in treasury management decisions",
-        "Redundancy or unnecessary scope: already funded similar work (e.g., IOG Rust node); unnecessary expenses relative to alternatives"
+        "Concerns about budget justification and costs being inflated relative to market prices or comparable service benchmarks",
+        "Preference for completing core unfinished work before approving additional expansions or new scope additions",
+        "Governance and constitutional compliance issues, including lack of transparency on decision-making bodies and fund allocation control",
+        "Skepticism about ecosystem readiness or actual demand for proposed initiatives, particularly in DeFi infrastructure without native stablecoins"
       ],
       "typicalReasonsNo_ja": [
-        "予算前提と現在の市場状況の不一致（$0.40想定だが実際$0.28）、財政責任の懸念",
-        "透明性と具体性の欠如：受け入れ基準、KPI、製品定義、具体的なデリバリー基準の不足",
-        "憲法非遵守またはガバナンス懸念：DRepによる財務管理決定への権限超過",
-        "冗長性または不要な範囲：���似作業はすでに資金提供済み（例：IOG Rustノード）、代替案に比べて不要な支出"
+        "市場価格または同等のサービスベンチマークと比較して予算正当性とコストが膨らんでいることへの懸念",
+        "追加の拡張または新しいスコープの追加を承認する前に、コア未完了作業を完了することの優先",
+        "意思決定機関の透明性の欠如と資金配分管理を��む、ガバナンスおよび憲法遵守の問題",
+        "提案されたイニシアティブ（特にネイティブステーブルコインなしのDeFiインフラ）に対するエコシステム準備度または実際の需要についての懸念"
       ]
     },
     "InfoAction": {

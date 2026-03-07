@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-03-07T04:42:36.444Z",
+  "generatedAt": "2026-03-07T06:09:15.139Z",
   "proposals": {
     "f35285db3c4e085ad331843b3007737952b8a322bb3216311edc37fdf44ad3da#0": {
       "title": "Dingo: a Production-Grade Block Producer in Go by Blink Labs",
       "type": "TreasuryWithdrawals",
       "submittedEpoch": 0,
       "stats": {
-        "votedWithRationale": 1,
-        "votedWithoutRationale": 1,
-        "notVoted": 1591,
-        "notVotedTotalStake": "5834054690335576",
+        "votedWithRationale": 2,
+        "votedWithoutRationale": 2,
+        "notVoted": 1589,
+        "notVotedTotalStake": "5830406816756899",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -53,11 +53,11 @@
           }
         ],
         "yesBreakdown": {
-          "total": 2,
-          "withRationale": 1,
+          "total": 3,
+          "withRationale": 2,
           "withoutRationale": 1,
-          "totalStake": "23903803421913",
-          "withRationaleStake": "23521241752068",
+          "totalStake": "27545229070952",
+          "withRationaleStake": "27162667401107",
           "withoutRationaleStake": "382561669845",
           "withoutRationaleDreps": [
             {
@@ -67,13 +67,18 @@
           ]
         },
         "noBreakdown": {
-          "total": 0,
+          "total": 1,
           "withRationale": 0,
-          "withoutRationale": 0,
-          "totalStake": "0",
+          "withoutRationale": 1,
+          "totalStake": "6447929638",
           "withRationaleStake": "0",
-          "withoutRationaleStake": "0",
-          "withoutRationaleDreps": []
+          "withoutRationaleStake": "6447929638",
+          "withoutRationaleDreps": [
+            {
+              "name": "Anonymous",
+              "stake": "6447929638"
+            }
+          ]
         },
         "abstainBreakdown": {
           "total": 0,
@@ -87,13 +92,28 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Enthusiastic support with informal approval",
-          "reason_ja": "非公式な承認による熱心なサポート",
-          "totalStake": "23521241752068",
+          "reason_en": "Network resilience and client diversity - Supporting alternative block producer implementation to reduce single point of failure risk",
+          "reason_ja": "ネットワークレジリエンスとクライアント多様性の向上 - 単一実装による障害リスクを軽減するための独立したブロック生成者実装の支持",
+          "totalStake": "27162667401107",
           "dreps": [
             {
               "name": "wolf31o2 (Chris Gianelloni)",
               "stake": "23521241752068"
+            },
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3641425649039"
+            }
+          ]
+        },
+        {
+          "reason_en": "Good cost-effectiveness - Proposed budget scale and development track record demonstrate reasonable value for investment",
+          "reason_ja": "優れた費用対効果 - 提案された予算規模と開発実績から見て、投資対効果が良好",
+          "totalStake": "3641425649039",
+          "dreps": [
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3641425649039"
             }
           ]
         }
@@ -107,9 +127,9 @@
       "submittedEpoch": 0,
       "stats": {
         "votedWithRationale": 5,
-        "votedWithoutRationale": 5,
-        "notVoted": 1583,
-        "notVotedTotalStake": "5764540709659354",
+        "votedWithoutRationale": 6,
+        "notVoted": 1582,
+        "notVotedTotalStake": "5764534261729716",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -153,12 +173,12 @@
           }
         ],
         "yesBreakdown": {
-          "total": 9,
+          "total": 10,
           "withRationale": 5,
-          "withoutRationale": 4,
-          "totalStake": "93035222428290",
+          "withoutRationale": 5,
+          "totalStake": "93041670357928",
           "withRationaleStake": "65539494026773",
-          "withoutRationaleStake": "27495728401517",
+          "withoutRationaleStake": "27502176331155",
           "withoutRationaleDreps": [
             {
               "name": "YOADA",
@@ -175,6 +195,10 @@
             {
               "name": "FMS-DRep",
               "stake": "1454104917335"
+            },
+            {
+              "name": "Anonymous",
+              "stake": "6447929638"
             }
           ]
         },
@@ -204,27 +228,34 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Supports transparent and structured Treasury budget management framework",
-          "reason_ja": "透明性があり体系的なトレジャリー予算管理の枠組みを支持",
-          "totalStake": "44942616266217",
+          "reason_en": "Supports structured and transparent Treasury budget process with clear procedures and common reference framework",
+          "reason_ja": "明確な手続きと共通の参照枠組みにより、Treasury予算プロセスを透明化・構造化することを支持",
+          "totalStake": "4279534772866",
           "dreps": [
             {
               "name": "MREDGARCROSS",
               "stake": "638109123827"
             },
             {
-              "name": "Big Lazy Cat",
-              "stake": "37203760700444"
-            },
-            {
-              "name": "drep1yfdfs28uwa...",
-              "stake": "7100746441946"
+              "name": "BWtake(長崎)Japan",
+              "stake": "3641425649039"
             }
           ]
         },
         {
-          "reason_en": "Enables iterative improvement of decentralized treasury governance process",
-          "reason_ja": "分散型トレジャリーガバナンスプロセスの反復的な改善を可能にする",
+          "reason_en": "Framework is practical and reasonable as a foundation for managing Cardano Treasury distribution",
+          "reason_ja": "Cardano Treasuryの管理と配分を行うための実用的で合理的な基盤として評価",
+          "totalStake": "37203760700444",
+          "dreps": [
+            {
+              "name": "Big Lazy Cat",
+              "stake": "37203760700444"
+            }
+          ]
+        },
+        {
+          "reason_en": "Allows for iterative experimentation and improvement of the budget process based on lessons from 2025 cycle",
+          "reason_ja": "2025年サイクルの経験を踏まえ、予算プロセスを反復的に改善・実験することが可能",
           "totalStake": "16955452111517",
           "dreps": [
             {
@@ -234,28 +265,13 @@
           ]
         },
         {
-          "reason_en": "Provides practical coordination framework for ecosystem budget planning and process clarity",
-          "reason_ja": "エコシステム予算計画のための実用的な調整枠組みとプロセスの明確化を提供",
-          "totalStake": "40845186349483",
+          "reason_en": "Serves as guidance and sentiment record while supporting improved predictability and governance maturity",
+          "reason_ja": "オンチェーンガイダンスと感情表現の記録として機能し、予測可能性向上とガバナンス成熟に貢献",
+          "totalStake": "7100746441946",
           "dreps": [
             {
-              "name": "Big Lazy Cat",
-              "stake": "37203760700444"
-            },
-            {
-              "name": "BWtake(長崎)Japan",
-              "stake": "3641425649039"
-            }
-          ]
-        },
-        {
-          "reason_en": "Improves predictability and governance maturity through formalized budget procedures and common reference framework",
-          "reason_ja": "明文化された予算手続きと共通の参照枠組みを通じて予測可能性とガバナンスの成熟性を向上",
-          "totalStake": "3641425649039",
-          "dreps": [
-            {
-              "name": "BWtake(長崎)Japan",
-              "stake": "3641425649039"
+              "name": "drep1yfdfs28uwa",
+              "stake": "7100746441946"
             }
           ]
         }
