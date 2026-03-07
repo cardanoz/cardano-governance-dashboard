@@ -849,5 +849,149 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2026-03-07",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "V11 Hard Fork Details Expected Soon with Leios Protocol Launch",
+        "title_ja": "V11ハードフォーク詳細が近日発表予定、Leiosプロトコル起動へ",
+        "summary_en": "Cardano V11 hard fork specifications are anticipated to be released imminently, supporting the 2026 Leios protocol deployment that promises significant block processing improvements and DApp performance enhancements through a new throughput architecture.",
+        "summary_ja": "Cardanoネットワークのブロック処理方式を革新的に改善するLeiosプロトコルを2026年に実装するV11ハードフォーク詳細が近日発表される見込み。DAppパフォーマンスの大幅向上が期待されている。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@ZcaToKoins",
+          "@USBitcoinServcs"
+        ]
+      },
+      {
+        "category": "constitution_budget",
+        "title_en": "New DeFi Liquidity Budget Draft Submitted for Community Review",
+        "title_ja": "DeFi流動性予算の新規草案が提出、コミュニティレビュー受付中",
+        "summary_en": "A refreshed DeFi Liquidity Budget proposal has been released in draft form with both standard and Google Doc versions available for community feedback before formal submission to governance voting.",
+        "summary_ja": "DeFi流動性予算の新規草案がリリースされ、標準形式およびGoogle Doc版が公開。正式なガバナンス投票前のコミュニティレビューが募集中。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Archax FCA-Regulated Exchange Integrates Cardano for Real-World Asset Tokenization",
+        "title_ja": "英FCA認可取引所Archaxが、実世界資産トークン化でCardanoを統合",
+        "summary_en": "UK FCA-regulated digital asset exchange Archax has integrated Cardano blockchain, enabling tokenization of regulated real-world assets including funds, bonds, and real estate on a compliant platform.",
+        "summary_ja": "英国FCA認可のデジタル資産取引所Archaxがカルダノを統合。ファンド、債券、不動産などの実世界資産をカルダノ上でトークン化可能に。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Sagespeaks3090"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "BrickTowers and DFX Swiss Deploy Regulated Payment Infrastructure Reducing Merchant Fees 66%",
+        "title_ja": "BrickTowersとDFX SwissがCardano上で規制対応決済インフラを展開、加盟店手数料66%削減",
+        "summary_en": "BrickTowers and DFX Swiss have deployed regulated payment and savings infrastructure on Cardano with compliance-ready rails, significantly reducing merchant transaction fees by approximately 66% and advancing ADA adoption in everyday payments.",
+        "summary_ja": "BrickTowersとDFX Swissがカルダノ上で規制対応の決済・貯蓄インフラを展開。加盟店手数料が約66%削減され、ADAの日常決済での採用が加速。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Liqwid V3 Testnet Deployment Complete with USDCx Market and Hose Infrastructure",
+        "title_ja": "Liqwid V3がテストネット展開完了、USDCxマーケットとHoseインフラ稼動",
+        "summary_en": "Liqwid Finance completed Sprint 30 deployment including USDCx market launch, registry inclusion, Hose and offchain components on preprod, plus API integration for indexing inputs in preparation for mainnet release.",
+        "summary_ja": "Liqwid FinanceがSprint 30の展開完了。USDCxマーケット起動、Hoseとオフチェーンコンポーネントのテストネット稼動、インデックスAPI統合を実現。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@LiqwidFinance"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "BETFI Token Launches on CSWAP DEX with Poker and Bitcoin Mining Reward Mechanics",
+        "title_ja": "BETFIトークンがCSWAP DEXで起動、ポーカーとBTCマイニング報酬メカニクス搭載",
+        "summary_en": "BETFI officially launched on CSWAP DEX with staking mechanisms enabling users to earn shares in poker games and Bitcoin mining operations based on token holdings, expanding Cardano DeFi gaming applications.",
+        "summary_ja": "BETFIトークンがCSWAP DEXで正式起動。ステーキングでポーカーゲームとBTCマイニング事業の利益シェアを獲得できるメカニクスを実装。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@BetFicasino"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Repository Activity: 740 Commits Across 69 Repos in Latest Development Cycle",
+        "title_ja": "カルダノリポジ���リ活動：最新サイクルで69リポジトリ全体で740コミットを実行",
+        "summary_en": "Cardano ecosystem repositories processed 740 commits across 69 repositories with Mithril, cardano-node, and Acropolis as primary contributors, indicating sustained development velocity across core infrastructure and protocol improvements.",
+        "summary_ja": "カルダノエコシステムで740コミットが69リポジトリ全体に分散。Mithril、cardano-node、Acropolisが主要貢献者。コアインフラと프로토콜改善の継続的な開発を示唆。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Explains Wyoming Stem Cell Freedom Act Implications for Regenerative Medicine",
+        "title_ja": "チャールズ・ホスキンソン、ワイオミング州「幹細胞自由法」と再生医療への影響を解説",
+        "summary_en": "Cardano founder Charles Hoskinson released a video explaining the Wyoming Stem Cell Freedom Act's significance for expanding access to regenerative medicine treatments, highlighting policy innovation in US biotech regulation.",
+        "summary_ja": "カルダノ創設者がワイオミング州「幹細胞自由法」について動画で解説。再生医療へのアクセス拡大の重要性を強調し、米国バイオテック規制における政策革新を紹介。",
+        "importance": 1,
+        "audience": [
+          "Holder"
+        ],
+        "sources": [
+          "@SIPO_Tokyo"
+        ]
+      }
+    ],
+    "tweetCount": 51,
+    "generatedAt": "2026-03-07T06:31:40.221Z",
+    "apiUsage": {
+      "input_tokens": 4217,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2078,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]

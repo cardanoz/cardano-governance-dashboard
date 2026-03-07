@@ -1,5 +1,149 @@
 [
   {
+    "date": "2026-03-07",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "V11 Hard Fork Details Expected Soon with Leios Protocol Launch",
+        "title_ja": "V11ハードフォーク詳細が近日発表予定、Leiosプロトコル起動へ",
+        "summary_en": "Cardano V11 hard fork specifications are anticipated to be released imminently, supporting the 2026 Leios protocol deployment that promises significant block processing improvements and DApp performance enhancements through a new throughput architecture.",
+        "summary_ja": "Cardanoネットワークのブロック処理方式を革新的に改善するLeiosプロトコルを2026年に実装するV11ハードフォーク詳細が近日発表される見込み。DAppパフォーマンスの大幅向上が期待されている。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@ZcaToKoins",
+          "@USBitcoinServcs"
+        ]
+      },
+      {
+        "category": "constitution_budget",
+        "title_en": "New DeFi Liquidity Budget Draft Submitted for Community Review",
+        "title_ja": "DeFi流動性予算の新規草案が提出、コミュニティレビュー受付中",
+        "summary_en": "A refreshed DeFi Liquidity Budget proposal has been released in draft form with both standard and Google Doc versions available for community feedback before formal submission to governance voting.",
+        "summary_ja": "DeFi流動性予算の新規草案がリリースされ、標準形式およびGoogle Doc版が公開。正式なガバナンス投票前のコミュニティレビューが募集中。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Archax FCA-Regulated Exchange Integrates Cardano for Real-World Asset Tokenization",
+        "title_ja": "英FCA認可取引所Archaxが、実世界資産トークン化でCardanoを統合",
+        "summary_en": "UK FCA-regulated digital asset exchange Archax has integrated Cardano blockchain, enabling tokenization of regulated real-world assets including funds, bonds, and real estate on a compliant platform.",
+        "summary_ja": "英国FCA認可のデジタル資産取引所Archaxがカルダノを統合。ファンド、債券、不動産などの実世界資産をカルダノ上でトークン化可能に。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Sagespeaks3090"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "BrickTowers and DFX Swiss Deploy Regulated Payment Infrastructure Reducing Merchant Fees 66%",
+        "title_ja": "BrickTowersとDFX SwissがCardano上で規制対応決済インフラを展開、加盟店手数料66%削減",
+        "summary_en": "BrickTowers and DFX Swiss have deployed regulated payment and savings infrastructure on Cardano with compliance-ready rails, significantly reducing merchant transaction fees by approximately 66% and advancing ADA adoption in everyday payments.",
+        "summary_ja": "BrickTowersとDFX Swissがカルダノ上で規制対応の決済・貯蓄インフラを展開。加盟店手数料が約66%削減され、ADAの日常決済での採用が加速。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Institutional"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Liqwid V3 Testnet Deployment Complete with USDCx Market and Hose Infrastructure",
+        "title_ja": "Liqwid V3がテストネット展開完了、USDCxマーケットとHoseインフラ稼動",
+        "summary_en": "Liqwid Finance completed Sprint 30 deployment including USDCx market launch, registry inclusion, Hose and offchain components on preprod, plus API integration for indexing inputs in preparation for mainnet release.",
+        "summary_ja": "Liqwid FinanceがSprint 30の展開完了。USDCxマーケット起動、Hoseとオフチェーンコンポーネントのテストネット稼動、インデックスAPI統合を実現。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@LiqwidFinance"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "BETFI Token Launches on CSWAP DEX with Poker and Bitcoin Mining Reward Mechanics",
+        "title_ja": "BETFIトークンがCSWAP DEXで起動、ポーカーとBTCマイニング報酬メカニクス搭載",
+        "summary_en": "BETFI officially launched on CSWAP DEX with staking mechanisms enabling users to earn shares in poker games and Bitcoin mining operations based on token holdings, expanding Cardano DeFi gaming applications.",
+        "summary_ja": "BETFIトークンがCSWAP DEXで正式起動。ステーキングでポーカーゲームとBTCマイニング事業の利益シェアを獲得できるメカニクスを実装。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@BetFicasino"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Repository Activity: 740 Commits Across 69 Repos in Latest Development Cycle",
+        "title_ja": "カルダノリポジ���リ活動：最新サイクルで69リポジトリ全体で740コミットを実行",
+        "summary_en": "Cardano ecosystem repositories processed 740 commits across 69 repositories with Mithril, cardano-node, and Acropolis as primary contributors, indicating sustained development velocity across core infrastructure and protocol improvements.",
+        "summary_ja": "カルダノエコシステムで740コミットが69リポジトリ全体に分散。Mithril、cardano-node、Acropolisが主要貢献者。コアインフラと프로토콜改善の継続的な開発を示唆。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson Explains Wyoming Stem Cell Freedom Act Implications for Regenerative Medicine",
+        "title_ja": "チャールズ・ホスキンソン、ワイオミング州「幹細胞自由法」と再生医療への影響を解説",
+        "summary_en": "Cardano founder Charles Hoskinson released a video explaining the Wyoming Stem Cell Freedom Act's significance for expanding access to regenerative medicine treatments, highlighting policy innovation in US biotech regulation.",
+        "summary_ja": "カルダノ創設者がワイオミング州「幹細胞自由法」について動画で解説。再生医療へのアクセス拡大の重要性を強調し、米国バイオテック規制における政策革新を紹介。",
+        "importance": 1,
+        "audience": [
+          "Holder"
+        ],
+        "sources": [
+          "@SIPO_Tokyo"
+        ]
+      }
+    ],
+    "tweetCount": 51,
+    "generatedAt": "2026-03-07T06:31:40.221Z",
+    "apiUsage": {
+      "input_tokens": 4217,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2078,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
     "date": "2026-03-06",
     "highlights": [
       {
@@ -848,143 +992,6 @@
     ],
     "tweetCount": 97,
     "generatedAt": "2026-03-06T15:04:41.181Z",
-    "backfilled": true
-  },
-  {
-    "date": "2026-02-28",
-    "highlights": [
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "Circle's USDC to USDCx Bridge Now Open for Community Integration",
-        "title_ja": "CircleのUSDC→USDCxブリッジが誰でも統合可能に",
-        "summary_en": "Circle has published official step-by-step documentation enabling any developer to build USDC-to-USDCx bridges on Cardano, democratizing access to stablecoin integration. This positions Cardano as a uniquely partnered blockchain with Circle.",
-        "summary_ja": "Circleが公式ドキュメントを公開し、開発者は誰でもCardano上でUSDCからUSDCxへのブリッジを構築できるようになった。Cardanoの独自パートナーシップ地位を強化。",
-        "importance": 5,
-        "audience": [
-          "Builder",
-          "Ecosystem_adoption",
-          "Developer"
-        ],
-        "sources": [
-          "@Padierfind"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "USDCx Launch Drives $14M Injection, Becomes Second Highest DEX Volume Asset",
-        "title_ja": "USDCx発表後24時間で$14M注入、DEX出来高で$NIGHTに次ぐ第2位に",
-        "summary_en": "Within 24 hours of USDCx launch on Cardano, $14M was supplied to the ecosystem with total stablecoin supply reaching ~$48M. USDCx ranked second in DEX volume at 3.6M ADA, demonstrating strong market demand and DeFi momentum.",
-        "summary_ja": "USDCx発表24時間で$14M投入され、総供給量は$48Mに到達。DEX出来高は$NIGHTに次ぐ3.6M ADAで、DeFiの強い需要を示唆。",
-        "importance": 5,
-        "audience": [
-          "Holder",
-          "DRep",
-          "Builder"
-        ],
-        "sources": [
-          "@cardanzo_tools",
-          "@NicolasC3rny"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "Liqwid Lending Protocol Enables USDCx Lending/Borrowing with $3M+ TVL",
-        "title_ja": "Liqwidがカルダノ最大貸付プロトコルでUSDCx対応、$3M以上ロック",
-        "summary_en": "Cardano's largest lending protocol Liqwid launched USDCx lending and borrowing with over $3M already supplied. Supported collateral includes ADA, NIGHT, DJED, USDA, and USDM, strengthening DeFi composability.",
-        "summary_ja": "カルダノ最大の貸付プロトコルLiqwidが$3M以上の供給でUSDCx対応を開始。複数のステーブルコイン担保サポートがDeFi相互運用性を強化。",
-        "importance": 4,
-        "audience": [
-          "Holder",
-          "Builder",
-          "Ecosystem_adoption"
-        ],
-        "sources": [
-          "@angrycryptoshow"
-        ]
-      },
-      {
-        "category": "protocol_parameter",
-        "title_en": "Ouroboros Leios Protocol Upgrade Expected in 2026, Targeting 500-1000+ TPS",
-        "title_ja": "Ouroboros Leios 2026年導入予定、500-1000+ TPSを目指す",
-        "summary_en": "Charles Hoskinson confirms Ouroboros Leios launches this year, claiming it solves the blockchain trilemma by maintaining decentralization while scaling to 500-1000+ TPS. Current mainnet operates at ~0.4 TPS baseline.",
-        "summary_ja": "Charles HoskinssonがOuroboros Leiosが2026年の導入を確認。ブロックチェーン三者択一問題を解決し、スケーラビリティを大幅向上させる見込み。",
-        "importance": 5,
-        "audience": [
-          "DRep",
-          "SPO",
-          "CC",
-          "Holder"
-        ],
-        "sources": [
-          "@angrycryptoshow",
-          "@GrahamsNoPlus1"
-        ]
-      },
-      {
-        "category": "institutional",
-        "title_en": "Circle Confirms Cardano as Uniquely Selected Partner for xReserve Integration",
-        "title_ja": "CircleがCardanoをxReserve統合の選定パートナーとして確認",
-        "summary_en": "Circle confirmed that only select blockchain teams partnered with Circle can integrate xReserve, and Cardano successfully negotiated this exclusive partnership. This reflects Cardano's institutional standing and stablecoin infrastructure maturity.",
-        "summary_ja": "CircleがxReserve統合のための厳選パートナーシップでCardanoを選定。制度的地位と決済���ンフラの成熟度を示唆。",
-        "importance": 4,
-        "audience": [
-          "Holder",
-          "DRep",
-          "Institutional"
-        ],
-        "sources": [
-          "@angrycryptoshow"
-        ]
-      },
-      {
-        "category": "dev_tools",
-        "title_en": "Txpipe Hosts First Pythathon at IOG, Advancing Pyth Network Integration",
-        "title_ja": "TxpipeがIOG主催の初Pythathonを実施、Pythネットワーク統合を推進",
-        "summary_en": "Txpipe is hosting Cardano's first Pythathon event at IOG offices, aligned with Charles Hoskinson's PENTAD vision. This initiatives supports Pyth Network integration for oracle infrastructure expansion.",
-        "summary_ja": "TxpipeがIOGでCardano初のPythathonを開催。Charles HoskinssonのPENTAD構想と連携し、Pythネットワーク統合を促進。",
-        "importance": 3,
-        "audience": [
-          "Builder",
-          "Developer"
-        ],
-        "sources": [
-          "@diegomac35"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "MinSwap Launches Deep USDCx Liquidity Pools for Cross-Ecosystem Efficiency",
-        "title_ja": "MinSwapがUSDCx深流動性プールを本格始動、エコシステム効率化へ",
-        "summary_en": "Minswap provides deep liquidity pools for USDCx since day one of launch with efficient routing capabilities. Platform aims to facilitate ecosystem-wide adoption through aligned LP economics and protocol incentives.",
-        "summary_ja": "MinswapがUSDCx上場初日から深流動性プールを提供。エコシステム全体の効率的な利用を目指す。",
-        "importance": 3,
-        "audience": [
-          "Holder",
-          "Builder",
-          "Ecosystem_adoption"
-        ],
-        "sources": [
-          "@MinswapDEX"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "CSWAP Launches ADA/USDCx Trading Pair with Protocol-Aligned LP Economics",
-        "title_ja": "CSWAPがADA/USDCx取引ペア推出、プロトコル連動型LP報酬を提供",
-        "summary_en": "CSWAP launched ADA/USDCx with lowest trading and batcher fees, emphasizing LP economics alignment with Cardano protocol growth. Strategy prioritizes retail and liquidity provider incentive alignment.",
-        "summary_ja": "CSWAPがADA/USDCx取引ペアを推出。最低取引手数料とプロトコル成長連動型報酬でLP参加を促進。",
-        "importance": 2,
-        "audience": [
-          "Holder",
-          "Ecosystem_adoption"
-        ],
-        "sources": [
-          "@CSWAP_Destroy"
-        ]
-      }
-    ],
-    "tweetCount": 104,
-    "generatedAt": "2026-03-06T15:37:28.037Z",
     "backfilled": true
   }
 ]
