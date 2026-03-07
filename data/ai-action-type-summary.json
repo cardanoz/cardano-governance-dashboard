@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-07T15:38:30.159Z",
+  "generatedAt": "2026-03-07T16:48:47.942Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 48,
-      "summary_en": "Treasury Withdrawal proposals for Cardano show strong support for strategic investments in ecosystem infrastructure, particularly node diversity and critical development work. However, concerns center on budget justification, fiscal responsibility during market downturns, and governance process transparency.",
-      "summary_ja": "Cardanoのトレジャリー引き出し提案は、ノードの多様性や重要な開発作業など、エコシステムインフラへの戦略的投資に対して強い支持を示しています。しかし、予算正当性、市場低迷時の財政責任、ガバナンスプロセスの透明性に関する懸念が存在します。",
+      "summary_en": "Treasury Withdrawal proposals for Cardano show strong support (77% Yes) primarily driven by funding critical infrastructure projects like node diversity (Amaru) that enhance network resilience. Opposition focuses on fiscal responsibility concerns, budget justification, and redundancy with existing initiatives, while some abstentions cite constitutional compliance issues or incomplete delivery expectations.",
+      "summary_ja": "CardanoのTreasury Withdrawal提案は、ネットワークの耐障害性を高めるノード多様性（Amaru）などの重要インフラプロジェクト資金調達により強い支持（77%の賛成）を示しています。反対意見は財政責任、予算正当化、既存イニシアティブとの重複に焦点を当てており、一部の棄権は憲法準拠性の問題または不完全な納品期待を理由としています。",
       "typicalReasonsYes_en": [
-        "Addresses critical infrastructure needs like node diversity and decentralization to reduce single points of failure",
-        "Team demonstrates strong track record with transparent delivery, cost control, and accountability (e.g., returning unused funds)",
-        "Strategic long-term investment in ecosystem resilience and security despite short-term market conditions",
-        "Well-documented proposals with clear budgets, milestones, and cost-benefit analysis justifying the expenditure"
+        "Network resilience and decentralization through client/node diversity reduces single-point-of-failure risks",
+        "Strong team track record with proven delivery, fiscal responsibility (returning unused funds), and transparent budget breakdowns",
+        "Strategic importance of alternative node implementations in different languages (Rust, Go) to attract diverse developer communities",
+        "Well-presented proposals with concrete milestones, KPIs, and clear value proposition for long-term ecosystem health"
       ],
       "typicalReasonsYes_ja": [
-        "ノード多様性の向上とネットワーク分散化による単一障害点のリスク軽減という重要なインフラ需要に��応",
-        "透明性の高い実績、費用管理、説明責任を示すチーム（未使用資金の返還など）",
-        "短期的な市場状況にもかかわらず、エコシステムのレジリエンスとセキュリティへの長期的戦略投資",
-        "明確な予算、マイルストーン、費用対効果分析を備えた十分に記録された提案"
+        "クライアント/ノード多様性による単一障害点リスク軽減とネットワーク耐障害性の向上",
+        "未使用資金の返金、透明性のある予算内訳など実績に基づいた信頼できるチームの提示",
+        "異なるプログラミング言語（Rust、Go）による代替ノード実装で多様な開発者コミュニティを惹きつけることの戦略的重要性",
+        "具体的なマイルストーン、KPI、エコシステムの長期的健全性のための明確な価値提案を含む提案資料"
       ],
       "typicalReasonsNo_en": [
-        "Concerns about budget justification and costs being inflated relative to market prices or comparable service benchmarks",
-        "Preference for completing core unfinished work before approving additional expansions or new scope additions",
-        "Governance and constitutional compliance issues, including lack of transparency on decision-making bodies and fund allocation control",
-        "Skepticism about ecosystem readiness or actual demand for proposed initiatives, particularly in DeFi infrastructure without native stablecoins"
+        "Fiscal responsibility concerns: budget assumptions ($0.40 ADA) don't reflect current market prices, and large withdrawals during bearish conditions lack justification",
+        "Redundancy and inefficiency: funding duplicate implementations when similar work already funded (multiple Rust nodes, Go nodes already funded)",
+        "Lack of specificity and verifiable standards: insufficient milestone acceptance criteria, KPIs, and delivery guarantees relative to budget size",
+        "Constitutional and governance concerns: proposals violating Cardano Constitution requirements or lacking transparency on governance structures and accountability measures"
       ],
       "typicalReasonsNo_ja": [
-        "市場価格または同等のサービスベンチマークと比較して予算正当性とコストが膨らんでいることへの懸念",
-        "追加の拡張または新しいスコープの追加を承認する前に、コア未完了作業を完了することの優先",
-        "意思決定機関の透明性の欠如と資金配分管理を��む、ガバナンスおよび憲法遵守の問題",
-        "提案されたイニシアティブ（特にネイティブステーブルコインなしのDeFiインフラ）に対するエコシステム準備度または実際の需要についての懸念"
+        "財政責任：予算仮定（$0.40 ADA）が現在の市場価格を反映せず、弱気相場での大型引き出しに正当性がない",
+        "重複と非効率性：既に資金提供されている類似作業（複数のRustノード、既に資金提供されたGoノード）との重複実装への資金提供",
+        "具体性と検証可能な基準の不足：予算規模に対して、マイルストーン受け入れ基準、KPI、納品保証が不十分",
+        "憲法およびガバナンス上の懸念：Cardano憲法要件違反、ガバナンス構造と説明責任措置に関する透明性の欠如"
       ]
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on Cardano governance frameworks and treasury budget limits receive mixed support, with voters primarily concerned about fiscal discipline, transparency, and ecosystem sustainability. Yes voters generally support establishing clear budget frameworks and NCL guardrails as necessary governance infrastructure, while No voters argue for either stricter limits or more flexible spending to support ecosystem development.",
-      "summary_ja": "Cardanoのガバナンスフレームワークおよびトレジャリー予算制限に関するInfoActionは、投票者が財政規律、透明性、エコシステムの持続可能性を主な懸念としており、賛否が分かれている。賛成派はガバナンスインフラとして明確な予算枠組みとNCL上限の確立を支持し、反対派はより厳格な上限か生態系開発を支援するためのより柔軟な支出を主張している。",
+      "summary_en": "InfoAction proposals on Cardano governance receive broad support (67% Yes votes) primarily for establishing transparency frameworks and fiscal guardrails for treasury management. These actions serve informational purposes while allowing continued ecosystem experimentation, with most Yes voters viewing them as necessary procedural steps rather than perfect solutions.",
+      "summary_ja": "CardanoのInfoAction提案は、トレジャリー管理の透明性枠組みと財政的なガードレールを確立することで広範なサポート（Yes投票67%）を得ています。これらのアクションは情報提供目的で機能しながら、エコシステムの継続的な実験を可能にし、多くのYes投票者はこれらを完璧なソリューションというより必要な手続きステップと見なしています。",
       "typicalReasonsYes_en": [
-        "Establishes necessary fiscal guardrails and governance transparency for treasury operations",
-        "Represents practical balance between fiscal discipline and ecosystem funding needs",
-        "Allows continued experimentation and framework improvement without halting treasury operations",
-        "Provides coordination mechanism and predictability for the budget process across stakeholders"
+        "Establishes transparent and predictable governance framework for treasury management and budget processes",
+        "Enables continued ecosystem experimentation while maintaining fiscal discipline guardrails",
+        "Reasonable and practical approach to coordination without claiming to be a perfect long-term solution",
+        "Ensures treasury operations continue without stalling governance processes"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー運用に必要な財政上の制約と透明性のあるガバナンスを確立する",
-        "財政規律とエコシステム資金需要のバランスを取る実用的なアプローチ",
-        "トレジャリー運用の停滞を招かず、継続的な実験と枠組みの改善が可能",
-        "利害関係者全体の予算プロセスにおける調整可能性と予測可能性を提供"
+        "トレジャリー管理と予算プロセスの透��性と予測可能性を確立する",
+        "財政的ガードレールを維持しながらエコシステムの継続的な実験を可能にする",
+        "完璧な長期ソリューションとは言わずに、調整の実用的なアプローチを提供する",
+        "ガバナンスプロセスの停滞を防ぎながらトレジャリー運用を継続させる"
       ],
       "typicalReasonsNo_en": [
-        "Proposed limit is too high and does not enforce sufficient fiscal discipline for declining treasury inflows",
-        "Lack of transparent reporting and outcome review from prior budget cycles before approving new spending",
-        "Should evaluate individual proposals on merit rather than fitting within an overall budget ceiling",
-        "Concern about governance maturity and effectiveness measurement mechanisms for treasury spending"
+        "Lack of transparent reporting and accountability from previous budget cycles before approving new frameworks",
+        "Proposed limits are too high or improperly calibrated relative to actual treasury inflows and ecosystem needs",
+        "Insufficient governance maturity and measurement mechanisms for evaluating proposal effectiveness",
+        "Inadequate rationale provided without clear spending allocation strategy or mid-term review mechanisms"
       ],
       "typicalReasonsNo_ja": [
-        "提案される上限は高すぎ、減少するトレジャリー流入に対して十分な財政規律を強制していない",
-        "新たな支出承認前に、過去の予算サイクルからの透明な報告と成果レビューが不足している",
-        "予算天井内に収まるかではなく、個別提案を本質で評価すべき",
-        "トレジャリー��出に対するガバナンスの成熟度と有効性測定メカニズムへの懸念"
+        "新しい枠組みを承認する前に、以前の予算サイクルからの透明性報告とアカウンタビリティの欠如",
+        "提案された上限が実際のトレジャリー流入額とエコシステムニーズに対して高すぎるか不適切に設定されている",
+        "提案の有効性を評価するためのガバナンス成熟度と測定メカニズムが不十分である",
+        "支出配分戦略や��期的なレビューメカニズムの明確さを欠いた不十分な根拠"
       ]
     },
     "ParameterChange": {
