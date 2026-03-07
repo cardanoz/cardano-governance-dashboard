@@ -1,7 +1,10 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { pool } from "./db/pool.js";
-import { cached } from "./cache/redis.js";
+import { serve } from "@hono/node-server";
+import pkg from "./db/pool.js";
+const pool = pkg;
+import cachePkg from "./cache/redis.js";
+const { cached } = cachePkg;
 
 const app = new Hono();
 
@@ -18,7 +21,7 @@ app.get("/tip", async (c) => {
   const data = await cached("tip", 10, async () => {
     const r = await pool.query(`
       SELECT block_no, epoch_no, slot_no, encode(hash,'hex') as hash, time
-      FROM block ORDER BY block_no DESC LIMIT 1
+      FROM block ORDER BY id DESC LIMIT 1
     `);
     return r.rows[0];
   });
@@ -60,13 +63,14 @@ app.get("/blocks", async (c) => {
       SELECT b.block_no, encode(b.hash,'hex') as hash, b.epoch_no, b.slot_no,
              b.time, b.tx_count, b.size,
              ph.view as pool_name,
-             pod.ticker_name as pool_ticker
+             ocpd.ticker_name as pool_ticker
       FROM block b
       LEFT JOIN slot_leader sl ON b.slot_leader_id = sl.id
       LEFT JOIN pool_hash ph ON sl.pool_hash_id = ph.id
-      LEFT JOIN pool_offline_data pod ON pod.pool_id = ph.id
-        AND pod.id = (SELECT MAX(id) FROM pool_offline_data WHERE pool_id = ph.id)
-      ORDER BY b.block_no DESC
+      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      WHERE b.block_no IS NOT NULL
+      ORDER BY b.id DESC
       LIMIT $1
     `, [limit]);
     return r.rows;
@@ -81,12 +85,12 @@ app.get("/block/:hash", async (c) => {
       SELECT b.block_no, encode(b.hash,'hex') as hash, b.epoch_no, b.slot_no,
              b.time, b.tx_count, b.size,
              ph.view as pool_name,
-             pod.ticker_name as pool_ticker
+             ocpd.ticker_name as pool_ticker
       FROM block b
       LEFT JOIN slot_leader sl ON b.slot_leader_id = sl.id
       LEFT JOIN pool_hash ph ON sl.pool_hash_id = ph.id
-      LEFT JOIN pool_offline_data pod ON pod.pool_id = ph.id
-        AND pod.id = (SELECT MAX(id) FROM pool_offline_data WHERE pool_id = ph.id)
+      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
       WHERE b.hash = decode($1, 'hex')
     `, [hash]);
     return r.rows[0] || null;
@@ -130,12 +134,13 @@ app.get("/tx/:hash", async (c) => {
 
     // Get inputs
     const inputs = await pool.query(`
-      SELECT encode(tx2.hash,'hex') as tx_hash, txi.tx_out_index,
+      SELECT encode(tx_src.hash,'hex') as tx_hash, txi.tx_out_index,
              txo.value::text, txo.address
       FROM tx_in txi
       JOIN tx_out txo ON txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index
-      JOIN tx tx2 ON txo.tx_id = tx2.id
-      WHERE txi.tx_in_id = (SELECT id FROM tx WHERE hash = decode($1,'hex'))
+      JOIN tx tx_src ON txo.tx_id = tx_src.id
+      JOIN tx tx_cur ON txi.tx_in_id = tx_cur.id
+      WHERE tx_cur.hash = decode($1,'hex')
     `, [hash]);
 
     // Get outputs
@@ -166,13 +171,19 @@ app.get("/address/:addr", async (c) => {
       LIMIT 1
     `, [addr]);
 
-    // Get balance and tx count
+    // Get balance (unspent UTXOs only, using consumed_by_tx_id)
     const balR = await pool.query(`
       SELECT COALESCE(SUM(txo.value),0)::text as balance,
-             COUNT(DISTINCT txo.tx_id) as tx_count
+             COUNT(*)::int as utxo_count
       FROM tx_out txo
-      LEFT JOIN tx_in txi ON txo.tx_id = txi.tx_out_id AND txo.index = txi.tx_out_index
-      WHERE txo.address = $1 AND txi.id IS NULL
+      WHERE txo.address = $1 AND txo.consumed_by_tx_id IS NULL
+    `, [addr]);
+
+    // TX count
+    const txCountR = await pool.query(`
+      SELECT COUNT(DISTINCT txo.tx_id)::int as tx_count
+      FROM tx_out txo
+      WHERE txo.address = $1
     `, [addr]);
 
     // Get UTXOs (latest 50)
@@ -182,8 +193,7 @@ app.get("/address/:addr", async (c) => {
       FROM tx_out txo
       JOIN tx ON txo.tx_id = tx.id
       JOIN block b ON tx.block_id = b.id
-      LEFT JOIN tx_in txi ON txo.tx_id = txi.tx_out_id AND txo.index = txi.tx_out_index
-      WHERE txo.address = $1 AND txi.id IS NULL
+      WHERE txo.address = $1 AND txo.consumed_by_tx_id IS NULL
       ORDER BY b.time DESC
       LIMIT 50
     `, [addr]);
@@ -192,7 +202,7 @@ app.get("/address/:addr", async (c) => {
       address: addr,
       stake_address: stakeR.rows[0]?.stake_address || null,
       balance: balR.rows[0]?.balance || "0",
-      tx_count: parseInt(balR.rows[0]?.tx_count || "0"),
+      tx_count: txCountR.rows[0]?.tx_count || 0,
       utxos: utxoR.rows,
     };
   });
@@ -205,48 +215,37 @@ app.get("/pools", async (c) => {
   const data = await cached(`pools:${limit}`, 120, async () => {
     const r = await pool.query(`
       WITH latest_update AS (
-        SELECT DISTINCT ON (hash_id) hash_id, pledge, fixed_cost, margin,
-               registered_tx_id
+        SELECT DISTINCT ON (hash_id) hash_id, pledge, fixed_cost, margin
         FROM pool_update
         ORDER BY hash_id, registered_tx_id DESC
       ),
-      pool_stakes AS (
-        SELECT pool_hash_id,
-               SUM(amount)::text as live_stake,
-               COUNT(*) as delegator_count
-        FROM epoch_stake
-        WHERE epoch_no = (SELECT MAX(no) FROM epoch)
-        GROUP BY pool_hash_id
-      ),
-      pool_blocks AS (
-        SELECT sl.pool_hash_id, COUNT(*) as blocks_minted
-        FROM block b
-        JOIN slot_leader sl ON b.slot_leader_id = sl.id
-        WHERE sl.pool_hash_id IS NOT NULL
-        GROUP BY sl.pool_hash_id
+      latest_stat AS (
+        SELECT DISTINCT ON (pool_hash_id) pool_hash_id,
+               number_of_blocks, number_of_delegators, stake, voting_power
+        FROM pool_stat
+        ORDER BY pool_hash_id, epoch_no DESC
       )
       SELECT ph.view as pool_hash,
-             pod.ticker_name as ticker,
-             pod.json->>'name' as name,
+             ocpd.ticker_name as ticker,
+             ocpd.json->>'name' as name,
              lu.pledge::text,
              lu.fixed_cost::text,
              lu.margin,
-             COALESCE(ps.live_stake, '0') as live_stake,
-             COALESCE(ps.delegator_count, 0)::int as delegator_count,
-             COALESCE(pb.blocks_minted, 0)::int as blocks_minted,
-             CASE WHEN ps.live_stake IS NOT NULL
-                  THEN ROUND(ps.live_stake::numeric / 68000000000000, 4)::float
+             COALESCE(ls.stake, 0)::text as live_stake,
+             COALESCE(ls.number_of_delegators, 0)::int as delegator_count,
+             COALESCE(ls.number_of_blocks, 0)::int as blocks_minted,
+             CASE WHEN ls.stake IS NOT NULL AND ls.stake > 0
+                  THEN ROUND(ls.stake / 68000000000000, 4)::float
                   ELSE 0 END as saturation
       FROM pool_hash ph
       JOIN latest_update lu ON lu.hash_id = ph.id
-      LEFT JOIN pool_offline_data pod ON pod.pool_id = ph.id
-        AND pod.id = (SELECT MAX(id) FROM pool_offline_data WHERE pool_id = ph.id)
-      LEFT JOIN pool_stakes ps ON ps.pool_hash_id = ph.id
-      LEFT JOIN pool_blocks pb ON pb.pool_hash_id = ph.id
+      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      LEFT JOIN latest_stat ls ON ls.pool_hash_id = ph.id
       LEFT JOIN pool_retire pr ON pr.hash_id = ph.id
         AND pr.retiring_epoch <= (SELECT MAX(no) FROM epoch)
       WHERE pr.id IS NULL
-      ORDER BY COALESCE(ps.live_stake::numeric, 0) DESC
+      ORDER BY COALESCE(ls.stake, 0) DESC
       LIMIT $1
     `, [limit]);
     return r.rows;
@@ -262,19 +261,30 @@ app.get("/pool/:id", async (c) => {
         SELECT DISTINCT ON (hash_id) hash_id, pledge, fixed_cost, margin
         FROM pool_update
         ORDER BY hash_id, registered_tx_id DESC
+      ),
+      latest_stat AS (
+        SELECT DISTINCT ON (pool_hash_id) pool_hash_id,
+               number_of_blocks, number_of_delegators, stake, voting_power
+        FROM pool_stat
+        ORDER BY pool_hash_id, epoch_no DESC
       )
       SELECT ph.view as pool_hash,
-             pod.ticker_name as ticker,
-             pod.json->>'name' as name,
-             pod.json->>'description' as description,
-             pod.json->>'homepage' as homepage,
+             ocpd.ticker_name as ticker,
+             ocpd.json->>'name' as name,
+             ocpd.json->>'description' as description,
+             ocpd.json->>'homepage' as homepage,
              lu.pledge::text,
              lu.fixed_cost::text,
-             lu.margin
+             lu.margin,
+             COALESCE(ls.stake, 0)::text as live_stake,
+             COALESCE(ls.number_of_delegators, 0)::int as delegator_count,
+             COALESCE(ls.number_of_blocks, 0)::int as blocks_minted,
+             COALESCE(ls.voting_power, 0)::text as voting_power
       FROM pool_hash ph
       JOIN latest_update lu ON lu.hash_id = ph.id
-      LEFT JOIN pool_offline_data pod ON pod.pool_id = ph.id
-        AND pod.id = (SELECT MAX(id) FROM pool_offline_data WHERE pool_id = ph.id)
+      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      LEFT JOIN latest_stat ls ON ls.pool_hash_id = ph.id
       WHERE ph.view = $1
     `, [id]);
     return r.rows[0] || null;
@@ -292,20 +302,24 @@ app.get("/assets", async (c) => {
              encode(ma.name,'hex') as asset_name,
              ma.fingerprint,
              COALESCE(mam.quantity, 0)::text as total_supply,
-             (SELECT COUNT(*) FROM ma_tx_mint WHERE ident = ma.id)::int as mint_tx_count,
-             convert_from(ma.name, 'UTF8') as name_ascii
+             COALESCE(mam.mint_count, 0)::int as mint_tx_count
       FROM multi_asset ma
       LEFT JOIN LATERAL (
-        SELECT SUM(quantity) as quantity
+        SELECT SUM(quantity) as quantity, COUNT(*) as mint_count
         FROM ma_tx_mint WHERE ident = ma.id
       ) mam ON true
-      ORDER BY mint_tx_count DESC
+      ORDER BY mam.mint_count DESC NULLS LAST
       LIMIT $1
     `, [limit]);
-    return r.rows.map(row => ({
-      ...row,
-      name_ascii: row.name_ascii && /^[\x20-\x7E]+$/.test(row.name_ascii) ? row.name_ascii : null
-    }));
+    return r.rows.map(row => {
+      let name_ascii = null;
+      try {
+        const buf = Buffer.from(row.asset_name, 'hex');
+        const str = buf.toString('utf8');
+        if (/^[\x20-\x7E]+$/.test(str)) name_ascii = str;
+      } catch {}
+      return { ...row, name_ascii };
+    });
   });
   return c.json(data);
 });
@@ -317,10 +331,10 @@ app.get("/governance/actions", async (c) => {
     const r = await pool.query(`
       SELECT encode(tx.hash,'hex') as tx_hash,
              gap.index as cert_index,
-             gap.type,
+             gap.type::text,
              b.epoch_no as epoch,
-             va.title,
-             va.abstract,
+             ocvgad.title,
+             ocvgad.abstract,
              COALESCE((SELECT COUNT(*) FROM voting_procedure vp
                        WHERE vp.gov_action_proposal_id = gap.id AND vp.vote = 'Yes'), 0)::int as yes_votes,
              COALESCE((SELECT COUNT(*) FROM voting_procedure vp
@@ -330,11 +344,8 @@ app.get("/governance/actions", async (c) => {
       FROM gov_action_proposal gap
       JOIN tx ON gap.tx_id = tx.id
       JOIN block b ON tx.block_id = b.id
-      LEFT JOIN LATERAL (
-        SELECT va.title, va.abstract
-        FROM voting_anchor va
-        WHERE va.id = gap.voting_anchor_id
-      ) va ON true
+      LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+      LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
       ORDER BY gap.id DESC
       LIMIT $1
     `, [limit]);
@@ -382,12 +393,12 @@ app.get("/search", async (c) => {
   // Pool search by ticker or name
   if (q.length >= 2 && q.length <= 10) {
     const poolR = await pool.query(`
-      SELECT ph.view as pool_hash, pod.ticker_name as ticker, pod.json->>'name' as name
+      SELECT ph.view as pool_hash, ocpd.ticker_name as ticker, ocpd.json->>'name' as name
       FROM pool_hash ph
-      JOIN pool_offline_data pod ON pod.pool_id = ph.id
-        AND pod.id = (SELECT MAX(id) FROM pool_offline_data WHERE pool_id = ph.id)
-      WHERE UPPER(pod.ticker_name) = UPPER($1)
-         OR UPPER(pod.json->>'name') LIKE UPPER($2)
+      JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      WHERE UPPER(ocpd.ticker_name) = UPPER($1)
+         OR UPPER(ocpd.json->>'name') LIKE UPPER($2)
       LIMIT 5
     `, [q, `%${q}%`]);
     poolR.rows.forEach(p => {
@@ -395,7 +406,7 @@ app.get("/search", async (c) => {
     });
   }
 
-  // Asset search by fingerprint or name
+  // Asset search by fingerprint
   if (q.startsWith("asset")) {
     const assetR = await pool.query(
       `SELECT fingerprint FROM multi_asset WHERE fingerprint = $1 LIMIT 1`, [q]
@@ -408,9 +419,6 @@ app.get("/search", async (c) => {
 
 // ─── Start ─────────────────────────────────────────
 const port = parseInt(process.env.PORT || "3001");
-console.log(`ADAtool API listening on port ${port}`);
-
-export default {
-  port,
-  fetch: app.fetch,
-};
+serve({ fetch: app.fetch, port }, () => {
+  console.log(`ADAtool API listening on port ${port}`);
+});
