@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-07T19:36:23.517Z",
+  "generatedAt": "2026-03-07T20:42:41.521Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 48,
@@ -32,31 +32,31 @@
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on Cardano governance receive broad support (67% Yes votes) primarily for establishing transparency frameworks and fiscal guardrails for treasury management. These actions serve informational purposes while allowing continued ecosystem experimentation, with most Yes voters viewing them as necessary procedural steps rather than perfect solutions.",
-      "summary_ja": "CardanoのInfoAction提案は、トレジャリー管理の透明性枠組みと財政的なガードレールを確立することで広範なサポート（Yes投票67%）を得ています。これらのアクションは情報提供目的で機能しながら、エコシステムの継続的な実験を可能にし、多くのYes投票者はこれらを完璧なソリューションというより必要な手続きステップと見なしています。",
+      "summary_en": "InfoActions on Cardano's Budget Process Framework and Net Change Limit (NCL) proposals receive support primarily for establishing fiscal guardrails and treasury transparency, though significant disagreement exists over the appropriate spending ceiling. Supporters value the framework for enabling ecosystem coordination and preventing treasury depletion, while critics argue the limits are either too high (risking treasury drain) or too restrictive (limiting ecosystem development), with some concerned about lack of accountability for prior spending.",
+      "summary_ja": "CardanoのBudget Process FrameworkおよびNet Change Limit (NCL)提案に関するInfoActionは、財政ガードレールの確立とトレジャリーの透明性確保を支持する声が主流である一方で、適切な支出上限をめぐって大きな意見の相違が存在します。支持派は枠組みがエコシステム間調整とトレジャリー枯渇防止を可能にすることを評価し、批評派は上限が高すぎてトレジャリーを消耗させるリスクがあるか、またはエコシステム発展を過度に制限していると主張し、過去の支出に対する説明責任の欠如を懸念する者もいます。",
       "typicalReasonsYes_en": [
-        "Establishes transparent and predictable governance framework for treasury management and budget processes",
-        "Enables continued ecosystem experimentation while maintaining fiscal discipline guardrails",
-        "Reasonable and practical approach to coordination without claiming to be a perfect long-term solution",
-        "Ensures treasury operations continue without stalling governance processes"
+        "Establishes necessary fiscal discipline and transparency guardrails for treasury management while allowing ecosystem experimentation and improvement",
+        "Sets spending limits conservatively below prior-year inflows, representing responsible governance during low ADA price conditions",
+        "Prevents treasury depletion and enables continuity of critical infrastructure funding across 100-epoch period",
+        "Provides predictability and clear coordination framework across proposers, DReps, and community stakeholders"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー管理と予算プロセスの透��性と予測可能性を確立する",
-        "財政的ガードレールを維持しながらエコシステムの継続的な実験を可能にする",
-        "完璧な長期ソリューションとは言わずに、調整の実用的なアプローチを提供する",
-        "ガバナンスプロセスの停滞を防ぎながらトレジャリー運用を継続させる"
+        "トレジャリー管理に必要な財政規律と透明性のガードレールを確立しながらエコシステムの実験と改善を可能にする",
+        "ADA価格が低い状況での責任ある統治を示唆し、支出を前年度流入量以下に保守的に設定する",
+        "トレジャリー枯渇を防ぎ、100エポック期間にわたる重要インフラ資金の継続性を確保する",
+        "提案者、DRep、コミュニティ関係者全体の予測可能性と明確な調整枠組みを提供する"
       ],
       "typicalReasonsNo_en": [
-        "Lack of transparent reporting and accountability from previous budget cycles before approving new frameworks",
-        "Proposed limits are too high or improperly calibrated relative to actual treasury inflows and ecosystem needs",
-        "Insufficient governance maturity and measurement mechanisms for evaluating proposal effectiveness",
-        "Inadequate rationale provided without clear spending allocation strategy or mid-term review mechanisms"
+        "300M ADA limit is still excessive and fails to prioritize treasury growth; strict 200-250M ADA ceiling needed to enforce real fiscal discipline",
+        "Lack of transparent reporting and accountability for 2025 budget spending makes 2026 approval premature and unjustified",
+        "NCL may artificially constrain ecosystem development and reject high-quality proposals; individual proposals deserve merit-based evaluation without arbitrary caps",
+        "Governance maturity insufficient to justify large spending; mechanisms for measuring effectiveness and impact assessment remain underdeveloped"
       ],
       "typicalReasonsNo_ja": [
-        "新しい枠組みを承認する前に、以前の予算サイクルからの透明性報告とアカウンタビリティの欠如",
-        "提案された上限が実際のトレジャリー流入額とエコシステムニーズに対して高すぎるか不適切に設定されている",
-        "提案の有効性を評価するためのガバナンス成熟度と測定メカニズムが不十分である",
-        "支出配分戦略や��期的なレビューメカニズムの明確さを欠いた不十分な根拠"
+        "300M ADA上限は依然として過度であり、トレジャリー成長を優先できていない。200～250M ADAの厳格な上限で真の財政規律を強制する必要がある",
+        "2025年度予算支出の透明な報告と説明責任が欠けているため、2026年度承認は時期尚早であり正当化されない",
+        "NCLはエコシステム発展を人為的に制約し、高品質な提案を却下する可能性がある。個別提案は恣意的な上限なしにメリットベースで評価されるべきである",
+        "ガバナンス成熟度が大規模支出を正当化するのに不十分であり、有効性と影響度測定メカニズムが未発達のままである"
       ]
     },
     "ParameterChange": {
