@@ -42447,16 +42447,16 @@
       }
     },
     "e9693ed6b6465b2b46daaf641486a12b4b2946081634b5967b9d98897b0598fa#0": {
-      "voteCountAtAnalysis": 8,
+      "voteCountAtAnalysis": 10,
       "analysis": {
         "title": "Cardano Budget Process Framework (facilitated by Intersect)",
         "type": "InfoAction",
         "submittedEpoch": 0,
         "stats": {
-          "votedWithRationale": 4,
-          "votedWithoutRationale": 4,
-          "notVoted": 1585,
-          "notVotedTotalStake": "5768564696978238",
+          "votedWithRationale": 5,
+          "votedWithoutRationale": 5,
+          "notVoted": 1583,
+          "notVotedTotalStake": "5764540709659354",
           "notVotedTopDreps": [
             {
               "name": "Yoroi W₳llet",
@@ -42500,11 +42500,11 @@
             }
           ],
           "yesBreakdown": {
-            "total": 8,
-            "withRationale": 4,
+            "total": 9,
+            "withRationale": 5,
             "withoutRationale": 4,
-            "totalStake": "89393796779251",
-            "withRationaleStake": "61898068377734",
+            "totalStake": "93035222428290",
+            "withRationaleStake": "65539494026773",
             "withoutRationaleStake": "27495728401517",
             "withoutRationaleDreps": [
               {
@@ -42522,6 +42522,159 @@
               {
                 "name": "FMS-DRep",
                 "stake": "1454104917335"
+              }
+            ]
+          },
+          "noBreakdown": {
+            "total": 1,
+            "withRationale": 0,
+            "withoutRationale": 1,
+            "totalStake": "382561669845",
+            "withRationaleStake": "0",
+            "withoutRationaleStake": "382561669845",
+            "withoutRationaleDreps": [
+              {
+                "name": "A$Y",
+                "stake": "382561669845"
+              }
+            ]
+          },
+          "abstainBreakdown": {
+            "total": 0,
+            "withRationale": 0,
+            "withoutRationale": 0,
+            "totalStake": "0",
+            "withRationaleStake": "0",
+            "withoutRationaleStake": "0",
+            "withoutRationaleDreps": []
+          }
+        },
+        "yesReasons": [
+          {
+            "reason_en": "Supports transparent and structured Treasury budget management framework",
+            "reason_ja": "透明性があり体系的なトレジャリー予算管理の枠組みを支持",
+            "totalStake": "44942616266217",
+            "dreps": [
+              {
+                "name": "MREDGARCROSS",
+                "stake": "638109123827"
+              },
+              {
+                "name": "Big Lazy Cat",
+                "stake": "37203760700444"
+              },
+              {
+                "name": "drep1yfdfs28uwa...",
+                "stake": "7100746441946"
+              }
+            ]
+          },
+          {
+            "reason_en": "Enables iterative improvement of decentralized treasury governance process",
+            "reason_ja": "分散型トレジャリーガバナンスプロセスの反復的な改善を可能にする",
+            "totalStake": "16955452111517",
+            "dreps": [
+              {
+                "name": "Rodrigo-[CHIL]",
+                "stake": "16955452111517"
+              }
+            ]
+          },
+          {
+            "reason_en": "Provides practical coordination framework for ecosystem budget planning and process clarity",
+            "reason_ja": "エコシステム予算計画のための実用的な調整枠組みとプロセスの明確化を提供",
+            "totalStake": "40845186349483",
+            "dreps": [
+              {
+                "name": "Big Lazy Cat",
+                "stake": "37203760700444"
+              },
+              {
+                "name": "BWtake(長崎)Japan",
+                "stake": "3641425649039"
+              }
+            ]
+          },
+          {
+            "reason_en": "Improves predictability and governance maturity through formalized budget procedures and common reference framework",
+            "reason_ja": "明文化された予算手続きと共通の参照枠組みを通じて予測可能性とガバナンスの成熟性を向上",
+            "totalStake": "3641425649039",
+            "dreps": [
+              {
+                "name": "BWtake(長崎)Japan",
+                "stake": "3641425649039"
+              }
+            ]
+          }
+        ],
+        "noReasons": [],
+        "abstainReasons": []
+      }
+    },
+    "f35285db3c4e085ad331843b3007737952b8a322bb3216311edc37fdf44ad3da#0": {
+      "voteCountAtAnalysis": 2,
+      "analysis": {
+        "title": "Dingo: a Production-Grade Block Producer in Go by Blink Labs",
+        "type": "TreasuryWithdrawals",
+        "submittedEpoch": 0,
+        "stats": {
+          "votedWithRationale": 1,
+          "votedWithoutRationale": 1,
+          "notVoted": 1591,
+          "notVotedTotalStake": "5834054690335576",
+          "notVotedTopDreps": [
+            {
+              "name": "Yoroi W₳llet",
+              "stake": "706688300992836"
+            },
+            {
+              "name": "YUTA",
+              "stake": "456560934816090"
+            },
+            {
+              "name": "EMURGO",
+              "stake": "297641950522245"
+            },
+            {
+              "name": "Blockdaemon",
+              "stake": "291025714570235"
+            },
+            {
+              "name": "Eternl DRep Committee",
+              "stake": "250295455940124"
+            },
+            {
+              "name": "CryptoCrow",
+              "stake": "210177320524214"
+            },
+            {
+              "name": "Cardano Foundation",
+              "stake": "189929386416299"
+            },
+            {
+              "name": "Sebastien Guillemot セバ",
+              "stake": "186426813306648"
+            },
+            {
+              "name": "Everstake",
+              "stake": "120686546544414"
+            },
+            {
+              "name": "drep1yffld2866p...",
+              "stake": "115583518603139"
+            }
+          ],
+          "yesBreakdown": {
+            "total": 2,
+            "withRationale": 1,
+            "withoutRationale": 1,
+            "totalStake": "23903803421913",
+            "withRationaleStake": "23521241752068",
+            "withoutRationaleStake": "382561669845",
+            "withoutRationaleDreps": [
+              {
+                "name": "A$Y",
+                "stake": "382561669845"
               }
             ]
           },
@@ -42546,46 +42699,13 @@
         },
         "yesReasons": [
           {
-            "reason_en": "Support for structured and transparent treasury management process",
-            "reason_ja": "財務管理プロセスの構造化と透明性への支持",
-            "totalStake": "638109123827",
+            "reason_en": "Enthusiastic support with informal approval",
+            "reason_ja": "非公式な承認による熱心なサポート",
+            "totalStake": "23521241752068",
             "dreps": [
               {
-                "name": "MREDGARCROSS",
-                "stake": "638109123827"
-              }
-            ]
-          },
-          {
-            "reason_en": "Framework appears reasonable and practical for treasury administration",
-            "reason_ja": "財務管理に向けた合理的かつ実用的なフレームワークと評価",
-            "totalStake": "37203760700444",
-            "dreps": [
-              {
-                "name": "Big Lazy Cat",
-                "stake": "37203760700444"
-              }
-            ]
-          },
-          {
-            "reason_en": "Enables iterative experimentation and improvement of budget coordination process",
-            "reason_ja": "予算調整プロセスの段階的な実験と改善を可能にする",
-            "totalStake": "16955452111517",
-            "dreps": [
-              {
-                "name": "Rodrigo-[CHIL]",
-                "stake": "16955452111517"
-              }
-            ]
-          },
-          {
-            "reason_en": "Useful coordination, transparency, and planning framework for budget process with constitutional clarity",
-            "reason_ja": "予算プロセスの有用な調整、透明性、計画立案フレームワークと憲法上の明確性",
-            "totalStake": "7100746441946",
-            "dreps": [
-              {
-                "name": "drep1yfdfs28uwa...",
-                "stake": "7100746441946"
+                "name": "wolf31o2 (Chris Gianelloni)",
+                "stake": "23521241752068"
               }
             ]
           }
@@ -42597,35 +42717,35 @@
   },
   "actionTypeCache": {
     "TreasuryWithdrawals": {
-      "proposalCount": 47,
-      "rationaleCount": 4625,
+      "proposalCount": 48,
+      "rationaleCount": 4626,
       "analysis": {
-        "count": 47,
-        "summary_en": "Treasury withdrawal proposals for Cardano show strong support for strategic infrastructure investments that advance ecosystem resilience and decentralization. Voters favor well-established teams with proven track records, clear budgets, and transparent delivery plans, though concerns exist around fiscal responsibility, budget assumptions, and constitutional compliance in bear market conditions.",
-        "summary_ja": "Cardanoの財務引き出し提案は、エコシステムの強化と分散化を進める戦略的インフラ投資に対する強い支持を示しています。投票者は実績のあるチーム、明確な予算、透明な実行計画を支持する一方で、弱気相場環境における財政責任、予算仮定、憲法遵守に関する懸念が存在します。",
+        "count": 48,
+        "summary_en": "Treasury withdrawals for Cardano show strong support (77% Yes) primarily for strategic infrastructure projects like Amaru node diversity, with voter confidence driven by team track records and clear delivery milestones. Opposition focuses on budget concerns, fiscal responsibility during market downturns, lack of specificity, and constitutional compliance issues.",
+        "summary_ja": "Cardanoの財務引き出し提案は、特にAmaruノード多様性などの戦略的インフラプロジェクトについて強力な支持（77%賛成）を示しており、投票者の信頼はチームの実績と明確なデリバリーマイルストーンに基づいています。反対は予算懸念、市場低迷時の財政責任、具体性の欠如、憲法遵守の問題に焦点を当てています。",
         "typicalReasonsYes_en": [
-          "Team has strong track record of delivery and fiscal responsibility (returning unused funds)",
-          "Proposal addresses critical infrastructure needs for decentralization and network resilience",
-          "Well-structured budget with clear milestones, KPIs, and detailed financial breakdowns",
-          "Strategic long-term value justifies investment despite bear market conditions"
+          "Team has proven track record with transparent delivery and returning unused funds to treasury",
+          "Strategic importance for network decentralization and resilience (node diversity, avoiding single-implementation risks)",
+          "Well-structured proposals with clear milestones, KPIs, and detailed budget breakdowns",
+          "Critical infrastructure that addresses unsexy but essential blockchain foundation needs"
         ],
         "typicalReasonsYes_ja": [
-          "チームが実績のある実行能力と会計責任を示している（未使用資金の返還）",
-          "分散化とネットワーク耐性のための重要インフラニーズに対応",
-          "明確なマイルストーン、KPI、詳細な財務内訳を含む適切に構造化された予算",
-          "強気相場環境にもかかわらず、投資を正当化する長期的な戦略的価値"
+          "チームが透明性のある実績を示し、未使用資金をトレジャリーに返金している",
+          "ネットワーク分散化とレジリエンスの戦略的重要性（ノード多様性、単一実装リスク回避）",
+          "明確なマイルストーン、KPI、詳細な予算内訳を備えた構造化提案",
+          "ブロックチェーン基盤として不可欠だが見落とされやすいインフラの提供"
         ],
         "typicalReasonsNo_en": [
-          "Budget assumes unrealistic ADA price or lacks fiscal responsibility during market downturns",
-          "Lack of specificity in deliverables, KPIs, or verifiable acceptance criteria for major funding",
-          "Constitutional compliance concerns or governance process issues with Treasury delegation",
-          "Redundancy with existing initiatives or unclear necessity for ecosystem benefit"
+          "Budget assumptions misaligned with current market conditions (assumes $0.40 ADA, actual $0.28); fiscal responsibility concerns",
+          "Lack of transparency and specificity: missing acceptance criteria, KPIs, product definitions, or concrete delivery standards",
+          "Constitutional non-compliance or governance concerns about DRep overreach in treasury management decisions",
+          "Redundancy or unnecessary scope: already funded similar work (e.g., IOG Rust node); unnecessary expenses relative to alternatives"
         ],
         "typicalReasonsNo_ja": [
-          "非現実的なADA価格仮定または弱気相場時の会計責任の欠如",
-          "大型資金に対する成果物、KPI、検証可能な受入基準の仕様不足",
-          "憲法遵守の懸念または財務委任に関するガバナンスプロセスの問題",
-          "既存イニシアチブとの重複または生態系利益に対する必要性の不明確さ"
+          "予算前提と現在の市場状況の不一致（$0.40想定だが実際$0.28）、財政責任の懸念",
+          "透明性と具体性の欠如：受け入れ基準、KPI、製品定義、具体的なデリバリー基準の不足",
+          "憲法非遵守またはガバナンス懸念：DRepによる財務管理決定への権限超過",
+          "冗長性または不要な範囲：���似作業はすでに資金提供済み（例：IOG Rustノード）、代替案に比べて不要な支出"
         ]
       }
     },
@@ -42664,34 +42784,34 @@
     },
     "InfoAction": {
       "proposalCount": 30,
-      "rationaleCount": 1964,
+      "rationaleCount": 1965,
       "analysis": {
         "count": 30,
-        "summary_en": "InfoActions regarding Cardano's Net Change Limit (NCL) for Treasury management receive mixed support, with 67.5% voting Yes, reflecting ongoing debate about fiscal discipline versus ecosystem funding flexibility. Supporters favor establishing a clear spending limit aligned with treasury inflows and market conditions, while opponents argue the limit is either too high (risking treasury depletion) or unnecessarily restrictive (constraining ecosystem development).",
-        "summary_ja": "CardanoのNet Change Limit（NCL）に関するInfoActionは賛否が分かれており、賛成票が67.5%を占めています。支持者は入金実績と市場状況に合わせた明確な支出上限の設定を支持し、反対者は上限が高すぎてトレジャリーを枯渇させるリスク、または生態系開発を不必要に制限していると主張しています。",
+        "summary_en": "InfoAction proposals on Cardano governance frameworks and treasury budget limits receive mixed support, with voters primarily concerned about fiscal discipline, transparency, and ecosystem sustainability. Yes voters generally support establishing clear budget frameworks and NCL guardrails as necessary governance infrastructure, while No voters argue for either stricter limits or more flexible spending to support ecosystem development.",
+        "summary_ja": "Cardanoのガバナンスフレームワークおよびトレジャリー予算制限に関するInfoActionは、投票者が財政規律、透明性、エコシステムの持続可能性を主な懸念としており、賛否が分かれている。賛成派はガバナンスインフラとして明確な予算枠組みとNCL上限の確立を支持し、反対派はより厳格な上限か生態系開発を支援するためのより柔軟な支出を主張している。",
         "typicalReasonsYes_en": [
-          "Establishes necessary fiscal discipline aligned with actual treasury inflows and conservative spending approach",
-          "Allows governance process to continue functioning without stalling ecosystem infrastructure and development initiatives",
-          "Responsive to current market conditions and ADA price volatility, ensuring responsible capital management",
-          "Represents improvement over previous proposals and can be revised through future governance actions"
+          "Establishes necessary fiscal guardrails and governance transparency for treasury operations",
+          "Represents practical balance between fiscal discipline and ecosystem funding needs",
+          "Allows continued experimentation and framework improvement without halting treasury operations",
+          "Provides coordination mechanism and predictability for the budget process across stakeholders"
         ],
         "typicalReasonsYes_ja": [
-          "実際のトレジャリー入金に合わせた財政規律を確立し、保守的な支出アプローチを実現する",
-          "エコシステムのインフラストラクチャと開発イニシアチブを停滞させずに、ガバナンスプロセスを継続可能にする",
-          "現在の市場状況とADA価格の変動性に対応し、責任ある資本管理を確保する",
-          "以前の提案よりも改善され、将来のガバナンスアクションで見直しが可能である"
+          "トレジャリー運用に必要な財政上の制約と透明性のあるガバナンスを確立する",
+          "財政規律とエコシステム資金需要のバランスを取る実用的なアプローチ",
+          "トレジャリー運用の停滞を招かず、継続的な実験と枠組みの改善が可能",
+          "利害関係者全体の予算プロセスにおける調整可能性と予測可能性を提供"
         ],
         "typicalReasonsNo_en": [
-          "NCL is still too high and encourages wasteful spending; lower limits (200-250M ADA) would force better prioritization",
-          "Previous year's budget outcomes lack transparent reporting and review before approving new spending authority",
-          "Unnecessary restriction on ecosystem flexibility; higher ceilings provide needed funding for quality proposals that might be rejected",
-          "Governance maturity insufficient to ensure effectiveness measurement and accountability for treasury spending"
+          "Proposed limit is too high and does not enforce sufficient fiscal discipline for declining treasury inflows",
+          "Lack of transparent reporting and outcome review from prior budget cycles before approving new spending",
+          "Should evaluate individual proposals on merit rather than fitting within an overall budget ceiling",
+          "Concern about governance maturity and effectiveness measurement mechanisms for treasury spending"
         ],
         "typicalReasonsNo_ja": [
-          "NCLがまだ高すぎて浪費を助長する；より低い上限（200～250M ADA）がより良い優先順位付けを強制する",
-          "前年度の予算結果が透明に報告・検証されないまま新���い支出権限を承認している",
-          "生態系の柔軟性を不必要に制限；より高い上限が質の高い提案の実現に必要な資金を提供する",
-          "トレジャリー支出の効果測定と説明責任を確保するガバナンスの成熟度が不十分である"
+          "提案される上限は高すぎ、減少するトレジャリー流入に対して十分な財政規律を強制していない",
+          "新たな支出承認前に、過去の予算サイクルからの透明な報告と成果レビューが不足している",
+          "予算天井内に収まるかではなく、個別提案を本質で評価すべき",
+          "トレジャリー��出に対するガバナンスの成熟度と有効性測定メカニズムへの懸念"
         ]
       }
     },
