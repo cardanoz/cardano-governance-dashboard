@@ -301,14 +301,12 @@ app.get("/assets", async (c) => {
       SELECT encode(ma.policy,'hex') as policy_id,
              encode(ma.name,'hex') as asset_name,
              ma.fingerprint,
-             COALESCE(mam.quantity, 0)::text as total_supply,
-             COALESCE(mam.mint_count, 0)::int as mint_tx_count
-      FROM multi_asset ma
-      LEFT JOIN LATERAL (
-        SELECT SUM(quantity) as quantity, COUNT(*) as mint_count
-        FROM ma_tx_mint WHERE ident = ma.id
-      ) mam ON true
-      ORDER BY mam.mint_count DESC NULLS LAST
+             COUNT(mtm.id)::int as mint_tx_count,
+             COALESCE(SUM(mtm.quantity),0)::text as total_supply
+      FROM ma_tx_mint mtm
+      JOIN multi_asset ma ON ma.id = mtm.ident
+      GROUP BY ma.id, ma.policy, ma.name, ma.fingerprint
+      ORDER BY COUNT(mtm.id) DESC
       LIMIT $1
     `, [limit]);
     return r.rows.map(row => {
