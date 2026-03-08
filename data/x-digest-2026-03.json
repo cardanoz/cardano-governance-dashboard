@@ -993,5 +993,149 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2026-03-08",
+    "highlights": [
+      {
+        "category": "institutional",
+        "title_en": "Germany's DZ Bank Launches meinKrypto Platform with ADA Support",
+        "title_ja": "ドイツDZ銀行がADA対応の暗号資産プラットフォーム「meinKrypto」を開始",
+        "summary_en": "Germany's second-largest bank DZ Bank has officially launched meinKrypto under MiCAR regulatory approval, offering BTC, ETH, ADA, and LTC directly to retail customers. This marks a significant institutional adoption milestone for Cardano in regulated banking infrastructure.",
+        "summary_ja": "ドイツ第2位の銀行DZ銀行がMiCAR規制承認下でmeinKryptoを開始し、小売顧客向けにADAを含む暗号資産を提供。規制銀行インフラにおけるカルダノの制度的採用の重要なマイルストーン。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Institutional",
+          "Builder"
+        ],
+        "sources": [
+          "@theunhashed"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Charles Hoskinson Reiterates Leios Protocol's Blockchain Trilemma Solution",
+        "title_ja": "チャールス・ホスキンソン、Leiosプロトコルのブロックチェーン三大課題解決を強調",
+        "summary_en": "Charles Hoskinson has publicly stated that Leios fundamentally solves the blockchain trilemma (scalability, security, decentralization), with Crypto Banter predicting potential ADA breakout implications. This reinforces messaging ahead of the expected June 2026 Leios testnet.",
+        "summary_ja": "チャールス・ホスキンソンがLeiosがブロックチェーン三大課題を根本的に解決すると述べ、Crypto BanterはADAのブレークアウト可能性を予測。6月2026年Leiosテストネット前のメッセージング強化。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@MTitan57895"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Pentad Framework Aims to Accelerate Ecosystem Coordination and Delivery",
+        "title_ja": "Pentadフレームワークがエコシステム調整と成果加速を目指す",
+        "summary_en": "Charles Hoskinson explained that the Pentad structure brings major Cardano entities together to coordinate initiatives and reduce friction, enabling faster critical project delivery when needed. This governance approach emphasizes aligned stakeholder engagement.",
+        "summary_ja": "チャールス・ホスキンソンがPentad構造がカルダノの主要エンティティを結集して調整と摩擦軽減を実現し、重要プロジェクト配信を加速させると説明。ステークホルダー整列型のガバナンスアプローチを強調。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "constitution_budget",
+        "title_en": "Charles Proposes Sovereign Wealth Fund Strategy for Cardano Treasury Sustainability",
+        "title_ja": "チャールス、カルダノトレジャリー持続性向上のためのソブリン・ウェルス・ファンド戦略を提案",
+        "summary_en": "Charles Hoskinson has advocated for creating a sovereign wealth fund to strategically manage Cardano's treasury, arguing it could have generated significant profits and strengthened long-term sustainability of ecosystem funding capabilities.",
+        "summary_ja": "チャールス・ホスキンソンがカルダノ・トレジャリーの戦略的管理のためのソブリン・ウェルス・ファンド創設を提唱。相当な利益生成と長期的持続性強化の可能性を主張。",
+        "importance": 3,
+        "audience": [
+          "CC",
+          "DRep",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "RareEvo NFT Tickets Expand Cross-Chain Support with Cardano Integration",
+        "title_ja": "RareEvo NFTチケットがカルダノ統合で複数チェーン対応を拡大",
+        "summary_en": "RareEvo's NFT ticket system returns Monday with minting support across Ethereum, Base, and Cardano, offering Vegas perks including ARIA hotel stays. This demonstrates cross-chain adoption strategy for major event infrastructure.",
+        "summary_ja": "RareEvoのNFTチケットシステムが月曜日に復帰し、Ethereum、Base、カルダノ全体でのミント対応。ベガスの特典を含む主要イベントインフラの複数チェーン採用戦略を実証。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_Power",
+          "@jgb_peach"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Dingo v0.22.0 Released with Enhanced API Capabilities",
+        "title_ja": "Dingo v0.22.0がAPI機能強化で新規リリース",
+        "summary_en": "BlinkLabs has released Dingo v0.22.0, a development tool showing continued active improvement. Dingo is part of the Cardano infrastructure stack for blockchain interaction.",
+        "summary_ja": "BlinkLabsがDingo v0.22.0を新規リリース。継続的な改善を示唆する開発ツール。ブロックチェーン相互作用のカルダノインフラ���タック一部。",
+        "importance": 2,
+        "audience": [
+          "Builder"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Repository Activity: 197 Commits Across 40 Repos with Dingo Leading",
+        "title_ja": "カルダノ40リポジトリで197コミット、Dingoが先導",
+        "summary_en": "Recent development cycle shows 197 commits across 40 repositories with 953,160 lines added, primarily driven by Dingo (42 commits), IBC incubator, and Mithril protocols. Demonstrates sustained engineering velocity.",
+        "summary_ja": "40リポジトリで197コミット、953,160行追加。Dingo（42コミット）、IBC、Mithrilが主導。持続的な開発速度を実証。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "SIPO Tokyo Withdraws AIRA Fund14 Catalyst Proposal Due to Market & Timing Constraints",
+        "title_ja": "SIPO東京が市場タイミングの制約によりAIRA Fund14提案を正式辞退",
+        "summary_en": "SIPO Tokyo has formally withdrawn its AIRA Hydra Loyalty proposal from Project Catalyst Fund14, citing current market conditions and municipal budget cycle misalignment. Catalyst team offered flexible alternatives including milestone restructuring.",
+        "summary_ja": "SIPO東京が市場環境と地方自治体予算年度の不整合を理由にAIRA提案をCatalyst Fund14から正式辞退。Catalystチームが柔軟な代替案を提示。",
+        "importance": 2,
+        "audience": [
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@SIPO_Tokyo"
+        ]
+      }
+    ],
+    "tweetCount": 55,
+    "generatedAt": "2026-03-08T06:35:54.979Z",
+    "apiUsage": {
+      "input_tokens": 3983,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2133,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]
