@@ -777,6 +777,186 @@ app.get("/asset/:fingerprint/holders", async (c) => {
   return c.json(data);
 });
 
+// ─── Protocol Parameters ──────────────────────────
+app.get("/protocol-params", async (c) => {
+  const data = await cached("protocol-params", 600, async () => {
+    const r = await pool.query(`
+      SELECT ep.*, ep.epoch_no
+      FROM epoch_param ep
+      ORDER BY ep.epoch_no DESC
+      LIMIT 1
+    `);
+    if (!r.rows[0]) return null;
+    const p = r.rows[0];
+
+    // Try to get Conway governance params
+    let govParams = {};
+    try {
+      const gp = await pool.query(`
+        SELECT drep_deposit::text, gov_action_deposit::text, drep_activity,
+               gov_action_lifetime, committee_min_size, committee_max_term_length,
+               dvt_motion_no_confidence, dvt_committee_normal,
+               dvt_hard_fork_initiation, dvt_p_p_economic_group,
+               dvt_p_p_technical_group, dvt_treasury_withdrawal,
+               pvt_motion_no_confidence, pvt_committee_normal,
+               pvt_hard_fork_initiation
+        FROM epoch_param WHERE epoch_no = $1
+      `, [p.epoch_no]);
+      if (gp.rows[0]) govParams = gp.rows[0];
+    } catch {}
+
+    return {
+      epoch_no: p.epoch_no,
+      min_fee_a: p.min_fee_a, min_fee_b: p.min_fee_b,
+      max_block_size: p.max_block_size, max_tx_size: p.max_tx_size,
+      key_deposit: p.key_deposit?.toString() || "0",
+      pool_deposit: p.pool_deposit?.toString() || "0",
+      min_pool_cost: p.min_pool_cost?.toString() || "0",
+      max_block_ex_mem: p.max_block_ex_mem?.toString() || "0",
+      max_block_ex_steps: p.max_block_ex_steps?.toString() || "0",
+      max_tx_ex_mem: p.max_tx_ex_mem?.toString() || "0",
+      max_tx_ex_steps: p.max_tx_ex_steps?.toString() || "0",
+      collateral_percent: p.collateral_percent || 0,
+      price_mem: p.price_mem, price_step: p.price_step,
+      max_val_size: p.max_val_size || 0,
+      max_collateral_inputs: p.max_collateral_inputs || 0,
+      protocol_major: p.protocol_major, protocol_minor: p.protocol_minor,
+      coins_per_utxo_size: p.coins_per_utxo_size?.toString() || "0",
+      ...govParams,
+    };
+  });
+  if (!data) return c.json({ error: "No params found" }, 404);
+  return c.json(data);
+});
+
+// ─── Stake Distribution ───────────────────────────
+app.get("/stake-distribution", async (c) => {
+  const data = await cached("stake-dist", 600, async () => {
+    // Get basic stats from epoch_stake for current epoch
+    const statsR = await pool.query(`
+      SELECT SUM(amount)::text as total_staked,
+             COUNT(DISTINCT addr_id)::int as total_stakers,
+             AVG(amount)::text as avg_stake
+      FROM epoch_stake
+      WHERE epoch_no = (SELECT MAX(no) FROM epoch)
+    `);
+    const stats = statsR.rows[0] || {};
+
+    // Median approximation via percentile
+    let medianStake = "0";
+    try {
+      const medR = await pool.query(`
+        SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY amount)::text as median
+        FROM epoch_stake
+        WHERE epoch_no = (SELECT MAX(no) FROM epoch)
+      `);
+      medianStake = medR.rows[0]?.median || "0";
+    } catch {}
+
+    // Distribution buckets
+    const bucketsR = await pool.query(`
+      SELECT
+        CASE
+          WHEN amount < 100000000 THEN '< 100 ADA'
+          WHEN amount < 1000000000 THEN '100 - 1K ADA'
+          WHEN amount < 10000000000 THEN '1K - 10K ADA'
+          WHEN amount < 100000000000 THEN '10K - 100K ADA'
+          WHEN amount < 1000000000000 THEN '100K - 1M ADA'
+          ELSE '> 1M ADA'
+        END as range,
+        COUNT(*)::int as count,
+        SUM(amount)::text as total_stake
+      FROM epoch_stake
+      WHERE epoch_no = (SELECT MAX(no) FROM epoch)
+      GROUP BY
+        CASE
+          WHEN amount < 100000000 THEN 1
+          WHEN amount < 1000000000 THEN 2
+          WHEN amount < 10000000000 THEN 3
+          WHEN amount < 100000000000 THEN 4
+          WHEN amount < 1000000000000 THEN 5
+          ELSE 6
+        END,
+        CASE
+          WHEN amount < 100000000 THEN '< 100 ADA'
+          WHEN amount < 1000000000 THEN '100 - 1K ADA'
+          WHEN amount < 10000000000 THEN '1K - 10K ADA'
+          WHEN amount < 100000000000 THEN '10K - 100K ADA'
+          WHEN amount < 1000000000000 THEN '100K - 1M ADA'
+          ELSE '> 1M ADA'
+        END
+      ORDER BY 1
+    `);
+
+    return {
+      total_staked: stats.total_staked || "0",
+      total_stakers: stats.total_stakers || 0,
+      avg_stake: stats.avg_stake || "0",
+      median_stake: medianStake,
+      buckets: bucketsR.rows,
+    };
+  });
+  return c.json(data);
+});
+
+// ─── Constitutional Committee ─────────────────────
+app.get("/committee", async (c) => {
+  const data = await cached("committee", 300, async () => {
+    // Get CC members
+    const r = await pool.query(`
+      SELECT encode(ch.raw, 'hex') as cc_hash,
+             ch.has_script,
+             cm.expiration_epoch,
+             CASE
+               WHEN cm.expiration_epoch <= (SELECT MAX(no) FROM epoch) THEN 'Expired'
+               ELSE 'Active'
+             END as status,
+             COALESCE(encode(cha.raw, 'hex'), null) as hot_key,
+             COALESCE(vc.vote_count, 0)::int as vote_count,
+             COALESCE(vc.yes_votes, 0)::int as yes_votes,
+             COALESCE(vc.no_votes, 0)::int as no_votes,
+             COALESCE(vc.abstain_votes, 0)::int as abstain_votes
+      FROM committee_member cm
+      JOIN committee_hash ch ON cm.committee_hash_id = ch.id
+      LEFT JOIN committee_de_registration cdr ON cdr.cold_key_id = ch.id
+      LEFT JOIN committee_registration cr ON cr.cold_key_id = ch.id
+      LEFT JOIN committee_hash cha ON cr.hot_key_id = cha.id
+      LEFT JOIN LATERAL (
+        SELECT COUNT(*) as vote_count,
+               COUNT(*) FILTER (WHERE vote = 'Yes') as yes_votes,
+               COUNT(*) FILTER (WHERE vote = 'No') as no_votes,
+               COUNT(*) FILTER (WHERE vote = 'Abstain') as abstain_votes
+        FROM voting_procedure vp
+        WHERE vp.committee_voter = ch.id
+      ) vc ON true
+      WHERE cdr.id IS NULL
+      ORDER BY cm.expiration_epoch DESC
+    `);
+
+    // Get threshold
+    let threshold = 0.67;
+    try {
+      const tR = await pool.query(`
+        SELECT committee_normal_state_threshold
+        FROM epoch_param
+        ORDER BY epoch_no DESC LIMIT 1
+      `);
+      if (tR.rows[0]?.committee_normal_state_threshold) {
+        threshold = tR.rows[0].committee_normal_state_threshold;
+      }
+    } catch {}
+
+    const members = r.rows;
+    return {
+      threshold,
+      members,
+      total_members: members.length,
+      active_members: members.filter((m: any) => m.status === "Active").length,
+    };
+  });
+  return c.json(data);
+});
+
 // ─── Search ────────────────────────────────────────
 app.get("/search", async (c) => {
   const q = (c.req.query("q") || "").trim();
