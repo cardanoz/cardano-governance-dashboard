@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-08T16:49:14.844Z",
+  "generatedAt": "2026-03-08T17:41:27.341Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 48,
@@ -32,31 +32,31 @@
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on Cardano governance, particularly treasury budget frameworks and Net Change Limits, receive majority support when they establish clear processes for treasury management and maintain fiscal discipline. However, opposition emerges when spending ceilings are perceived as either too high (risking treasury depletion) or when governance maturity and accountability mechanisms are deemed insufficient.",
-      "summary_ja": "CardanoガバナンスのInfoAction提案、特にトレジャリー予算枠組みとNet Change Limitは、トレジャリー管理のための明確なプロセスを確立し、財政規律を維持する場合に多くの支持を受けます。しかし、支出上限が高すぎる（トレジャリー枯渇のリスク）と見なされたり、ガバナンス成熟度と説明責任メカニズムが不十分と判断される場合に反対が生じます。",
+      "summary_en": "InfoAction proposals on Cardano governance, particularly regarding treasury budget frameworks and Net Change Limits (NCL), receive majority support from DReps who view structured budgeting as essential for ecosystem coordination and fiscal responsibility. However, significant disagreement exists over appropriate spending levels, with critics concerned about governance maturity, transparency of prior spending, and whether limits constrain necessary ecosystem development.",
+      "summary_ja": "CardanoのInfoAction提案、特にトレジャリー予算枠組みと純変化限度額（NCL）に関するものは、構造化された予算編成をエコシステム調整と財政責任に不可欠と見なすDRepから多数の支持を受けています。しかし、適切な支出水準、ガバナンス成熟度への懸念、過去の支出の透明性、および制限がエコシステム開発に必要な資金を制約するかどうかについて、重大な意見の相違が存在しています。",
       "typicalReasonsYes_en": [
-        "Establishes transparent framework and clear processes for treasury management and budget coordination",
-        "Maintains fiscal discipline by anchoring spending limits to prior year inflows and responding to market conditions",
-        "Enables ecosystem experimentation while protecting against social engineering and capture by organized actors",
-        "Provides predictability and reduces uncertainty for proposals, DReps, and development teams"
+        "Establishes transparency and predictability for treasury management through clear budgeting frameworks and procedures",
+        "Introduces fiscal discipline by anchoring spending to actual treasury inflows, preventing excessive or uncontrolled withdrawals",
+        "Enables continued experimentation and governance maturation while maintaining reasonable safeguards against treasury depletion",
+        "Reduces social engineering and favoritism by establishing objective criteria and structured processes for funding allocation"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー管理と予算調整のための透明なフレームワークと明確なプロセスを確立する",
-        "前年度の流入と市場条件に支出限度額を固定し、財政規律を維持する",
-        "エコシステムの実験を可能にしながら、社会工学と組織的行為者による支配から保護する",
-        "提案者、DRep、開発チームの予測可能性を提供し、不確実性を減らす"
+        "明確な予算編成手続きを通じてトレジャリー管理に透明性と予測可能性をもたらす",
+        "実際の資金流入に支出をアンカーすることで、過度または制御不能な引き出しを防ぐ財政規律を導入する",
+        "合理的なセーフガードを維持しながら、ガバナンス成熟の継続的な実験を可能にする",
+        "目的基準と構造化されたプロセスの確立により、資金配分における社会工学と優遇措置を削減する"
       ],
       "typicalReasonsNo_en": [
-        "Spending ceiling perceived as excessive and not aligned with treasury depletion concerns or market volatility",
-        "Insufficient governance maturity and lack of transparent reporting/evaluation of previous budget cycle outcomes",
-        "Organized coordination may concentrate power toward established entities and reduce decentralized friction",
-        "Individual proposals should be evaluated on merit rather than fitting within a predetermined budget ceiling"
+        "Proposed spending limits are excessive and do not adequately reduce treasury depletion; stricter fiscal discipline is needed",
+        "Lack of transparent reporting and accountability for previous year's budget spending before approving future budgets",
+        "Governance frameworks may concentrate power with organized actors like Intersect, reducing natural decentralized checks against capture",
+        "NCL ceiling appears treated as spending target rather than genuine limit, and individual proposals should be evaluated independently rather than against aggregate budget"
       ],
       "typicalReasonsNo_ja": [
-        "支出上限がトレジャリー枯渇懸念や市場ボラティリティと整合していないと見なされる",
-        "ガバナンス成熟度が不十分で、前年度予算サイクル成果の透明な報告・評価がない",
-        "組織的調整は確立された実体への権力集中につながり、分散型の摩擦を減らす",
-        "個別提案は事前決定された予算上限に適合するのではなく、メリットに基づいて評価されるべき"
+        "提案される支出制限は過度であり、トレジャリー枯渇を十分に削減しておらず、より厳格な財政規律が必要",
+        "将来の予算承認前に、前年度の予算支出に対する透明な報告と説明責任の欠如",
+        "ガバナンス枠組みはIntersectなどの組織的な行為者と権力を集中させ、キャプチャーに対する自然な分散型チェックを減らす可能性がある",
+        "NCL上限は支出目標として扱われており、提案は集計予算に対してではなく独立して評価されるべき"
       ]
     },
     "ParameterChange": {
