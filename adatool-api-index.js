@@ -435,6 +435,235 @@ app.get("/block/:hash/txs", async (c) => {
   return c.json(data);
 });
 
+// ─── Network Stats ─────────────────────────────────
+app.get("/stats", async (c) => {
+  const data = await cached("stats", 60, async () => {
+    const [tipR, epochR, supplyR, stakeR, poolR, govR] = await Promise.all([
+      pool.query(`SELECT block_no, epoch_no, slot_no FROM block ORDER BY id DESC LIMIT 1`),
+      pool.query(`SELECT no, tx_count, blk_count, fees::text FROM epoch ORDER BY no DESC LIMIT 1`),
+      pool.query(`SELECT (SELECT COALESCE(SUM(value),0) FROM ada_pots WHERE epoch_no = (SELECT MAX(no) FROM epoch)) as treasury, (SELECT COALESCE(SUM(value),0) FROM ada_pots WHERE epoch_no = (SELECT MAX(no) FROM epoch)) as reserves`),
+      pool.query(`SELECT COALESCE(SUM(amount),0)::text as total_stake, COUNT(DISTINCT addr_id)::int as stakers FROM epoch_stake WHERE epoch_no = (SELECT MAX(no) FROM epoch)`),
+      pool.query(`SELECT COUNT(DISTINCT ph.id)::int as active_pools FROM pool_hash ph JOIN pool_update pu ON pu.hash_id = ph.id LEFT JOIN pool_retire pr ON pr.hash_id = ph.id AND pr.retiring_epoch <= (SELECT MAX(no) FROM epoch) WHERE pr.id IS NULL`),
+      pool.query(`SELECT COUNT(*)::int as total_proposals FROM gov_action_proposal`),
+    ]);
+    return {
+      block_no: tipR.rows[0]?.block_no,
+      epoch_no: tipR.rows[0]?.epoch_no,
+      epoch_tx_count: epochR.rows[0]?.tx_count,
+      epoch_blk_count: epochR.rows[0]?.blk_count,
+      epoch_fees: epochR.rows[0]?.fees,
+      total_stake: stakeR.rows[0]?.total_stake || "0",
+      stakers: stakeR.rows[0]?.stakers || 0,
+      active_pools: poolR.rows[0]?.active_pools || 0,
+      total_proposals: govR.rows[0]?.total_proposals || 0,
+    };
+  });
+  return c.json(data);
+});
+
+// ─── Asset detail ──────────────────────────────────
+app.get("/asset/:fingerprint", async (c) => {
+  const fp = c.req.param("fingerprint");
+  const data = await cached(`asset:${fp}`, 120, async () => {
+    const r = await pool.query(`
+      SELECT encode(ma.policy,'hex') as policy_id,
+             encode(ma.name,'hex') as asset_name,
+             ma.fingerprint
+      FROM multi_asset ma WHERE ma.fingerprint = $1
+    `, [fp]);
+    if (!r.rows[0]) return null;
+    const asset = r.rows[0];
+
+    const mintR = await pool.query(`
+      SELECT mtm.quantity::text, encode(tx.hash,'hex') as tx_hash, b.time
+      FROM ma_tx_mint mtm
+      JOIN tx ON mtm.tx_id = tx.id
+      JOIN block b ON tx.block_id = b.id
+      WHERE mtm.ident = (SELECT id FROM multi_asset WHERE fingerprint = $1)
+      ORDER BY mtm.id DESC LIMIT 20
+    `, [fp]);
+
+    const supplyR = await pool.query(`
+      SELECT COALESCE(SUM(quantity),0)::text as total_supply,
+             COUNT(*)::int as mint_count
+      FROM ma_tx_mint WHERE ident = (SELECT id FROM multi_asset WHERE fingerprint = $1)
+    `, [fp]);
+
+    const holdersR = await pool.query(`
+      SELECT COUNT(DISTINCT txo.address)::int as holder_count
+      FROM ma_tx_out mto
+      JOIN tx_out txo ON mto.tx_out_id = txo.id
+      WHERE mto.ident = (SELECT id FROM multi_asset WHERE fingerprint = $1)
+        AND txo.consumed_by_tx_id IS NULL
+    `, [fp]);
+
+    let name_ascii = null;
+    try {
+      const buf = Buffer.from(asset.asset_name, 'hex');
+      const str = buf.toString('utf8');
+      if (/^[\x20-\x7E]+$/.test(str)) name_ascii = str;
+    } catch {}
+
+    return {
+      ...asset,
+      name_ascii,
+      total_supply: supplyR.rows[0]?.total_supply || "0",
+      mint_count: supplyR.rows[0]?.mint_count || 0,
+      holder_count: holdersR.rows[0]?.holder_count || 0,
+      mint_history: mintR.rows,
+    };
+  });
+  if (!data) return c.json({ error: "Asset not found" }, 404);
+  return c.json(data);
+});
+
+// ─── Address tokens ────────────────────────────────
+app.get("/address/:addr/tokens", async (c) => {
+  const addr = c.req.param("addr");
+  const data = await cached(`addr:tokens:${addr}`, 30, async () => {
+    const r = await pool.query(`
+      SELECT encode(ma.policy,'hex') as policy_id,
+             encode(ma.name,'hex') as asset_name,
+             ma.fingerprint,
+             SUM(mto.quantity)::text as quantity
+      FROM ma_tx_out mto
+      JOIN tx_out txo ON mto.tx_out_id = txo.id
+      JOIN multi_asset ma ON mto.ident = ma.id
+      WHERE txo.address = $1 AND txo.consumed_by_tx_id IS NULL
+      GROUP BY ma.id, ma.policy, ma.name, ma.fingerprint
+      ORDER BY SUM(mto.quantity) DESC
+      LIMIT 100
+    `, [addr]);
+    return r.rows.map(row => {
+      let name_ascii = null;
+      try {
+        const buf = Buffer.from(row.asset_name, 'hex');
+        const str = buf.toString('utf8');
+        if (/^[\x20-\x7E]+$/.test(str)) name_ascii = str;
+      } catch {}
+      return { ...row, name_ascii };
+    });
+  });
+  return c.json(data);
+});
+
+// ─── DRep detail ───────────────────────────────────
+app.get("/drep/:hash", async (c) => {
+  const hash = c.req.param("hash");
+  const data = await cached(`drep:${hash}`, 120, async () => {
+    const r = await pool.query(`
+      SELECT encode(dh.raw,'hex') as drep_hash,
+             dh.has_script,
+             dr.deposit::text,
+             COALESCE(dd.amount, 0)::text as voting_power,
+             va.url as anchor_url
+      FROM drep_hash dh
+      JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+        AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+      LEFT JOIN drep_distr dd ON dd.hash_id = dh.id
+        AND dd.epoch_no = (SELECT MAX(epoch_no) FROM drep_distr WHERE hash_id = dh.id)
+      LEFT JOIN voting_anchor va ON dr.voting_anchor_id = va.id
+      WHERE encode(dh.raw,'hex') = $1
+    `, [hash]);
+    if (!r.rows[0]) return null;
+
+    // Get voting history
+    const votes = await pool.query(`
+      SELECT vp.vote::text,
+             gap.type::text as action_type,
+             encode(gtx.hash,'hex') as action_tx_hash,
+             gap.index as action_index,
+             ocvgad.title as action_title,
+             b.time as vote_time
+      FROM voting_procedure vp
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+      JOIN tx vtx ON vp.tx_id = vtx.id
+      JOIN block b ON vtx.block_id = b.id
+      JOIN drep_hash dh ON vp.drep_voter = dh.id
+      LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+      LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
+      WHERE encode(dh.raw,'hex') = $1
+      ORDER BY vp.id DESC
+      LIMIT 50
+    `, [hash]);
+
+    // Get delegation count
+    const delR = await pool.query(`
+      SELECT COUNT(DISTINCT dv.addr_id)::int as delegator_count
+      FROM delegation_vote dv
+      JOIN drep_hash dh ON dv.drep_hash_id = dh.id
+      WHERE encode(dh.raw,'hex') = $1
+        AND dv.id = (SELECT MAX(id) FROM delegation_vote dv2 WHERE dv2.addr_id = dv.addr_id)
+    `, [hash]);
+
+    return {
+      ...r.rows[0],
+      delegator_count: delR.rows[0]?.delegator_count || 0,
+      votes: votes.rows,
+    };
+  });
+  if (!data) return c.json({ error: "DRep not found" }, 404);
+  return c.json(data);
+});
+
+// ─── Governance action detail ──────────────────────
+app.get("/governance/action/:hash/:index", async (c) => {
+  const hash = c.req.param("hash");
+  const index = parseInt(c.req.param("index"));
+  const data = await cached(`gov:action:${hash}:${index}`, 60, async () => {
+    const r = await pool.query(`
+      SELECT encode(tx.hash,'hex') as tx_hash,
+             gap.index as cert_index,
+             gap.type::text,
+             b.epoch_no as epoch,
+             gap.description,
+             gap.expiration,
+             gap.ratified_epoch,
+             gap.enacted_epoch,
+             gap.dropped_epoch,
+             gap.expired_epoch,
+             ocvgad.title, ocvgad.abstract, ocvgad.motivation, ocvgad.rationale
+      FROM gov_action_proposal gap
+      JOIN tx ON gap.tx_id = tx.id
+      JOIN block b ON tx.block_id = b.id
+      LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+      LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
+      WHERE tx.hash = decode($1,'hex') AND gap.index = $2
+    `, [hash, index]);
+    if (!r.rows[0]) return null;
+
+    // Get votes breakdown
+    const votes = await pool.query(`
+      SELECT vp.voter_role::text,
+             vp.vote::text,
+             CASE
+               WHEN vp.drep_voter IS NOT NULL THEN encode(dh.raw,'hex')
+               WHEN vp.pool_voter IS NOT NULL THEN ph.view
+               ELSE 'committee'
+             END as voter_id,
+             CASE
+               WHEN vp.drep_voter IS NOT NULL THEN 'drep'
+               WHEN vp.pool_voter IS NOT NULL THEN 'pool'
+               ELSE 'committee'
+             END as voter_type
+      FROM voting_procedure vp
+      LEFT JOIN drep_hash dh ON vp.drep_voter = dh.id
+      LEFT JOIN pool_hash ph ON vp.pool_voter = ph.id
+      WHERE vp.gov_action_proposal_id = (
+        SELECT gap2.id FROM gov_action_proposal gap2
+        JOIN tx tx2 ON gap2.tx_id = tx2.id
+        WHERE tx2.hash = decode($1,'hex') AND gap2.index = $2
+      )
+      ORDER BY vp.id
+    `, [hash, index]);
+
+    return { ...r.rows[0], votes: votes.rows };
+  });
+  if (!data) return c.json({ error: "Action not found" }, 404);
+  return c.json(data);
+});
+
 // ─── Search ────────────────────────────────────────
 app.get("/search", async (c) => {
   const q = (c.req.query("q") || "").trim();
