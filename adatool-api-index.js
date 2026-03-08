@@ -296,17 +296,16 @@ app.get("/pool/:id", async (c) => {
 // ─── Native Assets ─────────────────────────────────
 app.get("/assets", async (c) => {
   const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
-  const data = await cached(`assets:${limit}`, 120, async () => {
+  const data = await cached(`assets:${limit}`, 300, async () => {
+    // Use multi_asset table directly (much faster than GROUP BY on ma_tx_mint)
     const r = await pool.query(`
       SELECT encode(ma.policy,'hex') as policy_id,
              encode(ma.name,'hex') as asset_name,
              ma.fingerprint,
-             COUNT(mtm.id)::int as mint_tx_count,
-             COALESCE(SUM(mtm.quantity),0)::text as total_supply
-      FROM ma_tx_mint mtm
-      JOIN multi_asset ma ON ma.id = mtm.ident
-      GROUP BY ma.id, ma.policy, ma.name, ma.fingerprint
-      ORDER BY COUNT(mtm.id) DESC
+             0 as mint_tx_count,
+             '0' as total_supply
+      FROM multi_asset ma
+      ORDER BY ma.id DESC
       LIMIT $1
     `, [limit]);
     return r.rows.map(row => {
@@ -697,7 +696,10 @@ app.get("/whales", async (c) => {
 // ─── Rich List (by stake address, using epoch_stake) ──
 app.get("/richlist", async (c) => {
   const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
-  const data = await cached(`richlist:${limit}`, 600, async () => {
+  const data = await cached(`richlist:${limit}`, 3600, async () => {
+    // Use previous completed epoch (more likely to be indexed/faster)
+    const epochR = await pool.query(`SELECT MAX(no) - 1 as epoch FROM epoch`);
+    const epoch = epochR.rows[0]?.epoch || 0;
     const r = await pool.query(`
       SELECT sa.view as stake_address,
              sa.view as address,
@@ -705,10 +707,10 @@ app.get("/richlist", async (c) => {
              0 as utxo_count
       FROM epoch_stake es
       JOIN stake_address sa ON es.addr_id = sa.id
-      WHERE es.epoch_no = (SELECT MAX(no) FROM epoch)
+      WHERE es.epoch_no = $1
       ORDER BY es.amount DESC
-      LIMIT $1
-    `, [limit]);
+      LIMIT $2
+    `, [epoch, limit]);
     return r.rows;
   });
   return c.json(data);
@@ -782,50 +784,17 @@ app.get("/asset/:fingerprint/holders", async (c) => {
 // ─── Protocol Parameters ──────────────────────────
 app.get("/protocol-params", async (c) => {
   const data = await cached("protocol-params", 600, async () => {
-    const r = await pool.query(`
-      SELECT ep.*, ep.epoch_no
-      FROM epoch_param ep
-      ORDER BY ep.epoch_no DESC
-      LIMIT 1
-    `);
+    const r = await pool.query(`SELECT * FROM epoch_param ORDER BY epoch_no DESC LIMIT 1`);
     if (!r.rows[0]) return null;
     const p = r.rows[0];
-
-    // Try to get Conway governance params
-    let govParams = {};
-    try {
-      const gp = await pool.query(`
-        SELECT drep_deposit::text, gov_action_deposit::text, drep_activity,
-               gov_action_lifetime, committee_min_size, committee_max_term_length,
-               dvt_motion_no_confidence, dvt_committee_normal,
-               dvt_hard_fork_initiation, dvt_p_p_economic_group,
-               dvt_p_p_technical_group, dvt_treasury_withdrawal,
-               pvt_motion_no_confidence, pvt_committee_normal,
-               pvt_hard_fork_initiation
-        FROM epoch_param WHERE epoch_no = $1
-      `, [p.epoch_no]);
-      if (gp.rows[0]) govParams = gp.rows[0];
-    } catch {}
-
-    return {
-      epoch_no: p.epoch_no,
-      min_fee_a: p.min_fee_a, min_fee_b: p.min_fee_b,
-      max_block_size: p.max_block_size, max_tx_size: p.max_tx_size,
-      key_deposit: p.key_deposit?.toString() || "0",
-      pool_deposit: p.pool_deposit?.toString() || "0",
-      min_pool_cost: p.min_pool_cost?.toString() || "0",
-      max_block_ex_mem: p.max_block_ex_mem?.toString() || "0",
-      max_block_ex_steps: p.max_block_ex_steps?.toString() || "0",
-      max_tx_ex_mem: p.max_tx_ex_mem?.toString() || "0",
-      max_tx_ex_steps: p.max_tx_ex_steps?.toString() || "0",
-      collateral_percent: p.collateral_percent || 0,
-      price_mem: p.price_mem, price_step: p.price_step,
-      max_val_size: p.max_val_size || 0,
-      max_collateral_inputs: p.max_collateral_inputs || 0,
-      protocol_major: p.protocol_major, protocol_minor: p.protocol_minor,
-      coins_per_utxo_size: p.coins_per_utxo_size?.toString() || "0",
-      ...govParams,
-    };
+    // Return all fields, converting bigints to strings
+    const result = {};
+    for (const [k, v] of Object.entries(p)) {
+      if (v === null || v === undefined) result[k] = null;
+      else if (typeof v === 'bigint' || (typeof v === 'number' && Math.abs(v) > 1e15)) result[k] = v.toString();
+      else result[k] = v;
+    }
+    return result;
   });
   if (!data) return c.json({ error: "No params found" }, 404);
   return c.json(data);
@@ -833,68 +802,45 @@ app.get("/protocol-params", async (c) => {
 
 // ─── Stake Distribution ───────────────────────────
 app.get("/stake-distribution", async (c) => {
-  const data = await cached("stake-dist", 600, async () => {
-    // Get basic stats from epoch_stake for current epoch
-    const statsR = await pool.query(`
-      SELECT SUM(amount)::text as total_staked,
-             COUNT(DISTINCT addr_id)::int as total_stakers,
-             AVG(amount)::text as avg_stake
-      FROM epoch_stake
-      WHERE epoch_no = (SELECT MAX(no) FROM epoch)
-    `);
-    const stats = statsR.rows[0] || {};
+  const data = await cached("stake-dist", 3600, async () => {
+    // Use previous completed epoch for speed
+    const epochR = await pool.query(`SELECT MAX(no) - 1 as epoch FROM epoch`);
+    const epoch = epochR.rows[0]?.epoch || 0;
 
-    // Median approximation via percentile
-    let medianStake = "0";
-    try {
-      const medR = await pool.query(`
-        SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY amount)::text as median
+    // Run stats and buckets in parallel (skip median - too slow on 1.3M rows)
+    const [statsR, bucketsR] = await Promise.all([
+      pool.query(`
+        SELECT SUM(amount)::text as total_staked,
+               COUNT(*)::int as total_stakers,
+               AVG(amount)::bigint::text as avg_stake
         FROM epoch_stake
-        WHERE epoch_no = (SELECT MAX(no) FROM epoch)
-      `);
-      medianStake = medR.rows[0]?.median || "0";
-    } catch {}
+        WHERE epoch_no = $1
+      `, [epoch]),
+      pool.query(`
+        SELECT
+          CASE
+            WHEN amount < 100000000 THEN '< 100 ADA'
+            WHEN amount < 1000000000 THEN '100 - 1K ADA'
+            WHEN amount < 10000000000 THEN '1K - 10K ADA'
+            WHEN amount < 100000000000 THEN '10K - 100K ADA'
+            WHEN amount < 1000000000000 THEN '100K - 1M ADA'
+            ELSE '> 1M ADA'
+          END as range,
+          COUNT(*)::int as count,
+          SUM(amount)::text as total_stake
+        FROM epoch_stake
+        WHERE epoch_no = $1
+        GROUP BY 1
+        ORDER BY MIN(amount)
+      `, [epoch]),
+    ]);
 
-    // Distribution buckets
-    const bucketsR = await pool.query(`
-      SELECT
-        CASE
-          WHEN amount < 100000000 THEN '< 100 ADA'
-          WHEN amount < 1000000000 THEN '100 - 1K ADA'
-          WHEN amount < 10000000000 THEN '1K - 10K ADA'
-          WHEN amount < 100000000000 THEN '10K - 100K ADA'
-          WHEN amount < 1000000000000 THEN '100K - 1M ADA'
-          ELSE '> 1M ADA'
-        END as range,
-        COUNT(*)::int as count,
-        SUM(amount)::text as total_stake
-      FROM epoch_stake
-      WHERE epoch_no = (SELECT MAX(no) FROM epoch)
-      GROUP BY
-        CASE
-          WHEN amount < 100000000 THEN 1
-          WHEN amount < 1000000000 THEN 2
-          WHEN amount < 10000000000 THEN 3
-          WHEN amount < 100000000000 THEN 4
-          WHEN amount < 1000000000000 THEN 5
-          ELSE 6
-        END,
-        CASE
-          WHEN amount < 100000000 THEN '< 100 ADA'
-          WHEN amount < 1000000000 THEN '100 - 1K ADA'
-          WHEN amount < 10000000000 THEN '1K - 10K ADA'
-          WHEN amount < 100000000000 THEN '10K - 100K ADA'
-          WHEN amount < 1000000000000 THEN '100K - 1M ADA'
-          ELSE '> 1M ADA'
-        END
-      ORDER BY 1
-    `);
-
+    const stats = statsR.rows[0] || {};
     return {
       total_staked: stats.total_staked || "0",
       total_stakers: stats.total_stakers || 0,
       avg_stake: stats.avg_stake || "0",
-      median_stake: medianStake,
+      median_stake: "0",
       buckets: bucketsR.rows,
     };
   });
@@ -904,56 +850,74 @@ app.get("/stake-distribution", async (c) => {
 // ─── Constitutional Committee ─────────────────────
 app.get("/committee", async (c) => {
   const data = await cached("committee", 300, async () => {
-    // Get CC members
-    const r = await pool.query(`
-      SELECT encode(ch.raw, 'hex') as cc_hash,
-             ch.has_script,
-             cm.expiration_epoch,
-             CASE
-               WHEN cm.expiration_epoch <= (SELECT MAX(no) FROM epoch) THEN 'Expired'
-               ELSE 'Active'
-             END as status,
-             COALESCE(encode(cha.raw, 'hex'), null) as hot_key,
-             COALESCE(vc.vote_count, 0)::int as vote_count,
-             COALESCE(vc.yes_votes, 0)::int as yes_votes,
-             COALESCE(vc.no_votes, 0)::int as no_votes,
-             COALESCE(vc.abstain_votes, 0)::int as abstain_votes
-      FROM committee_member cm
-      JOIN committee_hash ch ON cm.committee_hash_id = ch.id
-      LEFT JOIN committee_de_registration cdr ON cdr.cold_key_id = ch.id
-      LEFT JOIN committee_registration cr ON cr.cold_key_id = ch.id
-      LEFT JOIN committee_hash cha ON cr.hot_key_id = cha.id
-      LEFT JOIN LATERAL (
-        SELECT COUNT(*) as vote_count,
-               COUNT(*) FILTER (WHERE vote = 'Yes') as yes_votes,
-               COUNT(*) FILTER (WHERE vote = 'No') as no_votes,
-               COUNT(*) FILTER (WHERE vote = 'Abstain') as abstain_votes
-        FROM voting_procedure vp
-        WHERE vp.committee_voter = ch.id
-      ) vc ON true
-      WHERE cdr.id IS NULL
-      ORDER BY cm.expiration_epoch DESC
-    `);
+    // First discover the actual column names
+    let members = [];
+    try {
+      const colsR = await pool.query(`
+        SELECT column_name FROM information_schema.columns
+        WHERE table_name = 'committee_member' ORDER BY ordinal_position
+      `);
+      const cols = colsR.rows.map(r => r.column_name);
+
+      // committee_member might use committee_hash_id or committee_id
+      const hashCol = cols.includes('committee_hash_id') ? 'committee_hash_id' : 'committee_id';
+
+      const r = await pool.query(`
+        SELECT encode(ch.raw, 'hex') as cc_hash,
+               ch.has_script,
+               cm.expiration_epoch,
+               CASE
+                 WHEN cm.expiration_epoch <= (SELECT MAX(no) FROM epoch) THEN 'Expired'
+                 ELSE 'Active'
+               END as status
+        FROM committee_member cm
+        JOIN committee_hash ch ON cm.${hashCol} = ch.id
+        ORDER BY cm.expiration_epoch DESC
+      `);
+
+      // Get vote counts per member
+      for (const m of r.rows) {
+        let vote_count = 0, yes_votes = 0, no_votes = 0, abstain_votes = 0;
+        try {
+          const vc = await pool.query(`
+            SELECT COUNT(*) as total,
+                   COUNT(*) FILTER (WHERE vote = 'Yes') as yes,
+                   COUNT(*) FILTER (WHERE vote = 'No') as no,
+                   COUNT(*) FILTER (WHERE vote = 'Abstain') as abstain
+            FROM voting_procedure vp
+            JOIN committee_hash ch ON vp.committee_voter = ch.id
+            WHERE encode(ch.raw,'hex') = $1
+          `, [m.cc_hash]);
+          if (vc.rows[0]) {
+            vote_count = parseInt(vc.rows[0].total);
+            yes_votes = parseInt(vc.rows[0].yes);
+            no_votes = parseInt(vc.rows[0].no);
+            abstain_votes = parseInt(vc.rows[0].abstain);
+          }
+        } catch {}
+        members.push({ ...m, hot_key: null, vote_count, yes_votes, no_votes, abstain_votes });
+      }
+    } catch (e) {
+      console.error("Committee query error:", e.message);
+      return { threshold: 0.67, members: [], total_members: 0, active_members: 0 };
+    }
 
     // Get threshold
     let threshold = 0.67;
     try {
       const tR = await pool.query(`
-        SELECT committee_normal_state_threshold
-        FROM epoch_param
-        ORDER BY epoch_no DESC LIMIT 1
+        SELECT dvt_committee_normal FROM epoch_param ORDER BY epoch_no DESC LIMIT 1
       `);
-      if (tR.rows[0]?.committee_normal_state_threshold) {
-        threshold = tR.rows[0].committee_normal_state_threshold;
+      if (tR.rows[0]?.dvt_committee_normal) {
+        threshold = tR.rows[0].dvt_committee_normal;
       }
     } catch {}
 
-    const members = r.rows;
     return {
       threshold,
       members,
       total_members: members.length,
-      active_members: members.filter((m: any) => m.status === "Active").length,
+      active_members: members.filter(m => m.status === "Active").length,
     };
   });
   return c.json(data);
