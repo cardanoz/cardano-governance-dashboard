@@ -352,6 +352,89 @@ app.get("/governance/actions", async (c) => {
   return c.json(data);
 });
 
+// ─── DReps ─────────────────────────────────────────
+app.get("/dreps", async (c) => {
+  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const data = await cached(`dreps:${limit}`, 120, async () => {
+    const r = await pool.query(`
+      SELECT encode(dh.raw,'hex') as drep_hash,
+             dh.has_script,
+             dr.deposit::text,
+             COALESCE(dd.amount, 0)::text as voting_power,
+             COALESCE(vc.vote_count, 0)::int as vote_count,
+             va.url as anchor_url
+      FROM drep_hash dh
+      JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+        AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+      LEFT JOIN drep_distr dd ON dd.hash_id = dh.id
+        AND dd.epoch_no = (SELECT MAX(epoch_no) FROM drep_distr WHERE hash_id = dh.id)
+      LEFT JOIN LATERAL (
+        SELECT COUNT(*) as vote_count FROM voting_procedure vp WHERE vp.drep_voter = dh.id
+      ) vc ON true
+      LEFT JOIN voting_anchor va ON dr.voting_anchor_id = va.id
+      WHERE dr.deposit > 0
+      ORDER BY COALESCE(dd.amount, 0) DESC
+      LIMIT $1
+    `, [limit]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── Epochs list ───────────────────────────────────
+app.get("/epochs", async (c) => {
+  const limit = Math.min(parseInt(c.req.query("limit") || "30"), 100);
+  const data = await cached(`epochs:${limit}`, 60, async () => {
+    const r = await pool.query(`
+      SELECT no as epoch_no, start_time, end_time,
+             tx_count, blk_count, out_sum::text, fees::text
+      FROM epoch
+      ORDER BY no DESC
+      LIMIT $1
+    `, [limit]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── Block by number ───────────────────────────────
+app.get("/block/by-number/:no", async (c) => {
+  const no = parseInt(c.req.param("no"));
+  const data = await cached(`block:num:${no}`, 600, async () => {
+    const r = await pool.query(`
+      SELECT b.block_no, encode(b.hash,'hex') as hash, b.epoch_no, b.slot_no,
+             b.time, b.tx_count, b.size,
+             ph.view as pool_name,
+             ocpd.ticker_name as pool_ticker
+      FROM block b
+      LEFT JOIN slot_leader sl ON b.slot_leader_id = sl.id
+      LEFT JOIN pool_hash ph ON sl.pool_hash_id = ph.id
+      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      WHERE b.block_no = $1
+    `, [no]);
+    return r.rows[0] || null;
+  });
+  if (!data) return c.json({ error: "Block not found" }, 404);
+  return c.json(data);
+});
+
+// ─── Block transactions ────────────────────────────
+app.get("/block/:hash/txs", async (c) => {
+  const hash = c.req.param("hash");
+  const data = await cached(`block:txs:${hash}`, 600, async () => {
+    const r = await pool.query(`
+      SELECT encode(tx.hash,'hex') as hash, tx.fee::text, tx.out_sum::text, tx.size
+      FROM tx
+      JOIN block b ON tx.block_id = b.id
+      WHERE b.hash = decode($1, 'hex')
+      ORDER BY tx.block_index
+    `, [hash]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
 // ─── Search ────────────────────────────────────────
 app.get("/search", async (c) => {
   const q = (c.req.query("q") || "").trim();
