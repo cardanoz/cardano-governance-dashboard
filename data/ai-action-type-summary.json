@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-07T23:37:28.388Z",
+  "generatedAt": "2026-03-08T03:17:19.971Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 48,
-      "summary_en": "Treasury Withdrawal proposals for Cardano show strong support (77% Yes) primarily driven by funding critical infrastructure projects like node diversity (Amaru) that enhance network resilience. Opposition focuses on fiscal responsibility concerns, budget justification, and redundancy with existing initiatives, while some abstentions cite constitutional compliance issues or incomplete delivery expectations.",
-      "summary_ja": "CardanoのTreasury Withdrawal提案は、ネットワークの耐障害性を高めるノード多様性（Amaru）などの重要インフラプロジェクト資金調達により強い支持（77%の賛成）を示しています。反対意見は財政責任、予算正当化、既存イニシアティブとの重複に焦点を当てており、一部の棄権は憲法準拠性の問題または不完全な納品期待を理由としています。",
+      "summary_en": "Treasury Withdrawals for Cardano show strong support (3318 Yes votes) for funding critical infrastructure projects, particularly node diversity initiatives like Amaru. However, concerns about fiscal responsibility, budget justification, and constitutional compliance drive opposition (1000 No votes), with some abstentions citing premature scope expansion or governance issues.",
+      "summary_ja": "Cardanoのトレジャリー引き出しは、Amaruなどのノード多様性イニシアティブを中心とした重要インフラプロジェクトへの資金提供に対して強い支持（投票賛成3318件）を示しています。一方、財政責任、予算正当性、憲法遵守に関する懸念により反対票（1000件）が投じられており、一部は時期尚早なスコープ拡大やガバナンス問題を理由に棄権しています。",
       "typicalReasonsYes_en": [
-        "Network resilience and decentralization through client/node diversity reduces single-point-of-failure risks",
-        "Strong team track record with proven delivery, fiscal responsibility (returning unused funds), and transparent budget breakdowns",
-        "Strategic importance of alternative node implementations in different languages (Rust, Go) to attract diverse developer communities",
-        "Well-presented proposals with concrete milestones, KPIs, and clear value proposition for long-term ecosystem health"
+        "Node diversity and client implementation diversity are critical for network resilience and security",
+        "Teams demonstrate strong track records with transparent financial management and delivering on commitments",
+        "Strategic infrastructure investments reduce single point of failure risks in protocol implementation",
+        "Well-documented proposals with clear budgets, milestones, and cost-benefit justification"
       ],
       "typicalReasonsYes_ja": [
-        "クライアント/ノード多様性による単一障害点リスク軽減とネットワーク耐障害性の向上",
-        "未使用資金の返金、透明性のある予算内訳など実績に基づいた信頼できるチームの提示",
-        "異なるプログラミング言語（Rust、Go）による代替ノード実装で多様な開発者コミュニティを惹きつけることの戦略的重要性",
-        "具体的なマイルストーン、KPI、エコシステムの長期的健全性のための明確な価値提案を含む提案資料"
+        "ノード多様性とクライアント実装の多様性はネットワークのレジリエンスとセキュリティに不可欠である",
+        "チームは透明性の高い財務管理と約束の実行で強い実績を示している",
+        "戦略的インフラ投資はプロトコル実装における単一障害点のリスクを軽減する",
+        "明確な予算、マイルストーン、費用対効果の正当性が記載された十分に文書化された提案"
       ],
       "typicalReasonsNo_en": [
-        "Fiscal responsibility concerns: budget assumptions ($0.40 ADA) don't reflect current market prices, and large withdrawals during bearish conditions lack justification",
-        "Redundancy and inefficiency: funding duplicate implementations when similar work already funded (multiple Rust nodes, Go nodes already funded)",
-        "Lack of specificity and verifiable standards: insufficient milestone acceptance criteria, KPIs, and delivery guarantees relative to budget size",
-        "Constitutional and governance concerns: proposals violating Cardano Constitution requirements or lacking transparency on governance structures and accountability measures"
+        "Fiscal responsibility concerns, especially regarding unrealistic ADA price assumptions or inadequate budget justification",
+        "Lack of specificity in deliverables, acceptance criteria, and measurable KPIs for large budget requests",
+        "Constitutional or governance compliance violations affecting legitimacy of the withdrawal",
+        "Duplication of existing efforts or lack of clear market need relative to funding request"
       ],
       "typicalReasonsNo_ja": [
-        "財政責任：予算仮定（$0.40 ADA）が現在の市場価格を反映せず、弱気相場での大型引き出しに正当性がない",
-        "重複と非効率性：既に資金提供されている類似作業（複数のRustノード、既に資金提供されたGoノード）との重複実装への資金提供",
-        "具体性と検証可能な基準の不足：予算規模に対して、マイルストーン受け入れ基準、KPI、納品保証が不十分",
-        "憲法およびガバナンス上の懸念：Cardano憲法要件違反、ガバナンス構造と説明責任措置に関する透明性の欠如"
+        "特に現実的でないADA価格の想定や不十分な予算正当性に関する財政責任の懸念",
+        "大規模予算要求に対する成果物、受け入れ基準、測定可能なKPIの具体性の欠如",
+        "引き出しの正当性に影響する憲法またはガバナンス遵守違反",
+        "既存の取り組みの重複または資金要求に対する明確な市場ニーズの欠如"
       ]
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoActions on Cardano's Budget Process Framework and Net Change Limit (NCL) proposals receive support primarily for establishing fiscal guardrails and treasury transparency, though significant disagreement exists over the appropriate spending ceiling. Supporters value the framework for enabling ecosystem coordination and preventing treasury depletion, while critics argue the limits are either too high (risking treasury drain) or too restrictive (limiting ecosystem development), with some concerned about lack of accountability for prior spending.",
-      "summary_ja": "CardanoのBudget Process FrameworkおよびNet Change Limit (NCL)提案に関するInfoActionは、財政ガードレールの確立とトレジャリーの透明性確保を支持する声が主流である一方で、適切な支出上限をめぐって大きな意見の相違が存在します。支持派は枠組みがエコシステム間調整とトレジャリー枯渇防止を可能にすることを評価し、批評派は上限が高すぎてトレジャリーを消耗させるリスクがあるか、またはエコシステム発展を過度に制限していると主張し、過去の支出に対する説明責任の欠如を懸念する者もいます。",
+      "summary_en": "InfoAction proposals on Cardano governance, particularly treasury budget frameworks and Net Change Limits, receive majority support when they establish clear processes for treasury management and maintain fiscal discipline. However, opposition emerges when spending ceilings are perceived as either too high (risking treasury depletion) or when governance maturity and accountability mechanisms are deemed insufficient.",
+      "summary_ja": "CardanoガバナンスのInfoAction提案、特にトレジャリー予算枠組みとNet Change Limitは、トレジャリー管理のための明確なプロセスを確立し、財政規律を維持する場合に多くの支持を受けます。しかし、支出上限が高すぎる（トレジャリー枯渇のリスク）と見なされたり、ガバナンス成熟度と説明責任メカニズムが不十分と判断される場合に反対が生じます。",
       "typicalReasonsYes_en": [
-        "Establishes necessary fiscal discipline and transparency guardrails for treasury management while allowing ecosystem experimentation and improvement",
-        "Sets spending limits conservatively below prior-year inflows, representing responsible governance during low ADA price conditions",
-        "Prevents treasury depletion and enables continuity of critical infrastructure funding across 100-epoch period",
-        "Provides predictability and clear coordination framework across proposers, DReps, and community stakeholders"
+        "Establishes transparent framework and clear processes for treasury management and budget coordination",
+        "Maintains fiscal discipline by anchoring spending limits to prior year inflows and responding to market conditions",
+        "Enables ecosystem experimentation while protecting against social engineering and capture by organized actors",
+        "Provides predictability and reduces uncertainty for proposals, DReps, and development teams"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー管理に必要な財政規律と透明性のガードレールを確立しながらエコシステムの実験と改善を可能にする",
-        "ADA価格が低い状況での責任ある統治を示唆し、支出を前年度流入量以下に保守的に設定する",
-        "トレジャリー枯渇を防ぎ、100エポック期間にわたる重要インフラ資金の継続性を確保する",
-        "提案者、DRep、コミュニティ関係者全体の予測可能性と明確な調整枠組みを提供する"
+        "トレジャリー管理と予算調整のための透明なフレームワークと明確なプロセスを確立する",
+        "前年度の流入と市場条件に支出限度額を固定し、財政規律を維持する",
+        "エコシステムの実験を可能にしながら、社会工学と組織的行為者による支配から保護する",
+        "提案者、DRep、開発チームの予測可能性を提供し、不確実性を減らす"
       ],
       "typicalReasonsNo_en": [
-        "300M ADA limit is still excessive and fails to prioritize treasury growth; strict 200-250M ADA ceiling needed to enforce real fiscal discipline",
-        "Lack of transparent reporting and accountability for 2025 budget spending makes 2026 approval premature and unjustified",
-        "NCL may artificially constrain ecosystem development and reject high-quality proposals; individual proposals deserve merit-based evaluation without arbitrary caps",
-        "Governance maturity insufficient to justify large spending; mechanisms for measuring effectiveness and impact assessment remain underdeveloped"
+        "Spending ceiling perceived as excessive and not aligned with treasury depletion concerns or market volatility",
+        "Insufficient governance maturity and lack of transparent reporting/evaluation of previous budget cycle outcomes",
+        "Organized coordination may concentrate power toward established entities and reduce decentralized friction",
+        "Individual proposals should be evaluated on merit rather than fitting within a predetermined budget ceiling"
       ],
       "typicalReasonsNo_ja": [
-        "300M ADA上限は依然として過度であり、トレジャリー成長を優先できていない。200～250M ADAの厳格な上限で真の財政規律を強制する必要がある",
-        "2025年度予算支出の透明な報告と説明責任が欠けているため、2026年度承認は時期尚早であり正当化されない",
-        "NCLはエコシステム発展を人為的に制約し、高品質な提案を却下する可能性がある。個別提案は恣意的な上限なしにメリットベースで評価されるべきである",
-        "ガバナンス成熟度が大規模支出を正当化するのに不十分であり、有効性と影響度測定メカニズムが未発達のままである"
+        "支出上限がトレジャリー枯渇懸念や市場ボラティリティと整合していないと見なされる",
+        "ガバナンス成熟度が不十分で、前年度予算サイクル成果の透明な報告・評価がない",
+        "組織的調整は確立された実体への権力集中につながり、分散型の摩擦を減らす",
+        "個別提案は事前決定された予算上限に適合するのではなく、メリットに基づいて評価されるべき"
       ]
     },
     "ParameterChange": {
