@@ -9,7 +9,7 @@ const { cached } = cachePkg;
 const app = new Hono();
 
 app.use("/*", cors({
-  origin: ["https://adatool.net", "http://localhost:3000", "http://13.203.249.154:3000"],
+  origin: ["https://adatool.net", "http://localhost:3000", "http://13.203.249.154:3000", "http://13.203.249.154"],
   allowMethods: ["GET"],
 }));
 
@@ -438,24 +438,33 @@ app.get("/block/:hash/txs", async (c) => {
 // ─── Network Stats ─────────────────────────────────
 app.get("/stats", async (c) => {
   const data = await cached("stats", 60, async () => {
-    const [tipR, epochR, supplyR, stakeR, poolR, govR] = await Promise.all([
+    const [tipR, epochR, poolR, govR, txCountR] = await Promise.all([
       pool.query(`SELECT block_no, epoch_no, slot_no FROM block ORDER BY id DESC LIMIT 1`),
-      pool.query(`SELECT no, tx_count, blk_count, fees::text FROM epoch ORDER BY no DESC LIMIT 1`),
-      pool.query(`SELECT (SELECT COALESCE(SUM(value),0) FROM ada_pots WHERE epoch_no = (SELECT MAX(no) FROM epoch)) as treasury, (SELECT COALESCE(SUM(value),0) FROM ada_pots WHERE epoch_no = (SELECT MAX(no) FROM epoch)) as reserves`),
-      pool.query(`SELECT COALESCE(SUM(amount),0)::text as total_stake, COUNT(DISTINCT addr_id)::int as stakers FROM epoch_stake WHERE epoch_no = (SELECT MAX(no) FROM epoch)`),
+      pool.query(`SELECT no, tx_count, blk_count, fees::text, out_sum::text FROM epoch ORDER BY no DESC LIMIT 1`),
       pool.query(`SELECT COUNT(DISTINCT ph.id)::int as active_pools FROM pool_hash ph JOIN pool_update pu ON pu.hash_id = ph.id LEFT JOIN pool_retire pr ON pr.hash_id = ph.id AND pr.retiring_epoch <= (SELECT MAX(no) FROM epoch) WHERE pr.id IS NULL`),
       pool.query(`SELECT COUNT(*)::int as total_proposals FROM gov_action_proposal`),
+      pool.query(`SELECT reltuples::bigint as est_count FROM pg_class WHERE relname = 'tx'`),
     ]);
+
+    let adaR = { rows: [{ treasury: null, reserves: null, utxo: null }] };
+    try {
+      adaR = await pool.query(`SELECT treasury::text, reserves::text, utxo::text FROM ada_pots ORDER BY epoch_no DESC LIMIT 1`);
+    } catch (e) {
+      console.error("ada_pots query failed:", e.message);
+    }
+
     return {
       block_no: tipR.rows[0]?.block_no,
       epoch_no: tipR.rows[0]?.epoch_no,
       epoch_tx_count: epochR.rows[0]?.tx_count,
       epoch_blk_count: epochR.rows[0]?.blk_count,
       epoch_fees: epochR.rows[0]?.fees,
-      total_stake: stakeR.rows[0]?.total_stake || "0",
-      stakers: stakeR.rows[0]?.stakers || 0,
+      circulation: epochR.rows[0]?.out_sum || "0",
+      treasury: adaR.rows[0]?.treasury || "0",
+      reserves: adaR.rows[0]?.reserves || "0",
       active_pools: poolR.rows[0]?.active_pools || 0,
       total_proposals: govR.rows[0]?.total_proposals || 0,
+      total_tx_count: txCountR.rows[0]?.est_count || 0,
     };
   });
   return c.json(data);
