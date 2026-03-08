@@ -673,6 +673,110 @@ app.get("/governance/action/:hash/:index", async (c) => {
   return c.json(data);
 });
 
+// ─── Whale Tracker (large TXs) ────────────────────
+app.get("/whales", async (c) => {
+  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const threshold = c.req.query("min") || "1000000000000"; // default 1M ADA in lovelace
+  const data = await cached(`whales:${limit}:${threshold}`, 30, async () => {
+    const r = await pool.query(`
+      SELECT encode(tx.hash,'hex') as hash, b.block_no, b.time as block_time,
+             tx.out_sum::text, tx.fee::text,
+             (SELECT COUNT(*) FROM tx_in WHERE tx_in_id = tx.id)::int as input_count,
+             (SELECT COUNT(*) FROM tx_out WHERE tx_id = tx.id)::int as output_count
+      FROM tx
+      JOIN block b ON tx.block_id = b.id
+      WHERE tx.out_sum >= $1::numeric
+      ORDER BY tx.id DESC
+      LIMIT $2
+    `, [threshold, limit]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── Rich List (by stake address) ─────────────────
+app.get("/richlist", async (c) => {
+  const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
+  const data = await cached(`richlist:${limit}`, 600, async () => {
+    const r = await pool.query(`
+      SELECT sa.view as stake_address,
+             MIN(txo.address) as address,
+             SUM(txo.value)::text as balance,
+             COUNT(*)::int as utxo_count
+      FROM tx_out txo
+      JOIN stake_address sa ON txo.stake_address_id = sa.id
+      WHERE txo.consumed_by_tx_id IS NULL
+      GROUP BY sa.id, sa.view
+      ORDER BY SUM(txo.value) DESC
+      LIMIT $1
+    `, [limit]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── TX Volume (daily aggregates) ─────────────────
+app.get("/tx-volume", async (c) => {
+  const days = Math.min(parseInt(c.req.query("days") || "30"), 90);
+  const data = await cached(`txvol:${days}`, 300, async () => {
+    const r = await pool.query(`
+      SELECT b.time::date as date,
+             COUNT(DISTINCT tx.id)::int as tx_count,
+             COUNT(DISTINCT b.id)::int as block_count,
+             COALESCE(SUM(tx.fee), 0)::text as total_fees,
+             COALESCE(SUM(tx.out_sum), 0)::text as total_output
+      FROM block b
+      LEFT JOIN tx ON tx.block_id = b.id
+      WHERE b.time >= NOW() - ($1 || ' days')::interval
+        AND b.block_no IS NOT NULL
+      GROUP BY b.time::date
+      ORDER BY date ASC
+    `, [days]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── Pool Blocks ──────────────────────────────────
+app.get("/pool/:id/blocks", async (c) => {
+  const id = c.req.param("id");
+  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const data = await cached(`pool:blocks:${id}:${limit}`, 60, async () => {
+    const r = await pool.query(`
+      SELECT b.block_no, encode(b.hash,'hex') as hash, b.epoch_no, b.slot_no,
+             b.time, b.tx_count, b.size
+      FROM block b
+      JOIN slot_leader sl ON b.slot_leader_id = sl.id
+      JOIN pool_hash ph ON sl.pool_hash_id = ph.id
+      WHERE ph.view = $1 AND b.block_no IS NOT NULL
+      ORDER BY b.id DESC
+      LIMIT $2
+    `, [id, limit]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── Asset Holders ────────────────────────────────
+app.get("/asset/:fingerprint/holders", async (c) => {
+  const fp = c.req.param("fingerprint");
+  const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
+  const data = await cached(`asset:holders:${fp}:${limit}`, 300, async () => {
+    const r = await pool.query(`
+      SELECT txo.address, SUM(mto.quantity)::text as quantity
+      FROM ma_tx_out mto
+      JOIN tx_out txo ON mto.tx_out_id = txo.id
+      WHERE mto.ident = (SELECT id FROM multi_asset WHERE fingerprint = $1)
+        AND txo.consumed_by_tx_id IS NULL
+      GROUP BY txo.address
+      ORDER BY SUM(mto.quantity) DESC
+      LIMIT $2
+    `, [fp, limit]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
 // ─── Search ────────────────────────────────────────
 app.get("/search", async (c) => {
   const q = (c.req.query("q") || "").trim();
