@@ -694,20 +694,19 @@ app.get("/whales", async (c) => {
   return c.json(data);
 });
 
-// ─── Rich List (by stake address) ─────────────────
+// ─── Rich List (by stake address, using epoch_stake) ──
 app.get("/richlist", async (c) => {
   const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
   const data = await cached(`richlist:${limit}`, 600, async () => {
     const r = await pool.query(`
       SELECT sa.view as stake_address,
-             MIN(txo.address) as address,
-             SUM(txo.value)::text as balance,
-             COUNT(*)::int as utxo_count
-      FROM tx_out txo
-      JOIN stake_address sa ON txo.stake_address_id = sa.id
-      WHERE txo.consumed_by_tx_id IS NULL
-      GROUP BY sa.id, sa.view
-      ORDER BY SUM(txo.value) DESC
+             sa.view as address,
+             es.amount::text as balance,
+             0 as utxo_count
+      FROM epoch_stake es
+      JOIN stake_address sa ON es.addr_id = sa.id
+      WHERE es.epoch_no = (SELECT MAX(no) FROM epoch)
+      ORDER BY es.amount DESC
       LIMIT $1
     `, [limit]);
     return r.rows;
@@ -719,20 +718,23 @@ app.get("/richlist", async (c) => {
 app.get("/tx-volume", async (c) => {
   const days = Math.min(parseInt(c.req.query("days") || "30"), 90);
   const data = await cached(`txvol:${days}`, 300, async () => {
-    const r = await pool.query(`
-      SELECT b.time::date as date,
-             COUNT(DISTINCT tx.id)::int as tx_count,
-             COUNT(DISTINCT b.id)::int as block_count,
-             COALESCE(SUM(tx.fee), 0)::text as total_fees,
-             COALESCE(SUM(tx.out_sum), 0)::text as total_output
-      FROM block b
-      LEFT JOIN tx ON tx.block_id = b.id
-      WHERE b.time >= NOW() - ($1 || ' days')::interval
-        AND b.block_no IS NOT NULL
-      GROUP BY b.time::date
+    // Use two separate fast queries instead of one heavy join
+    const blocksR = await pool.query(`
+      SELECT time::date as date,
+             COUNT(*)::int as block_count,
+             SUM(tx_count)::int as tx_count,
+             SUM(fees)::text as total_fees
+      FROM block
+      WHERE time >= NOW() - ($1 || ' days')::interval
+        AND block_no IS NOT NULL
+      GROUP BY time::date
       ORDER BY date ASC
     `, [days]);
-    return r.rows;
+    // block table already has tx_count and fees per block
+    return blocksR.rows.map(r => ({
+      ...r,
+      total_output: "0",
+    }));
   });
   return c.json(data);
 });

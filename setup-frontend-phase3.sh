@@ -145,7 +145,7 @@ import { Card } from "@/components/ui/Card";
 import { lovelaceToAda, truncHash, timeAgo } from "@/lib/format";
 import Link from "next/link";
 
-export const revalidate = 30;
+export const dynamic = "force-dynamic";
 
 interface WhaleTx {
   hash: string; block_no: number; block_time: string;
@@ -215,7 +215,7 @@ import { Card } from "@/components/ui/Card";
 import { lovelaceToAda, truncHash, compactNumber } from "@/lib/format";
 import Link from "next/link";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 interface RichEntry {
   address: string; stake_address: string | null;
@@ -279,7 +279,7 @@ cat > "src/app/(explorer)/charts/page.tsx" << 'CHARTSEOF'
 import { Card, StatCard } from "@/components/ui/Card";
 import { compactNumber, lovelaceToAda } from "@/lib/format";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 interface DayVolume {
   date: string; tx_count: number; block_count: number;
