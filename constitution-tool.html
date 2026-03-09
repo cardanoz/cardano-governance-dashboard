@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cardano Constitution Amendment Tool</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230033AD'/%3E%3Cstop offset='100%25' stop-color='%23003FD6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Arial,sans-serif' font-weight='bold' font-size='36' fill='white'%3EC%3C/text%3E%3Ccircle cx='32' cy='8' r='2.5' fill='%2393c5fd'/%3E%3Ccircle cx='32' cy='56' r='2.5' fill='%2393c5fd'/%3E%3Ccircle cx='8' cy='32' r='2.5' fill='%2393c5fd'/%3E%3Ccircle cx='56' cy='32' r='2.5' fill='%2393c5fd'/%3E%3Ccircle cx='14' cy='14' r='2' fill='%2393c5fd' opacity='.7'/%3E%3Ccircle cx='50' cy='14' r='2' fill='%2393c5fd' opacity='.7'/%3E%3Ccircle cx='14' cy='50' r='2' fill='%2393c5fd' opacity='.7'/%3E%3Ccircle cx='50' cy='50' r='2' fill='%2393c5fd' opacity='.7'/%3E%3C/svg%3E"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>var module = {};</script>
+  <script src="https://cdn.jsdelivr.net/npm/diff-match-patch/index.js"></script>
+  <script>if(module.exports) window.diff_match_patch = module.exports;</script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <!-- bech32 conversion is handled by self-contained encoder below -->
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: {
+        cardano: { blue: '#0033AD', dark: '#0a0e1a', mid: '#111827', light: '#1f2937' }
+      }}}
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; background: #0a0e1a; color: #e5e7eb; }
+    * { scrollbar-width: thin; scrollbar-color: #374151 transparent; }
+    *::-webkit-scrollbar { width: 6px; }
+    *::-webkit-scrollbar-track { background: transparent; }
+    *::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+    .diff-add { background: rgba(34,197,94,0.15); color: #86efac; border-left: 3px solid #22c55e; padding: 2px 6px; }
+    .diff-del { background: rgba(239,68,68,0.15); color: #fca5a5; text-decoration: line-through; border-left: 3px solid #ef4444; padding: 2px 6px; }
+    .diff-eq { color: #9ca3af; padding: 2px 6px; }
+    .prose-c h1 { font-size:1.5rem; font-weight:700; color:#fff; margin:2rem 0 1rem; }
+    .prose-c h2 { font-size:1.25rem; font-weight:600; color:#93c5fd; margin:1.5rem 0 .75rem; border-bottom:1px solid #1e3a5f; padding-bottom:.5rem; }
+    .prose-c h3 { font-size:1.1rem; font-weight:600; color:#bfdbfe; margin:1rem 0 .5rem; }
+    .prose-c p { margin:.5rem 0; line-height:1.75; }
+    .prose-c ul,.prose-c ol { margin:.5rem 0 .5rem 1.5rem; }
+    .prose-c li { margin:.25rem 0; line-height:1.6; }
+    .prose-c blockquote { border-left:3px solid #0033AD; padding-left:1rem; margin:1rem 0; color:#9ca3af; }
+    .prose-c hr { border-color:#1e3a5f; margin:1.5rem 0; }
+    .prose-c strong { color:#e5e7eb; }
+    .fade-in { animation: fadeIn .3s ease-in; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .glow { box-shadow: 0 0 0 1px rgba(0,51,173,.3), 0 0 15px rgba(0,51,173,.1); }
+    .comment-highlight { background: rgba(59,130,246,.12); border-bottom: 2px solid rgba(59,130,246,.5); cursor: pointer; position: relative; }
+    .comment-highlight:hover { background: rgba(59,130,246,.25); }
+    .comment-highlight .comment-count { position:absolute; top:-8px; right:-4px; background:#3b82f6; color:#fff; font-size:10px; min-width:16px; height:16px; border-radius:8px; display:flex; align-items:center; justify-content:center; padding:0 4px; font-weight:600; }
+    .comment-dot { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:4px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const {useState,useEffect,useContext,createContext,useCallback,useReducer,useMemo,useRef} = React;
+
+    // ====== FIREBASE CONFIG ======
+    // ★ Fill in your Firebase project config here ★
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyBLmvGiU7WMjWuZBb2TeBOpMaOYoVQ0fJs",
+      authDomain: "cardano-constitution-too-fc6e3.firebaseapp.com",
+      databaseURL: "https://cardano-constitution-too-fc6e3-default-rtdb.firebaseio.com",
+      projectId: "cardano-constitution-too-fc6e3",
+      storageBucket: "cardano-constitution-too-fc6e3.firebasestorage.app",
+      messagingSenderId: "605836795672",
+      appId: "1:605836795672:web:34920edb047bfc71d8886d"
+    };
+
+    // Initialize Firebase
+    let firebaseApp = null;
+    let firebaseDB = null;
+    try {
+      if (FIREBASE_CONFIG.projectId !== 'your-project' && typeof firebase !== 'undefined') {
+        firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
+        firebaseDB = firebase.database();
+        console.log('[Firebase] Initialized successfully');
+      } else {
+        console.warn('[Firebase] Using localStorage fallback. Configure FIREBASE_CONFIG to enable shared data.');
+      }
+    } catch(e) {
+      console.error('[Firebase] Init failed:', e);
+    }
+
+    // ====== i18n ======
+    const I18N = {
+      en: {
+        appTitle: 'Cardano Constitution Amendment Tool',
+        appSub: 'Constitution Amendment Assistance',
+        connectWallet: 'Connect Wallet',
+        disconnect: 'Disconnect',
+        selectWallet: 'Select Wallet',
+        selectWalletDesc: 'Connect with a CIP-30 compatible wallet',
+        mockDev: 'Development test mode',
+        cipWallet: 'CIP-30 Browser Wallet',
+        initiatives: 'Amendment Initiatives',
+        initiativesDesc: 'Browse and comment on amendment proposals for the current Cardano Constitution v2.4. To lead an initiative, connect your wallet and create a new one.',
+        newInitiative: 'New Initiative',
+        loginRequired: 'Wallet connection required to create an initiative',
+        noInitiatives: 'No initiatives yet',
+        noInitiativesDesc: 'Be the first to propose a constitutional amendment',
+        rep: 'Representative',
+        comments: 'Comments',
+        created: 'Created',
+        requiresLogin: '🔒 Login required',
+        backHome: '← Back to Home',
+        createInitiative: 'Create New Amendment Initiative',
+        basicInfo: 'Basic Information',
+        initiativeName: 'Initiative Name *',
+        initiativeNamePh: 'e.g., Amendment A - Treasury Reform',
+        description: 'Description',
+        descriptionPh: 'Describe what this initiative aims to change...',
+        repName: 'Representative Name (optional)',
+        repNamePh: 'Display name (wallet address shown if empty)',
+        requireLoginToggle: 'Require wallet login to comment',
+        amendedText: 'Amended Constitution Text',
+        amendedTextDesc: 'Edit the sections you want to amend from the current constitution.',
+        mdEdit: 'Markdown Edit',
+        plainEdit: 'Plain Text Edit',
+        diffLive: 'Diff vs LIVE',
+        cancel: 'Cancel',
+        create: 'Create',
+        back: '← Back',
+        mdRendered: 'Markdown (Rendered)',
+        mdSource: 'Markdown (Source)',
+        plainText: 'Plain Text',
+        diffView: '🔍 Diff vs LIVE Constitution',
+        editAmendment: 'Edit Amendment',
+        selectTextHint: '💡 Select text to add a comment (amendment proposal). Your comment will be anchored to the selected passage.',
+        loginToComment: 'Wallet login required to comment on this initiative',
+        toc: '📑 Table of Contents',
+        newComment: '+ New Comment',
+        noComments: 'No comments yet',
+        commentFormTitle: 'Amendment Proposal Comment',
+        commentFormDesc: 'Your comment is anchored to the text you selected. Propose a replacement or deletion, and optionally explain why.',
+        selectedPassage: 'Selected Passage (anchored)',
+        proposedReplacement: 'Proposed Replacement',
+        proposedReplacementPh: 'Enter replacement text. Leave empty if proposing deletion of the selected passage.',
+        reason: 'Reason (optional)',
+        reasonPh: 'Why is this change needed?',
+        displayName: 'Display Name (optional)',
+        displayNamePh: 'Wallet address shown if empty',
+        diffPreview: 'Diff Preview:',
+        submit: 'Submit',
+        close: 'Close',
+        delete: 'Delete',
+        accept: 'Accept',
+        reject: 'Reject',
+        accepted: 'Accepted',
+        rejected: 'Rejected',
+        pending: 'Pending',
+        actionReason: 'Reason for this decision',
+        actionReasonPh: 'Explain why you are accepting/rejecting...',
+        confirmAction: 'Confirm',
+        history: 'Decision History',
+        noHistory: 'No decisions yet',
+        proposeDeletion: '(Proposes deletion of selected text)',
+        loadingConstitution: 'Loading constitution text...',
+        loadingFromGithub: 'Fetching v2.4 from GitHub',
+        fetchFailed: '⚠️ GitHub fetch failed. Using fallback text. Actual deployment requires GitHub access.',
+        removed: 'removed',
+        added: 'added',
+        unchanged: 'unchanged',
+        editModalTitle: 'Edit Amendment Text',
+        markdown: 'Markdown',
+        diff: 'Diff Check',
+        save: 'Save',
+        noToc: 'No table of contents available',
+        selectTextFirst: 'Please select text in the constitution first, then click this button.',
+        exportData: 'Export Data',
+        importData: 'Import Data',
+        exportSuccess: 'Data exported successfully',
+        importSuccess: 'Data imported successfully! Page will reload.',
+        importConfirm: 'This will merge imported data with existing data. Continue?',
+        dataManagement: 'Data Management',
+      },
+      ja: {
+        appTitle: 'Cardano 憲法改正補助ツール',
+        appSub: '憲法改正アシスタンス',
+        connectWallet: 'ウォレット接続',
+        disconnect: '切断',
+        selectWallet: 'ウォレットを選択',
+        selectWalletDesc: 'CIP-30対応ウォレットで接続してください',
+        mockDev: '開発用テストモード',
+        cipWallet: 'CIP-30 ブラウザウォレット',
+        initiatives: '憲法改正イニシアチブ',
+        initiativesDesc: '現行のCardano憲法v2.4に対する改正案を閲覧・コメントできます。改正案を主導したい方は、ウォレットログインの上「新規イニシアチブ作成」から登録してください。',
+        newInitiative: '新規イニシアチブ作成',
+        loginRequired: '改正イニシアチブを作成するにはウォレット接続が必要です',
+        noInitiatives: 'まだイニシアチブがありません',
+        noInitiativesDesc: '最初の憲法改正提案を作成してみましょう',
+        rep: '代表',
+        comments: 'コメント',
+        created: '作成',
+        requiresLogin: '🔒 要ログイン',
+        backHome: '← ホームに戻る',
+        createInitiative: '新規 憲法改正イニシアチブ作成',
+        basicInfo: '基本情報',
+        initiativeName: 'イニシアチブ名 *',
+        initiativeNamePh: '例: 憲法改正案A - トレジャリー改革',
+        description: '説明',
+        descriptionPh: 'このイニシアチブの概要を記述...',
+        repName: '代表者名（任意）',
+        repNamePh: '表示名（空欄の場合ウォレットアドレス表示）',
+        requireLoginToggle: 'コメントにウォレットログインを要求する',
+        amendedText: '改正案テキスト',
+        amendedTextDesc: '現行憲法をベースに、改正したい箇所を編集してください。',
+        mdEdit: 'Markdown編集',
+        plainEdit: 'プレーンテキスト編集',
+        diffLive: 'LIVE憲法との差分',
+        cancel: 'キャンセル',
+        create: '作成する',
+        back: '← 戻る',
+        mdRendered: 'Markdown (表示)',
+        mdSource: 'Markdown (ソース)',
+        plainText: 'プレーンテキスト',
+        diffView: '🔍 LIVE憲法との差分',
+        editAmendment: '改正案を編集',
+        selectTextHint: '💡 テキストを選択してコメント（修正提案）を追加できます。コメントは選択した箇所に紐づけられます。',
+        loginToComment: 'このイニシアチブへのコメントにはウォレットログインが必要です',
+        toc: '📑 目次',
+        newComment: '+ 新規コメント',
+        noComments: 'コメントはまだありません',
+        commentFormTitle: '修正提案コメント',
+        commentFormDesc: '選択したテキストに紐づくコメントです。修正提案テキストまたは削除提案と、必要に応じて理由を記入してください。',
+        selectedPassage: '選択された箇所（アンカー）',
+        proposedReplacement: '修正提案テキスト',
+        proposedReplacementPh: '置き換えるテキストを入力。選択箇所の削除を提案する場合は空欄。',
+        reason: '理由（任意）',
+        reasonPh: 'なぜこの変更が必要ですか？',
+        displayName: '表示名（任意）',
+        displayNamePh: '空欄の場合ウォレットアドレス表示',
+        diffPreview: '差分プレビュー:',
+        submit: '投稿する',
+        close: '閉じる',
+        delete: '削除',
+        accept: '反映',
+        reject: '拒否',
+        accepted: '反映済み',
+        rejected: '拒否済み',
+        pending: '保留中',
+        actionReason: '判断理由',
+        actionReasonPh: '反映・拒否の理由を説明...',
+        confirmAction: '確定',
+        history: '判断履歴',
+        noHistory: 'まだ判断履歴はありません',
+        proposeDeletion: '（選択テキストの削除を提案）',
+        loadingConstitution: '憲法テキストを読み込んでいます...',
+        loadingFromGithub: 'GitHubからv2.4を取得中',
+        fetchFailed: '⚠️ GitHubからの取得に失敗。フォールバックテキスト使用中。',
+        removed: '削除',
+        added: '追加',
+        unchanged: '変更なし',
+        editModalTitle: '改正案テキストを編集',
+        markdown: 'Markdown',
+        diff: '差分確認',
+        save: '保存する',
+        noToc: '目次を生成できません',
+        selectTextFirst: 'まず憲法テキストの中からテキストを選択してください。',
+        exportData: 'データをエクスポート',
+        importData: 'データをインポート',
+        exportSuccess: 'データをエクスポートしました',
+        importSuccess: 'データをインポートしました。ページを再読み込みします。',
+        importConfirm: 'インポートしたデータを既存データとマージします。続行しますか？',
+        dataManagement: 'データ管理',
+      }
+    };
+    const LangCtx = createContext();
+    const useLang = () => useContext(LangCtx);
+    const t = (lang, key) => (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key;
+
+    // ====== CONSTANTS ======
+    const GITHUB_MD = 'https://raw.githubusercontent.com/cardanoz/constitution/main/constitution-v24.md';
+    const GITHUB_TXT = 'https://raw.githubusercontent.com/cardanoz/constitution/main/constitution-24-2.txt';
+
+    // ====== STORAGE (Firebase + localStorage hybrid) ======
+    const LS = {
+      _g: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+      _s: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
+    };
+
+    const DB = {
+      // Wallet & lang are always local (per-browser)
+      wallet: { get:()=>LS._g('ccat_w'), set:v=>LS._s('ccat_w',v) },
+      lang:   { get:()=>LS._g('ccat_lang')||'en', set:v=>LS._s('ccat_lang',v) },
+
+      // Initiatives & comments: Firebase if available, localStorage fallback
+      initiatives: {
+        get: () => LS._g('ccat_i') || [],
+        set: (v) => {
+          LS._s('ccat_i', v);
+          if (firebaseDB) firebaseDB.ref('initiatives').set(v).catch(e => console.error('[Firebase] write initiatives:', e));
+        }
+      },
+      comments: {
+        get: () => LS._g('ccat_c') || [],
+        set: (v) => {
+          LS._s('ccat_c', v);
+          if (firebaseDB) firebaseDB.ref('comments').set(v).catch(e => console.error('[Firebase] write comments:', e));
+        }
+      },
+    };
+
+    // ====== CONTEXTS ======
+    const WalletCtx = createContext();
+    const DataCtx = createContext();
+
+    // ====== WALLET ======
+    // CIP-30 returns addresses as hex-encoded CBOR bytes.
+    // We convert to bech32 (addr1...) for display.
+
+    const hexToBytes = (hex) => {
+      const bytes = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < hex.length; i += 2) bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+      return bytes;
+    };
+
+    // Minimal bech32 encoder (self-contained fallback)
+    const BECH32_CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+    const bech32Polymod = (values) => {
+      const GEN = [0x3b6a57b2,0x26508e6d,0x1ea119fa,0x3d4233dd,0x2a1462b3];
+      let chk = 1;
+      for (const v of values) { const b = chk >> 25; chk = ((chk & 0x1ffffff) << 5) ^ v; for (let i=0;i<5;i++) if ((b>>i)&1) chk ^= GEN[i]; }
+      return chk;
+    };
+    const bech32HrpExpand = (hrp) => {
+      const ret = [];
+      for (let i=0;i<hrp.length;i++) ret.push(hrp.charCodeAt(i) >> 5);
+      ret.push(0);
+      for (let i=0;i<hrp.length;i++) ret.push(hrp.charCodeAt(i) & 31);
+      return ret;
+    };
+    const bech32CreateChecksum = (hrp, data) => {
+      const values = [...bech32HrpExpand(hrp), ...data, 0,0,0,0,0,0];
+      const polymod = bech32Polymod(values) ^ 1;
+      const ret = [];
+      for (let i=0;i<6;i++) ret.push((polymod >> (5*(5-i))) & 31);
+      return ret;
+    };
+    const convertBits = (data, fromBits, toBits, pad) => {
+      let acc=0, bits=0; const ret=[]; const maxv=(1<<toBits)-1;
+      for (const v of data) { acc=(acc<<fromBits)|v; bits+=fromBits; while(bits>=toBits){bits-=toBits;ret.push((acc>>bits)&maxv);}}
+      if(pad){if(bits>0)ret.push((acc<<(toBits-bits))&maxv);}
+      else if(bits>=fromBits||((acc<<(toBits-bits))&maxv)) return null;
+      return ret;
+    };
+    const bech32Encode = (hrp, data) => {
+      const combined = [...data, ...bech32CreateChecksum(hrp, data)];
+      return hrp + '1' + combined.map(d => BECH32_CHARSET[d]).join('');
+    };
+
+    const hexToBech32 = (hexAddr) => {
+      try {
+        if (!hexAddr || hexAddr.startsWith('addr')) return hexAddr; // already bech32
+        const bytes = hexToBytes(hexAddr);
+        // Header byte: bottom nibble = network id (1=mainnet, 0=testnet)
+        const network = bytes[0] & 0x0F;
+        const prefix = network === 1 ? 'addr' : 'addr_test';
+
+        // Self-contained bech32 encoder (no external dependency)
+        const words = convertBits(Array.from(bytes), 8, 5, true);
+        if (words) return bech32Encode(prefix, words);
+
+        console.warn('bech32 convertBits returned null for:', hexAddr.slice(0,20));
+        return hexAddr;
+      } catch (e) {
+        console.warn('bech32 conversion failed:', e, 'Using hex display.');
+        return hexAddr;
+      }
+    };
+
+    // Known CIP-30 wallet keys. Yoroi = 'yoroi', Eternl = 'eternl'
+    const KNOWN_WALLETS = [
+      'yoroi','eternl','nami','flint','lace','gerowallet',
+      'typhoncip30','nufi','begin','vespr'
+    ];
+
+    const WalletProvider = ({children}) => {
+      const [wallet, setWallet] = useState(()=>DB.wallet.get());
+      const [avail, setAvail] = useState([]);
+      const [debug, setDebug] = useState([]);
+      const [scanning, setScanning] = useState(false);
+
+      const log = useCallback((msg) => {
+        setDebug(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
+        console.log('[Wallet]', msg);
+      }, []);
+
+      const scanWallets = useCallback(() => {
+        const w = [];
+        const debugMsgs = [];
+        debugMsgs.push('Scanning window.cardano for CIP-30 wallets...');
+
+        if (typeof window !== 'undefined' && window.cardano) {
+          const keys = Object.keys(window.cardano);
+          debugMsgs.push('window.cardano found. Keys: ' + keys.join(', '));
+
+          // Detect known wallets
+          KNOWN_WALLETS.forEach(k => {
+            if (window.cardano[k]) {
+              const wObj = window.cardano[k];
+              const name = wObj.name || k;
+              const icon = wObj.icon || null;
+              const apiVer = wObj.apiVersion || '?';
+              const hasEnable = typeof wObj.enable === 'function';
+              w.push({ key: k, name, icon, apiVersion: apiVer });
+              debugMsgs.push(`✓ Found: ${name} (key: ${k}, CIP-30 API: v${apiVer}, enable: ${hasEnable})`);
+            }
+          });
+
+          // Also detect any unknown CIP-30 wallets
+          keys.forEach(k => {
+            if (!KNOWN_WALLETS.includes(k) && window.cardano[k]) {
+              try {
+                const wObj = window.cardano[k];
+                if (wObj && typeof wObj === 'object' && typeof wObj.enable === 'function') {
+                  w.push({ key: k, name: wObj.name || k, icon: wObj.icon || null, apiVersion: wObj.apiVersion || '?' });
+                  debugMsgs.push(`✓ Found (other): ${wObj.name || k} (key: ${k})`);
+                }
+              } catch(e) {
+                debugMsgs.push(`⚠ Error accessing window.cardano.${k}: ${e.message}`);
+              }
+            }
+          });
+
+          if (w.length === 0) debugMsgs.push('⚠ No CIP-30 wallets detected. Make sure Yoroi/Eternl extension is installed and enabled, then click "Rescan".');
+        } else {
+          debugMsgs.push('⚠ window.cardano not found. No Cardano wallet extensions detected.');
+          debugMsgs.push('Tip: Extensions may take a moment to inject. Try clicking "Rescan" after a few seconds.');
+        }
+
+        w.push({ key: '__mock__', name: 'Mock Wallet (Dev)', icon: null, apiVersion: '-' });
+        setAvail(w);
+        setDebug(debugMsgs);
+      }, []);
+
+      // Initial scan with retry — wallets may inject asynchronously
+      useEffect(()=>{
+        scanWallets();
+        // Retry after 1s and 3s in case extensions are slow to inject
+        const t1 = setTimeout(scanWallets, 1000);
+        const t2 = setTimeout(scanWallets, 3000);
+        return () => { clearTimeout(t1); clearTimeout(t2); };
+      }, [scanWallets]);
+
+      const connect = useCallback(async (k) => {
+        log(`Connecting to wallet: ${k}`);
+        let addrHex, addrBech32;
+
+        if (k === '__mock__') {
+          addrBech32 = 'addr1qy8ac9xr5pkngtpkxmhv9vnfj7hrfj0682n7m9lxahq9syvkj5th3dkf0v8d5z8fxrm3adgsulkfz099ks7cg3qp6tqcnwwyw';
+          log('Mock wallet connected');
+        } else {
+          try {
+            // Verify wallet object exists
+            if (!window.cardano || !window.cardano[k]) {
+              log(`ERROR: window.cardano.${k} not found. Extension may not be installed or not yet loaded.`);
+              alert(`Wallet "${k}" not found. Please make sure the extension is installed and refresh the page.`);
+              return;
+            }
+
+            const walletObj = window.cardano[k];
+            log(`Wallet object found. name=${walletObj.name}, apiVersion=${walletObj.apiVersion}, enable=${typeof walletObj.enable}`);
+
+            if (typeof walletObj.enable !== 'function') {
+              log(`ERROR: window.cardano.${k}.enable is not a function`);
+              alert(`Wallet "${k}" does not have a valid enable() method. The extension may need to be updated.`);
+              return;
+            }
+
+            log(`Calling window.cardano.${k}.enable()...`);
+            const api = await walletObj.enable();
+            log(`enable() successful. API methods: ${Object.keys(api || {}).join(', ')}`);
+
+            if (!api) {
+              log('ERROR: enable() returned null/undefined');
+              alert('Wallet enable() returned no API. Please unlock the wallet and try again.');
+              return;
+            }
+
+            // CIP-30: getUsedAddresses() returns hex-encoded CBOR addresses
+            let used = [];
+            try {
+              used = await api.getUsedAddresses();
+              log(`getUsedAddresses() returned ${used ? used.length : 0} address(es)`);
+            } catch(e2) {
+              log(`getUsedAddresses() failed: ${e2.message}. Trying getUnusedAddresses()...`);
+            }
+
+            if (used && used.length > 0) {
+              addrHex = used[0];
+            } else {
+              log('No used addresses. Trying getUnusedAddresses()...');
+              try {
+                const unused = await api.getUnusedAddresses();
+                log(`getUnusedAddresses() returned ${unused ? unused.length : 0} address(es)`);
+                addrHex = (unused && unused.length > 0) ? unused[0] : null;
+              } catch(e3) {
+                log(`getUnusedAddresses() also failed: ${e3.message}`);
+              }
+            }
+
+            // Last resort: try getChangeAddress()
+            if (!addrHex && typeof api.getChangeAddress === 'function') {
+              try {
+                log('Trying getChangeAddress()...');
+                addrHex = await api.getChangeAddress();
+                log(`getChangeAddress() returned: ${addrHex ? addrHex.slice(0,20)+'...' : 'null'}`);
+              } catch(e4) {
+                log(`getChangeAddress() failed: ${e4.message}`);
+              }
+            }
+
+            if (!addrHex) {
+              log('ERROR: No addresses returned from wallet');
+              alert('No addresses found in wallet. Please ensure:\n1. The wallet is unlocked\n2. The wallet has at least one account set up\n3. Try refreshing the page and reconnecting');
+              return;
+            }
+
+            log(`Raw hex address (${addrHex.length} chars): ${addrHex.slice(0, 20)}...${addrHex.slice(-10)}`);
+
+            // Convert hex → bech32 for display
+            addrBech32 = hexToBech32(addrHex);
+            log(`Bech32 address: ${addrBech32.slice(0, 20)}...${addrBech32.slice(-10)}`);
+
+          } catch (e) {
+            const errMsg = e.message || e.info || String(e);
+            log(`ERROR: ${errMsg}`);
+
+            // Provide user-friendly error messages
+            let userMsg = `Wallet connection error: ${errMsg}`;
+            if (errMsg.includes('refused') || errMsg.includes('reject') || errMsg.includes('cancel')) {
+              userMsg = 'Connection was rejected. Please approve the connection request in your wallet extension.';
+            } else if (errMsg.includes('account') || errMsg.includes('Account')) {
+              userMsg = 'No active account found. Please set up an account in your wallet first.';
+            }
+            alert(userMsg);
+            return;
+          }
+        }
+
+        const d = { key: k, address: addrBech32, addressHex: addrHex || null, ts: Date.now() };
+        setWallet(d);
+        DB.wallet.set(d);
+        log('Wallet connected successfully');
+      }, [log]);
+
+      const disconnect = useCallback(() => { setWallet(null); DB.wallet.set(null); }, []);
+      const short = useCallback(a => a ? `${a.slice(0, 12)}…${a.slice(-6)}` : '', []);
+
+      return <WalletCtx.Provider value={{ wallet, avail, connect, disconnect, short, debug, scanWallets }}>{children}</WalletCtx.Provider>;
+    };
+
+    // ====== DATA ======
+    /*
+      Comment now includes:
+        anchorText: string (the text passage this comment is anchored to)
+        proposedText: string|null (replacement; null = propose deletion)
+        reason: string|null
+        status: 'pending'|'accepted'|'rejected'
+        decisions: [{action:'accept'|'reject', reason:string, by:string, at:number}]
+    */
+    const dataR = (s,a) => {
+      switch(a.type){
+        case 'INIT': return {...s,...a.payload};
+        case 'ADD_I': return {...s, initiatives:[...s.initiatives,{...a.payload,id:crypto.randomUUID(),createdAt:Date.now()}]};
+        case 'UPD_I': return {...s, initiatives:s.initiatives.map(i=>i.id===a.id?{...i,...a.payload}:i)};
+        case 'DEL_I': return {...s, initiatives:s.initiatives.filter(i=>i.id!==a.id), comments:s.comments.filter(c=>c.initiativeId!==a.id)};
+        case 'ADD_C': return {...s, comments:[...s.comments,{...a.payload,id:crypto.randomUUID(),createdAt:Date.now(),status:'pending',decisions:[]}]};
+        case 'DEL_C': return {...s, comments:s.comments.filter(c=>c.id!==a.id)};
+        case 'DECIDE_C': return {...s, comments:s.comments.map(c=>c.id===a.id?{...c, status:a.action, decisions:[...(c.decisions||[]),{action:a.action,reason:a.reason,by:a.by,at:Date.now()}]}:c)};
+        default: return s;
+      }
+    };
+    // Helper: Firebase converts empty arrays [] to null, and can return objects instead of arrays.
+    const fbToArray = (val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return val;
+      if (typeof val === 'object') return Object.values(val);
+      return [];
+    };
+    const fixComment = (c) => ({...c, decisions: Array.isArray(c.decisions) ? c.decisions : []});
+    const fixComments = (arr) => fbToArray(arr).map(fixComment);
+
+    const DataProvider = ({children}) => {
+      const [s,dispatch] = useReducer(dataR,{initiatives:[],comments:[]});
+      // Track: 0=not loaded, 1=local loaded, 2=firebase loaded (or no firebase)
+      const readyRef = useRef(0);
+      const userActionRef = useRef(false); // true when dispatch came from user action
+
+      // Wrap dispatch to track user vs sync actions
+      const userDispatch = useCallback((action) => {
+        userActionRef.current = true;
+        dispatch(action);
+      }, []);
+
+      // Initial load
+      useEffect(()=>{
+        // Load from localStorage first (instant)
+        const localI = DB.initiatives.get();
+        const localC = DB.comments.get();
+        dispatch({type:'INIT',payload:{initiatives:localI,comments:fixComments(localC)}});
+        readyRef.current = 1;
+
+        if (firebaseDB) {
+          let initCount = 0;
+          const checkReady = () => { initCount++; if(initCount >= 2) readyRef.current = 2; };
+
+          // Listen for real-time changes from Firebase
+          firebaseDB.ref('initiatives').on('value', snap => {
+            const val = fbToArray(snap.val());
+            console.log('[Firebase] initiatives received:', val.length);
+            LS._s('ccat_i', val); // update local cache
+            dispatch({type:'INIT',payload:{initiatives:val, comments: fixComments(LS._g('ccat_c'))}});
+            checkReady();
+          });
+          firebaseDB.ref('comments').on('value', snap => {
+            const val = fixComments(snap.val());
+            console.log('[Firebase] comments received:', val.length);
+            LS._s('ccat_c', val); // update local cache
+            dispatch({type:'INIT',payload:{initiatives: fbToArray(LS._g('ccat_i')), comments:val}});
+            checkReady();
+          });
+        } else {
+          readyRef.current = 2; // no firebase, local is final
+        }
+
+        return () => {
+          if (firebaseDB) {
+            firebaseDB.ref('initiatives').off();
+            firebaseDB.ref('comments').off();
+          }
+        };
+      },[]);
+
+      // Persist on change — ONLY when triggered by user actions, never from Firebase sync
+      useEffect(()=>{
+        if (readyRef.current < 1) return; // not yet loaded
+        if (!userActionRef.current) return; // came from Firebase sync, skip
+        userActionRef.current = false;
+        console.log('[Persist] Saving initiatives:', s.initiatives.length, 'comments:', s.comments.length);
+        DB.initiatives.set(s.initiatives);
+        DB.comments.set(s.comments);
+      },[s.initiatives, s.comments]);
+
+      return <DataCtx.Provider value={{...s,dispatch:userDispatch}}>{children}</DataCtx.Provider>;
+    };
+
+    // ====== CONSTITUTION LOADER ======
+    const useConstitution = () => {
+      const [md,setMd]=useState(''); const [plain,setPlain]=useState('');
+      const [loading,setLoading]=useState(true); const [error,setError]=useState(null);
+      useEffect(()=>{
+        let c=false;
+        (async()=>{
+          try{
+            const [r1,r2]=await Promise.all([fetch(GITHUB_MD),fetch(GITHUB_TXT)]);
+            if(!c){setMd(r1.ok?await r1.text():FB_MD); setPlain(r2.ok?await r2.text():FB_PLAIN);}
+          }catch(e){if(!c){setError(e.message);setMd(FB_MD);setPlain(FB_PLAIN);}}
+          finally{if(!c)setLoading(false);}
+        })();
+        return ()=>{c=true;};
+      },[]);
+      const sections=useMemo(()=>{
+        if(!md)return[];const r=[];
+        for(const l of md.split('\n')){const m=l.match(/^(#{1,3})\s+(.+)/);if(m)r.push({id:m[2].toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,''),title:m[2],level:m[1].length});}
+        return r;
+      },[md]);
+      return {mdText:md,plainText:plain,sections,loading,error};
+    };
+
+    const FB_MD = `# CARDANO BLOCKCHAIN ECOSYSTEM CONSTITUTION v2.4
+
+> This is fallback text. The full constitution should be loaded from [GitHub](https://github.com/cardanoz/constitution/blob/main/constitution-v24.md).
+
+## PREAMBLE
+
+Cardano is a decentralized ecosystem of blockchain technology, smart contracts, and community governance. This Constitution serves as the foundation for the governance of the Cardano Blockchain ecosystem.
+
+## ARTICLE I. CARDANO BLOCKCHAIN TENETS AND GUARDRAILS
+
+**Section 1.** These Tenets shall guide all participants of the Cardano Blockchain ecosystem.
+
+**TENET 1** Transactions on the Cardano Blockchain shall not be slowed down or censored.
+
+**TENET 2** The cost of transactions shall be predictable and not unreasonable.
+
+**TENET 3** Anyone desiring to develop applications shall not unreasonably be prevented from doing so.
+
+**TENET 4** Any owner of ada who desires to participate in governance shall not unreasonably be prevented from doing so.
+
+**TENET 5** Contributions shall be appropriately recognized and fairly compensated.
+
+**TENET 6** The value of ada shall not be diluted by unauthorized minting.
+
+**TENET 7** All owners of ada shall have the right to access and use any ada they own.
+
+**Section 2. Guardrails.** The Cardano Blockchain shall operate in accordance with the Guardrails Appendix.
+
+## ARTICLE II. THE CARDANO BLOCKCHAIN COMMUNITY
+
+**Section 1.** Any owner of ada shall benefit from, and be subject to, this Constitution.
+
+**Section 2.** The Cardano Community shall refer to all owners of ada.
+
+**Section 3.** Members shall have the ability to propose governance changes.
+
+## ARTICLE III. PARTICIPATORY AND DECENTRALIZED GOVERNANCE
+
+**Section 1.** The Cardano Blockchain shall be governed by a decentralized, on-chain governance model.
+
+**Section 2.** All owners of ada shall have the right to vote in on-chain governance.
+
+**Section 3.** Three governance bodies are recognized: DReps, SPOs, and the Constitutional Committee.
+
+**Section 4.** Governance Actions include: Motion of no-confidence, CC updates, Constitutional amendments, Hard Forks, Parameter changes, Treasury withdrawals, and Info actions.
+
+**Section 5.** Governance Actions shall be voted on by the applicable governance bodies.
+
+**Section 6.** A governance action shall not be implemented unless sufficient governance bodies have approved it.
+
+## ARTICLE IV. CARDANO BLOCKCHAIN BUDGETS
+
+**Section 1.** The Community is expected to periodically propose and vote on budgets.
+
+**Section 2.** Treasury ada shall only be spent pursuant to approved budgets.
+
+## ARTICLE V. DELEGATED REPRESENTATIVES
+
+**Section 1.** Any owner of ada may register as a DRep or delegate their voting stake.
+
+**Section 2.** DReps are expected to adopt a Code of Conduct.
+
+**Section 3.** DReps shall consider the views of delegators.
+
+## ARTICLE VI. STAKE POOL OPERATORS
+
+**Section 1.** SPOs shall maintain the security and integrity of the Cardano Blockchain.
+
+**Section 2.** SPOs shall have a specific role in certain governance actions.
+
+**Section 3.** SPOs are expected to adopt a Code of Conduct.
+
+## ARTICLE VII. CONSTITUTIONAL COMMITTEE
+
+**Section 1.** A Constitutional Committee shall ensure governance actions are consistent with this Constitution.
+
+**Section 2.** The Committee shall comprise members determined through on-chain governance.
+
+**Section 3.** Committee members shall publish signed statements for their votes.
+
+## ARTICLE VIII. AMENDMENTS
+
+**Section 1.** Amendments shall be approved by not less than 67% of active voting stake.
+
+**Section 2.** Amended versions shall identify which sections are amended.
+
+## CARDANO BLOCKCHAIN GUARDRAILS APPENDIX
+
+This appendix sets forth guardrails for on-chain governance actions, including parameter changes and treasury withdrawals.
+`;
+    const FB_PLAIN = FB_MD.replace(/[#*>`_\[\]()]/g,'').replace(/\n{3,}/g,'\n\n');
+
+    // ====== DIFF ======
+    const computeDiff=(a,b)=>{if(!a||!b)return[];try{const d=new diff_match_patch();const r=d.diff_main(a,b);d.diff_cleanupSemantic(r);return r;}catch{return[[0,a]];}};
+    const DiffView=({original,amended})=>{
+      const diffs=useMemo(()=>computeDiff(original,amended),[original,amended]);
+      const lang=useLang();
+      if(!diffs.length)return null;
+      const changed=diffs.some(([o])=>o!==0);
+      if(!changed)return <p className="text-green-400 text-sm">✓ {lang==='en'?'No changes — identical to live constitution':'変更なし — 現行憲法と同一'}</p>;
+      return <div className="font-mono text-sm leading-relaxed whitespace-pre-wrap">{diffs.map(([o,tx],i)=><span key={i} className={o===1?'diff-add':o===-1?'diff-del':'diff-eq'}>{tx}</span>)}</div>;
+    };
+
+    // ====== UTIL COMPONENTS ======
+    const Badge=({text,color})=><span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${color}`}>{text}</span>;
+    const Modal=({children,onClose,wide})=>ReactDOM.createPortal(
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 fade-in" onClick={onClose}>
+        <div className={`bg-cardano-mid border border-gray-700 rounded-xl p-6 mx-4 max-h-[90vh] overflow-y-auto glow ${wide?'max-w-4xl w-full':'max-w-lg w-full'}`} onClick={e=>e.stopPropagation()}>{children}</div>
+      </div>,
+      document.body
+    );
+
+    // ====== INLINE COMMENT HIGHLIGHTS ======
+    // Renders constitution HTML with comment anchors highlighted
+    const HighlightedContent = ({ html, commentsForIni, onClickHighlight }) => {
+      const ref = useRef(null);
+
+      // Build set of anchor texts with comment counts
+      const anchors = useMemo(() => {
+        const map = {};
+        commentsForIni.forEach(c => {
+          if (!c.anchorText) return;
+          if (!map[c.anchorText]) map[c.anchorText] = [];
+          map[c.anchorText].push(c);
+        });
+        return map;
+      }, [commentsForIni]);
+
+      const highlightedHtml = useMemo(() => {
+        let result = html;
+        // Sort by length desc so longer matches are replaced first
+        const keys = Object.keys(anchors).sort((a,b) => b.length - a.length);
+        keys.forEach(anchor => {
+          const count = anchors[anchor].length;
+          const escaped = anchor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+          try {
+            const regex = new RegExp(`(${escaped})`, 'i');
+            const statusDot = anchors[anchor].some(c=>c.status==='accepted') ? 'bg-green-400' :
+                              anchors[anchor].some(c=>c.status==='rejected') ? 'bg-red-400' : 'bg-blue-400';
+            result = result.replace(regex,
+              `<span class="comment-highlight" data-anchor="${btoa(encodeURIComponent(anchor))}">$1<span class="comment-count">${count}</span></span>`
+            );
+          } catch {}
+        });
+        return result;
+      }, [html, anchors]);
+
+      useEffect(() => {
+        if (!ref.current) return;
+        const els = ref.current.querySelectorAll('.comment-highlight');
+        els.forEach(el => {
+          el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            try {
+              const anchor = decodeURIComponent(atob(el.dataset.anchor));
+              onClickHighlight(anchor);
+            } catch {}
+          });
+        });
+      }, [highlightedHtml, onClickHighlight]);
+
+      return <div ref={ref} className="prose-c max-w-none" dangerouslySetInnerHTML={{__html: highlightedHtml}} />;
+    };
+
+    // ====== DATA EXPORT/IMPORT ======
+    const exportData = (initiatives, comments, lang) => {
+      const data = {
+        exportedAt: new Date().toISOString(),
+        version: '1.0',
+        initiatives: initiatives,
+        comments: comments,
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cardano-constitution-data-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    const importData = (dispatch, lang) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (!data.initiatives || !data.comments) {
+              alert('Invalid data file format.');
+              return;
+            }
+            if (!confirm(t(lang, 'importConfirm'))) return;
+
+            // Merge: add imported items that don't already exist (by id)
+            const existI = DB.initiatives.get();
+            const existC = fixComments(DB.comments.get());
+            const existIIds = new Set(existI.map(i=>i.id));
+            const existCIds = new Set(existC.map(c=>c.id));
+            const newI = [...existI, ...fbToArray(data.initiatives).filter(i => !existIIds.has(i.id))];
+            const newC = [...existC, ...fixComments(data.comments).filter(c => !existCIds.has(c.id))];
+
+            DB.initiatives.set(newI);
+            DB.comments.set(newC);
+            alert(t(lang, 'importSuccess'));
+            location.reload();
+          } catch(err) {
+            alert('Error reading file: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    };
+
+    // ====== HEADER ======
+    const Header = () => {
+      const {wallet,avail,connect,disconnect,short,debug,scanWallets} = useContext(WalletCtx);
+      const {initiatives, comments, dispatch} = useContext(DataCtx);
+      const [showM,setShowM] = useState(false);
+      const [showDebug,setShowDebug] = useState(false);
+      const lang = useLang();
+      const {setLang} = useContext(LangSetCtx);
+
+      return (
+        <header className="bg-gradient-to-r from-cardano-dark via-cardano-mid to-cardano-dark border-b border-blue-900/50 px-6 py-3 flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-cardano-blue flex items-center justify-center font-bold text-white">C</div>
+            <div>
+              <h1 className="text-lg font-bold text-white tracking-tight">{t(lang,'appTitle')}</h1>
+              <p className="text-[11px] text-gray-500">{t(lang,'appSub')}
+                {firebaseDB
+                  ? <span className="ml-2 text-green-400">● Cloud Sync</span>
+                  : <span className="ml-2 text-yellow-400">● Local Only</span>}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {/* Data management */}
+            <div className="flex items-center gap-1">
+              <button onClick={()=>exportData(initiatives,comments,lang)} title={t(lang,'exportData')}
+                className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-600 px-2 py-1.5 rounded-lg text-gray-300 transition">
+                ↓
+              </button>
+              <button onClick={()=>importData(dispatch,lang)} title={t(lang,'importData')}
+                className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-600 px-2 py-1.5 rounded-lg text-gray-300 transition">
+                ↑
+              </button>
+            </div>
+            {/* Lang toggle */}
+            <button onClick={()=>setLang(lang==='en'?'ja':'en')}
+              className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-600 px-3 py-1.5 rounded-lg text-gray-300 transition font-medium">
+              {lang==='en'?'日本語':'English'}
+            </button>
+            {wallet ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 bg-cardano-light border border-blue-800/50 rounded-lg px-3 py-1.5 group relative">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"/>
+                  <span className="text-sm text-gray-200 font-mono">{short(wallet.address)}</span>
+                  {/* Full address tooltip on hover */}
+                  <div className="absolute top-full right-0 mt-2 p-3 bg-cardano-dark border border-gray-600 rounded-lg shadow-xl z-50 hidden group-hover:block min-w-[360px]">
+                    <p className="text-[10px] text-gray-500 mb-1">Wallet: {wallet.key}</p>
+                    <p className="text-[10px] text-gray-300 font-mono break-all">{wallet.address}</p>
+                    {wallet.addressHex && <p className="text-[10px] text-gray-500 font-mono break-all mt-1">Hex: {wallet.addressHex.slice(0,40)}...</p>}
+                  </div>
+                </div>
+                <button onClick={disconnect} className="text-xs text-red-400 hover:text-red-300 transition">{t(lang,'disconnect')}</button>
+              </div>
+            ) : (
+              <button onClick={()=>setShowM(true)} className="bg-cardano-blue hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition">{t(lang,'connectWallet')}</button>
+            )}
+          </div>
+          {showM && (
+            <Modal onClose={()=>setShowM(false)}>
+              <h2 className="text-xl font-bold text-white mb-1">{t(lang,'selectWallet')}</h2>
+              <p className="text-sm text-gray-400 mb-4">{t(lang,'selectWalletDesc')}</p>
+              <div className="space-y-2 mb-4">
+                {avail.map(w=>(
+                  <button key={w.key} onClick={()=>{connect(w.key);setShowM(false);}}
+                    className="w-full flex items-center gap-3 p-3 bg-cardano-light hover:bg-gray-700 border border-gray-700 rounded-lg transition text-left">
+                    {w.icon?<img src={w.icon} className="w-7 h-7 rounded" alt=""/>:<div className="w-7 h-7 rounded bg-gray-600 flex items-center justify-center text-xs">🔧</div>}
+                    <div className="flex-1">
+                      <div className="font-medium text-white">{w.name}</div>
+                      <div className="text-xs text-gray-400">{w.key==='__mock__'?t(lang,'mockDev'):`CIP-30 • ${w.key} • API v${w.apiVersion||'?'}`}</div>
+                    </div>
+                    {w.key!=='__mock__'&&<span className="text-xs text-green-400">●</span>}
+                  </button>
+                ))}
+              </div>
+              {/* Rescan button */}
+              <button onClick={()=>{scanWallets();}} className="w-full text-center text-sm text-blue-400 hover:text-blue-300 py-2 border border-dashed border-gray-600 rounded-lg hover:border-blue-500 transition">
+                ↻ Rescan Wallets
+              </button>
+              {/* Debug panel */}
+              <details className="text-xs mt-3">
+                <summary className="text-gray-500 cursor-pointer hover:text-gray-300">🔍 Debug: Wallet Detection Log</summary>
+                <div className="mt-2 bg-cardano-dark border border-gray-700 rounded-lg p-3 max-h-48 overflow-y-auto font-mono">
+                  {debug.map((line,i)=><div key={i} className={`py-0.5 ${line.includes('ERROR')||line.includes('⚠')?'text-yellow-300':'text-gray-400'}`}>{line}</div>)}
+                </div>
+              </details>
+            </Modal>
+          )}
+        </header>
+      );
+    };
+    const LangSetCtx = createContext();
+
+    // ====== PAGES ======
+    const PG={HOME:'h',VIEW:'v',CREATE:'c'};
+
+    // ====== HOME ======
+    const HomePage=({nav})=>{
+      const {initiatives,comments}=useContext(DataCtx);
+      const {wallet,short}=useContext(WalletCtx);
+      const lang=useLang();
+      return (
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-5xl mx-auto px-6 py-8">
+            <div className="mb-8 text-center">
+              <h2 className="text-3xl font-bold text-white mb-2">{t(lang,'initiatives')}</h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">{t(lang,'initiativesDesc')}</p>
+            </div>
+            {wallet ? (
+              <div className="mb-8 flex justify-center">
+                <button onClick={()=>nav(PG.CREATE)} className="bg-cardano-blue hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition flex items-center gap-2">
+                  <span className="text-xl leading-none">+</span> {t(lang,'newInitiative')}
+                </button>
+              </div>
+            ) : (
+              <div className="mb-8 p-4 bg-yellow-900/20 border border-yellow-700/50 rounded-lg text-center">
+                <p className="text-yellow-200 text-sm">{t(lang,'loginRequired')}</p>
+              </div>
+            )}
+            {initiatives.length===0?(
+              <div className="text-center py-20 text-gray-500">
+                <div className="text-5xl mb-4">📜</div>
+                <p className="text-lg">{t(lang,'noInitiatives')}</p>
+                <p className="text-sm mt-1">{t(lang,'noInitiativesDesc')}</p>
+              </div>
+            ):(
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {initiatives.map(ini=>{
+                  const cnt=comments.filter(c=>c.initiativeId===ini.id).length;
+                  return (
+                    <div key={ini.id} onClick={()=>nav(PG.VIEW,ini.id)}
+                      className="bg-cardano-mid border border-gray-700/50 rounded-xl p-5 cursor-pointer hover:border-cardano-blue/50 transition group glow fade-in">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="text-lg font-semibold text-white group-hover:text-blue-300 transition leading-snug">{ini.title}</h3>
+                        {ini.requireLoginToComment && <Badge text={t(lang,'requiresLogin')} color="bg-amber-900/30 text-amber-300"/>}
+                      </div>
+                      <p className="text-sm text-gray-400 line-clamp-2 mb-4">{ini.description}</p>
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>{t(lang,'rep')}: {ini.representativeName||short(ini.representativeWallet)}</span>
+                        <span>💬 {cnt}</span>
+                      </div>
+                      <div className="text-xs text-gray-600 mt-2">{new Date(ini.createdAt).toLocaleDateString()}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    // ====== CREATE ======
+    const CreatePage=({nav,live})=>{
+      const {wallet}=useContext(WalletCtx);
+      const {dispatch}=useContext(DataCtx);
+      const lang=useLang();
+      const [title,setTitle]=useState('');
+      const [desc,setDesc]=useState('');
+      const [repN,setRepN]=useState('');
+      const [reqL,setReqL]=useState(false);
+      const [amd,setAmd]=useState(live.mdText);
+      const [amdP,setAmdP]=useState(live.plainText);
+      const [tab,setTab]=useState('md');
+      if(!wallet){nav(PG.HOME);return null;}
+      const submit=()=>{
+        if(!title.trim())return alert(lang==='en'?'Please enter a title':'タイトルを入力してください');
+        dispatch({type:'ADD_I',payload:{title,description:desc,representativeWallet:wallet.address,representativeName:repN,amendedTextMd:amd,amendedTextPlain:amdP,requireLoginToComment:reqL}});
+        nav(PG.HOME);
+      };
+      return (
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-5xl mx-auto px-6 py-8">
+            <button onClick={()=>nav(PG.HOME)} className="text-sm text-gray-400 hover:text-white mb-6 transition">{t(lang,'backHome')}</button>
+            <h2 className="text-2xl font-bold text-white mb-6">{t(lang,'createInitiative')}</h2>
+            <div className="space-y-6">
+              <div className="bg-cardano-mid border border-gray-700/50 rounded-xl p-6 space-y-4">
+                <h3 className="font-semibold text-white">{t(lang,'basicInfo')}</h3>
+                <div><label className="block text-sm text-gray-300 mb-1">{t(lang,'initiativeName')}</label>
+                  <input value={title} onChange={e=>setTitle(e.target.value)} placeholder={t(lang,'initiativeNamePh')} className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cardano-blue transition"/></div>
+                <div><label className="block text-sm text-gray-300 mb-1">{t(lang,'description')}</label>
+                  <textarea value={desc} onChange={e=>setDesc(e.target.value)} rows="3" placeholder={t(lang,'descriptionPh')} className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cardano-blue transition"/></div>
+                <div><label className="block text-sm text-gray-300 mb-1">{t(lang,'repName')}</label>
+                  <input value={repN} onChange={e=>setRepN(e.target.value)} placeholder={t(lang,'repNamePh')} className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cardano-blue transition"/></div>
+                <div className="flex items-center gap-3">
+                  <button onClick={()=>setReqL(!reqL)} className={`relative w-12 h-6 rounded-full transition ${reqL?'bg-cardano-blue':'bg-gray-600'}`}>
+                    <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform ${reqL?'translate-x-6':'translate-x-0.5'}`}/></button>
+                  <span className="text-sm text-gray-300">{t(lang,'requireLoginToggle')}</span>
+                </div>
+              </div>
+              <div className="bg-cardano-mid border border-gray-700/50 rounded-xl p-6">
+                <h3 className="font-semibold text-white mb-2">{t(lang,'amendedText')}</h3>
+                <p className="text-sm text-gray-400 mb-4">{t(lang,'amendedTextDesc')}</p>
+                <div className="flex gap-1 mb-4 bg-cardano-dark rounded-lg p-1">
+                  {[['md',t(lang,'mdEdit')],['plain',t(lang,'plainEdit')],['diff',t(lang,'diffLive')]].map(([k,l])=>(
+                    <button key={k} onClick={()=>setTab(k)} className={`flex-1 text-sm py-2 rounded-md transition ${tab===k?'bg-cardano-blue text-white':'text-gray-400 hover:text-white'}`}>{l}</button>
+                  ))}
+                </div>
+                {tab==='md'&&<textarea value={amd} onChange={e=>setAmd(e.target.value)} rows="20" className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-3 text-gray-200 font-mono text-sm focus:outline-none focus:border-cardano-blue transition leading-relaxed"/>}
+                {tab==='plain'&&<textarea value={amdP} onChange={e=>setAmdP(e.target.value)} rows="20" className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-3 text-gray-200 font-mono text-sm focus:outline-none focus:border-cardano-blue transition leading-relaxed"/>}
+                {tab==='diff'&&<div className="bg-cardano-dark border border-gray-700 rounded-lg p-4 max-h-[600px] overflow-y-auto"><DiffView original={live.mdText} amended={amd}/></div>}
+              </div>
+              <div className="flex justify-end gap-3">
+                <button onClick={()=>nav(PG.HOME)} className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">{t(lang,'cancel')}</button>
+                <button onClick={submit} className="px-6 py-2.5 bg-cardano-blue hover:bg-blue-700 text-white font-medium rounded-lg transition">{t(lang,'create')}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ====== VIEW INITIATIVE ======
+    const ViewPage=({iniId,nav,live})=>{
+      const {initiatives,comments,dispatch}=useContext(DataCtx);
+      const {wallet,short}=useContext(WalletCtx);
+      const lang=useLang();
+      const ini=initiatives.find(i=>i.id===iniId);
+      const iniC=useMemo(()=>comments.filter(c=>c.initiativeId===iniId),[comments,iniId]);
+      const [vm,setVm]=useState('md-rendered');
+      const [showCF,setShowCF]=useState(false);
+      const [selText,setSelText]=useState('');
+      const [sTab,setSTab]=useState('comments');
+      const [showEdit,setShowEdit]=useState(false);
+      const [editMd,setEditMd]=useState('');
+      const [editP,setEditP]=useState('');
+      const [focusAnchor,setFocusAnchor]=useState(null); // when clicking a highlight
+      const [showDecide,setShowDecide]=useState(null); // comment id
+
+      if(!ini) return <div className="flex-1 flex items-center justify-center"><div className="text-center"><p className="text-gray-400">Not found</p><button onClick={()=>nav(PG.HOME)} className="mt-4 text-blue-400 hover:underline">{t(lang,'backHome')}</button></div></div>;
+
+      const isRep=wallet?.address===ini.representativeWallet;
+      const canC=!ini.requireLoginToComment||!!wallet;
+
+      const handleSel=()=>{
+        const s=window.getSelection().toString().trim();
+        if(s.length>3&&canC){setSelText(s);setShowCF(true);}
+      };
+      const openEdit=()=>{setEditMd(ini.amendedTextMd);setEditP(ini.amendedTextPlain);setShowEdit(true);};
+      const saveEdit=()=>{dispatch({type:'UPD_I',id:ini.id,payload:{amendedTextMd:editMd,amendedTextPlain:editP}});setShowEdit(false);};
+
+      const renderedHtml=useMemo(()=>{try{return marked.parse(ini.amendedTextMd||'');}catch{return'<p>Error</p>';}}, [ini.amendedTextMd]);
+
+      const sections=useMemo(()=>{
+        if(!ini.amendedTextMd)return[];const r=[];
+        for(const l of ini.amendedTextMd.split('\n')){const m=l.match(/^(#{1,3})\s+(.+)/);if(m)r.push({id:m[2].toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,''),title:m[2],level:m[1].length});}
+        return r;
+      },[ini.amendedTextMd]);
+
+      // When a highlight is clicked, show that anchor's comments in sidebar
+      const handleHighlightClick = useCallback((anchor) => {
+        setFocusAnchor(anchor);
+        setSTab('comments');
+      }, []);
+
+      const filteredComments = focusAnchor ? iniC.filter(c=>c.anchorText===focusAnchor) : iniC;
+
+      return (
+        <div className="flex-1 flex overflow-hidden">
+          <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+            {/* Top bar */}
+            <div className="bg-cardano-mid border-b border-gray-800 px-6 py-3 flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-4 min-w-0">
+                <button onClick={()=>nav(PG.HOME)} className="text-gray-400 hover:text-white transition text-sm flex-shrink-0">{t(lang,'back')}</button>
+                <h2 className="text-lg font-semibold text-white truncate">{ini.title}</h2>
+                {ini.requireLoginToComment&&<Badge text={t(lang,'requiresLogin')} color="bg-amber-900/30 text-amber-300"/>}
+              </div>
+              {isRep&&<button onClick={openEdit} className="text-xs bg-blue-900/50 hover:bg-blue-900 text-blue-300 px-3 py-1.5 rounded-lg transition flex-shrink-0">{t(lang,'editAmendment')}</button>}
+            </div>
+            {/* View tabs */}
+            <div className="bg-cardano-dark border-b border-gray-800 px-6 py-2 flex gap-1 flex-shrink-0 overflow-x-auto">
+              {[['md-rendered',t(lang,'mdRendered')],['md-raw',t(lang,'mdSource')],['plain',t(lang,'plainText')],['diff',t(lang,'diffView')]].map(([k,l])=>(
+                <button key={k} onClick={()=>setVm(k)} className={`text-xs px-3 py-1.5 rounded-md transition whitespace-nowrap ${vm===k?'bg-cardano-blue text-white':'text-gray-400 hover:text-white hover:bg-gray-800'}`}>{l}</button>
+              ))}
+            </div>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto px-8 py-6" onMouseUp={handleSel}>
+              <div className="mb-6 p-4 bg-cardano-mid border border-gray-700/50 rounded-xl">
+                <p className="text-sm text-gray-300">{ini.description}</p>
+                <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+                  <span>{t(lang,'rep')}: {ini.representativeName||short(ini.representativeWallet)}</span>
+                  <span>{t(lang,'created')}: {new Date(ini.createdAt).toLocaleDateString()}</span>
+                  <span>{t(lang,'comments')}: {iniC.length}</span>
+                </div>
+              </div>
+              {canC ? (
+                <div className="mb-4 p-3 bg-blue-900/10 border border-blue-800/30 rounded-lg">
+                  <p className="text-xs text-blue-300">{t(lang,'selectTextHint')}</p>
+                </div>
+              ):(
+                <div className="mb-4 p-3 bg-amber-900/10 border border-amber-700/30 rounded-lg">
+                  <p className="text-xs text-amber-300">{t(lang,'loginToComment')}</p>
+                </div>
+              )}
+
+              {vm==='md-rendered'&&<HighlightedContent html={renderedHtml} commentsForIni={iniC} onClickHighlight={handleHighlightClick}/>}
+              {vm==='md-raw'&&<pre className="bg-cardano-dark border border-gray-700 rounded-lg p-6 font-mono text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">{ini.amendedTextMd}</pre>}
+              {vm==='plain'&&<pre className="bg-cardano-dark border border-gray-700 rounded-lg p-6 font-mono text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">{ini.amendedTextPlain}</pre>}
+              {vm==='diff'&&(
+                <div className="bg-cardano-dark border border-gray-700 rounded-lg p-6">
+                  <div className="mb-4 flex items-center gap-4 text-xs">
+                    <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-red-500/30 border-l-2 border-red-500 rounded-sm"/> {t(lang,'removed')}</span>
+                    <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-green-500/30 border-l-2 border-green-500 rounded-sm"/> {t(lang,'added')}</span>
+                    <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-gray-500/30 rounded-sm"/> {t(lang,'unchanged')}</span>
+                  </div>
+                  <DiffView original={live.mdText} amended={ini.amendedTextMd}/>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="hidden lg:flex lg:flex-col w-80 xl:w-96 border-l border-gray-800 bg-cardano-mid flex-shrink-0">
+            <div className="flex border-b border-gray-800 flex-shrink-0">
+              {[['comments',`💬 ${t(lang,'comments')} (${iniC.length})`],['toc',t(lang,'toc')]].map(([k,l])=>(
+                <button key={k} onClick={()=>{setSTab(k);if(k==='comments')setFocusAnchor(null);}}
+                  className={`flex-1 text-sm py-3 transition ${sTab===k?'text-white border-b-2 border-cardano-blue':'text-gray-500 hover:text-gray-300'}`}>{l}</button>
+              ))}
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              {sTab==='toc'&&(
+                <div className="space-y-0.5">
+                  {sections.map((s,i)=><div key={i} className="text-sm py-1.5 px-2 rounded cursor-pointer hover:bg-gray-800 transition text-gray-300 hover:text-white" style={{paddingLeft:`${(s.level-1)*12+8}px`}}>{s.title}</div>)}
+                  {sections.length===0&&<p className="text-gray-500 text-sm text-center py-4">{t(lang,'noToc')}</p>}
+                </div>
+              )}
+              {sTab==='comments'&&(
+                <div className="space-y-3">
+                  {focusAnchor && (
+                    <div className="p-2 bg-blue-900/20 border border-blue-800/30 rounded-lg flex items-center justify-between">
+                      <p className="text-xs text-blue-300 truncate">Filtered: "{focusAnchor.slice(0,40)}…"</p>
+                      <button onClick={()=>setFocusAnchor(null)} className="text-xs text-gray-400 hover:text-white ml-2">✕</button>
+                    </div>
+                  )}
+                  {canC&&(
+                    <button onClick={()=>{
+                      const s=window.getSelection().toString().trim();
+                      if(s.length>3){setSelText(s);setShowCF(true);}
+                      else alert(t(lang,'selectTextFirst'));
+                    }} className="w-full bg-cardano-blue/20 hover:bg-cardano-blue/30 border border-cardano-blue/40 text-blue-300 text-sm font-medium py-2.5 rounded-lg transition">{t(lang,'newComment')}</button>
+                  )}
+                  {filteredComments.length===0?(
+                    <p className="text-center text-gray-500 text-sm py-8">{t(lang,'noComments')}</p>
+                  ):(
+                    filteredComments.map(c=>(
+                      <CommentCard key={c.id} c={c} isRep={isRep} short={short} dispatch={dispatch} wallet={wallet} setShowDecide={setShowDecide}/>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {showCF&&<CommentForm iniId={ini.id} selText={selText} onClose={()=>{setShowCF(false);setSelText('');}}/>}
+          {showEdit&&<EditModal editMd={editMd} setEditMd={setEditMd} editP={editP} setEditP={setEditP} live={live} onSave={saveEdit} onClose={()=>setShowEdit(false)}/>}
+          {showDecide&&<DecideModal commentId={showDecide} onClose={()=>setShowDecide(null)}/>}
+        </div>
+      );
+    };
+
+    // ====== COMMENT CARD ======
+    const CommentCard=({c,isRep,short,dispatch,wallet,setShowDecide})=>{
+      const lang=useLang();
+      const statusColor = c.status==='accepted'?'bg-green-900/30 text-green-300':c.status==='rejected'?'bg-red-900/30 text-red-300':'bg-yellow-900/30 text-yellow-300';
+      const statusText = t(lang,c.status);
+      return (
+        <div className="bg-cardano-dark border border-gray-700/50 rounded-lg p-4 space-y-2 fade-in">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-gray-400 font-mono">{c.authorName||short(c.authorWallet)}</span>
+            <div className="flex items-center gap-2">
+              <Badge text={statusText} color={statusColor}/>
+              <span className="text-xs text-gray-600">{new Date(c.createdAt).toLocaleDateString()}</span>
+            </div>
+          </div>
+          {/* Anchor */}
+          <div className="text-xs bg-blue-900/10 border-l-2 border-blue-500/50 pl-2 py-1 text-blue-300">
+            📌 "{c.anchorText?.length>80?c.anchorText.slice(0,80)+'…':c.anchorText}"
+          </div>
+          {/* Proposed change */}
+          {c.proposedText ? (
+            <div>
+              <p className="text-xs text-gray-500 mb-1">{t(lang,'proposedReplacement')}:</p>
+              <div className="text-xs bg-green-900/10 border-l-2 border-green-500/50 pl-2 py-1 text-green-300">{c.proposedText}</div>
+            </div>
+          ) : (
+            <div className="text-xs text-red-300 italic">{t(lang,'proposeDeletion')}</div>
+          )}
+          {/* Diff */}
+          {c.anchorText && (
+            <details className="text-xs">
+              <summary className="text-blue-400 cursor-pointer hover:text-blue-300">{t(lang,'diffPreview')}</summary>
+              <div className="mt-2 bg-cardano-mid p-2 rounded">
+                <DiffView original={c.anchorText} amended={c.proposedText||''}/>
+              </div>
+            </details>
+          )}
+          {/* Reason */}
+          {c.reason&&<div><p className="text-xs text-gray-500 mb-1">{t(lang,'reason')}:</p><p className="text-sm text-gray-300">{c.reason}</p></div>}
+          {/* Decision history */}
+          {(c.decisions||[]).length>0&&(
+            <details className="text-xs">
+              <summary className="text-purple-400 cursor-pointer hover:text-purple-300">{t(lang,'history')} ({(c.decisions||[]).length})</summary>
+              <div className="mt-2 space-y-1">
+                {(c.decisions||[]).map((d,i)=>(
+                  <div key={i} className={`p-2 rounded text-xs ${d.action==='accept'?'bg-green-900/10 text-green-300':'bg-red-900/10 text-red-300'}`}>
+                    <span className="font-medium">{d.action==='accept'?t(lang,'accepted'):t(lang,'rejected')}</span>
+                    {d.reason&&<span className="text-gray-400"> — {d.reason}</span>}
+                    <span className="text-gray-600 ml-2">{new Date(d.at).toLocaleDateString()}</span>
+                  </div>
+                ))}
+              </div>
+            </details>
+          )}
+          {/* Actions */}
+          <div className="flex items-center gap-2 pt-1">
+            {isRep&&c.status==='pending'&&(
+              <>
+                <button onClick={()=>setShowDecide(c.id)} className="text-xs bg-green-900/30 hover:bg-green-900/50 text-green-300 px-2 py-1 rounded transition">{t(lang,'accept')}/{t(lang,'reject')}</button>
+              </>
+            )}
+            {(wallet?.address===c.authorWallet||isRep)&&(
+              <button onClick={()=>dispatch({type:'DEL_C',id:c.id})} className="text-xs text-red-400 hover:text-red-300 transition">{t(lang,'delete')}</button>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    // ====== DECIDE MODAL (Accept/Reject) ======
+    const DecideModal=({commentId,onClose})=>{
+      const {dispatch}=useContext(DataCtx);
+      const {wallet}=useContext(WalletCtx);
+      const lang=useLang();
+      const [action,setAction]=useState('accept');
+      const [reason,setReason]=useState('');
+      const submit=()=>{
+        dispatch({type:'DECIDE_C',id:commentId,action,reason,by:wallet?.address||'unknown'});
+        onClose();
+      };
+      return (
+        <Modal onClose={onClose}>
+          <h2 className="text-xl font-bold text-white mb-4">{t(lang,'accept')} / {t(lang,'reject')}</h2>
+          <div className="flex gap-2 mb-4">
+            <button onClick={()=>setAction('accept')} className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${action==='accept'?'bg-green-700 text-white':'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>{t(lang,'accept')}</button>
+            <button onClick={()=>setAction('reject')} className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${action==='reject'?'bg-red-700 text-white':'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>{t(lang,'reject')}</button>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm text-gray-300 mb-1">{t(lang,'actionReason')}</label>
+            <textarea value={reason} onChange={e=>setReason(e.target.value)} rows="3" placeholder={t(lang,'actionReasonPh')}
+              className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cardano-blue transition"/>
+          </div>
+          <div className="flex justify-end gap-3">
+            <button onClick={onClose} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition text-sm">{t(lang,'cancel')}</button>
+            <button onClick={submit} className={`px-5 py-2 text-white font-medium rounded-lg transition text-sm ${action==='accept'?'bg-green-600 hover:bg-green-700':'bg-red-600 hover:bg-red-700'}`}>{t(lang,'confirmAction')}</button>
+          </div>
+        </Modal>
+      );
+    };
+
+    // ====== COMMENT FORM ======
+    const CommentForm=({iniId,selText,onClose})=>{
+      const {dispatch}=useContext(DataCtx);
+      const {wallet}=useContext(WalletCtx);
+      const lang=useLang();
+      const [proposed,setProposed]=useState('');
+      const [reason,setReason]=useState('');
+      const [authorN,setAuthorN]=useState('');
+      const submit=()=>{
+        dispatch({type:'ADD_C',payload:{
+          initiativeId:iniId, anchorText:selText, proposedText:proposed||null, reason:reason||null,
+          authorWallet:wallet?.address||'anonymous', authorName:authorN||null,
+        }});
+        onClose();
+      };
+      return (
+        <Modal onClose={onClose} wide>
+          <h2 className="text-xl font-bold text-white mb-1">{t(lang,'commentFormTitle')}</h2>
+          <p className="text-sm text-gray-400 mb-6">{t(lang,'commentFormDesc')}</p>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-gray-300 mb-1">{t(lang,'selectedPassage')}</label>
+              <div className="bg-blue-900/10 border border-blue-800/30 rounded-lg p-3 text-sm text-blue-200 font-mono max-h-32 overflow-y-auto">"{selText}"</div>
+            </div>
+            <div>
+              <label className="block text-sm text-gray-300 mb-1">{t(lang,'proposedReplacement')}</label>
+              <textarea value={proposed} onChange={e=>setProposed(e.target.value)} rows="3" placeholder={t(lang,'proposedReplacementPh')}
+                className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-2 text-white font-mono text-sm placeholder-gray-500 focus:outline-none focus:border-cardano-blue transition"/>
+            </div>
+            {selText&&(proposed||proposed==='')&&(
+              <div className="bg-cardano-dark border border-gray-700 rounded-lg p-4">
+                <p className="text-xs text-gray-400 mb-2 font-medium">{t(lang,'diffPreview')}</p>
+                <DiffView original={selText} amended={proposed}/>
+                {!proposed&&<p className="text-xs text-red-300 mt-1 italic">{t(lang,'proposeDeletion')}</p>}
+              </div>
+            )}
+            <div>
+              <label className="block text-sm text-gray-300 mb-1">{t(lang,'reason')}</label>
+              <textarea value={reason} onChange={e=>setReason(e.target.value)} rows="2" placeholder={t(lang,'reasonPh')}
+                className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cardano-blue transition"/>
+            </div>
+            <div>
+              <label className="block text-sm text-gray-300 mb-1">{t(lang,'displayName')}</label>
+              <input value={authorN} onChange={e=>setAuthorN(e.target.value)} placeholder={t(lang,'displayNamePh')}
+                className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-cardano-blue transition"/>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <button onClick={onClose} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition text-sm">{t(lang,'cancel')}</button>
+              <button onClick={submit} className="px-5 py-2 bg-cardano-blue hover:bg-blue-700 text-white font-medium rounded-lg transition text-sm">{t(lang,'submit')}</button>
+            </div>
+          </div>
+        </Modal>
+      );
+    };
+
+    // ====== EDIT MODAL ======
+    const EditModal=({editMd,setEditMd,editP,setEditP,live,onSave,onClose})=>{
+      const lang=useLang();
+      const [tab,setTab]=useState('md');
+      return (
+        <Modal onClose={onClose} wide>
+          <h2 className="text-xl font-bold text-white mb-4">{t(lang,'editModalTitle')}</h2>
+          <div className="flex gap-1 mb-4 bg-cardano-dark rounded-lg p-1">
+            {[['md',t(lang,'markdown')],['plain',t(lang,'plainText')],['diff',t(lang,'diff')]].map(([k,l])=>(
+              <button key={k} onClick={()=>setTab(k)} className={`flex-1 text-sm py-2 rounded-md transition ${tab===k?'bg-cardano-blue text-white':'text-gray-400 hover:text-white'}`}>{l}</button>
+            ))}
+          </div>
+          {tab==='md'&&<textarea value={editMd} onChange={e=>setEditMd(e.target.value)} rows="20" className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-3 text-gray-200 font-mono text-sm focus:outline-none focus:border-cardano-blue transition leading-relaxed"/>}
+          {tab==='plain'&&<textarea value={editP} onChange={e=>setEditP(e.target.value)} rows="20" className="w-full bg-cardano-dark border border-gray-700 rounded-lg px-4 py-3 text-gray-200 font-mono text-sm focus:outline-none focus:border-cardano-blue transition leading-relaxed"/>}
+          {tab==='diff'&&<div className="bg-cardano-dark border border-gray-700 rounded-lg p-4 max-h-[500px] overflow-y-auto"><DiffView original={live.mdText} amended={editMd}/></div>}
+          <div className="flex justify-end gap-3 mt-4">
+            <button onClick={onClose} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition text-sm">{t(lang,'cancel')}</button>
+            <button onClick={onSave} className="px-5 py-2 bg-cardano-blue hover:bg-blue-700 text-white font-medium rounded-lg transition text-sm">{t(lang,'save')}</button>
+          </div>
+        </Modal>
+      );
+    };
+
+    // ====== LOADING ======
+    const Loading=()=>{
+      const lang=useLang();
+      return (
+        <div className="h-screen flex flex-col items-center justify-center bg-cardano-dark">
+          <div className="w-12 h-12 rounded-xl bg-cardano-blue flex items-center justify-center mb-4 animate-pulse"><span className="text-white font-bold text-2xl">C</span></div>
+          <p className="text-gray-400 text-sm">{t(lang,'loadingConstitution')}</p>
+          <p className="text-gray-600 text-xs mt-1">{t(lang,'loadingFromGithub')}</p>
+        </div>
+      );
+    };
+
+    // ====== APP ======
+    const App=()=>{
+      const [lang,setLang]=useState(()=>DB.lang.get());
+      const [page,setPage]=useState(PG.HOME);
+      const [arg,setArg]=useState(null);
+      const live=useConstitution();
+      useEffect(()=>{DB.lang.set(lang);},[lang]);
+      const nav=useCallback((p,a)=>{setPage(p);setArg(a||null);},[]);
+
+      return (
+        <LangCtx.Provider value={lang}>
+          <LangSetCtx.Provider value={{setLang}}>
+            {live.loading ? <Loading/> : (
+              <WalletProvider>
+                <DataProvider>
+                  <div className="h-screen flex flex-col bg-cardano-dark">
+                    <Header/>
+                    {live.error&&<div className="bg-yellow-900/20 border-b border-yellow-700/30 px-6 py-2 text-center flex-shrink-0"><p className="text-xs text-yellow-300">{t(lang,'fetchFailed')}</p></div>}
+                    {page===PG.HOME&&<HomePage nav={nav}/>}
+                    {page===PG.CREATE&&<CreatePage nav={nav} live={live}/>}
+                    {page===PG.VIEW&&<ViewPage iniId={arg} nav={nav} live={live}/>}
+                  </div>
+                </DataProvider>
+              </WalletProvider>
+            )}
+          </LangSetCtx.Provider>
+        </LangCtx.Provider>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

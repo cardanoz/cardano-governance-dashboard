@@ -271,6 +271,7 @@ const sections = [
   { href: "/explorer/tokens", icon: "🪙", title: "Tokens", desc: "Native tokens, recent mints" },
   { href: "/explorer/analytics", icon: "📊", title: "Analytics", desc: "Trends, pots, distribution" },
   { href: "/explorer/addresses", icon: "📋", title: "Addresses", desc: "Rich list, top stakers" },
+  { href: "/explorer/constitution", icon: "📜", title: "Constitution", desc: "Amendment tool & proposals" },
 ];
 export default function ExplorerIndex() {
   return (
