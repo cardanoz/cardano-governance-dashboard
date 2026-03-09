@@ -59,50 +59,50 @@ import {
 // 35-Tier System
 // ══════════════════════════════════════════════
 const MAJOR_TIERS = [
-  { name: "\u795e\u8a71\u30fb\u4f1d\u8aac\u7d1a", emoji: "\ud83c\udfdb\ufe0f", color: "#FBBF24", range: "5M+" },
-  { name: "\u53e4\u4ee3\u751f\u547d\u7d1a", emoji: "\ud83e\uddb4", color: "#7C3AED", range: "2M~5M" },
-  { name: "\u30af\u30b8\u30e9\u7d1a", emoji: "\ud83d\udc0b", color: "#2563EB", range: "500K~2M" },
-  { name: "\u4e2d\u578b\u9b5a\u7d1a", emoji: "\ud83d\udc1f", color: "#0891B2", range: "100K~500K" },
-  { name: "\u5c0f\u578b\u9b5a\u7d1a", emoji: "\ud83d\udc20", color: "#34D399", range: "10K~100K" },
-  { name: "\u7532\u6bbb\u985e\u30fb\u5c0f\u751f\u7269\u7d1a", emoji: "\ud83e\udd90", color: "#FB923C", range: "1K~10K" },
-  { name: "\u30d7\u30e9\u30f3\u30af\u30c8\u30f3\u30fb\u5fae\u751f\u7269\u7d1a", emoji: "\ud83e\udda0", color: "#6B7280", range: "~1K" },
+  { name: "\u795e\u8a71\u30fb\u4f1d\u8aac\u7d1a", emoji: "🏛️", color: "#FBBF24", range: "5M+" },
+  { name: "\u53e4\u4ee3\u751f\u547d\u7d1a", emoji: "🦴", color: "#7C3AED", range: "2M~5M" },
+  { name: "\u30af\u30b8\u30e9\u7d1a", emoji: "🐋", color: "#2563EB", range: "500K~2M" },
+  { name: "\u4e2d\u578b\u9b5a\u7d1a", emoji: "🐟", color: "#0891B2", range: "100K~500K" },
+  { name: "\u5c0f\u578b\u9b5a\u7d1a", emoji: "🐠", color: "#34D399", range: "10K~100K" },
+  { name: "\u7532\u6bbb\u985e\u30fb\u5c0f\u751f\u7269\u7d1a", emoji: "🦐", color: "#FB923C", range: "1K~10K" },
+  { name: "\u30d7\u30e9\u30f3\u30af\u30c8\u30f3\u30fb\u5fae\u751f\u7269\u7d1a", emoji: "🦠", color: "#6B7280", range: "~1K" },
 ];
 const TIERS = [
-  { name: "\u30dd\u30bb\u30a4\u30c9\u30f3", emoji: "\ud83d\udd31", min: 10000000, max: Infinity, color: "#FFD700", desc: "\u6d77\u795e", major: 0, sub: "S+" },
-  { name: "\u30ea\u30f4\u30a1\u30a4\u30a2\u30b5\u30f3", emoji: "\ud83d\udc09", min: 8000000, max: 10000000, color: "#FCD34D", desc: "\u6d77\u306e\u602a\u7269", major: 0, sub: "S" },
-  { name: "\u30af\u30e9\u30fc\u30b1\u30f3", emoji: "\ud83e\udd91", min: 6000000, max: 8000000, color: "#F59E0B", desc: "\u6df1\u6df5\u306e\u4e3b", major: 0, sub: "A" },
-  { name: "\u30e8\u30eb\u30e0\u30f3\u30ac\u30f3\u30c9", emoji: "\ud83d\udc0d", min: 5000000, max: 6000000, color: "#D97706", desc: "\u4e16\u754c\u86c7", major: 0, sub: "B" },
-  { name: "\u30e1\u30ac\u30ed\u30c9\u30f3", emoji: "\ud83e\uddb7", min: 4000000, max: 5000000, color: "#8B5CF6", desc: "\u53e4\u4ee3\u5de8\u5927\u30b5\u30e1", major: 1, sub: "S" },
-  { name: "\u30c0\u30f3\u30af\u30eb\u30aa\u30b9\u30c6\u30a6\u30b9", emoji: "\ud83d\udee1\ufe0f", min: 3500000, max: 4000000, color: "#7C3AED", desc: "\u88c5\u7532\u9b5a", major: 1, sub: "A" },
-  { name: "\u30ea\u30fc\u30c9\u30b7\u30af\u30c6\u30a3\u30b9", emoji: "\ud83d\udc0b", min: 2500000, max: 3500000, color: "#6D28D9", desc: "\u53f2\u4e0a\u6700\u5927\u786c\u9aa8\u9b5a", major: 1, sub: "B" },
-  { name: "\u30d0\u30b7\u30ed\u30b5\u30a6\u30eb\u30b9", emoji: "\ud83e\udd95", min: 2000000, max: 2500000, color: "#5B21B6", desc: "\u539f\u59cb\u30af\u30b8\u30e9", major: 1, sub: "C" },
-  { name: "\u30b7\u30ed\u30ca\u30ac\u30b9\u30af\u30b8\u30e9", emoji: "\ud83d\udc33", min: 1500000, max: 2000000, color: "#3B82F6", desc: "Blue Whale", major: 2, sub: "S" },
-  { name: "\u30de\u30c3\u30b3\u30a6\u30af\u30b8\u30e9", emoji: "\ud83d\udc0b", min: 1000000, max: 1500000, color: "#2563EB", desc: "Sperm Whale", major: 2, sub: "A" },
-  { name: "\u30b6\u30c8\u30a6\u30af\u30b8\u30e9", emoji: "\ud83d\udc0b", min: 800000, max: 1000000, color: "#1D4ED8", desc: "Humpback", major: 2, sub: "B" },
-  { name: "\u30b8\u30f3\u30d9\u30a8\u30b6\u30e1", emoji: "\ud83e\udd88", min: 650000, max: 800000, color: "#1E40AF", desc: "Whale Shark", major: 2, sub: "C" },
-  { name: "\u30db\u30aa\u30b8\u30ed\u30b6\u30e1", emoji: "\ud83e\udd88", min: 500000, max: 650000, color: "#1E3A8A", desc: "Great White", major: 2, sub: "D" },
-  { name: "\u30de\u30b0\u30ed", emoji: "\ud83d\udc1f", min: 400000, max: 500000, color: "#06B6D4", desc: "Tuna", major: 3, sub: "S" },
+  { name: "\u30dd\u30bb\u30a4\u30c9\u30f3", emoji: "🔱", min: 10000000, max: Infinity, color: "#FFD700", desc: "\u6d77\u795e", major: 0, sub: "S+" },
+  { name: "\u30ea\u30f4\u30a1\u30a4\u30a2\u30b5\u30f3", emoji: "🐉", min: 8000000, max: 10000000, color: "#FCD34D", desc: "\u6d77\u306e\u602a\u7269", major: 0, sub: "S" },
+  { name: "\u30af\u30e9\u30fc\u30b1\u30f3", emoji: "🦑", min: 6000000, max: 8000000, color: "#F59E0B", desc: "\u6df1\u6df5\u306e\u4e3b", major: 0, sub: "A" },
+  { name: "\u30e8\u30eb\u30e0\u30f3\u30ac\u30f3\u30c9", emoji: "🐍", min: 5000000, max: 6000000, color: "#D97706", desc: "\u4e16\u754c\u86c7", major: 0, sub: "B" },
+  { name: "\u30e1\u30ac\u30ed\u30c9\u30f3", emoji: "🦷", min: 4000000, max: 5000000, color: "#8B5CF6", desc: "\u53e4\u4ee3\u5de8\u5927\u30b5\u30e1", major: 1, sub: "S" },
+  { name: "\u30c0\u30f3\u30af\u30eb\u30aa\u30b9\u30c6\u30a6\u30b9", emoji: "🛡️", min: 3500000, max: 4000000, color: "#7C3AED", desc: "\u88c5\u7532\u9b5a", major: 1, sub: "A" },
+  { name: "\u30ea\u30fc\u30c9\u30b7\u30af\u30c6\u30a3\u30b9", emoji: "🐋", min: 2500000, max: 3500000, color: "#6D28D9", desc: "\u53f2\u4e0a\u6700\u5927\u786c\u9aa8\u9b5a", major: 1, sub: "B" },
+  { name: "\u30d0\u30b7\u30ed\u30b5\u30a6\u30eb\u30b9", emoji: "🦕", min: 2000000, max: 2500000, color: "#5B21B6", desc: "\u539f\u59cb\u30af\u30b8\u30e9", major: 1, sub: "C" },
+  { name: "\u30b7\u30ed\u30ca\u30ac\u30b9\u30af\u30b8\u30e9", emoji: "🐳", min: 1500000, max: 2000000, color: "#3B82F6", desc: "Blue Whale", major: 2, sub: "S" },
+  { name: "\u30de\u30c3\u30b3\u30a6\u30af\u30b8\u30e9", emoji: "🐋", min: 1000000, max: 1500000, color: "#2563EB", desc: "Sperm Whale", major: 2, sub: "A" },
+  { name: "\u30b6\u30c8\u30a6\u30af\u30b8\u30e9", emoji: "🐋", min: 800000, max: 1000000, color: "#1D4ED8", desc: "Humpback", major: 2, sub: "B" },
+  { name: "\u30b8\u30f3\u30d9\u30a8\u30b6\u30e1", emoji: "🦈", min: 650000, max: 800000, color: "#1E40AF", desc: "Whale Shark", major: 2, sub: "C" },
+  { name: "\u30db\u30aa\u30b8\u30ed\u30b6\u30e1", emoji: "🦈", min: 500000, max: 650000, color: "#1E3A8A", desc: "Great White", major: 2, sub: "D" },
+  { name: "\u30de\u30b0\u30ed", emoji: "🐟", min: 400000, max: 500000, color: "#06B6D4", desc: "Tuna", major: 3, sub: "S" },
   { name: "\u30ab\u30b8\u30ad", emoji: "\u2694\ufe0f", min: 300000, max: 400000, color: "#0891B2", desc: "Marlin", major: 3, sub: "A" },
-  { name: "\u30d0\u30e9\u30af\u30fc\u30c0", emoji: "\ud83d\udc21", min: 200000, max: 300000, color: "#0E7490", desc: "Barracuda", major: 3, sub: "B" },
-  { name: "\u30b5\u30fc\u30e2\u30f3", emoji: "\ud83c\udf63", min: 150000, max: 200000, color: "#155E75", desc: "Salmon", major: 3, sub: "C" },
-  { name: "\u30bf\u30a4", emoji: "\ud83d\udc21", min: 120000, max: 150000, color: "#164E63", desc: "Sea Bream", major: 3, sub: "D" },
-  { name: "\u30a2\u30b8", emoji: "\ud83d\udc1f", min: 100000, max: 120000, color: "#134E4A", desc: "Horse Mackerel", major: 3, sub: "E" },
-  { name: "\u30af\u30de\u30ce\u30df", emoji: "\ud83d\udc20", min: 70000, max: 100000, color: "#34D399", desc: "Clownfish", major: 4, sub: "S" },
-  { name: "\u30cd\u30aa\u30f3\u30c6\u30c8\u30e9", emoji: "\ud83d\udc8e", min: 50000, max: 70000, color: "#10B981", desc: "Neon Tetra", major: 4, sub: "A" },
-  { name: "\u30bf\u30c4\u30ce\u30aa\u30c8\u30b7\u30b4", emoji: "\ud83d\udc34", min: 30000, max: 50000, color: "#059669", desc: "Seahorse", major: 4, sub: "B" },
-  { name: "\u30e1\u30c0\u30ab", emoji: "\ud83d\udc1f", min: 20000, max: 30000, color: "#047857", desc: "Killifish", major: 4, sub: "C" },
-  { name: "\u30b0\u30c3\u30d4\u30fc", emoji: "\ud83d\udc1f", min: 10000, max: 20000, color: "#065F46", desc: "Guppy", major: 4, sub: "D" },
-  { name: "\u30a4\u30bb\u30a8\u30d3", emoji: "\ud83e\udde6", min: 7000, max: 10000, color: "#F97316", desc: "Lobster", major: 5, sub: "S" },
-  { name: "\u30ab\u30cb", emoji: "\ud83e\udd80", min: 5000, max: 7000, color: "#EA580C", desc: "Crab", major: 5, sub: "A" },
-  { name: "\u30a8\u30d3", emoji: "\ud83e\udd90", min: 3000, max: 5000, color: "#DC2626", desc: "Shrimp", major: 5, sub: "B" },
-  { name: "\u30e4\u30c9\u30ab\u30ea", emoji: "\ud83d\udc1a", min: 2000, max: 3000, color: "#B91C1C", desc: "Hermit Crab", major: 5, sub: "C" },
-  { name: "\u30d5\u30b8\u30c4\u30dc", emoji: "\ud83e\udea8", min: 1000, max: 2000, color: "#991B1B", desc: "Barnacle", major: 5, sub: "D" },
-  { name: "\u30aa\u30ad\u30a2\u30df", emoji: "\ud83e\udd90", min: 500, max: 1000, color: "#9CA3AF", desc: "Krill", major: 6, sub: "S" },
-  { name: "\u30df\u30b8\u30f3\u30b3", emoji: "\ud83d\udd0d", min: 200, max: 500, color: "#6B7280", desc: "Daphnia", major: 6, sub: "A" },
-  { name: "\u30d7\u30e9\u30f3\u30af\u30c8\u30f3", emoji: "\ud83e\udee7", min: 50, max: 200, color: "#4B5563", desc: "Plankton", major: 6, sub: "B" },
-  { name: "\u30a2\u30e1\u30fc\u30d0", emoji: "\ud83d\udd2c", min: 10, max: 50, color: "#374151", desc: "Amoeba", major: 6, sub: "C" },
-  { name: "\u30d0\u30af\u30c6\u30ea\u30a2", emoji: "\ud83e\uddeb", min: 1, max: 10, color: "#1F2937", desc: "Bacteria", major: 6, sub: "D" },
-  { name: "\u30a6\u30a4\u30eb\u30b9", emoji: "\ud83e\uddec", min: 0, max: 1, color: "#111827", desc: "Virus", major: 6, sub: "E" },
+  { name: "\u30d0\u30e9\u30af\u30fc\u30c0", emoji: "🐡", min: 200000, max: 300000, color: "#0E7490", desc: "Barracuda", major: 3, sub: "B" },
+  { name: "\u30b5\u30fc\u30e2\u30f3", emoji: "🍣", min: 150000, max: 200000, color: "#155E75", desc: "Salmon", major: 3, sub: "C" },
+  { name: "\u30bf\u30a4", emoji: "🐡", min: 120000, max: 150000, color: "#164E63", desc: "Sea Bream", major: 3, sub: "D" },
+  { name: "\u30a2\u30b8", emoji: "🐟", min: 100000, max: 120000, color: "#134E4A", desc: "Horse Mackerel", major: 3, sub: "E" },
+  { name: "\u30af\u30de\u30ce\u30df", emoji: "🐠", min: 70000, max: 100000, color: "#34D399", desc: "Clownfish", major: 4, sub: "S" },
+  { name: "\u30cd\u30aa\u30f3\u30c6\u30c8\u30e9", emoji: "💎", min: 50000, max: 70000, color: "#10B981", desc: "Neon Tetra", major: 4, sub: "A" },
+  { name: "\u30bf\u30c4\u30ce\u30aa\u30c8\u30b7\u30b4", emoji: "🐴", min: 30000, max: 50000, color: "#059669", desc: "Seahorse", major: 4, sub: "B" },
+  { name: "\u30e1\u30c0\u30ab", emoji: "🐟", min: 20000, max: 30000, color: "#047857", desc: "Killifish", major: 4, sub: "C" },
+  { name: "\u30b0\u30c3\u30d4\u30fc", emoji: "🐟", min: 10000, max: 20000, color: "#065F46", desc: "Guppy", major: 4, sub: "D" },
+  { name: "\u30a4\u30bb\u30a8\u30d3", emoji: "🧦", min: 7000, max: 10000, color: "#F97316", desc: "Lobster", major: 5, sub: "S" },
+  { name: "\u30ab\u30cb", emoji: "🦀", min: 5000, max: 7000, color: "#EA580C", desc: "Crab", major: 5, sub: "A" },
+  { name: "\u30a8\u30d3", emoji: "🦐", min: 3000, max: 5000, color: "#DC2626", desc: "Shrimp", major: 5, sub: "B" },
+  { name: "\u30e4\u30c9\u30ab\u30ea", emoji: "🐚", min: 2000, max: 3000, color: "#B91C1C", desc: "Hermit Crab", major: 5, sub: "C" },
+  { name: "\u30d5\u30b8\u30c4\u30dc", emoji: "🪨", min: 1000, max: 2000, color: "#991B1B", desc: "Barnacle", major: 5, sub: "D" },
+  { name: "\u30aa\u30ad\u30a2\u30df", emoji: "🦐", min: 500, max: 1000, color: "#9CA3AF", desc: "Krill", major: 6, sub: "S" },
+  { name: "\u30df\u30b8\u30f3\u30b3", emoji: "🔍", min: 200, max: 500, color: "#6B7280", desc: "Daphnia", major: 6, sub: "A" },
+  { name: "\u30d7\u30e9\u30f3\u30af\u30c8\u30f3", emoji: "🫧", min: 50, max: 200, color: "#4B5563", desc: "Plankton", major: 6, sub: "B" },
+  { name: "\u30a2\u30e1\u30fc\u30d0", emoji: "🔬", min: 10, max: 50, color: "#374151", desc: "Amoeba", major: 6, sub: "C" },
+  { name: "\u30d0\u30af\u30c6\u30ea\u30a2", emoji: "🧫", min: 1, max: 10, color: "#1F2937", desc: "Bacteria", major: 6, sub: "D" },
+  { name: "\u30a6\u30a4\u30eb\u30b9", emoji: "🧬", min: 0, max: 1, color: "#111827", desc: "Virus", major: 6, sub: "E" },
 ];
 const getTier = (a: number) => TIERS.find(t => a >= t.min && a < t.max) || TIERS[TIERS.length - 1];
 const getNextTier = (a: number) => { const i = TIERS.findIndex(t => a >= t.min && a < t.max); return i > 0 ? TIERS[i - 1] : null; };
@@ -339,8 +339,8 @@ export default function CardanoWatch() {
           {lastFetch && <span className="text-xs text-gray-600">Updated: {lastFetch.toLocaleTimeString()}</span>}
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setHide(!hide)} className="px-2 py-1 rounded-lg hover:bg-gray-700 text-gray-400 text-xs">{hide ? "\ud83d\udc41\ufe0f Show" : "\ud83d\udc41\ufe0f Hide"}</button>
-          <button onClick={fetchAllData} disabled={apiStatus==="loading"} className="px-2 py-1 rounded-lg hover:bg-gray-700 text-gray-400 text-xs">\ud83d\udd04 Refresh</button>
+          <button onClick={() => setHide(!hide)} className="px-2 py-1 rounded-lg hover:bg-gray-700 text-gray-400 text-xs">{hide ? "👁️ Show" : "👁️ Hide"}</button>
+          <button onClick={fetchAllData} disabled={apiStatus==="loading"} className="px-2 py-1 rounded-lg hover:bg-gray-700 text-gray-400 text-xs">🔄 Refresh</button>
         </div>
       </div>
 
@@ -369,7 +369,7 @@ export default function CardanoWatch() {
       )}
 
       {/* ═══ Section 1: Asset Price Table ═══ */}
-      <Section title="\u4fa1\u683c\u30c6\u30fc\u30d6\u30eb" icon="\ud83d\udcca" badge={isLive ? "Live" : "Mock"}>
+      <Section title="\u4fa1\u683c\u30c6\u30fc\u30d6\u30eb" icon="📊" badge={isLive ? "Live" : "Mock"}>
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           <span className="text-xs text-gray-500">Periods:</span>
           {PERIODS.map(p => <Btn key={p.key} active={visiblePeriods[p.key]} onClick={() => setVisiblePeriods({...visiblePeriods, [p.key]: !visiblePeriods[p.key]})} color="#4B5563">{p.label}</Btn>)}
@@ -399,7 +399,7 @@ export default function CardanoWatch() {
       </Section>
 
       {/* ═══ Section 2: Price Analysis Chart ═══ */}
-      <Section title="\u4fa1\u683c\u6bd4\u8f03\u5206\u6790" icon="\ud83d\udcc8">
+      <Section title="\u4fa1\u683c\u6bd4\u8f03\u5206\u6790" icon="📈">
         <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
           <div className="flex items-center gap-1">
             {[{k:"7d",l:"7d"},{k:"1m",l:"1M"},{k:"all",l:"All"}].map(p => <Btn key={p.k} active={pricePeriod===p.k} onClick={()=>setPricePeriod(p.k)} color="#6366F1">{p.l}</Btn>)}
@@ -432,7 +432,7 @@ export default function CardanoWatch() {
       </Section>
 
       {/* ═══ Section 3: Wallets ═══ */}
-      <Section title="\u4fdd\u6709\u4e00\u89a7\uff08\u30a6\u30a9\u30ec\u30c3\u30c8\uff0b\u53d6\u5f15\u6240\uff09" icon="\ud83d\udc5b" badge={`${wallets.length}\u30a6\u30a9\u30ec\u30c3\u30c8 \u00b7 ${manual.length}\u624b\u52d5`}>
+      <Section title="\u4fdd\u6709\u4e00\u89a7\uff08\u30a6\u30a9\u30ec\u30c3\u30c8\uff0b\u53d6\u5f15\u6240\uff09" icon="👛" badge={`${wallets.length}\u30a6\u30a9\u30ec\u30c3\u30c8 \u00b7 ${manual.length}\u624b\u52d5`}>
         <div className="flex gap-2 mb-2">
           <input value={newName} onChange={e=>setNewName(e.target.value)} placeholder="\u30a6\u30a9\u30ec\u30c3\u30c8\u540d" className="bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-gray-600 w-36"/>
           <input value={newAddr} onChange={e=>setNewAddr(e.target.value)} placeholder="stake1... / addr1..." className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-gray-600"/>
@@ -445,7 +445,7 @@ export default function CardanoWatch() {
           <input value={mAmt} onChange={e=>setMAmt(e.target.value)} placeholder="ADA\u6570\u91cf" type="number" className="bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-gray-600 w-28"/>
           <button onClick={addManual} className="bg-orange-600 hover:bg-orange-500 px-3 py-1.5 rounded-lg text-xs font-medium">+ \u624b\u52d5</button>
         </div>
-        <div className="text-xs text-gray-600 mb-2">\ud83d\udee1\ufe0f \u30ed\u30fc\u30ab\u30eb\u306e\u307f\u4fdd\u5b58\u30fb\u30b5\u30fc\u30d0\u30fc\u9001\u4fe1\u306a\u3057</div>
+        <div className="text-xs text-gray-600 mb-2">🛡️ \u30ed\u30fc\u30ab\u30eb\u306e\u307f\u4fdd\u5b58\u30fb\u30b5\u30fc\u30d0\u30fc\u9001\u4fe1\u306a\u3057</div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead><tr className="text-gray-500 text-left border-b border-gray-700">
@@ -479,7 +479,7 @@ export default function CardanoWatch() {
       </Section>
 
       {/* ═══ Section 4: Rewards ═══ */}
-      <Section title="\u5831\u916c\u30b5\u30de\u30ea\u30fc" icon="\ud83e\ude99" badge={`\u20b3 ${fmt(totalRew, 1)}`}>
+      <Section title="\u5831\u916c\u30b5\u30de\u30ea\u30fc" icon="🪙" badge={`\u20b3 ${fmt(totalRew, 1)}`}>
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-gray-400">Staking: <span className="text-green-400 font-bold">{H(`\u20b3 ${fmt(totalRew,1)}`)}</span></span>
           <button onClick={exportCSV} className="text-xs bg-green-700 hover:bg-green-600 px-2.5 py-1 rounded">CSV\u51fa\u529b</button>
@@ -516,7 +516,7 @@ export default function CardanoWatch() {
       </Section>
 
       {/* ═══ Tier Reference (collapsed) ═══ */}
-      <Section title="\u5168{TIERS.length}\u6bb5\u968e\u30c6\u30a3\u30a2\u4e00\u89a7" icon="\ud83c\udfc6" defaultOpen={false}>
+      <Section title="\u5168{TIERS.length}\u6bb5\u968e\u30c6\u30a3\u30a2\u4e00\u89a7" icon="🏆" defaultOpen={false}>
         {MAJOR_TIERS.map((mt, mi) => (
           <div key={mi} className="mb-2">
             <div className="text-xs font-bold px-2 py-1 rounded mb-1" style={{color:mt.color,backgroundColor:mt.color+'15'}}>{mt.emoji} {mt.name} <span className="text-gray-500 font-normal ml-1">{mt.range}</span></div>
@@ -594,11 +594,11 @@ with open(dash_page, "w") as f:
     f.write('''export const dynamic = "force-dynamic";
 
 const dashboards = [
-  { name: "ADA Holder", href: "/dashboard/holder", emoji: "\ud83e\ude99", desc: "Portfolio, prices, wallets, rewards" },
-  { name: "SPO", href: "/dashboard/spo", emoji: "\ud83c\udfca", desc: "Pool performance, delegators, blocks" },
-  { name: "DRep", href: "/dashboard/drep", emoji: "\ud83d\uddf3\ufe0f", desc: "Voting matrix, governance, simulator" },
-  { name: "Governance", href: "/dashboard/governance", emoji: "\ud83c\udfdb\ufe0f", desc: "Proposals, committee, constitution" },
-  { name: "Chain Analyst", href: "/dashboard/chain", emoji: "\ud83d\udd17", desc: "Epochs, blocks, transactions, stats" },
+  { name: "ADA Holder", href: "/dashboard/holder", emoji: "🪙", desc: "Portfolio, prices, wallets, rewards" },
+  { name: "SPO", href: "/dashboard/spo", emoji: "🏊", desc: "Pool performance, delegators, blocks" },
+  { name: "DRep", href: "/dashboard/drep", emoji: "🗳️", desc: "Voting matrix, governance, simulator" },
+  { name: "Governance", href: "/dashboard/governance", emoji: "🏛️", desc: "Proposals, committee, constitution" },
+  { name: "Chain Analyst", href: "/dashboard/chain", emoji: "🔗", desc: "Epochs, blocks, transactions, stats" },
 ];
 
 export default function DashboardIndex() {
@@ -703,7 +703,7 @@ export default function Header() {
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Live
           </Link>
           <Link href="/search" className={`px-3 py-2 rounded-lg text-sm font-medium transition ${pathname === "/search" ? "text-white bg-gray-700" : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"}`}>
-            {"\ud83d\udd0d"}
+            {"🔍"}
           </Link>
         </nav>
       </div>

@@ -147,7 +147,7 @@ export default function SPODashboard() {
     <div className="space-y-3">
       {/* ── Search bar (compact) ── */}
       <div className="relative">
-        <input type="text" placeholder="\\ud83d\\udd0d Search pool by ticker, name, or ID..." value={input} onChange={e=>setInput(e.target.value)}
+        <input type="text" placeholder="🔍 Search pool by ticker, name, or ID..." value={input} onChange={e=>setInput(e.target.value)}
           className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
         {results.length > 0 && (
           <div className="absolute top-full left-0 right-0 bg-gray-800 border border-gray-700 rounded-lg shadow-xl mt-1 max-h-48 overflow-y-auto z-50">
@@ -189,7 +189,7 @@ export default function SPODashboard() {
       {/* ── Empty state ── */}
       {!cur && !loading && (
         <div className="text-center py-12 text-gray-600">
-          <div className="text-3xl mb-2">\\ud83c\\udfca</div>Search and add your pool above
+          <div className="text-3xl mb-2">🏊</div>Search and add your pool above
         </div>
       )}
 
@@ -601,7 +601,7 @@ export default function DRepDashboard() {
 
       {/* Search */}
       <div className="relative">
-        <input type="text" placeholder="\\ud83d\\udd0d Search DRep by ID..." value={input} onChange={e=>setInput(e.target.value)}
+        <input type="text" placeholder="🔍 Search DRep by ID..." value={input} onChange={e=>setInput(e.target.value)}
           className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
         {results.length > 0 && (
           <div className="absolute top-full left-0 right-0 bg-gray-800 border border-gray-700 rounded-lg shadow-xl mt-1 max-h-48 overflow-y-auto z-50">
@@ -616,7 +616,7 @@ export default function DRepDashboard() {
         )}
       </div>
 
-      {!drepId && !loading && <div className="text-center py-12 text-gray-600"><div className="text-3xl mb-2">\\ud83d\\uddf3</div>Search for a DRep above</div>}
+      {!drepId && !loading && <div className="text-center py-12 text-gray-600"><div className="text-3xl mb-2">🗳</div>Search for a DRep above</div>}
       {loading && <div className="space-y-3">{[1,2].map(i=><div key={i} className="h-20 bg-gray-700/20 rounded-xl animate-pulse"/>)}</div>}
 
       {d && !d.error && !loading && <>
@@ -664,7 +664,7 @@ export default function DRepDashboard() {
                     {v.vote==="VoteYes"?"Yes":v.vote==="VoteNo"?"No":"Abs"}
                   </span>
                   <span className="text-gray-400">{v.proposal_type}</span>
-                  {v.anchor_url && <a href={v.anchor_url} target="_blank" rel="noopener" className="text-purple-400">\\ud83d\\udcce</a>}
+                  {v.anchor_url && <a href={v.anchor_url} target="_blank" rel="noopener" className="text-purple-400">📎</a>}
                 </span>
                 <span className="text-gray-500">{ago(v.vote_time)}</span>
               </div>
@@ -836,8 +836,8 @@ export default function ChainDashboard() {
                   <span className="text-gray-500 w-5 text-right">{e.rank}</span>
                   <span className={`px-1 py-0.5 rounded text-[10px] ${e.addr_type==="stake"?"bg-blue-500/20 text-blue-400":e.addr_type==="byron"?"bg-amber-500/20 text-amber-400":"bg-purple-500/20 text-purple-400"}`}>{e.addr_type}</span>
                   <span className="font-mono text-gray-300">{e.identifier?.slice(0,16)}...</span>
-                  {e.is_exchange && <span className="text-yellow-400" title={e.exchange_reason}>\\ud83c\\udfe6</span>}
-                  {e.is_likely_lost && <span className="text-red-400" title={e.lost_reason}>\\ud83d\\udc80</span>}
+                  {e.is_exchange && <span className="text-yellow-400" title={e.exchange_reason}>🏦</span>}
+                  {e.is_likely_lost && <span className="text-red-400" title={e.lost_reason}>💀</span>}
                 </span>
                 <span className="font-bold">{fA(e.balance)}</span>
               </div>
