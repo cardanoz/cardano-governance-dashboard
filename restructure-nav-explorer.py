@@ -304,7 +304,7 @@ PAGES["explorer/chain/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
@@ -388,7 +388,7 @@ PAGES["explorer/staking/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
@@ -484,7 +484,7 @@ export default function StakingExplorer() {
 PAGES["explorer/governance/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
@@ -608,7 +608,7 @@ PAGES["explorer/tokens/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
 
@@ -672,7 +672,7 @@ export default function TokensExplorer() {
 PAGES["explorer/analytics/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 
 function Skeleton() { return <div className="space-y-4">{[1,2,3,4,5].map(i=><div key={i} className="h-8 bg-gray-700/50 rounded animate-pulse"/>)}</div>; }
@@ -737,7 +737,7 @@ PAGES["explorer/addresses/page.tsx"] = r'''"use client";
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const truncAddr = (h: string, n=12) => h ? h.slice(0,n)+"..."+h.slice(-6) : "";
 const timeAgo = (t: string) => { if(!t) return "-"; const s=(Date.now()-new Date(t).getTime())/1000; if(s<60)return `${Math.floor(s)}s ago`; if(s<3600)return `${Math.floor(s/60)}m ago`; if(s<86400)return `${Math.floor(s/3600)}h ago`; if(s<2592000)return `${Math.floor(s/86400)}d ago`; return `${(s/31536000).toFixed(1)}y ago`; };

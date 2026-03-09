@@ -73,7 +73,7 @@ with open(os.path.join(spo_dir, "page.tsx"), "w", encoding="utf-8") as f:
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fA = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const fM = (v: any) => { const n=Number(v||0)/1e6; if(n>=1e9) return (n/1e9).toFixed(2)+"B"; if(n>=1e6) return (n/1e6).toFixed(2)+"M"; if(n>=1e3) return (n/1e3).toFixed(1)+"K"; return n.toFixed(0); };
 const ago = (t: string) => { if(!t) return "-"; const s=(Date.now()-new Date(t).getTime())/1000; if(s<60)return Math.floor(s)+"s"; if(s<3600)return Math.floor(s/60)+"m"; if(s<86400)return Math.floor(s/3600)+"h"; return Math.floor(s/86400)+"d"; };
@@ -367,7 +367,7 @@ with open(os.path.join(gov_dir, "page.tsx"), "w", encoding="utf-8") as f:
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fA = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const fM = (v: any) => { const n=Number(v||0)/1e6; if(n>=1e9) return (n/1e9).toFixed(2)+"B"; if(n>=1e6) return (n/1e6).toFixed(2)+"M"; return n.toFixed(0); };
 const tr = (h: string, n=10) => h ? h.slice(0,n)+"\\u2026" : "";
@@ -549,7 +549,7 @@ with open(os.path.join(drep_dir, "page.tsx"), "w", encoding="utf-8") as f:
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fA = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const fM = (v: any) => { const n=Number(v||0)/1e6; if(n>=1e9) return (n/1e9).toFixed(2)+"B"; if(n>=1e6) return (n/1e6).toFixed(2)+"M"; return n.toFixed(0); };
 const tr = (h: string, n=12) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
@@ -729,7 +729,7 @@ with open(os.path.join(chain_dir, "page.tsx"), "w", encoding="utf-8") as f:
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 const fA = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const fM = (v: any) => { const n=Number(v||0)/1e6; if(n>=1e9) return (n/1e9).toFixed(2)+"B"; if(n>=1e6) return (n/1e6).toFixed(2)+"M"; if(n>=1e3) return (n/1e3).toFixed(1)+"K"; return n.toFixed(0); };
 

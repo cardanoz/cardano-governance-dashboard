@@ -60,7 +60,7 @@ const fmt = (n: number, d = 0) => n.toLocaleString(undefined, { maximumFractionD
 const fmtK = (n: number) => n >= 1e6 ? `${(n/1e6).toFixed(1)}M` : n >= 1e3 ? `${(n/1e3).toFixed(0)}K` : `${n}`;
 
 // API endpoints
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api";
 const CG_BASE = "https://api.coingecko.com/api/v3";
 const CG_IDS: Record<string,string> = { ADA: "cardano", BTC: "bitcoin", ETH: "ethereum", SOL: "solana", XRP: "ripple", GOLD: "pax-gold" };
 
