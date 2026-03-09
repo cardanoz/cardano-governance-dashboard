@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38483759243545795",
-    "supply_circulating": "37146346888431140",
-    "supply_locked": "517284714620170",
+    "supply_circulating": "37146346412037750",
+    "supply_locked": "517333074169891",
     "supply_treasury": "1650231853481439",
     "supply_reserves": "6516240756454205",
-    "stake_live": "21780237585983439",
+    "stake_live": "21780817046616005",
     "stake_active": "21750394647282169"
   },
   "protocolParams": {
@@ -2469,13 +2469,13 @@
     "f35285db3c4e085ad331843b3007737952b8a322bb3216311edc37fdf44ad3da#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 1.4,
-        "no_pct": 98.6,
-        "yes_votes_cast": 11,
-        "no_votes_cast": 9,
+        "yes_pct": 1.5,
+        "no_pct": 98.5,
+        "yes_votes_cast": 13,
+        "no_votes_cast": 10,
         "abstain_votes_cast": 0,
-        "yes_power": "81777599047236",
-        "no_power": "5752870376714194"
+        "yes_power": "87727086306925",
+        "no_power": "5746920889454505"
       },
       "cc": {
         "yes_pct": 0,
@@ -2499,11 +2499,11 @@
       "drep": {
         "yes_pct": 1.62,
         "no_pct": 98.38,
-        "yes_votes_cast": 14,
+        "yes_votes_cast": 15,
         "no_votes_cast": 7,
         "abstain_votes_cast": 0,
-        "yes_power": "94487785032742",
-        "no_power": "5740160190728688"
+        "yes_power": "94584125846667",
+        "no_power": "5740063849914763"
       },
       "cc": {
         "yes_pct": 0,
@@ -2525,13 +2525,13 @@
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 47.09,
-        "no_pct": 52.91,
-        "yes_votes_cast": 78,
+        "yes_pct": 47.1,
+        "no_pct": 52.9,
+        "yes_votes_cast": 79,
         "no_votes_cast": 8,
         "abstain_votes_cast": 3,
-        "yes_power": "2730045298544874",
-        "no_power": "3067010099193156"
+        "yes_power": "2730141639358799",
+        "no_power": "3066913758379231"
       },
       "cc": {
         "yes_pct": 33.33,
@@ -2581,13 +2581,13 @@
     "73a4eb2148781c37ef37c90a33a1d3d00511a8eefe9cdfaa1ea593b090f23f96#0": {
       "proposal_type": "InfoAction",
       "drep": {
-        "yes_pct": 36.06,
-        "no_pct": 63.94,
-        "yes_votes_cast": 105,
+        "yes_pct": 39.74,
+        "no_pct": 60.26,
+        "yes_votes_cast": 107,
         "no_votes_cast": 39,
-        "abstain_votes_cast": 12,
-        "yes_power": "2024042200391624",
-        "no_power": "3589714729497585"
+        "abstain_votes_cast": 13,
+        "yes_power": "2214067927621848",
+        "no_power": "3356761432157754"
       },
       "cc": {
         "yes_pct": 25,
