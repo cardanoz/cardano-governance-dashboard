@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38483759243545795",
-    "supply_circulating": "37146347077100027",
-    "supply_locked": "517326588626341",
+    "supply_circulating": "37146346888431140",
+    "supply_locked": "517284714620170",
     "supply_treasury": "1650231853481439",
     "supply_reserves": "6516240756454205",
-    "stake_live": "21782317221814230",
+    "stake_live": "21780237585983439",
     "stake_active": "21750394647282169"
   },
   "protocolParams": {
@@ -2469,13 +2469,13 @@
     "f35285db3c4e085ad331843b3007737952b8a322bb3216311edc37fdf44ad3da#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 1.39,
-        "no_pct": 98.61,
-        "yes_votes_cast": 10,
+        "yes_pct": 1.4,
+        "no_pct": 98.6,
+        "yes_votes_cast": 11,
         "no_votes_cast": 9,
         "abstain_votes_cast": 0,
-        "yes_power": "81367017736078",
-        "no_power": "5753280958025352"
+        "yes_power": "81777599047236",
+        "no_power": "5752870376714194"
       },
       "cc": {
         "yes_pct": 0,
@@ -2497,13 +2497,13 @@
     "e9693ed6b6465b2b46daaf641486a12b4b2946081634b5967b9d98897b0598fa#0": {
       "proposal_type": "InfoAction",
       "drep": {
-        "yes_pct": 1.61,
-        "no_pct": 98.39,
-        "yes_votes_cast": 13,
+        "yes_pct": 1.62,
+        "no_pct": 98.38,
+        "yes_votes_cast": 14,
         "no_votes_cast": 7,
         "abstain_votes_cast": 0,
-        "yes_power": "94077203721584",
-        "no_power": "5740570772039846"
+        "yes_power": "94487785032742",
+        "no_power": "5740160190728688"
       },
       "cc": {
         "yes_pct": 0,
@@ -2525,13 +2525,13 @@
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 46.99,
-        "no_pct": 53.01,
-        "yes_votes_cast": 76,
+        "yes_pct": 47.09,
+        "no_pct": 52.91,
+        "yes_votes_cast": 78,
         "no_votes_cast": 8,
         "abstain_votes_cast": 3,
-        "yes_power": "2724225329687617",
-        "no_power": "3072830068050413"
+        "yes_power": "2730045298544874",
+        "no_power": "3067010099193156"
       },
       "cc": {
         "yes_pct": 33.33,
