@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-09T22:01:09.633Z",
+  "generatedAt": "2026-03-09T22:51:13.297Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 48,
@@ -32,31 +32,31 @@
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on Cardano's budget framework receive mixed support based on fiscal responsibility and governance structure concerns. Supporters view these frameworks as necessary for transparency and ecosystem maturation, while detractors question spending limits, process maturity, and whether previous budget cycles have been adequately reviewed.",
-      "summary_ja": "CardanoのBudget Frameworkに関するInfoActionは、財政責任とガバナンス構造の懸念に基づいて賛否が分かれています。支持者はこれらのフレームワークを透明性と生態系の成熟に必要なものと見なし、反対者は支出制限、プロセスの成熟度、および過去の予算サイクルが適切にレビューされたかどうかを疑問視しています。",
+      "summary_en": "InfoActions on Cardano's budget framework and Net Change Limits reflect community support for establishing transparent, structured treasury governance processes, though with significant debate over spending levels and fiscal discipline. Supporters view these frameworks as necessary for ecosystem maturation and predictable governance, while critics worry about centralized control, insufficient accountability, and spending levels that don't align with ecosystem inflows.",
+      "summary_ja": "CardanoのBudget Frameworkおよび純変化制限（NCL）に関するInfoActionは、透明性のある構造化されたトレジャリーガバナンスプロセス確立への支持を反映していますが、支出水準と財政規律をめぐる大きな議論があります。支持者はこれらのフレームワークをエコシステムの成熟と予測可能なガバナンスに必要と見なし、批評家は中央集権的コントロール、不十分な説明責任、およびエコシステムの流入との不一致を懸念しています。",
       "typicalReasonsYes_en": [
-        "Improves transparency and establishes clear budgeting procedures for treasury management",
-        "Provides structured coordination framework that reduces arbitrary spending and social engineering",
-        "Demonstrates ecosystem maturation and signals responsible fiscal governance",
-        "Creates predictability and common reference framework for all stakeholders"
+        "Improves transparency and establishes clear, predictable procedures for treasury budget management and fund distribution",
+        "Provides necessary fiscal guardrail and discipline to prevent arbitrary spending and social engineering for funding",
+        "Signals ecosystem maturation and enables better coordination among proposers, DReps, development teams, and community",
+        "Reduces past inconsistencies in evaluation criteria and improves proposal quality through structured framework"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー管理の透明性を向上させ、明確な予算手続きを確立する",
-        "恣意的な支出と社会工学的���作を減らす構造化された調整フレームワークを提供する",
-        "生態系の成熟を実証し、責任ある財政ガバナンスを示唆する",
-        "全ステークホルダーにとって予測可能性と共通の参照枠を作成する"
+        "予算管理と資金配分におけるトレジャリーの透明性を向上させ、明確で予測可能な手続きを確立する",
+        "恣意的な支出と資金調達への社会工学を防ぐために必要な財政規律を提供する",
+        "エコシステムの成熟を示し、提案者、DRep、開発チーム、コミュニティ間のより良い調整を可能にする",
+        "過去の評価基準の不一貫性を軽減し、構造化されたフレームワークを通じて提案の質を向上させる"
       ],
       "typicalReasonsNo_en": [
-        "Concerns that framework concentrates power toward organized entities and reduces decentralized friction",
-        "Lack of transparent reporting and analysis of previous budget cycles (2025) before approving future budgets",
-        "Budget spending limits (300M-350M ADA) viewed as either excessive or insufficient depending on market conditions",
-        "Questions about governance maturity and effectiveness measurement mechanisms before committing large treasury resources"
+        "Proposed spending limits (300M-350M ADA) remain excessive relative to treasury inflows and market conditions; should be reduced to 200-250M ADA for stricter fiscal discipline",
+        "Lack of transparent reporting and outcomes analysis from prior budget cycles (2025) prevents informed decision-making on future allocations",
+        "Risks concentrating power with organized actors like Intersect while reducing natural friction that protects against governance capture in decentralized systems",
+        "Framework lacks accountability mechanisms, effectiveness measurement systems, and mid-term review provisions to ensure proper fund utilization"
       ],
       "typicalReasonsNo_ja": [
-        "フレームワークが権力を組織化されたエンティティに集中させ、分散化の摩擦を減らすことへの懸念",
-        "将来の予算を承認する前に過去の予算サイクル（2025年）の透明な報告と分析の欠如",
-        "市場状況に応じて過度または不十分と見なされる予算支出制限（300M～350M ADA）",
-        "大規模なトレジャリーリソースをコミットする前のガバナンスの成熟度と効果測定メカニズムに関する質問"
+        "提案された支出制限（300M～350M ADA）は依然としてトレジャリー流入と市場状況に対して過度であり、財政規律強化のため200～250M ADAに削減すべき",
+        "過去の予算サイクル（2025）からの透明な報告と成果分析の欠如により、将来の配分について情報に基づいた意思決定ができない",
+        "Intersectなどの組織化されたアクターへの権力集中のリスクがあり、分散型システムにおけるガバナンス乗っ取りから保護する自然な摩擦を減少させる",
+        "フレームワークには説明責任メカニズム、効果測定システム、および資金の適切な利用を確保するための中期レビュー規定がない"
       ]
     },
     "ParameterChange": {
