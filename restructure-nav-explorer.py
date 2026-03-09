@@ -299,23 +299,29 @@ export default function ExplorerIndex() {
 }
 '''
 
-# --- Chain Explorer ---
-PAGES["explorer/chain/page.tsx"] = r'''import { fetchAPI } from "@/lib/api";
-import { fmtAda, truncHash, timeAgo } from "@/lib/format";
+# --- Chain Explorer (client-side for instant load) ---
+PAGES["explorer/chain/page.tsx"] = r'''"use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
+const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
+const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
 
-export default async function ChainExplorer() {
-  const data: any = await fetchAPI("/explorer/chain");
-  if (!data) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
-  const { latestBlocks, latestTxs, epochs } = data;
+function Skeleton() { return <div className="space-y-4">{[1,2,3,4,5].map(i=><div key={i} className="h-8 bg-gray-700/50 rounded animate-pulse"/>)}</div>; }
+
+export default function ChainExplorer() {
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState(false);
+  useEffect(() => { fetch(`${API}/explorer/chain`).then(r=>r.json()).then(setData).catch(()=>setErr(true)); }, []);
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Chain Explorer</h1>
-
-      {/* Epochs */}
+      {err && <div className="p-8 text-center text-gray-400">Failed to load</div>}
+      {!data && !err && <Skeleton/>}
+      {data && <>
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Epochs</h2>
         <div className="overflow-x-auto">
@@ -324,7 +330,7 @@ export default async function ChainExplorer() {
               <th className="text-left py-2">Epoch</th><th className="text-left py-2">Started</th>
               <th className="text-right py-2">Blocks</th><th className="text-right py-2">Fees</th>
             </tr></thead>
-            <tbody>{(epochs||[]).map((e: any) => (
+            <tbody>{(data.epochs||[]).map((e: any) => (
               <tr key={e.no} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                 <td className="py-2"><Link href={`/epoch/${e.no}`} className="text-blue-400 hover:underline font-bold">{e.no}</Link></td>
                 <td className="py-2 text-gray-400">{e.start_time ? timeAgo(e.start_time) : "\u2014"}</td>
@@ -335,14 +341,11 @@ export default async function ChainExplorer() {
           </table>
         </div>
       </div>
-
-      {/* Two columns: Blocks and Txs */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Latest Blocks */}
         <div className="bg-gray-800 rounded-xl p-6">
           <h2 className="text-lg font-semibold mb-4">Latest Blocks</h2>
           <div className="space-y-2">
-            {(latestBlocks||[]).slice(0,15).map((b: any) => (
+            {(data.latestBlocks||[]).slice(0,15).map((b: any) => (
               <div key={b.block_no} className="flex justify-between items-center py-2 border-b border-gray-700/30 text-sm">
                 <div>
                   <Link href={`/block/${b.hash}`} className="text-blue-400 hover:underline font-mono">#{b.block_no}</Link>
@@ -356,12 +359,10 @@ export default async function ChainExplorer() {
             ))}
           </div>
         </div>
-
-        {/* Latest Transactions */}
         <div className="bg-gray-800 rounded-xl p-6">
           <h2 className="text-lg font-semibold mb-4">Latest Transactions</h2>
           <div className="space-y-2">
-            {(latestTxs||[]).slice(0,15).map((tx: any, i: number) => (
+            {(data.latestTxs||[]).slice(0,15).map((tx: any, i: number) => (
               <div key={i} className="flex justify-between items-center py-2 border-b border-gray-700/30 text-sm">
                 <div>
                   <Link href={`/tx/${tx.hash}`} className="text-blue-400 hover:underline font-mono text-xs">{truncHash(tx.hash, 10)}</Link>
@@ -376,33 +377,41 @@ export default async function ChainExplorer() {
           </div>
         </div>
       </div>
+      </>}
     </div>
   );
 }
 '''
 
-# --- Staking Explorer ---
-PAGES["explorer/staking/page.tsx"] = r'''import { fetchAPI } from "@/lib/api";
-import { fmtAda, truncHash, timeAgo, compactNumber } from "@/lib/format";
+# --- Staking Explorer (client-side for instant load) ---
+PAGES["explorer/staking/page.tsx"] = r'''"use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
+const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
+const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
+const compact = (n: number) => n>=1e6?`${(n/1e6).toFixed(1)}M`:n>=1e3?`${(n/1e3).toFixed(1)}K`:n.toString();
 
-export default async function StakingExplorer() {
-  const data: any = await fetchAPI("/explorer/staking");
-  if (!data) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
-  const { pools, recentDelegations, stakeDistribution, stats } = data;
+function Skeleton() { return <div className="space-y-4">{[1,2,3,4,5].map(i=><div key={i} className="h-8 bg-gray-700/50 rounded animate-pulse"/>)}</div>; }
+
+export default function StakingExplorer() {
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState(false);
+  useEffect(() => { fetch(`${API}/explorer/staking`).then(r=>r.json()).then(setData).catch(()=>setErr(true)); }, []);
+
+  if (err) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Staking Explorer</h1>
-
-      {/* Stats */}
+      {!data ? <Skeleton/> : <>
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Total Staked", value: fmtAda(stats?.total_staked||0)+" ADA", color: "text-green-400" },
-          { label: "Stakers", value: compactNumber(Number(stats?.total_stakers||0)), color: "text-blue-400" },
-          { label: "Active Pools", value: Number(stats?.active_pools||0).toLocaleString(), color: "text-purple-400" },
+          { label: "Total Staked", value: fmtAda(data.stats?.total_staked||0)+" ADA", color: "text-green-400" },
+          { label: "Stakers", value: compact(Number(data.stats?.total_stakers||0)), color: "text-blue-400" },
+          { label: "Active Pools", value: Number(data.stats?.active_pools||0).toLocaleString(), color: "text-purple-400" },
         ].map((s, i) => (
           <div key={i} className="bg-gray-800 rounded-xl p-4 text-center">
             <span className="text-gray-400 text-xs">{s.label}</span>
@@ -410,13 +419,11 @@ export default async function StakingExplorer() {
           </div>
         ))}
       </div>
-
-      {/* Stake Distribution */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Stake Distribution</h2>
         <div className="space-y-2">
-          {(stakeDistribution||[]).map((b: any, i: number) => {
-            const maxTotal = Math.max(...(stakeDistribution||[]).map((x: any) => Number(x.total)));
+          {(data.stakeDistribution||[]).map((b: any, i: number) => {
+            const maxTotal = Math.max(...(data.stakeDistribution||[]).map((x: any) => Number(x.total)));
             const pct = maxTotal > 0 ? (Number(b.total)/maxTotal)*100 : 0;
             return (
               <div key={i} className="flex items-center gap-3 text-sm">
@@ -432,8 +439,6 @@ export default async function StakingExplorer() {
           })}
         </div>
       </div>
-
-      {/* Top Pools */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Top Pools by Stake</h2>
         <div className="overflow-x-auto">
@@ -442,7 +447,7 @@ export default async function StakingExplorer() {
               <th className="text-left py-2">Pool</th><th className="text-right py-2">Stake</th>
               <th className="text-right py-2">Delegators</th><th className="text-right py-2">Margin</th>
             </tr></thead>
-            <tbody>{(pools||[]).map((p: any, i: number) => (
+            <tbody>{(data.pools||[]).map((p: any, i: number) => (
               <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                 <td className="py-2"><Link href={`/pool/${p.pool_id}`} className="text-blue-400 hover:underline">{p.ticker || p.name || p.pool_id?.slice(0,20)}</Link></td>
                 <td className="py-2 text-right">{fmtAda(p.stake)} ADA</td>
@@ -453,8 +458,6 @@ export default async function StakingExplorer() {
           </table>
         </div>
       </div>
-
-      {/* Recent Delegations */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Delegations</h2>
         <table className="w-full text-sm">
@@ -462,7 +465,7 @@ export default async function StakingExplorer() {
             <th className="text-left py-2">Stake Address</th><th className="text-left py-2">Pool</th>
             <th className="text-right py-2">Time</th>
           </tr></thead>
-          <tbody>{(recentDelegations||[]).map((d: any, i: number) => (
+          <tbody>{(data.recentDelegations||[]).map((d: any, i: number) => (
             <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/30">
               <td className="py-2 font-mono text-xs">{truncHash(d.stake_addr,10)}</td>
               <td className="py-2"><Link href={`/pool/${d.pool_id}`} className="text-blue-400 hover:underline text-xs">{d.pool_name || d.pool_id?.slice(0,20)}</Link></td>
@@ -471,60 +474,64 @@ export default async function StakingExplorer() {
           </tbody>
         </table>
       </div>
+      </>}
     </div>
   );
 }
 '''
 
-# --- Governance Explorer ---
-PAGES["explorer/governance/page.tsx"] = r'''import { fetchAPI } from "@/lib/api";
-import { truncHash, timeAgo, lovelaceToAda } from "@/lib/format";
+# --- Governance Explorer (client-side) ---
+PAGES["explorer/governance/page.tsx"] = r'''"use client";
+import { useState, useEffect } from "react";
 
-export const dynamic = "force-dynamic";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
+const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
+const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
 
-export default async function GovernanceExplorer() {
-  const data: any = await fetchAPI("/explorer/governance");
-  if (!data) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
-  const { proposals, dreps, committee, recentVotes, constitution, protocolParams: pp } = data;
+function Skeleton() { return <div className="space-y-4">{[1,2,3,4,5].map(i=><div key={i} className="h-8 bg-gray-700/50 rounded animate-pulse"/>)}</div>; }
+
+export default function GovernanceExplorer() {
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState(false);
+  useEffect(() => { fetch(`${API}/explorer/governance`).then(r=>r.json()).then(setData).catch(()=>setErr(true)); }, []);
+
+  if (err) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
+  const pp = data?.protocolParams || {};
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Governance Explorer</h1>
-
-      {/* Constitution */}
-      {constitution && (
+      {!data ? <Skeleton/> : <>
+      {data.constitution && (
         <div className="bg-gray-800 rounded-xl p-6">
           <h2 className="text-lg font-semibold mb-3">Constitution</h2>
           <div className="text-sm">
-            {constitution.url && <p><span className="text-gray-400">URL: </span><a href={constitution.url} target="_blank" rel="noopener" className="text-blue-400 hover:underline break-all">{constitution.url}</a></p>}
-            {constitution.script_hash && <p className="mt-1"><span className="text-gray-400">Script: </span><span className="font-mono text-xs">{constitution.script_hash}</span></p>}
+            {data.constitution.url && <p><span className="text-gray-400">URL: </span><a href={data.constitution.url} target="_blank" rel="noopener" className="text-blue-400 hover:underline break-all">{data.constitution.url}</a></p>}
+            {data.constitution.script_hash && <p className="mt-1"><span className="text-gray-400">Script: </span><span className="font-mono text-xs">{data.constitution.script_hash}</span></p>}
           </div>
         </div>
       )}
-
-      {/* Protocol Params Summary */}
       <div className="bg-gray-800 rounded-xl p-6">
-        <h2 className="text-lg font-semibold mb-3">Protocol Parameters (Epoch {pp?.epoch_no})</h2>
+        <h2 className="text-lg font-semibold mb-3">Protocol Parameters (Epoch {pp.epoch_no})</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-          <div><span className="text-gray-400">Key Deposit</span><p>{lovelaceToAda(pp?.key_deposit||0)} ADA</p></div>
-          <div><span className="text-gray-400">Pool Deposit</span><p>{lovelaceToAda(pp?.pool_deposit||0)} ADA</p></div>
-          <div><span className="text-gray-400">Min Pool Cost</span><p>{lovelaceToAda(pp?.min_pool_cost||0)} ADA</p></div>
-          <div><span className="text-gray-400">Optimal Pools (k)</span><p>{pp?.optimal_pool_count}</p></div>
-          <div><span className="text-gray-400">Monetary Expansion</span><p>{(Number(pp?.monetary_expand_rate||0)*100).toFixed(3)}%</p></div>
-          <div><span className="text-gray-400">Treasury Growth</span><p>{(Number(pp?.treasury_growth_rate||0)*100).toFixed(1)}%</p></div>
-          <div><span className="text-gray-400">Protocol</span><p>v{pp?.protocol_major}.{pp?.protocol_minor}</p></div>
+          <div><span className="text-gray-400">Key Deposit</span><p>{fmtAda(pp.key_deposit||0)} ADA</p></div>
+          <div><span className="text-gray-400">Pool Deposit</span><p>{fmtAda(pp.pool_deposit||0)} ADA</p></div>
+          <div><span className="text-gray-400">Min Pool Cost</span><p>{fmtAda(pp.min_pool_cost||0)} ADA</p></div>
+          <div><span className="text-gray-400">Optimal Pools (k)</span><p>{pp.optimal_pool_count}</p></div>
+          <div><span className="text-gray-400">Monetary Expansion</span><p>{(Number(pp.monetary_expand_rate||0)*100).toFixed(3)}%</p></div>
+          <div><span className="text-gray-400">Treasury Growth</span><p>{(Number(pp.treasury_growth_rate||0)*100).toFixed(1)}%</p></div>
+          <div><span className="text-gray-400">Protocol</span><p>v{pp.protocol_major}.{pp.protocol_minor}</p></div>
         </div>
       </div>
-
-      {/* Committee */}
       <div className="bg-gray-800 rounded-xl p-6">
-        <h2 className="text-lg font-semibold mb-4">Constitutional Committee ({committee?.length || 0} members)</h2>
+        <h2 className="text-lg font-semibold mb-4">Constitutional Committee ({data.committee?.length || 0} members)</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead><tr className="text-gray-400 border-b border-gray-700">
               <th className="text-left py-2">Credential Hash</th><th className="text-left py-2">Type</th><th className="text-right py-2">Expires</th>
             </tr></thead>
-            <tbody>{(committee||[]).map((m: any, i: number) => (
+            <tbody>{(data.committee||[]).map((m: any, i: number) => (
               <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                 <td className="py-2 font-mono text-xs">{truncHash(m.cred_hash, 12)}</td>
                 <td className="py-2">{m.has_script ? <span className="text-yellow-400 text-xs">Script</span> : <span className="text-gray-400 text-xs">Key</span>}</td>
@@ -534,12 +541,10 @@ export default async function GovernanceExplorer() {
           </table>
         </div>
       </div>
-
-      {/* Proposals */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Governance Proposals</h2>
         <div className="space-y-3">
-          {(proposals||[]).map((p: any, i: number) => {
+          {(data.proposals||[]).map((p: any, i: number) => {
             const status = p.enacted_epoch?"Enacted":p.ratified_epoch?"Ratified":p.dropped_epoch?"Dropped":p.expired_epoch?"Expired":"Active";
             const sc = status==="Enacted"?"bg-green-600/30 text-green-300":status==="Active"?"bg-yellow-600/30 text-yellow-300":status==="Ratified"?"bg-blue-600/30 text-blue-300":"bg-red-600/30 text-red-300";
             return (
@@ -550,18 +555,13 @@ export default async function GovernanceExplorer() {
                     <span className="bg-gray-600/50 text-gray-300 px-2 py-0.5 rounded text-xs">{p.type}</span>
                     <span className="font-mono text-xs text-gray-400">{truncHash(p.tx_hash)}#{p.index}</span>
                   </div>
-                  <div className="text-xs text-gray-400">
-                    <span>{p.vote_count} votes</span>
-                    <span className="ml-2">{p.time ? timeAgo(p.time) : ""}</span>
-                  </div>
+                  <div className="text-xs text-gray-400"><span>{p.vote_count} votes</span><span className="ml-2">{p.time ? timeAgo(p.time) : ""}</span></div>
                 </div>
               </div>
             );
           })}
         </div>
       </div>
-
-      {/* Top DReps */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">DReps by Delegations</h2>
         <table className="w-full text-sm">
@@ -569,7 +569,7 @@ export default async function GovernanceExplorer() {
             <th className="text-left py-2">#</th><th className="text-left py-2">DRep</th>
             <th className="text-left py-2">Type</th><th className="text-right py-2">Delegations</th>
           </tr></thead>
-          <tbody>{(dreps||[]).map((d: any, i: number) => (
+          <tbody>{(data.dreps||[]).map((d: any, i: number) => (
             <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/30">
               <td className="py-2 text-gray-400">{i+1}</td>
               <td className="py-2 font-mono text-xs">{d.view || truncHash(d.drep_hash)}</td>
@@ -579,16 +579,14 @@ export default async function GovernanceExplorer() {
           </tbody>
         </table>
       </div>
-
-      {/* Recent Votes */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Votes</h2>
         <table className="w-full text-sm">
           <thead><tr className="text-gray-400 border-b border-gray-700">
-            <th className="text-left py-2">Proposal Type</th><th className="text-left py-2">Voter</th>
+            <th className="text-left py-2">Proposal</th><th className="text-left py-2">Voter</th>
             <th className="text-left py-2">Role</th><th className="text-left py-2">Vote</th><th className="text-right py-2">Time</th>
           </tr></thead>
-          <tbody>{(recentVotes||[]).map((v: any, i: number) => (
+          <tbody>{(data.recentVotes||[]).map((v: any, i: number) => (
             <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/30">
               <td className="py-2 text-xs">{v.proposal_type}</td>
               <td className="py-2 font-mono text-xs">{truncHash(v.voter_id||"")}</td>
@@ -599,28 +597,34 @@ export default async function GovernanceExplorer() {
           </tbody>
         </table>
       </div>
+      </>}
     </div>
   );
 }
 '''
 
-# --- Tokens Explorer ---
-PAGES["explorer/tokens/page.tsx"] = r'''import { fetchAPI } from "@/lib/api";
-import { truncHash, timeAgo } from "@/lib/format";
+# --- Tokens Explorer (client-side) ---
+PAGES["explorer/tokens/page.tsx"] = r'''"use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
+const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
 
-export default async function TokensExplorer() {
-  const data: any = await fetchAPI("/explorer/tokens");
-  if (!data) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
-  const { tokens, recentMints } = data;
+function Skeleton() { return <div className="space-y-4">{[1,2,3,4,5].map(i=><div key={i} className="h-8 bg-gray-700/50 rounded animate-pulse"/>)}</div>; }
+
+export default function TokensExplorer() {
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState(false);
+  useEffect(() => { fetch(`${API}/explorer/tokens`).then(r=>r.json()).then(setData).catch(()=>setErr(true)); }, []);
+
+  if (err) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Tokens Explorer</h1>
-
-      {/* Recent Mints */}
+      {!data ? <Skeleton/> : <>
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Mints</h2>
         <div className="overflow-x-auto">
@@ -629,7 +633,7 @@ export default async function TokensExplorer() {
               <th className="text-left py-2">Token</th><th className="text-left py-2">Policy</th>
               <th className="text-right py-2">Quantity</th><th className="text-right py-2">Time</th>
             </tr></thead>
-            <tbody>{(recentMints||[]).map((m: any, i: number) => (
+            <tbody>{(data.recentMints||[]).map((m: any, i: number) => (
               <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                 <td className="py-2">{m.fingerprint ? <Link href={`/token/${m.fingerprint}`} className="text-blue-400 hover:underline font-mono text-xs">{m.fingerprint}</Link> : <span className="font-mono text-xs">{truncHash(m.name_hex)}</span>}</td>
                 <td className="py-2 font-mono text-xs text-gray-400">{truncHash(m.policy)}</td>
@@ -640,8 +644,6 @@ export default async function TokensExplorer() {
           </table>
         </div>
       </div>
-
-      {/* Token List */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Tokens</h2>
         <div className="overflow-x-auto">
@@ -650,7 +652,7 @@ export default async function TokensExplorer() {
               <th className="text-left py-2">Fingerprint</th><th className="text-left py-2">Policy</th>
               <th className="text-right py-2">Supply</th>
             </tr></thead>
-            <tbody>{(tokens||[]).map((t: any, i: number) => (
+            <tbody>{(data.tokens||[]).map((t: any, i: number) => (
               <tr key={i} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                 <td className="py-2">{t.fingerprint ? <Link href={`/token/${t.fingerprint}`} className="text-blue-400 hover:underline font-mono text-xs">{t.fingerprint}</Link> : <span className="font-mono text-xs">{truncHash(t.name_hex)}</span>}</td>
                 <td className="py-2 font-mono text-xs text-gray-400">{truncHash(t.policy)}</td>
@@ -660,151 +662,267 @@ export default async function TokensExplorer() {
           </table>
         </div>
       </div>
+      </>}
     </div>
   );
 }
 '''
 
-# --- Analytics Explorer ---
-PAGES["explorer/analytics/page.tsx"] = r'''import { fetchAPI } from "@/lib/api";
-import { fmtAda } from "@/lib/format";
+# --- Analytics Explorer (client-side) ---
+PAGES["explorer/analytics/page.tsx"] = r'''"use client";
+import { useState, useEffect } from "react";
 
-export const dynamic = "force-dynamic";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 
-export default async function AnalyticsExplorer() {
-  const data: any = await fetchAPI("/explorer/analytics");
-  if (!data) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
-  const { epochTrend, adaPots, wealthStats, blockVersions } = data;
+function Skeleton() { return <div className="space-y-4">{[1,2,3,4,5].map(i=><div key={i} className="h-8 bg-gray-700/50 rounded animate-pulse"/>)}</div>; }
 
+export default function AnalyticsExplorer() {
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState(false);
+  useEffect(() => { fetch(`${API}/explorer/analytics`).then(r=>r.json()).then(setData).catch(()=>setErr(true)); }, []);
+  if (err) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Analytics Explorer</h1>
-
-      {/* Wealth Summary */}
+      {!data ? <Skeleton/> : <>
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-3">Top 100 Addresses</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div><span className="text-gray-400">Count</span><p className="font-bold">{wealthStats?.count}</p></div>
-          <div><span className="text-gray-400">Total Held</span><p className="font-bold text-green-400">{fmtAda(wealthStats?.total||0)} ADA</p></div>
-          <div><span className="text-gray-400">Min Balance</span><p>{fmtAda(wealthStats?.min_bal||0)} ADA</p></div>
-          <div><span className="text-gray-400">Max Balance</span><p>{fmtAda(wealthStats?.max_bal||0)} ADA</p></div>
+          <div><span className="text-gray-400">Count</span><p className="font-bold">{data.wealthStats?.count}</p></div>
+          <div><span className="text-gray-400">Total Held</span><p className="font-bold text-green-400">{fmtAda(data.wealthStats?.total||0)} ADA</p></div>
+          <div><span className="text-gray-400">Min Balance</span><p>{fmtAda(data.wealthStats?.min_bal||0)} ADA</p></div>
+          <div><span className="text-gray-400">Max Balance</span><p>{fmtAda(data.wealthStats?.max_bal||0)} ADA</p></div>
         </div>
       </div>
-
-      {/* Block Versions */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-3">Block Versions (Current Epoch)</h2>
         <table className="w-full text-sm">
-          <thead><tr className="text-gray-400 border-b border-gray-700">
-            <th className="text-left py-2">Version</th><th className="text-right py-2">Blocks</th>
-          </tr></thead>
-          <tbody>{(blockVersions||[]).map((v: any, i: number) => (
-            <tr key={i} className="border-b border-gray-700/50">
-              <td className="py-2">v{v.proto_major}.{v.proto_minor}</td>
-              <td className="py-2 text-right">{Number(v.block_count).toLocaleString()}</td>
-            </tr>))}
+          <thead><tr className="text-gray-400 border-b border-gray-700"><th className="text-left py-2">Version</th><th className="text-right py-2">Blocks</th></tr></thead>
+          <tbody>{(data.blockVersions||[]).map((v: any, i: number) => (
+            <tr key={i} className="border-b border-gray-700/50"><td className="py-2">v{v.proto_major}.{v.proto_minor}</td><td className="py-2 text-right">{Number(v.block_count).toLocaleString()}</td></tr>))}
           </tbody>
         </table>
       </div>
-
-      {/* Epoch Trend */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">Epoch Trend</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead><tr className="text-gray-400 border-b border-gray-700">
-              <th className="text-left py-2">Epoch</th><th className="text-right py-2">Blocks</th>
-              <th className="text-right py-2">Transactions</th><th className="text-right py-2">Total Fees</th>
-            </tr></thead>
-            <tbody>{(epochTrend||[]).map((e: any) => (
-              <tr key={e.no} className="border-b border-gray-700/50 hover:bg-gray-700/30">
-                <td className="py-2 font-bold">{e.no}</td>
-                <td className="py-2 text-right">{Number(e.blocks).toLocaleString()}</td>
-                <td className="py-2 text-right">{Number(e.tx_count).toLocaleString()}</td>
-                <td className="py-2 text-right">{fmtAda(e.total_fees)} ADA</td>
-              </tr>))}
+            <thead><tr className="text-gray-400 border-b border-gray-700"><th className="text-left py-2">Epoch</th><th className="text-right py-2">Blocks</th><th className="text-right py-2">Transactions</th><th className="text-right py-2">Total Fees</th></tr></thead>
+            <tbody>{(data.epochTrend||[]).map((e: any) => (
+              <tr key={e.no} className="border-b border-gray-700/50 hover:bg-gray-700/30"><td className="py-2 font-bold">{e.no}</td><td className="py-2 text-right">{Number(e.blocks).toLocaleString()}</td><td className="py-2 text-right">{Number(e.tx_count).toLocaleString()}</td><td className="py-2 text-right">{fmtAda(e.total_fees)} ADA</td></tr>))}
             </tbody>
           </table>
         </div>
       </div>
-
-      {/* ADA Pots */}
       <div className="bg-gray-800 rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4">ADA Pots</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead><tr className="text-gray-400 border-b border-gray-700">
-              <th className="text-left py-2">Epoch</th><th className="text-right py-2">Treasury</th>
-              <th className="text-right py-2">Reserves</th><th className="text-right py-2">Rewards</th>
-              <th className="text-right py-2">UTxO</th>
-            </tr></thead>
-            <tbody>{(adaPots||[]).map((p: any) => (
-              <tr key={p.epoch_no} className="border-b border-gray-700/50 hover:bg-gray-700/30">
-                <td className="py-2">{p.epoch_no}</td>
-                <td className="py-2 text-right">{fmtAda(p.treasury)} ADA</td>
-                <td className="py-2 text-right">{fmtAda(p.reserves)} ADA</td>
-                <td className="py-2 text-right">{fmtAda(p.rewards)} ADA</td>
-                <td className="py-2 text-right">{fmtAda(p.utxo)} ADA</td>
-              </tr>))}
+            <thead><tr className="text-gray-400 border-b border-gray-700"><th className="text-left py-2">Epoch</th><th className="text-right py-2">Treasury</th><th className="text-right py-2">Reserves</th><th className="text-right py-2">Rewards</th><th className="text-right py-2">UTxO</th></tr></thead>
+            <tbody>{(data.adaPots||[]).map((p: any) => (
+              <tr key={p.epoch_no} className="border-b border-gray-700/50 hover:bg-gray-700/30"><td className="py-2">{p.epoch_no}</td><td className="py-2 text-right">{fmtAda(p.treasury)} ADA</td><td className="py-2 text-right">{fmtAda(p.reserves)} ADA</td><td className="py-2 text-right">{fmtAda(p.rewards)} ADA</td><td className="py-2 text-right">{fmtAda(p.utxo)} ADA</td></tr>))}
             </tbody>
           </table>
         </div>
       </div>
+      </>}
     </div>
   );
 }
 '''
 
-# --- Addresses Explorer ---
-PAGES["explorer/addresses/page.tsx"] = r'''import { fetchAPI } from "@/lib/api";
-import { fmtAda, truncHash, lovelaceToAda } from "@/lib/format";
+# --- Addresses Explorer (Unified Rich List, client-side) ---
+PAGES["explorer/addresses/page.tsx"] = r'''"use client";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
+const truncAddr = (h: string, n=12) => h ? h.slice(0,n)+"..."+h.slice(-6) : "";
+const timeAgo = (t: string) => { if(!t) return "-"; const s=(Date.now()-new Date(t).getTime())/1000; if(s<60)return `${Math.floor(s)}s ago`; if(s<3600)return `${Math.floor(s/60)}m ago`; if(s<86400)return `${Math.floor(s/3600)}h ago`; if(s<2592000)return `${Math.floor(s/86400)}d ago`; return `${(s/31536000).toFixed(1)}y ago`; };
 
-export default async function AddressesExplorer() {
-  const data: any = await fetchAPI("/explorer/addresses");
-  if (!data) return <div className="p-8 text-center text-gray-400">Failed to load</div>;
-  const { richList, topStakers } = data;
+type Filter = "all" | "stake" | "byron" | "enterprise";
+
+const TYPE_LABELS: Record<string, { label: string; color: string; icon: string }> = {
+  stake: { label: "Staking", color: "bg-blue-500/20 text-blue-400", icon: "🥩" },
+  byron: { label: "Byron", color: "bg-amber-500/20 text-amber-400", icon: "🏛" },
+  enterprise: { label: "Enterprise", color: "bg-purple-500/20 text-purple-400", icon: "🏢" },
+};
+
+function Skeleton() {
+  return (
+    <div className="space-y-3">
+      {[1,2,3,4,5,6,7,8].map(i => (
+        <div key={i} className="h-14 bg-gray-700/30 rounded-lg animate-pulse" />
+      ))}
+    </div>
+  );
+}
+
+function SummaryCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
+  return (
+    <div className="bg-gray-800 rounded-xl p-4 border border-gray-700/50">
+      <div className="text-xs text-gray-400 mb-1">{label}</div>
+      <div className="text-lg font-bold">{value}</div>
+      {sub && <div className="text-xs text-gray-500 mt-0.5">{sub}</div>}
+    </div>
+  );
+}
+
+export default function AddressesExplorer() {
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState(false);
+  const [filter, setFilter] = useState<Filter>("all");
+  const [showExchange, setShowExchange] = useState<"all"|"exchange"|"non-exchange">("all");
+  const [search, setSearch] = useState("");
+  const [expandedRow, setExpandedRow] = useState<number|null>(null);
+
+  useEffect(() => {
+    fetch(`${API}/richlist-v2?limit=300`)
+      .then(r => r.json())
+      .then(setData)
+      .catch(() => setErr(true));
+  }, []);
+
+  const filtered = useMemo(() => {
+    if (!data?.entries) return [];
+    return data.entries.filter((e: any) => {
+      if (filter !== "all" && e.addr_type !== filter) return false;
+      if (showExchange === "exchange" && !e.is_exchange) return false;
+      if (showExchange === "non-exchange" && e.is_exchange) return false;
+      if (search && !e.identifier.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    });
+  }, [data, filter, showExchange, search]);
+
+  const s = data?.summary;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Addresses Explorer</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Rich List */}
-        <div className="bg-gray-800 rounded-xl p-6">
-          <h2 className="text-lg font-semibold mb-4">Richest Addresses</h2>
-          <div className="space-y-1">
-            {(richList||[]).map((a: any, i: number) => (
-              <div key={i} className="flex justify-between items-center py-1.5 border-b border-gray-700/30 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-500 w-6 text-right text-xs">{i+1}</span>
-                  <Link href={`/address/${a.address}`} className="text-blue-400 hover:underline font-mono text-xs">{truncHash(a.address, 12)}</Link>
-                </div>
-                <span className="font-bold">{fmtAda(a.balance)} ADA</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Top Stakers */}
-        <div className="bg-gray-800 rounded-xl p-6">
-          <h2 className="text-lg font-semibold mb-4">Top Stakers</h2>
-          <div className="space-y-1">
-            {(topStakers||[]).map((s: any, i: number) => (
-              <div key={i} className="flex justify-between items-center py-1.5 border-b border-gray-700/30 text-sm">
-                <div>
-                  <span className="text-gray-500 mr-2 text-xs">{i+1}</span>
-                  <span className="font-mono text-xs">{truncHash(s.stake_address, 10)}</span>
-                  {s.pool_name && <span className="text-gray-500 ml-1 text-xs">({s.pool_name})</span>}
-                </div>
-                <span className="font-bold">{fmtAda(s.amount)} ADA</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div>
+        <h1 className="text-2xl font-bold">Rich List</h1>
+        <p className="text-gray-400 text-sm mt-1">
+          Top ADA holders across all address types
+          {s && <span className="text-gray-500"> · Epoch {s.epoch}</span>}
+        </p>
       </div>
+
+      {err && <div className="p-8 text-center text-gray-400">Failed to load data. Please try again later.</div>}
+      {!data && !err && <Skeleton/>}
+
+      {data && <>
+        {/* Summary Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <SummaryCard label="Total Entries" value={s.total_entries.toLocaleString()} sub={`${fmtAda(s.total_balance)} ADA combined`} />
+          <SummaryCard label="Staking" value={`${s.by_type.stake.count}`} sub={`${fmtAda(s.by_type.stake.balance)} ADA`} />
+          <SummaryCard label="Exchange-linked" value={`${s.exchange.count}`} sub={`${fmtAda(s.exchange.balance)} ADA`} />
+          <SummaryCard label="Likely Lost" value={`${s.likely_lost.count}`} sub={`${fmtAda(s.likely_lost.balance)} ADA`} />
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Address Type Filter */}
+          <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
+            {(["all","stake","byron","enterprise"] as Filter[]).map(f => (
+              <button key={f} onClick={() => setFilter(f)}
+                className={`px-3 py-1.5 text-xs rounded-md transition font-medium ${filter===f ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"}`}>
+                {f === "all" ? "All Types" : TYPE_LABELS[f]?.label || f}
+                {f !== "all" && s && <span className="ml-1 opacity-60">({s.by_type[f]?.count || 0})</span>}
+              </button>
+            ))}
+          </div>
+
+          {/* Exchange Filter */}
+          <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
+            {(["all","exchange","non-exchange"] as const).map(f => (
+              <button key={f} onClick={() => setShowExchange(f)}
+                className={`px-3 py-1.5 text-xs rounded-md transition font-medium ${showExchange===f ? "bg-gray-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"}`}>
+                {f === "all" ? "All" : f === "exchange" ? "🏦 Exchange" : "👤 Non-Exchange"}
+              </button>
+            ))}
+          </div>
+
+          {/* Search */}
+          <input type="text" placeholder="Search address..." value={search} onChange={e => setSearch(e.target.value)}
+            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-300 w-48 focus:outline-none focus:border-blue-500" />
+
+          <span className="text-xs text-gray-500 ml-auto">{filtered.length} results</span>
+        </div>
+
+        {/* Table */}
+        <div className="bg-gray-800 rounded-xl border border-gray-700/50 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-gray-400 text-xs border-b border-gray-700 bg-gray-800/80">
+                  <th className="text-left py-3 px-4 w-10">#</th>
+                  <th className="text-left py-3 px-2">Type</th>
+                  <th className="text-left py-3 px-2">Address</th>
+                  <th className="text-right py-3 px-2">Balance (ADA)</th>
+                  <th className="text-right py-3 px-2 hidden md:table-cell">TX Count</th>
+                  <th className="text-right py-3 px-2 hidden lg:table-cell">Last Active</th>
+                  <th className="text-center py-3 px-2 hidden md:table-cell">Flags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((e: any, idx: number) => {
+                  const t = TYPE_LABELS[e.addr_type] || { label: e.addr_type, color: "bg-gray-500/20 text-gray-400", icon: "?" };
+                  const expanded = expandedRow === idx;
+                  return (
+                    <tr key={idx} onClick={() => setExpandedRow(expanded ? null : idx)}
+                      className={`border-b border-gray-700/30 cursor-pointer transition ${expanded ? "bg-gray-700/40" : "hover:bg-gray-700/20"}`}>
+                      <td className="py-2.5 px-4 text-gray-500 text-xs">{e.rank}</td>
+                      <td className="py-2.5 px-2">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${t.color}`}>
+                          <span>{t.icon}</span> {t.label}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-2">
+                        <div>
+                          <Link href={`/address/${e.identifier}`} className="text-blue-400 hover:underline font-mono text-xs"
+                            onClick={(ev) => ev.stopPropagation()}>
+                            {truncAddr(e.identifier, 16)}
+                          </Link>
+                          {e.pool && (
+                            <div className="text-xs text-gray-500 mt-0.5">
+                              <span className="text-gray-400">{e.pool.pool_ticker || "Pool"}</span>
+                              {e.pool.pool_name && <span className="ml-1 hidden sm:inline">· {e.pool.pool_name.slice(0,25)}</span>}
+                            </div>
+                          )}
+                          {e.drep && (
+                            <div className="text-xs text-gray-500">
+                              DRep: <span className="text-purple-400">{truncAddr(e.drep.drep_id, 10)}</span>
+                            </div>
+                          )}
+                          {/* Mobile: inline flags */}
+                          <div className="flex gap-1 mt-1 md:hidden">
+                            {e.is_exchange && <span className="text-xs px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">🏦 Exchange</span>}
+                            {e.is_likely_lost && <span className="text-xs px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded">💀 Lost?</span>}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-2 text-right font-bold whitespace-nowrap">{fmtAda(e.balance)}</td>
+                      <td className="py-2.5 px-2 text-right text-gray-400 hidden md:table-cell">{(e.tx_count||0).toLocaleString()}</td>
+                      <td className="py-2.5 px-2 text-right text-gray-400 text-xs hidden lg:table-cell">{timeAgo(e.last_tx)}</td>
+                      <td className="py-2.5 px-2 text-center hidden md:table-cell">
+                        <div className="flex justify-center gap-1">
+                          {e.is_exchange && <span title={e.exchange_reason} className="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded text-xs">🏦</span>}
+                          {e.is_likely_lost && <span title={e.lost_reason} className="px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-xs">💀</span>}
+                          {!e.is_exchange && !e.is_likely_lost && <span className="text-gray-600">-</span>}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {filtered.length === 0 && (
+            <div className="py-12 text-center text-gray-500">No entries match the current filters</div>
+          )}
+        </div>
+      </>}
     </div>
   );
 }
@@ -819,15 +937,11 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 const DASHBOARDS = [
-  { href: "/dashboard", label: "All Dashboards" },
   { href: "/dashboard/holder", label: "ADA Holder" },
   { href: "/dashboard/spo", label: "SPO" },
-  { href: "/dashboard/cc", label: "CC Member" },
   { href: "/dashboard/drep", label: "DRep" },
-  { href: "/dashboard/governance", label: "Governance Analyst" },
+  { href: "/dashboard/governance", label: "Governance" },
   { href: "/dashboard/chain", label: "Chain Analyst" },
-  { href: "/dashboard/portfolio", label: "Portfolio Tracker" },
-  { href: "/dashboard/developer", label: "Developer" },
 ];
 
 const EXPLORER = [
@@ -999,7 +1113,10 @@ if __name__ == "__main__":
     header_path = os.path.join(PROJECT, "src/components/layout/Header.tsx")
     with open(header_path, "w") as f:
         f.write(HEADER_CONTENT)
-    log("  Header updated: Dashboards primary, Explorer consolidated")
+    # Also write to src/components/Header.tsx for compatibility
+    header_alt = os.path.join(PROJECT, "src/components/Header.tsx")
+    shutil.copy2(header_path, header_alt)
+    log("  Header updated: Dashboards primary, Explorer consolidated (both paths)")
 
     # Step 4: Restart API
     info("Step 4: Restarting API...")
@@ -1010,10 +1127,11 @@ if __name__ == "__main__":
 
     # Step 5: Build frontend
     info("Step 5: Building frontend...")
-    dotNext = os.path.join(PROJECT, ".next")
-    if os.path.isdir(dotNext):
-        shutil.rmtree(dotNext)
-    code, out, errs = run("npm run build 2>&1", timeout=300)
+    # Skip .next deletion for incremental build (much faster)
+    # dotNext = os.path.join(PROJECT, ".next")
+    # if os.path.isdir(dotNext):
+    #     shutil.rmtree(dotNext)
+    code, out, errs = run("npm run build 2>&1", timeout=600)
     build_out = (out + errs).strip().split("\n")
     for line in build_out[-25:]:
         print(f"  {line}")

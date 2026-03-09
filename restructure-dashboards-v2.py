@@ -12,6 +12,7 @@ Run on server: python3 restructure-dashboards-v2.py
 import os, subprocess, time, shutil
 
 PROJECT_FE = "/home/ubuntu/adatool-frontend"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 G = "\033[32m"; R = "\033[31m"; Y = "\033[33m"; N = "\033[0m"
 def log(msg): print(f"{G}[OK]{N} {msg}")
 def warn(msg): print(f"{Y}[WARN]{N} {msg}")
@@ -25,10 +26,10 @@ def run(cmd, cwd=None, timeout=300):
         return -1, "", "TIMEOUT"
 
 # ============================================================
-# Step 1: Rewrite CardanoWatch component — single page layout
+# Step 1: Copy CardanoWatch component from repo file
 # ============================================================
 print("=" * 60)
-print("STEP 1: Rewriting CardanoWatch as single-page layout")
+print("STEP 1: Copying CardanoWatch from repo file")
 print("=" * 60)
 
 comp_dir = os.path.join(PROJECT_FE, "src/components")
@@ -39,8 +40,15 @@ cw_file = os.path.join(comp_dir, "CardanoWatch.tsx")
 if os.path.exists(cw_file):
     shutil.copy2(cw_file, cw_file + ".bak")
 
-with open(cw_file, "w") as f:
-    f.write(r""""use client";
+# Copy from the repo's standalone CardanoWatch.tsx (has proper UTF-8 Japanese, db-sync integration)
+repo_cw = os.path.join(SCRIPT_DIR, "CardanoWatch.tsx")
+if os.path.exists(repo_cw):
+    shutil.copy2(repo_cw, cw_file)
+    log("CardanoWatch.tsx copied from repo file (UTF-8 Japanese, db-sync)")
+else:
+    print(f"WARNING: {repo_cw} not found, writing minimal fallback")
+    with open(cw_file, "w", encoding="utf-8") as f:
+        f.write(""""use client";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -619,7 +627,9 @@ print("\n" + "=" * 60)
 print("STEP 4: Updating Header navigation")
 print("=" * 60)
 
+# Write to both paths (layout/Header.tsx is the one actually used by the server)
 header_file = os.path.join(PROJECT_FE, "src/components/Header.tsx")
+header_layout_file = os.path.join(PROJECT_FE, "src/components/layout/Header.tsx")
 if os.path.exists(header_file):
     shutil.copy2(header_file, header_file + ".bak")
 
@@ -701,7 +711,9 @@ export default function Header() {
   );
 }
 ''')
-log("Header rewritten with 5 dashboards + explorer")
+os.makedirs(os.path.dirname(header_layout_file), exist_ok=True)
+shutil.copy2(header_file, header_layout_file)
+log("Header rewritten with 5 dashboards + explorer (both paths)")
 
 # ============================================================
 # Step 5: Build & Deploy
@@ -710,11 +722,12 @@ print("\n" + "=" * 60)
 print("STEP 5: Building frontend")
 print("=" * 60)
 
-dotNext = os.path.join(PROJECT_FE, ".next")
-if os.path.isdir(dotNext):
-    shutil.rmtree(dotNext)
+# Skip .next deletion for incremental build (much faster)
+# dotNext = os.path.join(PROJECT_FE, ".next")
+# if os.path.isdir(dotNext):
+#     shutil.rmtree(dotNext)
 
-code, out, errs = run("npm run build 2>&1", timeout=300)
+code, out, errs = run("npm run build 2>&1", timeout=600)
 if code != 0:
     err("BUILD FAILED!")
     combined = out + errs

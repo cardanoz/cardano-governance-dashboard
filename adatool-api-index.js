@@ -1758,6 +1758,110 @@ app.get("/search", async (c) => {
   return c.json(results);
 });
 
+// ─── Wallet Lookup (replaces Blockfrost for ADA Holder dashboard) ───
+app.get("/wallet/:stakeAddr", async (c) => {
+  const stakeAddr = c.req.param("stakeAddr");
+  if (!stakeAddr.startsWith("stake")) return c.json({ error: "Invalid stake address" }, 400);
+
+  const data = await cached(`wallet:${stakeAddr}`, 120, async () => {
+    const epochR = await pool.query("SELECT MAX(no) - 1 as e FROM epoch");
+    const prevEpoch = epochR.rows[0]?.e || 0;
+
+    // Get stake address ID and balance
+    const saR = await pool.query(`
+      SELECT sa.id, sa.view, es.amount::text as balance
+      FROM stake_address sa
+      LEFT JOIN epoch_stake es ON es.addr_id = sa.id AND es.epoch_no = $2
+      WHERE sa.view = $1
+    `, [stakeAddr, prevEpoch]);
+    if (!saR.rows.length) return { error: "not_found" };
+    const sa = saR.rows[0];
+    const balAda = Number(sa.balance || "0") / 1e6;
+
+    // Pool delegation
+    let pool_ticker = null, pool_name = null, pool_id = null;
+    try {
+      const pdR = await pool.query(`
+        SELECT ph.view as pool_id, ocpd.json->>'ticker' as ticker, ocpd.json->>'name' as name
+        FROM delegation d
+        JOIN pool_hash ph ON ph.id = d.pool_hash_id
+        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        WHERE d.addr_id = $1 ORDER BY d.tx_id DESC LIMIT 1
+      `, [sa.id]);
+      if (pdR.rows.length) { pool_id = pdR.rows[0].pool_id; pool_ticker = pdR.rows[0].ticker; pool_name = pdR.rows[0].name; }
+    } catch(e) {}
+
+    // DRep delegation
+    let drep_id = null, drep_view = null;
+    try {
+      const dvR = await pool.query(`
+        SELECT dh.view, dh.raw FROM delegation_vote dv
+        JOIN drep_hash dh ON dh.id = dv.drep_hash_id
+        WHERE dv.addr_id = $1 ORDER BY dv.tx_id DESC LIMIT 1
+      `, [sa.id]);
+      if (dvR.rows.length) { drep_view = dvR.rows[0].view; drep_id = dvR.rows[0].view; }
+    } catch(e) {}
+
+    // Rewards (last 30 epochs)
+    let rewards = [];
+    try {
+      const rwR = await pool.query(`
+        SELECT r.earned_epoch as epoch, r.amount::text
+        FROM reward r WHERE r.addr_id = $1
+        ORDER BY r.earned_epoch DESC LIMIT 30
+      `, [sa.id]);
+      rewards = rwR.rows.map((r) => ({ epoch: r.epoch, ada: Number(r.amount) / 1e6 }));
+    } catch(e) {}
+
+    // Total rewards
+    let totalRewards = 0;
+    try {
+      const trR = await pool.query(`
+        SELECT COALESCE(SUM(amount),0)::text as total FROM reward WHERE addr_id = $1
+      `, [sa.id]);
+      totalRewards = Number(trR.rows[0]?.total || "0") / 1e6;
+    } catch(e) {}
+
+    // Total withdrawals
+    let totalWithdrawals = 0;
+    try {
+      const twR = await pool.query(`
+        SELECT COALESCE(SUM(amount),0)::text as total FROM withdrawal WHERE addr_id = $1
+      `, [sa.id]);
+      totalWithdrawals = Number(twR.rows[0]?.total || "0") / 1e6;
+    } catch(e) {}
+
+    return {
+      stake_address: stakeAddr,
+      balance_ada: balAda,
+      balance_lovelace: sa.balance || "0",
+      pool: pool_id ? { id: pool_id, ticker: pool_ticker, name: pool_name } : null,
+      drep: drep_id ? { id: drep_id, view: drep_view } : null,
+      rewards_available: totalRewards - totalWithdrawals,
+      rewards_total: totalRewards,
+      reward_history: rewards.reverse(),
+      epoch: prevEpoch,
+      active: balAda > 0,
+    };
+  });
+  return c.json(data);
+});
+
+// Resolve addr1 -> stake address
+app.get("/address-to-stake/:addr", async (c) => {
+  const addr = c.req.param("addr");
+  const data = await cached(`a2s:${addr}`, 600, async () => {
+    const r = await pool.query(`
+      SELECT sa.view as stake_address FROM tx_out txo
+      JOIN stake_address sa ON sa.id = txo.stake_address_id
+      WHERE txo.address = $1 LIMIT 1
+    `, [addr]);
+    return r.rows[0] || { error: "not_found" };
+  });
+  return c.json(data);
+});
+
 // ============================================================
 // CONSOLIDATED EXPLORER API ENDPOINTS
 // ============================================================
@@ -1985,13 +2089,22 @@ app.get("/explorer/addresses", async (c) => {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const EXCHANGE_POOL_TICKERS = new Set([
-  "BINA","BNP","BNP1","BNP2","BNP3","BNP4",
-  "COIN","COINBASE",
-  "KRKN","KRAK",
-  "BTCM","BITGO",
+  // Binance
+  "BINA","BNP","BNP1","BNP2","BNP3","BNP4","BNP5","BNP6","BNP7","BNP8",
+  // Coinbase
+  "COIN","COINBASE","CB1","CB2",
+  // Kraken
+  "KRKN","KRAK","KRAK1","KRAK2",
+  // BitGo / Bitfinex / BitMEX
+  "BTCM","BITGO","BFIN","BITMEX",
+  // Other exchanges
   "NEXO","WHLP","ETORO","UPBIT","UPBI",
-  "HUOBI","GATE","OKEX","BYBIT","BISO","ROBH",
-  "HASH","HASH0","HASH1",
+  "HUOBI","HTX","GATE","OKEX","OKX","BYBIT","BISO","ROBH",
+  "HASH","HASH0","HASH1","HASH2",
+  // Additional exchanges
+  "MEXC","KUCN","KUCOIN","BITTREX","GEMNI","GEMINI",
+  "CRYPTO","CDC","SWISSBORG","LUNO","BITPANDA",
+  "EMURG","YOROI",
 ]);
 
 app.get("/richlist-v2", async (c) => {
@@ -2233,6 +2346,452 @@ app.get("/lost-ada-analysis", async (c) => {
     return {
       byron_analysis: { total_entries: entries.length, buckets: bucketsOut, top_entries: entries.slice(0,100) },
       enterprise_analysis: { likely_lost_count: entLostCnt, likely_lost_balance: entLostBal.toString() },
+    };
+  });
+  return c.json(data);
+});
+
+// ─── Price Proxy (cached CoinGecko) ──────────────────
+app.get("/prices", async (c) => {
+  const ids = c.req.query("ids") || "cardano";
+  const vs = c.req.query("vs") || "usd,jpy";
+  const data = await cached(`prices:${ids}:${vs}`, 300, async () => {
+    try {
+      const url = `https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(ids)}&vs_currencies=${encodeURIComponent(vs)}&include_24hr_change=true&include_market_cap=true`;
+      const r = await fetch(url, { headers: { "Accept": "application/json" }, signal: AbortSignal.timeout(10000) });
+      if (!r.ok) throw new Error(`CoinGecko ${r.status}`);
+      return await r.json();
+    } catch(e) { return { error: e.message }; }
+  });
+  return c.json(data);
+});
+
+app.get("/price-history/:id", async (c) => {
+  const id = c.req.param("id") || "cardano";
+  const days = Math.min(parseInt(c.req.query("days") || "30"), 365);
+  const vs = c.req.query("vs") || "usd";
+  const data = await cached(`priceH:${id}:${days}:${vs}`, 1800, async () => {
+    try {
+      const url = `https://api.coingecko.com/api/v3/coins/${encodeURIComponent(id)}/market_chart?vs_currency=${vs}&days=${days}`;
+      const r = await fetch(url, { headers: { "Accept": "application/json" }, signal: AbortSignal.timeout(15000) });
+      if (!r.ok) throw new Error(`CoinGecko ${r.status}`);
+      const d = await r.json();
+      return { prices: (d.prices||[]).map(([t,p]) => ({ t, p: Math.round(p*10000)/10000 })) };
+    } catch(e) { return { error: e.message }; }
+  });
+  return c.json(data);
+});
+
+// ─── SPO Dashboard API ──────────────────────────────
+// Search pools by ticker or name
+app.get("/pools/search/:q", async (c) => {
+  const q = c.req.param("q");
+  const data = await cached(`pool_search:${q}`, 120, async () => {
+    const r = await pool.query(`
+      SELECT ph.view as pool_id, ocpd.ticker_name as ticker, ocpd.json->>'name' as name,
+             COALESCE(ps.stake, 0)::text as live_stake,
+             COALESCE(ps.number_of_delegators, 0)::int as delegators
+      FROM pool_hash ph
+      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      LEFT JOIN pool_stat ps ON ps.pool_hash_id = ph.id
+        AND ps.epoch_no = (SELECT MAX(epoch_no) FROM pool_stat WHERE pool_hash_id = ph.id)
+      WHERE (ocpd.ticker_name ILIKE $1 OR ocpd.json->>'name' ILIKE $1 OR ph.view ILIKE $1)
+        AND NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= (SELECT MAX(no) FROM epoch))
+      ORDER BY COALESCE(ps.stake, 0) DESC LIMIT 20
+    `, [`%${q}%`]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// Comprehensive SPO dashboard data for a pool
+app.get("/dashboard/spo/:poolId", async (c) => {
+  const poolId = c.req.param("poolId");
+  const data = await cached(`spo_dash:${poolId}`, 120, async () => {
+    // 1) Pool basic info
+    const infoR = await pool.query(`
+      SELECT ph.id as hash_id, ph.view as pool_id,
+             ocpd.ticker_name as ticker, ocpd.json->>'name' as name,
+             ocpd.json->>'description' as description, ocpd.json->>'homepage' as homepage
+      FROM pool_hash ph
+      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      WHERE ph.view = $1
+    `, [poolId]);
+    if (!infoR.rows[0]) return null;
+    const info = infoR.rows[0];
+    const hashId = info.hash_id;
+
+    // 2) Latest registration params
+    const paramsR = await pool.query(`
+      SELECT pu.pledge::text, pu.fixed_cost::text, pu.margin,
+             sa.view as reward_address, pu.vrf_key_hash,
+             encode(pu.meta_hash, 'hex') as meta_hash
+      FROM pool_update pu
+      LEFT JOIN stake_address sa ON sa.id = pu.reward_addr_id
+      WHERE pu.hash_id = $1
+      ORDER BY pu.registered_tx_id DESC LIMIT 1
+    `, [hashId]);
+    const params = paramsR.rows[0] || {};
+
+    // 3) Pool stats history (last 20 epochs for trend)
+    const statsR = await pool.query(`
+      SELECT ps.epoch_no, ps.stake::text as active_stake,
+             ps.number_of_delegators::int as delegators,
+             ps.number_of_blocks::int as blocks
+      FROM pool_stat ps
+      WHERE ps.pool_hash_id = $1
+      ORDER BY ps.epoch_no DESC LIMIT 20
+    `, [hashId]);
+
+    // 4) Recent blocks (last 50)
+    const blocksR = await pool.query(`
+      SELECT b.block_no, b.epoch_no, b.slot_no, b.time, b.tx_count, b.size,
+             encode(b.hash,'hex') as hash
+      FROM block b
+      JOIN slot_leader sl ON b.slot_leader_id = sl.id
+      WHERE sl.pool_hash_id = $1 AND b.block_no IS NOT NULL
+      ORDER BY b.id DESC LIMIT 50
+    `, [hashId]);
+
+    // 5) Top delegators
+    const delegR = await pool.query(`
+      SELECT DISTINCT ON (d.addr_id) sa.view as stake_address,
+             COALESCE(es.amount, 0)::text as delegated_amount
+      FROM delegation d
+      JOIN stake_address sa ON sa.id = d.addr_id
+      LEFT JOIN epoch_stake es ON es.addr_id = d.addr_id
+        AND es.epoch_no = (SELECT MAX(no)-1 FROM epoch)
+      WHERE d.pool_hash_id = $1
+        AND NOT EXISTS (SELECT 1 FROM delegation d2 WHERE d2.addr_id = d.addr_id AND d2.tx_id > d.tx_id)
+      ORDER BY d.addr_id, d.tx_id DESC
+    `, [hashId]);
+    // Sort by amount desc, take top 20
+    const topDelegators = delegR.rows
+      .sort((a, b) => { const d = BigInt(b.delegated_amount||"0") - BigInt(a.delegated_amount||"0"); return d > 0n ? 1 : d < 0n ? -1 : 0; })
+      .slice(0, 20);
+
+    // 6) Update history (registrations/re-registrations)
+    const updR = await pool.query(`
+      SELECT pu.pledge::text, pu.fixed_cost::text, pu.margin,
+             b.epoch_no, b.time
+      FROM pool_update pu
+      JOIN tx t ON t.id = pu.registered_tx_id
+      JOIN block b ON b.id = t.block_id
+      WHERE pu.hash_id = $1
+      ORDER BY pu.registered_tx_id DESC LIMIT 20
+    `, [hashId]);
+
+    // 7) Reward history
+    const rewardR = await pool.query(`
+      SELECT r.earned_epoch, SUM(r.amount)::text as total_reward, COUNT(*)::int as delegator_rewards
+      FROM reward r
+      WHERE r.pool_id = $1 AND r.type = 'leader'
+      GROUP BY r.earned_epoch
+      ORDER BY r.earned_epoch DESC LIMIT 20
+    `, [hashId]);
+
+    // 8) Fee income estimate (cost + margin * rewards for each epoch)
+    const feeR = await pool.query(`
+      SELECT r.earned_epoch,
+             SUM(r.amount)::text as total_pool_rewards
+      FROM reward r
+      WHERE r.pool_id = $1 AND r.type IN ('leader','member')
+      GROUP BY r.earned_epoch
+      ORDER BY r.earned_epoch DESC LIMIT 20
+    `, [hashId]);
+
+    // 9) Check retirement
+    const retireR = await pool.query(`
+      SELECT pr.retiring_epoch, b.time as announced_time
+      FROM pool_retire pr
+      JOIN tx t ON t.id = pr.announced_tx_id
+      JOIN block b ON b.id = t.block_id
+      WHERE pr.hash_id = $1
+      ORDER BY pr.id DESC LIMIT 1
+    `, [hashId]);
+
+    // 10) Governance votes by this pool
+    const votesR = await pool.query(`
+      SELECT vp.gov_action_proposal_id, vp.vote::text,
+             gap.type::text as proposal_type,
+             encode(gap_tx.hash, 'hex') as proposal_tx_hash, gap.index as proposal_index,
+             b.time as vote_time
+      FROM voting_procedure vp
+      JOIN gov_action_proposal gap ON gap.id = vp.gov_action_proposal_id
+      JOIN tx gap_tx ON gap_tx.id = gap.tx_id
+      JOIN tx vt ON vt.id = vp.tx_id
+      JOIN block b ON b.id = vt.block_id
+      WHERE vp.voter_role = 'SPO'
+        AND vp.committee_voter = $1
+      ORDER BY vp.tx_id DESC LIMIT 50
+    `, [hashId]);
+
+    return {
+      pool_id: info.pool_id, ticker: info.ticker, name: info.name,
+      description: info.description, homepage: info.homepage,
+      params, retirement: retireR.rows[0] || null,
+      stats_history: statsR.rows.reverse(),
+      recent_blocks: blocksR.rows,
+      top_delegators: topDelegators,
+      total_delegators: delegR.rows.length,
+      update_history: updR.rows,
+      reward_history: rewardR.rows.reverse(),
+      fee_history: feeR.rows.reverse(),
+      governance_votes: votesR.rows,
+    };
+  });
+  if (!data) return c.json({ error: "Pool not found" }, 404);
+  return c.json(data);
+});
+
+// Multi-pool aggregate (for SPOs running multiple pools)
+app.get("/dashboard/spo-multi", async (c) => {
+  const ids = (c.req.query("pools") || "").split(",").filter(Boolean).slice(0, 10);
+  if (ids.length === 0) return c.json({ error: "Provide ?pools=pool1...,pool1..." }, 400);
+  const key = `spo_multi:${ids.sort().join(",")}`;
+  const data = await cached(key, 120, async () => {
+    const results = [];
+    for (const pid of ids) {
+      const r = await pool.query(`
+        SELECT ph.id as hash_id, ph.view as pool_id,
+               ocpd.ticker_name as ticker, ocpd.json->>'name' as name,
+               COALESCE(ps.stake, 0)::text as live_stake,
+               COALESCE(ps.number_of_delegators, 0)::int as delegators,
+               COALESCE(ps.number_of_blocks, 0)::int as lifetime_blocks
+        FROM pool_hash ph
+        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        LEFT JOIN pool_stat ps ON ps.pool_hash_id = ph.id
+          AND ps.epoch_no = (SELECT MAX(epoch_no) FROM pool_stat WHERE pool_hash_id = ph.id)
+        WHERE ph.view = $1
+      `, [pid]);
+      if (r.rows[0]) results.push(r.rows[0]);
+    }
+    const totalStake = results.reduce((s, r) => s + BigInt(r.live_stake||"0"), BigInt(0));
+    const totalDelegators = results.reduce((s, r) => s + (r.delegators||0), 0);
+    const totalBlocks = results.reduce((s, r) => s + (r.lifetime_blocks||0), 0);
+    return {
+      pools: results,
+      aggregate: {
+        total_stake: totalStake.toString(),
+        total_delegators: totalDelegators,
+        total_lifetime_blocks: totalBlocks,
+        pool_count: results.length,
+      }
+    };
+  });
+  return c.json(data);
+});
+
+// ─── Governance Dashboard API ───────────────────────
+// Voting matrix: all votes on active proposals
+app.get("/governance/voting-matrix", async (c) => {
+  const data = await cached("gov_voting_matrix", 300, async () => {
+    // Active/recent governance proposals
+    const propsR = await pool.query(`
+      SELECT gap.id, gap.type::text, gap.index,
+             encode(tx.hash, 'hex') as tx_hash,
+             gap.description as meta,
+             b.time as proposed_time
+      FROM gov_action_proposal gap
+      JOIN tx ON tx.id = gap.tx_id
+      JOIN block b ON b.id = tx.block_id
+      WHERE gap.ratified_epoch IS NULL AND gap.dropped_epoch IS NULL AND gap.expired_epoch IS NULL
+      ORDER BY gap.id DESC LIMIT 30
+    `);
+
+    // All votes on these proposals
+    const propIds = propsR.rows.map(p => p.id);
+    let votes = [];
+    if (propIds.length > 0) {
+      const votesR = await pool.query(`
+        SELECT vp.gov_action_proposal_id as prop_id,
+               vp.voter_role::text,
+               CASE
+                 WHEN vp.voter_role = 'DRep' THEN dh.view
+                 WHEN vp.voter_role = 'SPO' THEN ph.view
+                 WHEN vp.voter_role = 'ConstitutionalCommittee' THEN ch.raw::text
+                 ELSE 'unknown'
+               END as voter_id,
+               vp.vote::text
+        FROM voting_procedure vp
+        LEFT JOIN drep_hash dh ON vp.drep_voter = dh.id
+        LEFT JOIN pool_hash ph ON vp.committee_voter = ph.id
+        LEFT JOIN committee_hash ch ON vp.committee_voter = ch.id AND vp.voter_role = 'ConstitutionalCommittee'
+        WHERE vp.gov_action_proposal_id = ANY($1::bigint[])
+      `, [propIds]);
+      votes = votesR.rows;
+    }
+
+    // Vote summary per proposal
+    const summaries = propsR.rows.map(p => {
+      const pVotes = votes.filter(v => v.prop_id === p.id);
+      const byRole = {};
+      for (const v of pVotes) {
+        if (!byRole[v.voter_role]) byRole[v.voter_role] = { yes: 0, no: 0, abstain: 0 };
+        const key = v.vote === 'VoteYes' ? 'yes' : v.vote === 'VoteNo' ? 'no' : 'abstain';
+        byRole[v.voter_role][key]++;
+      }
+      return { ...p, vote_summary: byRole, total_votes: pVotes.length };
+    });
+
+    return { proposals: summaries, all_votes: votes };
+  });
+  return c.json(data);
+});
+
+// Reward simulator data (protocol params + pool stats for calculation)
+app.get("/governance/reward-params", async (c) => {
+  const data = await cached("gov_reward_params", 600, async () => {
+    const ppR = await pool.query(`
+      SELECT ep.min_fee_a, ep.min_fee_b, ep.key_deposit::text, ep.pool_deposit::text,
+             ep.max_epoch, ep.optimal_pool_count, ep.influence,
+             ep.monetary_expand_rate, ep.treasury_growth_rate,
+             ep.decentralisation, ep.min_pool_cost::text,
+             ep.epoch_no
+      FROM epoch_param ep ORDER BY ep.epoch_no DESC LIMIT 1
+    `);
+    const supplyR = await pool.query(`
+      SELECT ap.reserves::text, ap.treasury::text, ap.rewards::text, ap.utxo::text
+      FROM ada_pots ap ORDER BY ap.epoch_no DESC LIMIT 1
+    `);
+    const poolCountR = await pool.query(`
+      SELECT COUNT(DISTINCT ps.pool_hash_id)::int as active_pools,
+             SUM(ps.stake)::text as total_stake
+      FROM pool_stat ps
+      WHERE ps.epoch_no = (SELECT MAX(epoch_no) FROM pool_stat)
+    `);
+    return {
+      protocol_params: ppR.rows[0] || {},
+      ada_pots: supplyR.rows[0] || {},
+      pool_stats: poolCountR.rows[0] || {},
+    };
+  });
+  return c.json(data);
+});
+
+// ─── DRep Dashboard API ─────────────────────────────
+// Comprehensive DRep dashboard
+app.get("/dashboard/drep/:drepId", async (c) => {
+  const drepId = c.req.param("drepId");
+  const data = await cached(`drep_dash:${drepId}`, 120, async () => {
+    // 1) DRep info
+    const infoR = await pool.query(`
+      SELECT dh.id as hash_id, dh.view as drep_id, dh.has_script,
+             dr.deposit::text, dr.voting_anchor_id
+      FROM drep_hash dh
+      LEFT JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+        AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+      WHERE dh.view = $1
+    `, [drepId]);
+    if (!infoR.rows[0]) return null;
+    const info = infoR.rows[0];
+
+    // 2) Delegation to this DRep
+    const delegR = await pool.query(`
+      SELECT COUNT(DISTINCT dv.addr_id)::int as delegator_count,
+             COALESCE(SUM(es.amount), 0)::text as total_voting_power
+      FROM delegation_vote dv
+      LEFT JOIN epoch_stake es ON es.addr_id = dv.addr_id
+        AND es.epoch_no = (SELECT MAX(no)-1 FROM epoch)
+      WHERE dv.drep_hash_id = $1
+        AND NOT EXISTS (SELECT 1 FROM delegation_vote dv2 WHERE dv2.addr_id = dv.addr_id AND dv2.tx_id > dv.tx_id)
+    `, [info.hash_id]);
+
+    // 3) Voting history
+    const votesR = await pool.query(`
+      SELECT vp.gov_action_proposal_id, vp.vote::text,
+             gap.type::text as proposal_type,
+             encode(gap_tx.hash, 'hex') as proposal_tx_hash, gap.index as proposal_index,
+             b.time as vote_time,
+             va.url as anchor_url, encode(va.data_hash, 'hex') as anchor_hash
+      FROM voting_procedure vp
+      JOIN gov_action_proposal gap ON gap.id = vp.gov_action_proposal_id
+      JOIN tx gap_tx ON gap_tx.id = gap.tx_id
+      JOIN tx vt ON vt.id = vp.tx_id
+      JOIN block b ON b.id = vt.block_id
+      LEFT JOIN voting_anchor va ON va.id = vp.voting_anchor_id
+      WHERE vp.voter_role = 'DRep' AND vp.drep_voter = $1
+      ORDER BY vp.tx_id DESC LIMIT 100
+    `, [info.hash_id]);
+
+    // 4) Delegation trend (last 10 epochs)
+    const trendR = await pool.query(`
+      SELECT es.epoch_no,
+             COUNT(DISTINCT dv.addr_id)::int as delegators,
+             COALESCE(SUM(es.amount), 0)::text as voting_power
+      FROM delegation_vote dv
+      JOIN epoch_stake es ON es.addr_id = dv.addr_id
+      WHERE dv.drep_hash_id = $1
+        AND NOT EXISTS (SELECT 1 FROM delegation_vote dv2 WHERE dv2.addr_id = dv.addr_id AND dv2.tx_id > dv.tx_id)
+        AND es.epoch_no >= (SELECT MAX(no)-10 FROM epoch)
+      GROUP BY es.epoch_no
+      ORDER BY es.epoch_no ASC
+    `, [info.hash_id]);
+
+    // 5) Registration anchor (metadata)
+    let metadata = null;
+    if (info.voting_anchor_id) {
+      const anchorR = await pool.query(`
+        SELECT va.url, encode(va.data_hash, 'hex') as data_hash
+        FROM voting_anchor va WHERE va.id = $1
+      `, [info.voting_anchor_id]);
+      metadata = anchorR.rows[0] || null;
+    }
+
+    return {
+      drep_id: info.drep_id, has_script: info.has_script, deposit: info.deposit,
+      delegator_count: parseInt(delegR.rows[0]?.delegator_count || "0"),
+      total_voting_power: delegR.rows[0]?.total_voting_power || "0",
+      voting_history: votesR.rows,
+      delegation_trend: trendR.rows,
+      registration_metadata: metadata,
+    };
+  });
+  if (!data) return c.json({ error: "DRep not found" }, 404);
+  return c.json(data);
+});
+
+// DRep search
+app.get("/dreps/search/:q", async (c) => {
+  const q = c.req.param("q");
+  const data = await cached(`drep_search:${q}`, 120, async () => {
+    const r = await pool.query(`
+      SELECT dh.view as drep_id, dh.has_script,
+             COALESCE(ps.cnt, 0)::int as delegators
+      FROM drep_hash dh
+      LEFT JOIN (
+        SELECT dv.drep_hash_id, COUNT(DISTINCT dv.addr_id) as cnt
+        FROM delegation_vote dv
+        WHERE NOT EXISTS (SELECT 1 FROM delegation_vote dv2 WHERE dv2.addr_id = dv.addr_id AND dv2.tx_id > dv.tx_id)
+        GROUP BY dv.drep_hash_id
+      ) ps ON ps.drep_hash_id = dh.id
+      WHERE dh.view ILIKE $1
+      ORDER BY COALESCE(ps.cnt, 0) DESC LIMIT 20
+    `, [`%${q}%`]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── Chain Analyst Dashboard API ────────────────────
+app.get("/dashboard/chain-overview", async (c) => {
+  const data = await cached("chain_overview", 60, async () => {
+    const [tipR, epochR, txR, poolR, drepR] = await Promise.all([
+      pool.query(`SELECT block_no, epoch_no, slot_no, time FROM block ORDER BY id DESC LIMIT 1`),
+      pool.query(`SELECT no, start_time, end_time, tx_count, blk_count, fees::text, out_sum::text FROM epoch ORDER BY no DESC LIMIT 5`),
+      pool.query(`SELECT COUNT(*)::int as tx_24h FROM tx t JOIN block b ON b.id = t.block_id WHERE b.time >= NOW() - INTERVAL '24 hours'`),
+      pool.query(`SELECT COUNT(DISTINCT ps.pool_hash_id)::int as active_pools FROM pool_stat ps WHERE ps.epoch_no = (SELECT MAX(epoch_no) FROM pool_stat)`),
+      pool.query(`SELECT COUNT(DISTINCT dh.id)::int as active_dreps FROM drep_hash dh JOIN drep_registration dr ON dr.drep_hash_id = dh.id`),
+    ]);
+    return {
+      tip: tipR.rows[0],
+      recent_epochs: epochR.rows,
+      tx_24h: txR.rows[0]?.tx_24h || 0,
+      active_pools: poolR.rows[0]?.active_pools || 0,
+      active_dreps: drepR.rows[0]?.active_dreps || 0,
     };
   });
   return c.json(data);
