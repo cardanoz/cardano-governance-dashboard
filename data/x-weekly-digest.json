@@ -1,0 +1,88 @@
+[
+  {
+    "week": "2026-W10",
+    "startDate": "2026-03-02",
+    "endDate": "2026-03-08",
+    "summary_en": "Week 10 marked a pivotal moment for Cardano's institutional adoption and stablecoin infrastructure, with CME Group launching 24/7 ADA futures and USDCx going live on Liqwid, while major protocol upgrades including Leios testnet (June 2026) and Pentad V2 ecosystem modernization advanced significantly. Real-world adoption accelerated with 137 Swiss supermarkets accepting ADA via Spar and Germany's DZ Bank launching meinKrypto platform, demonstrating tangible merchant integration across Europe.",
+    "summary_ja": "第10週はCardanoの制度的採用とステーブルコイン基盤の転換点となり、CMEグループが24時間ADA先物取引を開始し、USDCxがLiqwidでローンチされました。Leios testnet（2026年6月）やPentad V2エコシステム近代化などの主要プロトコルアップグレードが大きく進展し、137のスイススーパーマーケットがSparを通じてADAを受け入れ、ドイツのDZ BankがmeinKryptoプラットフォームをローンチするなど、ヨーロッパ全体の実世界採用が加速しました。",
+    "topHighlights": [
+      {
+        "category": "institutional",
+        "title_en": "CME Group Launches 24/7 ADA Futures Trading & DZ Bank meinKrypto Platform",
+        "title_ja": "CMEグルー��が24時間ADA先物取引開始、ドイツDZ BankがmeinKryptoプラットフォームローンチ",
+        "summary_en": "Major institutional gates opening with CME Group adding perpetual ADA futures and Germany's largest bank launching regulated crypto platform with ADA, signaling mainstream financial infrastructure integration.",
+        "summary_ja": "CMEグループの恒久ADA先物追加とドイツ大手銀行による規制対応の暗号プラットフォーム立ち上げにより、主流金融インフラとの統合が加速。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Stablecoin Ecosystem Surge & Real-World Retail Adoption at 137 Swiss Supermarkets",
+        "title_ja": "USDCxステーブルコインエコシステムの急成長とスイス137店舗での実世界小売採用",
+        "summary_en": "USDCx launched on Liqwid with stablecoin supply reaching $47M (40% weekly growth) while ADA payment integration expanded to 137 Swiss supermarkets via Spar, demonstrating merchant-grade real-world adoption.",
+        "summary_ja": "LiqwidでのUSDCxローンチにより、ステーブルコイン供給が4700万ドル（週間40%成長）に達し、同時にスイス137店舗でのADA決済統合が実現。",
+        "importance": 5
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Leios Testnet June 2026 Launch & Pentad V2 DApp Infrastructure Modernization",
+        "title_ja": "Leios Testnet 2026年6月ローンチとPentad V2 DAppインフラ近代化",
+        "summary_en": "Leios protocol testnet scheduled for June 2026 as blockchain trilemma solution, with Pentad V2 simultaneously modernizing Cardano DApp infrastructure through ecosystem coordination framework.",
+        "summary_ja": "ブロックチェーン三者択一問題の解決策としてLeios protocol testnetが2026年6月開始予定、同時にPentad V2がエコシステム連携フレームワークを通じてDAppインフラを近代化。",
+        "importance": 5
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Privacy Layer Integration & Private Prediction Market Launch",
+        "title_ja": "Midnight プライバシーレイヤー統合とプライベート予測市場ローンチ",
+        "summary_en": "Bodega launched world's first fully private prediction market on Midnight while lace 2.0 wallet evolution signals major infrastructure upgrade for privacy-enabled cross-chain DeFi.",
+        "summary_ja": "Bodega がMidnightで世界初の完全プライベート予測市場をローンチ、Lace 2.0ウォレ��ト進化がプライバシー対応クロスチェーンDeFi用の主要インフラ升級を示唆。",
+        "importance": 5
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Strike Protocol V2 Mainnet & FluidTokens Smart Accounts Enable Gasless DeFi",
+        "title_ja": "Strike Protocol V2 Mainnet & FluidTokensスマートアカウント実現",
+        "summary_en": "Strike Protocol V2 mainnet deployment and FluidTokens smart accounts enabling gasless scheduled payments with USDCx demonstrate mature developer tooling for frictionless DeFi experience.",
+        "summary_ja": "Strike Protocol V2 mainnetデプロイと、USDCxを活用したFluidTokensスマートアカウントによるガスレス決済実現により、摩擦のないDeFi体験のための成熟した開発者ツール実現。",
+        "importance": 4
+      }
+    ],
+    "actionItems": [
+      {
+        "action_en": "Monitor Leios testnet launch in June 2026 and evaluate impact on throughput/scalability; track V11 hard fork details expected soon regarding protocol upgrades",
+        "action_ja": "2026年6月のLeios testnetローンチを監視しスケーラビリティへの影響を評価、V11ハードフォーク詳細近日公開を追跡",
+        "audience": [
+          "DRep",
+          "SPO",
+          "dev_tools"
+        ]
+      },
+      {
+        "action_en": "Assess DRep governance centralization concerns raised by community; review draft proposals including Pool Target Parameter K doubling and Lost ADA stake expiry parameters",
+        "action_ja": "コミュニティから提起されたDRep ガバナンス集中化の懸念を評価、プール目標パラメータK倍増やLost ADAステーク失効パラメータなどの草案を検討",
+        "audience": [
+          "DRep",
+          "CC"
+        ]
+      }
+    ],
+    "generatedAt": "2026-03-09T07:53:39.437Z",
+    "stats": {
+      "totalTweets": 619,
+      "totalHighlights": 46,
+      "daysWithData": 7
+    },
+    "apiUsage": {
+      "input_tokens": 1725,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1783,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+]
