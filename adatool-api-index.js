@@ -1758,6 +1758,228 @@ app.get("/search", async (c) => {
   return c.json(results);
 });
 
+// ============================================================
+// CONSOLIDATED EXPLORER API ENDPOINTS
+// ============================================================
+
+// --- Explorer: Chain (blocks + txs + epochs) ---
+app.get("/explorer/chain", async (c) => {
+  const data = await cached("exp:chain", 15, async () => {
+    const [latestBlocks, latestTxs, epochs] = await Promise.all([
+      pool.query(`SELECT b.block_no, encode(b.hash,'hex') as hash, b.epoch_no,
+        b.slot_no, b.time, b.size, b.tx_count,
+        ph.view as pool_id
+        FROM block b
+        LEFT JOIN slot_leader sl ON sl.id = b.slot_leader_id
+        LEFT JOIN pool_hash ph ON ph.id = sl.pool_hash_id
+        WHERE b.block_no IS NOT NULL
+        ORDER BY b.block_no DESC LIMIT 30`),
+      pool.query(`SELECT encode(t.hash,'hex') as hash, t.fee::text, t.out_sum::text,
+        t.size, b.time, b.epoch_no, b.block_no
+        FROM tx t JOIN block b ON b.id = t.block_id
+        ORDER BY t.id DESC LIMIT 30`),
+      pool.query(`SELECT e.no, e.start_time, e.end_time, e.blk_count as blocks,
+        e.fees::text as fees, e.out_sum::text as out_sum, e.tx_count
+        FROM epoch e ORDER BY e.no DESC LIMIT 15`)
+    ]);
+    return { latestBlocks: latestBlocks.rows, latestTxs: latestTxs.rows, epochs: epochs.rows };
+  });
+  return c.json(data);
+});
+
+// --- Explorer: Staking (pools + delegations + stake dist + rewards) ---
+app.get("/explorer/staking", async (c) => {
+  const data = await cached("exp:staking", 30, async () => {
+    const epochR = await pool.query("SELECT MAX(no) - 1 as e FROM epoch");
+    const prevEpoch = epochR.rows[0]?.e || 0;
+    const [pools, recentDelegations, stakeDist, stats] = await Promise.all([
+      pool.query(`WITH pool_stakes AS (
+        SELECT pool_id, COUNT(*) as delegators, COALESCE(SUM(amount),0)::text as stake
+        FROM epoch_stake WHERE epoch_no = $1 GROUP BY pool_id
+      )
+      SELECT ph.view as pool_id, ocpd.json->>'name' as name, ocpd.json->>'ticker' as ticker,
+        pu.pledge::text, pu.margin, pu.fixed_cost::text,
+        COALESCE(ps.delegators,0) as delegators, COALESCE(ps.stake,'0') as stake
+        FROM pool_hash ph
+        JOIN pool_update pu ON pu.id = (SELECT id FROM pool_update pu2 WHERE pu2.hash_id = ph.id ORDER BY pu2.registered_tx_id DESC LIMIT 1)
+        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        LEFT JOIN pool_stakes ps ON ps.pool_id = ph.id
+        WHERE NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= $1 + 1)
+        ORDER BY ps.stake::numeric DESC NULLS LAST LIMIT 50`, [prevEpoch]),
+      pool.query(`SELECT d.id, sa.view as stake_addr, ph.view as pool_id,
+        ocpd.json->>'name' as pool_name, b.time, b.epoch_no
+        FROM delegation d
+        JOIN stake_address sa ON sa.id = d.addr_id
+        JOIN pool_hash ph ON ph.id = d.pool_hash_id
+        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        JOIN tx t ON t.id = d.tx_id
+        JOIN block b ON b.id = t.block_id
+        ORDER BY d.id DESC LIMIT 30`),
+      pool.query(`WITH buckets AS (
+        SELECT CASE
+          WHEN amount < 1000000000 THEN '< 1K ADA'
+          WHEN amount < 10000000000 THEN '1K-10K'
+          WHEN amount < 100000000000 THEN '10K-100K'
+          WHEN amount < 1000000000000 THEN '100K-1M'
+          ELSE '> 1M ADA'
+        END as bucket,
+        COUNT(*) as cnt, COALESCE(SUM(amount),0)::text as total
+        FROM epoch_stake WHERE epoch_no = $1
+        GROUP BY bucket)
+        SELECT * FROM buckets ORDER BY total DESC`, [prevEpoch]),
+      pool.query(`SELECT
+        (SELECT COALESCE(SUM(amount),0)::text FROM epoch_stake WHERE epoch_no = $1) as total_staked,
+        (SELECT COUNT(DISTINCT addr_id) FROM epoch_stake WHERE epoch_no = $1) as total_stakers,
+        (SELECT COUNT(*) FROM pool_hash ph WHERE NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= $1 + 1)) as active_pools`, [prevEpoch])
+    ]);
+    return { pools: pools.rows, recentDelegations: recentDelegations.rows, stakeDistribution: stakeDist.rows, stats: stats.rows[0] || {} };
+  });
+  return c.json(data);
+});
+
+// --- Explorer: Governance ---
+app.get("/explorer/governance", async (c) => {
+  const data = await cached("exp:governance", 60, async () => {
+    const [proposals, dreps, committee, votes, constitution, params] = await Promise.all([
+      pool.query(`SELECT encode(t.hash,'hex') as tx_hash, gp.index, gp.type,
+        gp.description, gp.deposit::text, gp.expiration,
+        va.url as anchor_url,
+        b.time, b.epoch_no,
+        gp.ratified_epoch, gp.enacted_epoch, gp.dropped_epoch, gp.expired_epoch,
+        (SELECT COUNT(*) FROM voting_procedure vp WHERE vp.gov_action_proposal_id = gp.id) as vote_count
+        FROM gov_action_proposal gp
+        JOIN tx t ON t.id = gp.tx_id
+        JOIN block b ON b.id = t.block_id
+        LEFT JOIN voting_anchor va ON va.id = gp.voting_anchor_id
+        ORDER BY b.time DESC LIMIT 30`),
+      pool.query(`SELECT encode(dh.raw,'hex') as drep_hash, dh.view, dh.has_script,
+        (SELECT COUNT(*) FROM delegation_vote dv WHERE dv.drep_hash_id = dh.id) as delegations
+        FROM drep_hash dh
+        ORDER BY delegations DESC LIMIT 30`),
+      pool.query(`SELECT ch.id, encode(ch.raw,'hex') as cred_hash, ch.has_script,
+        cm.expiration_epoch
+        FROM committee_member cm
+        JOIN committee_hash ch ON ch.id = cm.committee_hash_id`),
+      pool.query(`SELECT gp.type as proposal_type,
+        vp.vote, vp.voter_role,
+        CASE WHEN vp.voter_role='DRep' THEN encode(dh.raw,'hex')
+             WHEN vp.voter_role='SPO' THEN ph.view
+             WHEN vp.voter_role='ConstitutionalCommittee' THEN encode(ch.raw,'hex')
+        END as voter_id,
+        b.time
+        FROM voting_procedure vp
+        JOIN gov_action_proposal gp ON gp.id = vp.gov_action_proposal_id
+        JOIN tx t ON t.id = vp.tx_id
+        JOIN block b ON b.id = t.block_id
+        LEFT JOIN drep_hash dh ON dh.id = vp.drep_voter
+        LEFT JOIN pool_hash ph ON ph.id = vp.pool_voter
+        LEFT JOIN committee_hash ch ON ch.id = vp.committee_voter
+        ORDER BY b.time DESC LIMIT 50`),
+      pool.query(`SELECT c.script_hash, va.url, va.data_hash
+        FROM constitution c
+        LEFT JOIN voting_anchor va ON va.id = c.voting_anchor_id
+        ORDER BY c.id DESC LIMIT 1`),
+      pool.query(`SELECT epoch_no, min_fee_a, min_fee_b, key_deposit::text,
+        pool_deposit::text, optimal_pool_count, min_pool_cost::text,
+        monetary_expand_rate, treasury_growth_rate, protocol_major, protocol_minor
+        FROM epoch_param ORDER BY epoch_no DESC LIMIT 1`)
+    ]);
+    return {
+      proposals: proposals.rows, dreps: dreps.rows, committee: committee.rows,
+      recentVotes: votes.rows, constitution: constitution.rows[0] || null,
+      protocolParams: params.rows[0] || {}
+    };
+  });
+  return c.json(data);
+});
+
+// --- Explorer: Tokens ---
+app.get("/explorer/tokens", async (c) => {
+  const data = await cached("exp:tokens", 30, async () => {
+    const [tokens, recentMints] = await Promise.all([
+      pool.query(`SELECT ma.fingerprint, encode(ma.policy,'hex') as policy,
+        encode(ma.name,'hex') as name_hex,
+        (SELECT COALESCE(SUM(mto.quantity),0)::text FROM ma_tx_out mto
+         JOIN tx_out tao ON tao.id = mto.tx_out_id
+         LEFT JOIN tx_in ti ON ti.tx_out_id = tao.tx_id AND ti.tx_out_index = tao.index
+         WHERE mto.ident = ma.id AND ti.id IS NULL) as supply
+        FROM multi_asset ma
+        ORDER BY ma.id DESC LIMIT 50`),
+      pool.query(`SELECT ma.fingerprint, encode(ma.policy,'hex') as policy,
+        encode(ma.name,'hex') as name_hex,
+        mam.quantity::text, b.time, b.epoch_no
+        FROM ma_tx_mint mam
+        JOIN multi_asset ma ON ma.id = mam.ident
+        JOIN tx t ON t.id = mam.tx_id
+        JOIN block b ON b.id = t.block_id
+        WHERE mam.quantity > 0
+        ORDER BY t.id DESC LIMIT 30`)
+    ]);
+    return { tokens: tokens.rows, recentMints: recentMints.rows };
+  });
+  return c.json(data);
+});
+
+// --- Explorer: Analytics (optimized: uses epoch table columns directly) ---
+app.get("/explorer/analytics", async (c) => {
+  const data = await cached("exp:analytics", 60, async () => {
+    const [epochTrend, pots, wealth, blockVersions] = await Promise.all([
+      pool.query(`SELECT e.no, e.start_time,
+        e.blk_count as blocks, e.tx_count, e.fees::text as total_fees
+        FROM epoch e ORDER BY e.no DESC LIMIT 20`),
+      pool.query(`SELECT epoch_no, treasury::text, reserves::text, rewards::text,
+        utxo::text, deposits_stake::text, fees::text
+        FROM ada_pots ORDER BY epoch_no DESC LIMIT 15`),
+      pool.query(`SELECT sa.view as stake_address, es.amount::text as balance
+        FROM epoch_stake es
+        JOIN stake_address sa ON sa.id = es.addr_id
+        WHERE es.epoch_no = (SELECT MAX(no) - 1 FROM epoch)
+        ORDER BY es.amount DESC LIMIT 100`),
+      pool.query(`SELECT b.proto_major, b.proto_minor, COUNT(*) as block_count
+        FROM block b WHERE b.epoch_no = (SELECT MAX(no) FROM epoch)
+        GROUP BY b.proto_major, b.proto_minor ORDER BY block_count DESC`)
+    ]);
+    // Compute wealth stats from top 100 stakers
+    const topBalances = epochTrend.rows.length > 0 ? wealth.rows : [];
+    let wealthTotal = BigInt(0), wealthMin = BigInt(0), wealthMax = BigInt(0);
+    for (const r of topBalances) {
+      const b = BigInt(r.balance || "0");
+      wealthTotal += b;
+      if (wealthMin === BigInt(0) || b < wealthMin) wealthMin = b;
+      if (b > wealthMax) wealthMax = b;
+    }
+    return {
+      epochTrend: epochTrend.rows, adaPots: pots.rows,
+      wealthStats: { count: topBalances.length, total: wealthTotal.toString(), min_bal: wealthMin.toString(), max_bal: wealthMax.toString() },
+      blockVersions: blockVersions.rows
+    };
+  });
+  return c.json(data);
+});
+
+// --- Explorer: Addresses (rich list + whales) ---
+app.get("/explorer/addresses", async (c) => {
+  const data = await cached("exp:addresses", 120, async () => {
+    const prevEpochR = await pool.query("SELECT MAX(no) - 1 as e FROM epoch");
+    const prevEpoch = prevEpochR.rows[0]?.e || 0;
+    const [topStakers] = await Promise.all([
+      pool.query(`SELECT sa.view as stake_address,
+        es.amount::text as balance,
+        ph.view as pool_id,
+        pod.json->>'name' as pool_name
+        FROM epoch_stake es
+        JOIN stake_address sa ON sa.id = es.addr_id
+        LEFT JOIN delegation d ON d.addr_id = sa.id AND d.id = (SELECT MAX(d2.id) FROM delegation d2 WHERE d2.addr_id = sa.id)
+        LEFT JOIN pool_hash ph ON ph.id = d.pool_hash_id
+        LEFT JOIN off_chain_pool_data pod ON pod.pool_id = ph.id AND pod.id = (SELECT MAX(pod2.id) FROM off_chain_pool_data pod2 WHERE pod2.pool_id = ph.id)
+        WHERE es.epoch_no = $1
+        ORDER BY es.amount DESC LIMIT 50`, [prevEpoch])
+    ]);
+    return { richList: topStakers.rows, topStakers: topStakers.rows };
+  });
+  return c.json(data);
+});
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // Rich List V2 - Unified ranking: Byron + Enterprise + Stake addresses
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1774,11 +1996,11 @@ const EXCHANGE_POOL_TICKERS = new Set([
 
 app.get("/richlist-v2", async (c) => {
   const limit = Math.min(parseInt(c.req.query("limit") || "200"), 500);
-  const data = await cached(`richlist_v2:${limit}`, 1800, async () => {
+  const data = await cached(`richlist_v2:${limit}`, 3600, async () => {
     const epochR = await pool.query("SELECT MAX(no) - 1 as e FROM epoch");
     const prevEpoch = epochR.rows[0]?.e || 0;
 
-    // 1) Top staked addresses
+    // 1) Top staked addresses (fast - uses indexed epoch_stake)
     const stakedR = await pool.query(`
       SELECT sa.id as addr_id, sa.view as identifier, 'stake' as addr_type,
              es.amount::text as balance
@@ -1789,17 +2011,27 @@ app.get("/richlist-v2", async (c) => {
     `, [prevEpoch, limit]);
 
     // 2) Top non-staked UTXOs (Byron + Enterprise) >= 100K ADA
-    const unstakedR = await pool.query(`
-      SELECT txo.address as identifier,
-             CASE WHEN txo.address LIKE 'DdzFF%' OR txo.address LIKE 'Ae2%' THEN 'byron' ELSE 'enterprise' END as addr_type,
-             SUM(txo.value)::text as balance
-      FROM tx_out txo
-      WHERE txo.stake_address_id IS NULL
-        AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
-      GROUP BY txo.address
-      HAVING SUM(txo.value) >= 100000000000
-      ORDER BY SUM(txo.value) DESC LIMIT $1
-    `, [limit]);
+    // Use dedicated client with statement_timeout to prevent runaway queries
+    let unstakedR = { rows: [] };
+    try {
+      const client = await pool.connect();
+      try {
+        await client.query("SET statement_timeout = '60s'");
+        unstakedR = await client.query(`
+          SELECT txo.address as identifier,
+                 CASE WHEN txo.address LIKE 'DdzFF%' OR txo.address LIKE 'Ae2%' THEN 'byron' ELSE 'enterprise' END as addr_type,
+                 SUM(txo.value)::text as balance
+          FROM tx_out txo
+          WHERE txo.stake_address_id IS NULL
+            AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
+          GROUP BY txo.address
+          HAVING SUM(txo.value) >= 100000000000
+          ORDER BY SUM(txo.value) DESC LIMIT $1
+        `, [limit]);
+      } finally { client.release(); }
+    } catch(e) {
+      console.warn("richlist-v2: unstaked UTXO query timed out, returning staked-only results");
+    }
 
     // 3) Merge & sort
     const all = [...stakedR.rows, ...unstakedR.rows];
@@ -1924,60 +2156,78 @@ app.get("/richlist-v2", async (c) => {
 
 // ─── Lost ADA Analysis ──
 app.get("/lost-ada-analysis", async (c) => {
-  const data = await cached("lost_ada_analysis", 3600, async () => {
-    const byronR = await pool.query(`
-      SELECT txo.address as identifier, SUM(txo.value)::text as balance,
-             COUNT(DISTINCT txo.tx_id)::int as tx_count, MAX(b.time) as last_tx
-      FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
-      WHERE txo.stake_address_id IS NULL
-        AND (txo.address LIKE 'DdzFF%' OR txo.address LIKE 'Ae2%')
-        AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
-      GROUP BY txo.address HAVING SUM(txo.value) >= 1000000000
-      ORDER BY SUM(txo.value) DESC LIMIT 500
-    `);
-
+  const data = await cached("lost_ada_analysis", 7200, async () => {
     const now = new Date();
     const buckets = {
-      active_recent: { label: "< 1 year", count: 0, balance: 0n },
-      dormant_1_3: { label: "1-3 years", count: 0, balance: 0n },
-      dormant_3_5: { label: "3-5 years", count: 0, balance: 0n },
-      likely_lost_5plus: { label: "5+ years (likely lost)", count: 0, balance: 0n },
-      unknown: { label: "Unknown last activity", count: 0, balance: 0n },
+      active_recent: { label: "< 1 year", count: 0, balance: BigInt(0) },
+      dormant_1_3: { label: "1-3 years", count: 0, balance: BigInt(0) },
+      dormant_3_5: { label: "3-5 years", count: 0, balance: BigInt(0) },
+      likely_lost_5plus: { label: "5+ years (likely lost)", count: 0, balance: BigInt(0) },
+      unknown: { label: "Unknown last activity", count: 0, balance: BigInt(0) },
     };
+    let entries = [];
 
-    const entries = byronR.rows.map(row => {
-      const bal = BigInt(row.balance||"0");
-      let cat = "unknown", yrs = null;
-      if (row.last_tx) {
-        yrs = (now - new Date(row.last_tx)) / (365.25*24*60*60*1000);
-        cat = yrs < 1 ? "active_recent" : yrs < 3 ? "dormant_1_3" : yrs < 5 ? "dormant_3_5" : "likely_lost_5plus";
-      }
-      buckets[cat].count++;
-      buckets[cat].balance += bal;
-      return {
-        address: row.identifier.slice(0,30)+"...", full_address: row.identifier,
-        balance: row.balance, tx_count: row.tx_count, last_tx: row.last_tx,
-        years_since_last_tx: yrs ? yrs.toFixed(1) : null, category: cat,
-      };
-    });
+    try {
+      const client = await pool.connect();
+      try {
+        await client.query("SET statement_timeout = '90s'");
+        const byronR = await client.query(`
+          SELECT txo.address as identifier, SUM(txo.value)::text as balance,
+                 COUNT(DISTINCT txo.tx_id)::int as tx_count, MAX(b.time) as last_tx
+          FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
+          WHERE txo.stake_address_id IS NULL
+            AND (txo.address LIKE 'DdzFF%' OR txo.address LIKE 'Ae2%')
+            AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
+          GROUP BY txo.address HAVING SUM(txo.value) >= 1000000000
+          ORDER BY SUM(txo.value) DESC LIMIT 500
+        `);
+
+        entries = byronR.rows.map(row => {
+          const bal = BigInt(row.balance||"0");
+          let cat = "unknown", yrs = null;
+          if (row.last_tx) {
+            yrs = (now - new Date(row.last_tx)) / (365.25*24*60*60*1000);
+            cat = yrs < 1 ? "active_recent" : yrs < 3 ? "dormant_1_3" : yrs < 5 ? "dormant_3_5" : "likely_lost_5plus";
+          }
+          buckets[cat].count++;
+          buckets[cat].balance += bal;
+          return {
+            address: row.identifier.slice(0,30)+"...", full_address: row.identifier,
+            balance: row.balance, tx_count: row.tx_count, last_tx: row.last_tx,
+            years_since_last_tx: yrs ? yrs.toFixed(1) : null, category: cat,
+          };
+        });
+      } finally { client.release(); }
+    } catch(e) {
+      console.warn("lost-ada-analysis: Byron UTXO query timed out");
+    }
 
     const bucketsOut = {};
     for (const [k,v] of Object.entries(buckets)) bucketsOut[k] = { ...v, balance: v.balance.toString() };
 
-    const entR = await pool.query(`
-      SELECT txo.address, SUM(txo.value)::text as balance, MAX(b.time) as last_tx
-      FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
-      WHERE txo.stake_address_id IS NULL AND txo.address NOT LIKE 'DdzFF%' AND txo.address NOT LIKE 'Ae2%'
-        AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
-      GROUP BY txo.address HAVING SUM(txo.value) >= 10000000000
-      ORDER BY SUM(txo.value) DESC LIMIT 200
-    `);
-    let entLostBal = 0n, entLostCnt = 0;
-    for (const r of entR.rows) {
-      if (r.last_tx) {
-        const yrs = (now - new Date(r.last_tx)) / (365.25*24*60*60*1000);
-        if (yrs > 3) { entLostBal += BigInt(r.balance||"0"); entLostCnt++; }
-      }
+    // Enterprise lost analysis (also with timeout)
+    let entLostBal = BigInt(0), entLostCnt = 0;
+    try {
+      const client2 = await pool.connect();
+      try {
+        await client2.query("SET statement_timeout = '90s'");
+        const entR = await client2.query(`
+          SELECT txo.address, SUM(txo.value)::text as balance, MAX(b.time) as last_tx
+          FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
+          WHERE txo.stake_address_id IS NULL AND txo.address NOT LIKE 'DdzFF%' AND txo.address NOT LIKE 'Ae2%'
+            AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
+          GROUP BY txo.address HAVING SUM(txo.value) >= 10000000000
+          ORDER BY SUM(txo.value) DESC LIMIT 200
+        `);
+        for (const r of entR.rows) {
+          if (r.last_tx) {
+            const yrs = (now - new Date(r.last_tx)) / (365.25*24*60*60*1000);
+            if (yrs > 3) { entLostBal += BigInt(r.balance||"0"); entLostCnt++; }
+          }
+        }
+      } finally { client2.release(); }
+    } catch(e) {
+      console.warn("lost-ada-analysis: Enterprise UTXO query timed out");
     }
 
     return {
