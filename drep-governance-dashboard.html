@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cardano DRep Governance Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0d13;--bg2:#111621;--bg3:#181e2c;--bg4:#1f2738;--border:#262f42;--border2:#333e55;--text:#e8ecf4;--text2:#8692ab;--accent:#3b82f6;--accent2:#60a5fa;--yes:#34d399;--no:#f87171;--abstain:#fbbf24;--nv:#4b5563}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+a{color:var(--accent2);text-decoration:none;transition:opacity .15s}a:hover{opacity:.75}
+input,select{font-family:inherit}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+input[type=number]{-moz-appearance:textfield}
+.loader{display:flex;gap:8px;align-items:center;justify-content:center;padding:40px}
+.loader span{width:10px;height:10px;border-radius:50%;background:var(--accent);animation:bounce 1.4s ease-in-out infinite}
+.loader span:nth-child(2){animation-delay:.16s}.loader span:nth-child(3){animation-delay:.32s}
+@keyframes bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .3s ease-out}
+.tooltip-container{display:inline-block}
+.tooltip-popup{display:none;position:fixed;z-index:100;
+  background:#1e2538;border:1px solid var(--border2);border-radius:8px;padding:10px 12px;
+  min-width:240px;max-width:380px;font-size:11px;color:var(--text);line-height:1.5;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);pointer-events:none;white-space:normal;word-break:break-word}
+.tooltip-container:hover .tooltip-popup{display:block}
+.btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text);
+  cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;transition:all .15s}
+.btn:hover{background:var(--bg4);border-color:var(--border2)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:#2563eb}
+.vote-cell{overflow:hidden;position:relative;z-index:1}
+.tab-bar{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:14px}
+.tab-btn{flex:1;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:inherit;background:transparent;color:var(--text2);transition:all .15s}
+.tab-btn.active{background:var(--accent);color:#fff}
+.tab-btn:hover:not(.active){background:var(--bg3)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+input[type=range]{-webkit-appearance:none;background:var(--bg);height:6px;border-radius:3px;outline:none;width:100%}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ════════════════════════════════════════════════════════════════
+// i18n
+// ════════════════════════════════════════════════════════════════
+const LANG = {
+  en: {
+    title:"Cardano DRep Governance", subtitle_drep:"DReps", subtitle_actions:"Actions", subtitle_votes:"Votes",
+    loading:"Loading…", loading_dreps:"Fetching DReps…", loading_votes:"Fetching vote data…",
+    loading_proposals:"Fetching proposal details…",
+    error_title:"Data Fetch Error", retry:"Retry", demo_btn:"Use Demo Data",
+    switch_live:"Switch to Live", refresh:"Refresh",
+    filter_search:"Search DRep", filter_search_ph:"Name or ID…",
+    filter_min_stake:"Min Stake (ADA)", filter_max_stake:"Max Stake (ADA)", filter_action_type:"Action Type",
+    filter_all:"All", filter_epoch_from:"Epoch From", filter_epoch_to:"Epoch To", filter_sort:"Sort",
+    sort_stake_desc:"Stake ↓", sort_stake_asc:"Stake ↑", sort_name:"Name A→Z", reset:"Reset",
+    showing:"Showing", csv_export:"Export CSV", no_dreps:"No DReps match your filters",
+    rationale:"Vote Rationale", no_rationale:"No rationale attached", has_rationale:"Has rationale",
+    drep_col:"DRep", type_param:"Param Change", type_hardfork:"Hard Fork", type_treasury:"Treasury",
+    type_noconf:"No Confidence", type_cc:"Update CC", type_const:"New Constitution", type_info:"Info Action",
+    attached:"attached", not_attached:"none", data_warnings:"Data Warnings", hide:"Hide",
+    delegators:"delegators", load_more:"Load More", csv_visible:"Visible Only", csv_all:"All Loaded Data",
+    tab_dashboard:"Voting Dashboard", tab_simulator:"Reward Simulator",
+    sim_title:"DRep Reward Simulator", sim_subtitle:"Middle-Out mechanism comparison (process-first)",
+    params:"Parameters", summary:"Summary",
+    rank:"Rank", name:"Name", stake:"Stake", eligible:"Elig.",
+    reward:"Reward", vote_rate:"Vote Rate",
+    eligible_count:"Eligible", avg_reward:"Avg", gini:"Gini",
+    search:"Search DRep…", no_data:"No DRep data",
+    mech_equal:"Equal", mech_prop:"Proportional", mech_bonus:"Prop+Bonus",
+    desc_equal:"Exclude top K, pay next N equally.",
+    desc_prop:"Exclude top K, pay next N proportional to stake.",
+    desc_bonus:"Exclude top K, base proportional + fixed bonus per person among next N.",
+    mo_k:"K (exclude top)", mo_n:"N (pay next)",
+    mo_total:"Total budget (ADA)",
+    budget_b2:"Fixed bonus / person (ADA)",
+    vote_start:"Start date", vote_end:"End date", vote_penalty:"Vote-rate penalty",
+    vote_penalty_on:"ON", vote_penalty_off:"OFF",
+    vote_ga_count:"GAs in range", vote_info:"GAs whose voting ended in this period",
+    rationale_penalty:"No-rationale penalty (%)",
+    metric_d:"D", metric_p:"P", metric_c:"C",
+    api_stats:"API Stats", api_calls:"API calls", cached:"cached", loading_sim_votes:"Loading vote counts for simulator…",
+    demo_mode:"Demo Mode", clear_cache:"Clear Cache",
+    api_key:"Blockfrost API Key", api_key_ph:"project_id…", api_key_save:"Save & Load",
+    api_key_change:"Change API Key", api_key_desc:"Get a free key at blockfrost.io",
+    api_key_required:"Blockfrost API key required",
+  },
+  ja: {
+    title:"Cardano DRep ガバナンス", subtitle_drep:"DRep", subtitle_actions:"アクション", subtitle_votes:"投票",
+    loading:"読み込み中…", loading_dreps:"DRep一覧を取得中…", loading_votes:"投票データを取得中…",
+    loading_proposals:"プロポーザル詳細を取得中…",
+    error_title:"データ取得エラー", retry:"再試行", demo_btn:"デモデータで表示",
+    switch_live:"ライブデータに切替", refresh:"更新",
+    filter_search:"DRep検索", filter_search_ph:"名前またはID…",
+    filter_min_stake:"最小ステーク(ADA)", filter_max_stake:"最大ステーク(ADA)", filter_action_type:"アクション種別",
+    filter_all:"すべて", filter_epoch_from:"Epochから", filter_epoch_to:"Epochまで", filter_sort:"ソート",
+    sort_stake_desc:"ステーク ↓", sort_stake_asc:"ステーク ↑", sort_name:"名前 A→Z", reset:"リセット",
+    showing:"表示", csv_export:"CSV出力", no_dreps:"該当するDRepが見つかりません",
+    rationale:"投票根拠", no_rationale:"投票根拠なし", has_rationale:"根拠あり",
+    drep_col:"DRep", type_param:"パラメータ変更", type_hardfork:"ハードフォーク", type_treasury:"トレジャリー",
+    type_noconf:"不信任", type_cc:"CC更新", type_const:"新憲法", type_info:"情報",
+    attached:"添付あり", not_attached:"なし", data_warnings:"データ警告", hide:"非表示",
+    delegators:"委任者", load_more:"さらに読込", csv_visible:"表示中のみ", csv_all:"全読込データ",
+    tab_dashboard:"投票ダッシュボード", tab_simulator:"報酬シミュレーター",
+    sim_title:"DRep報酬シミュレーター", sim_subtitle:"ミドルアウト方式比較（プロセスファースト）",
+    params:"パラメータ", summary:"サマリー",
+    rank:"順位", name:"名前", stake:"委任額", eligible:"対象",
+    reward:"報酬", vote_rate:"投票率",
+    eligible_count:"対象数", avg_reward:"平均", gini:"ジニ",
+    search:"DRep検索…", no_data:"DRepデータなし",
+    mech_equal:"均等", mech_prop:"比例", mech_bonus:"比例+ボーナス",
+    desc_equal:"上位K人除外、次のN人に均等配分。",
+    desc_prop:"上位K人除外、次のN人にステーク比例配分。",
+    desc_bonus:"上位K人除外、基本比例＋一人あたり固定ボーナスを次のN人に。",
+    mo_k:"K（上位除外数）", mo_n:"N（支払対象数）",
+    mo_total:"総予算（ADA）",
+    budget_b2:"一人あたり固定ボーナス（ADA）",
+    vote_start:"開始日", vote_end:"終了日", vote_penalty:"投票率ペナルティ",
+    vote_penalty_on:"ON", vote_penalty_off:"OFF",
+    vote_ga_count:"期間内GA数", vote_info:"投票期間終了日がこの範囲内のGA",
+    rationale_penalty:"根拠なしペナルティ（%）",
+    metric_d:"D", metric_p:"P", metric_c:"C",
+    api_stats:"API統計", api_calls:"APIコール", cached:"キャッシュ", loading_sim_votes:"シミュレーター用投票数を取得中…",
+    demo_mode:"デモモード", clear_cache:"キャッシュクリア",
+    api_key:"Blockfrost APIキー", api_key_ph:"project_id…", api_key_save:"保存して読込",
+    api_key_change:"APIキー変更", api_key_desc:"blockfrost.ioで無料キーを取得",
+    api_key_required:"Blockfrost APIキーが必要です",
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+// Blockfrost API Layer with Caching + Rate Limiting
+// ════════════════════════════════════════════════════════════════
+const BLOCKFROST_URL = "https://cardano-mainnet.blockfrost.io/api/v0";
+const BF_KEY_LS = "blockfrost_api_key";
+const BF_PAGE_SIZE = 100;
+
+function getBfKey() { return localStorage.getItem(BF_KEY_LS) || ""; }
+function setBfKey(k) { localStorage.setItem(BF_KEY_LS, k); }
+
+// --- In-memory cache ---
+const _cache = new Map();
+const CACHE_TTL = 10 * 60 * 1000; // 10 min
+let _apiCalls = 0, _cacheHits = 0;
+
+// --- Persistent cache (localStorage) for simulator vote data ---
+const SIM_CACHE_KEY = "cardano_drep_sim_cache_v4";
+const SIM_CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
+function saveSimCache(data) {
+  try {
+    const payload = { ts: Date.now(), ...data };
+    localStorage.setItem(SIM_CACHE_KEY, JSON.stringify(payload));
+  } catch(e) { console.warn("SimCache save failed:", e); }
+}
+
+function loadSimCache() {
+  try {
+    const raw = localStorage.getItem(SIM_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Date.now() - parsed.ts > SIM_CACHE_TTL) { localStorage.removeItem(SIM_CACHE_KEY); return null; }
+    return parsed;
+  } catch(e) { localStorage.removeItem(SIM_CACHE_KEY); return null; }
+}
+
+function timedFetch(url, opts={}, ms=30000) {
+  const c = new AbortController();
+  const t = setTimeout(() => c.abort(), ms);
+  return fetch(url, {...opts, signal:c.signal}).finally(() => clearTimeout(t));
+}
+
+// --- Throttle: min 100ms between calls (10 req/sec for Blockfrost) ---
+let _lastFetch = 0;
+async function bfFetchJSON(path) {
+  const url = `${BLOCKFROST_URL}${path}`;
+  const cached = _cache.get(url);
+  if (cached && Date.now() - cached.ts < CACHE_TTL) { _cacheHits++; return cached.data; }
+  const key = getBfKey();
+  if (!key) throw new Error("Blockfrost API key not set");
+  const now = Date.now();
+  const wait = Math.max(0, 100 - (now - _lastFetch));
+  if (wait > 0) await new Promise(r => setTimeout(r, wait));
+  _lastFetch = Date.now();
+  _apiCalls++;
+  const r = await timedFetch(url, { headers: { "Accept": "application/json", "project_id": key } });
+  if (r.status === 404) { _cache.set(url, { data: null, ts: Date.now() }); return null; }
+  if (r.status === 402) throw new Error("Blockfrost: Usage limit reached");
+  if (r.status === 403) throw new Error("Blockfrost: Invalid API key");
+  if (r.status === 418) throw new Error("Blockfrost: IP has been auto-banned");
+  if (r.status === 429) { await new Promise(r => setTimeout(r, 1000)); return bfFetchJSON(path); } // retry once
+  if (!r.ok) throw new Error(`Blockfrost HTTP ${r.status}`);
+  const data = await r.json();
+  _cache.set(url, { data, ts: Date.now() });
+  return data;
+}
+
+// Fetch all pages of a paginated Blockfrost endpoint
+async function bfFetchAllPages(path, maxPages = 20) {
+  const results = [];
+  for (let page = 1; page <= maxPages; page++) {
+    const sep = path.includes("?") ? "&" : "?";
+    const data = await bfFetchJSON(`${path}${sep}page=${page}&count=${BF_PAGE_SIZE}`);
+    if (!data || !Array.isArray(data) || data.length === 0) break;
+    results.push(...data);
+    if (data.length < BF_PAGE_SIZE) break;
+  }
+  return results;
+}
+
+function getApiStats() { return { calls: _apiCalls, cached: _cacheHits }; }
+function resetApiStats() { _apiCalls = 0; _cacheHits = 0; }
+
+// ════════════════════════════════════════════════════════════════
+// Shared Helpers
+// ════════════════════════════════════════════════════════════════
+function fmtAda(lovelace) {
+  if(!lovelace) return "0";
+  const a = Number(lovelace)/1e6;
+  if(a>=1e9) return (a/1e9).toFixed(2)+"B";
+  if(a>=1e6) return (a/1e6).toFixed(2)+"M";
+  if(a>=1e3) return (a/1e3).toFixed(1)+"K";
+  return a.toFixed(0);
+}
+function fmtAdaNum(ada) {
+  if(ada>=1e9) return (ada/1e9).toFixed(2)+"B";
+  if(ada>=1e6) return (ada/1e6).toFixed(2)+"M";
+  if(ada>=1e3) return (ada/1e3).toFixed(1)+"K";
+  return ada.toFixed(ada < 1 ? 4 : 1);
+}
+function shortId(id,n=8,m=5) { return !id ? "" : id.length<=n+m+3 ? id : id.slice(0,n)+"…"+id.slice(-m); }
+function normalizeType(t) {
+  const map = {
+    // Blockfrost lowercase types
+    "treasury_withdrawals":"TreasuryWithdrawals","hard_fork_initiation":"HardForkInitiation",
+    "parameter_change":"ParameterChange","no_confidence":"NoConfidence",
+    "update_committee":"UpdateCommittee","new_constitution":"NewConstitution",
+    "info_action":"InfoAction",
+    // Legacy uppercase types (demo data / backward compat)
+    "HARD_FORK_INITIATION":"HardForkInitiation","TREASURY_WITHDRAWALS":"TreasuryWithdrawals",
+    "PARAMETER_CHANGE":"ParameterChange","PROTOCOL_PARAMETER_CHANGE":"ParameterChange",
+    "NO_CONFIDENCE":"NoConfidence","UPDATE_COMMITTEE":"UpdateCommittee",
+    "NEW_CONSTITUTION":"NewConstitution","INFO_ACTION":"InfoAction","INFO":"InfoAction","INFORMATION":"InfoAction",
+  };
+  return map[t] || map[t?.toLowerCase()] || t || "";
+}
+// Epoch → Unix timestamp (Shelley era: epoch 208 started at 1596059091)
+function epochToTimestamp(epoch) {
+  return 1596059091 + (epoch - 208) * 432000;
+}
+function calcGini(values) {
+  const n = values.length; if (n === 0) return 0;
+  const sorted = [...values].sort((a,b) => a - b);
+  const sum = sorted.reduce((a,b) => a + b, 0); if (sum === 0) return 0;
+  let cumSum = 0, giniSum = 0;
+  sorted.forEach(v => { cumSum += v; giniSum += cumSum; });
+  return (2 * giniSum) / (n * sum) - (n + 1) / n;
+}
+
+const ACTION_COLORS = {
+  ParameterChange:"#8b5cf6", HardForkInitiation:"#ef4444", TreasuryWithdrawals:"#f59e0b",
+  NoConfidence:"#dc2626", UpdateCommittee:"#06b6d4", NewConstitution:"#10b981", InfoAction:"#6366f1"
+};
+function actionColor(t){ return ACTION_COLORS[t] || "#6b7280"; }
+function actionLabel(t, T) {
+  const m = { ParameterChange:"type_param", HardForkInitiation:"type_hardfork", TreasuryWithdrawals:"type_treasury",
+    NoConfidence:"type_noconf", UpdateCommittee:"type_cc", NewConstitution:"type_const", InfoAction:"type_info" };
+  return T[m[t]] || t || "?";
+}
+
+// ════════════════════════════════════════════════════════════════
+// Blockfrost API Functions
+// ════════════════════════════════════════════════════════════════
+const DREP_CHUNK = 100, VOTE_BATCH = 5;
+
+// Fetch a page of DRep IDs, then batch-fetch their details + metadata
+async function fetchDrepPage(page, addLog, setStage) {
+  const ids = await bfFetchJSON(`/governance/dreps?page=${page}&count=${BF_PAGE_SIZE}`);
+  if (!ids || !Array.isArray(ids) || ids.length === 0) return { dreps: [], reachedEnd: true };
+  const result = [];
+  for (let i = 0; i < ids.length; i += VOTE_BATCH) {
+    const batch = ids.slice(i, i + VOTE_BATCH);
+    if (setStage) setStage(`DReps: ${result.length + batch.length}/${ids.length} (page ${page})`);
+    const results = await Promise.allSettled(batch.map(async d => {
+      const detail = await bfFetchJSON(`/governance/dreps/${d.drep_id}`);
+      if (!detail || detail.retired || detail.expired) return null;
+      let name = null, image_url = null;
+      try {
+        const meta = await bfFetchJSON(`/governance/dreps/${d.drep_id}/metadata`);
+        if (meta && meta.json_metadata) {
+          const body = meta.json_metadata.body || meta.json_metadata;
+          name = body?.givenName || body?.name || null;
+          image_url = body?.image?.contentUrl || null;
+        }
+      } catch(e) {}
+      return { drep_id: d.drep_id, name, amount: detail.amount || "0", image_url, delegators: 0 };
+    }));
+    results.forEach(r => { if (r.status === "fulfilled" && r.value) result.push(r.value); });
+  }
+  return { dreps: result, reachedEnd: ids.length < BF_PAGE_SIZE };
+}
+
+// Fetch multiple pages of DReps
+async function fetchDrepRange(startPage, numPages, addLog, setStage) {
+  const result = []; let reachedEnd = false;
+  for (let p = startPage; p < startPage + numPages; p++) {
+    const { dreps: chunk, reachedEnd: ended } = await fetchDrepPage(p, addLog, setStage);
+    result.push(...chunk);
+    if (ended) { reachedEnd = true; break; }
+  }
+  result.sort((a, b) => Number(b.amount) - Number(a.amount));
+  return { dreps: result, nextPage: reachedEnd ? -1 : startPage + numPages, reachedEnd };
+}
+
+// Fetch ALL DReps (for simulator) — details only, skip metadata for speed
+async function fetchAllDreps(onProgress) {
+  const allIds = await bfFetchAllPages("/governance/dreps", 20);
+  if (onProgress) onProgress(0, allIds.length);
+  const allDreps = [];
+  for (let i = 0; i < allIds.length; i += VOTE_BATCH) {
+    const batch = allIds.slice(i, i + VOTE_BATCH);
+    const results = await Promise.allSettled(batch.map(async d => {
+      const detail = await bfFetchJSON(`/governance/dreps/${d.drep_id}`);
+      if (!detail || detail.retired || detail.expired) return null;
+      // Try to get name from metadata (best effort)
+      let name = null;
+      try {
+        const meta = await bfFetchJSON(`/governance/dreps/${d.drep_id}/metadata`);
+        if (meta && meta.json_metadata) {
+          const body = meta.json_metadata.body || meta.json_metadata;
+          name = body?.givenName || body?.name || null;
+        }
+      } catch(e) {}
+      return { drep_id: d.drep_id, name, amount: detail.amount || "0", image_url: null, delegators: 0 };
+    }));
+    results.forEach(r => { if (r.status === "fulfilled" && r.value) allDreps.push(r.value); });
+    if (onProgress) onProgress(allDreps.length, allIds.length);
+  }
+  allDreps.sort((a, b) => Number(b.amount) - Number(a.amount));
+  return allDreps;
+}
+
+// Fetch all votes for a single DRep from Blockfrost
+async function fetchAllVotesForDrep(drepId) {
+  return await bfFetchAllPages(`/governance/dreps/${drepId}/votes`, 10) || [];
+}
+
+// Process a Blockfrost vote record into the vote map
+function processVoteRecord(v, drepId, vm, rm, gaMap) {
+  const propTxHash = v.proposal_tx_hash || "";
+  const propCertIdx = v.proposal_cert_index != null ? v.proposal_cert_index : -1;
+  if (!propTxHash) return false;
+  const propKey = `${propTxHash}#${propCertIdx}`;
+  if (!gaMap[propKey]) {
+    gaMap[propKey] = {
+      proposal_id: propKey, proposal_type: "", epoch_no: 0,
+      title: "", tx_hash: propTxHash, cert_index: propCertIdx, expiration: 0
+    };
+  }
+  let voteVal = (v.vote || "").toLowerCase();
+  if (voteVal === "yes") voteVal = "Yes";
+  else if (voteVal === "no") voteVal = "No";
+  else if (voteVal === "abstain") voteVal = "Abstain";
+  else return false;
+  const k = `${drepId}__${propKey}`;
+  vm[k] = voteVal;
+  // Blockfrost vote records don't include rationale directly
+  return true;
+}
+
+// Fetch votes for a list of DReps
+async function fetchVotesForDreps(drepList, addLog, setStage, stageLabel) {
+  const vm = {}, rm = {}, gaMap = {}; let totalVotes = 0;
+  for (let batch = 0; batch < drepList.length; batch += VOTE_BATCH) {
+    const batchDreps = drepList.slice(batch, batch + VOTE_BATCH);
+    if (setStage) setStage(`${stageLabel} (${Math.min(batch + VOTE_BATCH, drepList.length)}/${drepList.length})`);
+    await Promise.allSettled(batchDreps.map(async (d) => {
+      try {
+        const votes = await fetchAllVotesForDrep(d.drep_id);
+        votes.forEach(v => { if (processVoteRecord(v, d.drep_id, vm, rm, gaMap)) totalVotes++; });
+      } catch(e) { /* skip */ }
+    }));
+  }
+  return { vm, rm, gaMap, totalVotes };
+}
+
+// Enrich proposals with details (type, expiration) and metadata (title) from Blockfrost
+async function enrichProposals(gaMap, addLog, setStage) {
+  const proposals = Object.values(gaMap);
+  const toFetch = proposals.filter(p => !p.proposal_type && p.tx_hash);
+  for (let i = 0; i < toFetch.length; i += VOTE_BATCH) {
+    const batch = toFetch.slice(i, i + VOTE_BATCH);
+    if (setStage) setStage(`Proposals: ${Math.min(i + VOTE_BATCH, toFetch.length)}/${toFetch.length}`);
+    await Promise.allSettled(batch.map(async p => {
+      try {
+        const detail = await bfFetchJSON(`/governance/proposals/${p.tx_hash}/${p.cert_index}`);
+        if (detail) {
+          p.proposal_type = normalizeType(detail.governance_type || "");
+          p.expiration = detail.expiration || 0;
+          p.epoch_no = detail.expiration || 0;
+        }
+      } catch(e) {}
+      try {
+        const meta = await bfFetchJSON(`/governance/proposals/${p.tx_hash}/${p.cert_index}/metadata`);
+        if (meta && meta.json_metadata) {
+          const body = meta.json_metadata.body || meta.json_metadata;
+          let title = body?.title || "";
+          if (typeof title === "object") title = JSON.stringify(title);
+          p.title = title;
+        }
+      } catch(e) {}
+    }));
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// Demo Data
+// ════════════════════════════════════════════════════════════════
+function demoData() {
+  const names = ["Yoroi Wallet","Everstake","CryptoCrow","Cardano Foundation","IOHK DRep","Tempo.vote","Sidan Lab",
+    "Mesh","Socious","Cerkoryn","Kyle Solomon","Chris G","CardanoSphere","ADA Whale","Stakepool Hub",
+    "DRep Alpha","Governance Pioneer","Community Voice","Blockchain Scholar","ADA Guardian"];
+  const rnd = (n) => Math.floor(Math.random()*n);
+  const hex = (n) => Array(n).fill(0).map(()=>"0123456789abcdef"[rnd(16)]).join("");
+  const dreps = names.map(name => ({
+    drep_id:`drep1${hex(52)}`, name, amount:String((rnd(800)+1)*1e6*1e6), image_url:null, delegators:rnd(5000)
+  }));
+  const types = ["InfoAction","TreasuryWithdrawals","ParameterChange","UpdateCommittee","HardForkInitiation","NewConstitution","NoConfidence"];
+  const props = Array.from({length:20},(_,i)=>({
+    proposal_id:`${hex(64)}#0`, proposal_type:types[rnd(types.length)], epoch_no:530+rnd(85),
+    title:"", tx_hash:hex(64), cert_index:0, expiration:540+rnd(80)
+  }));
+  const choices = ["Yes","No","Abstain"]; const vm={}, rm={};
+  dreps.forEach(d=>props.forEach(p=>{ if(Math.random()>.35){ const k=`${d.drep_id}__${p.proposal_id}`; vm[k]=choices[rnd(3)]; if(Math.random()>.5) rm[k]=`https://ipfs.io/ipfs/Qm${hex(44)}`; }}));
+  return { dreps, proposals:props, votes:vm, rationales:rm };
+}
+
+// ════════════════════════════════════════════════════════════════
+// Shared Components
+// ════════════════════════════════════════════════════════════════
+function Avatar({ name, url, size=28 }) {
+  const [err,setErr] = React.useState(false);
+  const ini = (name||"?").replace(/^drep1/,"").slice(0,2).toUpperCase();
+  const h = (name||"").split("").reduce((a,c)=>a+c.charCodeAt(0),0)%360;
+  const validUrl = url && !err && !url.startsWith("data:") ? url : null;
+  if(validUrl) return <img src={validUrl} alt="" onError={()=>setErr(true)}
+    style={{width:size,height:size,borderRadius:"50%",objectFit:"cover",border:"2px solid var(--border2)",flexShrink:0}}/>;
+  return <div style={{width:size,height:size,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",
+    fontSize:size*0.35,fontWeight:700,background:`hsl(${h},40%,20%)`,color:`hsl(${h},60%,62%)`,
+    border:`2px solid hsl(${h},30%,30%)`,flexShrink:0}}>{ini}</div>;
+}
+
+function PaginationBar({ label, page, setPage, total }) {
+  return (
+    <div style={{display:"flex",alignItems:"center",gap:5}}>
+      <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{label}:</span>
+      <button className="btn" disabled={page===0} onClick={()=>setPage(Math.max(0,page-1))} style={{padding:"2px 7px",fontSize:11,opacity:page===0?.3:1}}>←</button>
+      <span style={{fontSize:11,minWidth:36,textAlign:"center"}}>{page+1}/{total}</span>
+      <button className="btn" disabled={page>=total-1} onClick={()=>setPage(Math.min(total-1,page+1))} style={{padding:"2px 7px",fontSize:11,opacity:page>=total-1?.3:1}}>→</button>
+    </div>
+  );
+}
+
+function VoteBadge({ vote, hasRationale, rationaleUrl, T }) {
+  const m = {
+    Yes:{bg:"rgba(52,211,153,.12)",c:"#34d399",bc:"rgba(52,211,153,.25)",icon:"✓",l:"YES"},
+    No:{bg:"rgba(248,113,113,.12)",c:"#f87171",bc:"rgba(248,113,113,.25)",icon:"✗",l:"NO"},
+    Abstain:{bg:"rgba(251,191,36,.12)",c:"#fbbf24",bc:"rgba(251,191,36,.25)",icon:"−",l:"ABSTAIN"},
+    NotVoted:{bg:"rgba(75,85,99,.06)",c:"#555e70",bc:"rgba(75,85,99,.12)",icon:"",l:"−"},
+  };
+  const s = m[vote]||m.NotVoted; const isVoted = vote && vote !== "NotVoted";
+  const popRef = React.useRef(null);
+  const onEnter = (e) => {
+    const pop = popRef.current; if(!pop) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    let left = r.left + r.width/2 - 190, top = r.top - 8;
+    if (left < 8) left = 8; if (left + 380 > window.innerWidth) left = window.innerWidth - 388;
+    pop.style.left = left + "px"; pop.style.bottom = "auto"; pop.style.top = "auto";
+    if (top > 200) { pop.style.bottom = (window.innerHeight - r.top + 6) + "px"; }
+    else { pop.style.top = (r.bottom + 6) + "px"; }
+  };
+  const badge = (
+    <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:2,
+      padding:"3px 7px",borderRadius:5,fontSize:10,fontWeight:700,
+      background:s.bg,color:s.c,border:`1px solid ${s.bc}`,minWidth:52,letterSpacing:".05em",lineHeight:1.4}}>
+      {s.icon && <span style={{fontSize:11}}>{s.icon}</span>}{s.l}
+      {isVoted && hasRationale && <span style={{fontSize:8,marginLeft:2,opacity:.7}} title={T.has_rationale}>📎</span>}
+    </div>
+  );
+  if (!isVoted) return badge;
+  return (
+    <div className="tooltip-container" onMouseEnter={onEnter}>{badge}
+      <div className="tooltip-popup" ref={popRef}>
+        <div style={{fontWeight:700,marginBottom:4,fontSize:12,color:s.c}}>{vote} {hasRationale ? `(${T.attached})` : ""}</div>
+        {hasRationale && rationaleUrl
+          ? <div><div style={{color:"var(--text2)",marginBottom:4}}>{T.rationale}:</div>
+              {rationaleUrl.startsWith("http")
+                ? <a href={rationaleUrl} target="_blank" rel="noopener" style={{fontSize:10,wordBreak:"break-all",color:"var(--accent2)"}}>{rationaleUrl.length>80?rationaleUrl.slice(0,80)+"…":rationaleUrl}</a>
+                : <div style={{fontSize:10,color:"var(--text)",maxHeight:150,overflow:"auto",lineHeight:1.5}}>{rationaleUrl.length>500?rationaleUrl.slice(0,500)+"…":rationaleUrl}</div>
+              }</div>
+          : <div style={{color:"var(--text2)"}}>{T.no_rationale}</div>}
+      </div>
+    </div>
+  );
+}
+
+function SliderParam({ label, value, onChange, min, max, step, suffix="" }) {
+  return (
+    <div style={{marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+        <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{label}</span>
+        <div style={{display:"flex",alignItems:"center",gap:4}}>
+          <input type="number" value={value} onChange={e => onChange(Number(e.target.value))}
+            min={min} max={max} step={step} style={{width:90,textAlign:"right",padding:"4px 8px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"}} />
+          {suffix && <span style={{fontSize:10,color:"var(--text2)"}}>{suffix}</span>}
+        </div>
+      </div>
+      <input type="range" min={min} max={max} step={step} value={value}
+        onChange={e => onChange(Number(e.target.value))}
+        style={{background:`linear-gradient(to right, var(--accent) ${((value-min)/(max-min))*100}%, var(--bg3) ${((value-min)/(max-min))*100}%)`}} />
+    </div>
+  );
+}
+
+function WarningBanner({ warnings, T }) {
+  const [open,setOpen] = React.useState(true);
+  if (!warnings||warnings.length===0) return null;
+  if (!open) return <div style={{marginBottom:8,textAlign:"right"}}><button className="btn" onClick={()=>setOpen(true)} style={{fontSize:10,padding:"3px 8px",color:"#f59e0b"}}>⚠ {warnings.length} {T.data_warnings}</button></div>;
+  return (
+    <div style={{background:"rgba(245,158,11,.08)",border:"1px solid rgba(245,158,11,.25)",borderRadius:10,padding:"10px 14px",marginBottom:12,fontSize:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+        <span style={{fontWeight:700,color:"#f59e0b"}}>⚠ {T.data_warnings} ({warnings.length})</span>
+        <button className="btn" onClick={()=>setOpen(false)} style={{fontSize:10,padding:"2px 8px"}}>{T.hide}</button>
+      </div>
+      {warnings.map((w,i)=><div key={i} style={{padding:"3px 0",color:w.type==="error"?"#f87171":"#fbbf24",fontSize:11}}>{w.type==="error"?"❌":"⚠️"} {w.msg}</div>)}
+    </div>
+  );
+}
+
+// Reward Calculation Models (3 mechanisms, computed simultaneously)
+// ════════════════════════════════════════════════════════════════
+function calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData, rationaleData) {
+  const n = dreps.length;
+  if (n === 0) return { mo_equal:[], mo_prop:[], mo_bonus:[] };
+  const budget = params.totalBudget;
+
+  function tagEligible() {
+    let paidCount = 0;
+    return dreps.map((d, i) => {
+      const excluded = i < params.K;
+      const inBand = !excluded && Number(d.amount) > 0 && paidCount < params.N;
+      if (inBand) paidCount++;
+      return { ...d, rank: i + 1, eligible: inBand };
+    });
+  }
+
+  function applyPeriodVotePenalty(tagged, rewards) {
+    if (!params.votePenaltyOn || !periodVoteData) return rewards;
+    return rewards.map((r, i) => {
+      if (r === 0) return 0;
+      const pd = periodVoteData[tagged[i].drep_id];
+      if (!pd || pd.actionsInPeriod === 0) return 0;
+      const voteRate = pd.votesInPeriod / pd.actionsInPeriod;
+      return r * voteRate;
+    });
+  }
+
+  function applyRationaleAdjustment(tagged, rewards) {
+    if (!rationaleData || (params.rationaleBonus === 0 && params.rationalePenalty === 0)) return rewards;
+    return rewards.map((r, i) => {
+      if (r === 0) return 0;
+      const rd = rationaleData[tagged[i].drep_id];
+      if (!rd || rd.total === 0) return r * (1 - params.rationalePenalty / 100);
+      const rationaleRate = rd.withRationale / rd.total;
+      const factor = 1 + (params.rationaleBonus / 100) * rationaleRate - (params.rationalePenalty / 100) * (1 - rationaleRate);
+      return r * Math.max(0, factor);
+    });
+  }
+
+  function adjustAndNormalize(tagged, rewards) {
+    let adj = applyPeriodVotePenalty(tagged, rewards);
+    adj = applyRationaleAdjustment(tagged, adj);
+    const total = adj.reduce((a, b) => a + b, 0);
+    if (total > 0) adj = adj.map(r => r * budget / total);
+    return tagged.map((d, i) => ({ ...d, reward: adj[i] }));
+  }
+
+  function calcEqual() {
+    const tagged = tagEligible();
+    const weights = tagged.map(d => d.eligible ? 1 : 0);
+    const sumW = weights.reduce((a, b) => a + b, 0);
+    const base = tagged.map((d, i) => sumW > 0 && d.eligible ? budget * (weights[i] / sumW) : 0);
+    return adjustAndNormalize(tagged, base);
+  }
+
+  function calcProp() {
+    const tagged = tagEligible();
+    const weights = tagged.map(d => d.eligible ? Number(d.amount) : 0);
+    const sumW = weights.reduce((a, b) => a + b, 0);
+    const base = tagged.map((d, i) => sumW > 0 && d.eligible ? budget * (weights[i] / sumW) : 0);
+    return adjustAndNormalize(tagged, base);
+  }
+
+  function calcBonus() {
+    const tagged = tagEligible();
+    const eligibleList = tagged.filter(d => d.eligible);
+    if (eligibleList.length === 0) return tagged.map(d => ({ ...d, reward: 0 }));
+    const eligibleStake = eligibleList.reduce((s, d) => s + Number(d.amount), 0);
+    const totalBonusPool = params.b2 * eligibleList.length;
+    const baseBudget = budget - totalBonusPool;
+    const base = tagged.map(d => {
+      if (!d.eligible) return 0;
+      const propPart = eligibleStake > 0 && baseBudget > 0 ? baseBudget * (Number(d.amount) / eligibleStake) : 0;
+      return propPart + params.b2;
+    });
+    return adjustAndNormalize(tagged, base);
+  }
+
+  return { mo_equal: calcEqual(), mo_prop: calcProp(), mo_bonus: calcBonus() };
+}
+
+function calcProcessMetrics(results, totalEligible) {
+  const rewarded = results.filter(r => r.reward > 0);
+  const eligibleCount = rewarded.length;
+  const totalReward = rewarded.reduce((s, r) => s + r.reward, 0);
+  const rewards = rewarded.map(r => r.reward);
+  const P = totalEligible > 0 ? eligibleCount / totalEligible : 0;
+  let C = 0;
+  if (totalReward > 0 && eligibleCount > 1) {
+    const hhi = rewarded.reduce((s, r) => s + Math.pow(r.reward / totalReward, 2), 0);
+    C = (hhi - 1 / eligibleCount) / (1 - 1 / eligibleCount);
+  }
+  const rewardedStake = rewarded.reduce((s, r) => s + Number(r.amount), 0);
+  let D = 0;
+  if (rewardedStake > 0 && totalEligible > 0) {
+    const stakeHHI = rewarded.reduce((s, r) => s + Math.pow(Number(r.amount) / rewardedStake, 2), 0);
+    const effectiveN = stakeHHI > 0 ? 1 / stakeHHI : 0;
+    D = effectiveN / totalEligible;
+  }
+  const gini = calcGini(rewards);
+  const minR = rewards.length > 0 ? Math.min(...rewards) : 0;
+  const maxR = rewards.length > 0 ? Math.max(...rewards) : 0;
+  const avgR = rewards.length > 0 ? totalReward / rewards.length : 0;
+  const medR = rewards.length > 0 ? [...rewards].sort((a, b) => a - b)[Math.floor(rewards.length / 2)] : 0;
+  return { D, P, C, eligible: eligibleCount, gini, minR, maxR, avgR, medR, totalReward };
+}
+
+// ════════════════════════════════════════════════════════════════
+// Dashboard Tab
+// ════════════════════════════════════════════════════════════════
+function DashboardTab({ dreps, proposals, votes, rationales, warnings, hasMore, pageLoading, stage,
+  loadMoreDreps, T, isDemo }) {
+  const [search,setSearch] = React.useState("");
+  const [minStake,setMinStake] = React.useState("");
+  const [maxStake,setMaxStake] = React.useState("");
+  const [actType,setActType] = React.useState("all");
+  const [epFrom,setEpFrom] = React.useState("");
+  const [epTo,setEpTo] = React.useState("");
+  const [sortBy,setSortBy] = React.useState("stake_desc");
+  const [dPage,setDPage] = React.useState(0);
+  const [pPage,setPPage] = React.useState(0);
+  const [csvOpen,setCsvOpen] = React.useState(false);
+  const DPP = 100, PPP = 20;
+
+  const fDreps = React.useMemo(()=>{
+    let r = [...dreps];
+    if(minStake){const m=parseFloat(minStake)*1e6; r=r.filter(d=>Number(d.amount)>=m);}
+    if(maxStake){const m=parseFloat(maxStake)*1e6; r=r.filter(d=>Number(d.amount)<=m);}
+    if(search){const q=search.toLowerCase(); r=r.filter(d=>(d.name&&d.name.toLowerCase().includes(q))||(d.drep_id&&d.drep_id.toLowerCase().includes(q)));}
+    if(sortBy==="stake_desc") r.sort((a,b)=>Number(b.amount)-Number(a.amount));
+    else if(sortBy==="stake_asc") r.sort((a,b)=>Number(a.amount)-Number(b.amount));
+    else r.sort((a,b)=>(a.name||"zzz").localeCompare(b.name||"zzz"));
+    return r;
+  },[dreps,minStake,maxStake,search,sortBy]);
+
+  const fProps = React.useMemo(()=>{
+    let r=[...proposals];
+    if(actType!=="all") r=r.filter(p=>p.proposal_type===actType);
+    if(epFrom) r=r.filter(p=>Number(p.epoch_no)>=parseInt(epFrom));
+    if(epTo) r=r.filter(p=>Number(p.epoch_no)<=parseInt(epTo));
+    return r;
+  },[proposals,actType,epFrom,epTo]);
+
+  const pgD=fDreps.slice(dPage*DPP,(dPage+1)*DPP);
+  const pgP=fProps.slice(pPage*PPP,(pPage+1)*PPP);
+  const tDP=Math.max(1,Math.ceil(fDreps.length/DPP));
+  const tPP=Math.max(1,Math.ceil(fProps.length/PPP));
+  const actTypes=[...new Set(proposals.map(p=>p.proposal_type).filter(Boolean))];
+
+  function gv(did,pid){return votes[`${did}__${pid}`]||"NotVoted";}
+  function gr(did,pid){return rationales[`${did}__${pid}`]||null;}
+
+  function handleDPageChange(newPage) {
+    setDPage(newPage);
+    if ((newPage+1)*DPP > dreps.length && hasMore && !pageLoading) loadMoreDreps();
+  }
+
+  function exportCSV(mode){
+    const csvDreps = mode === "visible" ? pgD : fDreps;
+    const csvProps = mode === "visible" ? pgP : fProps;
+    const hdr=["DRep ID","DRep Name","Stake (ADA)","Delegators",
+      ...csvProps.map(p=>{ const t = p.title ? p.title.slice(0,40) : shortId(p.proposal_id); return `[${p.proposal_type}] ${t}`; })];
+    const rows=csvDreps.map(d=>[d.drep_id,d.name||"",Math.round(Number(d.amount)/1e6),d.delegators||0,
+      ...csvProps.map(p=>{const v=gv(d.drep_id,p.proposal_id);const r=gr(d.drep_id,p.proposal_id);return v+(r?" [rationale]":"");})]);
+    const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob); const a=document.createElement("a");a.href=url;a.download=`cardano_drep_votes_${mode}.csv`;a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  const ist={padding:"6px 10px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:12,outline:"none"};
+
+  return (
+    <div>
+      <WarningBanner warnings={warnings} T={T}/>
+      <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 12px",marginBottom:12,display:"flex",flexWrap:"wrap",gap:8,alignItems:"flex-end"}}>
+        {[
+          {l:T.filter_search,el:<input type="text" placeholder={T.filter_search_ph} value={search} onChange={e=>{setSearch(e.target.value);setDPage(0)}} style={{...ist,width:150}}/>},
+          {l:T.filter_min_stake,el:<input type="number" placeholder="1000000" value={minStake} onChange={e=>{setMinStake(e.target.value);setDPage(0)}} style={{...ist,width:110}}/>},
+          {l:T.filter_max_stake,el:<input type="number" placeholder="999999999" value={maxStake} onChange={e=>{setMaxStake(e.target.value);setDPage(0)}} style={{...ist,width:110}}/>},
+          {l:T.filter_action_type,el:<select value={actType} onChange={e=>{setActType(e.target.value);setPPage(0)}} style={{...ist,minWidth:120}}>
+            <option value="all">{T.filter_all}</option>{actTypes.map(t=><option key={t} value={t}>{actionLabel(t,T)}</option>)}</select>},
+          {l:T.filter_sort,el:<select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{...ist,minWidth:100}}>
+            <option value="stake_desc">{T.sort_stake_desc}</option><option value="stake_asc">{T.sort_stake_asc}</option><option value="name_asc">{T.sort_name}</option></select>},
+        ].map(({l,el},i)=>(<div key={i} style={{display:"flex",flexDirection:"column",gap:3}}>
+          <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,textTransform:"uppercase",letterSpacing:".06em"}}>{l}</label>{el}</div>))}
+        <div style={{position:"relative",display:"inline-block"}}>
+          <button className="btn" onClick={()=>setCsvOpen(!csvOpen)}>📥 {T.csv_export} ▾</button>
+          {csvOpen && <div style={{position:"absolute",top:"100%",left:0,marginTop:4,background:"var(--bg3)",border:"1px solid var(--border2)",
+            borderRadius:6,overflow:"hidden",zIndex:50,minWidth:160,boxShadow:"0 8px 24px rgba(0,0,0,.5)"}}>
+            <button onClick={()=>{exportCSV("visible");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
+              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
+              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📄 {T.csv_visible}</button>
+            <button onClick={()=>{exportCSV("all");setCsvOpen(false)}} style={{display:"block",width:"100%",padding:"8px 12px",
+              border:"none",background:"transparent",color:"var(--text)",fontSize:11,cursor:"pointer",textAlign:"left",fontFamily:"inherit"}}
+              onMouseEnter={e=>e.target.style.background="var(--bg4)"} onMouseLeave={e=>e.target.style.background="transparent"}>📊 {T.csv_all}</button>
+          </div>}
+        </div>
+        <button className="btn" onClick={()=>{setSearch("");setMinStake("");setMaxStake("");setActType("all");setEpFrom("");setEpTo("");setSortBy("stake_desc");setDPage(0);setPPage(0)}}
+          style={{alignSelf:"flex-end",fontSize:11}}>{T.reset}</button>
+      </div>
+
+      <div style={{fontSize:11,color:"var(--text2)",marginBottom:8}}>
+        {T.showing}: {T.subtitle_drep} {fDreps.length}{hasMore?"+":""} × {T.subtitle_actions} {fProps.length}
+        <span style={{opacity:.6,marginLeft:6}}>📎 = {T.has_rationale}</span>
+        {pageLoading && <span style={{marginLeft:8,color:"var(--accent2)"}}>⏳ {stage}</span>}
+      </div>
+
+      <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+        <div style={{overflow:"auto",maxHeight:"calc(100vh - 360px)"}}>
+          <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%",minWidth:pgP.length*95+260}}>
+            <thead><tr>
+              <th style={{position:"sticky",left:0,top:0,zIndex:30,background:"var(--bg3)",padding:"8px 10px",textAlign:"left",
+                borderBottom:"2px solid var(--border)",borderRight:"2px solid var(--border)",fontSize:10,fontWeight:700,
+                color:"var(--text2)",minWidth:260,textTransform:"uppercase",letterSpacing:".05em",
+                boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>{T.drep_col}</th>
+              {pgP.map((p,i)=>{const c=actionColor(p.proposal_type);
+                const shortTitle = p.title ? (p.title.length > 20 ? p.title.slice(0,20)+"…" : p.title) : "";
+                return(
+                <th key={p.proposal_id||i} style={{position:"sticky",top:0,zIndex:20,background:"var(--bg3)",padding:"5px 3px",
+                  textAlign:"center",borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:600,minWidth:100,maxWidth:120,verticalAlign:"bottom"}}>
+                  <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}} title={p.title||p.proposal_id}>
+                    <span style={{display:"inline-block",padding:"1px 4px",borderRadius:3,fontSize:7,fontWeight:700,
+                      textTransform:"uppercase",background:c+"15",color:c,border:`1px solid ${c}30`,lineHeight:1.6}}>{actionLabel(p.proposal_type,T)}</span>
+                    {shortTitle && <span style={{fontSize:8,color:"var(--text)",lineHeight:1.3,maxWidth:110,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{shortTitle}</span>}
+                    <span style={{fontSize:7,color:"var(--text2)",opacity:.6}} title={p.proposal_id}>{shortId(p.tx_hash||p.proposal_id,6,4)}</span>
+                  </div>
+                </th>);})}
+            </tr></thead>
+            <tbody>
+              {pgD.map((d,ri)=>{const bg=ri%2===0?"var(--bg2)":"rgba(255,255,255,.01)";return(
+                <tr key={d.drep_id}>
+                  <td style={{position:"sticky",left:0,zIndex:10,background:bg,padding:"7px 8px",
+                    borderBottom:"1px solid var(--border)",borderRight:"2px solid var(--border)",minWidth:260,
+                    boxShadow:"4px 0 8px rgba(0,0,0,.3)"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:7}}>
+                      <Avatar name={d.name||d.drep_id} url={d.image_url}/>
+                      <div style={{minWidth:0,flex:1}}>
+                        <div style={{fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:150}}>
+                          {d.name||shortId(d.drep_id)}</div>
+                        <div style={{fontSize:10,color:"var(--text2)",display:"flex",gap:5,flexWrap:"wrap"}}>
+                          <span title={`${(Number(d.amount)/1e6).toLocaleString()} ADA`}>₳ {fmtAda(d.amount)}</span>
+                          {d.delegators>0&&<span style={{fontSize:9,opacity:.7}}>({d.delegators.toLocaleString()} {T.delegators})</span>}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  {pgP.map((p,ci)=>{const v=gv(d.drep_id,p.proposal_id);const rUrl=gr(d.drep_id,p.proposal_id);return(
+                    <td key={p.proposal_id||ci} style={{padding:0,borderBottom:"1px solid var(--border)"}}>
+                      <div className="vote-cell" style={{padding:"5px 3px",textAlign:"center"}}>
+                        <VoteBadge vote={v} hasRationale={!!rUrl} rationaleUrl={rUrl} T={T}/>
+                      </div></td>
+                  );})}
+                </tr>
+              );})}
+              {pgD.length===0&&<tr><td colSpan={pgP.length+1} style={{padding:40,textAlign:"center",color:"var(--text2)",fontSize:13}}>{T.no_dreps}</td></tr>}
+            </tbody>
+          </table>
+        </div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 12px",
+          borderTop:"1px solid var(--border)",background:"var(--bg3)",flexWrap:"wrap",gap:6}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <PaginationBar label={T.subtitle_drep} page={dPage} setPage={handleDPageChange} total={hasMore?tDP+1:tDP}/>
+            {hasMore && <button className="btn btn-primary" onClick={loadMoreDreps} disabled={pageLoading}
+              style={{fontSize:10,padding:"3px 10px"}}>{pageLoading?"⏳":"⬇"} {T.load_more}</button>}
+          </div>
+          <PaginationBar label={T.subtitle_actions} page={pPage} setPage={setPPage} total={tPP}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Simulator Tab — Single table with 3 reward columns side by side
+// ════════════════════════════════════════════════════════════════
+function SimulatorTab({ dreps, voteData, totalActions, periodVoteData, rationaleData, computePeriodVoteData, setPeriodVoteData, loadingVotes, progress, T }) {
+  const [K, setK] = React.useState(5);
+  const [N, setN] = React.useState(100);
+  const [totalBudget, setTotalBudget] = React.useState(500000);
+  const [b2, setB2] = React.useState(20000);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const sixMonthsAgo = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
+  const [voteStart, setVoteStart] = React.useState(sixMonthsAgo);
+  const [voteEnd, setVoteEnd] = React.useState(todayStr);
+  const [votePenaltyOn, setVotePenaltyOn] = React.useState(true);
+  const [rationalePenalty, setRationalePenalty] = React.useState(0);
+  const [searchQ, setSearchQ] = React.useState("");
+  const [page, setPage] = React.useState(0);
+  const perPage = 50;
+  const b1 = Math.max(0, totalBudget - b2);
+
+  React.useEffect(() => {
+    if (computePeriodVoteData && voteStart && voteEnd && !loadingVotes) {
+      const pvd = computePeriodVoteData(voteStart, voteEnd);
+      setPeriodVoteData(pvd);
+    }
+  }, [voteStart, voteEnd, loadingVotes]);
+
+  const gasInRange = React.useMemo(() => {
+    if (!periodVoteData) return 0;
+    const first = Object.values(periodVoteData)[0];
+    return first ? first.actionsInPeriod : 0;
+  }, [periodVoteData]);
+
+  const params = React.useMemo(() => ({
+    K, N, totalBudget, b1, b2, votePeriod: votePenaltyOn ? 1 : 0, votePenaltyOn, rationaleBonus: 0, rationalePenalty
+  }), [K, N, totalBudget, b1, b2, votePenaltyOn, rationalePenalty]);
+
+  const allResults = React.useMemo(() => calcAllMechanisms(dreps, params, voteData, totalActions, periodVoteData, rationaleData),
+    [dreps, params, voteData, totalActions, periodVoteData, rationaleData]);
+  const totalEligible = dreps.filter(d => Number(d.amount) > 0).length;
+  const budget = totalBudget;
+
+  const MECHS = [
+    { id:"mo_equal", l:T.mech_equal, d:T.desc_equal, c:"#14b8a6" },
+    { id:"mo_prop", l:T.mech_prop, d:T.desc_prop, c:"#f59e0b" },
+    { id:"mo_bonus", l:T.mech_bonus, d:T.desc_bonus, c:"#a78bfa" },
+  ];
+
+  const merged = React.useMemo(() => {
+    const eq = allResults.mo_equal, pr = allResults.mo_prop, bo = allResults.mo_bonus;
+    return eq.map((d, i) => ({
+      ...d,
+      r_equal: d.reward,
+      r_prop: pr[i]?.reward || 0,
+      r_bonus: bo[i]?.reward || 0,
+      periodVR: periodVoteData && periodVoteData[d.drep_id]
+        ? (periodVoteData[d.drep_id].actionsInPeriod > 0 ? periodVoteData[d.drep_id].votesInPeriod / periodVoteData[d.drep_id].actionsInPeriod * 100 : 0) : null,
+      rationaleRate: rationaleData && rationaleData[d.drep_id]
+        ? (rationaleData[d.drep_id].total > 0 ? rationaleData[d.drep_id].withRationale / rationaleData[d.drep_id].total * 100 : 0) : null,
+    }));
+  }, [allResults, periodVoteData, rationaleData]);
+
+  const filtered = React.useMemo(() => {
+    if (!searchQ) return merged;
+    const q = searchQ.toLowerCase();
+    return merged.filter(d => (d.name && d.name.toLowerCase().includes(q)) || d.drep_id.toLowerCase().includes(q));
+  }, [merged, searchQ]);
+  const pageData = filtered.slice(page * perPage, (page + 1) * perPage);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+
+  function exportCSV() {
+    const hdr = ["Rank","DRep ID","Name","Stake (ADA)","Eligible","Equal (ADA)","Prop (ADA)","Prop+Bonus (ADA)","Period Vote Rate %","Rationale Rate %","Vote Count","Overall Vote Rate %"];
+    const rows = merged.map(d => [d.rank, d.drep_id, d.name || "", Math.round(Number(d.amount) / 1e6),
+      d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2),
+      d.periodVR != null ? d.periodVR.toFixed(1) : "", d.rationaleRate != null ? d.rationaleRate.toFixed(1) : "",
+      voteData[d.drep_id] || "", totalActions > 0 ? ((voteData[d.drep_id] || 0) / totalActions * 100).toFixed(1) : ""]);
+    const csv = [hdr, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "drep_rewards_comparison.csv"; a.click(); URL.revokeObjectURL(url);
+  }
+
+  const tdS = (bg) => ({background:bg, padding:"4px 6px", borderBottom:"1px solid var(--border)", fontSize:10, textAlign:"right"});
+
+  return (
+    <div>
+      <div style={{marginBottom:12}}>
+        <div className="card">
+          <h3 style={{fontSize:12,fontWeight:700,marginBottom:8}}>{T.params}</h3>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
+            <div>
+              <SliderParam label={T.mo_k} value={K} onChange={setK} min={0} max={100} step={5} />
+              <SliderParam label={T.mo_n} value={N} onChange={setN} min={10} max={500} step={10} />
+            </div>
+            <div>
+              <SliderParam label={T.mo_total} value={totalBudget} onChange={v => { setTotalBudget(v); if(b2>v) setB2(v); }} min={5000} max={500000} step={5000} suffix=" ADA" />
+              <SliderParam label={T.budget_b2} value={b2} onChange={v => setB2(Math.min(v, totalBudget))} min={0} max={totalBudget} step={2500} suffix=" ADA" />
+              <div style={{fontSize:9,color:"var(--text2)",marginTop:-6,marginBottom:4}}>Prop+Bonus: Base = ₳{Math.max(0, totalBudget - b2 * N).toLocaleString()} + ₳{b2.toLocaleString()}/人 × {N}人</div>
+            </div>
+            <div>
+              <div style={{marginBottom:8}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+                  <span style={{fontSize:11,color:"var(--text2)",fontWeight:600}}>{T.vote_penalty}</span>
+                  <div style={{display:"flex",gap:2,border:"1px solid var(--border)",borderRadius:5,overflow:"hidden"}}>
+                    <button onClick={()=>setVotePenaltyOn(true)}
+                      style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                        background:votePenaltyOn?"var(--accent)":"var(--bg3)",color:votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_on}</button>
+                    <button onClick={()=>setVotePenaltyOn(false)}
+                      style={{padding:"3px 8px",fontSize:9,fontWeight:600,border:"none",cursor:"pointer",
+                        background:!votePenaltyOn?"var(--accent)":"var(--bg3)",color:!votePenaltyOn?"#fff":"var(--text2)"}}>{T.vote_penalty_off}</button>
+                  </div>
+                </div>
+                {votePenaltyOn && (<div>
+                  <div style={{display:"flex",gap:6,marginBottom:4}}>
+                    <div style={{flex:1}}>
+                      <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,display:"block",marginBottom:2}}>{T.vote_start}</label>
+                      <input type="date" value={voteStart} onChange={e=>setVoteStart(e.target.value)}
+                        style={{width:"100%",padding:"4px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,outline:"none"}} />
+                    </div>
+                    <div style={{flex:1}}>
+                      <label style={{fontSize:9,color:"var(--text2)",fontWeight:600,display:"block",marginBottom:2}}>{T.vote_end}</label>
+                      <input type="date" value={voteEnd} onChange={e=>setVoteEnd(e.target.value)}
+                        style={{width:"100%",padding:"4px 6px",borderRadius:4,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:10,outline:"none"}} />
+                    </div>
+                  </div>
+                  <div style={{fontSize:8,color:gasInRange>0?"var(--yes)":"var(--no)"}}>{T.vote_ga_count}: {gasInRange} — {T.vote_info}</div>
+                </div>)}
+              </div>
+              <SliderParam label={T.rationale_penalty} value={rationalePenalty} onChange={setRationalePenalty} min={0} max={100} step={5} suffix="%" />
+            </div>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:12,marginTop:4,flexWrap:"wrap"}}>
+            <span style={{fontSize:9,color:"var(--text2)"}}>
+              Budget: ₳{budget.toLocaleString()} · DReps: {dreps.length} · Eligible: {totalEligible}
+              {votePenaltyOn ? ` · ⏱ Vote penalty ON (${gasInRange} GAs)` : " · ⏱ Vote penalty OFF"}
+              {rationalePenalty > 0 ? ` · 📎 No rationale: -${rationalePenalty}%` : ""}
+            </span>
+            {loadingVotes && <span style={{fontSize:9,color:"var(--accent2)"}}>⏳ {progress}</span>}
+            {!loadingVotes && progress && <span style={{fontSize:8,color:"var(--text2)"}}>{progress}</span>}
+            <button className="btn" onClick={()=>{ localStorage.removeItem(SIM_CACHE_KEY); window.location.reload(); }}
+              style={{fontSize:8,padding:"2px 6px",opacity:0.6}}>{T.clear_cache}</button>
+          </div>
+        </div>
+      </div>
+
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,gap:8}}>
+        <input type="text" placeholder={T.search} value={searchQ} onChange={e => { setSearchQ(e.target.value); setPage(0); }}
+          style={{padding:"5px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:11,width:180,outline:"none"}} />
+        <div style={{display:"flex",gap:6,alignItems:"center"}}>
+          <span style={{fontSize:10,color:"var(--text2)"}}>{filtered.length} DReps</span>
+          <button className="btn" onClick={exportCSV} style={{fontSize:9,padding:"4px 8px"}}>📥 CSV</button>
+        </div>
+      </div>
+
+      <div style={{border:"1px solid var(--border)",borderRadius:10,overflow:"hidden",background:"var(--bg2)"}}>
+        <div style={{overflow:"auto",maxHeight:"calc(100vh - 420px)"}}>
+          <table style={{borderCollapse:"separate",borderSpacing:0,width:"100%"}}>
+            <thead><tr>
+              {[{t:T.rank,a:"right",w:32},{t:"",a:"left",w:22},{t:T.name,a:"left"},{t:T.stake,a:"right"}].map((h,i)=>(
+                <th key={i} style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:h.a,
+                  borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap",width:h.w||"auto"}}>{h.t}</th>
+              ))}
+              <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"center",
+                borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)"}}>Elig.</th>
+              {MECHS.map(m=>(
+                <th key={m.id} style={{position:"sticky",top:0,background:m.c+"15",padding:"5px 6px",textAlign:"right",
+                  borderBottom:`2px solid ${m.c}40`,fontSize:9,fontWeight:700,color:m.c,whiteSpace:"nowrap",minWidth:75}}>
+                  {m.l}</th>
+              ))}
+              <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
+                borderBottom:"2px solid var(--border)",fontSize:9,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>{T.vote_rate}</th>
+              <th style={{position:"sticky",top:0,background:"var(--bg3)",padding:"5px 6px",textAlign:"right",
+                borderBottom:"2px solid var(--border)",fontSize:8,fontWeight:700,color:"var(--text2)",whiteSpace:"nowrap"}}>📎 Rate</th>
+            </tr></thead>
+            <tbody>
+              {pageData.map((d, ri) => {
+                const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+                const pvr = d.periodVR; const rr = d.rationaleRate;
+                return (
+                  <tr key={d.drep_id} style={{opacity:d.eligible?1:0.35}}>
+                    <td style={{...tdS(bg),color:"var(--text2)",width:32,fontSize:9}}>{d.rank}</td>
+                    <td style={{background:bg,padding:"3px 2px",borderBottom:"1px solid var(--border)",width:22}}><Avatar name={d.name||d.drep_id} url={d.image_url} size={18}/></td>
+                    <td style={{background:bg,padding:"4px 6px",borderBottom:"1px solid var(--border)",fontSize:10,fontWeight:600,maxWidth:120,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                      {d.name || shortId(d.drep_id)}</td>
+                    <td style={{...tdS(bg),fontSize:9}}>₳{fmtAda(d.amount)}</td>
+                    <td style={{...tdS(bg),textAlign:"center",fontSize:9}}>
+                      {d.eligible ? <span style={{color:"var(--yes)"}}>✓</span> : <span style={{color:"var(--text2)"}}>−</span>}</td>
+                    <td style={{...tdS(bg),fontWeight:600,color:d.r_equal>0?"#14b8a6":"var(--text2)",background:bg}}>
+                      {d.r_equal>0?"₳"+fmtAdaNum(d.r_equal):"−"}</td>
+                    <td style={{...tdS(bg),fontWeight:600,color:d.r_prop>0?"#f59e0b":"var(--text2)",background:bg}}>
+                      {d.r_prop>0?"₳"+fmtAdaNum(d.r_prop):"−"}</td>
+                    <td style={{...tdS(bg),fontWeight:600,color:d.r_bonus>0?"#a78bfa":"var(--text2)",background:bg}}>
+                      {d.r_bonus>0?"₳"+fmtAdaNum(d.r_bonus):"−"}</td>
+                    <td style={{...tdS(bg),fontSize:9}}>
+                      {pvr != null ? (<div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:3}}>
+                        <div style={{width:28,height:3,background:"var(--bg4)",borderRadius:2,overflow:"hidden"}}>
+                          <div style={{width:`${Math.min(pvr,100)}%`,height:"100%",background:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)",borderRadius:2}} /></div>
+                        <span style={{fontSize:8,color:pvr>80?"var(--yes)":pvr>50?"var(--abstain)":"var(--no)"}}>{pvr.toFixed(0)}%</span></div>)
+                      : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
+                    </td>
+                    <td style={{...tdS(bg),fontSize:9}}>
+                      {rr != null ? (<span style={{fontSize:8,color:rr>70?"var(--yes)":rr>30?"var(--abstain)":"var(--no)"}}>{rr.toFixed(0)}%</span>)
+                      : <span style={{color:"var(--text2)",fontSize:8}}>−</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:8,padding:"6px 12px",borderTop:"1px solid var(--border)",background:"var(--bg3)"}}>
+          <button className="btn" disabled={page===0} onClick={()=>setPage(page-1)} style={{padding:"2px 7px",fontSize:10,opacity:page===0?.3:1}}>←</button>
+          <span style={{fontSize:10}}>{page+1} / {totalPages}</span>
+          <button className="btn" disabled={page>=totalPages-1} onClick={()=>setPage(page+1)} style={{padding:"2px 7px",fontSize:10,opacity:page>=totalPages-1?.3:1}}>→</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════
+// Main App (Tab Controller + Shared Data)
+// ════════════════════════════════════════════════════════════════
+function App() {
+  const [lang,setLang] = React.useState("en");
+  const T = LANG[lang];
+  const [tab,setTab] = React.useState("dashboard");
+  const [apiKey, setApiKey] = React.useState(getBfKey());
+  const [apiKeyInput, setApiKeyInput] = React.useState(getBfKey());
+
+  // Shared state
+  const [dreps,setDreps] = React.useState([]);
+  const [allDreps,setAllDreps] = React.useState([]);
+  const [proposals,setProposals] = React.useState([]);
+  const [votes,setVotes] = React.useState({});
+  const [rationales,setRationales] = React.useState({});
+  const [loading,setLoading] = React.useState(true);
+  const [pageLoading,setPageLoading] = React.useState(false);
+  const [stage,setStage] = React.useState("");
+  const [error,setError] = React.useState(null);
+  const [isDemo,setIsDemo] = React.useState(false);
+  const [warnings,setWarnings] = React.useState([]);
+  const [hasMore,setHasMore] = React.useState(true);
+  const [voteData, setVoteData] = React.useState({});
+  const [totalActions, setTotalActions] = React.useState(0);
+  const [periodVoteData, setPeriodVoteData] = React.useState({});
+  const [rationaleData, setRationaleData] = React.useState({});
+  const [loadingVotes, setLoadingVotes] = React.useState(false);
+  const [simProgress, setSimProgress] = React.useState("");
+  const [apiStats, setApiStats] = React.useState({calls:0,cached:0});
+
+  const loadedPageRef = React.useRef(1);
+  const gaMapRef = React.useRef({});
+  const allDrepsLoadedRef = React.useRef(false);
+  const voteDataLoadedRef = React.useRef(false);
+
+  const [dataSource, setDataSource] = React.useState(""); // "static" | "api" | "demo"
+
+  const addLog = React.useCallback((level, msg) => { console.log(`[${level}] ${msg}`); }, []);
+
+  // Try static data first, then Blockfrost API, then show key setup
+  React.useEffect(()=>{ loadStatic().catch(() => { if (getBfKey()) loadLive(); else setLoading(false); }); },[]);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => setApiStats(getApiStats()), 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  function saveApiKey() {
+    const trimmed = apiKeyInput.trim();
+    if (!trimmed) return;
+    setBfKey(trimmed);
+    setApiKey(trimmed);
+    // Clear old caches when key changes
+    localStorage.removeItem(SIM_CACHE_KEY);
+    _cache.clear();
+    loadLive();
+  }
+
+  function loadDemo() {
+    const d = demoData();
+    setDreps(d.dreps); setAllDreps(d.dreps); setProposals(d.proposals); setVotes(d.votes); setRationales(d.rationales);
+    setIsDemo(true); setLoading(false); setError(null); setWarnings([]); setHasMore(false);
+  }
+
+  // ── Load from pre-fetched static JSON files (GitHub Actions) ──
+  async function loadStatic() {
+    setStage("Checking for static data…");
+    const base = "./data/";
+    const metaRes = await fetch(base + "meta.json");
+    if (!metaRes.ok) throw new Error("No static data");
+    const meta = await metaRes.json();
+
+    setStage("Loading static data…");
+    const [drepsRes, proposalsRes, votesRes, simRes] = await Promise.all([
+      fetch(base + "dreps.json"),
+      fetch(base + "proposals.json"),
+      fetch(base + "votes.json"),
+      fetch(base + "simulator.json")
+    ]);
+    if (!drepsRes.ok || !proposalsRes.ok || !votesRes.ok) throw new Error("Static data incomplete");
+
+    const drepsData = await drepsRes.json();
+    const proposalsData = await proposalsRes.json();
+    const votesData = await votesRes.json();   // flat map: "drepId__propKey" → "Yes"/"No"/"Abstain"
+
+    // Rebuild votes into the format the dashboard expects: { "drepId__propKey": "Yes", ... }
+    // The static votes.json is already in that format
+    setDreps(drepsData);
+    setAllDreps(drepsData);
+    setProposals(proposalsData);
+    setVotes(votesData);
+    setRationales({});
+    setIsDemo(false);
+    setHasMore(false);
+    setDataSource("static");
+    allDrepsLoadedRef.current = true;
+
+    // Build gaMapRef for dashboard from proposals
+    const gaMap = {};
+    proposalsData.forEach(p => {
+      gaMap[p.proposal_id] = p;
+    });
+    gaMapRef.current = gaMap;
+
+    // Pre-load simulator data if available
+    if (simRes.ok) {
+      try {
+        const simData = await simRes.json();
+        // Pre-populate vote data for simulator
+        const vd = simData.drepVoteCounts || {};
+        const maxVotes = simData.maxVotes || 0;
+        const flatExpirations = simData.proposalExpirations || {};
+        const drepVotedProposals = {};
+        if (simData.drepVotedProposals) {
+          Object.entries(simData.drepVotedProposals).forEach(([id, arr]) => {
+            drepVotedProposals[id] = new Set(arr);
+          });
+        }
+        window.__simVoteRaw = { proposalExpirations: flatExpirations, drepVotedProposals };
+        setVoteData(vd);
+        setTotalActions(maxVotes);
+        setRationaleData({});
+        voteDataLoadedRef.current = true;
+      } catch(e) { console.warn("Simulator data parse error:", e); }
+    }
+
+    // Show data freshness
+    const age = Math.round((Date.now() - new Date(meta.updated_at).getTime()) / 60000);
+    const freshness = age < 60 ? `${age}min ago` : `${Math.round(age / 60)}h ago`;
+    setSimProgress(`Static data: ${meta.drep_count} DReps, ${meta.proposal_count} proposals (${freshness})`);
+    setWarnings([]);
+    setLoading(false);
+    setError(null);
+    console.log(`[Static] Loaded: ${drepsData.length} DReps, ${proposalsData.length} proposals, ${Object.keys(votesData).length} votes (updated ${meta.updated_at})`);
+  }
+
+  async function loadLive() {
+    try {
+      if (!getBfKey()) { setError(T.api_key_required); setLoading(false); return; }
+      resetApiStats();
+      setLoading(true); setError(null); setIsDemo(false);
+      loadedPageRef.current = 1; gaMapRef.current = {};
+      allDrepsLoadedRef.current = false; voteDataLoadedRef.current = false;
+
+      setStage(T.loading_dreps);
+      const { dreps: chunk, nextPage, reachedEnd } = await fetchDrepRange(1, 1, addLog, setStage);
+      if (chunk.length === 0) { loadDemo(); return; }
+      const seen = new Set();
+      const uniqueDreps = chunk.filter(d => { if(seen.has(d.drep_id)) return false; seen.add(d.drep_id); return true; });
+      uniqueDreps.sort((a,b) => Number(b.amount) - Number(a.amount));
+      loadedPageRef.current = nextPage;
+      setHasMore(!reachedEnd);
+
+      setStage(T.loading_votes);
+      const { vm, rm, gaMap, totalVotes } = await fetchVotesForDreps(uniqueDreps, addLog, setStage, T.loading_votes);
+      gaMapRef.current = { ...gaMap };
+
+      // Enrich proposals with type + title from Blockfrost
+      setStage(T.loading_proposals);
+      await enrichProposals(gaMapRef.current, addLog, setStage);
+
+      const allProposals = Object.values(gaMapRef.current);
+      allProposals.sort((a,b) => (b.expiration || 0) - (a.expiration || 0));
+
+      setDreps(uniqueDreps); setAllDreps(uniqueDreps);
+      setProposals(allProposals); setVotes(vm); setRationales(rm);
+      setWarnings([]); setLoading(false);
+    } catch(e) { setError(e.message); setLoading(false); }
+  }
+
+  async function loadMoreDreps() {
+    if (pageLoading || !hasMore || loadedPageRef.current < 0) return;
+    setPageLoading(true);
+    const page = loadedPageRef.current;
+    setStage(`${T.loading_dreps} (page ${page})`);
+    try {
+      const { dreps: chunk, nextPage, reachedEnd } = await fetchDrepRange(page, 1, addLog, setStage);
+      if (chunk.length === 0) { setHasMore(false); setPageLoading(false); return; }
+      if (reachedEnd) setHasMore(false);
+      loadedPageRef.current = nextPage;
+      const existingIds = new Set(dreps.map(d => d.drep_id));
+      const newDreps = chunk.filter(d => !existingIds.has(d.drep_id));
+      setStage(T.loading_votes);
+      const { vm: newVm, rm: newRm, gaMap: newGaMap } = await fetchVotesForDreps(newDreps, addLog, setStage, T.loading_votes);
+      Object.assign(gaMapRef.current, newGaMap);
+
+      // Enrich new proposals
+      await enrichProposals(gaMapRef.current, addLog, setStage);
+
+      const allProposals = Object.values(gaMapRef.current);
+      allProposals.sort((a,b) => (b.expiration || 0) - (a.expiration || 0));
+      const merged = [...dreps, ...newDreps];
+      merged.sort((a,b) => Number(b.amount) - Number(a.amount));
+      setDreps(merged); setAllDreps(prev => {
+        const ids = new Set(prev.map(d=>d.drep_id));
+        const extra = newDreps.filter(d=>!ids.has(d.drep_id));
+        const all = [...prev, ...extra]; all.sort((a,b)=>Number(b.amount)-Number(a.amount)); return all;
+      });
+      setProposals(allProposals); setVotes(prev => ({...prev, ...newVm})); setRationales(prev => ({...prev, ...newRm}));
+    } catch(e) { addLog("ERROR", e.message); }
+    setPageLoading(false);
+  }
+
+  // Load ALL DReps for simulator (lazy, once)
+  async function ensureAllDrepsLoaded() {
+    if (allDrepsLoadedRef.current || isDemo) return;
+    allDrepsLoadedRef.current = true;
+    setSimProgress("Loading all DReps for simulator...");
+    const all = await fetchAllDreps((count, total) => {
+      setSimProgress(`${count}/${total} DReps...`);
+    });
+    setAllDreps(all);
+    if (all.length > dreps.length) {
+      setDreps(all); setHasMore(false);
+    }
+    setSimProgress(`${all.length} DReps loaded`);
+  }
+
+  // Load vote data for simulator — uses proposal expiration epochs for vote period
+  async function ensureVoteDataLoaded() {
+    if (voteDataLoadedRef.current || isDemo) return;
+    voteDataLoadedRef.current = true;
+
+    const cached = loadSimCache();
+    if (cached && cached.vd && cached.rd && cached.proposalExpirations && cached.drepVotedProposals) {
+      setSimProgress("Restoring cached vote data…");
+      setLoadingVotes(true);
+      const drepVotedProposals = {};
+      Object.entries(cached.drepVotedProposals).forEach(([id, arr]) => { drepVotedProposals[id] = new Set(arr); });
+      window.__simVoteRaw = { proposalExpirations: cached.proposalExpirations, drepVotedProposals };
+      setVoteData(cached.vd); setTotalActions(cached.maxVotes); setRationaleData(cached.rd);
+      setLoadingVotes(false);
+      setSimProgress(`Cached: ${Object.keys(cached.vd).length} DReps (${Math.round((Date.now() - cached.ts) / 60000)}min ago)`);
+      return;
+    }
+
+    setLoadingVotes(true);
+    const toFetch = allDreps.slice(0, 200);
+    setSimProgress(`Vote data: 0/${toFetch.length}`);
+    const vd = {}, rd = {};
+    let maxVotes = 0;
+    const proposalExpirations = {}; // propKey → expiration epoch
+    const drepVotedProposals = {}; // drepId → Set<propKey>
+
+    for (let i = 0; i < toFetch.length; i += VOTE_BATCH) {
+      const batch = toFetch.slice(i, i + VOTE_BATCH);
+      const results = await Promise.allSettled(batch.map(async d => {
+        const votes = await fetchAllVotesForDrep(d.drep_id);
+        const votedProposals = new Set();
+        votes.forEach(v => {
+          const propTxHash = v.proposal_tx_hash || "";
+          const propCertIdx = v.proposal_cert_index != null ? v.proposal_cert_index : -1;
+          if (propTxHash) {
+            const propKey = `${propTxHash}#${propCertIdx}`;
+            votedProposals.add(propKey);
+            if (!proposalExpirations[propKey]) {
+              proposalExpirations[propKey] = { tx_hash: propTxHash, cert_index: propCertIdx, expiration: 0 };
+            }
+          }
+        });
+        // Blockfrost doesn't provide rationale info in vote records
+        return { id: d.drep_id, count: votes.length, withRationale: 0, votedProposals };
+      }));
+      results.forEach(r => {
+        if (r.status === "fulfilled") {
+          const { id, count, withRationale, votedProposals } = r.value;
+          vd[id] = count;
+          if (count > maxVotes) maxVotes = count;
+          rd[id] = { withRationale, total: count };
+          drepVotedProposals[id] = votedProposals;
+        }
+      });
+      setSimProgress(`Vote data: ${Math.min(i + VOTE_BATCH, toFetch.length)}/${toFetch.length}`);
+    }
+
+    // Fetch proposal expirations from Blockfrost
+    setSimProgress("Fetching proposal expirations...");
+    const propEntries = Object.entries(proposalExpirations);
+    for (let i = 0; i < propEntries.length; i += VOTE_BATCH) {
+      const batch = propEntries.slice(i, i + VOTE_BATCH);
+      await Promise.allSettled(batch.map(async ([propKey, info]) => {
+        try {
+          const detail = await bfFetchJSON(`/governance/proposals/${info.tx_hash}/${info.cert_index}`);
+          if (detail && detail.expiration) {
+            proposalExpirations[propKey].expiration = detail.expiration;
+          }
+        } catch(e) {}
+      }));
+      setSimProgress(`Proposal expirations: ${Math.min(i + VOTE_BATCH, propEntries.length)}/${propEntries.length}`);
+    }
+
+    // Flatten expirations for storage
+    const flatExpirations = {};
+    Object.entries(proposalExpirations).forEach(([k, v]) => { flatExpirations[k] = v.expiration || 0; });
+    window.__simVoteRaw = { proposalExpirations: flatExpirations, drepVotedProposals };
+
+    // Save to cache
+    const serialDrepProps = {};
+    Object.entries(drepVotedProposals).forEach(([id, s]) => { serialDrepProps[id] = [...s]; });
+    saveSimCache({ vd, rd, maxVotes, proposalExpirations: flatExpirations, drepVotedProposals: serialDrepProps });
+
+    setVoteData(vd); setTotalActions(maxVotes); setRationaleData(rd);
+    setLoadingVotes(false);
+    setSimProgress(`${Object.keys(vd).length} DReps loaded & cached`);
+  }
+
+  // Compute period vote data using proposal expiration epochs
+  function computePeriodVoteData(startDate, endDate) {
+    const raw = window.__simVoteRaw;
+    if (!raw || !startDate || !endDate) return {};
+    const { proposalExpirations, drepVotedProposals } = raw;
+
+    const startTs = new Date(startDate + "T00:00:00Z").getTime() / 1000;
+    const endTs = new Date(endDate + "T23:59:59Z").getTime() / 1000;
+
+    // Find proposals whose expiration epoch falls in the date range
+    const proposalsInRange = new Set();
+    Object.entries(proposalExpirations).forEach(([propKey, exp]) => {
+      const expEpoch = typeof exp === "number" ? exp : (exp?.expiration || 0);
+      if (!expEpoch) return;
+      const expTs = epochToTimestamp(expEpoch);
+      if (expTs >= startTs && expTs <= endTs) proposalsInRange.add(propKey);
+    });
+
+    console.log(`[VotePeriod] Range: ${startDate}~${endDate}, ${proposalsInRange.size}/${Object.keys(proposalExpirations).length} proposals in range`);
+
+    const actionsInPeriod = proposalsInRange.size;
+    const result = {};
+    Object.entries(drepVotedProposals).forEach(([drepId, votedSet]) => {
+      let votesInPeriod = 0;
+      proposalsInRange.forEach(propKey => { if (votedSet.has(propKey)) votesInPeriod++; });
+      result[drepId] = { votesInPeriod, actionsInPeriod };
+    });
+    return result;
+  }
+
+  // When switching to simulator tab, load all DReps + vote data
+  React.useEffect(() => {
+    if (tab === "simulator" && !loading && !isDemo && (getBfKey() || dataSource === "static")) {
+      if (dataSource === "static") {
+        // Static data already has all DReps + simulator data pre-loaded
+        return;
+      }
+      ensureAllDrepsLoaded().then(() => ensureVoteDataLoaded());
+    }
+  }, [tab, loading, allDreps.length, dataSource]);
+
+  // API Key Setup Screen (skip if static data loaded)
+  if (!apiKey && !loading && !isDemo && dataSource !== "static") {
+    return (
+      <div className="fade-in" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
+        <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Cardano <span style={{color:"var(--accent)"}}>Governance</span></div>
+        <div style={{background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:12,padding:24,maxWidth:440,width:"100%"}}>
+          <h2 style={{fontSize:16,fontWeight:700,marginBottom:8}}>{T.api_key}</h2>
+          <p style={{fontSize:12,color:"var(--text2)",marginBottom:16}}>
+            {T.api_key_desc}: <a href="https://blockfrost.io" target="_blank" rel="noopener">blockfrost.io</a>
+          </p>
+          <div style={{display:"flex",gap:8}}>
+            <input type="text" placeholder={T.api_key_ph} value={apiKeyInput} onChange={e => setApiKeyInput(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && saveApiKey()}
+              style={{flex:1,padding:"8px 12px",borderRadius:6,border:"1px solid var(--border)",background:"var(--bg)",color:"var(--text)",fontSize:13,outline:"none"}} />
+            <button className="btn btn-primary" onClick={saveApiKey} disabled={!apiKeyInput.trim()}>{T.api_key_save}</button>
+          </div>
+        </div>
+        <button className="btn" onClick={loadDemo} style={{marginTop:8}}>{T.demo_btn}</button>
+      </div>
+    );
+  }
+
+  if(loading) return (
+    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:20,padding:24}}>
+      <div style={{fontSize:24,fontWeight:800,letterSpacing:"-.02em"}}>Cardano <span style={{color:"var(--accent)"}}>Governance</span></div>
+      <div className="loader"><span/><span/><span/></div>
+      <div style={{color:"var(--text2)",fontSize:13}}>{stage}</div>
+    </div>
+  );
+
+  if(error) return (
+    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16,padding:24}}>
+      <div style={{fontSize:20,fontWeight:700,color:"#ef4444"}}>{T.error_title}</div>
+      <div style={{color:"var(--text2)",maxWidth:460,textAlign:"center",fontSize:13}}>{error}</div>
+      <div style={{display:"flex",gap:10}}>
+        <button className="btn btn-primary" onClick={loadLive}>{T.retry}</button>
+        <button className="btn" onClick={loadDemo}>{T.demo_btn}</button>
+        <button className="btn" onClick={()=>{ setBfKey(""); setApiKey(""); setApiKeyInput(""); setError(null); }}>{T.api_key_change}</button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="fade-in" style={{minHeight:"100vh",padding:"14px 18px",maxWidth:1900,margin:"0 auto"}}>
+      {/* Header */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10,marginBottom:10}}>
+        <div>
+          <h1 style={{fontSize:19,fontWeight:800,letterSpacing:"-.02em"}}>Cardano <span style={{color:"var(--accent)"}}>{T.title}</span></h1>
+          <div style={{color:"var(--text2)",fontSize:11,marginTop:2,display:"flex",gap:10,flexWrap:"wrap"}}>
+            <span>{T.subtitle_drep}: {dreps.length}{hasMore?"+":""}</span>
+            <span>{T.subtitle_actions}: {proposals.length}</span>
+            <span style={{color:"var(--border2)"}}>{T.api_stats}: {apiStats.calls} {T.api_calls} / {apiStats.cached} {T.cached}</span>
+            {isDemo && <span style={{color:"#f59e0b",fontWeight:600}}>⚠ {T.demo_mode}</span>}
+          </div>
+        </div>
+        <div style={{display:"flex",gap:6,alignItems:"center"}}>
+          <div style={{display:"flex",border:"1px solid var(--border)",borderRadius:6,overflow:"hidden"}}>
+            {["en","ja"].map(l=>(
+              <button key={l} onClick={()=>setLang(l)} style={{padding:"4px 10px",fontSize:11,fontWeight:600,border:"none",cursor:"pointer",
+                background:lang===l?"var(--accent)":"var(--bg3)",color:lang===l?"#fff":"var(--text2)"}}>{l==="en"?"EN":"日本語"}</button>
+            ))}
+          </div>
+          {isDemo&&<button className="btn btn-primary" onClick={loadLive} style={{fontSize:11}}>{T.switch_live}</button>}
+          <button className="btn" onClick={isDemo?loadDemo:loadLive}>↻ {T.refresh}</button>
+          <button className="btn" onClick={()=>{ setBfKey(""); setApiKey(""); setApiKeyInput(""); }}
+            style={{fontSize:9,padding:"4px 8px",opacity:0.6}} title={T.api_key_change}>🔑</button>
+        </div>
+      </div>
+
+      {/* Tab Bar */}
+      <div className="tab-bar">
+        <button className={`tab-btn ${tab==="dashboard"?"active":""}`} onClick={()=>setTab("dashboard")}>{T.tab_dashboard}</button>
+        <button className={`tab-btn ${tab==="simulator"?"active":""}`} onClick={()=>setTab("simulator")}>{T.tab_simulator}</button>
+      </div>
+
+      {tab === "dashboard" ? (
+        <DashboardTab dreps={dreps} proposals={proposals} votes={votes} rationales={rationales}
+          warnings={warnings} hasMore={hasMore} pageLoading={pageLoading} stage={stage}
+          loadMoreDreps={loadMoreDreps} T={T} isDemo={isDemo} />
+      ) : (
+        <SimulatorTab dreps={allDreps} voteData={voteData} totalActions={totalActions}
+          periodVoteData={periodVoteData} rationaleData={rationaleData}
+          computePeriodVoteData={computePeriodVoteData} setPeriodVoteData={setPeriodVoteData}
+          loadingVotes={loadingVotes} progress={simProgress} T={T} />
+      )}
+
+      <div style={{marginTop:12,textAlign:"center",color:"#333a4a",fontSize:10,lineHeight:1.8}}>
+        Data: <a href="https://blockfrost.io" target="_blank">Blockfrost.io</a>
+        {dataSource === "static" && " (cached)"} ·
+        <a href="https://github.com/Cerkoryn/ExcludeKPayN" target="_blank">ExcludeKPayN (Middle-Out)</a> ·
+        Process-first framework (<a href="https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694" target="_blank">CIP-1694</a>)
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
