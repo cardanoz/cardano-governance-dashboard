@@ -594,11 +594,11 @@ with open(dash_page, "w") as f:
     f.write('''export const dynamic = "force-dynamic";
 
 const dashboards = [
-  { name: "ADA Holder", href: "/dashboard/holder", emoji: "\\ud83e\\ude99", desc: "Portfolio, prices, wallets, rewards" },
-  { name: "SPO", href: "/dashboard/spo", emoji: "\\ud83c\\udfca", desc: "Pool performance, delegators, blocks" },
-  { name: "DRep", href: "/dashboard/drep", emoji: "\\ud83d\\uddf3\\ufe0f", desc: "Voting matrix, governance, simulator" },
-  { name: "Governance", href: "/dashboard/governance", emoji: "\\ud83c\\udfdb\\ufe0f", desc: "Proposals, committee, constitution" },
-  { name: "Chain Analyst", href: "/dashboard/chain", emoji: "\\ud83d\\udd17", desc: "Epochs, blocks, transactions, stats" },
+  { name: "ADA Holder", href: "/dashboard/holder", emoji: "\ud83e\ude99", desc: "Portfolio, prices, wallets, rewards" },
+  { name: "SPO", href: "/dashboard/spo", emoji: "\ud83c\udfca", desc: "Pool performance, delegators, blocks" },
+  { name: "DRep", href: "/dashboard/drep", emoji: "\ud83d\uddf3\ufe0f", desc: "Voting matrix, governance, simulator" },
+  { name: "Governance", href: "/dashboard/governance", emoji: "\ud83c\udfdb\ufe0f", desc: "Proposals, committee, constitution" },
+  { name: "Chain Analyst", href: "/dashboard/chain", emoji: "\ud83d\udd17", desc: "Epochs, blocks, transactions, stats" },
 ];
 
 export default function DashboardIndex() {
@@ -667,7 +667,7 @@ function Dropdown({ label, items, isActive }: { label: string; items: any[]; isA
   return (
     <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
       <button className={`px-3 py-2 rounded-lg text-sm font-medium transition ${isActive ? "text-white bg-gray-700" : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"}`}>
-        {label} <span className="text-xs ml-0.5">\\u25be</span>
+        {label} <span className="text-xs ml-0.5">{"\u25be"}</span>
       </button>
       {open && (
         <div className="absolute top-full left-0 mt-1 bg-gray-800 border border-gray-700 rounded-xl shadow-xl py-1 min-w-[200px] z-50">
@@ -693,7 +693,7 @@ export default function Header() {
     <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-14">
         <Link href="/dashboard/holder" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-sm">\\u20b3</div>
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-sm">{"\u20b3"}</div>
           <span className="text-lg font-bold"><span className="text-blue-400">ADA</span>tool</span>
         </Link>
         <nav className="flex items-center gap-1">
@@ -703,7 +703,7 @@ export default function Header() {
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Live
           </Link>
           <Link href="/search" className={`px-3 py-2 rounded-lg text-sm font-medium transition ${pathname === "/search" ? "text-white bg-gray-700" : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"}`}>
-            \\ud83d\\udd0d
+            {"\ud83d\udd0d"}
           </Link>
         </nav>
       </div>

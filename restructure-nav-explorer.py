@@ -304,7 +304,7 @@ PAGES["explorer/chain/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
@@ -388,7 +388,7 @@ PAGES["explorer/staking/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
@@ -484,7 +484,7 @@ export default function StakingExplorer() {
 PAGES["explorer/governance/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
@@ -608,7 +608,7 @@ PAGES["explorer/tokens/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
 const timeAgo = (t: string) => { const s = (Date.now() - new Date(t).getTime())/1000; if(s<60) return `${Math.floor(s)}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; };
 const truncHash = (h: string, n=8) => h ? h.slice(0,n)+"..."+h.slice(-4) : "";
 
@@ -672,7 +672,7 @@ export default function TokensExplorer() {
 PAGES["explorer/analytics/page.tsx"] = r'''"use client";
 import { useState, useEffect } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 
 function Skeleton() { return <div className="space-y-4">{[1,2,3,4,5].map(i=><div key={i} className="h-8 bg-gray-700/50 rounded animate-pulse"/>)}</div>; }
@@ -732,12 +732,12 @@ export default function AnalyticsExplorer() {
 }
 '''
 
-# --- Addresses Explorer (Unified Rich List, client-side) ---
+# --- Addresses Explorer (Unified Rich List, summary-first, client-side) ---
 PAGES["explorer/addresses/page.tsx"] = r'''"use client";
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "https://adatool.net/api";
+const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== "undefined" && window.location.hostname !== "adatool.net" ? `${window.location.protocol}//${window.location.hostname}:3001` : "https://adatool.net/api");
 const fmtAda = (v: any) => (Number(v||0)/1e6).toLocaleString(undefined, {maximumFractionDigits:0});
 const truncAddr = (h: string, n=12) => h ? h.slice(0,n)+"..."+h.slice(-6) : "";
 const timeAgo = (t: string) => { if(!t) return "-"; const s=(Date.now()-new Date(t).getTime())/1000; if(s<60)return `${Math.floor(s)}s ago`; if(s<3600)return `${Math.floor(s/60)}m ago`; if(s<86400)return `${Math.floor(s/3600)}h ago`; if(s<2592000)return `${Math.floor(s/86400)}d ago`; return `${(s/31536000).toFixed(1)}y ago`; };
@@ -762,10 +762,10 @@ function Skeleton() {
 
 function SummaryCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <div className="bg-gray-800 rounded-xl p-4 border border-gray-700/50">
-      <div className="text-xs text-gray-400 mb-1">{label}</div>
-      <div className="text-lg font-bold">{value}</div>
-      {sub && <div className="text-xs text-gray-500 mt-0.5">{sub}</div>}
+    <div className="bg-gray-800 rounded-lg px-3 py-2.5 border border-gray-700/50">
+      <div className="text-[10px] text-gray-500">{label}</div>
+      <div className="text-base font-bold">{value}</div>
+      {sub && <div className="text-[10px] text-gray-500">{sub}</div>}
     </div>
   );
 }
@@ -776,7 +776,7 @@ export default function AddressesExplorer() {
   const [filter, setFilter] = useState<Filter>("all");
   const [showExchange, setShowExchange] = useState<"all"|"exchange"|"non-exchange">("all");
   const [search, setSearch] = useState("");
-  const [expandedRow, setExpandedRow] = useState<number|null>(null);
+  // expandedRow removed — replaced by showAll toggle
 
   useEffect(() => {
     fetch(`${API}/richlist-v2?limit=300`)
@@ -798,119 +798,91 @@ export default function AddressesExplorer() {
 
   const s = data?.summary;
 
+  const [showAll, setShowAll] = useState(false);
+  const display = showAll ? filtered : filtered.slice(0, 10);
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Rich List</h1>
-        <p className="text-gray-400 text-sm mt-1">
-          Top ADA holders across all address types
-          {s && <span className="text-gray-500"> · Epoch {s.epoch}</span>}
-        </p>
+    <div className="space-y-3">
+      <div className="flex items-baseline justify-between">
+        <h1 className="text-xl font-bold">Rich List</h1>
+        {s && <span className="text-xs text-gray-500">Epoch {s.epoch}</span>}
       </div>
 
-      {err && <div className="p-8 text-center text-gray-400">Failed to load data. Please try again later.</div>}
+      {err && <div className="p-6 text-center text-gray-400">Failed to load</div>}
       {!data && !err && <Skeleton/>}
 
       {data && <>
-        {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <SummaryCard label="Total Entries" value={s.total_entries.toLocaleString()} sub={`${fmtAda(s.total_balance)} ADA combined`} />
+        {/* ══════════ ABOVE THE FOLD ══════════ */}
+        {/* Summary row (compact) */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <SummaryCard label="Entries" value={s.total_entries.toLocaleString()} sub={`${fmtAda(s.total_balance)} ADA`} />
           <SummaryCard label="Staking" value={`${s.by_type.stake.count}`} sub={`${fmtAda(s.by_type.stake.balance)} ADA`} />
-          <SummaryCard label="Exchange-linked" value={`${s.exchange.count}`} sub={`${fmtAda(s.exchange.balance)} ADA`} />
+          <SummaryCard label="Exchange" value={`${s.exchange.count}`} sub={`${fmtAda(s.exchange.balance)} ADA`} />
           <SummaryCard label="Likely Lost" value={`${s.likely_lost.count}`} sub={`${fmtAda(s.likely_lost.balance)} ADA`} />
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Address Type Filter */}
-          <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
+        {/* Filters (compact row) */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex gap-0.5 bg-gray-800 rounded-lg p-0.5">
             {(["all","stake","byron","enterprise"] as Filter[]).map(f => (
-              <button key={f} onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 text-xs rounded-md transition font-medium ${filter===f ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"}`}>
-                {f === "all" ? "All Types" : TYPE_LABELS[f]?.label || f}
-                {f !== "all" && s && <span className="ml-1 opacity-60">({s.by_type[f]?.count || 0})</span>}
+              <button key={f} onClick={() => { setFilter(f); setShowAll(false); }}
+                className={`px-2 py-1 text-[11px] rounded transition font-medium ${filter===f ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"}`}>
+                {f === "all" ? "All" : TYPE_LABELS[f]?.label || f}
               </button>
             ))}
           </div>
-
-          {/* Exchange Filter */}
-          <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
+          <div className="flex gap-0.5 bg-gray-800 rounded-lg p-0.5">
             {(["all","exchange","non-exchange"] as const).map(f => (
-              <button key={f} onClick={() => setShowExchange(f)}
-                className={`px-3 py-1.5 text-xs rounded-md transition font-medium ${showExchange===f ? "bg-gray-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"}`}>
-                {f === "all" ? "All" : f === "exchange" ? "🏦 Exchange" : "👤 Non-Exchange"}
+              <button key={f} onClick={() => { setShowExchange(f); setShowAll(false); }}
+                className={`px-2 py-1 text-[11px] rounded transition font-medium ${showExchange===f ? "bg-gray-600 text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"}`}>
+                {f === "all" ? "All" : f === "exchange" ? "🏦" : "👤"}
               </button>
             ))}
           </div>
-
-          {/* Search */}
-          <input type="text" placeholder="Search address..." value={search} onChange={e => setSearch(e.target.value)}
-            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-300 w-48 focus:outline-none focus:border-blue-500" />
-
-          <span className="text-xs text-gray-500 ml-auto">{filtered.length} results</span>
+          <input type="text" placeholder="Search..." value={search} onChange={e => { setSearch(e.target.value); setShowAll(false); }}
+            className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-xs text-gray-300 w-36 focus:outline-none focus:border-blue-500" />
+          <span className="text-[10px] text-gray-600 ml-auto">{filtered.length} results</span>
         </div>
 
-        {/* Table */}
+        {/* Top 10 compact table (above fold) */}
         <div className="bg-gray-800 rounded-xl border border-gray-700/50 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-xs">
               <thead>
-                <tr className="text-gray-400 text-xs border-b border-gray-700 bg-gray-800/80">
-                  <th className="text-left py-3 px-4 w-10">#</th>
-                  <th className="text-left py-3 px-2">Type</th>
-                  <th className="text-left py-3 px-2">Address</th>
-                  <th className="text-right py-3 px-2">Balance (ADA)</th>
-                  <th className="text-right py-3 px-2 hidden md:table-cell">TX Count</th>
-                  <th className="text-right py-3 px-2 hidden lg:table-cell">Last Active</th>
-                  <th className="text-center py-3 px-2 hidden md:table-cell">Flags</th>
+                <tr className="text-gray-500 text-[10px] border-b border-gray-700">
+                  <th className="text-left py-2 px-3 w-8">#</th>
+                  <th className="text-left py-2 px-1">Type</th>
+                  <th className="text-left py-2 px-1">Address</th>
+                  <th className="text-right py-2 px-1">Balance</th>
+                  <th className="text-right py-2 px-1 hidden md:table-cell">TXs</th>
+                  <th className="text-right py-2 px-1 hidden lg:table-cell">Active</th>
+                  <th className="text-center py-2 px-2 hidden md:table-cell">Flag</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((e: any, idx: number) => {
+                {display.map((e: any, idx: number) => {
                   const t = TYPE_LABELS[e.addr_type] || { label: e.addr_type, color: "bg-gray-500/20 text-gray-400", icon: "?" };
-                  const expanded = expandedRow === idx;
                   return (
-                    <tr key={idx} onClick={() => setExpandedRow(expanded ? null : idx)}
-                      className={`border-b border-gray-700/30 cursor-pointer transition ${expanded ? "bg-gray-700/40" : "hover:bg-gray-700/20"}`}>
-                      <td className="py-2.5 px-4 text-gray-500 text-xs">{e.rank}</td>
-                      <td className="py-2.5 px-2">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${t.color}`}>
-                          <span>{t.icon}</span> {t.label}
-                        </span>
+                    <tr key={idx} className="border-b border-gray-700/20 hover:bg-gray-700/20">
+                      <td className="py-1.5 px-3 text-gray-500">{e.rank}</td>
+                      <td className="py-1.5 px-1">
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${t.color}`}>{t.label}</span>
                       </td>
-                      <td className="py-2.5 px-2">
-                        <div>
-                          <Link href={`/address/${e.identifier}`} className="text-blue-400 hover:underline font-mono text-xs"
-                            onClick={(ev) => ev.stopPropagation()}>
-                            {truncAddr(e.identifier, 16)}
-                          </Link>
-                          {e.pool && (
-                            <div className="text-xs text-gray-500 mt-0.5">
-                              <span className="text-gray-400">{e.pool.pool_ticker || "Pool"}</span>
-                              {e.pool.pool_name && <span className="ml-1 hidden sm:inline">· {e.pool.pool_name.slice(0,25)}</span>}
-                            </div>
-                          )}
-                          {e.drep && (
-                            <div className="text-xs text-gray-500">
-                              DRep: <span className="text-purple-400">{truncAddr(e.drep.drep_id, 10)}</span>
-                            </div>
-                          )}
-                          {/* Mobile: inline flags */}
-                          <div className="flex gap-1 mt-1 md:hidden">
-                            {e.is_exchange && <span className="text-xs px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">🏦 Exchange</span>}
-                            {e.is_likely_lost && <span className="text-xs px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded">💀 Lost?</span>}
-                          </div>
+                      <td className="py-1.5 px-1">
+                        <Link href={`/address/${e.identifier}`} className="text-blue-400 hover:underline font-mono">{truncAddr(e.identifier, 14)}</Link>
+                        {e.pool && <span className="text-gray-500 ml-1 text-[10px]">{e.pool.pool_ticker || ""}</span>}
+                        <div className="flex gap-0.5 md:hidden mt-0.5">
+                          {e.is_exchange && <span className="text-[9px] px-1 bg-yellow-500/20 text-yellow-400 rounded">🏦</span>}
+                          {e.is_likely_lost && <span className="text-[9px] px-1 bg-red-500/20 text-red-400 rounded">💀</span>}
                         </div>
                       </td>
-                      <td className="py-2.5 px-2 text-right font-bold whitespace-nowrap">{fmtAda(e.balance)}</td>
-                      <td className="py-2.5 px-2 text-right text-gray-400 hidden md:table-cell">{(e.tx_count||0).toLocaleString()}</td>
-                      <td className="py-2.5 px-2 text-right text-gray-400 text-xs hidden lg:table-cell">{timeAgo(e.last_tx)}</td>
-                      <td className="py-2.5 px-2 text-center hidden md:table-cell">
-                        <div className="flex justify-center gap-1">
-                          {e.is_exchange && <span title={e.exchange_reason} className="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded text-xs">🏦</span>}
-                          {e.is_likely_lost && <span title={e.lost_reason} className="px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-xs">💀</span>}
-                          {!e.is_exchange && !e.is_likely_lost && <span className="text-gray-600">-</span>}
-                        </div>
+                      <td className="py-1.5 px-1 text-right font-bold whitespace-nowrap">{fmtAda(e.balance)}</td>
+                      <td className="py-1.5 px-1 text-right text-gray-400 hidden md:table-cell">{(e.tx_count||0).toLocaleString()}</td>
+                      <td className="py-1.5 px-1 text-right text-gray-500 hidden lg:table-cell">{timeAgo(e.last_tx)}</td>
+                      <td className="py-1.5 px-2 text-center hidden md:table-cell">
+                        {e.is_exchange && <span title={e.exchange_reason} className="text-yellow-400">🏦</span>}
+                        {e.is_likely_lost && <span title={e.lost_reason} className="text-red-400 ml-0.5">💀</span>}
+                        {!e.is_exchange && !e.is_likely_lost && <span className="text-gray-700">-</span>}
                       </td>
                     </tr>
                   );
@@ -918,8 +890,15 @@ export default function AddressesExplorer() {
               </tbody>
             </table>
           </div>
+          {/* Expand / Collapse toggle */}
+          {filtered.length > 10 && (
+            <button onClick={() => setShowAll(!showAll)}
+              className="w-full py-2 text-center text-xs text-blue-400 hover:bg-gray-700/30 transition border-t border-gray-700/50">
+              {showAll ? `Show Top 10 ▲` : `Show All ${filtered.length} ▼`}
+            </button>
+          )}
           {filtered.length === 0 && (
-            <div className="py-12 text-center text-gray-500">No entries match the current filters</div>
+            <div className="py-8 text-center text-gray-500 text-xs">No entries match filters</div>
           )}
         </div>
       </>}
