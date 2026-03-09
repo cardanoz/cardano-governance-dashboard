@@ -93,8 +93,7 @@ import dynamic from "next/dynamic";
 const CardanoWatch = dynamic(() => import("@/components/CardanoWatch"), { ssr: false });
 
 export default function HolderDashboard() {
-  return <CardanoWatch />
-  );
+  return <CardanoWatch />;
 }
 ''')
 log("Holder page rewritten (clean, single-page)")
