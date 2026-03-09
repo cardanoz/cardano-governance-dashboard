@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-09T06:14:35.993Z",
+  "generatedAt": "2026-03-09T07:21:21.063Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 48,
-      "summary_en": "Treasury Withdrawals for Cardano typically fund critical infrastructure and ecosystem development projects. Voting patterns show strong support for proposals that address network resilience, client diversity, and security, while opposition focuses on budget efficiency, market conditions, and project redundancy concerns.",
-      "summary_ja": "Cardanoの財務提案は、ネットワークの回復力向上やエコシステム開発に資金を配分するものが多い。投票パターンでは、ネットワークの分散性やセキュリティ向上に貢献する提案への強い支持がある一方、予算効率性や市場環境、プロジェクトの重複性への懸念が反対票につながっている。",
+      "summary_en": "Treasury Withdrawals for Cardano show strong support when proposals demonstrate client/node diversity (reducing single points of failure), team track records with returned unused funds, and clear technical merit. However, significant opposition arises over budget concerns during bear markets, redundancy with existing initiatives, lack of detailed specifications, and insufficient governance oversight or constitutional compliance.",
+      "summary_ja": "Cardanoのトレジャリー出金提案は、クライアント/ノードの多様性（単一障害点の低減）、未使用資金の返還実績を示すチーム、明確な技術的価値を示す場合に強い支持を得ています。一方、弱気市場での予算懸念、既存イニシアティブとの重複、詳細な仕様不足、ガバナンス監視または憲法準拠の不十分さを理由に大きな反対が生じています。",
       "typicalReasonsYes_en": [
-        "Addresses critical infrastructure needs such as node diversity and network resilience to reduce single points of failure",
-        "Proposing teams have established track records and demonstrated delivery in the Cardano ecosystem",
-        "Clear budget breakdown, cost justification, and evidence of responsible fund management (e.g., returning unused funds)",
-        "Aligns with strategic long-term goals for decentralization and protocol security"
+        "Proposal addresses critical infrastructure needs like client/node diversity and reduces single points of failure in the Cardano network",
+        "Team has established track record and reputation within Cardano community; previous proposals returned unused funds demonstrating fiscal responsibility",
+        "Technical specifications are well-documented, budgets are justified with clear cost breakdowns, and deliverables are clearly defined",
+        "Strategic long-term value for network decentralization and resilience outweighs short-term market conditions"
       ],
       "typicalReasonsYes_ja": [
-        "ノード実装の多様化によるネットワーク耐障害性向上と単一障害点リスク低減",
-        "提案チームがCardanoエコシステムでの実績と信頼性を有している",
-        "詳細な予算根拠、過去の返金実績など透明性と財務管理責任が明確である",
-        "中長期的なネットワーク分散性向上と結果的なプロトコルセキュリティ強化に貢献"
+        "クライアント/ノードの多様性など重要なインフラストラクチャニーズに対応し、Cardanoネットワークの単一障害点を低減する",
+        "Cardanoコミュニティ内で確立された実績と信頼性を持つチーム；過去の提案で未使用資金を返還し、財政的責任を実証している",
+        "技術仕様が適切に文書化され、予算が明確なコスト内訳で正当化され、成果物が明確に定義されている",
+        "短期的な市場条件より、ネットワーク分散化と耐障害性に対する戦略的長期的価値を優先する"
       ],
       "typicalReasonsNo_en": [
-        "Project redundancy concerns, particularly when similar solutions are already funded or in development (e.g., multiple node implementations)",
-        "Insufficient budget justification relative to market conditions; concern that proposal pricing assumes outdated ADA values",
-        "Lack of specific, verifiable delivery milestones and acceptance criteria for large-scale funding requests",
-        "Fiscal responsibility during bearish market conditions; preference to defer non-critical spending until ecosystem conditions improve"
+        "Proposal duplicates or competes with existing initiatives (e.g., already-funded Rust node implementation), creating inefficient resource allocation",
+        "Budget is excessive relative to market conditions; proposal assumes higher ADA prices ($0.40+) than current reality or lacks realistic cost justification",
+        "Insufficient specification and accountability measures; lack of clear KPIs, milestones, adoption metrics, or governance oversight before funding release",
+        "Fiscal responsibility concerns during bear market; treasury should prioritize essential work and withhold funding for non-core or experimental projects"
       ],
       "typicalReasonsNo_ja": [
-        "既に他の実装開発に資金が投じられているため、プロジェクト重複への懸念",
-        "提案予算が現在の市場状況に対して適切でなく、ADA価格の想定が過度に楽観的",
-        "マイルストーン、KPI設定、成功基準などの具体的な検証指標が不明確である",
-        "現在の弱気相場環境において、緊急性の低い事業への支出は控えるべき"
+        "既存イニシアティブ（例：既に資金提供されたRustノード実装）と重複または競合し、効率的でないリソース配分を引き起こす",
+        "予算が市場状況に対して過剰；提案は高いADA価格（$0.40以上）を想定するか、現実的なコスト正当化に欠ける",
+        "仕様と説明責任の不十分な措置；資金放出前の明確なKPI、マイルストーン、採用メトリクス、ガバナンス監視がない",
+        "弱気市場における財政的責任の懸念；トレジャリーは本質的な作業を優先し、非中核または実験的プロジェクトへの資金提供を保留すべき"
       ]
     },
     "InfoAction": {
