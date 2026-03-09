@@ -12,7 +12,7 @@ async function fetchAPI(path: string) {
 }
 
 function fmtAda(lovelace: string | number): string {
-  const n = Number(BigInt(String(lovelace || "0")) / 1000000n);
+  const n = Number(BigInt(String(lovelace || "0")) / BigInt(1000000));
   return n.toLocaleString("en-US", { maximumFractionDigits: 0 });
 }
 
@@ -223,8 +223,8 @@ export default async function RichListPage() {
             <h3 className="text-lg font-semibold mb-4">Byron Address Activity Distribution</h3>
             <div className="space-y-3">
               {Object.entries(lostData.byron_analysis.buckets).map(([key, bucket]) => {
-                const maxBal = Math.max(...Object.values(lostData.byron_analysis.buckets).map(b => Number(BigInt(b.balance) / 1000000n)));
-                const pct = maxBal > 0 ? (Number(BigInt(bucket.balance) / 1000000n) / maxBal) * 100 : 0;
+                const maxBal = Math.max(...Object.values(lostData.byron_analysis.buckets).map(b => Number(BigInt(b.balance) / BigInt(1000000))));
+                const pct = maxBal > 0 ? (Number(BigInt(bucket.balance) / BigInt(1000000)) / maxBal) * 100 : 0;
                 return (
                   <div key={key} className="flex items-center gap-3">
                     <span className="w-40 text-gray-400 text-sm">{bucket.label}</span>
