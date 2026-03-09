@@ -58,9 +58,8 @@ app.get("/explorer/chain", async (c) => {
         t.size, b.time, b.epoch_no, b.block_no
         FROM tx t JOIN block b ON b.id = t.block_id
         ORDER BY t.id DESC LIMIT 30`),
-      pool.query(`SELECT e.no, e.start_time, e.end_time,
-        (SELECT COUNT(*) FROM block WHERE epoch_no = e.no) as blocks,
-        (SELECT COALESCE(SUM(t.fee),0)::text FROM tx t JOIN block b ON b.id = t.block_id WHERE b.epoch_no = e.no) as fees
+      pool.query(`SELECT e.no, e.start_time, e.end_time, e.blk_count as blocks,
+        e.fees::text as fees, e.out_sum::text as out_sum, e.tx_count
         FROM epoch e ORDER BY e.no DESC LIMIT 15`)
     ]);
     return { latestBlocks: latestBlocks.rows, latestTxs: latestTxs.rows, epochs: epochs.rows };
@@ -71,22 +70,28 @@ app.get("/explorer/chain", async (c) => {
 // --- Explorer: Staking (pools + delegations + stake dist + rewards) ---
 app.get("/explorer/staking", async (c) => {
   const data = await cached("exp:staking", 30, async () => {
+    const epochR = await pool.query("SELECT MAX(no) - 1 as e FROM epoch");
+    const prevEpoch = epochR.rows[0]?.e || 0;
     const [pools, recentDelegations, stakeDist, stats] = await Promise.all([
-      pool.query(`SELECT ph.view as pool_id, pod.json->>'name' as name, pod.json->>'ticker' as ticker,
+      pool.query(`WITH pool_stakes AS (
+        SELECT pool_id, COUNT(*) as delegators, COALESCE(SUM(amount),0)::text as stake
+        FROM epoch_stake WHERE epoch_no = $1 GROUP BY pool_id
+      )
+      SELECT ph.view as pool_id, ocpd.json->>'name' as name, ocpd.json->>'ticker' as ticker,
         pu.pledge::text, pu.margin, pu.fixed_cost::text,
-        (SELECT COUNT(*) FROM epoch_stake es WHERE es.pool_id = ph.id AND es.epoch_no = (SELECT MAX(no)-1 FROM epoch)) as delegators,
-        (SELECT COALESCE(SUM(es.amount),0)::text FROM epoch_stake es WHERE es.pool_id = ph.id AND es.epoch_no = (SELECT MAX(no)-1 FROM epoch)) as stake
+        COALESCE(ps.delegators,0) as delegators, COALESCE(ps.stake,'0') as stake
         FROM pool_hash ph
         JOIN pool_update pu ON pu.id = (SELECT id FROM pool_update pu2 WHERE pu2.hash_id = ph.id ORDER BY pu2.registered_tx_id DESC LIMIT 1)
-        LEFT JOIN pool_offline_data pod ON pod.pool_id = ph.id AND pod.id = (SELECT MAX(pod2.id) FROM pool_offline_data pod2 WHERE pod2.pool_id = ph.id)
-        WHERE NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= (SELECT MAX(no) FROM epoch))
-        ORDER BY stake DESC LIMIT 50`),
+        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        LEFT JOIN pool_stakes ps ON ps.pool_id = ph.id
+        WHERE NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= $1 + 1)
+        ORDER BY ps.stake::numeric DESC NULLS LAST LIMIT 50`, [prevEpoch]),
       pool.query(`SELECT d.id, sa.view as stake_addr, ph.view as pool_id,
-        pod.json->>'name' as pool_name, b.time, b.epoch_no
+        ocpd.json->>'name' as pool_name, b.time, b.epoch_no
         FROM delegation d
         JOIN stake_address sa ON sa.id = d.addr_id
         JOIN pool_hash ph ON ph.id = d.pool_hash_id
-        LEFT JOIN pool_offline_data pod ON pod.pool_id = ph.id AND pod.id = (SELECT MAX(pod2.id) FROM pool_offline_data pod2 WHERE pod2.pool_id = ph.id)
+        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
         JOIN tx t ON t.id = d.tx_id
         JOIN block b ON b.id = t.block_id
         ORDER BY d.id DESC LIMIT 30`),
@@ -99,13 +104,13 @@ app.get("/explorer/staking", async (c) => {
           ELSE '> 1M ADA'
         END as bucket,
         COUNT(*) as cnt, COALESCE(SUM(amount),0)::text as total
-        FROM epoch_stake WHERE epoch_no = (SELECT MAX(no)-1 FROM epoch)
+        FROM epoch_stake WHERE epoch_no = $1
         GROUP BY bucket)
-        SELECT * FROM buckets ORDER BY total DESC`),
+        SELECT * FROM buckets ORDER BY total DESC`, [prevEpoch]),
       pool.query(`SELECT
-        (SELECT COALESCE(SUM(amount),0)::text FROM epoch_stake WHERE epoch_no = (SELECT MAX(no)-1 FROM epoch)) as total_staked,
-        (SELECT COUNT(DISTINCT addr_id) FROM epoch_stake WHERE epoch_no = (SELECT MAX(no)-1 FROM epoch)) as total_stakers,
-        (SELECT COUNT(*) FROM pool_hash ph WHERE NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= (SELECT MAX(no) FROM epoch))) as active_pools`)
+        (SELECT COALESCE(SUM(amount),0)::text FROM epoch_stake WHERE epoch_no = $1) as total_staked,
+        (SELECT COUNT(DISTINCT addr_id) FROM epoch_stake WHERE epoch_no = $1) as total_stakers,
+        (SELECT COUNT(*) FROM pool_hash ph WHERE NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= $1 + 1)) as active_pools`, [prevEpoch])
     ]);
     return { pools: pools.rows, recentDelegations: recentDelegations.rows, stakeDistribution: stakeDist.rows, stats: stats.rows[0] || {} };
   });
@@ -244,7 +249,7 @@ app.get("/explorer/addresses", async (c) => {
         JOIN stake_address sa ON sa.id = es.addr_id
         LEFT JOIN delegation d ON d.addr_id = sa.id AND d.id = (SELECT MAX(d2.id) FROM delegation d2 WHERE d2.addr_id = sa.id)
         LEFT JOIN pool_hash ph ON ph.id = d.pool_hash_id
-        LEFT JOIN pool_offline_data pod ON pod.pool_id = ph.id AND pod.id = (SELECT MAX(pod2.id) FROM pool_offline_data pod2 WHERE pod2.pool_id = ph.id)
+        LEFT JOIN off_chain_pool_data pod ON pod.pool_id = ph.id AND pod.id = (SELECT MAX(pod2.id) FROM off_chain_pool_data pod2 WHERE pod2.pool_id = ph.id)
         WHERE es.epoch_no = (SELECT MAX(no)-1 FROM epoch)
         ORDER BY es.amount DESC LIMIT 50`)
     ]);

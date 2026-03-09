@@ -1758,6 +1758,236 @@ app.get("/search", async (c) => {
   return c.json(results);
 });
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// Rich List V2 - Unified ranking: Byron + Enterprise + Stake addresses
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const EXCHANGE_POOL_TICKERS = new Set([
+  "BINA","BNP","BNP1","BNP2","BNP3","BNP4",
+  "COIN","COINBASE",
+  "KRKN","KRAK",
+  "BTCM","BITGO",
+  "NEXO","WHLP","ETORO","UPBIT","UPBI",
+  "HUOBI","GATE","OKEX","BYBIT","BISO","ROBH",
+  "HASH","HASH0","HASH1",
+]);
+
+app.get("/richlist-v2", async (c) => {
+  const limit = Math.min(parseInt(c.req.query("limit") || "200"), 500);
+  const data = await cached(`richlist_v2:${limit}`, 1800, async () => {
+    const epochR = await pool.query("SELECT MAX(no) - 1 as e FROM epoch");
+    const prevEpoch = epochR.rows[0]?.e || 0;
+
+    // 1) Top staked addresses
+    const stakedR = await pool.query(`
+      SELECT sa.id as addr_id, sa.view as identifier, 'stake' as addr_type,
+             es.amount::text as balance
+      FROM epoch_stake es
+      JOIN stake_address sa ON sa.id = es.addr_id
+      WHERE es.epoch_no = $1
+      ORDER BY es.amount DESC LIMIT $2
+    `, [prevEpoch, limit]);
+
+    // 2) Top non-staked UTXOs (Byron + Enterprise) >= 100K ADA
+    const unstakedR = await pool.query(`
+      SELECT txo.address as identifier,
+             CASE WHEN txo.address LIKE 'DdzFF%' OR txo.address LIKE 'Ae2%' THEN 'byron' ELSE 'enterprise' END as addr_type,
+             SUM(txo.value)::text as balance
+      FROM tx_out txo
+      WHERE txo.stake_address_id IS NULL
+        AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
+      GROUP BY txo.address
+      HAVING SUM(txo.value) >= 100000000000
+      ORDER BY SUM(txo.value) DESC LIMIT $1
+    `, [limit]);
+
+    // 3) Merge & sort
+    const all = [...stakedR.rows, ...unstakedR.rows];
+    all.sort((a, b) => { const d = BigInt(b.balance||"0") - BigInt(a.balance||"0"); return d > 0n ? 1 : d < 0n ? -1 : 0; });
+    const top = all.slice(0, limit);
+
+    // 4) Pool & DRep delegation for staked entries
+    const stakeIds = top.filter(e => e.addr_type === "stake" && e.addr_id).map(e => e.addr_id);
+    let poolDels = {}, drepDels = {}, stakeLast = {}, stakeTxCnt = {};
+    if (stakeIds.length > 0) {
+      const pdR = await pool.query(`
+        SELECT DISTINCT ON (d.addr_id) d.addr_id,
+               ph.view as pool_id, ocpd.json->>'ticker' as pool_ticker, ocpd.json->>'name' as pool_name
+        FROM delegation d
+        JOIN pool_hash ph ON ph.id = d.pool_hash_id
+        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        WHERE d.addr_id = ANY($1::bigint[])
+        ORDER BY d.addr_id, d.tx_id DESC
+      `, [stakeIds]);
+      for (const r of pdR.rows) poolDels[r.addr_id] = { pool_id: r.pool_id, pool_ticker: r.pool_ticker, pool_name: r.pool_name };
+
+      try {
+        const dvR = await pool.query(`
+          SELECT DISTINCT ON (dv.addr_id) dv.addr_id, dh.view as drep_id, dh.has_script
+          FROM delegation_vote dv JOIN drep_hash dh ON dh.id = dv.drep_hash_id
+          WHERE dv.addr_id = ANY($1::bigint[]) ORDER BY dv.addr_id, dv.tx_id DESC
+        `, [stakeIds]);
+        for (const r of dvR.rows) drepDels[r.addr_id] = { drep_id: r.drep_id, has_script: r.has_script };
+      } catch(e) {}
+
+      const ltR = await pool.query(`
+        SELECT sa_id, MAX(tx_time) as last_tx FROM (
+          SELECT txo.stake_address_id as sa_id, b.time as tx_time
+          FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
+          WHERE txo.stake_address_id = ANY($1::bigint[]) ORDER BY t.id DESC LIMIT 5000
+        ) sub GROUP BY sa_id
+      `, [stakeIds]);
+      for (const r of ltR.rows) stakeLast[r.sa_id] = r.last_tx;
+
+      const tcR = await pool.query(`
+        SELECT txo.stake_address_id as sa_id, COUNT(DISTINCT txo.tx_id)::int as tx_count
+        FROM tx_out txo WHERE txo.stake_address_id = ANY($1::bigint[]) GROUP BY txo.stake_address_id
+      `, [stakeIds]);
+      for (const r of tcR.rows) stakeTxCnt[r.sa_id] = r.tx_count;
+    }
+
+    // 5) Tx info for non-staked addresses
+    const nsAddrs = top.filter(e => e.addr_type !== "stake").map(e => e.identifier);
+    let addrTxInfo = {};
+    for (let i = 0; i < nsAddrs.length; i += 50) {
+      const batch = nsAddrs.slice(i, i + 50);
+      const r = await pool.query(`
+        SELECT txo.address, COUNT(DISTINCT txo.tx_id)::int as tx_count, MAX(b.time) as last_tx
+        FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
+        WHERE txo.address = ANY($1::text[]) GROUP BY txo.address
+      `, [batch]);
+      for (const row of r.rows) addrTxInfo[row.address] = { tx_count: row.tx_count, last_tx: row.last_tx };
+    }
+
+    // 6) Assemble with flags
+    const now = new Date();
+    let totBal=0n, exBal=0n, lostBal=0n, byronBal=0n, entBal=0n, stBal=0n;
+    let exCnt=0, lostCnt=0, byronCnt=0, entCnt=0, stCnt=0;
+
+    const entries = top.map((e, idx) => {
+      const isStk = e.addr_type === "stake";
+      const aid = e.addr_id;
+      const pd = isStk ? poolDels[aid] || null : null;
+      const dd = isStk ? drepDels[aid] || null : null;
+      let txCnt = isStk ? (stakeTxCnt[aid]||0) : (addrTxInfo[e.identifier]?.tx_count||0);
+      let lastTx = isStk ? (stakeLast[aid]||null) : (addrTxInfo[e.identifier]?.last_tx||null);
+
+      let isEx = false, exReason = null;
+      if (pd?.pool_ticker && EXCHANGE_POOL_TICKERS.has(pd.pool_ticker.toUpperCase())) {
+        isEx = true; exReason = "Exchange pool: " + pd.pool_ticker;
+      }
+      if (!isEx && txCnt > 50000) { isEx = true; exReason = "High tx count: " + txCnt; }
+
+      let isLost = false, lostReason = null;
+      const bal = BigInt(e.balance||"0");
+      if (lastTx) {
+        const yrs = (now - new Date(lastTx)) / (365.25*24*60*60*1000);
+        if (e.addr_type === "byron" && yrs > 4) { isLost = true; lostReason = `Byron inactive ${yrs.toFixed(1)}y`; }
+        else if (yrs > 5 && bal > 10000000000n) { isLost = true; lostReason = `Inactive ${yrs.toFixed(1)}y`; }
+        else if (!isStk && !isEx && yrs > 3) { isLost = true; lostReason = `Non-staked inactive ${yrs.toFixed(1)}y`; }
+      } else if (e.addr_type === "byron") { isLost = true; lostReason = "Byron, no recent activity"; }
+
+      totBal += bal;
+      if (isEx) { exBal += bal; exCnt++; }
+      if (isLost) { lostBal += bal; lostCnt++; }
+      if (e.addr_type==="byron") { byronBal += bal; byronCnt++; }
+      if (e.addr_type==="enterprise") { entBal += bal; entCnt++; }
+      if (e.addr_type==="stake") { stBal += bal; stCnt++; }
+
+      return {
+        rank: idx+1, identifier: e.identifier, addr_type: e.addr_type,
+        balance: e.balance, tx_count: txCnt, last_tx: lastTx,
+        pool: pd, drep: dd,
+        is_exchange: isEx, exchange_reason: exReason,
+        is_likely_lost: isLost, lost_reason: lostReason,
+      };
+    });
+
+    return {
+      summary: {
+        epoch: prevEpoch, total_entries: entries.length,
+        total_balance: totBal.toString(),
+        exchange: { count: exCnt, balance: exBal.toString() },
+        likely_lost: { count: lostCnt, balance: lostBal.toString() },
+        by_type: {
+          byron: { count: byronCnt, balance: byronBal.toString() },
+          enterprise: { count: entCnt, balance: entBal.toString() },
+          stake: { count: stCnt, balance: stBal.toString() },
+        },
+      },
+      entries,
+    };
+  });
+  return c.json(data);
+});
+
+// ─── Lost ADA Analysis ──
+app.get("/lost-ada-analysis", async (c) => {
+  const data = await cached("lost_ada_analysis", 3600, async () => {
+    const byronR = await pool.query(`
+      SELECT txo.address as identifier, SUM(txo.value)::text as balance,
+             COUNT(DISTINCT txo.tx_id)::int as tx_count, MAX(b.time) as last_tx
+      FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
+      WHERE txo.stake_address_id IS NULL
+        AND (txo.address LIKE 'DdzFF%' OR txo.address LIKE 'Ae2%')
+        AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
+      GROUP BY txo.address HAVING SUM(txo.value) >= 1000000000
+      ORDER BY SUM(txo.value) DESC LIMIT 500
+    `);
+
+    const now = new Date();
+    const buckets = {
+      active_recent: { label: "< 1 year", count: 0, balance: 0n },
+      dormant_1_3: { label: "1-3 years", count: 0, balance: 0n },
+      dormant_3_5: { label: "3-5 years", count: 0, balance: 0n },
+      likely_lost_5plus: { label: "5+ years (likely lost)", count: 0, balance: 0n },
+      unknown: { label: "Unknown last activity", count: 0, balance: 0n },
+    };
+
+    const entries = byronR.rows.map(row => {
+      const bal = BigInt(row.balance||"0");
+      let cat = "unknown", yrs = null;
+      if (row.last_tx) {
+        yrs = (now - new Date(row.last_tx)) / (365.25*24*60*60*1000);
+        cat = yrs < 1 ? "active_recent" : yrs < 3 ? "dormant_1_3" : yrs < 5 ? "dormant_3_5" : "likely_lost_5plus";
+      }
+      buckets[cat].count++;
+      buckets[cat].balance += bal;
+      return {
+        address: row.identifier.slice(0,30)+"...", full_address: row.identifier,
+        balance: row.balance, tx_count: row.tx_count, last_tx: row.last_tx,
+        years_since_last_tx: yrs ? yrs.toFixed(1) : null, category: cat,
+      };
+    });
+
+    const bucketsOut = {};
+    for (const [k,v] of Object.entries(buckets)) bucketsOut[k] = { ...v, balance: v.balance.toString() };
+
+    const entR = await pool.query(`
+      SELECT txo.address, SUM(txo.value)::text as balance, MAX(b.time) as last_tx
+      FROM tx_out txo JOIN tx t ON t.id = txo.tx_id JOIN block b ON b.id = t.block_id
+      WHERE txo.stake_address_id IS NULL AND txo.address NOT LIKE 'DdzFF%' AND txo.address NOT LIKE 'Ae2%'
+        AND NOT EXISTS (SELECT 1 FROM tx_in txi WHERE txi.tx_out_id = txo.tx_id AND txi.tx_out_index = txo.index)
+      GROUP BY txo.address HAVING SUM(txo.value) >= 10000000000
+      ORDER BY SUM(txo.value) DESC LIMIT 200
+    `);
+    let entLostBal = 0n, entLostCnt = 0;
+    for (const r of entR.rows) {
+      if (r.last_tx) {
+        const yrs = (now - new Date(r.last_tx)) / (365.25*24*60*60*1000);
+        if (yrs > 3) { entLostBal += BigInt(r.balance||"0"); entLostCnt++; }
+      }
+    }
+
+    return {
+      byron_analysis: { total_entries: entries.length, buckets: bucketsOut, top_entries: entries.slice(0,100) },
+      enterprise_analysis: { likely_lost_count: entLostCnt, likely_lost_balance: entLostBal.toString() },
+    };
+  });
+  return c.json(data);
+});
+
 // ─── Start ─────────────────────────────────────────
 const port = parseInt(process.env.PORT || "3001");
 serve({ fetch: app.fetch, port }, () => {
