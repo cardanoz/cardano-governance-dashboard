@@ -3350,7 +3350,7 @@ function DashboardTab({
         display: "flex",
         gap: 3
       }
-    }, [["all", "All"], ["auto_abstain", "A-Abs"], ["auto_nc", "A-NC"], ["custom_drep", "DRep委任"]].map(([k, label]) => /*#__PURE__*/React.createElement("button", {
+    }, [["all", "All"], ["auto_abstain", "Auto-Abstain"], ["auto_nc", "Auto-NC"], ["custom_drep", "DRep委任"]].map(([k, label]) => /*#__PURE__*/React.createElement("button", {
       key: k,
       onClick: () => {
         setSpoDrepFilter(k);
@@ -3539,12 +3539,16 @@ function DashboardTab({
         title: `${Math.round(Number(pool.active_stake) / 1e6).toLocaleString()} ADA`
       }, fmtStake(pool.active_stake)), /*#__PURE__*/React.createElement("span", {
         style: {
-          fontSize: Math.round(7 * zoom / 100),
+          fontSize: Math.round(8 * zoom / 100),
           marginLeft: 4,
-          color: pool.isAutoAbstain ? "#fbbf24" : pool.isAutoNoConf ? "#dc2626" : pool.pledge_drep ? "var(--text2)" : "transparent",
-          fontWeight: 600
+          padding: pool.isAutoAbstain || pool.isAutoNoConf ? "1px 4px" : "0 2px",
+          borderRadius: 4,
+          background: pool.isAutoAbstain ? "rgba(251,191,36,0.18)" : pool.isAutoNoConf ? "rgba(220,38,38,0.18)" : "transparent",
+          color: pool.isAutoAbstain ? "#fbbf24" : pool.isAutoNoConf ? "#ef4444" : pool.pledge_drep ? "var(--text2)" : "transparent",
+          fontWeight: 700,
+          letterSpacing: 0.3
         }
-      }, pool.isAutoAbstain ? "A-Abs" : pool.isAutoNoConf ? "A-NC" : pool.pledge_drep ? "DRep" : "−")), pgP.map((p, ci) => {
+      }, pool.isAutoAbstain ? "Auto-Abstain" : pool.isAutoNoConf ? "Auto-NC" : pool.pledge_drep ? "DRep" : "−")), pgP.map((p, ci) => {
         const inelig = isSpoIneligible(p);
         if (inelig) return /*#__PURE__*/React.createElement("td", {
           key: p.proposal_id || ci,

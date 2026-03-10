@@ -3461,12 +3461,15 @@ app.get("/bf/dashboard-bundle", async (c) => {
                  ocvd.json->'body'->'comment'->>'@value',
                  ocvd.json->>'comment',
                  ocvd.json->'body'->>'rationale',
+                 ocvd.json->'body'->>'rationaleStatement',
+                 ocvd.json->'body'->'rationaleStatement'->>'@value',
                  ocvd.json->'body'->>'summary',
                  ocvd.json->'body'->>'conclusion',
                  ocvd.json->'body'->>'abstract',
                  ocvd.json->>'abstract',
                  ocvd.json->>'summary',
                  ocvd.json->>'rationale',
+                 ocvd.json->>'rationaleStatement',
                  ocvd.json->'body'->>'content',
                  ocvd.json->>'content',
                  ocvd.json->'body'->>'reason',
@@ -3478,6 +3481,8 @@ app.get("/bf/dashboard-bundle", async (c) => {
                  ocvd.json->'body'->'comment'->>'@value',
                  ocvd.json->>'comment',
                  ocvd.json->'body'->>'rationale',
+                 ocvd.json->'body'->>'rationaleStatement',
+                 ocvd.json->'body'->'rationaleStatement'->>'@value',
                  ocvd.json->'body'->>'summary',
                  ocvd.json->'body'->>'conclusion',
                  ocvd.json->'body'->>'abstract',
@@ -3697,12 +3702,8 @@ app.get("/bf/dashboard-bundle", async (c) => {
         // Fallback: try to extract meaningful text from raw JSON
         try {
           const j = typeof r.raw_json === 'string' ? JSON.parse(r.raw_json) : r.raw_json;
-          const body = j.body || j;
-          const txt = body?.comment?.["@value"] || body?.comment || body?.rationale || body?.summary || body?.conclusion || body?.abstract || body?.content || body?.reason || j?.abstract || j?.summary || j?.rationale || j?.content;
-          if (txt) { drepRationales[key] = { text: typeof txt === 'object' ? JSON.stringify(txt) : String(txt) }; continue; }
-          // Last resort: stringify top-level keys as text
-          const keys = Object.keys(body).filter(k => typeof body[k] === 'string' && body[k].length > 10);
-          if (keys.length > 0) { drepRationales[key] = { text: keys.map(k => body[k]).join('\n') }; continue; }
+          const txt = extractRatFromJson(j);
+          if (txt) { drepRationales[key] = { text: txt }; continue; }
         } catch(e) { /* ignore parse error */ }
         if (r.anchor_url) drepRatToFetch.push({ key, url: r.anchor_url });
       } else if (r.anchor_url) {
@@ -3723,23 +3724,55 @@ app.get("/bf/dashboard-bundle", async (c) => {
     }
 
     // Server-side fetch for rationales not in DB (batched, with timeout)
-    const fetchRatText = async (url, timeout = 5000) => {
+    const IPFS_GATEWAYS = ["https://ipfs.io/ipfs/", "https://dweb.link/ipfs/", "https://cf-ipfs.com/ipfs/", "https://gateway.pinata.cloud/ipfs/"];
+    const extractRatFromJson = (json) => {
+      if (!json) return null;
+      const body = json.body || json;
+      // CIP-100 fields
+      const cip100 = body?.comment?.["@value"] || body?.comment || body?.rationale || body?.summary || body?.conclusion || body?.abstract || body?.content || body?.reason || json?.abstract || json?.summary || json?.rationale || json?.content;
+      if (cip100) return typeof cip100 === 'object' ? JSON.stringify(cip100) : String(cip100);
+      // CIP-136 fields
+      const parts = [];
+      if (body?.rationaleStatement) parts.push(typeof body.rationaleStatement === 'object' ? (body.rationaleStatement["@value"] || JSON.stringify(body.rationaleStatement)) : body.rationaleStatement);
+      if (body?.precedentDiscussion) parts.push("Precedent: " + (typeof body.precedentDiscussion === 'object' ? (body.precedentDiscussion["@value"] || JSON.stringify(body.precedentDiscussion)) : body.precedentDiscussion));
+      if (body?.counterargumentDiscussion) parts.push("Counterargument: " + (typeof body.counterargumentDiscussion === 'object' ? (body.counterargumentDiscussion["@value"] || JSON.stringify(body.counterargumentDiscussion)) : body.counterargumentDiscussion));
+      if (body?.conclusion) parts.push("Conclusion: " + (typeof body.conclusion === 'object' ? (body.conclusion["@value"] || JSON.stringify(body.conclusion)) : body.conclusion));
+      if (parts.length > 0) return parts.join('\n');
+      // Fallback: any long string value
+      const keys = Object.keys(body).filter(k => typeof body[k] === 'string' && body[k].length > 10);
+      if (keys.length > 0) return keys.map(k => body[k]).join('\n');
+      return null;
+    };
+    const fetchRatText = async (url, timeout = 8000) => {
       try {
         let u = url;
-        if (u.startsWith("ipfs://")) u = "https://ipfs.io/ipfs/" + u.slice(7);
-        else if (u.startsWith("ipfs:")) u = "https://ipfs.io/ipfs/" + u.slice(5);
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), timeout);
-        const res = await fetch(u, { signal: ctrl.signal });
-        clearTimeout(timer);
-        if (!res.ok) return null;
-        const json = await res.json();
-        const body = json.body || json;
-        return body?.comment?.["@value"] || body?.comment || body?.rationale || body?.summary || body?.conclusion || body?.abstract || json?.abstract || json?.summary || null;
+        const isIpfs = u.startsWith("ipfs://") || u.startsWith("ipfs:");
+        const cid = isIpfs ? u.replace(/^ipfs:\/?\/?/, '') : null;
+        if (isIpfs) u = IPFS_GATEWAYS[0] + cid;
+        const tryFetch = async (fetchUrl) => {
+          const ctrl = new AbortController();
+          const timer = setTimeout(() => ctrl.abort(), timeout);
+          const res = await fetch(fetchUrl, { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
+          clearTimeout(timer);
+          if (!res.ok) return null;
+          const json = await res.json();
+          return extractRatFromJson(json);
+        };
+        // Try primary URL
+        let text = await tryFetch(u);
+        if (text) return text;
+        // For IPFS: try other gateways
+        if (cid) {
+          for (let g = 1; g < IPFS_GATEWAYS.length; g++) {
+            text = await tryFetch(IPFS_GATEWAYS[g] + cid);
+            if (text) return text;
+          }
+        }
+        return null;
       } catch { return null; }
     };
-    // Limit server-side fetches to max 100 to avoid slowing cache build
-    const MAX_FETCH = 100;
+    // Increase limit to fetch more rationales
+    const MAX_FETCH = 300;
     const allToFetch = [...drepRatToFetch.slice(0, MAX_FETCH), ...ccRatToFetch.slice(0, MAX_FETCH)];
     if (allToFetch.length > 0) {
       console.log(`[bundle] Server-side fetching ${allToFetch.length} rationale URLs...`);
