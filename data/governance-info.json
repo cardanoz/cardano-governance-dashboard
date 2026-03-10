@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38483759243545795",
-    "supply_circulating": "37146236578667300",
-    "supply_locked": "516454779809941",
+    "supply_circulating": "37146235823727771",
+    "supply_locked": "516603280044676",
     "supply_treasury": "1650231853481439",
     "supply_reserves": "6516240756454205",
-    "stake_live": "21820934779372388",
+    "stake_live": "21821279095336748",
     "stake_active": "21750394647282169"
   },
   "protocolParams": {
@@ -2472,7 +2472,7 @@
         "yes_pct": 5.26,
         "no_pct": 94.74,
         "yes_votes_cast": 20,
-        "no_votes_cast": 15,
+        "no_votes_cast": 17,
         "abstain_votes_cast": 0,
         "yes_power": "307236401356890",
         "no_power": "5529939430085141"
@@ -2497,13 +2497,13 @@
     "e5c4d7ebaad03ac127ec19a286605a188d6fea1c54e075c619ca6993b7fa9fd1#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 4.17,
-        "no_pct": 95.83,
-        "yes_votes_cast": 6,
-        "no_votes_cast": 4,
+        "yes_pct": 4.2,
+        "no_pct": 95.8,
+        "yes_votes_cast": 7,
+        "no_votes_cast": 6,
         "abstain_votes_cast": 0,
-        "yes_power": "243681414051442",
-        "no_power": "5593494417390589"
+        "yes_power": "245195482225550",
+        "no_power": "5591980349216481"
       },
       "cc": {
         "yes_pct": 0,
@@ -2525,13 +2525,13 @@
     "e9693ed6b6465b2b46daaf641486a12b4b2946081634b5967b9d98897b0598fa#0": {
       "proposal_type": "InfoAction",
       "drep": {
-        "yes_pct": 19.44,
-        "no_pct": 80.56,
-        "yes_votes_cast": 25,
+        "yes_pct": 20.83,
+        "no_pct": 79.17,
+        "yes_votes_cast": 27,
         "no_votes_cast": 9,
         "abstain_votes_cast": 0,
-        "yes_power": "1134982327648080",
-        "no_power": "4702193503793951"
+        "yes_power": "1215928355385787",
+        "no_power": "4621247476056244"
       },
       "cc": {
         "yes_pct": 0,
@@ -2553,13 +2553,13 @@
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 50.84,
-        "no_pct": 49.16,
-        "yes_votes_cast": 84,
-        "no_votes_cast": 9,
+        "yes_pct": 50.87,
+        "no_pct": 49.13,
+        "yes_votes_cast": 85,
+        "no_votes_cast": 10,
         "abstain_votes_cast": 4,
-        "yes_power": "2947364998102528",
-        "no_power": "2849690399635502"
+        "yes_power": "2948879066276636",
+        "no_power": "2848176331461394"
       },
       "cc": {
         "yes_pct": 33.33,
@@ -2609,18 +2609,18 @@
     "73a4eb2148781c37ef37c90a33a1d3d00511a8eefe9cdfaa1ea593b090f23f96#0": {
       "proposal_type": "InfoAction",
       "drep": {
-        "yes_pct": 43.87,
-        "no_pct": 56.13,
-        "yes_votes_cast": 116,
+        "yes_pct": 43.9,
+        "no_pct": 56.1,
+        "yes_votes_cast": 117,
         "no_votes_cast": 41,
         "abstain_votes_cast": 13,
-        "yes_power": "2444915898809006",
-        "no_power": "3128441316651197"
+        "yes_power": "2446429966983114",
+        "no_power": "3126927248477089"
       },
       "cc": {
-        "yes_pct": 37.5,
-        "no_pct": 62.5,
-        "yes_votes_cast": 3,
+        "yes_pct": 75,
+        "no_pct": 25,
+        "yes_votes_cast": 6,
         "no_votes_cast": 0,
         "abstain_votes_cast": 0
       },
