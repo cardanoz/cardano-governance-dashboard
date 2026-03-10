@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-10T20:51:44.363Z",
+  "generatedAt": "2026-03-10T21:46:42.586Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 49,
-      "summary_en": "Treasury Withdrawal proposals show mixed support, with yes votes driven by team credibility, strategic importance (particularly node diversity), and historical track records, while no votes cite concerns about budget efficiency, duplicate efforts, milestone-based funding requirements, and constitutional compliance issues. The voting patterns reflect tension between supporting long-term ecosystem development and fiscal responsibility during market downturns.",
-      "summary_ja": "Treasury Withdrawal提案は投票が分かれており、肯定票はチーム信頼性、戦略的重要性（特にノード多様性）、実績に基づいているが、否定票は予算効率性、重複した取り組み、マイルストーンベースの資金配分要件、および憲法準拠性の懸念を指摘しています。投票パターンは、長期的なエコシステム開発支援と市場低迷時の財政責任のバランスを反映しています。",
+      "summary_en": "Treasury Withdrawal proposals show mixed support across 49 proposals, with votes driven by project merit, team reputation, and ecosystem needs like node diversity and DeFi liquidity. Common concerns include budget allocation, implementation duplication, milestone-based funding preferences, and constitutional compliance issues.",
+      "summary_ja": "49件の提案に対する投票は、プロジェクトの価値、チームの評判、ノード多様性やDeFi流動性などのエコシステムニーズによって駆動されており、サポートは混在しています。一般的な懸念には、予算配分、実装の重複、マイルストーンベースの資金配分の好み、および憲法準拠の問題が含まれます。",
       "typicalReasonsYes_en": [
-        "Team reputation and proven track record (Blink Labs, Amaru demonstrated competence and transparency)",
-        "Critical infrastructure need for client/node diversity to reduce single point of failure risk",
-        "Long-term strategic value for Cardano resilience and ecosystem strengthening",
-        "Reasonable cost-benefit analysis relative to milestones achieved and budget transparency"
+        "Strong team reputation and proven track record of delivery and transparency",
+        "Critical ecosystem need for client/node diversity to reduce single point of failure risk",
+        "Reasonable cost relative to project scope and long-term strategic value",
+        "Detailed budget breakdown and demonstrated accountability (e.g., returning unused funds)"
       ],
       "typicalReasonsYes_ja": [
-        "チームの信頼性と実績（Blink LabsやAmaruの能力実証と透明性）",
-        "単一障害点リスク軽減のためのクライアント/ノード多様性の重要性",
-        "Cardanoレジリエンスとエコシステム強化の長期的戦略価値",
-        "達成したマイルストーンと予算透明性との相対的な費用対効果"
+        "強い チーム評判と配信と透明性の実績",
+        "単一障害点のリスク軽減のためのクライアント/ノード多様性の重要なエコシステムニーズ",
+        "プ��ジェクト規模と長期的な戦略的価値に対する合理的なコスト",
+        "詳細な予算内訳と実証済みの説明責任（未使用資金の返還など）"
       ],
       "typicalReasonsNo_en": [
-        "Excessive budget for single large withdrawal without milestone-based funding structure",
-        "Duplication with existing node diversity initiatives (Rust node already in development)",
-        "Premature funding against unpublished specifications without production-ready deliverables",
-        "Constitutional compliance issues and concerns about delegating treasury decision-making authority"
+        "Excessively high budget or poor cost-effectiveness for the proposed work",
+        "Duplication with existing initiatives (e.g., multiple node implementations already funded)",
+        "Request for single large lump sum rather than milestone-based fund releases",
+        "Constitutional non-compliance or governance process concerns"
       ],
       "typicalReasonsNo_ja": [
-        "マイルストーン基盤の資金構成なしの単一大型引き出しの過度な予算",
-        "既存のノード多様性イニシアティブとの重複（Rustノード開発中）",
-        "未発表仕様に対する時期尚早な資金提供と本番対応成果物の欠如",
-        "憲法準拠性の問題とTreasury意思決定権の委譲に対する懸念"
+        "提案された作業に対する過度に高い予算または低い費用対効果",
+        "既存のイニシアチブとの重複（例えば、既に資金提供されている複数のノード実装）",
+        "マイルストーンベースの資金リリースではなく、単一の大口一括請求",
+        "憲法非準拠またはガバナンスプロセスの懸念"
       ]
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on Cardano's Budget Process Framework receive mixed support, with Yes voters appreciating the transparency, structure, and coordination mechanisms for treasury management, while No voters worry about centralization of power toward Intersect, lack of accountability for past spending, and overly generous Net Change Limits. The framework represents an attempt to mature governance processes, though concerns remain about whether it adequately balances decentralization with operational efficiency.",
-      "summary_ja": "CardanoのBudget Process Frameworkに関するInfoActionは賛否両論を受けており、賛成派は予算管理の透明性、構造化、調整メカニズムを評価する一方、反対派はIntersectへの権力集中、過去の支出に対する説明責任の欠如、過度に寛容なNet Change Limitを懸念しています。このフレームワークはガバナンスプロセスの成熟化を目指していますが、分散化と運用効率のバランスが十分かどうかについて懸念が残ります。",
+      "summary_en": "InfoAction proposals on Cardano's Budget Process Framework receive mixed support, with Yes voters appreciating the framework's role in establishing transparency, structured processes, and fiscal discipline for treasury management. No voters express concerns about centralized budget control, inadequate accountability mechanisms, and the need for transparent reporting of previous budget outcomes before approving future spending.",
+      "summary_ja": "CardanoのBudget Process Frameworkに関するInfoActionの提案は賛否が分かれており、賛成票はフレームワークがトレジャリー管理に透明性と構造化されたプロセスをもたらすことを評価している一方、反対票は予算管理の集中化、不十分な説明責任メカニズム、および将来の支出承認前の過去の予算成果に関する透明性報告の必要性について懸念を表明している。",
       "typicalReasonsYes_en": [
-        "Increases transparency and establishes clear, documented processes for treasury budget submission, review, and distribution",
-        "Provides predictability and common reference framework for ecosystem stakeholders, reducing uncertainty in governance",
-        "Improves upon previous ad-hoc budget cycles by introducing structured stages and evaluation criteria",
-        "Signals ecosystem maturation and demonstrates coordinated approach to prevent wasteful 'social engineering' of treasury funds"
+        "Improves transparency and establishes clear reference framework for treasury budgeting process across the ecosystem",
+        "Introduces structured process with defined criteria to reduce social engineering and ensure fair comparison of proposals",
+        "Signals ecosystem maturation and enables continued experimentation with budget coordination mechanisms",
+        "Reduces procedural uncertainty and improves predictability between proposers, DReps, development teams, and community"
       ],
       "typicalReasonsYes_ja": [
-        "予算提案、レビュー、配分のプロセスを明文化し、透明性を向上させる",
-        "エコシステムの利害関係者に予測可能性と共通の参照枠組みを提供し、ガバナンスの不確実性を低減する",
-        "構造化されたステージと評価基準を導入し、過去のアドホックな予算サイクルを改善する",
-        "エコシステムの成熟化を示し、予算資金の『ソーシャルエンジニアリング』による浪費を防ぐ調整的なアプローチを実証する"
+        "トレジャリー予算プロセスに透明性をもたらし、エコシステム全体の明確な参照枠組みを確立する",
+        "ソーシャルエンジニアリングを減らし、提案の公正な比較を確保するための定義された基準を持つ構造化プロセスを導入する",
+        "エコシステムの成熟を示し、予算調整メカニズムの継続的な実験を可能にする",
+        "手続きの不確実性を軽減し、提案者、DRep、開発チーム、コミュニティ間の予測可能性を向上させる"
       ],
       "typicalReasonsNo_en": [
-        "Concerns about excessive power concentration toward Intersect and organized actors at the expense of decentralized grassroots proposals",
-        "Lack of transparent reporting and evaluation of 2025 budget outcomes before committing to 2026 spending limits",
-        "Net Change Limits (300-350M ADA) are considered too generous; advocates push for lower limits (200-250M) to prioritize treasury growth",
-        "High barriers to entry (100k ADA submission fee) and preference for decentralized proposal submission exclude smaller projects and reduce competition"
+        "Concentrates budget control with organized actors (particularly Intersect), risking centralization and reducing natural friction that protects against capture",
+        "Lacks transparent reporting and accountability for previous budget outcomes before approving future spending limits",
+        "Imposes barriers to entry (100k ADA donation fee) that discourage grassroots proposals and limit decentralized participation",
+        "Sets spending limits without proven effectiveness metrics or mechanisms to measure impact of funded activities"
       ],
       "typicalReasonsNo_ja": [
-        "Intersectと���織化されたアクターへの権力集中が分散型の草の根提案を損なう可能性への懸念",
-        "2026年の支出限度額にコミットする前に、2025年予算成果の透明なレポートと評価の欠如",
-        "Net Change Limit（300～350M ADA）は過度に寛容と見なされ、提唱者は予算成長を優先するために200～250M ADAへの削減を推し進めている",
-        "参入障壁（100k ADAの提出手数料）が高く、分散型提案提出の選好により、小規模プロジェクトが除外され、競争が減少する"
+        "予算管理を組織化されたアクター（特にIntersect）に集中させ、集中化のリスクと分散化を保護する自然な摩擦を低減させる",
+        "将来の支出限度を承認する前に、過去の予算成果に関する透明性のある報告と説明責任が不足している",
+        "エントリーバリア（100k ADAの寄付手数料）を課し、グラスルーツ提案を阻止し、分散化された参加を制限する",
+        "資金提供活動の有効性を測定するための証明されたメトリクスまたはメカニズムなしに支出限度を設定する"
       ]
     },
     "ParameterChange": {
