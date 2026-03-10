@@ -4782,7 +4782,7 @@ function SimulatorTab({
       return ep >= ccSimEpFrom && ep <= simEpTo && expiry <= currentEpoch;
     });
   }, [ccProposals, ccSimEpFrom, simEpTo, currentEpoch]);
-  const ccFMembers = React.useMemo(() => [...ccMembers].sort((a, b) => b.vote_count - a.vote_count), [ccMembers]);
+  const ccFMembers = React.useMemo(() => [...ccMembers].sort((a, b) => (Number(b.expiration_epoch) || 0) - (Number(a.expiration_epoch) || 0) || (b.vote_count - a.vote_count)), [ccMembers]);
   const simData = React.useMemo(() => {
     return ccFMembers.map(cc => {
       const memberMin = ccMemberMinEpoch(cc.cc_id);

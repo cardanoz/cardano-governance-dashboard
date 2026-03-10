@@ -3663,10 +3663,10 @@ app.get("/bf/dashboard-bundle", async (c) => {
     }
     // Calculate percentages
     for (const ps of Object.values(proposalSummaries)) {
-      const dT = ps.drep.yes + ps.drep.no + ps.drep.abstain;
-      if (dT > 0) { ps.drep.yes_pct = ps.drep.yes / dT * 100; ps.drep.no_pct = ps.drep.no / dT * 100; }
-      const sT = ps.spo.yes_votes_cast + ps.spo.no_votes_cast;
-      if (sT > 0) { ps.spo.yes_pct = ps.spo.yes_votes_cast / sT * 100; ps.spo.no_pct = ps.spo.no_votes_cast / sT * 100; }
+      const dPT = ps.drep.yes_power + ps.drep.no_power + ps.drep.abstain_power;
+      if (dPT > 0) { ps.drep.yes_pct = ps.drep.yes_power / dPT * 100; ps.drep.no_pct = ps.drep.no_power / dPT * 100; }
+      const sPT = ps.spo.yes_power + ps.spo.no_power;
+      if (sPT > 0) { ps.spo.yes_pct = ps.spo.yes_power / sPT * 100; ps.spo.no_pct = ps.spo.no_power / sPT * 100; }
       const cT = ps.cc.yes + ps.cc.no + ps.cc.abstain;
       if (cT > 0) { ps.cc.yes_pct = ps.cc.yes / cT * 100; }
     }
