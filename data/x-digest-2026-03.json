@@ -1137,5 +1137,185 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2026-03-10",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "CIP-113 Programmable Tokens Standard Unlocks Institutional Tokenization",
+        "title_ja": "CIP-113プログラマブルトークン標準が機関投資家向けトークン化を実現",
+        "summary_en": "Cardano Foundation announces CIP-113, a new standard enabling programmable tokens with compliance features including KYC/AML, regulatory rule enforcement, and automatic execution on transfer/mint/burn. This enhances institutional confidence for RWA tokenization on Cardano.",
+        "summary_ja": "Cardano Foundationが新標準CIP-113を発表。KYC/AML対応、規制準拠ルール自動施行が可能なプログラマブルトークンにより、機関投資家向けの現実資産（RWA）トークン化を加速。",
+        "importance": 5,
+        "audience": [
+          "Builder",
+          "Institutional",
+          "Holder"
+        ],
+        "sources": [
+          "@angrycryptoshow",
+          "@ISPF_Cardano",
+          "@funkyhiro2009"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Crypto.com & Venmo Partnership Brings 90M+ Users Closer to Cardano",
+        "title_ja": "Crypto.comとVenmoパートナーシップで9,000万以上ユーザーがCardanoに接近",
+        "summary_en": "Crypto.com partners with Venmo to enable fast USD deposits via the 90M-user platform, significantly lowering friction for mainstream Cardano and ADA access. This represents major adoption infrastructure improvement.",
+        "summary_ja": "Crypto.comとVenmoのパートナーシップにより、9,000万以上のユーザーがUSD入金を通じてADAにアクセス可能に。Cardanoへの主流採用の重要なインフラ整備。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Thaxt21"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet Launch Expected Before End of March; $NIGHT Token Reaches 55K Holders",
+        "title_ja": "Midnightメインネット3月末までに始動予定；$NIGHTトークンが5.5万ホルダーに到達",
+        "summary_en": "Midnight mainnet deployment confirmed for before end of March with growing momentum. $NIGHT token now holds ~55,000 holders, positioning it as one of Cardano's most widely distributed tokens, signaling strong community adoption.",
+        "summary_ja": "Midnightメインネットが3月末までの展開を予定。$NIGHTトークンは約5.5万ホルダーを記録し、Cardano上で最も広く保有されているトークンの一つに。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@Cardano_Power",
+          "@WrathofKah5y"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Franklin Templeton Launches Cardano ADA ETF",
+        "title_ja": "Franklin TempletonがCardano ADA ETFをローンチ",
+        "summary_en": "Franklin Templeton launches a dedicated ADA ETF product, providing institutional investors easy regulated access to Cardano. This is a significant institutional adoption milestone.",
+        "summary_ja": "Franklin TempletonがADA専用ETFをローンチ。機関投資家向けの規制準拠アクセスを提供し、機関採用の重要なマイルストーン。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Institutional",
+          "DRep"
+        ],
+        "sources": [
+          "@StakeWithPride"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "HLabs Reveals 2026 Cardano Development Plan: TypeScript Browser Node & Pebble Smart Contract Language",
+        "title_ja": "HLabsが2026年CardanoTreasuryドラフト公開：TypeScriptブラウザノード及びPebbleスマートコントラクト言語",
+        "summary_en": "Harmonic Laboratories submits treasury budget proposal for 2026 focusing on three development pillars: Gerolamo (TypeScript), Pebble (new smart contract language), and infrastructure enhancements. Formal submission expected in 2-3 weeks with community feedback period open.",
+        "summary_ja": "Harmonic Laboratoriesが2026年Treasury予算案を公開。Gerolamo（TypeScript）、Pebble（新スマートコントラクト言語）など3つの開発柱が中心。2～3週間後の正式提出予定。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@SIPO_Tokyo"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "DeFi Liquidity Budget Withdrawal 1 Now Live for Voting",
+        "title_ja": "DeFiリクイディティ予算引き出し1が投票開始",
+        "summary_en": "DeFi Liquidity Withdrawal 1 governance action is now live for voting. Community urged to engage DReps and CC members to facilitate swift passage.",
+        "summary_ja": "DeFiリクイディティ予算引き出し1がガバナンス投票に。DRepsとCC委員への協力呼びかけで迅速な可決を目指す。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Constitutional Governance Action Voted by Eastern Cardano CC Member",
+        "title_ja": "Eastern CardanoのCC委員が憲法的ガバナンスアクションに投票",
+        "summary_en": "CC member @EasternCardano votes on constitutional governance action. Community voting participation continues on key governance decisions.",
+        "summary_ja": "Eastern CardanoのCC委員が憲法的ガバナンスアクションに投票。主要なガバナンス決定への継続的なコミュニティ参加。",
+        "importance": 2,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@GovActions"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Blockfrost-js v6.1.1 Released with API Improvements",
+        "title_ja": "Blockfrost-js v6.1.1リリース：API改善",
+        "summary_en": "New version of blockfrost-js released, continuing API development improvements for Cardano builders and integrators.",
+        "summary_ja": "blockfrost-js v6.1.1がリリース。Cardanoビルダー向けAPIの継続的な改善を提供。",
+        "importance": 2,
+        "audience": [
+          "Builder"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Development Activity: 806 Commits Across 86 Repos (Mar 9)",
+        "title_ja": "Cardano開発活動：86リポジトリで806コミット（3月9日）",
+        "summary_en": "Strong development momentum continues with 806 commits across 86 repositories. Mithril leads with 128 commits, followed by Dingo (57), and cardano-ibc-incubator (41), with +25.9M lines added.",
+        "summary_ja": "86リポジトリで806コミットを記録し、開発勢いが継続。Mithril（128）がリード、Dingo（57）、cardano-ibc-incubator（41）が続く。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "SPO",
+          "DRep"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Phil UPLC Clarifies CIP-113 Design: Solo Effort Without External Input",
+        "title_ja": "Phil UPLCがCIP-113設計を説明：独自作業で外部入力なし",
+        "summary_en": "Developer @phil_uplc clarifies that CIP-113's entire design was created independently without external design input, while noting other concurrent programmable token work was underway.",
+        "summary_ja": "開発者Phil UPLCがCIP-113の設計は独自作業で外部入力がないことを明確化。同時期の他のプログラマブルトークン開発に言及。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@phil_uplc"
+        ]
+      }
+    ],
+    "tweetCount": 72,
+    "generatedAt": "2026-03-10T06:41:21.901Z",
+    "apiUsage": {
+      "input_tokens": 5616,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2410,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]
