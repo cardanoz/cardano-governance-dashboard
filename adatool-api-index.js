@@ -328,6 +328,33 @@ app.get("/assets", async (c) => {
   return c.json(data);
 });
 
+// ─── Token Mints (recent) ─────────────────────────
+app.get("/tokens/mints", async (c) => {
+  const limit = getLimit(c, 50, 200);
+  const data = await cached(`tokens:mints:${limit}`, 30, async () => {
+    const r = await pool.query(`
+      SELECT encode(ma.policy,'hex') as policy,
+             encode(ma.name,'hex') as asset_name,
+             ma.fingerprint,
+             mtm.quantity::text as quantity,
+             encode(tx.hash,'hex') as tx_hash,
+             b.time
+      FROM ma_tx_mint mtm
+      JOIN multi_asset ma ON mtm.ident = ma.id
+      JOIN tx ON mtm.tx_id = tx.id
+      JOIN block b ON tx.block_id = b.id
+      WHERE mtm.quantity > 0
+      ORDER BY mtm.id DESC
+      LIMIT $1
+    `, [limit]);
+    return r.rows.map(row => ({
+      ...row,
+      display_name: hexToAscii(row.asset_name) || row.fingerprint?.slice(0, 16) || row.asset_name
+    }));
+  });
+  return c.json(data);
+});
+
 // ─── Governance Actions ────────────────────────────
 app.get("/governance/actions", async (c) => {
   const limit = getLimit(c);
