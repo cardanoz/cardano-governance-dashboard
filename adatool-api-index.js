@@ -371,7 +371,7 @@ app.get("/dreps", async (c) => {
         SELECT COUNT(*) as vote_count FROM voting_procedure vp WHERE vp.drep_voter = dh.id
       ) vc ON true
       LEFT JOIN voting_anchor va ON dr.voting_anchor_id = va.id
-      WHERE dr.deposit > 0
+      WHERE (dr.deposit >= 0 OR dr.deposit IS NULL)
       ORDER BY COALESCE(dd.amount, 0) DESC
       LIMIT $1
     `, [limit]);
@@ -2797,8 +2797,1376 @@ app.get("/dashboard/chain-overview", async (c) => {
   return c.json(data);
 });
 
+// ─── Blockfrost-compatible endpoints for governance dashboard ─────
+// These endpoints return data in formats compatible with the governance
+// dashboard frontend (originally built for Blockfrost API)
+
+// GET /bf/dreps — All DReps with bech32 IDs, paginated Blockfrost-style
+app.get("/bf/dreps", async (c) => {
+  const page = parseInt(c.req.query("page") || "1");
+  const count = Math.min(parseInt(c.req.query("count") || "100"), 100);
+  const offset = (page - 1) * count;
+  const data = await cached(`bf_dreps:${page}:${count}`, 120, async () => {
+    const r = await pool.query(`
+      SELECT dh.view as drep_id,
+             encode(dh.raw,'hex') as drep_hash,
+             dh.has_script,
+             dr.deposit::text,
+             COALESCE(dd.amount, 0)::text as amount,
+             va.url as anchor_url,
+             COALESCE(vc.vote_count, 0)::int as vote_count
+      FROM drep_hash dh
+      JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+        AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+      LEFT JOIN drep_distr dd ON dd.hash_id = dh.id
+        AND dd.epoch_no = (SELECT MAX(epoch_no) FROM drep_distr WHERE hash_id = dh.id)
+      LEFT JOIN LATERAL (
+        SELECT COUNT(*) as vote_count FROM voting_procedure vp WHERE vp.drep_voter = dh.id
+      ) vc ON true
+      LEFT JOIN voting_anchor va ON dr.voting_anchor_id = va.id
+      WHERE (dr.deposit >= 0 OR dr.deposit IS NULL)
+      ORDER BY COALESCE(dd.amount, 0) DESC
+      LIMIT $1 OFFSET $2
+    `, [count, offset]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// GET /bf/drep/:id — DRep detail (supports both bech32 drep1... and hex)
+app.get("/bf/drep/:id", async (c) => {
+  const id = c.req.param("id");
+  const isBech32 = id.startsWith("drep1") || id.startsWith("drep_script1");
+  const data = await cached(`bf_drep:${id}`, 120, async () => {
+    const whereClause = isBech32 ? "dh.view = $1" : "encode(dh.raw,'hex') = $1";
+    const r = await pool.query(`
+      SELECT dh.view as drep_id,
+             encode(dh.raw,'hex') as drep_hash,
+             dh.has_script,
+             dr.deposit::text,
+             COALESCE(dd.amount, 0)::text as amount,
+             va.url as anchor_url,
+             CASE
+               WHEN EXISTS(SELECT 1 FROM drep_registration dr2 WHERE dr2.drep_hash_id = dh.id AND dr2.deposit < 0) THEN true
+               ELSE false
+             END as retired
+      FROM drep_hash dh
+      JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+        AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+      LEFT JOIN drep_distr dd ON dd.hash_id = dh.id
+        AND dd.epoch_no = (SELECT MAX(epoch_no) FROM drep_distr WHERE hash_id = dh.id)
+      LEFT JOIN voting_anchor va ON dr.voting_anchor_id = va.id
+      WHERE ${whereClause}
+    `, [id]);
+    if (!r.rows[0]) return null;
+
+    // Delegation count
+    const delR = await pool.query(`
+      SELECT COUNT(DISTINCT dv.addr_id)::int as delegator_count
+      FROM delegation_vote dv
+      JOIN drep_hash dh ON dv.drep_hash_id = dh.id
+      WHERE ${whereClause}
+        AND dv.id = (SELECT MAX(id) FROM delegation_vote dv2 WHERE dv2.addr_id = dv.addr_id)
+    `, [id]);
+
+    return {
+      ...r.rows[0],
+      delegators: delR.rows[0]?.delegator_count || 0,
+      expired: false,
+    };
+  });
+  if (!data) return c.json({ error: "DRep not found" }, 404);
+  return c.json(data);
+});
+
+// GET /bf/drep/:id/metadata — DRep metadata from anchor URL
+app.get("/bf/drep/:id/metadata", async (c) => {
+  const id = c.req.param("id");
+  const isBech32 = id.startsWith("drep1") || id.startsWith("drep_script1");
+  const data = await cached(`bf_drep_meta:${id}`, 600, async () => {
+    const whereClause = isBech32 ? "dh.view = $1" : "encode(dh.raw,'hex') = $1";
+    const r = await pool.query(`
+      SELECT va.url as anchor_url, encode(va.data_hash,'hex') as anchor_hash
+      FROM drep_hash dh
+      JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+        AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+      LEFT JOIN voting_anchor va ON dr.voting_anchor_id = va.id
+      WHERE ${whereClause}
+    `, [id]);
+    if (!r.rows[0]?.anchor_url) return null;
+
+    // Try to fetch metadata from anchor URL
+    try {
+      let url = r.rows[0].anchor_url;
+      if (url.startsWith("ipfs://")) {
+        url = "https://ipfs.io/ipfs/" + url.slice(7);
+      }
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 8000);
+      const res = await fetch(url, { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (!res.ok) return null;
+      const json = await res.json();
+      // Return in Blockfrost-compatible format
+      return {
+        drep_id: id,
+        hex: r.rows[0].anchor_hash,
+        url: r.rows[0].anchor_url,
+        json_metadata: json,
+      };
+    } catch (e) {
+      return null;
+    }
+  });
+  return c.json(data);
+});
+
+// GET /bf/drep/:id/votes — All votes for a DRep, paginated
+app.get("/bf/drep/:id/votes", async (c) => {
+  const id = c.req.param("id");
+  const page = parseInt(c.req.query("page") || "1");
+  const count = Math.min(parseInt(c.req.query("count") || "100"), 100);
+  const offset = (page - 1) * count;
+  const isBech32 = id.startsWith("drep1") || id.startsWith("drep_script1");
+  const data = await cached(`bf_drep_votes:${id}:${page}`, 120, async () => {
+    const whereClause = isBech32 ? "dh.view = $1" : "encode(dh.raw,'hex') = $1";
+    const r = await pool.query(`
+      SELECT encode(gtx.hash,'hex') as proposal_tx_hash,
+             gap.index as proposal_cert_index,
+             LOWER(vp.vote::text) as vote,
+             gap.type::text as action_type,
+             b.epoch_no as epoch,
+             b.time as vote_time
+      FROM voting_procedure vp
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+      JOIN tx vtx ON vp.tx_id = vtx.id
+      JOIN block b ON vtx.block_id = b.id
+      JOIN drep_hash dh ON vp.drep_voter = dh.id
+      WHERE ${whereClause}
+      ORDER BY vp.id DESC
+      LIMIT $2 OFFSET $3
+    `, [id, count, offset]);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// GET /bf/proposal/:hash/:index — Proposal detail in Blockfrost format
+app.get("/bf/proposal/:hash/:index", async (c) => {
+  const hash = c.req.param("hash");
+  const index = parseInt(c.req.param("index"));
+  const data = await cached(`bf_proposal:${hash}:${index}`, 120, async () => {
+    const r = await pool.query(`
+      SELECT encode(tx.hash,'hex') as tx_hash,
+             gap.index as cert_index,
+             gap.type::text as governance_type,
+             b.epoch_no as epoch,
+             gap.expiration,
+             gap.ratified_epoch,
+             gap.enacted_epoch,
+             gap.dropped_epoch,
+             gap.expired_epoch,
+             gap.description,
+             ocvgad.title, ocvgad.abstract, ocvgad.motivation, ocvgad.rationale,
+             va.url as anchor_url
+      FROM gov_action_proposal gap
+      JOIN tx ON gap.tx_id = tx.id
+      JOIN block b ON tx.block_id = b.id
+      LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+      LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
+      LEFT JOIN voting_anchor va ON gap.voting_anchor_id = va.id
+      WHERE encode(tx.hash,'hex') = $1 AND gap.index = $2
+    `, [hash, index]);
+    if (!r.rows[0]) return null;
+
+    // Get vote tallies
+    const votesR = await pool.query(`
+      SELECT vp.voter_role::text, vp.vote::text, COUNT(*)::int as cnt
+      FROM voting_procedure vp
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx ON gap.tx_id = tx.id
+      WHERE encode(tx.hash,'hex') = $1 AND gap.index = $2
+      GROUP BY vp.voter_role, vp.vote
+    `, [hash, index]);
+
+    const summary = {};
+    for (const v of votesR.rows) {
+      if (!summary[v.voter_role]) summary[v.voter_role] = { yes: 0, no: 0, abstain: 0 };
+      const key = v.vote === 'VoteYes' ? 'yes' : v.vote === 'VoteNo' ? 'no' : 'abstain';
+      summary[v.voter_role][key] = v.cnt;
+    }
+
+    return { ...r.rows[0], vote_summary: summary };
+  });
+  if (!data) return c.json({ error: "Proposal not found" }, 404);
+  return c.json(data);
+});
+
+// GET /bf/proposal/:hash/:index/metadata — Proposal metadata
+app.get("/bf/proposal/:hash/:index/metadata", async (c) => {
+  const hash = c.req.param("hash");
+  const index = parseInt(c.req.param("index"));
+  const data = await cached(`bf_proposal_meta:${hash}:${index}`, 600, async () => {
+    const r = await pool.query(`
+      SELECT ocvgad.title, ocvgad.abstract, ocvgad.motivation, ocvgad.rationale,
+             va.url as anchor_url, encode(va.data_hash,'hex') as anchor_hash
+      FROM gov_action_proposal gap
+      JOIN tx ON gap.tx_id = tx.id
+      LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+      LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
+      LEFT JOIN voting_anchor va ON gap.voting_anchor_id = va.id
+      WHERE encode(tx.hash,'hex') = $1 AND gap.index = $2
+    `, [hash, index]);
+    if (!r.rows[0]) return null;
+    // Return in Blockfrost-compatible format
+    const row = r.rows[0];
+    return {
+      url: row.anchor_url,
+      hash: row.anchor_hash,
+      json_metadata: {
+        body: {
+          title: row.title || null,
+          abstract: row.abstract || null,
+          motivation: row.motivation || null,
+          rationale: row.rationale || null,
+        }
+      }
+    };
+  });
+  if (!data) return c.json(null);
+  return c.json(data);
+});
+
+// GET /bf/governance-info — Comprehensive governance summary (for static data replacement)
+app.get("/bf/governance-info", async (c) => {
+  const data = await cached("bf_gov_info", 300, async () => {
+    // Proposal summaries with vote tallies by role
+    const propsR = await pool.query(`
+      SELECT gap.id, gap.type::text, gap.index,
+             encode(tx.hash, 'hex') as tx_hash,
+             gap.expiration,
+             gap.ratified_epoch, gap.enacted_epoch, gap.dropped_epoch, gap.expired_epoch,
+             ocvgad.title, ocvgad.abstract,
+             b.epoch_no as proposed_epoch,
+             b.time as proposed_time
+      FROM gov_action_proposal gap
+      JOIN tx ON tx.id = gap.tx_id
+      JOIN block b ON b.id = tx.block_id
+      LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+      LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
+      ORDER BY gap.id DESC
+      LIMIT 200
+    `);
+
+    // All votes on these proposals
+    const propIds = propsR.rows.map(p => p.id);
+    let allVotes = [];
+    if (propIds.length > 0) {
+      const votesR = await pool.query(`
+        SELECT vp.gov_action_proposal_id as prop_id,
+               vp.voter_role::text,
+               vp.vote::text,
+               CASE
+                 WHEN vp.drep_voter IS NOT NULL THEN dh.view
+                 WHEN vp.pool_voter IS NOT NULL THEN ph.view
+                 WHEN vp.committee_voter IS NOT NULL THEN 'committee_' || encode(ch.raw,'hex')
+                 ELSE 'unknown'
+               END as voter_id
+        FROM voting_procedure vp
+        LEFT JOIN drep_hash dh ON vp.drep_voter = dh.id
+        LEFT JOIN pool_hash ph ON vp.pool_voter = ph.id
+        LEFT JOIN committee_hash ch ON vp.committee_voter = ch.id
+        WHERE vp.gov_action_proposal_id = ANY($1::bigint[])
+      `, [propIds]);
+      allVotes = votesR.rows;
+    }
+
+    // Build proposal summaries with vote counts per role
+    const proposalSummaries = {};
+    for (const p of propsR.rows) {
+      const key = `${p.tx_hash}#${p.index}`;
+      const pVotes = allVotes.filter(v => v.prop_id === p.id);
+      const byRole = { drep: { yes: 0, no: 0, abstain: 0, yes_pct: 0, no_pct: 0 }, spo: { yes_votes_cast: 0, no_votes_cast: 0, yes_pct: 0, no_pct: 0 }, cc: { yes: 0, no: 0, abstain: 0 } };
+      for (const v of pVotes) {
+        const vote = v.vote === 'VoteYes' ? 'yes' : v.vote === 'VoteNo' ? 'no' : 'abstain';
+        if (v.voter_role === 'DRep') byRole.drep[vote]++;
+        else if (v.voter_role === 'SPO') {
+          if (vote === 'yes') byRole.spo.yes_votes_cast++;
+          else if (vote === 'no') byRole.spo.no_votes_cast++;
+        }
+        else if (v.voter_role === 'ConstitutionalCommittee') byRole.cc[vote]++;
+      }
+      // Calc percentages
+      const drepTotal = byRole.drep.yes + byRole.drep.no + byRole.drep.abstain;
+      if (drepTotal > 0) { byRole.drep.yes_pct = byRole.drep.yes / drepTotal * 100; byRole.drep.no_pct = byRole.drep.no / drepTotal * 100; }
+      const spoTotal = byRole.spo.yes_votes_cast + byRole.spo.no_votes_cast;
+      if (spoTotal > 0) { byRole.spo.yes_pct = byRole.spo.yes_votes_cast / spoTotal * 100; byRole.spo.no_pct = byRole.spo.no_votes_cast / spoTotal * 100; }
+      proposalSummaries[key] = byRole;
+    }
+
+    // Protocol params
+    const ppR = await pool.query(`SELECT * FROM epoch_param ORDER BY epoch_no DESC LIMIT 1`);
+
+    return {
+      proposalSummaries,
+      protocolParams: ppR.rows[0] || {},
+      currentEpoch: ppR.rows[0]?.epoch_no || 0,
+    };
+  });
+  return c.json(data);
+});
+
+// GET /bf/drep-stake-history — DRep stake distribution per epoch (for Stake Analytics)
+app.get("/bf/drep-stake-history", async (c) => {
+  const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
+  const topN = Math.min(parseInt(c.req.query("topN") || "10"), 50);
+  const data = await cached(`bf_drep_stake_hist:${limit}:${topN}`, 600, async () => {
+    // Get top N DReps by current voting power
+    const topR = await pool.query(`
+      SELECT dh.id as hash_id, dh.view as drep_id
+      FROM drep_hash dh
+      JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+        AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+      LEFT JOIN drep_distr dd ON dd.hash_id = dh.id
+        AND dd.epoch_no = (SELECT MAX(epoch_no) FROM drep_distr WHERE hash_id = dh.id)
+      WHERE (dr.deposit >= 0 OR dr.deposit IS NULL)
+      ORDER BY COALESCE(dd.amount, 0) DESC
+      LIMIT $1
+    `, [topN]);
+
+    const hashIds = topR.rows.map(r => r.hash_id);
+    if (hashIds.length === 0) return { snapshots: [], dreps: [] };
+
+    // Get stake history for these DReps
+    const histR = await pool.query(`
+      SELECT dd.epoch_no, dd.hash_id, dd.amount::text
+      FROM drep_distr dd
+      WHERE dd.hash_id = ANY($1::bigint[])
+      ORDER BY dd.epoch_no DESC
+      LIMIT $2
+    `, [hashIds, limit * topN]);
+
+    // Group by epoch
+    const byEpoch = {};
+    for (const row of histR.rows) {
+      if (!byEpoch[row.epoch_no]) byEpoch[row.epoch_no] = {};
+      const drep = topR.rows.find(d => d.hash_id === row.hash_id);
+      if (drep) byEpoch[row.epoch_no][drep.drep_id] = row.amount;
+    }
+
+    const snapshots = Object.entries(byEpoch)
+      .map(([epoch, stakes]) => ({ epoch: parseInt(epoch), stakes }))
+      .sort((a, b) => a.epoch - b.epoch);
+
+    return {
+      snapshots,
+      dreps: topR.rows.map(r => ({ drep_id: r.drep_id })),
+    };
+  });
+  return c.json(data);
+});
+
+// ─── Debug: check DB table structure and DRep/CC name resolution ─
+app.get("/bf/debug-schema", async (c) => {
+  try {
+    const result = {};
+
+    // 1) How many rows in off_chain_vote_drep_data?
+    try {
+      const cnt = await pool.query(`SELECT COUNT(*) as cnt FROM off_chain_vote_drep_data`);
+      result.off_chain_vote_drep_data_count = cnt.rows[0].cnt;
+    } catch(e) { result.off_chain_vote_drep_data_error = e.message; }
+
+    // 2) Sample DRep names from off_chain_vote_drep_data
+    try {
+      const sample = await pool.query(`SELECT ocvdd.id, ocvdd.off_chain_vote_data_id, ocvdd.given_name, ocvdd.image_url FROM off_chain_vote_drep_data ocvdd LIMIT 10`);
+      result.drep_data_samples = sample.rows;
+    } catch(e) { result.drep_data_samples_error = e.message; }
+
+    // 3) Test the full DRep JOIN chain - how many get names?
+    try {
+      const test = await pool.query(`
+        SELECT dh.view as drep_id, va.url as anchor_url, ocvd.id as ocvd_id, ocvdd.given_name
+        FROM drep_hash dh
+        JOIN drep_registration dr ON dr.drep_hash_id = dh.id
+          AND dr.id = (SELECT MAX(id) FROM drep_registration WHERE drep_hash_id = dh.id)
+        LEFT JOIN voting_anchor va ON dr.voting_anchor_id = va.id
+        LEFT JOIN LATERAL (
+          SELECT id FROM off_chain_vote_data WHERE voting_anchor_id = va.id ORDER BY id DESC LIMIT 1
+        ) ocvd ON true
+        LEFT JOIN LATERAL (
+          SELECT given_name FROM off_chain_vote_drep_data WHERE off_chain_vote_data_id = ocvd.id LIMIT 1
+        ) ocvdd ON true
+        WHERE (dr.deposit >= 0 OR dr.deposit IS NULL)
+        ORDER BY COALESCE((SELECT amount FROM drep_distr WHERE hash_id = dh.id ORDER BY epoch_no DESC LIMIT 1), 0) DESC
+        LIMIT 30
+      `);
+      const withName = test.rows.filter(r => r.given_name);
+      const withAnchor = test.rows.filter(r => r.anchor_url);
+      const withOcvd = test.rows.filter(r => r.ocvd_id);
+      result.drep_join_test = {
+        total: test.rows.length,
+        with_anchor_url: withAnchor.length,
+        with_ocvd_id: withOcvd.length,
+        with_given_name: withName.length,
+        rows: test.rows.map(r => ({
+          drep_id: r.drep_id?.slice(0, 25),
+          has_anchor: !!r.anchor_url,
+          has_ocvd: !!r.ocvd_id,
+          name: r.given_name ? (typeof r.given_name === 'string' ? r.given_name.slice(0,40) : JSON.stringify(r.given_name).slice(0,40)) : null
+        }))
+      };
+    } catch(e) { result.drep_join_test_error = e.message; }
+
+    // 4) CC member name test (from JSON authors field)
+    try {
+      const ccTest = await pool.query(`
+        SELECT encode(ch.raw,'hex') as cc_hash,
+               COALESCE(vc.cnt, 0)::int as vote_count,
+               auth.name as name,
+               latest_vote.va_id
+        FROM committee_member cm
+        JOIN committee_hash ch ON cm.committee_hash_id = ch.id
+        LEFT JOIN LATERAL (SELECT COUNT(*) as cnt FROM voting_procedure vp WHERE vp.committee_voter = ch.id) vc ON true
+        LEFT JOIN LATERAL (
+          SELECT vp2.voting_anchor_id as va_id FROM voting_procedure vp2
+          WHERE vp2.committee_voter = ch.id AND vp2.voting_anchor_id IS NOT NULL
+          ORDER BY vp2.id DESC LIMIT 1
+        ) latest_vote ON true
+        LEFT JOIN LATERAL (
+          SELECT ocvd.json->'authors'->0->>'name' as name
+          FROM off_chain_vote_data ocvd
+          WHERE ocvd.voting_anchor_id = latest_vote.va_id
+          AND ocvd.json->'authors'->0->>'name' IS NOT NULL
+          ORDER BY ocvd.id DESC LIMIT 1
+        ) auth ON true
+        LIMIT 10
+      `);
+      const ccWithName = ccTest.rows.filter(r => r.name);
+      result.cc_name_test = {
+        total: ccTest.rows.length,
+        with_va_id: ccTest.rows.filter(r => r.va_id).length,
+        with_name: ccWithName.length,
+        rows: ccTest.rows.map(r => ({
+          cc_hash: r.cc_hash?.slice(0,16),
+          votes: r.vote_count,
+          has_va_id: !!r.va_id,
+          name: r.name
+        }))
+      };
+    } catch(e) { result.cc_name_test_error = e.message; }
+
+    // 5) Check off_chain_vote_author table
+    try {
+      const authCnt = await pool.query(`SELECT COUNT(*) as cnt FROM off_chain_vote_author`);
+      result.off_chain_vote_author_count = authCnt.rows[0].cnt;
+      const authSample = await pool.query(`SELECT * FROM off_chain_vote_author LIMIT 5`);
+      result.off_chain_vote_author_samples = authSample.rows;
+    } catch(e) { result.off_chain_vote_author_error = e.message; }
+
+    // 6) Alternative: check if off_chain_vote_data.json has DRep givenName
+    try {
+      const jsonTest = await pool.query(`
+        SELECT ocvd.id, ocvd.voting_anchor_id,
+               ocvd.json->'body'->'givenName' as json_given_name
+        FROM off_chain_vote_data ocvd
+        WHERE ocvd.json->'body'->'givenName' IS NOT NULL
+        LIMIT 5
+      `);
+      result.json_given_name_test = {
+        count_with_name: jsonTest.rows.length,
+        samples: jsonTest.rows
+      };
+    } catch(e) { result.json_given_name_error = e.message; }
+
+    return c.json(result);
+  } catch(e) { return c.json({ error: e.message }); }
+});
+
+// ─── Dashboard Bundle: ALL governance data in one response (cached 30min) ─
+app.get("/bf/dashboard-bundle", async (c) => {
+  const data = await cached("bf_dashboard_bundle", 1800, async () => {
+    console.time("dashboard-bundle");
+    const t0 = Date.now();
+
+    // ── Phase 1: Fire ALL independent queries in parallel ──
+    const [drepsR, votesR, propsR, ccR, ccvR, spoVR, spoPoolR, ppR, drepRatR, ccRatR] = await Promise.all([
+      // 1) DReps — CTE-optimized, no per-row subqueries
+      pool.query(`
+        WITH latest_reg AS (
+          SELECT DISTINCT ON (drep_hash_id) id, drep_hash_id, deposit, voting_anchor_id
+          FROM drep_registration ORDER BY drep_hash_id, id DESC
+        ),
+        latest_distr AS (
+          SELECT DISTINCT ON (hash_id) hash_id, amount
+          FROM drep_distr ORDER BY hash_id, epoch_no DESC
+        ),
+        vote_counts AS (
+          SELECT drep_voter, COUNT(*) as vote_count FROM voting_procedure
+          WHERE drep_voter IS NOT NULL GROUP BY drep_voter
+        ),
+        latest_ocvd AS (
+          SELECT DISTINCT ON (voting_anchor_id) id, voting_anchor_id
+          FROM off_chain_vote_data ORDER BY voting_anchor_id, id DESC
+        )
+        SELECT dh.view as drep_id, encode(dh.raw,'hex') as drep_hash, dh.has_script,
+               lr.deposit::text, COALESCE(ld.amount, 0)::text as amount,
+               va.url as anchor_url, COALESCE(vc.vote_count, 0)::int as vote_count,
+               ocvdd.given_name as name, ocvdd.image_url as image_url
+        FROM drep_hash dh
+        JOIN latest_reg lr ON lr.drep_hash_id = dh.id
+        LEFT JOIN latest_distr ld ON ld.hash_id = dh.id
+        LEFT JOIN vote_counts vc ON vc.drep_voter = dh.id
+        LEFT JOIN voting_anchor va ON lr.voting_anchor_id = va.id
+        LEFT JOIN latest_ocvd locvd ON locvd.voting_anchor_id = va.id
+        LEFT JOIN LATERAL (
+          SELECT given_name, image_url FROM off_chain_vote_drep_data WHERE off_chain_vote_data_id = locvd.id LIMIT 1
+        ) ocvdd ON true
+        ORDER BY COALESCE(ld.amount, 0) DESC
+      `).catch(e => { console.warn("[bundle] DReps error:", e.message); return { rows: [] }; }),
+
+      // 2) All DRep votes
+      pool.query(`
+        SELECT dh.view as drep_id, encode(gtx.hash,'hex') as ptx, gap.index as pidx,
+               LOWER(vp.vote::text) as vote, gap.type::text as atype
+        FROM voting_procedure vp
+        JOIN drep_hash dh ON vp.drep_voter = dh.id
+        JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+        JOIN tx gtx ON gap.tx_id = gtx.id
+      `),
+
+      // 3) All proposals with metadata
+      pool.query(`
+        SELECT encode(tx.hash,'hex') as tx_hash, gap.index as cert_index,
+               gap.type::text as governance_type, b.epoch_no,
+               gap.expiration, gap.ratified_epoch, gap.enacted_epoch, gap.dropped_epoch, gap.expired_epoch,
+               ocvgad.title, ocvgad.abstract, va.url as anchor_url
+        FROM gov_action_proposal gap
+        JOIN tx ON gap.tx_id = tx.id
+        JOIN block b ON b.id = tx.block_id
+        LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+        LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
+        LEFT JOIN voting_anchor va ON gap.voting_anchor_id = va.id
+      `),
+
+      // 4) CC Members — merge committee_member + voting CC from voting_procedure
+      // Note: committee_member and voting_procedure may reference DIFFERENT committee_hash IDs
+      // for the same CC member (same raw hash). We join on raw hash to unify them.
+      pool.query(`
+        WITH max_epoch AS (SELECT MAX(no) as no FROM epoch),
+        -- All CC members from committee_member table (deduplicated, latest expiration)
+        cm_members AS (
+          SELECT DISTINCT ON (ch.raw) ch.raw, ch.has_script,
+                 cm.expiration_epoch
+          FROM committee_member cm
+          JOIN committee_hash ch ON cm.committee_hash_id = ch.id
+          ORDER BY ch.raw, cm.expiration_epoch DESC
+        ),
+        -- All CC members who voted (from voting_procedure)
+        vp_members AS (
+          SELECT ch.raw, ch.id as voter_id, COUNT(*) as vote_count
+          FROM voting_procedure vp
+          JOIN committee_hash ch ON vp.committee_voter = ch.id
+          WHERE vp.committee_voter IS NOT NULL
+          GROUP BY ch.raw, ch.id
+        ),
+        -- Latest voting anchor per voter for name lookup
+        cc_latest_anchor AS (
+          SELECT DISTINCT ON (vp.committee_voter) vp.committee_voter, vp.voting_anchor_id
+          FROM voting_procedure vp
+          WHERE vp.committee_voter IS NOT NULL AND vp.voting_anchor_id IS NOT NULL
+          ORDER BY vp.committee_voter, vp.id DESC
+        )
+        SELECT encode(COALESCE(cm.raw, vpm.raw),'hex') as cc_hash,
+               COALESCE(cm.has_script, false) as has_script,
+               cm.expiration_epoch,
+               CASE WHEN cm.expiration_epoch IS NULL THEN 'active'
+                    WHEN cm.expiration_epoch <= me.no THEN 'expired' ELSE 'active' END as status,
+               COALESCE(vpm.vote_count, 0)::int as vote_count,
+               (SELECT COALESCE(
+                  ocvd.json->'authors'->0->>'name',
+                  ocvd.json->'body'->'authors'->0->>'name',
+                  ocvd.json->>'name',
+                  ocvd.json->'body'->>'name',
+                  ocvd.json->'body'->'givenName'->>'@value',
+                  ocvd.json->'body'->>'givenName'
+                ) FROM off_chain_vote_data ocvd
+                WHERE ocvd.voting_anchor_id = cla.voting_anchor_id
+                AND (ocvd.json->'authors'->0->>'name' IS NOT NULL
+                  OR ocvd.json->'body'->'authors'->0->>'name' IS NOT NULL
+                  OR ocvd.json->>'name' IS NOT NULL
+                  OR ocvd.json->'body'->>'name' IS NOT NULL
+                  OR ocvd.json->'body'->'givenName'->>'@value' IS NOT NULL
+                  OR ocvd.json->'body'->>'givenName' IS NOT NULL)
+                ORDER BY ocvd.id DESC LIMIT 1) as name
+        FROM cm_members cm
+        FULL OUTER JOIN vp_members vpm ON vpm.raw = cm.raw
+        CROSS JOIN max_epoch me
+        LEFT JOIN cc_latest_anchor cla ON cla.committee_voter = vpm.voter_id
+        ORDER BY cm.expiration_epoch DESC NULLS LAST, COALESCE(vpm.vote_count, 0) DESC
+      `).catch(e => { console.warn("[bundle] CC error:", e.message); return { rows: [] }; }),
+
+      // 5) CC Votes
+      pool.query(`
+        SELECT encode(ch.raw,'hex') as cc_hash,
+               encode(gtx.hash,'hex') as proposal_tx_hash, gap.index as proposal_cert_index,
+               LOWER(vp.vote::text) as vote
+        FROM voting_procedure vp
+        JOIN committee_hash ch ON vp.committee_voter = ch.id
+        JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+        JOIN tx gtx ON gap.tx_id = gtx.id
+      `).catch(e => { console.warn("[bundle] CC votes error:", e.message); return { rows: [] }; }),
+
+      // 6) SPO Votes
+      pool.query(`
+        SELECT ph.view as pool_id, encode(gtx.hash,'hex') as ptx, gap.index as pidx,
+               LOWER(vp.vote::text) as vote
+        FROM voting_procedure vp
+        JOIN pool_hash ph ON vp.pool_voter = ph.id
+        JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+        JOIN tx gtx ON gap.tx_id = gtx.id
+      `).catch(e => { console.warn("[bundle] SPO votes error:", e.message); return { rows: [] }; }),
+
+      // 7) SPO Pool info (with active_stake from pool_stat)
+      pool.query(`
+        SELECT ph.view as pool_id, pod.ticker_name as ticker, pod.json->'name' as pool_name,
+               dh_vote.view as pledge_drep,
+               COALESCE(ps.stake, 0)::text as active_stake
+        FROM pool_hash ph
+        LEFT JOIN LATERAL (SELECT id FROM off_chain_pool_data WHERE pool_id = ph.id ORDER BY id DESC LIMIT 1) lm ON true
+        LEFT JOIN off_chain_pool_data pod ON pod.id = lm.id
+        LEFT JOIN LATERAL (
+          SELECT stake FROM pool_stat WHERE pool_hash_id = ph.id ORDER BY epoch_no DESC LIMIT 1
+        ) ps ON true
+        LEFT JOIN LATERAL (
+          SELECT pu.reward_addr_id FROM pool_update pu WHERE pu.hash_id = ph.id ORDER BY pu.id DESC LIMIT 1
+        ) latest_pu ON true
+        LEFT JOIN LATERAL (
+          SELECT dv.drep_hash_id FROM delegation_vote dv WHERE dv.addr_id = latest_pu.reward_addr_id ORDER BY dv.id DESC LIMIT 1
+        ) latest_dv ON true
+        LEFT JOIN drep_hash dh_vote ON dh_vote.id = latest_dv.drep_hash_id
+        WHERE ph.id IN (SELECT DISTINCT pool_voter FROM voting_procedure WHERE pool_voter IS NOT NULL)
+      `).catch(e => { console.warn("[bundle] SPO pools error:", e.message); return { rows: [] }; }),
+
+      // 8) Protocol params
+      pool.query(`SELECT * FROM epoch_param ORDER BY epoch_no DESC LIMIT 1`).catch(e => { console.warn("[bundle] Epoch param error:", e.message); return { rows: [] }; }),
+
+      // 9) DRep rationales — extract body text from off_chain_vote_data.json + URL fallback
+      pool.query(`
+        SELECT dh.view as did, encode(gtx.hash,'hex') as ptx, gap.index as pidx,
+               va.url as anchor_url,
+               COALESCE(
+                 ocvd.json->'body'->>'comment',
+                 ocvd.json->'body'->'comment'->>'@value',
+                 ocvd.json->>'comment',
+                 ocvd.json->'body'->>'rationale',
+                 ocvd.json->'body'->>'summary',
+                 ocvd.json->'body'->>'conclusion',
+                 ocvd.json->'body'->>'abstract',
+                 ocvd.json->>'abstract',
+                 ocvd.json->>'summary',
+                 ocvd.json->>'rationale',
+                 ocvd.json->'body'->>'content',
+                 ocvd.json->>'content',
+                 ocvd.json->'body'->>'reason',
+                 ocvd.json->>'reason',
+                 ocvd.json->'body'->'references'->0->>'label'
+               ) as rationale_text,
+               CASE WHEN ocvd.json IS NOT NULL AND COALESCE(
+                 ocvd.json->'body'->>'comment',
+                 ocvd.json->'body'->'comment'->>'@value',
+                 ocvd.json->>'comment',
+                 ocvd.json->'body'->>'rationale',
+                 ocvd.json->'body'->>'summary',
+                 ocvd.json->'body'->>'conclusion',
+                 ocvd.json->'body'->>'abstract',
+                 ocvd.json->>'abstract',
+                 ocvd.json->>'summary',
+                 ocvd.json->>'rationale',
+                 ocvd.json->'body'->>'content',
+                 ocvd.json->>'content'
+               ) IS NULL THEN ocvd.json::text ELSE NULL END as raw_json
+        FROM voting_procedure vp
+        JOIN drep_hash dh ON vp.drep_voter = dh.id
+        JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+        JOIN tx gtx ON gap.tx_id = gtx.id
+        LEFT JOIN voting_anchor va ON vp.voting_anchor_id = va.id
+        LEFT JOIN LATERAL (
+          SELECT json FROM off_chain_vote_data WHERE voting_anchor_id = va.id ORDER BY id DESC LIMIT 1
+        ) ocvd ON true
+        WHERE va.id IS NOT NULL
+      `).catch(e => { console.warn("[bundle] DRep rationales error:", e.message); return { rows: [] }; }),
+
+      // 10) CC rationales — extract body text from off_chain_vote_data.json + URL fallback
+      pool.query(`
+        SELECT encode(ch.raw,'hex') as cid, encode(gtx.hash,'hex') as ptx, gap.index as pidx,
+               va.url as anchor_url,
+               COALESCE(
+                 ocvd.json->'body'->>'comment',
+                 ocvd.json->'body'->'comment'->>'@value',
+                 ocvd.json->>'comment',
+                 ocvd.json->'body'->>'rationale',
+                 ocvd.json->'body'->>'summary',
+                 ocvd.json->'body'->>'conclusion',
+                 ocvd.json->'body'->>'abstract',
+                 ocvd.json->>'abstract',
+                 ocvd.json->>'summary'
+               ) as rationale_text
+        FROM voting_procedure vp
+        JOIN committee_hash ch ON vp.committee_voter = ch.id
+        JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+        JOIN tx gtx ON gap.tx_id = gtx.id
+        LEFT JOIN voting_anchor va ON vp.voting_anchor_id = va.id
+        LEFT JOIN LATERAL (
+          SELECT json FROM off_chain_vote_data WHERE voting_anchor_id = va.id ORDER BY id DESC LIMIT 1
+        ) ocvd ON true
+        WHERE va.id IS NOT NULL
+      `).catch(e => { console.warn("[bundle] CC rationales error:", e.message); return { rows: [] }; }),
+    ]);
+    console.log(`[bundle] All parallel queries done in ${Date.now()-t0}ms — DReps:${drepsR.rows.length} Votes:${votesR.rows.length} Props:${propsR.rows.length}`);
+
+    // ── Phase 2: Process results (CPU only, no I/O) ──
+
+    // Votes
+    const votes = {};
+    const propStubs = {};
+    for (const r of votesR.rows) {
+      const k = r.ptx + "#" + r.pidx;
+      const flatKey = r.drep_id + "__" + k;
+      const v = r.vote;
+      votes[flatKey] = (v === 'voteyes' || v === 'yes') ? 'Yes' : (v === 'voteno' || v === 'no') ? 'No' : (v === 'abstain') ? 'Abstain' : v;
+      if (!propStubs[k]) propStubs[k] = { proposal_id: k, tx_hash: r.ptx, cert_index: r.pidx, action_type: r.atype || 'Unknown' };
+    }
+
+    // Proposals
+    const proposals = {};
+    for (const r of propsR.rows) {
+      const k = r.tx_hash + "#" + r.cert_index;
+      proposals[k] = { ...propStubs[k], ...r, proposal_id: k, action_type: r.governance_type };
+    }
+
+    // CC Members — enrich names from GHA data (match by voted proposal overlap)
+    let ccMembers = ccR.rows.map(r => ({ ...r, cc_id: r.cc_hash }));
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 5000);
+      const ghaRes = await fetch('https://adatool.net/data/cc-members.json?v=' + Date.now(), { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (ghaRes.ok) {
+        const ghaCC = await ghaRes.json();
+        // Build proposal sets for each DBSync CC member
+        const dbCCProps = {};
+        for (const r of ccvR.rows) {
+          const pid = r.proposal_tx_hash + "#" + r.proposal_cert_index;
+          if (!dbCCProps[r.cc_hash]) dbCCProps[r.cc_hash] = new Set();
+          dbCCProps[r.cc_hash].add(pid);
+        }
+        // Match GHA CC members to DBSync by eligible_proposals overlap
+        for (const gm of ghaCC) {
+          if (!gm.name || !gm.eligible_proposals) continue;
+          const ghaPropsSet = new Set(gm.eligible_proposals);
+          let bestMatch = null, bestOverlap = 0;
+          for (const [hash, propSet] of Object.entries(dbCCProps)) {
+            let overlap = 0;
+            for (const p of propSet) { if (ghaPropsSet.has(p)) overlap++; }
+            if (overlap > bestOverlap) { bestOverlap = overlap; bestMatch = hash; }
+          }
+          if (bestMatch && bestOverlap >= 3) {
+            const cm = ccMembers.find(c => c.cc_id === bestMatch);
+            if (cm && !cm.name) {
+              cm.name = gm.name;
+              cm.eligible_proposals = gm.eligible_proposals;
+              console.log(`[bundle] CC name matched: ${bestMatch.slice(0,12)}… → ${gm.name} (${bestOverlap} proposal overlap)`);
+            }
+          }
+        }
+      }
+    } catch(e) { console.warn("[bundle] GHA CC name fetch failed:", e.message); }
+
+    // Hardcoded CC name map for well-known members (hex hash prefix → name)
+    const ccNameMap = {
+      "df0e83bde65416dade5b1f97e7f115e105ccc5a2297588": "Input | Output (IOG)",
+      "e8c03a03c0b2ddbea4195caf39f41e669f7d251ecf221f": "Cardano Foundation",
+      "b6012034ba0a516ffdaebf1ad31dc1ceb88c94faedd109": "EMURGO",
+      "6796d87d65ab0a20b9a3709c3d1624e6a4504ea6cf1280": "Intersect",
+      "4012cab55e44e6a1bfc79e0ca1509d5478b0955ab8f0755": "Cardano Atlantic Council",
+      "85c47dd4a3c81233e9e96d15c48a8cac13c104bf64": "Mike Hornan",
+      "89ee15deeb45d272e62c51e44f8b97f66af65be8e6f788": "Adam Rusch",
+      "ce0075f09ce3f41019fd34cc5b48075e3c3e5b559c2245": "Kevin Hammond",
+      "db1bc3c3f99ce68977ceaf27ab4dd917123ef90e56ec76": "Tsz Wai Wu",
+      "2f308c13e6a743dbb448c0a86122a3b5244e66d11c58f8": "Mercy Fordwoo",
+    };
+    for (const cm of ccMembers) {
+      if (cm.name) continue;
+      for (const [prefix, name] of Object.entries(ccNameMap)) {
+        if (cm.cc_id && cm.cc_id.startsWith(prefix)) { cm.name = name; break; }
+      }
+    }
+
+    // CC Votes
+    const ccVotes = {};
+    for (const r of ccvR.rows) {
+      const propId = r.proposal_tx_hash + "#" + r.proposal_cert_index;
+      const rv = r.vote;
+      const v = (rv === 'voteyes' || rv === 'yes') ? 'Yes' : (rv === 'voteno' || rv === 'no') ? 'No' : 'Abstain';
+      ccVotes[r.cc_hash + "__" + propId] = v;
+    }
+
+    // SPO Votes
+    const spoVotes = {};
+    for (const r of spoVR.rows) {
+      const rv = r.vote;
+      const v = (rv === 'voteyes' || rv === 'yes') ? 'Yes' : (rv === 'voteno' || rv === 'no') ? 'No' : 'Abstain';
+      spoVotes[r.pool_id + "__" + r.ptx + "#" + r.pidx] = v;
+    }
+
+    // SPO Pools
+    const spoPools = {};
+    for (const r of spoPoolR.rows) {
+      spoPools[r.pool_id] = { ticker: r.ticker, name: r.pool_name, pledge_drep: r.pledge_drep || null, active_stake: r.active_stake || "0" };
+    }
+
+    // Proposal summaries — compute vote percentages AND voting power per role
+    const proposalSummaries = {};
+    // Build DRep power map: drep_id -> amount (lovelace)
+    const drepPowerMap = {};
+    for (const d of drepsR.rows) { drepPowerMap[d.drep_id] = Number(d.amount) || 0; }
+    const mkPS = () => ({ drep: { yes: 0, no: 0, abstain: 0, yes_pct: 0, no_pct: 0, yes_power: 0, no_power: 0, abstain_power: 0 }, spo: { yes_votes_cast: 0, no_votes_cast: 0, yes_pct: 0, no_pct: 0, yes_power: 0, no_power: 0 }, cc: { yes: 0, no: 0, abstain: 0, yes_pct: 0 } });
+    // DRep votes per proposal (with power)
+    for (const r of votesR.rows) {
+      const k = r.ptx + "#" + r.pidx;
+      if (!proposalSummaries[k]) proposalSummaries[k] = mkPS();
+      const v = r.vote;
+      const pw = drepPowerMap[r.drep_id] || 0;
+      if (v === 'voteyes' || v === 'yes') { proposalSummaries[k].drep.yes++; proposalSummaries[k].drep.yes_power += pw; }
+      else if (v === 'voteno' || v === 'no') { proposalSummaries[k].drep.no++; proposalSummaries[k].drep.no_power += pw; }
+      else { proposalSummaries[k].drep.abstain++; proposalSummaries[k].drep.abstain_power += pw; }
+    }
+    // CC votes per proposal
+    for (const r of ccvR.rows) {
+      const k = r.proposal_tx_hash + "#" + r.proposal_cert_index;
+      if (!proposalSummaries[k]) proposalSummaries[k] = mkPS();
+      const v = r.vote;
+      if (v === 'voteyes' || v === 'yes') proposalSummaries[k].cc.yes++;
+      else if (v === 'voteno' || v === 'no') proposalSummaries[k].cc.no++;
+      else proposalSummaries[k].cc.abstain++;
+    }
+    // SPO votes per proposal (with power)
+    for (const r of spoVR.rows) {
+      const k = r.ptx + "#" + r.pidx;
+      if (!proposalSummaries[k]) proposalSummaries[k] = mkPS();
+      const v = r.vote;
+      const pw = Number((spoPools[r.pool_id] || {}).active_stake || 0);
+      if (v === 'voteyes' || v === 'yes') { proposalSummaries[k].spo.yes_votes_cast++; proposalSummaries[k].spo.yes_power += pw; }
+      else if (v === 'voteno' || v === 'no') { proposalSummaries[k].spo.no_votes_cast++; proposalSummaries[k].spo.no_power += pw; }
+    }
+    // Calculate percentages
+    for (const ps of Object.values(proposalSummaries)) {
+      const dT = ps.drep.yes + ps.drep.no + ps.drep.abstain;
+      if (dT > 0) { ps.drep.yes_pct = ps.drep.yes / dT * 100; ps.drep.no_pct = ps.drep.no / dT * 100; }
+      const sT = ps.spo.yes_votes_cast + ps.spo.no_votes_cast;
+      if (sT > 0) { ps.spo.yes_pct = ps.spo.yes_votes_cast / sT * 100; ps.spo.no_pct = ps.spo.no_votes_cast / sT * 100; }
+      const cT = ps.cc.yes + ps.cc.no + ps.cc.abstain;
+      if (cT > 0) { ps.cc.yes_pct = ps.cc.yes / cT * 100; }
+    }
+
+    // Gov info
+    const govInfo = { protocolParams: ppR.rows[0] || {}, currentEpoch: ppR.rows[0]?.epoch_no || 0, proposalSummaries };
+
+    // Simulator — build from votes already loaded
+    const drepVoteCounts = {};
+    let maxVotes = 0;
+    for (const r of votesR.rows) {
+      if (!r.drep_id) continue;
+      drepVoteCounts[r.drep_id] = (drepVoteCounts[r.drep_id] || 0) + 1;
+    }
+    for (const vc of Object.values(drepVoteCounts)) { if (vc > maxVotes) maxVotes = vc; }
+    const proposalExpirations = {};
+    for (const [k, p] of Object.entries(proposals)) { if (p.expiration) proposalExpirations[k] = p.expiration; }
+    const simulator = { drepVoteCounts, maxVotes, proposalExpirations, drepVotedProposals: {} };
+
+    // DRep rationales — use DB text when available, server-side fetch for missing
+    const drepRationales = {};
+    const drepRatToFetch = []; // {key, url} for server-side fetch
+    for (const r of drepRatR.rows) {
+      const key = r.did + "__" + r.ptx + "#" + r.pidx;
+      if (r.rationale_text) {
+        drepRationales[key] = { text: r.rationale_text };
+      } else if (r.raw_json) {
+        // Fallback: try to extract meaningful text from raw JSON
+        try {
+          const j = typeof r.raw_json === 'string' ? JSON.parse(r.raw_json) : r.raw_json;
+          const body = j.body || j;
+          const txt = body?.comment?.["@value"] || body?.comment || body?.rationale || body?.summary || body?.conclusion || body?.abstract || body?.content || body?.reason || j?.abstract || j?.summary || j?.rationale || j?.content;
+          if (txt) { drepRationales[key] = { text: typeof txt === 'object' ? JSON.stringify(txt) : String(txt) }; continue; }
+          // Last resort: stringify top-level keys as text
+          const keys = Object.keys(body).filter(k => typeof body[k] === 'string' && body[k].length > 10);
+          if (keys.length > 0) { drepRationales[key] = { text: keys.map(k => body[k]).join('\n') }; continue; }
+        } catch(e) { /* ignore parse error */ }
+        if (r.anchor_url) drepRatToFetch.push({ key, url: r.anchor_url });
+      } else if (r.anchor_url) {
+        drepRatToFetch.push({ key, url: r.anchor_url });
+      }
+    }
+
+    // CC rationales
+    const ccRationales = {};
+    const ccRatToFetch = [];
+    for (const r of ccRatR.rows) {
+      const key = r.cid + "__" + r.ptx + "#" + r.pidx;
+      if (r.rationale_text) {
+        ccRationales[key] = { text: r.rationale_text };
+      } else if (r.anchor_url) {
+        ccRatToFetch.push({ key, url: r.anchor_url });
+      }
+    }
+
+    // Server-side fetch for rationales not in DB (batched, with timeout)
+    const fetchRatText = async (url, timeout = 5000) => {
+      try {
+        let u = url;
+        if (u.startsWith("ipfs://")) u = "https://ipfs.io/ipfs/" + u.slice(7);
+        else if (u.startsWith("ipfs:")) u = "https://ipfs.io/ipfs/" + u.slice(5);
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), timeout);
+        const res = await fetch(u, { signal: ctrl.signal });
+        clearTimeout(timer);
+        if (!res.ok) return null;
+        const json = await res.json();
+        const body = json.body || json;
+        return body?.comment?.["@value"] || body?.comment || body?.rationale || body?.summary || body?.conclusion || body?.abstract || json?.abstract || json?.summary || null;
+      } catch { return null; }
+    };
+    // Limit server-side fetches to max 100 to avoid slowing cache build
+    const MAX_FETCH = 100;
+    const allToFetch = [...drepRatToFetch.slice(0, MAX_FETCH), ...ccRatToFetch.slice(0, MAX_FETCH)];
+    if (allToFetch.length > 0) {
+      console.log(`[bundle] Server-side fetching ${allToFetch.length} rationale URLs...`);
+      const BATCH = 20;
+      for (let i = 0; i < allToFetch.length; i += BATCH) {
+        const batch = allToFetch.slice(i, i + BATCH);
+        const results = await Promise.all(batch.map(async ({ key, url }) => {
+          const text = await fetchRatText(url);
+          return { key, text };
+        }));
+        for (const { key, text } of results) {
+          if (text) {
+            // Determine if it's DRep or CC based on key format
+            if (drepRatToFetch.find(r => r.key === key)) drepRationales[key] = { text };
+            else ccRationales[key] = { text };
+          }
+        }
+      }
+      console.log(`[bundle] Server-side fetch done. DRep rationales: ${Object.keys(drepRationales).length}, CC: ${Object.keys(ccRationales).length}`);
+    }
+
+    // ── Phase 3: Stake history (depends on drepsR) ──
+    let stakeHistory = [];
+    try {
+      const topIds = drepsR.rows.slice(0, 50).map(r => r.drep_id);
+      // Get hash_ids for top DReps
+      if (topIds.length > 0) {
+        const topR = await pool.query(`SELECT id as hash_id, view as drep_id FROM drep_hash WHERE view = ANY($1::text[])`, [topIds]);
+        const hids = topR.rows.map(r => r.hash_id);
+        if (hids.length > 0) {
+          const hR = await pool.query(`SELECT dd.epoch_no, dd.hash_id, dd.amount::text FROM drep_distr dd WHERE dd.hash_id = ANY($1::bigint[]) ORDER BY dd.epoch_no`, [hids]);
+          const byEpoch = {};
+          for (const r of hR.rows) {
+            if (!byEpoch[r.epoch_no]) byEpoch[r.epoch_no] = {};
+            const d = topR.rows.find(x => x.hash_id === r.hash_id);
+            if (d) byEpoch[r.epoch_no][d.drep_id] = r.amount;
+          }
+          const drepNameMap = {};
+          for (const d of drepsR.rows) { drepNameMap[d.drep_id] = d.name || null; }
+          stakeHistory = Object.entries(byEpoch).map(([epochStr, stakes]) => {
+            const epoch = parseInt(epochStr);
+            const top = Object.entries(stakes).map(([drep_id, amount]) => ({
+              id: drep_id, name: drepNameMap[drep_id] || null, amount
+            })).sort((a, b) => Number(b.amount) - Number(a.amount));
+            const totalStake = top.reduce((s, d) => s + Number(d.amount), 0);
+            return { epoch, total_stake: String(totalStake), drep_count: top.length, top };
+          }).sort((a, b) => a.epoch - b.epoch);
+        }
+      }
+    } catch(e) { console.warn("[bundle] Stake history error:", e.message); }
+
+    console.timeEnd("dashboard-bundle");
+    console.log(`[bundle] Total: ${Date.now()-t0}ms`);
+
+    // Normalize DRep names — given_name may contain JSON-LD strings like {"@value": "Name"}
+    const dreps = drepsR.rows.map(d => {
+      if (d.name && typeof d.name === "object") {
+        d.name = d.name["@value"] || d.name.givenName || JSON.stringify(d.name);
+      } else if (typeof d.name === "string" && d.name.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(d.name);
+          d.name = parsed["@value"] || parsed.givenName || d.name;
+        } catch {}
+      }
+      return d;
+    });
+
+    return {
+      dreps,
+      votes,
+      proposals,
+      govInfo,
+      ccMembers,
+      ccVotes,
+      spoVotes,
+      spoPools,
+      simulator,
+      stakeHistory,
+      drepRationales,
+      ccRationales,
+      _ts: new Date().toISOString(),
+    };
+  });
+  return c.json(data);
+});
+
+// ─── Bulk: all DRep votes + proposals in one query (fast full load) ─
+app.get("/bf/all-votes", async (c) => {
+  const data = await cached("bf_all_votes", 120, async () => {
+    // All DRep votes with proposal info in one query
+    const r = await pool.query(`
+      SELECT dh.view as drep_id,
+             encode(gtx.hash, 'hex') as proposal_tx_hash,
+             gap.index as proposal_cert_index,
+             LOWER(vp.vote::text) as vote,
+             gap.type::text as action_type,
+             b.epoch_no as epoch
+      FROM voting_procedure vp
+      JOIN drep_hash dh ON vp.drep_voter = dh.id
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+      JOIN tx vtx ON vp.tx_id = vtx.id
+      JOIN block b ON vtx.block_id = b.id
+      ORDER BY vp.id DESC
+    `);
+    // Build votes map: { drep_id: { "hash#idx": "Yes"|"No"|"Abstain" } }
+    // and proposals map: { "hash#idx": { tx_hash, cert_index, action_type } }
+    const votes = {};
+    const proposals = {};
+    for (const row of r.rows) {
+      const propId = `${row.proposal_tx_hash}#${row.proposal_cert_index}`;
+      if (!votes[row.drep_id]) votes[row.drep_id] = {};
+      const rv = row.vote;
+      const vote = (rv === 'voteyes' || rv === 'yes') ? 'Yes' : (rv === 'voteno' || rv === 'no') ? 'No' : (rv === 'abstain') ? 'Abstain' : rv;
+      votes[row.drep_id][propId] = vote;
+      if (!proposals[propId]) {
+        proposals[propId] = {
+          proposal_id: propId,
+          tx_hash: row.proposal_tx_hash,
+          cert_index: row.proposal_cert_index,
+          action_type: row.action_type || 'Unknown',
+        };
+      }
+    }
+    return { votes, proposals, totalVotes: r.rows.length };
+  });
+  return c.json(data);
+});
+
+// ─── Bulk: all proposals with details (fast full load) ──────────────
+app.get("/bf/all-proposals", async (c) => {
+  const data = await cached("bf_all_proposals", 120, async () => {
+    const r = await pool.query(`
+      SELECT encode(tx.hash,'hex') as tx_hash,
+             gap.index as cert_index,
+             gap.type::text as governance_type,
+             b.epoch_no as epoch,
+             gap.expiration,
+             gap.ratified_epoch, gap.enacted_epoch, gap.dropped_epoch, gap.expired_epoch,
+             gap.description,
+             ocvgad.title, ocvgad.abstract, ocvgad.motivation, ocvgad.rationale,
+             va.url as anchor_url
+      FROM gov_action_proposal gap
+      JOIN tx ON gap.tx_id = tx.id
+      JOIN block b ON tx.block_id = b.id
+      LEFT JOIN off_chain_vote_data ocvd ON ocvd.voting_anchor_id = gap.voting_anchor_id
+      LEFT JOIN off_chain_vote_gov_action_data ocvgad ON ocvgad.off_chain_vote_data_id = ocvd.id
+      LEFT JOIN voting_anchor va ON gap.voting_anchor_id = va.id
+      ORDER BY gap.id DESC
+    `);
+    const proposals = {};
+    for (const row of r.rows) {
+      const key = `${row.tx_hash}#${row.cert_index}`;
+      proposals[key] = {
+        proposal_id: key,
+        tx_hash: row.tx_hash,
+        cert_index: row.cert_index,
+        action_type: row.governance_type,
+        governance_type: row.governance_type,
+        expiration: row.expiration,
+        ratified_epoch: row.ratified_epoch,
+        enacted_epoch: row.enacted_epoch,
+        dropped_epoch: row.dropped_epoch,
+        expired_epoch: row.expired_epoch,
+        title: row.title || null,
+        abstract: row.abstract || null,
+        anchor_url: row.anchor_url,
+      };
+    }
+    return proposals;
+  });
+  return c.json(data);
+});
+
+// ─── CC Members (replaces cc-members.json from Koios) ──────────────
+app.get("/bf/cc-members", async (c) => {
+  const data = await cached("bf_cc_members", 300, async () => {
+    const r = await pool.query(`
+      SELECT encode(ch.raw, 'hex') as cc_hash,
+             ch.has_script,
+             cm.expiration_epoch,
+             CASE
+               WHEN cm.expiration_epoch <= (SELECT MAX(no) FROM epoch) THEN 'expired'
+               ELSE 'active'
+             END as status
+      FROM committee_member cm
+      JOIN committee_hash ch ON cm.committee_hash_id = ch.id
+      ORDER BY cm.expiration_epoch DESC
+    `);
+    return r.rows;
+  });
+  return c.json(data);
+});
+
+// ─── CC Votes (replaces cc-votes.json from Koios) ──────────────────
+app.get("/bf/cc-votes", async (c) => {
+  const data = await cached("bf_cc_votes", 300, async () => {
+    const r = await pool.query(`
+      SELECT encode(ch.raw, 'hex') as cc_hash,
+             ch.has_script,
+             encode(gtx.hash, 'hex') as proposal_tx_hash,
+             gap.index as proposal_cert_index,
+             gap.type::text as action_type,
+             LOWER(vp.vote::text) as vote,
+             b.epoch_no as epoch,
+             b.time as vote_time
+      FROM voting_procedure vp
+      JOIN committee_hash ch ON vp.committee_voter = ch.id
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+      JOIN tx vtx ON vp.tx_id = vtx.id
+      JOIN block b ON vtx.block_id = b.id
+      ORDER BY vp.id DESC
+      LIMIT 5000
+    `);
+    // Group by cc_hash → { cc_hash: [ { proposal_id, vote, ... } ] }
+    const byCC = {};
+    for (const row of r.rows) {
+      if (!byCC[row.cc_hash]) byCC[row.cc_hash] = { cc_hash: row.cc_hash, has_script: row.has_script, votes: [] };
+      byCC[row.cc_hash].votes.push({
+        proposal_tx_hash: row.proposal_tx_hash,
+        proposal_cert_index: row.proposal_cert_index,
+        action_type: row.action_type,
+        vote: row.vote,
+        epoch: row.epoch,
+        vote_time: row.vote_time,
+      });
+    }
+    return Object.values(byCC);
+  });
+  return c.json(data);
+});
+
+// ─── SPO Votes (replaces spo-votes.json from Koios) ────────────────
+app.get("/bf/spo-votes", async (c) => {
+  const data = await cached("bf_spo_votes", 300, async () => {
+    const r = await pool.query(`
+      SELECT ph.view as pool_id,
+             encode(gtx.hash, 'hex') as proposal_tx_hash,
+             gap.index as proposal_cert_index,
+             gap.type::text as action_type,
+             LOWER(vp.vote::text) as vote,
+             b.epoch_no as epoch
+      FROM voting_procedure vp
+      JOIN pool_hash ph ON vp.pool_voter = ph.id
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+      JOIN tx vtx ON vp.tx_id = vtx.id
+      JOIN block b ON vtx.block_id = b.id
+      ORDER BY vp.id DESC
+      LIMIT 20000
+    `);
+    // Group by pool_id
+    const byPool = {};
+    for (const row of r.rows) {
+      if (!byPool[row.pool_id]) byPool[row.pool_id] = [];
+      byPool[row.pool_id].push({
+        proposal_tx_hash: row.proposal_tx_hash,
+        proposal_cert_index: row.proposal_cert_index,
+        action_type: row.action_type,
+        vote: row.vote,
+        epoch: row.epoch,
+      });
+    }
+    return byPool;
+  });
+  return c.json(data);
+});
+
+// ─── SPO Pool Info (replaces spo-pools.json from Koios) ────────────
+app.get("/bf/spo-pools", async (c) => {
+  const data = await cached("bf_spo_pools", 600, async () => {
+    try {
+      const r = await pool.query(`
+        SELECT ph.view as pool_id,
+               pod.ticker_name as ticker,
+               pod.json->'name' as pool_name
+        FROM pool_hash ph
+        LEFT JOIN LATERAL (
+          SELECT opr.id FROM off_chain_pool_data opr
+          WHERE opr.pool_id = ph.id ORDER BY opr.id DESC LIMIT 1
+        ) latest_meta ON true
+        LEFT JOIN off_chain_pool_data pod ON pod.id = latest_meta.id
+        WHERE ph.id IN (
+          SELECT DISTINCT vp.pool_voter FROM voting_procedure vp WHERE vp.pool_voter IS NOT NULL
+        )
+      `);
+      const result = {};
+      for (const row of r.rows) {
+        result[row.pool_id] = {
+          ticker: row.ticker || null,
+          name: row.pool_name || null,
+          active_stake: "0",
+          blocks: 0,
+        };
+      }
+      return result;
+    } catch (e) {
+      console.error("SPO pools query error:", e.message);
+      return {};
+    }
+  });
+  return c.json(data);
+});
+
+// ─── DRep Rationales (replaces drep-rationales.json) ────────────────
+app.get("/bf/drep-rationales", async (c) => {
+  const data = await cached("bf_drep_rationales", 600, async () => {
+    // Get vote rationales from voting anchors attached to voting_procedure
+    const r = await pool.query(`
+      SELECT dh.view as drep_id,
+             encode(gtx.hash, 'hex') as proposal_tx_hash,
+             gap.index as proposal_cert_index,
+             va.url as anchor_url
+      FROM voting_procedure vp
+      JOIN drep_hash dh ON vp.drep_voter = dh.id
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+      LEFT JOIN voting_anchor va ON vp.voting_anchor_id = va.id
+      WHERE va.url IS NOT NULL
+      ORDER BY vp.id DESC
+      LIMIT 10000
+    `);
+    // Group by drep_id → { proposal_id: anchor_url }
+    const byDrep = {};
+    for (const row of r.rows) {
+      if (!byDrep[row.drep_id]) byDrep[row.drep_id] = {};
+      const key = `${row.proposal_tx_hash}#${row.proposal_cert_index}`;
+      byDrep[row.drep_id][key] = row.anchor_url;
+    }
+    return byDrep;
+  });
+  return c.json(data);
+});
+
+// ─── CC Rationales (replaces cc-rationales.json) ────────────────────
+app.get("/bf/cc-rationales", async (c) => {
+  const data = await cached("bf_cc_rationales", 600, async () => {
+    const r = await pool.query(`
+      SELECT encode(ch.raw, 'hex') as cc_hash,
+             encode(gtx.hash, 'hex') as proposal_tx_hash,
+             gap.index as proposal_cert_index,
+             va.url as anchor_url
+      FROM voting_procedure vp
+      JOIN committee_hash ch ON vp.committee_voter = ch.id
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+      LEFT JOIN voting_anchor va ON vp.voting_anchor_id = va.id
+      WHERE va.url IS NOT NULL
+      ORDER BY vp.id DESC
+      LIMIT 5000
+    `);
+    const byCC = {};
+    for (const row of r.rows) {
+      if (!byCC[row.cc_hash]) byCC[row.cc_hash] = {};
+      const key = `${row.proposal_tx_hash}#${row.proposal_cert_index}`;
+      byCC[row.cc_hash][key] = row.anchor_url;
+    }
+    return byCC;
+  });
+  return c.json(data);
+});
+
+// ─── Simulator data (replaces simulator.json) ───────────────────────
+app.get("/bf/simulator", async (c) => {
+  const data = await cached("bf_simulator", 300, async () => {
+    // DRep vote counts and proposal expirations for reward simulator
+    const votesR = await pool.query(`
+      SELECT dh.view as drep_id, COUNT(*)::int as vote_count
+      FROM voting_procedure vp
+      JOIN drep_hash dh ON vp.drep_voter = dh.id
+      GROUP BY dh.view
+    `);
+    const drepVoteCounts = {};
+    let maxVotes = 0;
+    for (const row of votesR.rows) {
+      drepVoteCounts[row.drep_id] = row.vote_count;
+      if (row.vote_count > maxVotes) maxVotes = row.vote_count;
+    }
+
+    // Proposal expirations
+    const expR = await pool.query(`
+      SELECT encode(tx.hash, 'hex') as tx_hash, gap.index,
+             gap.expiration
+      FROM gov_action_proposal gap
+      JOIN tx ON gap.tx_id = tx.id
+      WHERE gap.expiration IS NOT NULL
+    `);
+    const proposalExpirations = {};
+    for (const row of expR.rows) {
+      proposalExpirations[`${row.tx_hash}#${row.index}`] = row.expiration;
+    }
+
+    // DRep voted proposals
+    const dvpR = await pool.query(`
+      SELECT dh.view as drep_id,
+             encode(gtx.hash, 'hex') as tx_hash,
+             gap.index
+      FROM voting_procedure vp
+      JOIN drep_hash dh ON vp.drep_voter = dh.id
+      JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
+      JOIN tx gtx ON gap.tx_id = gtx.id
+    `);
+    const drepVotedProposals = {};
+    for (const row of dvpR.rows) {
+      if (!drepVotedProposals[row.drep_id]) drepVotedProposals[row.drep_id] = [];
+      drepVotedProposals[row.drep_id].push(`${row.tx_hash}#${row.index}`);
+    }
+
+    return { drepVoteCounts, maxVotes, proposalExpirations, drepVotedProposals };
+  });
+  return c.json(data);
+});
+
 // ─── Start ─────────────────────────────────────────
 const port = parseInt(process.env.PORT || "3001");
 serve({ fetch: app.fetch, port }, () => {
   console.log(`ADAtool API listening on port ${port}`);
+  // Auto-warm cache on startup — run in background so server starts immediately
+  const warmCache = () => {
+    console.log("[warmup] Pre-loading dashboard-bundle cache...");
+    fetch(`http://localhost:${port}/bf/dashboard-bundle`)
+      .then(r => r.json())
+      .then(d => console.log(`[warmup] Cache warm! DReps: ${d.dreps?.length}, Proposals: ${Object.keys(d.proposals||{}).length}`))
+      .catch(e => console.warn("[warmup] Failed:", e.message));
+  };
+  setTimeout(warmCache, 2000);
+  // Auto-refresh cache every 25min (before 30min TTL expires) so users always get cache hits
+  setInterval(warmCache, 25 * 60 * 1000);
 });
