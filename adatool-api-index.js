@@ -8,6 +8,10 @@ const { cached } = cachePkg;
 
 const app = new Hono();
 
+// ─── Shared helpers ──────────────────────────────
+/** Normalize DBSync vote string to display form */
+const normalizeVote = (v) => (v === 'voteyes' || v === 'yes') ? 'Yes' : (v === 'voteno' || v === 'no') ? 'No' : (v === 'abstain') ? 'Abstain' : v;
+
 app.use("/*", cors({
   origin: ["https://adatool.net", "http://localhost:3000", "http://13.203.249.154:3000", "http://13.203.249.154"],
   allowMethods: ["GET"],
@@ -3290,6 +3294,24 @@ app.get("/bf/dashboard-bundle", async (c) => {
     console.time("dashboard-bundle");
     const t0 = Date.now();
 
+    // Shared SQL fragments for rationale text extraction from off_chain_vote_data
+    const RAT_COALESCE = `COALESCE(
+      ocvd.json->'body'->>'comment', ocvd.json->'body'->'comment'->>'@value', ocvd.json->>'comment',
+      ocvd.json->'body'->>'rationale', ocvd.json->'body'->>'rationaleStatement',
+      ocvd.json->'body'->'rationaleStatement'->>'@value',
+      ocvd.json->'body'->>'summary', ocvd.json->'body'->>'conclusion',
+      ocvd.json->'body'->>'abstract', ocvd.json->>'abstract', ocvd.json->>'summary',
+      ocvd.json->>'rationale', ocvd.json->>'rationaleStatement',
+      ocvd.json->'body'->>'content', ocvd.json->>'content',
+      ocvd.json->'body'->>'reason', ocvd.json->>'reason',
+      ocvd.json->'body'->'references'->0->>'label'
+    )`;
+    const RAT_RAW_JSON = `CASE WHEN ocvd.json IS NOT NULL AND ${RAT_COALESCE} IS NULL THEN ocvd.json::text ELSE NULL END`;
+    const RAT_JOIN = `LEFT JOIN voting_anchor va ON vp.voting_anchor_id = va.id
+        LEFT JOIN LATERAL (
+          SELECT json FROM off_chain_vote_data WHERE voting_anchor_id = va.id ORDER BY id DESC LIMIT 1
+        ) ocvd ON true`;
+
     // ── Phase 1: Fire ALL independent queries in parallel ──
     const [drepsR, votesR, propsR, ccR, ccvR, spoVR, spoPoolR, ppR, drepRatR, ccRatR] = await Promise.all([
       // 1) DReps — CTE-optimized, no per-row subqueries
@@ -3452,80 +3474,27 @@ app.get("/bf/dashboard-bundle", async (c) => {
       // 8) Protocol params
       pool.query(`SELECT * FROM epoch_param ORDER BY epoch_no DESC LIMIT 1`).catch(e => { console.warn("[bundle] Epoch param error:", e.message); return { rows: [] }; }),
 
-      // 9) DRep rationales — extract body text from off_chain_vote_data.json + URL fallback
+      // 9) DRep rationales — uses shared RAT_COALESCE / RAT_RAW_JSON / RAT_JOIN
       pool.query(`
         SELECT dh.view as did, encode(gtx.hash,'hex') as ptx, gap.index as pidx,
-               va.url as anchor_url,
-               COALESCE(
-                 ocvd.json->'body'->>'comment',
-                 ocvd.json->'body'->'comment'->>'@value',
-                 ocvd.json->>'comment',
-                 ocvd.json->'body'->>'rationale',
-                 ocvd.json->'body'->>'rationaleStatement',
-                 ocvd.json->'body'->'rationaleStatement'->>'@value',
-                 ocvd.json->'body'->>'summary',
-                 ocvd.json->'body'->>'conclusion',
-                 ocvd.json->'body'->>'abstract',
-                 ocvd.json->>'abstract',
-                 ocvd.json->>'summary',
-                 ocvd.json->>'rationale',
-                 ocvd.json->>'rationaleStatement',
-                 ocvd.json->'body'->>'content',
-                 ocvd.json->>'content',
-                 ocvd.json->'body'->>'reason',
-                 ocvd.json->>'reason',
-                 ocvd.json->'body'->'references'->0->>'label'
-               ) as rationale_text,
-               CASE WHEN ocvd.json IS NOT NULL AND COALESCE(
-                 ocvd.json->'body'->>'comment',
-                 ocvd.json->'body'->'comment'->>'@value',
-                 ocvd.json->>'comment',
-                 ocvd.json->'body'->>'rationale',
-                 ocvd.json->'body'->>'rationaleStatement',
-                 ocvd.json->'body'->'rationaleStatement'->>'@value',
-                 ocvd.json->'body'->>'summary',
-                 ocvd.json->'body'->>'conclusion',
-                 ocvd.json->'body'->>'abstract',
-                 ocvd.json->>'abstract',
-                 ocvd.json->>'summary',
-                 ocvd.json->>'rationale',
-                 ocvd.json->'body'->>'content',
-                 ocvd.json->>'content'
-               ) IS NULL THEN ocvd.json::text ELSE NULL END as raw_json
+               va.url as anchor_url, ${RAT_COALESCE} as rationale_text, ${RAT_RAW_JSON} as raw_json
         FROM voting_procedure vp
         JOIN drep_hash dh ON vp.drep_voter = dh.id
         JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
         JOIN tx gtx ON gap.tx_id = gtx.id
-        LEFT JOIN voting_anchor va ON vp.voting_anchor_id = va.id
-        LEFT JOIN LATERAL (
-          SELECT json FROM off_chain_vote_data WHERE voting_anchor_id = va.id ORDER BY id DESC LIMIT 1
-        ) ocvd ON true
+        ${RAT_JOIN}
         WHERE va.id IS NOT NULL
       `).catch(e => { console.warn("[bundle] DRep rationales error:", e.message); return { rows: [] }; }),
 
-      // 10) CC rationales — extract body text from off_chain_vote_data.json + URL fallback
+      // 10) CC rationales — uses shared RAT_COALESCE / RAT_RAW_JSON / RAT_JOIN
       pool.query(`
         SELECT encode(ch.raw,'hex') as cid, encode(gtx.hash,'hex') as ptx, gap.index as pidx,
-               va.url as anchor_url,
-               COALESCE(
-                 ocvd.json->'body'->>'comment',
-                 ocvd.json->'body'->'comment'->>'@value',
-                 ocvd.json->>'comment',
-                 ocvd.json->'body'->>'rationale',
-                 ocvd.json->'body'->>'summary',
-                 ocvd.json->'body'->>'conclusion',
-                 ocvd.json->'body'->>'abstract',
-                 ocvd.json->>'abstract',
-                 ocvd.json->>'summary'
-               ) as rationale_text
+               va.url as anchor_url, ${RAT_COALESCE} as rationale_text, ${RAT_RAW_JSON} as raw_json
         FROM voting_procedure vp
         JOIN committee_hash ch ON vp.committee_voter = ch.id
         JOIN gov_action_proposal gap ON vp.gov_action_proposal_id = gap.id
         JOIN tx gtx ON gap.tx_id = gtx.id
-        LEFT JOIN voting_anchor va ON vp.voting_anchor_id = va.id
-        LEFT JOIN LATERAL (
-          SELECT json FROM off_chain_vote_data WHERE voting_anchor_id = va.id ORDER BY id DESC LIMIT 1
-        ) ocvd ON true
+        ${RAT_JOIN}
         WHERE va.id IS NOT NULL
       `).catch(e => { console.warn("[bundle] CC rationales error:", e.message); return { rows: [] }; }),
     ]);
@@ -3540,7 +3509,7 @@ app.get("/bf/dashboard-bundle", async (c) => {
       const k = r.ptx + "#" + r.pidx;
       const flatKey = r.drep_id + "__" + k;
       const v = r.vote;
-      votes[flatKey] = (v === 'voteyes' || v === 'yes') ? 'Yes' : (v === 'voteno' || v === 'no') ? 'No' : (v === 'abstain') ? 'Abstain' : v;
+      votes[flatKey] = normalizeVote(v);
       if (!propStubs[k]) propStubs[k] = { proposal_id: k, tx_hash: r.ptx, cert_index: r.pidx, action_type: r.atype || 'Unknown' };
     }
 
@@ -3613,17 +3582,13 @@ app.get("/bf/dashboard-bundle", async (c) => {
     const ccVotes = {};
     for (const r of ccvR.rows) {
       const propId = r.proposal_tx_hash + "#" + r.proposal_cert_index;
-      const rv = r.vote;
-      const v = (rv === 'voteyes' || rv === 'yes') ? 'Yes' : (rv === 'voteno' || rv === 'no') ? 'No' : 'Abstain';
-      ccVotes[r.cc_hash + "__" + propId] = v;
+      ccVotes[r.cc_hash + "__" + propId] = normalizeVote(r.vote);
     }
 
     // SPO Votes
     const spoVotes = {};
     for (const r of spoVR.rows) {
-      const rv = r.vote;
-      const v = (rv === 'voteyes' || rv === 'yes') ? 'Yes' : (rv === 'voteno' || rv === 'no') ? 'No' : 'Abstain';
-      spoVotes[r.pool_id + "__" + r.ptx + "#" + r.pidx] = v;
+      spoVotes[r.pool_id + "__" + r.ptx + "#" + r.pidx] = normalizeVote(r.vote);
     }
 
     // SPO Pools
@@ -3642,29 +3607,30 @@ app.get("/bf/dashboard-bundle", async (c) => {
     for (const r of votesR.rows) {
       const k = r.ptx + "#" + r.pidx;
       if (!proposalSummaries[k]) proposalSummaries[k] = mkPS();
-      const v = r.vote;
+      const nv = normalizeVote(r.vote);
       const pw = drepPowerMap[r.drep_id] || 0;
-      if (v === 'voteyes' || v === 'yes') { proposalSummaries[k].drep.yes++; proposalSummaries[k].drep.yes_power += pw; }
-      else if (v === 'voteno' || v === 'no') { proposalSummaries[k].drep.no++; proposalSummaries[k].drep.no_power += pw; }
-      else { proposalSummaries[k].drep.abstain++; proposalSummaries[k].drep.abstain_power += pw; }
+      const d = proposalSummaries[k].drep;
+      if (nv === 'Yes') { d.yes++; d.yes_power += pw; }
+      else if (nv === 'No') { d.no++; d.no_power += pw; }
+      else { d.abstain++; d.abstain_power += pw; }
     }
     // CC votes per proposal
     for (const r of ccvR.rows) {
       const k = r.proposal_tx_hash + "#" + r.proposal_cert_index;
       if (!proposalSummaries[k]) proposalSummaries[k] = mkPS();
-      const v = r.vote;
-      if (v === 'voteyes' || v === 'yes') proposalSummaries[k].cc.yes++;
-      else if (v === 'voteno' || v === 'no') proposalSummaries[k].cc.no++;
-      else proposalSummaries[k].cc.abstain++;
+      const nv = normalizeVote(r.vote);
+      const cc = proposalSummaries[k].cc;
+      if (nv === 'Yes') cc.yes++; else if (nv === 'No') cc.no++; else cc.abstain++;
     }
     // SPO votes per proposal (with power)
     for (const r of spoVR.rows) {
       const k = r.ptx + "#" + r.pidx;
       if (!proposalSummaries[k]) proposalSummaries[k] = mkPS();
-      const v = r.vote;
+      const nv = normalizeVote(r.vote);
       const pw = Number((spoPools[r.pool_id] || {}).active_stake || 0);
-      if (v === 'voteyes' || v === 'yes') { proposalSummaries[k].spo.yes_votes_cast++; proposalSummaries[k].spo.yes_power += pw; }
-      else if (v === 'voteno' || v === 'no') { proposalSummaries[k].spo.no_votes_cast++; proposalSummaries[k].spo.no_power += pw; }
+      const s = proposalSummaries[k].spo;
+      if (nv === 'Yes') { s.yes_votes_cast++; s.yes_power += pw; }
+      else if (nv === 'No') { s.no_votes_cast++; s.no_power += pw; }
     }
     // Calculate percentages
     for (const ps of Object.values(proposalSummaries)) {
@@ -3692,38 +3658,7 @@ app.get("/bf/dashboard-bundle", async (c) => {
     const simulator = { drepVoteCounts, maxVotes, proposalExpirations, drepVotedProposals: {} };
 
     // DRep rationales — use DB text when available, server-side fetch for missing
-    const drepRationales = {};
-    const drepRatToFetch = []; // {key, url} for server-side fetch
-    for (const r of drepRatR.rows) {
-      const key = r.did + "__" + r.ptx + "#" + r.pidx;
-      if (r.rationale_text) {
-        drepRationales[key] = { text: r.rationale_text };
-      } else if (r.raw_json) {
-        // Fallback: try to extract meaningful text from raw JSON
-        try {
-          const j = typeof r.raw_json === 'string' ? JSON.parse(r.raw_json) : r.raw_json;
-          const txt = extractRatFromJson(j);
-          if (txt) { drepRationales[key] = { text: txt }; continue; }
-        } catch(e) { /* ignore parse error */ }
-        if (r.anchor_url) drepRatToFetch.push({ key, url: r.anchor_url });
-      } else if (r.anchor_url) {
-        drepRatToFetch.push({ key, url: r.anchor_url });
-      }
-    }
-
-    // CC rationales
-    const ccRationales = {};
-    const ccRatToFetch = [];
-    for (const r of ccRatR.rows) {
-      const key = r.cid + "__" + r.ptx + "#" + r.pidx;
-      if (r.rationale_text) {
-        ccRationales[key] = { text: r.rationale_text };
-      } else if (r.anchor_url) {
-        ccRatToFetch.push({ key, url: r.anchor_url });
-      }
-    }
-
-    // Server-side fetch for rationales not in DB (batched, with timeout)
+    // Server-side fetch helpers (defined before use)
     const IPFS_GATEWAYS = ["https://ipfs.io/ipfs/", "https://dweb.link/ipfs/", "https://cf-ipfs.com/ipfs/", "https://gateway.pinata.cloud/ipfs/"];
     const extractRatFromJson = (json) => {
       if (!json) return null;
@@ -3771,24 +3706,41 @@ app.get("/bf/dashboard-bundle", async (c) => {
         return null;
       } catch { return null; }
     };
-    // Increase limit to fetch more rationales
+    // Shared rationale row processor: parses DB rows into { rationales, toFetch }
+    const processRatRows = (rows, idField) => {
+      const rationales = {};
+      const toFetch = [];
+      for (const r of rows) {
+        const key = r[idField] + "__" + r.ptx + "#" + r.pidx;
+        if (r.rationale_text) { rationales[key] = { text: r.rationale_text }; }
+        else if (r.raw_json) {
+          try {
+            const j = typeof r.raw_json === 'string' ? JSON.parse(r.raw_json) : r.raw_json;
+            const txt = extractRatFromJson(j);
+            if (txt) { rationales[key] = { text: txt }; continue; }
+          } catch(e) { /* ignore */ }
+          if (r.anchor_url) toFetch.push({ key, url: r.anchor_url });
+        } else if (r.anchor_url) { toFetch.push({ key, url: r.anchor_url }); }
+      }
+      return { rationales, toFetch };
+    };
+    const drep = processRatRows(drepRatR.rows, 'did');
+    const cc = processRatRows(ccRatR.rows, 'cid');
+    const drepRationales = drep.rationales;
+    const ccRationales = cc.rationales;
+
+    // Server-side fetch for rationales not in DB (batched, with timeout)
     const MAX_FETCH = 300;
-    const allToFetch = [...drepRatToFetch.slice(0, MAX_FETCH), ...ccRatToFetch.slice(0, MAX_FETCH)];
+    const allToFetch = [...drep.toFetch.slice(0, MAX_FETCH), ...cc.toFetch.slice(0, MAX_FETCH)];
     if (allToFetch.length > 0) {
       console.log(`[bundle] Server-side fetching ${allToFetch.length} rationale URLs...`);
+      const drepKeySet = new Set(drep.toFetch.map(r => r.key));
       const BATCH = 20;
       for (let i = 0; i < allToFetch.length; i += BATCH) {
         const batch = allToFetch.slice(i, i + BATCH);
-        const results = await Promise.all(batch.map(async ({ key, url }) => {
-          const text = await fetchRatText(url);
-          return { key, text };
-        }));
+        const results = await Promise.all(batch.map(async ({ key, url }) => ({ key, text: await fetchRatText(url) })));
         for (const { key, text } of results) {
-          if (text) {
-            // Determine if it's DRep or CC based on key format
-            if (drepRatToFetch.find(r => r.key === key)) drepRationales[key] = { text };
-            else ccRationales[key] = { text };
-          }
+          if (text) (drepKeySet.has(key) ? drepRationales : ccRationales)[key] = { text };
         }
       }
       console.log(`[bundle] Server-side fetch done. DRep rationales: ${Object.keys(drepRationales).length}, CC: ${Object.keys(ccRationales).length}`);
@@ -3885,9 +3837,7 @@ app.get("/bf/all-votes", async (c) => {
     for (const row of r.rows) {
       const propId = `${row.proposal_tx_hash}#${row.proposal_cert_index}`;
       if (!votes[row.drep_id]) votes[row.drep_id] = {};
-      const rv = row.vote;
-      const vote = (rv === 'voteyes' || rv === 'yes') ? 'Yes' : (rv === 'voteno' || rv === 'no') ? 'No' : (rv === 'abstain') ? 'Abstain' : rv;
-      votes[row.drep_id][propId] = vote;
+      votes[row.drep_id][propId] = normalizeVote(row.vote);
       if (!proposals[propId]) {
         proposals[propId] = {
           proposal_id: propId,

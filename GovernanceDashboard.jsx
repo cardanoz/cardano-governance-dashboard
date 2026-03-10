@@ -7,6 +7,19 @@
  */
 import React from "react";
 
+// Module-level shorthand for React.createElement (used across all components)
+const E = React.createElement;
+
+// ─── Shared constants ───
+const DREP_ALWAYS_ABSTAIN = "drep_always_abstain";
+const DREP_ALWAYS_NO_CONFIDENCE = "drep_always_no_confidence";
+const isAutoMechanism = (id) => id === DREP_ALWAYS_ABSTAIN || id === DREP_ALWAYS_NO_CONFIDENCE;
+
+// ─── Shared formatting helpers ───
+const stakeToAda = (lovelace) => Math.round(Number(lovelace) / 1e6);
+const calcPct = (value, total) => total > 0 ? value / total * 100 : 0;
+const fmtPct = (pct) => pct.toFixed(pct >= 10 ? 1 : 2);
+
 // Inject scoped styles
 function GovStyles() {
   return React.createElement("style", { dangerouslySetInnerHTML: { __html: `*{margin:0;padding:0;box-sizing:border-box}
@@ -1408,6 +1421,29 @@ const INPUT_STYLE = {
   fontSize: 12,
   outline: "none"
 };
+// ─── Shared style factory functions ───
+const voteTableStyle = (cols, zoom, colWidth = 70, nameWidth = 260) => ({
+  borderCollapse: "separate",
+  borderSpacing: 0,
+  width: "100%",
+  minWidth: cols * Math.round(colWidth * zoom / 100) + Math.round(nameWidth * zoom / 100),
+  fontSize: Math.round(14 * zoom / 100)
+});
+const stickyHeaderStyle = (zoom) => ({
+  position: "sticky", top: 0, zIndex: 30, background: "var(--bg3)",
+  padding: `${Math.round(6 * zoom / 100)}px ${Math.round(8 * zoom / 100)}px`,
+  borderBottom: "2px solid var(--border)", fontSize: Math.round(10 * zoom / 100),
+  fontWeight: 700, color: "var(--text2)", whiteSpace: "nowrap"
+});
+const stickyLeftStyle = (zoom, bg) => ({
+  position: "sticky", left: 0, zIndex: 10, background: bg || "var(--bg2)",
+  padding: `${Math.round(5 * zoom / 100)}px ${Math.round(8 * zoom / 100)}px`,
+  borderRight: "1px solid var(--border)", boxShadow: "2px 0 4px rgba(0,0,0,.1)"
+});
+const voteCellPadding = (zoom) => ({
+  padding: `${Math.round(3 * zoom / 100)}px ${Math.round(2 * zoom / 100)}px`,
+  textAlign: "center"
+});
 function downloadCSV(csv, filename) {
   const blob = new Blob(["\uFEFF" + csv], {
     type: "text/csv;charset=utf-8"
@@ -1902,7 +1938,7 @@ function DashboardTab({
   const DPP = 100,
     PPP = 20;
   const fDreps = React.useMemo(() => {
-    let r = dreps.filter(d => d.drep_id !== "drep_always_abstain" && d.drep_id !== "drep_always_no_confidence");
+    let r = dreps.filter(d => !isAutoMechanism(d.drep_id));
     if (minStake) {
       const m = parseFloat(minStake) * 1e6;
       r = r.filter(d => Number(d.amount) >= m);
@@ -1921,7 +1957,7 @@ function DashboardTab({
     if (sortBy === "stake_desc") r.sort((a, b) => Number(b.amount) - Number(a.amount));else if (sortBy === "stake_asc") r.sort((a, b) => Number(a.amount) - Number(b.amount));else r.sort((a, b) => (safeName(a.name) || "zzz").localeCompare(safeName(b.name) || "zzz"));
     return r;
   }, [dreps, minStake, maxStake, search, sortBy]);
-  const totalStake = React.useMemo(() => dreps.filter(d => d.drep_id !== "drep_always_abstain" && Number(d.amount) > 0).reduce((s, d) => s + Number(d.amount), 0), [dreps]);
+  const totalStake = React.useMemo(() => dreps.filter(d => d.drep_id !== DREP_ALWAYS_ABSTAIN && Number(d.amount) > 0).reduce((s, d) => s + Number(d.amount), 0), [dreps]);
   const fProps = React.useMemo(() => {
     let r = [...proposals];
     if (actType !== "all") r = r.filter(p => p.proposal_type === actType);
@@ -2029,7 +2065,7 @@ function DashboardTab({
       const t = p.title ? p.title.slice(0, 40) : shortId(p.proposal_id);
       return `[${p.proposal_type}] ${t}`;
     })];
-    const rows = csvDreps.map(d => [d.drep_id, safeName(d.name) || "", Math.round(Number(d.amount) / 1e6), d.delegators || 0, ...csvProps.map(p => gv(d.drep_id, p.proposal_id))]);
+    const rows = csvDreps.map(d => [d.drep_id, safeName(d.name) || "", stakeToAda(d.amount), d.delegators || 0, ...csvProps.map(p => gv(d.drep_id, p.proposal_id))]);
     downloadCSV(buildCSV(hdr, rows), `cardano_drep_votes_${mode}.csv`);
   }
   function exportCCVotesCSV() {
@@ -2082,12 +2118,12 @@ function DashboardTab({
         active_stake: info.active_stake || "0",
         votes: v,
         voteCount: vc,
-        isAA: info.pledge_drep === "drep_always_abstain",
-        isNC: info.pledge_drep === "drep_always_no_confidence"
+        isAA: info.pledge_drep === DREP_ALWAYS_ABSTAIN,
+        isNC: info.pledge_drep === DREP_ALWAYS_NO_CONFIDENCE
       };
     }).sort((a, b) => Number(b.active_stake) - Number(a.active_stake));
     const hdr = ["Pool ID", "Ticker", "Active Stake (ADA)", "Reward DRep", ...fProps.map(p => `[${p.proposal_type}] ${(p.title || shortId(p.proposal_id)).slice(0, 40)}`)];
-    const rows = pools.map(pool => [pool.pool_id, pool.ticker, Math.round(Number(pool.active_stake) / 1e6), pool.isAA ? "Auto-Abstain" : pool.isNC ? "Auto-NoConfidence" : pool.pledge_drep || "", ...fProps.map(p => {
+    const rows = pools.map(pool => [pool.pool_id, pool.ticker, stakeToAda(pool.active_stake), pool.isAA ? "Auto-Abstain" : pool.isNC ? "Auto-NoConfidence" : pool.pledge_drep || "", ...fProps.map(p => {
       if (SPO_INELIG.includes(p.proposal_type)) return "N/A";
       const ex = pool.votes[p.proposal_id];
       if (ex) return ex;
@@ -2421,13 +2457,7 @@ function DashboardTab({
       flex: drepFull ? 1 : undefined
     }
   }, /*#__PURE__*/React.createElement("table", {
-    style: {
-      borderCollapse: "separate",
-      borderSpacing: 0,
-      width: "100%",
-      minWidth: pgP.length * Math.round(70 * zoom / 100) + Math.round(260 * zoom / 100),
-      fontSize: Math.round(14 * zoom / 100)
-    }
+    style: voteTableStyle(pgP.length, zoom)
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
     style: {
       position: "sticky",
@@ -2993,13 +3023,7 @@ function DashboardTab({
       flex: ccFull ? 1 : undefined
     }
   }, /*#__PURE__*/React.createElement("table", {
-    style: {
-      borderCollapse: "separate",
-      borderSpacing: 0,
-      width: "100%",
-      minWidth: pgP.length * Math.round(70 * zoom / 100) + Math.round(260 * zoom / 100),
-      fontSize: Math.round(14 * zoom / 100)
-    }
+    style: voteTableStyle(pgP.length, zoom)
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
     style: {
       position: "sticky",
@@ -3212,8 +3236,8 @@ function DashboardTab({
         active_stake: info.active_stake || "0",
         votes,
         voteCount,
-        isAutoAbstain: info.pledge_drep === "drep_always_abstain",
-        isAutoNoConf: info.pledge_drep === "drep_always_no_confidence"
+        isAutoAbstain: info.pledge_drep === DREP_ALWAYS_ABSTAIN,
+        isAutoNoConf: info.pledge_drep === DREP_ALWAYS_NO_CONFIDENCE
       };
     });
     let spoList = [...allPools];
@@ -3437,13 +3461,7 @@ function DashboardTab({
         flex: spoFull ? 1 : undefined
       }
     }, /*#__PURE__*/React.createElement("table", {
-      style: {
-        borderCollapse: "separate",
-        borderSpacing: 0,
-        width: "100%",
-        minWidth: pgP.length * Math.round(70 * zoom / 100) + Math.round(260 * zoom / 100),
-        fontSize: Math.round(14 * zoom / 100)
-      }
+      style: voteTableStyle(pgP.length, zoom)
     }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
       style: {
         position: "sticky",
@@ -3536,7 +3554,7 @@ function DashboardTab({
           color: "var(--text2)",
           marginLeft: 6
         },
-        title: `${Math.round(Number(pool.active_stake) / 1e6).toLocaleString()} ADA`
+        title: `${stakeToAda(pool.active_stake).toLocaleString()} ADA`
       }, fmtStake(pool.active_stake)), /*#__PURE__*/React.createElement("span", {
         style: {
           fontSize: Math.round(8 * zoom / 100),
@@ -3674,11 +3692,11 @@ const ENTITY_MERGES = {
 // Filter out auto-mechanism DReps and inactive from history snapshots
 function sanitizeHistory(history) {
   return history.map(s => {
-    const filtered = (s.top || []).filter(d => d.id !== "drep_always_abstain" && Number(d.amount) > 0);
-    const hadAbstain = (s.top || []).find(d => d.id === "drep_always_abstain");
+    const filtered = (s.top || []).filter(d => d.id !== DREP_ALWAYS_ABSTAIN && Number(d.amount) > 0);
+    const hadAbstain = (s.top || []).find(d => d.id === DREP_ALWAYS_ABSTAIN);
     const totalRaw = Number(s.total_stake);
     const abstainAmt = hadAbstain ? Number(hadAbstain.amount) : 0;
-    const inactiveAmt = (s.top || []).filter(d => d.id !== "drep_always_abstain" && Number(d.amount) <= 0).reduce((sum, d) => sum + Number(d.amount), 0);
+    const inactiveAmt = (s.top || []).filter(d => d.id !== DREP_ALWAYS_ABSTAIN && Number(d.amount) <= 0).reduce((sum, d) => sum + Number(d.amount), 0);
     return {
       ...s,
       top: filtered,
@@ -3699,7 +3717,7 @@ function StakeHistoryTab({
     const base = sanitizeHistory(rawHistory);
     if (!liveDreps || liveDreps.length === 0) return base;
     // Build live snapshot from current dreps data
-    const active = liveDreps.filter(d => d.drep_id !== "drep_always_abstain" && Number(d.amount) > 0);
+    const active = liveDreps.filter(d => d.drep_id !== DREP_ALWAYS_ABSTAIN && Number(d.amount) > 0);
     if (active.length === 0) return base;
     const top50 = active.slice(0, 50).map(d => ({
       id: d.drep_id,
@@ -3840,7 +3858,7 @@ function StakeHistoryTab({
     reversedDreps.forEach(drep => {
       const adaHist = processedHistory.map(s => {
         const found = (s.top || []).find(d => d.id === drep.id);
-        return found ? Math.round(Number(found.amount) / 1e6) : 0;
+        return found ? stakeToAda(found.amount) : 0;
       });
       const proj = [];
       if (nProj > 0) {
@@ -4016,7 +4034,7 @@ function StakeHistoryTab({
     const makeShareData = n => {
       // Project in ADA, then convert to %
       const adaTopHist = processedHistory.map(s => Math.round((s.top || []).slice(0, n).reduce((sum, d) => sum + Number(d.amount), 0) / 1e6));
-      const adaTotalHist = processedHistory.map(s => Math.round(Number(s.total_stake) / 1e6));
+      const adaTotalHist = processedHistory.map(s => stakeToAda(s.total_stake));
       let adaTop = [...adaTopHist],
         adaTotal = [...adaTotalHist];
       if (projEpochs > 0) {
@@ -4660,7 +4678,7 @@ function SimulatorTab({
   proposals,
   T
 }) {
-  const dreps = React.useMemo(() => rawDreps.filter(d => d.drep_id !== "drep_always_abstain" && d.drep_id !== "drep_always_no_confidence"), [rawDreps]);
+  const dreps = React.useMemo(() => rawDreps.filter(d => !isAutoMechanism(d.drep_id)), [rawDreps]);
   // ── Common parameters ──
   const todayStr = new Date().toISOString().slice(0, 10);
   const [govBudget, setGovBudget] = useHashState("s_budget", 500000);
@@ -4762,7 +4780,7 @@ function SimulatorTab({
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   function exportDrepCSV() {
     const hdr = ["Rank", "DRep ID", "Name", "Stake (ADA)", "Eligible", "Equal (ADA)", "Prop (ADA)", "Prop+Bonus (ADA)", "Period Vote Rate %", "Rationale Rate %", "Vote Count", "Overall Vote Rate %"];
-    const rows = merged.map(d => [d.rank, d.drep_id, safeName(d.name) || "", Math.round(Number(d.amount) / 1e6), d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2), d.periodVR != null ? d.periodVR.toFixed(1) : "", d.periodRR != null ? d.periodRR.toFixed(1) : "", voteData[d.drep_id] || "", totalActions > 0 ? ((voteData[d.drep_id] || 0) / totalActions * 100).toFixed(1) : ""]);
+    const rows = merged.map(d => [d.rank, d.drep_id, safeName(d.name) || "", stakeToAda(d.amount), d.eligible ? "Yes" : "No", d.r_equal.toFixed(2), d.r_prop.toFixed(2), d.r_bonus.toFixed(2), d.periodVR != null ? d.periodVR.toFixed(1) : "", d.periodRR != null ? d.periodRR.toFixed(1) : "", voteData[d.drep_id] || "", totalActions > 0 ? ((voteData[d.drep_id] || 0) / totalActions * 100).toFixed(1) : ""]);
     downloadCSV(buildCSV(hdr, rows), "drep_rewards_comparison.csv");
   }
 
@@ -5942,9 +5960,9 @@ function VetoPowerSection({
   if (!pp || !dreps || dreps.length === 0) return null;
   const CE = React.createElement;
   // Total active DRep stake (excluding abstain, including no_confidence)
-  const vetoAllDreps = (dreps || []).filter(d => d.drep_id !== "drep_always_abstain" && Number(d.amount) > 0);
+  const vetoAllDreps = (dreps || []).filter(d => d.drep_id !== DREP_ALWAYS_ABSTAIN && Number(d.amount) > 0);
   const totalActive = vetoAllDreps.reduce((s, d) => s + Number(d.amount), 0);
-  const ncDrep = (dreps || []).find(d => d.drep_id === "drep_always_no_confidence");
+  const ncDrep = (dreps || []).find(d => d.drep_id === DREP_ALWAYS_NO_CONFIDENCE);
   const ncPower = ncDrep ? Number(ncDrep.amount) : 0;
   const ncPct = totalActive > 0 ? ncPower / totalActive * 100 : 0;
   const ENTITY_GROUPS = [{
@@ -5952,7 +5970,7 @@ function VetoPowerSection({
     match: d => /yoroi/i.test(d.name || "") || /emurgo/i.test(d.name || "")
   }];
   const coalitionDreps = (() => {
-    const singles = vetoAllDreps.filter(d => d.drep_id !== "drep_always_no_confidence");
+    const singles = vetoAllDreps.filter(d => d.drep_id !== DREP_ALWAYS_NO_CONFIDENCE);
     const merged = [];
     const used = new Set();
     for (const eg of ENTITY_GROUPS) {
@@ -6218,7 +6236,7 @@ function VetoPowerSection({
       fontWeight: 600,
       color: "#ef4444"
     }
-  }, "drep_always_no_confidence"), CE("td", {
+  }, DREP_ALWAYS_NO_CONFIDENCE), CE("td", {
     style: {
       ...tdV,
       textAlign: "right"
@@ -6489,7 +6507,7 @@ function VoteReminderSection({
     [`${propId}__${col}`]: !prev[`${propId}__${col}`]
   }));
   const isCellExpanded = (propId, col) => !!expandedCells[`${propId}__${col}`];
-  const E = React.createElement;
+
   const fmtStake = fmtStakeShort;
   const curEp = pp && pp.epoch || currentEpochNow();
   // Blockfrost expiration = first epoch where proposal is INACTIVE
@@ -6523,7 +6541,7 @@ function VoteReminderSection({
       // DRep analysis — exclude auto voters and 0-stake DReps
       const drepThr = getDrepThreshold(pp, prop.proposal_type);
       const unvotedDreps = dreps.filter(d => {
-        if (d.drep_id === "drep_always_abstain" || d.drep_id === "drep_always_no_confidence") return false;
+        if (isAutoMechanism(d.drep_id)) return false;
         if (Number(d.amount) <= 0) return false;
         const v = votes[`${d.drep_id}__${prop.proposal_id}`];
         return !v || v === "NotVoted";
@@ -6537,7 +6555,7 @@ function VoteReminderSection({
         const yesPower = Number(ps.drep.yes_power) || 0;
         drepYesPct = ps.drep.yes_pct || 0;
         const yesPctFrac = drepYesPct / 100;
-        const totalPower = yesPctFrac > 0 ? yesPower / yesPctFrac : dreps.filter(d => d.drep_id !== "drep_always_abstain" && d.drep_id !== "drep_always_no_confidence" && Number(d.amount) > 0).reduce((s, d) => s + Number(d.amount), 0);
+        const totalPower = yesPctFrac > 0 ? yesPower / yesPctFrac : dreps.filter(d => !isAutoMechanism(d.drep_id) && Number(d.amount) > 0).reduce((s, d) => s + Number(d.amount), 0);
         const needed = drepThr * totalPower;
         deficit = needed - yesPower;
         thresholdMet = deficit <= 0;
@@ -7226,7 +7244,7 @@ function DRepHubTab({
   const [saved, setSaved] = React.useState(false);
   const [filter, setFilter] = React.useState("all"); // "all","ga","alert","discussion","signal"
   const [expandedItems, setExpandedItems] = React.useState({});
-  const E = React.createElement;
+
 
   // ─── Helpers ───
   const sentimentColor = s => s === "positive" ? "var(--yes)" : s === "negative" ? "var(--no)" : s === "mixed" ? "var(--abstain)" : "var(--text2)";
@@ -8101,7 +8119,7 @@ function AIAnalysisTab({
   }
   const fmtS = fmtStakeShort;
   const fmtDate = iso => iso ? iso.split("T")[0] : "—";
-  const E = React.createElement;
+
   const thS = {
     padding: "5px 8px",
     fontSize: 10,
@@ -9263,7 +9281,7 @@ function AIAnalysisTab({
 // ADA Hub Tab (β) — X Digest / ADA News Feed
 // ════════════════════════════════════════════════════════════════
 function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
-  const E = React.createElement;
+
   const [filter, setFilter] = React.useState("all");
   const [expandedIdx, setExpandedIdx] = React.useState({});
   const [selectedDate, setSelectedDate] = React.useState(null);
@@ -9806,7 +9824,7 @@ function GovHubTab({ xDailyDigest, xDigestMeta, T, lang }) {
 
 // ─── Subscribe Form sub-component ───────────────────────────────────────────
 function GovHubSubscribeForm({ lang }) {
-  const E = React.createElement;
+
   const [open, setOpen] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [frequency, setFrequency] = React.useState("daily");
@@ -10353,7 +10371,7 @@ function TransactionAnalysisTab({
   T,
   lang
 }) {
-  const E = React.createElement;
+
 
   // ── Sample static data (will be replaced by real data pipeline later) ──
   const epochData = [{
