@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-09T23:44:31.729Z",
+  "generatedAt": "2026-03-10T02:54:39.828Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
-      "count": 48,
-      "summary_en": "Treasury withdrawals for Cardano show strong support when proposals come from established, trusted teams with proven track records and clear cost justifications, particularly for infrastructure improvements like node diversity. However, significant opposition emerges around concerns about fiscal responsibility during market downturns, duplicate efforts, lack of specific delivery milestones, and constitutional compliance issues.",
-      "summary_ja": "Cardanoのトレジャリー引き出しは、確立された信頼できるチームによる実績のある提案で、明確なコスト根拠がある場合、特にノード多様性などのインフラ整備には強い支持を受けます。しかし、市場低迷時の財政責任、重複した取り組み、具体的な納品マイルストーンの欠如、憲法準拠の問題に関する懸念から、かなりの反対が生じています。",
+      "count": 49,
+      "summary_en": "Treasury withdrawal proposals for TreasuryWithdrawals show strong support (3331 yes vs 1001 no votes) driven by recognition of established teams, strategic importance of core infrastructure, and demonstrated accountability. Opposition centers on fiscal prudence during bear markets, budget concerns, and questions about necessity when similar projects already exist.",
+      "summary_ja": "TreasuryWithdrawalsの提案は強い支持（賛成3331票対反対1001票）を受けており、確立されたチームの認識、コア基盤インフラの戦略的重要性、実証された説明責任が主な理由です。反対は弱気市場での財政責任、予算懸念、類似プロジェクトが既に存在する場合の必要性に関する疑問に焦点を当てています。",
       "typicalReasonsYes_en": [
-        "Established team track record and community reputation with proven delivery history",
-        "Critical infrastructure needs such as client/node diversity and network resilience",
-        "Clear budget breakdown, cost justification, and favorable cost-to-value ratio",
-        "Demonstrated fiscal responsibility (e.g., returning unused funds in prior periods)"
+        "Client/node diversity critical for network resilience and security to avoid single point of failure",
+        "Established, trusted teams with proven track records and transparent delivery on commitments",
+        "Strategic long-term infrastructure investments essential for Cardano's sustainability and decentralization",
+        "Cost-effectiveness and good value demonstrated through detailed budgets and returned unused funds"
       ],
       "typicalReasonsYes_ja": [
-        "確立されたチームの実績���実績のあるコミュニティ内での評判",
-        "クライアント/ノード多様性およびネットワーク復元力などの重要なインフラニーズ",
-        "明確な予算内訳、コスト根拠、および良好な費用対効果",
-        "財政責任の実証（例：前年度の未使用資金の返還）"
+        "ネットワークレジリエンスとセキュリティのためのクライアント/ノード多様性が単一障害点を回避するために重要",
+        "実績を上げており約束を透明に遂行する確立された信頼できるチーム",
+        "Cardanoの持続可能性と分散化のために必要な戦略的長期インフラ投資",
+        "詳細な予算と未使用資金の返還により示された費用対効果と価値"
       ],
       "typicalReasonsNo_en": [
-        "Fiscal responsibility concerns, especially during bear market conditions and uncertain ADA pricing",
-        "Lack of specific delivery milestones, acceptance criteria, and measurable outcomes",
-        "Duplicate efforts or redundancy with existing funded initiatives (e.g., Rust node implementation)",
-        "Constitutional compliance issues or governance process concerns regarding proper oversight"
+        "Fiscal irresponsibility during bear market; budget assumes prices too high compared to current ADA valuation",
+        "Duplication of effort when similar infrastructure already funded or in development (e.g., Rust node alternative)",
+        "Insufficient specificity and verifiable delivery standards for large budget requests lacking defined milestones",
+        "Lack of demonstrated use case or market demand; preference to prioritize other ecosystem needs first"
       ],
       "typicalReasonsNo_ja": [
-        "特に弱気市場の状況とADA価格の不確実性の中での財政責任の懸念",
-        "具体的な納品マイルストーン、受理基準、および測定可能な成果の欠如",
-        "既存の資金提供されたイニシアチブとの重複した努力または冗長性（例：Rustノード実装）",
-        "憲法準拠の問題または適切な監視に関するガバナンスプロセスの懸念"
+        "弱気市場での財政的無責任；予算は現在のADA評価と比較して価格が高すぎると想定",
+        "類似インフラが既に資金提供されているか開発中の場合の努力の重複（例：Rustノード代替案）",
+        "定義されたマイルストーンを欠く大規模予算要求の具体性と検証可能な配信基準の不足",
+        "実証されたユースケースまたは市場需要の欠如；他のエコシステムニーズを優先することを選好"
       ]
     },
     "InfoAction": {
