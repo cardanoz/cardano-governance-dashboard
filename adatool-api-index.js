@@ -12,6 +12,21 @@ const app = new Hono();
 /** Normalize DBSync vote string to display form */
 const normalizeVote = (v) => (v === 'voteyes' || v === 'yes') ? 'Yes' : (v === 'voteno' || v === 'no') ? 'No' : (v === 'abstain') ? 'Abstain' : v;
 
+/** Parse limit query param with default & max */
+const getLimit = (c, def = 20, max = 100) => Math.min(parseInt(c.req.query("limit") || String(def)), max);
+
+/** Return 404 JSON response */
+const notFound = (c, what) => c.json({ error: `${what} not found` }, 404);
+
+/** Convert hex asset name to ASCII if printable */
+const hexToAscii = (hex) => {
+  try { const s = Buffer.from(hex, 'hex').toString('utf8'); return /^[\x20-\x7E]+$/.test(s) ? s : null; } catch { return null; }
+};
+
+/** SQL: latest off_chain_pool_data JOIN */
+const POOL_META_JOIN = `LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
+        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)`;
+
 app.use("/*", cors({
   origin: ["https://adatool.net", "http://localhost:3000", "http://13.203.249.154:3000", "http://13.203.249.154"],
   allowMethods: ["GET"],
@@ -55,13 +70,13 @@ app.get("/epoch/:no", async (c) => {
     `, [no]);
     return r.rows[0] || null;
   });
-  if (!data) return c.json({ error: "Epoch not found" }, 404);
+  if (!data) return notFound(c, "Epoch");
   return c.json(data);
 });
 
 // ─── Blocks ────────────────────────────────────────
 app.get("/blocks", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "20"), 100);
+  const limit = getLimit(c);
   const data = await cached(`blocks:${limit}`, 15, async () => {
     const r = await pool.query(`
       SELECT b.block_no, encode(b.hash,'hex') as hash, b.epoch_no, b.slot_no,
@@ -71,8 +86,7 @@ app.get("/blocks", async (c) => {
       FROM block b
       LEFT JOIN slot_leader sl ON b.slot_leader_id = sl.id
       LEFT JOIN pool_hash ph ON sl.pool_hash_id = ph.id
-      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       WHERE b.block_no IS NOT NULL
       ORDER BY b.id DESC
       LIMIT $1
@@ -93,19 +107,18 @@ app.get("/block/:hash", async (c) => {
       FROM block b
       LEFT JOIN slot_leader sl ON b.slot_leader_id = sl.id
       LEFT JOIN pool_hash ph ON sl.pool_hash_id = ph.id
-      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       WHERE b.hash = decode($1, 'hex')
     `, [hash]);
     return r.rows[0] || null;
   });
-  if (!data) return c.json({ error: "Block not found" }, 404);
+  if (!data) return notFound(c, "Block");
   return c.json(data);
 });
 
 // ─── Transactions ──────────────────────────────────
 app.get("/txs", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "20"), 100);
+  const limit = getLimit(c);
   const data = await cached(`txs:${limit}`, 15, async () => {
     const r = await pool.query(`
       SELECT encode(tx.hash,'hex') as hash, b.block_no,
@@ -158,7 +171,7 @@ app.get("/tx/:hash", async (c) => {
 
     return { ...txRow, inputs: inputs.rows, outputs: outputs.rows };
   });
-  if (!data) return c.json({ error: "TX not found" }, 404);
+  if (!data) return notFound(c, "TX");
   return c.json(data);
 });
 
@@ -215,7 +228,7 @@ app.get("/address/:addr", async (c) => {
 
 // ─── Stake Pools ───────────────────────────────────
 app.get("/pools", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const limit = getLimit(c, 50, 200);
   const data = await cached(`pools:${limit}`, 120, async () => {
     const r = await pool.query(`
       WITH latest_update AS (
@@ -243,8 +256,7 @@ app.get("/pools", async (c) => {
                   ELSE 0 END as saturation
       FROM pool_hash ph
       JOIN latest_update lu ON lu.hash_id = ph.id
-      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       LEFT JOIN latest_stat ls ON ls.pool_hash_id = ph.id
       LEFT JOIN pool_retire pr ON pr.hash_id = ph.id
         AND pr.retiring_epoch <= (SELECT MAX(no) FROM epoch)
@@ -286,20 +298,19 @@ app.get("/pool/:id", async (c) => {
              COALESCE(ls.voting_power, 0)::text as voting_power
       FROM pool_hash ph
       JOIN latest_update lu ON lu.hash_id = ph.id
-      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       LEFT JOIN latest_stat ls ON ls.pool_hash_id = ph.id
       WHERE ph.view = $1
     `, [id]);
     return r.rows[0] || null;
   });
-  if (!data) return c.json({ error: "Pool not found" }, 404);
+  if (!data) return notFound(c, "Pool");
   return c.json(data);
 });
 
 // ─── Native Assets ─────────────────────────────────
 app.get("/assets", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const limit = getLimit(c, 50, 200);
   const data = await cached(`assets:${limit}`, 300, async () => {
     // Use multi_asset table directly (much faster than GROUP BY on ma_tx_mint)
     const r = await pool.query(`
@@ -312,22 +323,14 @@ app.get("/assets", async (c) => {
       ORDER BY ma.id DESC
       LIMIT $1
     `, [limit]);
-    return r.rows.map(row => {
-      let name_ascii = null;
-      try {
-        const buf = Buffer.from(row.asset_name, 'hex');
-        const str = buf.toString('utf8');
-        if (/^[\x20-\x7E]+$/.test(str)) name_ascii = str;
-      } catch {}
-      return { ...row, name_ascii };
-    });
+    return r.rows.map(row => ({ ...row, name_ascii: hexToAscii(row.asset_name) }));
   });
   return c.json(data);
 });
 
 // ─── Governance Actions ────────────────────────────
 app.get("/governance/actions", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "20"), 100);
+  const limit = getLimit(c);
   const data = await cached(`gov:actions:${limit}`, 60, async () => {
     const r = await pool.query(`
       SELECT encode(tx.hash,'hex') as tx_hash,
@@ -357,7 +360,7 @@ app.get("/governance/actions", async (c) => {
 
 // ─── DReps ─────────────────────────────────────────
 app.get("/dreps", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const limit = getLimit(c, 50, 200);
   const data = await cached(`dreps:${limit}`, 120, async () => {
     const r = await pool.query(`
       SELECT encode(dh.raw,'hex') as drep_hash,
@@ -386,7 +389,7 @@ app.get("/dreps", async (c) => {
 
 // ─── Epochs list ───────────────────────────────────
 app.get("/epochs", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "30"), 100);
+  const limit = getLimit(c, 30);
   const data = await cached(`epochs:${limit}`, 60, async () => {
     const r = await pool.query(`
       SELECT no as epoch_no, start_time, end_time,
@@ -412,13 +415,12 @@ app.get("/block/by-number/:no", async (c) => {
       FROM block b
       LEFT JOIN slot_leader sl ON b.slot_leader_id = sl.id
       LEFT JOIN pool_hash ph ON sl.pool_hash_id = ph.id
-      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       WHERE b.block_no = $1
     `, [no]);
     return r.rows[0] || null;
   });
-  if (!data) return c.json({ error: "Block not found" }, 404);
+  if (!data) return notFound(c, "Block");
   return c.json(data);
 });
 
@@ -509,23 +511,16 @@ app.get("/asset/:fingerprint", async (c) => {
         AND txo.consumed_by_tx_id IS NULL
     `, [fp]);
 
-    let name_ascii = null;
-    try {
-      const buf = Buffer.from(asset.asset_name, 'hex');
-      const str = buf.toString('utf8');
-      if (/^[\x20-\x7E]+$/.test(str)) name_ascii = str;
-    } catch {}
-
     return {
       ...asset,
-      name_ascii,
+      name_ascii: hexToAscii(asset.asset_name),
       total_supply: supplyR.rows[0]?.total_supply || "0",
       mint_count: supplyR.rows[0]?.mint_count || 0,
       holder_count: holdersR.rows[0]?.holder_count || 0,
       mint_history: mintR.rows,
     };
   });
-  if (!data) return c.json({ error: "Asset not found" }, 404);
+  if (!data) return notFound(c, "Asset");
   return c.json(data);
 });
 
@@ -546,15 +541,7 @@ app.get("/address/:addr/tokens", async (c) => {
       ORDER BY SUM(mto.quantity) DESC
       LIMIT 100
     `, [addr]);
-    return r.rows.map(row => {
-      let name_ascii = null;
-      try {
-        const buf = Buffer.from(row.asset_name, 'hex');
-        const str = buf.toString('utf8');
-        if (/^[\x20-\x7E]+$/.test(str)) name_ascii = str;
-      } catch {}
-      return { ...row, name_ascii };
-    });
+    return r.rows.map(row => ({ ...row, name_ascii: hexToAscii(row.asset_name) }));
   });
   return c.json(data);
 });
@@ -615,7 +602,7 @@ app.get("/drep/:hash", async (c) => {
       votes: votes.rows,
     };
   });
-  if (!data) return c.json({ error: "DRep not found" }, 404);
+  if (!data) return notFound(c, "DRep");
   return c.json(data);
 });
 
@@ -672,13 +659,13 @@ app.get("/governance/action/:hash/:index", async (c) => {
 
     return { ...r.rows[0], votes: votes.rows };
   });
-  if (!data) return c.json({ error: "Action not found" }, 404);
+  if (!data) return notFound(c, "Action");
   return c.json(data);
 });
 
 // ─── Whale Tracker (large TXs) ────────────────────
 app.get("/whales", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const limit = getLimit(c, 50, 200);
   const threshold = c.req.query("min") || "1000000000000"; // default 1M ADA in lovelace
   const data = await cached(`whales:${limit}:${threshold}`, 30, async () => {
     const r = await pool.query(`
@@ -699,7 +686,7 @@ app.get("/whales", async (c) => {
 
 // ─── Rich List (by stake address, using epoch_stake) ──
 app.get("/richlist", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
+  const limit = getLimit(c, 100, 200);
   const data = await cached(`richlist:${limit}`, 3600, async () => {
     // Use previous completed epoch (more likely to be indexed/faster)
     const epochR = await pool.query(`SELECT MAX(no) - 1 as epoch FROM epoch`);
@@ -747,7 +734,7 @@ app.get("/tx-volume", async (c) => {
 // ─── Pool Blocks ──────────────────────────────────
 app.get("/pool/:id/blocks", async (c) => {
   const id = c.req.param("id");
-  const limit = Math.min(parseInt(c.req.query("limit") || "50"), 200);
+  const limit = getLimit(c, 50, 200);
   const data = await cached(`pool:blocks:${id}:${limit}`, 60, async () => {
     const r = await pool.query(`
       SELECT b.block_no, encode(b.hash,'hex') as hash, b.epoch_no, b.slot_no,
@@ -767,7 +754,7 @@ app.get("/pool/:id/blocks", async (c) => {
 // ─── Asset Holders ────────────────────────────────
 app.get("/asset/:fingerprint/holders", async (c) => {
   const fp = c.req.param("fingerprint");
-  const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
+  const limit = getLimit(c, 100, 200);
   const data = await cached(`asset:holders:${fp}:${limit}`, 300, async () => {
     const r = await pool.query(`
       SELECT txo.address, SUM(mto.quantity)::text as quantity
@@ -1189,8 +1176,7 @@ app.get("/pools/new", async (c) => {
           b.block_no
         FROM pool_update pu
         JOIN pool_hash ph ON pu.hash_id = ph.id
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         JOIN tx t ON pu.registered_tx_id = t.id
         JOIN block b ON t.block_id = b.id
         WHERE pu.id = (
@@ -1225,8 +1211,7 @@ app.get("/pools/retired", async (c) => {
           encode(t.hash,'hex') as tx_hash
         FROM pool_retire pr
         JOIN pool_hash ph ON pr.hash_id = ph.id
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         JOIN tx t ON pr.announced_tx_id = t.id
         JOIN block b ON t.block_id = b.id
         ORDER BY b.time DESC
@@ -1256,8 +1241,7 @@ app.get("/pool-updates", async (c) => {
           b.block_no
         FROM pool_update pu
         JOIN pool_hash ph ON pu.hash_id = ph.id
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         JOIN tx t ON pu.registered_tx_id = t.id
         JOIN block b ON t.block_id = b.id
         ORDER BY b.time DESC
@@ -1740,8 +1724,7 @@ app.get("/search", async (c) => {
     const poolR = await pool.query(`
       SELECT ph.view as pool_hash, ocpd.ticker_name as ticker, ocpd.json->>'name' as name
       FROM pool_hash ph
-      JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       WHERE UPPER(ocpd.ticker_name) = UPPER($1)
          OR UPPER(ocpd.json->>'name') LIKE UPPER($2)
       LIMIT 5
@@ -1789,8 +1772,7 @@ app.get("/wallet/:stakeAddr", async (c) => {
         SELECT ph.view as pool_id, ocpd.json->>'ticker' as ticker, ocpd.json->>'name' as name
         FROM delegation d
         JOIN pool_hash ph ON ph.id = d.pool_hash_id
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         WHERE d.addr_id = $1 ORDER BY d.tx_id DESC LIMIT 1
       `, [sa.id]);
       if (pdR.rows.length) { pool_id = pdR.rows[0].pool_id; pool_ticker = pdR.rows[0].ticker; pool_name = pdR.rows[0].name; }
@@ -1910,7 +1892,7 @@ app.get("/explorer/staking", async (c) => {
         COALESCE(ps.delegators,0) as delegators, COALESCE(ps.stake,'0') as stake
         FROM pool_hash ph
         JOIN pool_update pu ON pu.id = (SELECT id FROM pool_update pu2 WHERE pu2.hash_id = ph.id ORDER BY pu2.registered_tx_id DESC LIMIT 1)
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         LEFT JOIN pool_stakes ps ON ps.pool_id = ph.id
         WHERE NOT EXISTS (SELECT 1 FROM pool_retire pr WHERE pr.hash_id = ph.id AND pr.retiring_epoch <= $1 + 1)
         ORDER BY ps.stake::numeric DESC NULLS LAST LIMIT 50`, [prevEpoch]),
@@ -1919,7 +1901,7 @@ app.get("/explorer/staking", async (c) => {
         FROM delegation d
         JOIN stake_address sa ON sa.id = d.addr_id
         JOIN pool_hash ph ON ph.id = d.pool_hash_id
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         JOIN tx t ON t.id = d.tx_id
         JOIN block b ON b.id = t.block_id
         ORDER BY d.id DESC LIMIT 30`),
@@ -2112,7 +2094,7 @@ const EXCHANGE_POOL_TICKERS = new Set([
 ]);
 
 app.get("/richlist-v2", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "200"), 500);
+  const limit = getLimit(c, 200, 500);
   const data = await cached(`richlist_v2:${limit}`, 3600, async () => {
     const epochR = await pool.query("SELECT MAX(no) - 1 as e FROM epoch");
     const prevEpoch = epochR.rows[0]?.e || 0;
@@ -2164,8 +2146,7 @@ app.get("/richlist-v2", async (c) => {
                ph.view as pool_id, ocpd.json->>'ticker' as pool_ticker, ocpd.json->>'name' as pool_name
         FROM delegation d
         JOIN pool_hash ph ON ph.id = d.pool_hash_id
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         WHERE d.addr_id = ANY($1::bigint[])
         ORDER BY d.addr_id, d.tx_id DESC
       `, [stakeIds]);
@@ -2396,8 +2377,7 @@ app.get("/pools/search/:q", async (c) => {
              COALESCE(ps.stake, 0)::text as live_stake,
              COALESCE(ps.number_of_delegators, 0)::int as delegators
       FROM pool_hash ph
-      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       LEFT JOIN pool_stat ps ON ps.pool_hash_id = ph.id
         AND ps.epoch_no = (SELECT MAX(epoch_no) FROM pool_stat WHERE pool_hash_id = ph.id)
       WHERE (ocpd.ticker_name ILIKE $1 OR ocpd.json->>'name' ILIKE $1 OR ph.view ILIKE $1)
@@ -2419,8 +2399,7 @@ app.get("/dashboard/spo/:poolId", async (c) => {
              ocpd.ticker_name as ticker, ocpd.json->>'name' as name,
              ocpd.json->>'description' as description, ocpd.json->>'homepage' as homepage
       FROM pool_hash ph
-      LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-        AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+      ${POOL_META_JOIN}
       WHERE ph.view = $1
     `, [poolId]);
     if (!infoR.rows[0]) return null;
@@ -2546,7 +2525,7 @@ app.get("/dashboard/spo/:poolId", async (c) => {
       governance_votes: votesR.rows,
     };
   });
-  if (!data) return c.json({ error: "Pool not found" }, 404);
+  if (!data) return notFound(c, "Pool");
   return c.json(data);
 });
 
@@ -2565,8 +2544,7 @@ app.get("/dashboard/spo-multi", async (c) => {
                COALESCE(ps.number_of_delegators, 0)::int as delegators,
                COALESCE(ps.number_of_blocks, 0)::int as lifetime_blocks
         FROM pool_hash ph
-        LEFT JOIN off_chain_pool_data ocpd ON ocpd.pool_id = ph.id
-          AND ocpd.id = (SELECT MAX(id) FROM off_chain_pool_data WHERE pool_id = ph.id)
+        ${POOL_META_JOIN}
         LEFT JOIN pool_stat ps ON ps.pool_hash_id = ph.id
           AND ps.epoch_no = (SELECT MAX(epoch_no) FROM pool_stat WHERE pool_hash_id = ph.id)
         WHERE ph.view = $1
@@ -2754,7 +2732,7 @@ app.get("/dashboard/drep/:drepId", async (c) => {
       registration_metadata: metadata,
     };
   });
-  if (!data) return c.json({ error: "DRep not found" }, 404);
+  if (!data) return notFound(c, "DRep");
   return c.json(data);
 });
 
@@ -2879,7 +2857,7 @@ app.get("/bf/drep/:id", async (c) => {
       expired: false,
     };
   });
-  if (!data) return c.json({ error: "DRep not found" }, 404);
+  if (!data) return notFound(c, "DRep");
   return c.json(data);
 });
 
@@ -3003,7 +2981,7 @@ app.get("/bf/proposal/:hash/:index", async (c) => {
 
     return { ...r.rows[0], vote_summary: summary };
   });
-  if (!data) return c.json({ error: "Proposal not found" }, 404);
+  if (!data) return notFound(c, "Proposal");
   return c.json(data);
 });
 
@@ -3123,7 +3101,7 @@ app.get("/bf/governance-info", async (c) => {
 
 // GET /bf/drep-stake-history — DRep stake distribution per epoch (for Stake Analytics)
 app.get("/bf/drep-stake-history", async (c) => {
-  const limit = Math.min(parseInt(c.req.query("limit") || "100"), 200);
+  const limit = getLimit(c, 100, 200);
   const topN = Math.min(parseInt(c.req.query("topN") || "10"), 50);
   const data = await cached(`bf_drep_stake_hist:${limit}:${topN}`, 600, async () => {
     // Get top N DReps by current voting power

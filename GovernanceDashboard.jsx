@@ -1883,6 +1883,10 @@ function DashboardTab({
   const [spoPage, setSpoPage] = React.useState(0);
   const [spoDrepFilter, setSpoDrepFilter] = React.useState("all"); // all | auto_abstain | auto_nc | custom_drep
   const [zoom, setZoom] = useHashState("d_zm", 80); // 50-150 %
+  // ─── Shared helpers (inside component to access zoom) ───
+  const sz = (v) => Math.round(v * zoom / 100);
+  const rowBg = (i) => i % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+  const stickyLeft = (bg) => ({ ...stickyLeft(bg) });
   const [drepFull, setDrepFull] = React.useState(false); // fullscreen expand for DRep table
   const [ccFull, setCcFull] = React.useState(false); // fullscreen expand for CC table
   const drepScrollRef = React.useRef(null);
@@ -2425,8 +2429,8 @@ function DashboardTab({
       borderCollapse: "separate",
       borderSpacing: 0,
       width: "100%",
-      minWidth: pgP.length * Math.round(70 * zoom / 100) + Math.round(260 * zoom / 100),
-      fontSize: Math.round(14 * zoom / 100)
+      minWidth: pgP.length * sz(70) + sz(260),
+      fontSize: sz(14)
     }
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
     style: {
@@ -2435,14 +2439,14 @@ function DashboardTab({
       top: 0,
       zIndex: 30,
       background: "var(--bg3)",
-      padding: `${Math.round(8 * zoom / 100)}px ${Math.round(10 * zoom / 100)}px`,
+      padding: `${sz(8)}px ${sz(10)}px`,
       textAlign: "left",
       borderBottom: "2px solid var(--border)",
       borderRight: "2px solid var(--border)",
-      fontSize: Math.round(10 * zoom / 100),
+      fontSize: sz(10),
       fontWeight: 700,
       color: "var(--text2)",
-      minWidth: Math.round(260 * zoom / 100),
+      minWidth: sz(260),
       textTransform: "uppercase",
       letterSpacing: ".05em",
       boxShadow: "4px 0 8px rgba(0,0,0,.3)"
@@ -2597,8 +2601,8 @@ function DashboardTab({
         borderBottom: "2px solid var(--border)",
         fontSize: 9,
         fontWeight: 600,
-        minWidth: Math.round(70 * zoom / 100),
-        maxWidth: Math.round(90 * zoom / 100),
+        minWidth: sz(70),
+        maxWidth: sz(90),
         verticalAlign: "bottom"
       }
     }, /*#__PURE__*/React.createElement("div", {
@@ -2627,7 +2631,7 @@ function DashboardTab({
         fontSize: 7,
         color: "var(--text)",
         lineHeight: 1.2,
-        maxWidth: Math.round(86 * zoom / 100),
+        maxWidth: sz(86),
         overflow: "hidden",
         display: "-webkit-box",
         WebkitLineClamp: 2,
@@ -2762,7 +2766,7 @@ function DashboardTab({
       }, s.label, epochInfo ? ` ${epochInfo}` : "") : null;
     })()));
   }))), /*#__PURE__*/React.createElement("tbody", null, pgD.map((d, ri) => {
-    const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+    const bg = rowBg(ri);
     const share = totalStake > 0 ? Number(d.amount) / totalStake * 100 : 0;
     return /*#__PURE__*/React.createElement("tr", {
       key: d.drep_id
@@ -2772,17 +2776,17 @@ function DashboardTab({
         left: 0,
         zIndex: 10,
         background: bg,
-        padding: `${Math.round(7 * zoom / 100)}px ${Math.round(8 * zoom / 100)}px`,
+        padding: `${sz(7)}px ${sz(8)}px`,
         borderBottom: "1px solid var(--border)",
         borderRight: "2px solid var(--border)",
-        minWidth: Math.round(260 * zoom / 100),
+        minWidth: sz(260),
         boxShadow: "4px 0 8px rgba(0,0,0,.3)"
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
         display: "flex",
         alignItems: "center",
-        gap: Math.round(7 * zoom / 100)
+        gap: sz(7)
       }
     }, zoom >= 70 && /*#__PURE__*/React.createElement(Avatar, {
       name: safeName(d.name) || d.drep_id,
@@ -2794,16 +2798,16 @@ function DashboardTab({
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
-        fontSize: Math.round(11 * zoom / 100),
+        fontSize: sz(11),
         fontWeight: 600,
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        maxWidth: Math.round(150 * zoom / 100)
+        maxWidth: sz(150)
       }
     }, safeName(d.name) || shortId(d.drep_id)), /*#__PURE__*/React.createElement("div", {
       style: {
-        fontSize: Math.round(10 * zoom / 100),
+        fontSize: sz(10),
         color: "var(--text2)",
         display: "flex",
         gap: 5,
@@ -2814,14 +2818,14 @@ function DashboardTab({
       title: `${(Number(d.amount) / 1e6).toLocaleString()} ADA`
     }, "\u20B3 ", fmtAda(d.amount)), /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: Math.round(9 * zoom / 100),
+        fontSize: sz(9),
         fontWeight: 600,
         color: share >= 5 ? "var(--accent2)" : share >= 1 ? "var(--text2)" : "var(--text2)",
         opacity: share >= 1 ? 1 : .7
       }
     }, share.toFixed(share >= 10 ? 1 : 2), "%"), zoom >= 80 && d.delegators > 0 && /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: Math.round(9 * zoom / 100),
+        fontSize: sz(9),
         opacity: .7
       }
     }, "(", d.delegators.toLocaleString(), " ", T.delegators, ")"))))), pgP.map((p, ci) => {
@@ -2836,7 +2840,7 @@ function DashboardTab({
       }, /*#__PURE__*/React.createElement("div", {
         className: "vote-cell",
         style: {
-          padding: `${Math.round(3 * zoom / 100)}px ${Math.round(2 * zoom / 100)}px`,
+          padding: `${sz(3)}px ${sz(2)}px`,
           textAlign: "center",
           display: "flex",
           alignItems: "center",
@@ -2997,8 +3001,8 @@ function DashboardTab({
       borderCollapse: "separate",
       borderSpacing: 0,
       width: "100%",
-      minWidth: pgP.length * Math.round(70 * zoom / 100) + Math.round(260 * zoom / 100),
-      fontSize: Math.round(14 * zoom / 100)
+      minWidth: pgP.length * sz(70) + sz(260),
+      fontSize: sz(14)
     }
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
     style: {
@@ -3007,14 +3011,14 @@ function DashboardTab({
       top: 0,
       zIndex: 30,
       background: "var(--bg3)",
-      padding: `${Math.round(6 * zoom / 100)}px ${Math.round(8 * zoom / 100)}px`,
+      padding: `${sz(6)}px ${sz(8)}px`,
       textAlign: "left",
       borderBottom: "2px solid var(--border)",
       borderRight: "2px solid var(--border)",
-      fontSize: Math.round(9 * zoom / 100),
+      fontSize: sz(9),
       fontWeight: 700,
       color: "var(--text2)",
-      minWidth: Math.round(260 * zoom / 100),
+      minWidth: sz(260),
       boxShadow: "4px 0 8px rgba(0,0,0,.3)"
     }
   }, T.cc_member), pgP.map((p, i) => {
@@ -3032,8 +3036,8 @@ function DashboardTab({
         borderBottom: "2px solid var(--border)",
         fontSize: 8,
         fontWeight: 600,
-        minWidth: Math.round(70 * zoom / 100),
-        maxWidth: Math.round(90 * zoom / 100),
+        minWidth: sz(70),
+        maxWidth: sz(90),
         opacity: ccInelig ? .35 : 1
       }
     }, /*#__PURE__*/React.createElement("span", {
@@ -3049,7 +3053,7 @@ function DashboardTab({
       }
     }, actionLabel(p.proposal_type, T)));
   }))), /*#__PURE__*/React.createElement("tbody", null, (ccMembers || []).map((cc, ri) => {
-    const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+    const bg = rowBg(ri);
     return /*#__PURE__*/React.createElement("tr", {
       key: cc.cc_id
     }, /*#__PURE__*/React.createElement("td", {
@@ -3058,16 +3062,16 @@ function DashboardTab({
         left: 0,
         zIndex: 10,
         background: bg,
-        padding: `${Math.round(5 * zoom / 100)}px ${Math.round(8 * zoom / 100)}px`,
+        padding: `${sz(5)}px ${sz(8)}px`,
         borderBottom: "1px solid var(--border)",
         borderRight: "2px solid var(--border)",
         boxShadow: "4px 0 8px rgba(0,0,0,.3)",
-        fontSize: Math.round(11 * zoom / 100),
+        fontSize: sz(11),
         fontWeight: 600,
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        maxWidth: Math.round(180 * zoom / 100)
+        maxWidth: sz(180)
       }
     }, cc.name || shortId(cc.cc_id)), pgP.map((p, ci) => {
       const ccInelig = p.proposal_type === "NoConfidence";
@@ -3097,7 +3101,7 @@ function DashboardTab({
       }, /*#__PURE__*/React.createElement("div", {
         className: "vote-cell",
         style: {
-          padding: `${Math.round(3 * zoom / 100)}px ${Math.round(2 * zoom / 100)}px`,
+          padding: `${sz(3)}px ${sz(2)}px`,
           textAlign: "center",
           display: "flex",
           alignItems: "center",
@@ -3441,8 +3445,8 @@ function DashboardTab({
         borderCollapse: "separate",
         borderSpacing: 0,
         width: "100%",
-        minWidth: pgP.length * Math.round(70 * zoom / 100) + Math.round(260 * zoom / 100),
-        fontSize: Math.round(14 * zoom / 100)
+        minWidth: pgP.length * sz(70) + sz(260),
+        fontSize: sz(14)
       }
     }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
       style: {
@@ -3451,14 +3455,14 @@ function DashboardTab({
         top: 0,
         zIndex: 30,
         background: "var(--bg3)",
-        padding: `${Math.round(6 * zoom / 100)}px ${Math.round(8 * zoom / 100)}px`,
+        padding: `${sz(6)}px ${sz(8)}px`,
         textAlign: "left",
         borderBottom: "2px solid var(--border)",
         borderRight: "2px solid var(--border)",
-        fontSize: Math.round(9 * zoom / 100),
+        fontSize: sz(9),
         fontWeight: 700,
         color: "var(--text2)",
-        minWidth: Math.round(260 * zoom / 100),
+        minWidth: sz(260),
         boxShadow: "4px 0 8px rgba(0,0,0,.3)"
       }
     }, /*#__PURE__*/React.createElement("span", {
@@ -3492,8 +3496,8 @@ function DashboardTab({
           borderBottom: "2px solid var(--border)",
           fontSize: 8,
           fontWeight: 600,
-          minWidth: Math.round(70 * zoom / 100),
-          maxWidth: Math.round(90 * zoom / 100),
+          minWidth: sz(70),
+          maxWidth: sz(90),
           opacity: inelig ? .35 : 1
         }
       }, /*#__PURE__*/React.createElement("span", {
@@ -3509,7 +3513,7 @@ function DashboardTab({
         }
       }, actionLabel(p.proposal_type, T)));
     }))), /*#__PURE__*/React.createElement("tbody", null, spoPageData.map((pool, ri) => {
-      const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+      const bg = rowBg(ri);
       return /*#__PURE__*/React.createElement("tr", {
         key: pool.pool_id
       }, /*#__PURE__*/React.createElement("td", {
@@ -3518,28 +3522,28 @@ function DashboardTab({
           left: 0,
           zIndex: 10,
           background: bg,
-          padding: `${Math.round(5 * zoom / 100)}px ${Math.round(8 * zoom / 100)}px`,
+          padding: `${sz(5)}px ${sz(8)}px`,
           borderBottom: "1px solid var(--border)",
           borderRight: "2px solid var(--border)",
           boxShadow: "4px 0 8px rgba(0,0,0,.3)",
-          fontSize: Math.round(11 * zoom / 100),
+          fontSize: sz(11),
           fontWeight: 600,
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
-          maxWidth: Math.round(180 * zoom / 100)
+          maxWidth: sz(180)
         },
         title: pool.pool_id
       }, /*#__PURE__*/React.createElement("span", null, pool.ticker || shortId(pool.pool_id)), /*#__PURE__*/React.createElement("span", {
         style: {
-          fontSize: Math.round(8 * zoom / 100),
+          fontSize: sz(8),
           color: "var(--text2)",
           marginLeft: 6
         },
         title: `${Math.round(Number(pool.active_stake) / 1e6).toLocaleString()} ADA`
       }, fmtStake(pool.active_stake)), /*#__PURE__*/React.createElement("span", {
         style: {
-          fontSize: Math.round(8 * zoom / 100),
+          fontSize: sz(8),
           marginLeft: 4,
           padding: pool.isAutoAbstain || pool.isAutoNoConf ? "1px 4px" : "0 2px",
           borderRadius: 4,
@@ -3576,7 +3580,7 @@ function DashboardTab({
         }, /*#__PURE__*/React.createElement("div", {
           className: "vote-cell",
           style: {
-            padding: `${Math.round(3 * zoom / 100)}px ${Math.round(2 * zoom / 100)}px`,
+            padding: `${sz(3)}px ${sz(2)}px`,
             textAlign: "center",
             display: "flex",
             alignItems: "center",
@@ -4661,6 +4665,7 @@ function SimulatorTab({
   T
 }) {
   const dreps = React.useMemo(() => rawDreps.filter(d => d.drep_id !== "drep_always_abstain" && d.drep_id !== "drep_always_no_confidence"), [rawDreps]);
+  const rowBg = (i) => i % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
   // ── Common parameters ──
   const todayStr = new Date().toISOString().slice(0, 10);
   const [govBudget, setGovBudget] = useHashState("s_budget", 500000);
@@ -5591,7 +5596,7 @@ function SimulatorTab({
       whiteSpace: "nowrap"
     }
   }, T.rationale_rate))), /*#__PURE__*/React.createElement("tbody", null, pageData.map((d, ri) => {
-    const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+    const bg = rowBg(ri);
     const pvr = d.periodVR;
     return /*#__PURE__*/React.createElement("tr", {
       key: d.drep_id,
@@ -5838,7 +5843,7 @@ function SimulatorTab({
       whiteSpace: "nowrap"
     }
   }, h.t)))), /*#__PURE__*/React.createElement("tbody", null, simData.map((d, ri) => {
-    const bg = ri % 2 === 0 ? "var(--bg2)" : "rgba(255,255,255,.01)";
+    const bg = rowBg(ri);
     const fc = d.factor > 0.5 ? "#22c55e" : d.factor > 0 ? "#f59e0b" : "#ef4444";
     const rw = Math.round(d.reward);
     const rwYr = rw * distPerYear;
