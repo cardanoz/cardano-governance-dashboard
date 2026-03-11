@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-03-11T10:03:44.880Z",
+  "generatedAt": "2026-03-11T11:14:30.233Z",
   "tier": "top_700",
-  "runtime_seconds": 75.4,
-  "api_calls": 8,
-  "input_tokens": 22443,
-  "output_tokens": 7297,
-  "estimated_cost_usd": 0.0471,
+  "runtime_seconds": 7.5,
+  "api_calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "estimated_cost_usd": 0,
   "stats": {
     "drepsAnalyzed": 700,
     "proposalsAnalyzed": 92,
