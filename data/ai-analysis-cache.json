@@ -5679,6 +5679,28 @@
       ],
       "votingPattern_en": "Consistently votes affirmatively (75% approval rate from analyzed votes) on governance and decentralization proposals, with selective abstentions and rare dissent indicating measured but conviction-driven support for institutional development.",
       "votingPattern_ja": "分析された投票から75%の承認率で統治および分散化提案に一貫して肯定的に投票し、慎重な棄権と稀な反対は制度開発に対する測定済みだが確信的なサポートを示している。"
+    },
+    "drep1y2jyvvrk9g8t7uhmdtxp9nxay7a9rvj5ktqyd59wfe7ncmqege0em": {
+      "lastAnalyzedVoteCount": 17,
+      "lastAnalyzedAt": "2026-03-11T04:56:55.919Z",
+      "tendencySummary_en": "This DRep demonstrates strong support for ecosystem growth initiatives and strategic investments, particularly those aligned with Cardano's original mission of financial inclusion. However, they maintain fiscal responsibility concerns, favoring treasury accountability and repayment mechanisms similar to SNEK's model, and consistently oppose what they perceive as excessive or poorly justified compensation claims.",
+      "tendencySummary_ja": "本DRepは、カルダノの金融包摂という本来のミッションに沿った生態系成長イニシアティブと戦略的投資を強く支持しています。一方で、財政責任への懸念を維持し、SNEKと同様の返済メカニズムを伴う財務トラッキング責任を重視し、過度または説明不十分な補償請求に一貫して反対しています。",
+      "keyPositions_en": [
+        "Supports strategic ecosystem growth investments like stablecoin deployment for financial inclusion",
+        "Advocates for treasury withdrawal repayment mechanisms similar to SNEK model",
+        "Opposes excessive or poorly explained compensation claims",
+        "Supports bug-related fund recovery and returns",
+        "Favors time-limited pilot programs with flexibility for adjustment"
+      ],
+      "keyPositions_ja": [
+        "金融包摂のためのステーブルコイン展開などの戦略的生態���成長投資を支持",
+        "SNEKモデルと同様の財務引き出し返済メカニズムを推奨",
+        "過度または説明不十分な補償請求に反対",
+        "バグ関連の資金回収と返金を支持",
+        "調整の柔軟性を備えた期間限定パイロットプログラムを推奨"
+      ],
+      "votingPattern_en": "Votes predominantly in favor of growth initiatives (12 Yes vs 5 No) while maintaining principled opposition to compensation proposals lacking transparency or repayment frameworks, demonstrating bullish optimism balanced with fiscal conservatism.",
+      "votingPattern_ja": "成長イニシアティブを圧倒的に支持する投票（12票の賛成対5票の反対）を行いながら、透明性または返済枠組みを欠く補償提案に対して原則的に反対することで、強気の楽観性と財政保守主義のバランスを示しています。"
     }
   },
   "proposalCache": {
