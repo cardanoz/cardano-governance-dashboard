@@ -1709,26 +1709,26 @@
       "votingPattern_ja": "DRepは個人的な影響が記録されているコミュニティ構築提案には肯定的に投票し、主要な財政およびプロトコル決定について棄権により慎重さを行使しており、システム的変更よりも検証済みの草の根イニシアティブへの好みを示唆しています。"
     },
     "drep1ytcw6qzpqqclx2yd0zy64ztvlkkhnf6yrzza8whgnq4vz5gh89626": {
-      "lastAnalyzedVoteCount": 86,
-      "lastAnalyzedAt": "2026-03-05T23:59:37.144Z",
-      "tendencySummary_en": "BWtake is a strongly pro-ecosystem DRep who consistently votes YES on strategic infrastructure investments, governance maturation, and brand-building initiatives for Cardano. They demonstrate sophisticated analysis of institutional design, risk management, and long-term ecosystem development while maintaining healthy scrutiny of treasury expenditures and insisting on transparency, KPIs, and accountability measures.",
-      "tendencySummary_ja": "BWtakeはCardanoの戦略的インフラ投資、ガバナンス成熟化、ブランド確立に対して一貫してYESで投票する生態系支持派のDRepです。制度設計、リスク管理、長期的なエコシステム発展について高度な分析を示す一方で、トレジャリー支出に対する健全な精査姿勢を保ち、透明性、KPI、説明責任を求めています。",
+      "lastAnalyzedVoteCount": 89,
+      "lastAnalyzedAt": "2026-03-11T06:06:04.010Z",
+      "tendencySummary_en": "BWtake demonstrates a strong pro-governance and infrastructure-focused voting pattern, consistently supporting constitutional improvements, public infrastructure investments, and strategic ecosystem development while carefully scrutinizing individual token support and maintaining high standards for transparency and accountability. The DRep shows sophisticated analysis of long-term systemic benefits, institutional maturity, and precedent-setting implications in their voting decisions.",
+      "tendencySummary_ja": "BWtakeは、憲法改善、公共インフラ投資、戦略的エコシステム開発を一貫して支持する一方で、個別トークン支援に慎重であり、透明性と説明責任を重視する強力なガバナンス・インフラ重視の投票パターンを示している。DRepは、長期的システム効果、制度的成熟、先例設定の含意に関する高度な分析を投票判断に反映させている。",
       "keyPositions_en": [
-        "Supports unified global marketing strategy and brand establishment (.ada/.cardano domains) as essential for Cardano's competitive positioning",
-        "Advocates for decentralized governance through community-led initiatives and transparent Constitutional Committee elections over centralized control",
-        "Opposes partisan treasury support (SNEK example) without broader, equitable frameworks; demands neutrality in public funding",
-        "Backs critical financial infrastructure (stablecoins, oracles, custody, bridges) as necessary prerequisites for DeFi expansion and adoption",
-        "Emphasizes accountability through KPIs, third-party audits, milestone verification, and clear surplus fund returns in all major treasury withdrawals"
+        "Supports constitutional amendments that enhance clarity and remove redundant constraints while maintaining strong governance guardrails",
+        "Backs critical financial infrastructure (stablecoins, oracles, custody, bridges) as essential for ecosystem growth despite NDA limitations",
+        "Opposes individual token treasury support (e.g., SNEK) without comprehensive, equitable framework to protect neutrality",
+        "Advocates for transparent budget processes, clear KPIs, and robust audit mechanisms for major treasury expenditures",
+        "Supports strategic investments in protocol diversity (alternative node implementations) and DeFi infrastructure development"
       ],
       "keyPositions_ja": [
-        "Cardanoの競争力強化に向けたグローバル統一マーケティング戦略とブランド確立（.ada/.cardanoドメイン取得）を支持",
-        "コミュニティ主導型イニシアティブと透明な憲法委員会選挙による分散型ガバナンスを推進し、中央集権的統制に反対",
-        "包括的かつ公平な支援枠組みがない限り、特定トークン（SNEK）への党派的なトレジャリー支援に反対し、公的資金の中立性を要求",
-        "DeFi拡大と採用促進に必要な重要な金融インフラ（ステーブルコイン、オラクル、カストディ、ブリッジ）の整備を支持",
-        "全ての大規模トレジャリー引き出しにおいてKPI、第三者監査、マイルストーン検証、余剰金確実返還による説明責任を強調"
+        "強力なガバナンスガードレールを維持しながら、明確性を向上させ冗長な制約を削除する憲法改正を支持",
+        "NDA制限にもかかわらず、エコシステム成長に不可欠な重要金融インフラ（ステーブルコイン、オラクル、カストディ、ブリッジ）を支持",
+        "公平な枠組みなしに個別トークン（SNEKなど）をトレジャリーで支援することに反対し、中立性を保護",
+        "主要なトレジャリー支出に対する透明な予算プロセス、明確なKPI、堅牢な監査メカニズムを提唱",
+        "プロトコル多様性（代替ノード実装）およびDeFiインフラ開発への戦略的投資を支持"
       ],
-      "votingPattern_en": "BWtake votes YES on ~90% of proposals (77/86 votes), but applies rigorous conditional support requiring transparency improvements, KPI specifications, conflict-of-interest safeguards, and accountability mechanisms; strategically votes NO only on proposals lacking proper guardrails or limiting Cardano's future optionality.",
-      "votingPattern_ja": "BWtakeは提案の約90%でYESを投票（77/86票）していますが、透明性の改善、KPI仕様、利益相反防止、説明責任メカニズムを要求する厳密な条件付き支持を適用しており、適切なガードレール欠如またはCardanoの将来の選択肢を制限する提案に対してのみ戦略的にNOを投票しています。"
+      "votingPattern_en": "Votes YES on governance improvements, constitutional amendments, public infrastructure, and strategic ecosystem development; votes NO on individual token support without comprehensive frameworks; uses conditional YES with detailed improvement requests for large budget allocations; employs ABSTAIN when proposals may set important precedents requiring additional safeguards.",
+      "votingPattern_ja": "ガバナンス改善、憲法改正、公共インフラ、戦略的エコシステム開発にはYES投票；包括的枠組みのない個別トークン支援にはNO投票；大規模予算配分には詳細な改善要求を伴う条件付きYES投票；重要な先例設定となる可能性のある提案にはABSTAIN投票を活用。"
     },
     "drep1y2lhe7wn2sr6vme8gnca4jrkhv47uh3tklsykmrqvwzdq4g5s8wju": {
       "lastAnalyzedVoteCount": 56,
@@ -43147,16 +43147,16 @@
       }
     },
     "e5c4d7ebaad03ac127ec19a286605a188d6fea1c54e075c619ca6993b7fa9fd1#0": {
-      "voteCountAtAnalysis": 16,
+      "voteCountAtAnalysis": 17,
       "analysis": {
         "title": "Cardano Defi Liquidity Budget - Withdrawal 1",
         "type": "TreasuryWithdrawals",
         "submittedEpoch": 0,
         "stats": {
-          "votedWithRationale": 8,
+          "votedWithRationale": 9,
           "votedWithoutRationale": 8,
-          "notVoted": 1578,
-          "notVotedTotalStake": "5521390061422615",
+          "notVoted": 1577,
+          "notVotedTotalStake": "5519951594482665",
           "notVotedTopDreps": [
             {
               "name": "Yoroi W₳llet",
@@ -43203,17 +43203,17 @@
             "total": 8,
             "withRationale": 3,
             "withoutRationale": 5,
-            "totalStake": "245253108727498",
-            "withRationaleStake": "26199843618072",
-            "withoutRationaleStake": "219053265109426",
+            "totalStake": "245780429460105",
+            "withRationaleStake": "26740411710823",
+            "withoutRationaleStake": "219040017749282",
             "withoutRationaleDreps": [
               {
                 "name": "ADA_Labo",
-                "stake": "2408697168579"
+                "stake": "2395490353426"
               },
               {
                 "name": "Next Epoch",
-                "stake": "79942834375"
+                "stake": "79463604147"
               },
               {
                 "name": "CryptoCrow",
@@ -43225,7 +43225,7 @@
               },
               {
                 "name": "drep1yf9z2h2v43...",
-                "stake": "1514068174108"
+                "stake": "1514506859345"
               }
             ]
           },
@@ -43233,17 +43233,17 @@
             "total": 7,
             "withRationale": 4,
             "withoutRationale": 3,
-            "totalStake": "88698720303617",
-            "withRationaleStake": "7427196496682",
-            "withoutRationaleStake": "81271523806935",
+            "totalStake": "88593449925101",
+            "withRationaleStake": "7382638090390",
+            "withoutRationaleStake": "81210811834711",
             "withoutRationaleDreps": [
               {
                 "name": "BankFi",
-                "stake": "1977847879269"
+                "stake": "1917131396436"
               },
               {
                 "name": "Change_The_World_With_Cardano",
-                "stake": "17061036883"
+                "stake": "17065547492"
               },
               {
                 "name": "Peyton",
@@ -43252,19 +43252,19 @@
             ]
           },
           "abstainBreakdown": {
-            "total": 1,
-            "withRationale": 1,
+            "total": 2,
+            "withRationale": 2,
             "withoutRationale": 0,
-            "totalStake": "7575211742195",
-            "withRationaleStake": "7575211742195",
+            "totalStake": "11234201777951",
+            "withRationaleStake": "11234201777951",
             "withoutRationaleStake": "0",
             "withoutRationaleDreps": []
           }
         },
         "yesReasons": [
           {
-            "reason_en": "Addresses critical ecosystem need for ADA-stablecoin liquidity to improve trade execution and reduce slippage in Cardano DeFi",
-            "reason_ja": "Cardano DeFiにおける取引実行の改善とスリッページ削減のためのADA-ステーブルコイン流動性の重大なエコシステムニーズに対応",
+            "reason_en": "Addresses ecosystem liquidity weakness and improves DeFi usability through transparent, narrowly-scoped treasury deployment",
+            "reason_ja": "透明性があり狭い範囲に限定された合理的なトレジャリー配分により、エコシステムの流動性不足を解決し、DeFi利用性を向上させる",
             "totalStake": "22268895685451",
             "dreps": [
               {
@@ -43274,76 +43274,73 @@
             ]
           },
           {
-            "reason_en": "Supporting logical next step in established initiative with reasonable budget and transparent legal/technical infrastructure setup",
-            "reason_ja": "確立されたイニシアティブの論理的な次のステップを支持し、合理的な予算と透明な法的・技術的インフラの整備",
-            "totalStake": "2907909757358",
+            "reason_en": "Supports logical progression of previously approved liquidity initiative with reasonable infrastructure establishment costs",
+            "reason_ja": "以前承認された流動性イニシアティブの論理的な進展であり、インフラ構築コストが妥当である",
+            "totalStake": "4471516025372",
             "dreps": [
               {
                 "name": "Varavas",
-                "stake": "2907909757358"
-              }
-            ]
-          },
-          {
-            "reason_en": "Continuation of previously supported stablecoin DeFi liquidity budget initiative",
-            "reason_ja": "以前に支持されたステーブルコインDeFi流動性予算イニシアティブの継続",
-            "totalStake": "1023038175263",
-            "dreps": [
+                "stake": "2917192214028"
+              },
               {
                 "name": "AtlasHub",
-                "stake": "1023038175263"
+                "stake": "1554323811344"
               }
             ]
           }
         ],
         "noReasons": [
           {
-            "reason_en": "Budget allocation is excessive for legal entity establishment; alternative jurisdictions (Marshall Islands, BVI) are more cost-effective than Cayman Islands",
-            "reason_ja": "法人設立のための予算配分が過剰であり、ケイマン諸島よりもマーシャル諸島やBVIなどの代替司法管轄区の方が費用対効果が高い",
-            "totalStake": "3836431181765",
+            "reason_en": "Cayman Islands jurisdiction is expensive with little advantage over alternative jurisdictions like Marshall Islands or BVI",
+            "reason_ja": "ケイマン諸島の司法管轄は高額であり、マーシャル諸島やBVIなどの代替案に対して利点がほぼない",
+            "totalStake": "3797159489309",
             "dreps": [
               {
                 "name": "Dr. Navjit Dhaliwal",
-                "stake": "3836431181765"
+                "stake": "3797159489309"
               }
             ]
           },
           {
-            "reason_en": "Majority of budget (664,000 ADA) allocated to legal overhead rather than technical infrastructure or ecosystem development; insufficient justification of practical impact before execution",
-            "reason_ja": "予算の大部分（664,000 ADA）が技術インフラやエコシステム開発ではなく法的管理費に配分されており、実行前の実際的な効果の正当化が不十分",
-            "totalStake": "3165964804428",
+            "reason_en": "Excessive allocation to legal and administrative overhead (664,000 ADA) rather than technical infrastructure and ecosystem development",
+            "reason_ja": "リク���ストされた資金の大部分（664,000 ADA）が法的・行政的オーバーヘッドに配分されており、技術インフラやエコシステム開発に充てるべき",
+            "totalStake": "3160573998123",
             "dreps": [
               {
                 "name": "Medusa DRep",
-                "stake": "2527855680601"
+                "stake": "2528746635334"
               },
               {
                 "name": "MREDGARCROSS",
-                "stake": "638109123827"
+                "stake": "631827362789"
               }
             ]
           },
           {
-            "reason_en": "Excessive costs for establishing a legal company structure",
-            "reason_ja": "法人構造の確立にための過度なコスト",
-            "totalStake": "424800510489",
+            "reason_en": "Unjustified spending of 800,000 ADA for establishing a legal company",
+            "reason_ja": "法的会社設立のために800,000 ADAを支出することは正当化できない",
+            "totalStake": "424904602958",
             "dreps": [
               {
                 "name": "drep1yfx2476p8s...",
-                "stake": "424800510489"
+                "stake": "424904602958"
               }
             ]
           }
         ],
         "abstainReasons": [
           {
-            "reason_en": "Pragmatic acknowledgment of proposer's legitimate DeFi expertise and previous community support, balanced against earlier expressed concerns about the initiative",
-            "reason_ja": "提案者の正当なDeFi専門知識と以前のコミュニティサポートの実用的な認識と、このイニシアティブについて以前に表明された懸念のバランス",
-            "totalStake": "7575211742195",
+            "reason_en": "Proposal has merit and proposer has proven DeFi expertise, but requires more careful scrutiny regarding Interim Committee authority, legal structure validity, fund management transparency, and accountability as precedent for future treasury operations",
+            "reason_ja": "提案は戦略的意義があり提案者は実績のあるDeFi経験者だが、Interim Committeeの権限と責任、法的構造の妥当性、資金管理の透明性、説明責任について、将来のトレジャリー運用に影響する重要案件として慎重な検討が必要である",
+            "totalStake": "11234201777951",
             "dreps": [
               {
                 "name": "InputEndorsers",
                 "stake": "7575211742195"
+              },
+              {
+                "name": "BWtake(長崎)Japan",
+                "stake": "3658990035756"
               }
             ]
           }
@@ -43354,34 +43351,34 @@
   "actionTypeCache": {
     "TreasuryWithdrawals": {
       "proposalCount": 49,
-      "rationaleCount": 4660,
+      "rationaleCount": 4661,
       "analysis": {
         "count": 49,
-        "summary_en": "Treasury Withdrawals show diverse voting patterns across multiple project types including node implementations (Dingo), DeFi infrastructure (Amaru, stablecoin liquidity), and ecosystem development. Yes votes predominantly support projects addressing critical ecosystem needs like client diversity and liquidity, while No votes cite concerns about cost-efficiency, funding duplication, milestone-based disbursement preferences, and constitutional compliance issues.",
-        "summary_ja": "Treasury Withdrawalsは、ノード実装（Dingo）、DeFiインフラ（Amaru、ステーブルコイン流動性）、エコシステム開発など複数のプロジェクトタイプにおいて多様な投票パターンを示しています。Yes票はクライアント多様性と流動性といった重要なエコシステムニーズに対応するプロジェクトを支持し、No票はコスト効率性、資金重複、マイルストーンベースの配分予定、および憲法準拠の懸念を理由に挙げています。",
+        "summary_en": "Treasury withdrawal proposals for Cardano show mixed voting patterns across 49 proposals, with support primarily driven by team reputation, project importance for network resilience, and strategic value, while opposition focuses on budget concerns, timing, and funding mechanisms. Key dividing factors include whether proposals address critical infrastructure needs (like node diversity) versus preference for milestone-based funding over large lump-sum withdrawals.",
+        "summary_ja": "49の提案に対するCardanoトレジャリー引き出しの投票は混合的なパターンを示しており、支持はチーム評判、ネットワーク弾力性のためのプロジェクト重要性、戦略的価値に基づいており、反対は予算懸念、タイミング、資金調達メカニズムに焦点を当てています。主な分岐点は、提案が重要インフラ需要（ノード多様性など）に対応するかどうか、またはマイルストーンベースの資金と大規模一括引き出しの選好性です。",
         "typicalReasonsYes_en": [
-          "Addresses critical ecosystem infrastructure needs such as client/node diversity and network resilience",
-          "Teams have strong track records and proven capabilities within the Cardano community",
-          "Projects deliver measurable long-term strategic value despite current bearish market conditions",
-          "Cost-benefit analysis is favorable relative to development outcomes and ecosystem impact"
+          "Team reputation and proven track record within the Cardano ecosystem",
+          "Strategic importance for network resilience and client diversity",
+          "Clear technical merit and detailed proposal documentation",
+          "Cost-effectiveness relative to development scope and long-term value"
         ],
         "typicalReasonsYes_ja": [
-          "クライアント多様性やネットワークレジリエンスなどの重要なエコシステムインフラニーズに対応",
-          "チームはCardanoコミュニティ内で強い実績と実証済みの能力を保有している",
-          "現在のベアマーケット環境下でも、測定可能な長期的戦略的価値を提供",
-          "開発成果とエコシステムインパクトに対する費用対効果が有利"
+          "Cardanoエコシステム内のチーム評判と実績の証明",
+          "ネットワーク弾力性とクライアント多様性のための戦略的重要性",
+          "明確な技術的価値と詳細な提案ドキュメンテーション",
+          "開発範囲と長期的価値に対する費用対効果"
         ],
         "typicalReasonsNo_en": [
-          "Funding amount is excessive or budget structure allocates too much to overhead (legal entities, infrastructure) rather than development",
-          "Proposal duplicates ongoing efforts (multiple node implementations) or lacks clear differentiation from existing projects",
-          "Preference for milestone-based funding in tranches rather than single large lump-sum withdrawals to mitigate risk",
-          "Constitutional compliance concerns or governance process issues, particularly regarding transparency and accountability requirements"
+          "Excessive budget size or poor cost-efficiency for the deliverables",
+          "Preference for milestone-based funding instead of single large withdrawals",
+          "Timing concerns or redundancy with other similar proposals in development",
+          "Insufficient specification details or unproven implementation approaches"
         ],
         "typicalReasonsNo_ja": [
-          "資金額が過剰であるか、予算構造が開発ではなくオーバーヘッド（法的実体、インフラ）に過度に配分されている",
-          "進���中の取り組みの重複（複数のノード実装）または既存プロジェクトからの明確な差別化の欠如",
-          "リスク軽減のため、一括大型引き出しではなく段階的なマイルストーンベース資金提供を優先",
-          "特に透明性と説明責任要件に関する憲法準拠の懸念またはガバナンスプロセスの問題"
+          "成果物に対する過度な予算規模または費用対効果の低さ",
+          "単一の大規模引き出しではなくマイルストーンベースの資金調達への選好",
+          "タイミングの懸念または開発中の他の類似提案との重複",
+          "仕様の詳細不足または実装アプローチの実証不足"
         ]
       }
     },

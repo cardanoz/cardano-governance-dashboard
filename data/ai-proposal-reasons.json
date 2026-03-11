@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-11T04:56:57.038Z",
+  "generatedAt": "2026-03-11T06:06:15.949Z",
   "proposals": {
     "f35285db3c4e085ad331843b3007737952b8a322bb3216311edc37fdf44ad3da#0": {
       "title": "Dingo: a Production-Grade Block Producer in Go by Blink Labs",
@@ -339,10 +339,10 @@
       "type": "TreasuryWithdrawals",
       "submittedEpoch": 0,
       "stats": {
-        "votedWithRationale": 8,
+        "votedWithRationale": 9,
         "votedWithoutRationale": 8,
-        "notVoted": 1578,
-        "notVotedTotalStake": "5521390061422615",
+        "notVoted": 1577,
+        "notVotedTotalStake": "5519951594482665",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -389,17 +389,17 @@
           "total": 8,
           "withRationale": 3,
           "withoutRationale": 5,
-          "totalStake": "245253108727498",
-          "withRationaleStake": "26199843618072",
-          "withoutRationaleStake": "219053265109426",
+          "totalStake": "245780429460105",
+          "withRationaleStake": "26740411710823",
+          "withoutRationaleStake": "219040017749282",
           "withoutRationaleDreps": [
             {
               "name": "ADA_Labo",
-              "stake": "2408697168579"
+              "stake": "2395490353426"
             },
             {
               "name": "Next Epoch",
-              "stake": "79942834375"
+              "stake": "79463604147"
             },
             {
               "name": "CryptoCrow",
@@ -411,7 +411,7 @@
             },
             {
               "name": "drep1yf9z2h2v43...",
-              "stake": "1514068174108"
+              "stake": "1514506859345"
             }
           ]
         },
@@ -419,17 +419,17 @@
           "total": 7,
           "withRationale": 4,
           "withoutRationale": 3,
-          "totalStake": "88698720303617",
-          "withRationaleStake": "7427196496682",
-          "withoutRationaleStake": "81271523806935",
+          "totalStake": "88593449925101",
+          "withRationaleStake": "7382638090390",
+          "withoutRationaleStake": "81210811834711",
           "withoutRationaleDreps": [
             {
               "name": "BankFi",
-              "stake": "1977847879269"
+              "stake": "1917131396436"
             },
             {
               "name": "Change_The_World_With_Cardano",
-              "stake": "17061036883"
+              "stake": "17065547492"
             },
             {
               "name": "Peyton",
@@ -438,19 +438,19 @@
           ]
         },
         "abstainBreakdown": {
-          "total": 1,
-          "withRationale": 1,
+          "total": 2,
+          "withRationale": 2,
           "withoutRationale": 0,
-          "totalStake": "7575211742195",
-          "withRationaleStake": "7575211742195",
+          "totalStake": "11234201777951",
+          "withRationaleStake": "11234201777951",
           "withoutRationaleStake": "0",
           "withoutRationaleDreps": []
         }
       },
       "yesReasons": [
         {
-          "reason_en": "Addresses critical ecosystem need for ADA-stablecoin liquidity to improve trade execution and reduce slippage in Cardano DeFi",
-          "reason_ja": "Cardano DeFiにおける取引実行の改善とスリッページ削減のためのADA-ステーブルコイン流動性の重大なエコシステムニーズに対応",
+          "reason_en": "Addresses ecosystem liquidity weakness and improves DeFi usability through transparent, narrowly-scoped treasury deployment",
+          "reason_ja": "透明性があり狭い範囲に限定された合理的なトレジャリー配分により、エコシステムの流動性不足を解決し、DeFi利用性を向上させる",
           "totalStake": "22268895685451",
           "dreps": [
             {
@@ -460,76 +460,73 @@
           ]
         },
         {
-          "reason_en": "Supporting logical next step in established initiative with reasonable budget and transparent legal/technical infrastructure setup",
-          "reason_ja": "確立されたイニシアティブの論理的な次のステップを支持し、合理的な予算と透明な法的・技術的インフラの整備",
-          "totalStake": "2907909757358",
+          "reason_en": "Supports logical progression of previously approved liquidity initiative with reasonable infrastructure establishment costs",
+          "reason_ja": "以前承認された流動性イニシアティブの論理的な進展であり、インフラ構築コストが妥当である",
+          "totalStake": "4471516025372",
           "dreps": [
             {
               "name": "Varavas",
-              "stake": "2907909757358"
-            }
-          ]
-        },
-        {
-          "reason_en": "Continuation of previously supported stablecoin DeFi liquidity budget initiative",
-          "reason_ja": "以前に支持されたステーブルコインDeFi流動性予算イニシアティブの継続",
-          "totalStake": "1023038175263",
-          "dreps": [
+              "stake": "2917192214028"
+            },
             {
               "name": "AtlasHub",
-              "stake": "1023038175263"
+              "stake": "1554323811344"
             }
           ]
         }
       ],
       "noReasons": [
         {
-          "reason_en": "Budget allocation is excessive for legal entity establishment; alternative jurisdictions (Marshall Islands, BVI) are more cost-effective than Cayman Islands",
-          "reason_ja": "法人設立のための予算配分が過剰であり、ケイマン諸島よりもマーシャル諸島やBVIなどの代替司法管轄区の方が費用対効果が高い",
-          "totalStake": "3836431181765",
+          "reason_en": "Cayman Islands jurisdiction is expensive with little advantage over alternative jurisdictions like Marshall Islands or BVI",
+          "reason_ja": "ケイマン諸島の司法管轄は高額であり、マーシャル諸島やBVIなどの代替案に対して利点がほぼない",
+          "totalStake": "3797159489309",
           "dreps": [
             {
               "name": "Dr. Navjit Dhaliwal",
-              "stake": "3836431181765"
+              "stake": "3797159489309"
             }
           ]
         },
         {
-          "reason_en": "Majority of budget (664,000 ADA) allocated to legal overhead rather than technical infrastructure or ecosystem development; insufficient justification of practical impact before execution",
-          "reason_ja": "予算の大部分（664,000 ADA）が技術インフラやエコシステム開発ではなく法的管理費に配分されており、実行前の実際的な効果の正当化が不十分",
-          "totalStake": "3165964804428",
+          "reason_en": "Excessive allocation to legal and administrative overhead (664,000 ADA) rather than technical infrastructure and ecosystem development",
+          "reason_ja": "リク���ストされた資金の大部分（664,000 ADA）が法的・行政的オーバーヘッドに配分されており、技術インフラやエコシステム開発に充てるべき",
+          "totalStake": "3160573998123",
           "dreps": [
             {
               "name": "Medusa DRep",
-              "stake": "2527855680601"
+              "stake": "2528746635334"
             },
             {
               "name": "MREDGARCROSS",
-              "stake": "638109123827"
+              "stake": "631827362789"
             }
           ]
         },
         {
-          "reason_en": "Excessive costs for establishing a legal company structure",
-          "reason_ja": "法人構造の確立にための過度なコスト",
-          "totalStake": "424800510489",
+          "reason_en": "Unjustified spending of 800,000 ADA for establishing a legal company",
+          "reason_ja": "法的会社設立のために800,000 ADAを支出することは正当化できない",
+          "totalStake": "424904602958",
           "dreps": [
             {
               "name": "drep1yfx2476p8s...",
-              "stake": "424800510489"
+              "stake": "424904602958"
             }
           ]
         }
       ],
       "abstainReasons": [
         {
-          "reason_en": "Pragmatic acknowledgment of proposer's legitimate DeFi expertise and previous community support, balanced against earlier expressed concerns about the initiative",
-          "reason_ja": "提案者の正当なDeFi専門知識と以前のコミュニティサポートの実用的な認識と、このイニシアティブについて以前に表明された懸念のバランス",
-          "totalStake": "7575211742195",
+          "reason_en": "Proposal has merit and proposer has proven DeFi expertise, but requires more careful scrutiny regarding Interim Committee authority, legal structure validity, fund management transparency, and accountability as precedent for future treasury operations",
+          "reason_ja": "提案は戦略的意義があり提案者は実績のあるDeFi経験者だが、Interim Committeeの権限と責任、法的構造の妥当性、資金管理の透明性、説明責任について、将来のトレジャリー運用に影響する重要案件として慎重な検討が必要である",
+          "totalStake": "11234201777951",
           "dreps": [
             {
               "name": "InputEndorsers",
               "stake": "7575211742195"
+            },
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3658990035756"
             }
           ]
         }

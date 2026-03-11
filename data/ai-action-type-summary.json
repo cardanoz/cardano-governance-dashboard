@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-11T04:56:57.723Z",
+  "generatedAt": "2026-03-11T06:06:23.309Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 49,
-      "summary_en": "Treasury Withdrawals show diverse voting patterns across multiple project types including node implementations (Dingo), DeFi infrastructure (Amaru, stablecoin liquidity), and ecosystem development. Yes votes predominantly support projects addressing critical ecosystem needs like client diversity and liquidity, while No votes cite concerns about cost-efficiency, funding duplication, milestone-based disbursement preferences, and constitutional compliance issues.",
-      "summary_ja": "Treasury Withdrawalsは、ノード実装（Dingo）、DeFiインフラ（Amaru、ステーブルコイン流動性）、エコシステム開発など複数のプロジェクトタイプにおいて多様な投票パターンを示しています。Yes票はクライアント多様性と流動性といった重要なエコシステムニーズに対応するプロジェクトを支持し、No票はコスト効率性、資金重複、マイルストーンベースの配分予定、および憲法準拠の懸念を理由に挙げています。",
+      "summary_en": "Treasury withdrawal proposals for Cardano show mixed voting patterns across 49 proposals, with support primarily driven by team reputation, project importance for network resilience, and strategic value, while opposition focuses on budget concerns, timing, and funding mechanisms. Key dividing factors include whether proposals address critical infrastructure needs (like node diversity) versus preference for milestone-based funding over large lump-sum withdrawals.",
+      "summary_ja": "49の提案に対するCardanoトレジャリー引き出しの投票は混合的なパターンを示しており、支持はチーム評判、ネットワーク弾力性のためのプロジェクト重要性、戦略的価値に基づいており、反対は予算懸念、タイミング、資金調達メカニズムに焦点を当てています。主な分岐点は、提案が重要インフラ需要（ノード多様性など）に対応するかどうか、またはマイルストーンベースの資金と大規模一括引き出しの選好性です。",
       "typicalReasonsYes_en": [
-        "Addresses critical ecosystem infrastructure needs such as client/node diversity and network resilience",
-        "Teams have strong track records and proven capabilities within the Cardano community",
-        "Projects deliver measurable long-term strategic value despite current bearish market conditions",
-        "Cost-benefit analysis is favorable relative to development outcomes and ecosystem impact"
+        "Team reputation and proven track record within the Cardano ecosystem",
+        "Strategic importance for network resilience and client diversity",
+        "Clear technical merit and detailed proposal documentation",
+        "Cost-effectiveness relative to development scope and long-term value"
       ],
       "typicalReasonsYes_ja": [
-        "クライアント多様性やネットワークレジリエンスなどの重要なエコシステムインフラニーズに対応",
-        "チームはCardanoコミュニティ内で強い実績と実証済みの能力を保有している",
-        "現在のベアマーケット環境下でも、測定可能な長期的戦略的価値を提供",
-        "開発成果とエコシステムインパクトに対する費用対効果が有利"
+        "Cardanoエコシステム内のチーム評判と実績の証明",
+        "ネットワーク弾力性とクライアント多様性のための戦略的重要性",
+        "明確な技術的価値と詳細な提案ドキュメンテーション",
+        "開発範囲と長期的価値に対する費用対効果"
       ],
       "typicalReasonsNo_en": [
-        "Funding amount is excessive or budget structure allocates too much to overhead (legal entities, infrastructure) rather than development",
-        "Proposal duplicates ongoing efforts (multiple node implementations) or lacks clear differentiation from existing projects",
-        "Preference for milestone-based funding in tranches rather than single large lump-sum withdrawals to mitigate risk",
-        "Constitutional compliance concerns or governance process issues, particularly regarding transparency and accountability requirements"
+        "Excessive budget size or poor cost-efficiency for the deliverables",
+        "Preference for milestone-based funding instead of single large withdrawals",
+        "Timing concerns or redundancy with other similar proposals in development",
+        "Insufficient specification details or unproven implementation approaches"
       ],
       "typicalReasonsNo_ja": [
-        "資金額が過剰であるか、予算構造が開発ではなくオーバーヘッド（法的実体、インフラ）に過度に配分されている",
-        "進���中の取り組みの重複（複数のノード実装）または既存プロジェクトからの明確な差別化の欠如",
-        "リスク軽減のため、一括大型引き出しではなく段階的なマイルストーンベース資金提供を優先",
-        "特に透明性と説明責任要件に関する憲法準拠の懸念またはガバナンスプロセスの問題"
+        "成果物に対する過度な予算規模または費用対効果の低さ",
+        "単一の大規模引き出しではなくマイルストーンベースの資金調達への選好",
+        "タイミングの懸念または開発中の他の類似提案との重複",
+        "仕様の詳細不足または実装アプローチの実証不足"
       ]
     },
     "InfoAction": {
