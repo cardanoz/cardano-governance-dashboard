@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-10T23:43:35.820Z",
+  "generatedAt": "2026-03-11T02:53:07.083Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 49,
-      "summary_en": "Treasury Withdrawal proposals show mixed support across 49 proposals, with votes driven by project merit, team reputation, and ecosystem needs like node diversity and DeFi liquidity. Common concerns include budget allocation, implementation duplication, milestone-based funding preferences, and constitutional compliance issues.",
-      "summary_ja": "49件の提案に対する投票は、プロジェクトの価値、チームの評判、ノード多様性やDeFi流動性などのエコシステムニーズによって駆動されており、サポートは混在しています。一般的な懸念には、予算配分、実装の重複、マイルストーンベースの資金配分の好み、および憲法準拠の問題が含まれます。",
+      "summary_en": "Treasury Withdrawals show diverse voting patterns across multiple project types including node implementations (Dingo), DeFi infrastructure (Amaru, stablecoin liquidity), and ecosystem development. Yes votes predominantly support projects addressing critical ecosystem needs like client diversity and liquidity, while No votes cite concerns about cost-efficiency, funding duplication, milestone-based disbursement preferences, and constitutional compliance issues.",
+      "summary_ja": "Treasury Withdrawalsは、ノード実装（Dingo）、DeFiインフラ（Amaru、ステーブルコイン流動性）、エコシステム開発など複数のプロジェクトタイプにおいて多様な投票パターンを示しています。Yes票はクライアント多様性と流動性といった重要なエコシステムニーズに対応するプロジェクトを支持し、No票はコスト効率性、資金重複、マイルストーンベースの配分予定、および憲法準拠の懸念を理由に挙げています。",
       "typicalReasonsYes_en": [
-        "Strong team reputation and proven track record of delivery and transparency",
-        "Critical ecosystem need for client/node diversity to reduce single point of failure risk",
-        "Reasonable cost relative to project scope and long-term strategic value",
-        "Detailed budget breakdown and demonstrated accountability (e.g., returning unused funds)"
+        "Addresses critical ecosystem infrastructure needs such as client/node diversity and network resilience",
+        "Teams have strong track records and proven capabilities within the Cardano community",
+        "Projects deliver measurable long-term strategic value despite current bearish market conditions",
+        "Cost-benefit analysis is favorable relative to development outcomes and ecosystem impact"
       ],
       "typicalReasonsYes_ja": [
-        "強い チーム評判と配信と透明性の実績",
-        "単一障害点のリスク軽減のためのクライアント/ノード多様性の重要なエコシステムニーズ",
-        "プ��ジェクト規模と長期的な戦略的価値に対する合理的なコスト",
-        "詳細な予算内訳と実証済みの説明責任（未使用資金の返還など）"
+        "クライアント多様性やネットワークレジリエンスなどの重要なエコシステムインフラニーズに対応",
+        "チームはCardanoコミュニティ内で強い実績と実証済みの能力を保有している",
+        "現在のベアマーケット環境下でも、測定可能な長期的戦略的価値を提供",
+        "開発成果とエコシステムインパクトに対する費用対効果が有利"
       ],
       "typicalReasonsNo_en": [
-        "Excessively high budget or poor cost-effectiveness for the proposed work",
-        "Duplication with existing initiatives (e.g., multiple node implementations already funded)",
-        "Request for single large lump sum rather than milestone-based fund releases",
-        "Constitutional non-compliance or governance process concerns"
+        "Funding amount is excessive or budget structure allocates too much to overhead (legal entities, infrastructure) rather than development",
+        "Proposal duplicates ongoing efforts (multiple node implementations) or lacks clear differentiation from existing projects",
+        "Preference for milestone-based funding in tranches rather than single large lump-sum withdrawals to mitigate risk",
+        "Constitutional compliance concerns or governance process issues, particularly regarding transparency and accountability requirements"
       ],
       "typicalReasonsNo_ja": [
-        "提案された作業に対する過度に高い予算または低い費用対効果",
-        "既存のイニシアチブとの重複（例えば、既に資金提供されている複数のノード実装）",
-        "マイルストーンベースの資金リリースではなく、単一の大口一括請求",
-        "憲法非準拠またはガバナンスプロセスの懸念"
+        "資金額が過剰であるか、予算構造が開発ではなくオーバーヘッド（法的実体、インフラ）に過度に配分されている",
+        "進���中の取り組みの重複（複数のノード実装）または既存プロジェクトからの明確な差別化の欠如",
+        "リスク軽減のため、一括大型引き出しではなく段階的なマイルストーンベース資金提供を優先",
+        "特に透明性と説明責任要件に関する憲法準拠の懸念またはガバナンスプロセスの問題"
       ]
     },
     "InfoAction": {
