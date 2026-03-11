@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38494388152931287",
-    "supply_circulating": "37153011384481718",
-    "supply_locked": "513142635559553",
+    "supply_circulating": "37153010322693757",
+    "supply_locked": "514045306206140",
     "supply_treasury": "1654111958490226",
     "supply_reserves": "6505611847068713",
-    "stake_live": "21815983129628373",
+    "stake_live": "21815595339342805",
     "stake_active": "21787927325337212"
   },
   "protocolParams": {
@@ -2475,7 +2475,7 @@
         "no_votes_cast": 27,
         "abstain_votes_cast": 0,
         "yes_power": "322162793875366",
-        "no_power": "5511214033860676"
+        "no_power": "5513374981510121"
       },
       "cc": {
         "yes_pct": 0,
@@ -2503,7 +2503,7 @@
         "no_votes_cast": 12,
         "abstain_votes_cast": 4,
         "yes_power": "367518889618698",
-        "no_power": "5454512771546445"
+        "no_power": "5456673719195890"
       },
       "cc": {
         "yes_pct": 0,
@@ -2525,12 +2525,12 @@
     "e9693ed6b6465b2b46daaf641486a12b4b2946081634b5967b9d98897b0598fa#0": {
       "proposal_type": "InfoAction",
       "drep": {
-        "yes_pct": 22.15,
-        "no_pct": 77.85,
-        "yes_votes_cast": 33,
+        "yes_pct": 22.18,
+        "no_pct": 77.82,
+        "yes_votes_cast": 34,
         "no_votes_cast": 13,
         "abstain_votes_cast": 1,
-        "yes_power": "1265099179918297",
+        "yes_power": "1267260127567742",
         "no_power": "4446539187659152"
       },
       "cc": {
@@ -2553,13 +2553,13 @@
     "2f2fc2539dde550d3c83bea67c11b03861407976bbe8d07c5b0e124aa8a12baa#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 53.35,
-        "no_pct": 46.65,
+        "yes_pct": 53.33,
+        "no_pct": 46.67,
         "yes_votes_cast": 93,
         "no_votes_cast": 13,
         "abstain_votes_cast": 5,
         "yes_power": "3025721081032695",
-        "no_power": "2645621703570617"
+        "no_power": "2647782651220062"
       },
       "cc": {
         "yes_pct": 33.33,
@@ -2609,13 +2609,13 @@
     "73a4eb2148781c37ef37c90a33a1d3d00511a8eefe9cdfaa1ea593b090f23f96#0": {
       "proposal_type": "InfoAction",
       "drep": {
-        "yes_pct": 44.14,
-        "no_pct": 55.86,
+        "yes_pct": 44.12,
+        "no_pct": 55.88,
         "yes_votes_cast": 118,
         "no_votes_cast": 42,
         "abstain_votes_cast": 13,
         "yes_power": "2458866805568766",
-        "no_power": "3112330534776437"
+        "no_power": "3114491482425882"
       },
       "cc": {
         "yes_pct": 87.5,
