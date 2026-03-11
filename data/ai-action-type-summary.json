@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-11T09:50:54.937Z",
+  "generatedAt": "2026-03-11T10:03:44.868Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 49,
-      "summary_en": "Treasury withdrawal proposals for Cardano show mixed voting patterns across 49 proposals, with support primarily driven by team reputation, project importance for network resilience, and strategic value, while opposition focuses on budget concerns, timing, and funding mechanisms. Key dividing factors include whether proposals address critical infrastructure needs (like node diversity) versus preference for milestone-based funding over large lump-sum withdrawals.",
-      "summary_ja": "49の提案に対するCardanoトレジャリー引き出しの投票は混合的なパターンを示しており、支持はチーム評判、ネットワーク弾力性のためのプロジェクト重要性、戦略的価値に基づいており、反対は予算懸念、タイミング、資金調達メカニズムに焦点を当てています。主な分岐点は、提案が重要インフラ需要（ノード多様性など）に対応するかどうか、またはマイルストーンベースの資金と大規模一括引き出しの選好性です。",
+      "summary_en": "Treasury withdrawals show mixed support with 3,338 yes votes versus 1,010 no votes, primarily driven by proposals for node diversity infrastructure (Dingo Go implementation) and DeFi liquidity initiatives. Yes voters emphasize long-term network resilience and ecosystem development, while no voters cite concerns about funding duplication, high costs, and lack of milestone-based disbursement structures.",
+      "summary_ja": "トレジャリー引き出しは賛成3,338票対反対1,010票で支持が分かれており、主にノード多様性インフラストラクチャ（Dingo Go実装）とDeFi流動性イニシアティブの提案によるものです。賛成票投票者は長期的なネットワーク復元力とエコシステム開発を強調し、反対票投票者は資金重複、高コスト、マイルストーンベースの支出構造の欠如に関する懸念を挙げています。",
       "typicalReasonsYes_en": [
-        "Team reputation and proven track record within the Cardano ecosystem",
-        "Strategic importance for network resilience and client diversity",
-        "Clear technical merit and detailed proposal documentation",
-        "Cost-effectiveness relative to development scope and long-term value"
+        "Client/node diversity reduces single point of failure risk and improves network resilience",
+        "Established teams with proven track records warrant investment in critical infrastructure",
+        "Long-term strategic importance of diversifying language implementations (Go, Rust, Haskell)",
+        "DeFi liquidity improvements support ecosystem adoption and investor confidence"
       ],
       "typicalReasonsYes_ja": [
-        "Cardanoエコシステム内のチーム評判と実績の証明",
-        "ネットワーク弾力性とクライアント多様性のための戦略的重要性",
-        "明確な技術的価値と詳細な提案ドキュメンテーション",
-        "開発範囲と長期的価値に対する費用対効果"
+        "クライ���ント/ノード多様性は単一障害点のリスクを低減し、ネットワークの復元力を向上させる",
+        "実績のある確立されたチームは重要なインフラストラクチャへの投資を保証する",
+        "言語実装の多様化（Go、Rust、Haskell）の長期的戦略的重要性",
+        "DeFi流動性の改善はエコシステムの採用と投資家信頼を支える"
       ],
       "typicalReasonsNo_en": [
-        "Excessive budget size or poor cost-efficiency for the deliverables",
-        "Preference for milestone-based funding instead of single large withdrawals",
-        "Timing concerns or redundancy with other similar proposals in development",
-        "Insufficient specification details or unproven implementation approaches"
+        "Overlapping proposals requesting similar funding for redundant client implementations",
+        "Excessive upfront lump-sum funding without milestone-based disbursement safeguards",
+        "High costs for legal jurisdiction setup (Cayman Islands) without clear justification",
+        "Insufficient priority relative to completing existing infrastructure projects first"
       ],
       "typicalReasonsNo_ja": [
-        "成果物に対する過度な予算規模または費用対効果の低さ",
-        "単一の大規模引き出しではなくマイルストーンベースの資金調達への選好",
-        "タイミングの懸念または開発中の他の類似提案との重複",
-        "仕様の詳細不足または実装アプローチの実証不足"
+        "類似の資金を要求する重複する提案と冗長なクライアント実装",
+        "マイルストンベースの支出保障なしの過度な一括資金要求",
+        "明確な正当化なしのケイマン諸島の法的管轄設置の高コスト",
+        "既存インフラプロジェクトを完了させることに比べて不十分な優先度"
       ]
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on Cardano's Budget Process Framework receive mixed support, with Yes voters appreciating the framework's role in establishing transparency, structured processes, and fiscal discipline for treasury management. No voters express concerns about centralized budget control, inadequate accountability mechanisms, and the need for transparent reporting of previous budget outcomes before approving future spending.",
-      "summary_ja": "CardanoのBudget Process Frameworkに関するInfoActionの提案は賛否が分かれており、賛成票はフレームワークがトレジャリー管理に透明性と構造化されたプロセスをもたらすことを評価している一方、反対票は予算管理の集中化、不十分な説明責任メカニズム、および将来の支出承認前の過去の予算成果に関する透明性報告の必要性について懸念を表明している。",
+      "summary_en": "InfoActions on the Cardano Budget Process Framework represent governance documentation efforts that establish transparent procedures for treasury management and budget allocation cycles. Supporters view these frameworks as essential for ecosystem maturity, coordination, and fiscal discipline, while critics worry about power concentration, insufficient oversight of prior spending, and barriers to decentralized participation.",
+      "summary_ja": "Cardanoの予算プロセスフレームワークに関するInfoActionは、トレジャリー管理と予算配分サイクルのための透明な手続きを確立するガバナンス文書化の取り組みです。支持者はこれらのフレームワークをエコシステムの成熟、調整、および財政規律のために不可欠と見なしていますが、批評家は権力の集中、過去の支出に対する不十分な監視、および分散型参加への障壁について懸念しています。",
       "typicalReasonsYes_en": [
-        "Improves transparency and establishes clear reference framework for treasury budgeting process across the ecosystem",
-        "Introduces structured process with defined criteria to reduce social engineering and ensure fair comparison of proposals",
-        "Signals ecosystem maturation and enables continued experimentation with budget coordination mechanisms",
-        "Reduces procedural uncertainty and improves predictability between proposers, DReps, development teams, and community"
+        "Improves transparency and establishes a clear, predictable process for budget proposals and treasury management",
+        "Reduces reliance on social engineering and big-name recognition by creating objective evaluation criteria and formal procedures",
+        "Signals ecosystem maturation and enables better coordination among proposers, DReps, developers, and the community",
+        "Provides on-chain documentation that serves as a shared reference framework for current and future budget cycles"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー予算プロセスに透明性をもたらし、エコシステム全体の明確な参照枠組みを確立する",
-        "ソーシャルエンジニアリングを減らし、提案の公正な比較を確保するための定義された基準を持つ構造化プロセスを導入する",
-        "エコシステムの成熟を示し、予算調整メカニズムの継続的な実験を可能にする",
-        "手続きの不確実性を軽減し、提案者、DRep、開発チーム、コミュニティ間の予測可能性を向上させる"
+        "予算提案とトレジャリー管理のための明確で予測可能なプロセスを確立し、透明性を向上させる",
+        "客観的な評価基準と正式な手続きを導入することで、社会工学や大手プロジェクトへの依存を軽減する",
+        "エコシステムの成熟を示し、提案者、DRep、開発チーム、およびコミュニティ間のより良い調整を可能にする",
+        "現在および将来の予算サイクルの共有参照枠組みとして機能するオンチェーン文書を提供する"
       ],
       "typicalReasonsNo_en": [
-        "Concentrates budget control with organized actors (particularly Intersect), risking centralization and reducing natural friction that protects against capture",
-        "Lacks transparent reporting and accountability for previous budget outcomes before approving future spending limits",
-        "Imposes barriers to entry (100k ADA donation fee) that discourage grassroots proposals and limit decentralized participation",
-        "Sets spending limits without proven effectiveness metrics or mechanisms to measure impact of funded activities"
+        "Concerns about power concentration toward organized actors like Intersect and reduced decentralization in treasury governance",
+        "Lack of transparent reporting and accountability for prior budget cycles before approving future spending frameworks",
+        "Perceived barriers to entry (high submission fees, 100k ADA requirements) that limit community participation in the proposal process",
+        "Risk that formal budgeting frameworks will favor established entities over smaller, grassroots projects and innovation"
       ],
       "typicalReasonsNo_ja": [
-        "予算管理を組織化されたアクター（特にIntersect）に集中させ、集中化のリスクと分散化を保護する自然な摩擦を低減させる",
-        "将来の支出限度を承認する前に、過去の予算成果に関する透明性のある報告と説明責任が不足している",
-        "エントリーバリア（100k ADAの寄付手数料）を課し、グラスルーツ提案を阻止し、分散化された参加を制限する",
-        "資金提供活動の有効性を測定するための証明されたメトリクスまたはメカニズムなしに支出限度を設定する"
+        "Intersectな���の組織化されたアクターへの権力集中とトレジャリーガバナンスの分散化低下への懸念",
+        "将来の支出フレームワークを承認する前に、過去の予算サイクルに対する透明なレポーティングと説明責任の欠如",
+        "提案プロセスへのコミュニティ参加を制限する高い提出手数料や100k ADAの要件などの参入障壁",
+        "正式な予算フレームワークが、より小規模でグラスルーツなプロジェクトとイノベーションよりも確立された実体を優遇するリスク"
       ]
     },
     "ParameterChange": {
