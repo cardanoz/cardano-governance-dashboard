@@ -1317,5 +1317,149 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2026-03-11",
+    "highlights": [
+      {
+        "category": "governance_action",
+        "title_en": "EMURGO Signals Ecosystem Rebalancing Away from Infrastructure-Only Focus",
+        "title_ja": "EMURGOがインフラ中心からの戦略転換を示唆",
+        "summary_en": "EMURGO publicly backs Charles Hoskinson's call to rebalance Cardano funding priorities from infrastructure toward utility and user experience, positioning the Pentad for ecosystem-wide coordination. This represents a strategic shift in how the ecosystem allocates resources post-infrastructure buildout.",
+        "summary_ja": "EMURGOがCharles Hoskinssonの資金配分の再均衡化を支持。インフラからユーティリティ・ユーザー体験へのシフトを推進し、Pentadの生態系統合を加速させる動き。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@emurgo_io"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Minswap Aggregator Routes Across 17+ Liquidity Sources with Enhanced Market Efficiency",
+        "title_ja": "Minswapアグリゲーターが17以上の流動性ソースを統合",
+        "summary_en": "Minswap has deployed an advanced aggregator finding optimal trade routes across multiple DEXs and pool types, consolidating fragmented Cardano liquidity into a single efficient market infrastructure. This improves capital efficiency and user experience for DeFi traders.",
+        "summary_ja": "Minswapが複数DEXと流動性プールを統合するアグリゲーターを展開。断片化したCardano流動性を効率的に統合し、取引ユーザーの利便性が向上。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@MinswapDEX"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Poki V2 Portfolio Platform Achieves 100X Performance Improvement Post-Launch",
+        "title_ja": "Poki V2が起動後100倍のパフォーマンス改善を実現",
+        "summary_en": "Poki V2 has implemented infrastructure upgrades reducing portfolio load times from seconds to instant for returning users, while addressing NFT/illiquid memecoin valuation issues. This demonstrates active optimization of Cardano DeFi UX critical for adoption.",
+        "summary_ja": "Poki V2がポートフォリオ読み込み速度を100倍改善。NFT・イリキッドトークン価値算定問題にも対応し、DeFiユーザー体験を大幅向上。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@PokiPortfolio"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "WingRiders DEX Shows Strong Momentum with Positive Performance Metrics",
+        "title_ja": "WingRiders DEXが好調な取引指標を記録",
+        "summary_en": "WingRiders protocol reports positive numerical performance across key metrics, indicating healthy trading activity and user engagement on Cardano's DEX ecosystem. This reflects growing utility in the DeFi layer.",
+        "summary_ja": "WingRidersが取引指標で好調を報告。Cardano DeFi生態系における利用者エンゲージメントと取引活動の活発化を示す。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@Sssebi"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Network Development Continues with 847 Commits Across 73 Repositories",
+        "title_ja": "Cardanoネットワーク開発が73リポジトリ across 847コミットで継続進行",
+        "summary_en": "Latest development cycle shows strong commit activity across core infrastructure (cardano-node, mithril, hydra) with significant code changes, maintaining momentum on protocol improvements and scaling solutions. Cardano-haskell-package-repo leads with 70 commits.",
+        "summary_ja": "cardano-node、mithril、hydraなどコア基盤で847コミット。プロトコル改善とスケーリングソリューション開発が継続中。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Indigo Protocol Launches AI-Native DeFi MCP with 1,000+ Early Downloads",
+        "title_ja": "IndigoプロトコルがAIネイティブDeFi MCPを1,000ダウンロード達成",
+        "summary_en": "Indigo has released an AI Model Context Protocol integration enabling AI agents to interact directly with DeFi primitives. This 1,000+ download adoption signals growing interest in AI-agent-driven financial infrastructure on Cardano.",
+        "summary_ja": "IndigoがAIエージェント対応DeFi MCPをリリース。1,000ダウンロード達成は、エージェント型金融インフラへの関心が高まることを示唆。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@crpmore2428"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Constitutional Interpretation Debates Highlight Need for Clarified CC Guidance",
+        "title_ja": "憲法解釈論争がCC明確化の必要性を浮き彫りに",
+        "summary_en": "Community discourse reveals constitutional vagueness allowing multiple valid interpretations of governance actions, with CC members and DReps calling for explicit public statements to resolve ambiguity. This signals need for constitutional clarification mechanisms.",
+        "summary_ja": "CC構成員間で憲法解釈の相違が顕在化。明確性不足により複数の正当な解釈が併存。明示的なCC公式声明の必要性が認識される。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC"
+        ],
+        "sources": [
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "NIGHT Token Maintains Strong Market Position with Trading Volume Leadership",
+        "title_ja": "NIGHTトークンが取引高でトップポジション保持",
+        "summary_en": "$NIGHT leads Cardano's top 7-day traded tokens alongside $USDM, $SNEK, and $USDA, indicating robust Midnight mainnet ecosystem engagement and user activity post-launch. Market traction validates institutional interest in Cardano's privacy layer.",
+        "summary_ja": "$NIGHTが過去7日間のCardano取引高でトップ。Midnight生態系の健全なユーザーエンゲージメントと機関投資家の関心を示唆。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@TapTools"
+        ]
+      }
+    ],
+    "tweetCount": 64,
+    "generatedAt": "2026-03-11T06:44:14.883Z",
+    "apiUsage": {
+      "input_tokens": 4403,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1943,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]
