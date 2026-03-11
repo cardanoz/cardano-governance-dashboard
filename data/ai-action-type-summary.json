@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-11T16:04:30.673Z",
+  "generatedAt": "2026-03-11T17:14:40.199Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 49,
-      "summary_en": "Treasury withdrawal proposals show mixed support, with a 77% yes vote rate across 49 proposals. Key divisions emerge between infrastructure investments (node diversity, DeFi liquidity) that receive support from those prioritizing long-term ecosystem resilience, and concerns about budget efficiency, funding methodology, and opportunity costs during bearish market conditions.",
-      "summary_ja": "49件の提案全体で77%の賛成率を示す混合的なサポート状況が見られます。長期的なエコシステム強化を優先する層からのインフラ投資（ノード多様性、DeFi流動性）への支持と、弱気市場における予算効率性、資金提供方法、および機会費用に関する懸念の間で主な分裂が生じています。",
+      "summary_en": "Treasury Withdrawal proposals show mixed support, with Yes votes primarily driven by support for node/infrastructure diversity and projects from established teams, while No votes center on budget concerns, redundancy with existing initiatives, and requests for milestone-based funding structures. The 49 proposals cover diverse initiatives including node implementations, DeFi liquidity programs, and infrastructure projects.",
+      "summary_ja": "Treasury Withdrawal提案は賛否が分かれており、Yes票はノード実装やインフラストラクチャの多様性、実績のあるチームへの支持が中心で、No票は予算上の懸念、既存イニシアティブとの重複、マイルストーンベースの資金配分要求に集中しています。49件の提案はノード実装、DeFi流動性プログラム、インフラプロジェクトなど多様な取り組みをカバーしています。",
       "typicalReasonsYes_en": [
-        "Client diversity reduces single points of failure and improves network resilience through alternative implementations (Go, Rust nodes alongside existing Haskell)",
-        "Blink Labs and team reputation: established, transparent, proven track record in Cardano ecosystem development",
-        "Long-term strategic value justifies current investment despite bearish market conditions; infrastructure projects require sustained funding",
-        "Addressing ecosystem gaps in liquidity and infrastructure strengthens DeFi usability and investor confidence"
+        "Network resilience and client diversity through multiple node implementations reduce single points of failure",
+        "Support for established, trusted teams with proven track records and transparent development practices",
+        "Long-term strategic importance of core infrastructure development for ecosystem growth and security",
+        "Addresses critical ecosystem weaknesses such as liquidity provision and infrastructure gaps"
       ],
       "typicalReasonsYes_ja": [
-        "代替実装（Go、Rust、既存Haskellノード）を通じたクライアント多様性により、単一障害点を削減しネットワークレジリエンスを改善",
-        "Blink Labsおよびチームの評判：Cardanoエコシステム開発における確立された実績、透明性、証明済みの貢献",
-        "弱気市場でも現在の投資を正当化する長期的戦略的価値；インフラプロジェクトは継続的な資金が必要",
-        "流動性とインフラのエコシステムギャップへの対処はDeFi利用可能性と投資家信頼を強化"
+        "複数のノード実装によるネットワークのレジリエンス向上とクライアント多様性の確保",
+        "実績のある信頼できるチームによる透明性の高い開発の支持",
+        "エコシステム成長とセキュリティに向けたコアインフラストラクチャ開発の長期的重要性",
+        "流動性提供とインフラギャップなど、重大なエコシステムの弱点への対応"
       ],
       "typicalReasonsNo_en": [
-        "Budget concerns: cost is excessive for deliverables; legal entity setup (Cayman Islands) allocation disproportionately high relative to technical value",
-        "Funding methodology: single large lump-sum withdrawal instead of milestone-based, incremental funding increases fiscal risk and accountability gaps",
-        "Redundancy with existing initiatives: overlapping proposals (Amaru node diversity) mean funding multiple similar efforts is inefficient during resource constraints",
-        "Timing and market conditions: bearish market environment warrants conservative treasury spending; non-urgent initiatives should be deferred to prioritize critical infrastructure"
+        "Redundancy concerns with overlapping proposals addressing similar goals (e.g., multiple node implementations)",
+        "Budget excessive relative to scope or concerns about implementation costs (e.g., jurisdiction formation fees)",
+        "Preference for milestone-based funding disbursement rather than large single upfront withdrawals",
+        "Unpublished specifications or insufficient production-ready deliverables justify caution on funding"
       ],
       "typicalReasonsNo_ja": [
-        "予算懸念：成果物に対する費用が過度；法人設立（ケイマン諸島）配分が技術的価値に比して不均衡に高い",
-        "資金提供方法：マイルストーンベース段階的資金提供ではなく単一の大型一括引き出しは、財政リスクと説明責任ギャップを増加",
-        "既存イニシアティブとの重複：重複提案（Amaruノード多様性）は資源制約下での複数類似事業への資金提供が非効率",
-        "タイミングと市場環境：弱気市場はトレジャリー支出における保守的対応を要求；緊急性のないイニシアティブは重要インフラ優先のため延期されるべき"
+        "類似の目標に対応する重複した提案への懸念（例：複数のノード実装）",
+        "スコープに対する予算の過剰さや実装コストへの懸念（例：管轄地域設立費用）",
+        "大規模な一括引き出しではなく、マイルストーンベースの資金配分の希��",
+        "未発表の仕様や本番環境対応の不十分さによる資金提供の慎重さ"
       ]
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on the Cardano Budget Process Framework receive strong support for establishing transparency, structure, and coordination mechanisms for treasury management, though concerns persist about centralization risks, high barriers to entry, and lack of accountability for prior spending. Voters generally appreciate the framework as a necessary governance maturation tool while expressing reservations about potential capture by established entities and the need for demonstrated results from previous budget cycles.",
-      "summary_ja": "CardanoのBudget Process Frameworkに関するInfoActionは、トレジャリー管理の透明性、構造化、調整メカニズムの確立を支持する強い支持を受けています。一方、集権化リスク、高い参入障壁、過去の支出に対するアカウンタビリティの欠如についての懸念が存在します。投票者は、このフレームワークをガバナンスの成熟に必要なツールとして評価する一方で、確立された団体による支配の可能性と以前の予算サイクルからの成果実証の必要性について懸念を表明しています。",
+      "summary_en": "InfoAction proposals on Cardano governance frameworks, particularly budget processes, receive mixed reception with supporters valuing transparency, structured coordination, and ecosystem maturation, while critics worry about exclusionary barriers, concentration of power among large organizations, and lack of accountability for previous spending. The tension reflects broader concerns about balancing effective governance infrastructure with preserving decentralization and accessibility.",
+      "summary_ja": "CardanoのInfoAction提案、特に予算プロセスに関するものは賛否両論を受けており、支持者は透明性、構造化された調整、エコシステムの成熟を重視する一方、批評家は参入障壁の高さ、大規模組織への権力集中、過去の支出に対する説明責任の欠如を懸念しています。これは効果的なガバナンスインフラストラクチャと分散性・アクセス可能性の保全のバランスをめぐるより広い関心を反映しています。",
       "typicalReasonsYes_en": [
-        "Improves transparency and creates a clear reference framework for ecosystem budgeting processes",
-        "Reduces gaming and social engineering by establishing formal proposal submission and review procedures",
-        "Enhances predictability and coordination among proposers, DReps, developers, and the community",
-        "Signals governance maturation and demonstrates ecosystem evolution toward more structured treasury management"
+        "Improves transparency and provides a clear, shared reference framework for budget proposals and treasury processes",
+        "Establishes structured coordination mechanisms to reduce uncertainty and improve predictability in governance",
+        "Introduces quality filters and standardized evaluation criteria to ensure only valuable projects receive funding",
+        "Signals ecosystem maturation and professional administration needed for sustainable Cardano development"
       ],
       "typicalReasonsYes_ja": [
-        "エコシステム予算プロセスの透明性を向上させ、明確な参照枠組みを作成する",
-        "形式的な提案提出とレビュー手続きを確立することにより、ゲーム的行動と社会的エンジニアリングを削減する",
-        "提案者、DRep、開発者、コミュニティ間の予測可能性と調整を強化する",
-        "ガバナンスの成熟を示し、より構造化されたトレジャリー管理への進化を実証する"
+        "予算提案と財務プロセスの透明性を向上させ、明確で共有された参照枠組みを提供する",
+        "不確実性を軽減し、ガバナンスの予測可能性を向上させるための構造化された調整メカニズムを確立する",
+        "質的フィルターと標準化された評価基準を導入し、価値あるプロジェクトのみが資金を受け取ることを保証する",
+        "エコシステムの成熟とCardanoの持続可能な発展に必要な専門的な管理を示唆する"
       ],
       "typicalReasonsNo_en": [
-        "Concentrates power with organized entities like Intersect and risks reducing decentralized decision-making friction",
-        "Lacks accountability mechanisms and performance review of prior budget cycles before approving future spending",
-        "High barriers to entry (100k ADA donation fee) prevent diverse community participation and smaller projects",
-        "Excessive Net Change Limit amounts (300-350M ADA) enable wasteful spending without demonstrated ROI from previous allocations"
+        "High entry barriers (1,000-100,000 ADA fees/minimums) create pay-to-play exclusivity that disadvantages grassroots developers and smaller organizations",
+        "Concentrates budgeting power in Intersect and large established entities, reducing decentralization and community participation",
+        "Lacks accountability and transparency regarding outcomes of previous budget cycles before approving future spending",
+        "Excessive spending limits (300M+ ADA) are irresponsible without evidence that prior year allocations were effectively utilized"
       ],
       "typicalReasonsNo_ja": [
-        "Intersectなどの組織化された団体に権力を集中させ、分散化された意思決定メカニズムのバランスを減らすリスクがある",
-        "将来の支出を承認する前に、過去の予算サイクルのパフォーマンスレビューとアカウンタビリティメカニズムが不足している",
-        "参入障壁が高い（100k ADA寄付金）ため、多様なコミュニティ参加と小規模プロジェクトが妨げられる",
-        "過度なNet Change Limit額（300-350M ADA）により、以前の配分からの実証されたROIなしに浪費的な支出が可能になる"
+        "高い参入障壁（1,000～100,000 ADAsの手数料/最小要件）は大規模組織を優遇し、草の根開発者や小規模組織を排除するペイ・トゥ・プレイシステムを作成する",
+        "予算編成権をIntersectと大規模既成企業に集中させ、分散性とコミュニティ参加を削減する",
+        "将来の支出を承認する前に、前年度の予算サイクルの成果に関する説明責任と透明性が不足している",
+        "過度な支出制限（300M以上 ADA）は、前年度の配分が効果的に活用されたという証拠なしには無責任である"
       ]
     },
     "ParameterChange": {
