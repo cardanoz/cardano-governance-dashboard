@@ -1,35 +1,35 @@
 {
-  "lastRun": "2026-03-11T06:43:53.321Z",
+  "lastRun": "2026-03-12T06:46:05.392Z",
   "tier1Accounts": 134,
   "tier2Searches": 7,
-  "tier1Collected": 958,
-  "tier2Collected": 134,
-  "deduplicated": 1072,
-  "totalStored": 2612,
+  "tier1Collected": 967,
+  "tier2Collected": 130,
+  "deduplicated": 1087,
+  "totalStored": 2859,
   "categories": {
-    "protocol_parameter": 18,
-    "dev_tools": 171,
-    "key_person": 410,
+    "key_person": 407,
     "ecosystem_adoption": 197,
+    "dev_tools": 174,
     "spo": 112,
-    "constitution_budget": 8,
-    "institutional": 70,
-    "network_ops": 19,
-    "security": 19,
-    "governance_action": 18,
-    "governance_tool": 30
+    "protocol_parameter": 17,
+    "constitution_budget": 18,
+    "security": 20,
+    "network_ops": 20,
+    "governance_action": 16,
+    "institutional": 77,
+    "governance_tool": 29
   },
-  "lastSummarized": "2026-03-11T06:44:14.906Z",
+  "lastSummarized": "2026-03-12T06:46:26.442Z",
   "dailySummarized": true,
   "dailyApiUsage": {
-    "input_tokens": 4403,
+    "input_tokens": 5108,
     "cache_creation_input_tokens": 0,
     "cache_read_input_tokens": 0,
     "cache_creation": {
       "ephemeral_5m_input_tokens": 0,
       "ephemeral_1h_input_tokens": 0
     },
-    "output_tokens": 1943,
+    "output_tokens": 2339,
     "service_tier": "standard",
     "inference_geo": "not_available"
   }

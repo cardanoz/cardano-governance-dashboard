@@ -1,5 +1,170 @@
 [
   {
+    "date": "2026-03-12",
+    "highlights": [
+      {
+        "category": "protocol_parameter",
+        "title_en": "Antithesis Simulation Validates Leios Protocol for Cardano Scalability",
+        "title_ja": "Antithesis シミュレーションが Leios プロトコルを検証",
+        "summary_en": "IO conducted first Antithesis simulation for Leios, running a 3-node Cardano network for 48 hours of simulation time in just 1 hour on hypervisor. Testing capability enables stress-testing with long-running transaction spam scenarios.",
+        "summary_ja": "IO が Leios の初めての Antithesis シミュレーションを実施。3 ノード Cardano ネットワークの 48 時間シミュレーションを 1 時間で完了し、スケーラビリティと秒スケールでの検証が可能に。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@wolf31o2"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Midnight Mainnet Launch Confirmed for March 26 with Google & Telegram Partnership",
+        "title_ja": "Midnight メインネット 3 月 26 日ローンチ確定、Google & Telegram パートナーシップ",
+        "summary_en": "Midnight regulatory-compliant ZK privacy chain launches March 26 with Google and Telegram as infrastructure partners. $NIGHT token listing on Binance with planned on-chain celebration event.",
+        "summary_ja": "Midnight が 3 月 26 日のメインネット立ち上げを確定。Google と Telegram がインフラパートナーとして参加。$NIGHT token は Binance リストされ、オンチェーン祝賀イベント計画中。",
+        "importance": 5,
+        "audience": [
+          "Holder",
+          "Builder",
+          "DRep"
+        ],
+        "sources": [
+          "@CardanoFeed",
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Cardano DeFi TVL Surges 23% in Two Weeks; Stablecoin Pool Reaches $5M",
+        "title_ja": "Cardano DeFi TVL が 2 週間で 23% 急増、ステーブルコインプール 500 万ドル達成",
+        "summary_en": "Cardano's DeFi TVL spiked 23% in under 2 weeks. SundaeSwap's USDCx-USDM StablePool TVL exceeded $5M, offering low slippage and high capital efficiency for stablecoin trading.",
+        "summary_ja": "Cardano の DeFi TVL が 2 週間で 23% 上昇。SundaeSwap のステーブルプール TVL が 500 万ドルを超え、スリッページが小さく資本効率が高い。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@CardanoFeed",
+          "@SIPO_Tokyo"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Dingo v0.24.0 Released with Enhanced API Capabilities",
+        "title_ja": "Dingo v0.24.0 リリース、API 機能強化",
+        "summary_en": "New Dingo release v0.24.0 continues momentum in Cardano development tooling. Follows recent commits showing Dingo leading repository activity (60 commits tracked in latest activity report).",
+        "summary_ja": "Dingo v0.24.0 がリリース。Cardano 開発ツールチェーンの強化を継続。最新レポートで 60 コミットを記録。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Pentad Framework Governance Decentralization Debate: Community Questions Authority Concentration",
+        "title_ja": "Pentad フレームワーク分散化議論：権力集中への懸念",
+        "summary_en": "Community debate intensifies on Pentad governance model with critics arguing centralization risk through CF and Intersect, while framework supporters counter that committees currently have minimal influence. Phillip Pon reiterates Founding Entities aim to reduce roles, empowering community builders.",
+        "summary_ja": "Pentad ガバナンスモデルに関して、CF と Intersect を通じた権力集中への懸念が高まる。��方、Phillip Pon は Founding Entities が役割を減らし、コミュニティビルダーを支援する方針を再確認。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@0xNLYFANS",
+          "@phillip_pon",
+          "@phillewisit",
+          "@adamKDean"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "anetaBTC V2 Testnet Launch Enables Native BTC Wrapping on Cardano",
+        "title_ja": "anetaBTC V2 テストネット起動、Cardano で BTC ラップが可能に",
+        "summary_en": "anetaBTC V2 officially launched on Cardano's public testnet with full native BTC wrapping/unwrapping capability. Open-source infrastructure on distributed, resilient backbone enables cross-chain Bitcoin integration.",
+        "summary_ja": "anetaBTC V2 が Cardano パブリックテストネットに正式立ち上げ。native BTC ラップ・アンラップ機能を搭載し、オープンソースで分散型インフラを実現。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "DRep Discovery Infrastructure Gap Identified; Wallet Integration Proposed",
+        "title_ja": "DRep 発見機能の不足を指摘、ウォ��ット統合を提案",
+        "summary_en": "SIPO Tokyo highlights critical DRep discovery gap in Cardano governance, proposing wallet-integrated 'DRep menu' to help users easily find and understand DReps. Infrastructure improvement needed for voter participation.",
+        "summary_ja": "SIPO Tokyo が Cardano ガバナンスの DRep 発見機能の不足を指摘。ウォレットに統合された DRep メニューを提案し、ユーザーが DRep を簡単に見つけられる仕組みを要望。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@SIPO_Tokyo"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Development Momentum: 825 Commits Across 70 Repositories",
+        "title_ja": "Cardano 開発継続：70 リポジトリ中 825 コミット",
+        "summary_en": "March 11 development activity shows 825 commits across 70 repositories with formal-ledger-specifications (76), cardano-node (64), dingo (60), and mithril (58) leading. Net change of +30.9M lines added.",
+        "summary_ja": "3 月 11 日の開発実績：70 リポジトリに 825 コミット。formal-ledger-specifications (76)、cardano-node (64)、dingo (60) がリード。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Brave Wallet Cross-Chain Integration Expands to Cardano via NEAR Intents",
+        "title_ja": "Brave ウォレット NEAR Intents で Cardano 統合拡大",
+        "summary_en": "Brave Wallet now supports NEAR Intents enabling seamless decentralized cross-chain swaps across Bitcoin, Solana, Zcash, Cardano, and EVM chains directly in browser.",
+        "summary_ja": "Brave ウォレットが NEAR Intents をサポート開始。Bitcoin、Solana、Zcash、Cardano、EVM チェーン間のシームレスなクロスチェーンスワップをブラウザ内で実現。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@bitvillecrypto"
+        ]
+      }
+    ],
+    "tweetCount": 59,
+    "generatedAt": "2026-03-12T06:46:26.422Z",
+    "apiUsage": {
+      "input_tokens": 5108,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2339,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
     "date": "2026-03-11",
     "highlights": [
       {
@@ -889,140 +1054,6 @@
     ],
     "tweetCount": 119,
     "generatedAt": "2026-03-06T15:06:51.329Z",
-    "backfilled": true
-  },
-  {
-    "date": "2026-03-04",
-    "highlights": [
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "Stablecoin Market Rapidly Growing on Cardano",
-        "title_ja": "Cardanoのステーブルコイン市場が急速に成長",
-        "summary_en": "USDCx has minted over 15M since launch last Friday, while USDM surpassed 15.8M. Total stablecoin market cap reached nearly $50M, signaling strong DeFi infrastructure growth.",
-        "summary_ja": "USDCxは先週の立ち上げ以来1500万以上が鋳造され、USDMは1580万を超えました。ステーブルコイン総時価総額は約5000万ドルに達しました。",
-        "importance": 5,
-        "audience": [
-          "Holder",
-          "Builder",
-          "DRep"
-        ],
-        "sources": [
-          "@Cardanians_io"
-        ]
-      },
-      {
-        "category": "dev_tools",
-        "title_en": "Lace 2.0 and Midnight Launch Signal Major Wallet Evolution",
-        "title_ja": "Lace 2.0とMidnightの発表が大きなウォレット進化を示唆",
-        "summary_en": "Lace is retiring Nami mode to support Lace 2.0 and Midnight mainnet launch scheduled for March. Users' wallets and assets will migrate seamlessly, marking a generational shift in Cardano infrastructure.",
-        "summary_ja": "LaceはNamiモードを廃止してLace 2.0とMidnight（3月予定）をサポートします。ユーザーのウォレットと資��はシームレスに移行します。",
-        "importance": 5,
-        "audience": [
-          "Holder",
-          "Builder",
-          "DRep"
-        ],
-        "sources": [
-          "@lace_io",
-          "@pulsecardano"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "Cross-Chain Smart Accounts Enable Multi-Chain DeFi Access",
-        "title_ja": "クロスチェーンスマートアカウントがマルチチェーンDeFiアクセスを実現",
-        "summary_en": "Fluid Tokens' Smart Accounts feature allows users to connect BTC, DOGE, ETH, EVM, and LTC wallets to Cardano with a single signature, significantly expanding ecosystem accessibility.",
-        "summary_ja": "FluidTokensのスマートアカウント機能により、ユーザーはBTC、DOGE、ETH、EVM、LTCウォレットをCardanoに単一署名で接続でき、エコシステムのアクセス性が大幅に向上します。",
-        "importance": 4,
-        "audience": [
-          "Builder",
-          "Holder",
-          "DRep"
-        ],
-        "sources": [
-          "@FluidTokens"
-        ]
-      },
-      {
-        "category": "protocol_parameter",
-        "title_en": "Draft Proposal to Double Pool Target Parameter K",
-        "title_ja": "プールターゲットパラメータKを倍増させるドラフト提案",
-        "summary_en": "A governance draft proposal seeks to increase Cardano's target pool count from 500 to 1000, decentralizing stake pool distribution and improving network resilience.",
-        "summary_ja": "ガバナンスドラフト提案は、CardanoのターゲットプールカウントをIOG研究から500から1000に増やし、ステークプール分散を強化することを目指しています。",
-        "importance": 4,
-        "audience": [
-          "SPO",
-          "DRep",
-          "CC"
-        ],
-        "sources": [
-          "@JaromirTesar"
-        ]
-      },
-      {
-        "category": "institutional",
-        "title_en": "CME Group Launches 24/7 ADA Futures Trading",
-        "title_ja": "CMEグループがADA先物の24/7取引を開始",
-        "summary_en": "CME Group will expand its crypto futures and options suite with 24/7 trading on May 29th, now including newly listed ADA futures, substantially increasing institutional access.",
-        "summary_ja": "CMEグループは5月29日に暗号先物・オプション商品の24/7取引を拡大し、新たに上場されたADA先物も含めます。",
-        "importance": 5,
-        "audience": [
-          "Holder",
-          "Institution"
-        ],
-        "sources": [
-          "@angrycryptoshow"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "PENTAD Initiative Delivers First Integration with USDCx",
-        "title_ja": "PENTAD イニシアティブがUSDCxとの最初の統合を実現",
-        "summary_en": "USDCx marks PENTAD's first critical integration after only 3 months, with LayerZero, Pyth Oracle, and Dune Analytics integrations pending, demonstrating rapid ecosystem coordination.",
-        "summary_ja": "USDCxはわずか3ヶ月後のPENTADの最初の重要な統合であり、LayerZero、Pythオラクル、Duneアナリティクスの統合が予定されています。",
-        "importance": 4,
-        "audience": [
-          "Builder",
-          "DRep",
-          "Holder"
-        ],
-        "sources": [
-          "@Cardanians_io"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "DeFi Ecosystem Expansion Across Multiple Verticals",
-        "title_ja": "複数の分野にわたるDeFiエコシステムの拡大",
-        "summary_en": "Cardano's DeFi ecosystem now spans lending (Liqwid, Indigo), trading (CSwap, Atrium), leverage (Strike), prediction markets (Bodega), NFTs, and AI applications, demonstrating comprehensive financial infrastructure.",
-        "summary_ja": "CardanoのDeFiエコシステムは貸出、取引、レバレッジ、予測市場、NFT、AIアプリケーション。包括的な金融インフラストラクチャを実証しています。",
-        "importance": 3,
-        "audience": [
-          "Builder",
-          "Holder"
-        ],
-        "sources": [
-          "@bigpey"
-        ]
-      },
-      {
-        "category": "network_ops",
-        "title_en": "Strike Protocol V2 Mainnet Deployment Progressing",
-        "title_ja": "StrikeプロトコルV2メインネット展開が進行中",
-        "summary_en": "Strike Perpetuals reports successful V2 mainnet functionality testing with mainnet deployment underway and end-to-end testing planned before official launch announcement.",
-        "summary_ja": "StrikeパーペチュアルズはV2メインネット機能テストの成功を報告し、メインネット展開が進行中で、公式立ち上げ前にエンドツーエンドテストが予定されています。",
-        "importance": 3,
-        "audience": [
-          "Builder",
-          "DRep"
-        ],
-        "sources": [
-          "@strikeperps"
-        ]
-      }
-    ],
-    "tweetCount": 117,
-    "generatedAt": "2026-03-06T15:06:21.308Z",
     "backfilled": true
   }
 ]
