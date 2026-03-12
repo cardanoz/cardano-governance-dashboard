@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-12T21:50:57.468Z",
+  "generatedAt": "2026-03-12T22:49:50.955Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
-      "count": 49,
-      "summary_en": "Treasury Withdrawal proposals show mixed community sentiment, with supporters emphasizing critical infrastructure needs (particularly client diversity and ecosystem development) while opponents cite budget concerns, implementation redundancy, and preference for milestone-based funding. Key tensions exist between long-term strategic investments and near-term fiscal responsibility during market downturns.",
-      "summary_ja": "Treasury Withdrawal提案は、クライアント多様性やエコシステム開発などの重要なインフラニーズを強調する支持者と、予算懸念、実装の冗長性、マイルストーンベースの資金調達を好む反対者との間で、コミュニティの感情が混在しています。長期的な戦略投資と市場低迷時の短期的な財政責任の間に重要な緊張関係が存在します。",
+      "count": 50,
+      "summary_en": "Treasury withdrawal proposals show mixed support, with votes split between infrastructure investments (node diversity, DeFi liquidity) and fiscal concerns. Key dividing factors include project urgency, team reputation, budget efficiency, and alignment with existing ecosystem initiatives.",
+      "summary_ja": "トレジャリー引き出し提案は、インフラ投資（ノード多様性、DeFi流動性）と財政的懸念の間で投票が分かれている。主な決定要因は、プロジェクトの緊急性、チームの評判、予算効率、および既存のエコシステムイニシアチブとの整合性である。",
       "typicalReasonsYes_en": [
-        "Critical need for client/node diversity to reduce single point of failure risk and improve network resilience",
-        "Support for experienced teams with proven track records (Blink Labs credibility and transparency)",
-        "Strategic infrastructure investment essential for long-term adoption and ecosystem sustainability",
-        "Good cost-to-benefit ratio given development milestones already achieved and project importance"
+        "Client/node diversity reduces single points of failure and improves network resilience",
+        "Established teams with proven track records and transparency deserve continued support",
+        "Critical ecosystem infrastructure development justifies treasury investment for long-term security",
+        "DeFi liquidity improvements address genuine ecosystem weaknesses and enhance adoption"
       ],
       "typicalReasonsYes_ja": [
-        "単一実装のリスクを軽減し、ネットワークのレジリエンス向上のためのクライアント多様性が不可欠",
-        "実績のある信頼性の高いチーム（Blink Labsの信頼性と透明性）への支持",
-        "長期的な採用とエコシステム持続性のための戦略的インフラ投資",
-        "既に達成されたマイルストーンと提案の重要性を考慮すると、費用対効果が良好"
+        "クライアント/ノードの多様性は単一障害点を減らし、ネットワークの耐障害性を向上させる",
+        "実績があり透明性のある確立されたチームは継続的なサポートに値する",
+        "重要なエコシステムインフラ開発は、長期的なセキュリティのためのトレジャリー投資を正当化する",
+        "DeFi流動性の改善はエコシステムの真の弱点に対処し、採用を向上させる"
       ],
       "typicalReasonsNo_en": [
-        "Excessive budget ($6.9M ADA) for development that duplicates ongoing Rust node (Amaru) initiatives",
-        "Preference for milestone-based funding requests rather than large single lump-sum withdrawals",
-        "Concerns about funding experimental redundancy when focused implementations should be prioritized",
-        "Implementation costs appear inflated (e.g., $250k/year for Go engineers, expensive Cayman Islands jurisdiction)"
+        "Excessive costs and inefficient budgeting (e.g., inflated engineer salaries, expensive jurisdiction setup)",
+        "Redundant proposals when similar initiatives already receive funding or are underway",
+        "Funding required upfront in full without milestone-based payment structure or deliverable validation",
+        "Lower priority compared to existing node implementations; premature given ongoing Rust node development"
       ],
       "typicalReasonsNo_ja": [
-        "進行中のRustノード（Amaru）イニシアチブと重複する開発に対する過度な予算（690万ADA）",
-        "大規模な一括引き出しではなく、マイルストーンベースの資金調達要求の方を好む",
-        "焦点を絞った実装を優先すべき時に、実験的な冗長性への資金調達に対する懸念",
-        "実装費用が過大に���える（例：Goエンジニア年間25万ドル、高額なケイマン諸島の司法管轄区）"
+        "過度なコストと非効率な予算計画（例：給与のインフレ、高額な管轄区域設定費用）",
+        "類似のイニシアティブが既に資金を受けているか進行中の場合の冗長な提案",
+        "マイルストーンベースの支払い構造や成果物検証なしで全額を事前に要求",
+        "既存のノード実装と比較して優先度が低い。Rustノード開発の進行中に時期尚早"
       ]
     },
     "InfoAction": {
