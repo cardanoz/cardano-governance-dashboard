@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-03-12T19:55:08.878Z",
-  "updated_ts": 1773345308878,
+  "updated_at": "2026-03-12T20:51:48.873Z",
+  "updated_ts": 1773348708873,
   "drep_count": 1595,
   "proposal_count": 92,
   "vote_count": 17937,
-  "api_calls": 231,
-  "fetch_duration_ms": 124422,
+  "api_calls": 298,
+  "fetch_duration_ms": 25131,
   "max_votes": 120,
   "current_epoch": 618,
   "cached_expired_votes": 17408,
@@ -14,6 +14,6 @@
   "votes_from_cache": true,
   "cc_from_cache": true,
   "spo_from_cache": false,
-  "spo_vote_count": 3001,
+  "spo_vote_count": 2933,
   "spo_pool_count": 6120
 }
