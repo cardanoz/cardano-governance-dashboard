@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38494388152931287",
-    "supply_circulating": "37153003511100642",
-    "supply_locked": "514055318677626",
+    "supply_circulating": "37153003317657184",
+    "supply_locked": "514177951611581",
     "supply_treasury": "1654111958490226",
     "supply_reserves": "6505611847068713",
-    "stake_live": "21757020763990985",
+    "stake_live": "21756465886872490",
     "stake_active": "21787927325337212"
   },
   "protocolParams": {
@@ -2555,11 +2555,11 @@
       "drep": {
         "yes_pct": 55.86,
         "no_pct": 44.14,
-        "yes_votes_cast": 97,
+        "yes_votes_cast": 98,
         "no_votes_cast": 14,
         "abstain_votes_cast": 6,
-        "yes_power": "3167230430105685",
-        "no_power": "2502628358622013"
+        "yes_power": "3167388450514655",
+        "no_power": "2502470338213043"
       },
       "cc": {
         "yes_pct": 33.33,
