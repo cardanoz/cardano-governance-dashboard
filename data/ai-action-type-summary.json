@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-12T13:41:07.038Z",
+  "generatedAt": "2026-03-12T15:11:56.525Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 49,
@@ -32,31 +32,31 @@
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on Cardano governance, particularly the Intersect Budget Process Framework, receive mixed support. Supporters value the framework for establishing transparency, structured coordination, and clear processes for treasury management, while critics argue it creates barriers to entry and concentrates power among large organizations.",
-      "summary_ja": "Cardano ガバナンスの InfoAction 提案、特に Intersect Budget Process Framework は賛否両論を受けています。支持者はトレジャリー管理の透明性、構造化された調整、明確なプロセスの確立を重視する一方、批評家は参入障壁を生み出し、大規模組織への権力集中につながると主張しています。",
+      "summary_en": "InfoAction proposals on the Cardano Budget Process Framework receive mixed support, with YES voters appreciating the transparency, structure, and coordination mechanisms it provides for treasury management, while NO voters criticize it as overly centralized, exclusionary to smaller projects, and too dependent on Intersect with high entry barriers. Abstainers express concerns about governance maturity, lack of prior budget accountability, and insufficient clarity on fund allocation.",
+      "summary_ja": "CardanoのBudget Process Frameworkに関するInfoActionは賛否が分かれており、YES投票者はトレジャリー管理における透明性・構造化・調整メカニズムを評価する一方、NO投票者はIntersectへの過度な中央集権化、小規模プロジェクトへの排他性、高い参入障壁を批判しています。棄権投票者はガバナンスの成熟度の不足、過去の予算説明責任の欠如、資金配分の不明確さに懸念を表明しています。",
       "typicalReasonsYes_en": [
-        "Improves transparency and establishes clear, structured processes for treasury budget proposals and allocation",
-        "Provides common reference framework for ecosystem coordination and reduces procedural ambiguity in governance",
-        "Introduces screening mechanisms and evaluation criteria to ensure higher quality project funding",
-        "Signals ecosystem maturation and demonstrates commitment to disciplined, professional governance practices"
+        "Improves transparency and provides a clear, structured framework for budget proposal collection, review, and execution",
+        "Reduces uncertainty and social engineering in treasury withdrawals by establishing objective evaluation criteria and common reference standards",
+        "Enables ecosystem maturation through formalized processes, better coordination between stakeholders, and predictability in governance",
+        "Replaces ad-hoc decision-making with disciplined procedures that filter proposals by merit and quality"
       ],
       "typicalReasonsYes_ja": [
-        "トレジャリー予算提案と配分のための透明性向上と明確で構造化されたプロ���スの確立",
-        "エコシステム調整のための共通参照枠組みを提供し、ガバナンスの手続き上の曖昧性を軽減",
-        "スクリーニングメカニズムと評価基準を導入して、より高品質なプロジェクト資金調達を確保",
-        "エコシステムの成熟を示し、規律のある専門的なガバナンス実践へのコミットメントを実証"
+        "トレジャリー管理の透明性を向上させ、予算提案の収集・レビュー・実行プロセスを明確に定義する",
+        "客観的な評価基準と共通の参照枠組みを確立することで、社会工学的な資金獲得やエコシステム不確実性を削減する",
+        "形式的なプロセスを通じてステークホルダー間の調整を改善し、ガバナンスの成熟化と予測可能性を促進する",
+        "メリットベースのフィルタリングにより質の高い提案を選別し、恣意的な意思決定を排除する"
       ],
       "typicalReasonsNo_en": [
-        "Creates exclusionary 'pay-to-play' barriers with high entry fees (1,000 ADA) and minimum request thresholds (100,000 ADA) that disadvantage grassroots developers",
-        "Concentrates power and funding toward large, organized entities like Intersect at the expense of decentralized community proposals",
-        "Lacks transparent reporting and accountability for previous budget cycles before approving future spending authority",
-        "May enable capture and monopolization of treasury resources by established actors, reducing the natural friction that protects decentralization"
+        "Creates an exclusionary 'pay-to-play' system with high entry barriers (1,000 ADA fee, 100,000 ADA minimum request) that disadvantages grassroots developers and small projects",
+        "Concentrates power in Intersect and organized actors, reducing natural friction that protects against governance capture in decentralized systems",
+        "Introduces excessive bureaucracy and centralization that deters builders while favoring large organizations and established entities",
+        "Lacks accountability for prior budget performance and spending without transparent reporting on how 2025 funds were utilized"
       ],
       "typicalReasonsNo_ja": [
-        "高い参入手数料（1,000 ADA）と最小要求額（100,000 ADA）の障壁を設け、草の根開発者を不利にする排他的な「金銭による支配」システムを作成",
-        "権力と資金をIntersectなどの大規模で組織化されたエンテ���ティに集中させ、分散型のコミュニティ提案を損なう",
-        "将来の支出権を承認する前に、過去の予算サイクルの透明な報告と説明責任が欠落している",
-        "確立された行為者によるトレジャリー資源の権力集中と独占を可能にし、分散化を保護する自然な摩擦を減少させる可能性がある"
+        "高い参入障壁（1,000 ADA手数料、100,000 ADA最小要求額）により、グラスルーツ開発者や小規模プロジェクトを排除する「ペイ・トゥ・プレイ」システムを構築する",
+        "Intersectと大規模組織に権力を集中させ、分散化システムにおけるガバナンス乗っ取りを防ぐ自然なフリクションを減少させる",
+        "過度な官僚化と中央集権化により、ビルダーのアクセスを阻害しながら大規模組織や確立された事業体を優遇する",
+        "2025年の資金がどのように利用されたかについての透明性のある報告がなく、過去の予算パフォーマンスに対する説明責任が欠けている"
       ]
     },
     "ParameterChange": {
