@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38494388152931287",
-    "supply_circulating": "37152899707419953",
-    "supply_locked": "512628856248931",
+    "supply_circulating": "37152899135584384",
+    "supply_locked": "512770797050665",
     "supply_treasury": "1654111958490226",
     "supply_reserves": "6505611847068713",
-    "stake_live": "21766147814322565",
+    "stake_live": "21766714179006262",
     "stake_active": "21787927325337212"
   },
   "protocolParams": {
