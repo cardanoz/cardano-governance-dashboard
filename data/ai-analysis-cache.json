@@ -43282,16 +43282,16 @@
       }
     },
     "e5c4d7ebaad03ac127ec19a286605a188d6fea1c54e075c619ca6993b7fa9fd1#0": {
-      "voteCountAtAnalysis": 30,
+      "voteCountAtAnalysis": 32,
       "analysis": {
         "title": "Cardano Defi Liquidity Budget - Withdrawal 1",
         "type": "TreasuryWithdrawals",
         "submittedEpoch": 0,
         "stats": {
           "votedWithRationale": 14,
-          "votedWithoutRationale": 16,
-          "notVoted": 1565,
-          "notVotedTotalStake": "5343732068630155",
+          "votedWithoutRationale": 18,
+          "notVoted": 1563,
+          "notVotedTotalStake": "5324422478865387",
           "notVotedTopDreps": [
             {
               "name": "Yoroi W₳llet",
@@ -43335,12 +43335,12 @@
             }
           ],
           "yesBreakdown": {
-            "total": 13,
+            "total": 15,
             "withRationale": 3,
-            "withoutRationale": 10,
-            "totalStake": "410381106306153",
+            "withoutRationale": 12,
+            "totalStake": "429690696070921",
             "withRationaleStake": "26740411710823",
-            "withoutRationaleStake": "383640694595330",
+            "withoutRationaleStake": "402950284360098",
             "withoutRationaleDreps": [
               {
                 "name": "ADA_Labo",
@@ -43431,8 +43431,8 @@
         },
         "yesReasons": [
           {
-            "reason_en": "Addresses ecosystem weakness in ADA-stablecoin liquidity and improves DeFi usability",
-            "reason_ja": "ADA-ステーブルコイン流動性の不足という生態系の弱点に対処し、DeFi利用性を向上させる",
+            "reason_en": "Addresses ecosystem weakness in ADA-stablecoin liquidity and improves DeFi usability through transparent, community-governed program",
+            "reason_ja": "ADAステーブルコイン流動性の不足というエコシステムの弱点に対処し、透明性のあるコミュニティ主導のプログラムを通じてDeFiの使いやすさを改善",
             "totalStake": "22268895685451",
             "dreps": [
               {
@@ -43442,8 +43442,8 @@
             ]
           },
           {
-            "reason_en": "Logical progression from previous info action with reasonable infrastructure setup costs",
-            "reason_ja": "前のInfo Actionからの論理的な進展であり、インフラ整備コストが妥当",
+            "reason_en": "Necessary first step establishing legal and technical infrastructure at reasonable cost following prior community support",
+            "reason_ja": "コミュニティの以前の支持を受けて、合理的なコスト（800,000 ADA）で必要な法務および技術インフラを確立する必要な第一段階",
             "totalStake": "2917192214028",
             "dreps": [
               {
@@ -43453,8 +43453,8 @@
             ]
           },
           {
-            "reason_en": "Continuation of previously supported stablecoin DeFi liquidity initiative",
-            "reason_ja": "以前支持したステーブルコインDeFi流動性予算イニシアティブの継続",
+            "reason_en": "Logical progression of previously supported Stablecoin DeFi Liquidity initiative moving project forward",
+            "reason_ja": "以前にサポートされたステーブルコインDeFi流動性予算情報アクションの論理的な進展としてプロジェクトを前進させる",
             "totalStake": "1554323811344",
             "dreps": [
               {
@@ -43466,22 +43466,76 @@
         ],
         "noReasons": [
           {
-            "reason_en": "Excessive legal and administrative overhead costs, particularly for Cayman Islands jurisdiction",
-            "reason_ja": "法的・行政的オーバーヘッドコストが過度、特にケイマン諸島の管轄権の場合",
-            "totalStake": "8467735275314",
+            "reason_en": "Budget allocation (664,000 ADA) for Cayman Islands legal entity formation is excessive; alternative jurisdictions (Marshall Islands, BVI) are more cost-effective",
+            "reason_ja": "ケイマン諸島での法人設立に664,000 ADAを割くのは過剰であり、他の管轄区域（マーシャル諸島、BVI）の方がコスト効率的",
+            "totalStake": "3797159489309",
             "dreps": [
               {
                 "name": "Dr. Navjit Dhaliwal",
                 "stake": "3797159489309"
-              },
+              }
+            ]
+          },
+          {
+            "reason_en": "Excessive legal and administrative overhead (664,000 ADA) diverts funds from technical infrastructure and ecosystem development with unclear practical impact",
+            "reason_ja": "法務・行政オーバーヘッド（664,000 ADA）が多すぎ、技術インフラとエコシステム開発から資金を転用し、実践的な影響が不明確",
+            "totalStake": "2528746635334",
+            "dreps": [
               {
                 "name": "Medusa DRep",
                 "stake": "2528746635334"
-              },
+              }
+            ]
+          },
+          {
+            "reason_en": "High overhead costs for limited 1-year regulatory oversight create post-year-one complications; concerns about program's ability to generate organic trading activity",
+            "reason_ja": "限定的な1年間の規制監視に対する高いオーバーヘッド費用が1年後の合併症を招く懸念があり、有機的な取引活動生成能力に疑問",
+            "totalStake": "1917131396436",
+            "dreps": [
               {
                 "name": "BankFi",
                 "stake": "1917131396436"
-              },
+              }
+            ]
+          },
+          {
+            "reason_en": "Objection to high legal company formation costs despite acknowledging merit in the DeFi liquidity initiative itself",
+            "reason_ja": "DeFi流動性イニシアチブ自体の価値を認めつつも、高額な法人設立コストに反対",
+            "totalStake": "631827362789",
+            "dreps": [
+              {
+                "name": "MREDGARCROSS",
+                "stake": "631827362789"
+              }
+            ]
+          },
+          {
+            "reason_en": "Strong disapproval of 800,000 ADA legal company formation costs",
+            "reason_ja": "800,000 ADAの法人設立費用に対する強い反対",
+            "totalStake": "424904602958",
+            "dreps": [
+              {
+                "name": "drep1yfx2476p8s...",
+                "stake": "424904602958"
+              }
+            ]
+          },
+          {
+            "reason_en": "General opposition to treasury withdrawal direction despite recognizing improved proposal structure with clearer controls and audit paths",
+            "reason_ja": "より詳細な監査、契約管理、払い戻し手段の改善を認めつつも、進めようとするトレジャリー支出方向に反対",
+            "totalStake": "1231296714111",
+            "dreps": [
+              {
+                "name": "Kevin_ALBERT",
+                "stake": "1231296714111"
+              }
+            ]
+          },
+          {
+            "reason_en": "Unable to justify the legal structure cost",
+            "reason_ja": "法的構造費用の正当性が不明確",
+            "totalStake": "224697754235",
+            "dreps": [
               {
                 "name": "heo.keo",
                 "stake": "224697754235"
@@ -43489,62 +43543,32 @@
             ]
           },
           {
-            "reason_en": "Insufficient justification for practical impact and concerns about long-term regulatory sustainability",
-            "reason_ja": "実際の影響に対する正当化不足および長期的な規制持続性への懸念",
-            "totalStake": "3148428110547",
+            "reason_en": "Skeptical of the overall program's viability",
+            "reason_ja": "プログラム全体の実行可能性に懐疑的",
+            "totalStake": "6624265416514",
             "dreps": [
               {
-                "name": "BankFi",
-                "stake": "1917131396436"
-              },
-              {
-                "name": "Kevin_ALBERT",
-                "stake": "1231296714111"
-              }
-            ]
-          },
-          {
-            "reason_en": "Skepticism about ability to create organic trading activity and success of DeFi liquidity program",
-            "reason_ja": "自然なトレーディング活動の創出とDeFi流動性プログラムの成功能力への懐疑",
-            "totalStake": "1231296714111",
-            "dreps": [
-              {
-                "name": "Kevin_ALBERT",
-                "stake": "1231296714111"
-              }
-            ]
-          },
-          {
-            "reason_en": "Preference for directing treasury spending toward other shared public goods priorities",
-            "reason_ja": "トレジャリー支出を他の共有公共財の優先事項に向けることを希望",
-            "totalStake": "1231296714111",
-            "dreps": [
-              {
-                "name": "Kevin_ALBERT",
-                "stake": "1231296714111"
-              }
-            ]
-          },
-          {
-            "reason_en": "Objection to high costs for legal entity establishment",
-            "reason_ja": "法的実体設立のための高いコストへの異議",
-            "totalStake": "1056731965747",
-            "dreps": [
-              {
-                "name": "MREDGARCROSS",
-                "stake": "631827362789"
-              },
-              {
-                "name": "drep1yfx2476p8s...",
-                "stake": "424904602958"
+                "name": "drep1ytw5tvdxpe...",
+                "stake": "6624265416514"
               }
             ]
           }
         ],
         "abstainReasons": [
           {
-            "reason_en": "Acknowledges strategic value as precedent for future sovereign wealth fund model, but requires more careful scrutiny of governance, legal structure, and accountability mechanisms",
-            "reason_ja": "将来のソーベリン・ウェルス・ファンドモデ��の先例としての戦略的価値を認めつつも、ガバナンス、法的構造、説明責任メカニズムのより慎重な精査が必要",
+            "reason_en": "Acknowledges strategic importance and proposer's proven Cardano DeFi expertise while awaiting clearer governance structures and regulatory precedent clarity before full support",
+            "reason_ja": "提案者の実証されたCardano DeFi専門知識と戦略的重要性を認めつつ、より明確なガバナンス構造と規制的前例の明確化を待つ",
+            "totalStake": "7575211742195",
+            "dreps": [
+              {
+                "name": "InputEndorsers",
+                "stake": "7575211742195"
+              }
+            ]
+          },
+          {
+            "reason_en": "Recognizes strategic significance as potential precedent for Sovereign Wealth Fund-type treasury operations but requires greater scrutiny on Interim Committee authority, legal structure validity, fund management transparency, and accountability before supporting major treasury asset deployment outside usual spending",
+            "reason_ja": "国家ファンド型のトレジャリー運用の前例となる可能性のある戦略的意義を認めつつ、通常の支出以上に、中間委員会の権限と責任、法的構造の妥当性、資金管理の透明性、説明責任についてのより明確な検討が必要",
             "totalStake": "3658990035756",
             "dreps": [
               {
@@ -43554,8 +43578,8 @@
             ]
           },
           {
-            "reason_en": "Recognizes value of DeFi liquidity for adoption in emerging markets but unconvinced about full implementation details and transparency",
-            "reason_ja": "新興市場での採用のためのDeFi流動性の価値を認識しているが、完全な実装詳細と透明性について確信が持てない",
+            "reason_en": "Supports DeFi liquidity for real-world adoption in emerging markets while requiring greater conviction on necessary setup infrastructure for full support",
+            "reason_ja": "新興市場での実際の採用のためのDeFi流動性をサポートしつつ、必要なセットアップインフラの完全なサポートには、さらなる確信が必要",
             "totalStake": "2353291673",
             "dreps": [
               {
@@ -43563,10 +43587,105 @@
                 "stake": "2353291673"
               }
             ]
+          }
+        ]
+      }
+    },
+    "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0": {
+      "voteCountAtAnalysis": 3,
+      "analysis": {
+        "title": "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0",
+        "type": "TreasuryWithdrawals",
+        "submittedEpoch": 0,
+        "stats": {
+          "votedWithRationale": 1,
+          "votedWithoutRationale": 2,
+          "notVoted": 1592,
+          "notVotedTotalStake": "5838674874138859",
+          "notVotedTopDreps": [
+            {
+              "name": "Yoroi W₳llet",
+              "stake": "712999629106350"
+            },
+            {
+              "name": "YUTA",
+              "stake": "456592304918084"
+            },
+            {
+              "name": "EMURGO",
+              "stake": "298101924939471"
+            },
+            {
+              "name": "Blockdaemon",
+              "stake": "293113277113199"
+            },
+            {
+              "name": "Eternl DRep Committee",
+              "stake": "250554019332397"
+            },
+            {
+              "name": "CryptoCrow",
+              "stake": "209204432345923"
+            },
+            {
+              "name": "Cardano Foundation",
+              "stake": "189721100612096"
+            },
+            {
+              "name": "Sebastien Guillemot セバ",
+              "stake": "186397416892065"
+            },
+            {
+              "name": "Everstake",
+              "stake": "121738460158593"
+            },
+            {
+              "name": "drep1yffld2866p...",
+              "stake": "115473797014937"
+            }
+          ],
+          "yesBreakdown": {
+            "total": 2,
+            "withRationale": 0,
+            "withoutRationale": 2,
+            "totalStake": "19309589764768",
+            "withRationaleStake": "0",
+            "withoutRationaleStake": "19309589764768",
+            "withoutRationaleDreps": [
+              {
+                "name": "Moonstake",
+                "stake": "19179843791194"
+              },
+              {
+                "name": "Jday1100",
+                "stake": "129745973574"
+              }
+            ]
           },
+          "noBreakdown": {
+            "total": 1,
+            "withRationale": 1,
+            "withoutRationale": 0,
+            "totalStake": "7575211742195",
+            "withRationaleStake": "7575211742195",
+            "withoutRationaleStake": "0",
+            "withoutRationaleDreps": []
+          },
+          "abstainBreakdown": {
+            "total": 0,
+            "withRationale": 0,
+            "withoutRationale": 0,
+            "totalStake": "0",
+            "withRationaleStake": "0",
+            "withoutRationaleStake": "0",
+            "withoutRationaleDreps": []
+          }
+        },
+        "yesReasons": [],
+        "noReasons": [
           {
-            "reason_en": "Pragmatic approach acknowledging proposer's DeFi expertise while deferring final judgment pending community majority support",
-            "reason_ja": "提案者のDeFi専門知識を認識しながらも、コミュニティの多数支持を待つ実用的アプローチ",
+            "reason_en": "Lack of clear definition, independent validation, and structural simplicity - Treasury funds should only support investment vehicles that meet rigorous evaluation standards",
+            "reason_ja": "定義が不明確で独立した検証と構造的シンプルさに欠ける - 国庫資金は厳格な評価基準を満たす投資手段のみをサポートするべき",
             "totalStake": "7575211742195",
             "dreps": [
               {
@@ -43575,41 +43694,42 @@
               }
             ]
           }
-        ]
+        ],
+        "abstainReasons": []
       }
     }
   },
   "actionTypeCache": {
     "TreasuryWithdrawals": {
       "proposalCount": 50,
-      "rationaleCount": 4676,
+      "rationaleCount": 4677,
       "analysis": {
         "count": 50,
-        "summary_en": "Treasury withdrawal proposals show mixed support, with votes split between infrastructure investments (node diversity, DeFi liquidity) and fiscal concerns. Key dividing factors include project urgency, team reputation, budget efficiency, and alignment with existing ecosystem initiatives.",
-        "summary_ja": "トレジャリー引き出し提案は、インフラ投資（ノード多様性、DeFi流動性）と財政的懸念の間で投票が分かれている。主な決定要因は、プロジェクトの緊急性、チームの評判、予算効率、および既存のエコシステムイニシアチブとの整合性である。",
+        "summary_en": "Treasury withdrawal proposals show mixed support with votes driven by infrastructure investment needs versus fiscal responsibility concerns. Yes voters prioritize client diversity and network resilience, while No voters cite budget concerns, redundancy with existing initiatives, and preference for milestone-based funding over lump-sum withdrawals.",
+        "summary_ja": "トレジャリー引き出し提案は、インフラ投資の必要性と財政責任のバランスをめぐって意見が分かれている。賛成票はクライアント多様性とネットワークレジリエンスを優先し、反対票は予算規模、既存イニシアティブとの重複、段階的資金配分の必要性を指摘している。",
         "typicalReasonsYes_en": [
-          "Client/node diversity reduces single points of failure and improves network resilience",
-          "Established teams with proven track records and transparency deserve continued support",
-          "Critical ecosystem infrastructure development justifies treasury investment for long-term security",
-          "DeFi liquidity improvements address genuine ecosystem weaknesses and enhance adoption"
+          "Network resilience and client diversity through alternative node implementations reduces single point of failure risk",
+          "Support for established, trusted teams with proven track records in ecosystem development and transparency",
+          "Long-term strategic infrastructure investment essential for Cardano's security and future adoption despite market conditions",
+          "Cost-effectiveness relative to project scope and development milestones already achieved"
         ],
         "typicalReasonsYes_ja": [
-          "クライアント/ノードの多様性は単一障害点を減らし、ネットワークの耐障害性を向上させる",
-          "実績があり透明性のある確立されたチームは継続的なサポートに値する",
-          "重要なエコシステムインフラ開発は、長期的なセキュリティのためのトレジャリー投資を正当化する",
-          "DeFi流動性の改善はエコシステムの真の弱点に対処し、採用を向上させる"
+          "複数のノード実装によるクライアント多様性がネッ��ワークのレジリエンスを向上させ、単一障害点のリスクを軽減する",
+          "エコシステム開発と透明性に関する実績がある信頼できるチームへの支援",
+          "市場環境に関わらず、Cardanoの長期的なセキュリティと将来の採用に不可欠なインフラ投資",
+          "すでに達成されたマイルストーンと提案予算のバランスの取れた費用対効果"
         ],
         "typicalReasonsNo_en": [
-          "Excessive costs and inefficient budgeting (e.g., inflated engineer salaries, expensive jurisdiction setup)",
-          "Redundant proposals when similar initiatives already receive funding or are underway",
-          "Funding required upfront in full without milestone-based payment structure or deliverable validation",
-          "Lower priority compared to existing node implementations; premature given ongoing Rust node development"
+          "Large lump-sum withdrawals without milestone-based funding structure increase financial risk and community skepticism",
+          "Redundancy concerns with multiple parallel node implementations (Amaru, Dingo) addressing same problem unnecessarily",
+          "Budget scale concerns including allegedly inflated costs for personnel and jurisdiction setup (Cayman Islands legal entity)",
+          "Lack of urgency and competing priorities; preference to consolidate resources on proven implementations rather than experimental alternatives"
         ],
         "typicalReasonsNo_ja": [
-          "過度なコストと非効率な予算計画（例：給与のインフレ、高額な管轄区域設定費用）",
-          "類似のイニシアティブが既に資金を受けているか進行中の場合の冗長な提案",
-          "マイルストーンベースの支払い構造や成果物検証なしで全額を事前に要求",
-          "既存のノード実装と比較して優先度が低い。Rustノード開発の進行中に時期尚早"
+          "マイルストーン制度なしの一括引き出しは財政リスクを高め、コミュニティの懸念を招く",
+          "Amaru、Dingoなど同一問題に対する複数の並行実装開発による不要な重複",
+          "人員費用とケイマン諸島法人設立費用を含む予��規模の過大性に対する疑問",
+          "緊急性の欠如と優先順位の問題；実績のある実装に資源を集中させるべき"
         ]
       }
     },

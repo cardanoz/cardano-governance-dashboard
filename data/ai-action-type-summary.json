@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-12T23:45:57.756Z",
+  "generatedAt": "2026-03-13T03:23:06.329Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 50,
-      "summary_en": "Treasury withdrawal proposals show mixed support, with votes split between infrastructure investments (node diversity, DeFi liquidity) and fiscal concerns. Key dividing factors include project urgency, team reputation, budget efficiency, and alignment with existing ecosystem initiatives.",
-      "summary_ja": "トレジャリー引き出し提案は、インフラ投資（ノード多様性、DeFi流動性）と財政的懸念の間で投票が分かれている。主な決定要因は、プロジェクトの緊急性、チームの評判、予算効率、および既存のエコシステムイニシアチブとの整合性である。",
+      "summary_en": "Treasury withdrawal proposals show mixed support with votes driven by infrastructure investment needs versus fiscal responsibility concerns. Yes voters prioritize client diversity and network resilience, while No voters cite budget concerns, redundancy with existing initiatives, and preference for milestone-based funding over lump-sum withdrawals.",
+      "summary_ja": "トレジャリー引き出し提案は、インフラ投資の必要性と財政責任のバランスをめぐって意見が分かれている。賛成票はクライアント多様性とネットワークレジリエンスを優先し、反対票は予算規模、既存イニシアティブとの重複、段階的資金配分の必要性を指摘している。",
       "typicalReasonsYes_en": [
-        "Client/node diversity reduces single points of failure and improves network resilience",
-        "Established teams with proven track records and transparency deserve continued support",
-        "Critical ecosystem infrastructure development justifies treasury investment for long-term security",
-        "DeFi liquidity improvements address genuine ecosystem weaknesses and enhance adoption"
+        "Network resilience and client diversity through alternative node implementations reduces single point of failure risk",
+        "Support for established, trusted teams with proven track records in ecosystem development and transparency",
+        "Long-term strategic infrastructure investment essential for Cardano's security and future adoption despite market conditions",
+        "Cost-effectiveness relative to project scope and development milestones already achieved"
       ],
       "typicalReasonsYes_ja": [
-        "クライアント/ノードの多様性は単一障害点を減らし、ネットワークの耐障害性を向上させる",
-        "実績があり透明性のある確立されたチームは継続的なサポートに値する",
-        "重要なエコシステムインフラ開発は、長期的なセキュリティのためのトレジャリー投資を正当化する",
-        "DeFi流動性の改善はエコシステムの真の弱点に対処し、採用を向上させる"
+        "複数のノード実装によるクライアント多様性がネッ��ワークのレジリエンスを向上させ、単一障害点のリスクを軽減する",
+        "エコシステム開発と透明性に関する実績がある信頼できるチームへの支援",
+        "市場環境に関わらず、Cardanoの長期的なセキュリティと将来の採用に不可欠なインフラ投資",
+        "すでに達成されたマイルストーンと提案予算のバランスの取れた費用対効果"
       ],
       "typicalReasonsNo_en": [
-        "Excessive costs and inefficient budgeting (e.g., inflated engineer salaries, expensive jurisdiction setup)",
-        "Redundant proposals when similar initiatives already receive funding or are underway",
-        "Funding required upfront in full without milestone-based payment structure or deliverable validation",
-        "Lower priority compared to existing node implementations; premature given ongoing Rust node development"
+        "Large lump-sum withdrawals without milestone-based funding structure increase financial risk and community skepticism",
+        "Redundancy concerns with multiple parallel node implementations (Amaru, Dingo) addressing same problem unnecessarily",
+        "Budget scale concerns including allegedly inflated costs for personnel and jurisdiction setup (Cayman Islands legal entity)",
+        "Lack of urgency and competing priorities; preference to consolidate resources on proven implementations rather than experimental alternatives"
       ],
       "typicalReasonsNo_ja": [
-        "過度なコストと非効率な予算計画（例：給与のインフレ、高額な管轄区域設定費用）",
-        "類似のイニシアティブが既に資金を受けているか進行中の場合の冗長な提案",
-        "マイルストーンベースの支払い構造や成果物検証なしで全額を事前に要求",
-        "既存のノード実装と比較して優先度が低い。Rustノード開発の進行中に時期尚早"
+        "マイルストーン制度なしの一括引き出しは財政リスクを高め、コミュニティの懸念を招く",
+        "Amaru、Dingoなど同一問題に対する複数の並行実装開発による不要な重複",
+        "人員費用とケイマン諸島法人設立費用を含む予��規模の過大性に対する疑問",
+        "緊急性の欠如と優先順位の問題；実績のある実装に資源を集中させるべき"
       ]
     },
     "InfoAction": {
