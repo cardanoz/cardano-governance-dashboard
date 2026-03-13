@@ -1626,5 +1626,188 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2026-03-13",
+    "highlights": [
+      {
+        "category": "governance_action",
+        "title_en": "Orion Fund Treasury Withdrawal Now Live for DRep Voting",
+        "title_ja": "オリオンファンド財務引き出しDRep投票開始",
+        "summary_en": "Draper Dragon's Orion Fund proposal is now on-chain, requesting 50M ADA ($15M) in tranche-based funding with 100% treasury repayment terms. The proposal includes safeguards requiring future tranches to pass separate governance votes.",
+        "summary_ja": "Draper Dragonのオリオンファンド提案がオンチェーンで公開され、5000万ADA（1500万ドル）のトランシェベース資金提供を要求。今後の資金は別の投票が必要。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@astroboysoup"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Constitutional Crisis: Eastern Cardano CC Clarifies NCL Interpretation Amid Governance Deadlock",
+        "title_ja": "憲法危機：東部カルダノCC、ガバナンス混乱でNCL解釈を明確化",
+        "summary_en": "Eastern Cardano Council announced no active Net Change Limit (NCL) exists, declaring treasury withdrawal actions unconstitutional. This contradicts earlier NCL-referenced proposals and triggers ecosystem debate about constitutional interpretation standards under the new constitution.",
+        "summary_ja": "東部カルダノ評議会が有効なNCLが存在しないと発表し、財務引き出し行動は違憲と宣言。新憲法下での解釈基準について生態系での議論が勃発。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO"
+        ],
+        "sources": [
+          "@EasternCardano",
+          "@AdamRusch",
+          "@phillewisit"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "CSWAP Announces Enterprise-Scale RWA Platform Launch for Cardano",
+        "title_ja": "CSWAP、カルダノ向けエンタープライズRWAプラットフォーム発表",
+        "summary_en": "CSWAP revealed development of an enterprise-scale Real World Asset (RWA) Web 2.5 platform with feedback from established corporations, positioning it as a potential 'killer dapp' for Cardano's adoption. BTC staking platform testnet is live with mainnet launch in 5 weeks.",
+        "summary_ja": "CSWAPがエンタープライズレベルのRWA Web 2.5プラットフォーム開発を発表。BTC ステーキングプラットフォームのテストネット稼働、メインネット5週間後を予定。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Holder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@CSWAP_Destroy",
+          "@joedagama25",
+          "@ggreyborn"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Charles Hoskinson to Join Toronto Futurist Conference as Featured Speaker",
+        "title_ja": "チャールズ・ホスキンソン、トロント未来主義会議の登壇者決定",
+        "summary_en": "Cardano founder Charles Hoskinson will participate remotely in the Futurist Conference (July 21-22) in Toronto, placing Cardano and Midnight at the center of discussions with 250+ speakers and 8,000+ attendees on Web3 and AI.",
+        "summary_ja": "カルダノ創設者チャールズ・ホスキンソンがトロント未来主義会議に登壇予定（7月21-22日）。250以上のスピーカーと8000以上の参加者がWeb3とAIについて議論。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Governance Compensation Concerns: Treasury vs. Private Fund Imbalance in Orion Proposal",
+        "title_ja": "ガバナンス懸念：オリオン提案の財務対民間資金不均衡",
+        "summary_en": "Community scrutiny raised on Orion Fund proposal structure showing Cardano treasury contributing 75M USD while Draper contributes only 5M USD. Additional concerns flagged regarding co-investment risks when Draper may deploy private funds alongside treasury capital.",
+        "summary_ja": "オリオン提案でカルダノ財務が7500万ドル、Draperが500万ドル提供の不均衡が指摘。Draperが民間資金と併行投資するリスクが懸念される。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@MinswapIntern",
+          "@tsnnst"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Scalus Emulator Simplifies Cardano Smart Contract Unit Testing",
+        "title_ja": "Scalusエミュレーター、カルダノスマートコントラクトテストを簡素化",
+        "summary_en": "Scalus released an emulator that dramatically improves dApp developer experience by enabling efficient unit testing without slow testnet iterations. Mesh SDK developers report extensive use and recommend it for testing new features.",
+        "summary_ja": "Scalusがテストネット不要の効率的なユニットテスト環境を提供。Mesh SDKの開発者が実装の容易性を推奨。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Dev"
+        ],
+        "sources": [
+          "@meshsdk"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Constitutional Committee Authority Questioned Over Info Action Voting Requirements",
+        "title_ja": "情報行動投票要件をめぐるCC権限問題",
+        "summary_en": "Dispute emerged over whether the new constitution requires CC voting on Info Actions (NCL proposals). Eastern Cardano CC interpreted the constitution as requiring mandatory CC voting, but community members argue this contradicts historical governance practice and creates governance bottlenecks.",
+        "summary_ja": "新憲法が情報行動（NCL提案）にCC投票を必須としているかについて争点化。東部CCは必須と解釈するも、コミュニティは異議。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO"
+        ],
+        "sources": [
+          "@EasternCardano",
+          "@AdamRusch",
+          "@ElderM",
+          "@phillewisit"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Alternative NCL Validation Strategy Proposed via Treasury Withdrawal Action",
+        "title_ja": "財務引き出し行動によるNCL検証代替戦略提案",
+        "summary_en": "ElderM proposed submitting a 1 ADA Treasury Withdrawal Action with the previously approved 350M ADA NCL to test constitutional validity through epoch boundary timing (6-epoch window). This strategy bypasses current CC interpretation disputes.",
+        "summary_ja": "ElderM氏が1 ADAのTWAで350万ADのNCLをコピーして再投票する戦略提案。エポック境界を活用してCC解釈紛争を迂回。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "Builder"
+        ],
+        "sources": [
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "DeFi Ecosystem Expands: Fluid Tokens Incentives & Iagon Fixed Yields Launch",
+        "title_ja": "DeFi生態系拡大：Fluid Tokensインセンティブ、Iagon固定利回り開始",
+        "summary_en": "Cardano DeFi activity surges with Fluid Tokens offering 100K USDM incentives for lenders and Iagon loan markets providing fixed yields up to 9% APY, expanding capital deployment strategies across ADA suppliers.",
+        "summary_ja": "Fluid Tokens が100K USDMインセンティブを提供、Iagonは最大9% APYの固定利回りを開始。DeFi活動が拡大。",
+        "importance": 2,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Development Momentum Continues: 737 Commits Across 69 Repositories",
+        "title_ja": "カルダノ開発推進：69リポジトリで737コミット達成",
+        "summary_en": "Cardano network development shows sustained activity with 737 commits across 69 repositories (March 12). Major contributions from cardano-node (78/56 commits), mithril (50), cardano-ledger (49), and ouroboros-consensus (49).",
+        "summary_ja": "カルダノネットワーク開発が継続、69リポジトリで737コミット。cardano-nodeが最多、mithril、ledger、consensusも活発。",
+        "importance": 2,
+        "audience": [
+          "SPO",
+          "Builder"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      }
+    ],
+    "tweetCount": 98,
+    "generatedAt": "2026-03-13T06:44:32.828Z",
+    "apiUsage": {
+      "input_tokens": 5001,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2534,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]
