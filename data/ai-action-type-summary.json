@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-13T13:36:07.346Z",
+  "generatedAt": "2026-03-13T15:05:06.631Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 50,
-      "summary_en": "Treasury Withdrawal proposals for Cardano show mixed voting patterns, with support driven primarily by infrastructure resilience and ecosystem development needs, while opposition centers on budget efficiency, funding prioritization, and implementation redundancy. Key concerns include large upfront funding requests without milestone-based disbursement and competition between similar proposals.",
-      "summary_ja": "Cardanoのトレジャリー引き出し提案は投票パターンが混在しており、サポートはインフラストラクチャの耐性とエコシステム開発ニーズによって主に推進され、反対は予算効率、資金配分の優先順位付け、実装の冗長性に集中しています。主な懸念は、マイルストーンベースの支出なしの大規模な前払い資金要求と同様の提案間の競争です。",
+      "summary_en": "Treasury Withdrawals proposals show mixed community sentiment, with YES votes primarily driven by support for client diversity, trusted teams, and strategic ecosystem development, while NO votes focus on concerns about cost-efficiency, redundancy with existing initiatives, and preference for milestone-based funding. The voting reflects tension between long-term infrastructure needs and responsible treasury stewardship.",
+      "summary_ja": "Treasury Withdrawals提案は、クライアント多様性やトラストされたチームへの支持による賛成票と、費用対効果への懸念や既存イニシアティブとの重複、マイルストーンベース資金配分の希望による反対票により、コミュニティ意見が分かれている。長期的なインフラ整備の必要性と責任ある財務管理のバランスに関する緊張が反映されている。",
       "typicalReasonsYes_en": [
-        "Improves network resilience and client diversity by reducing single point of failure risk",
-        "Support for established and trusted teams with proven track records in Cardano ecosystem",
-        "Strategic long-term infrastructure investment critical for Cardano's future security and adoption",
-        "Addresses ecosystem weaknesses (liquidity, DeFi development) that enhance platform utility"
+        "Client/node diversity is critical for network resilience and reducing single points of failure",
+        "Blink Labs is a trusted, established team with proven track record and transparency",
+        "Strategic infrastructure investment essential for long-term adoption and competitive positioning",
+        "Proposal addresses clear ecosystem weaknesses and represents sound cost-benefit analysis"
       ],
       "typicalReasonsYes_ja": [
-        "単��障害点のリスクを低減し、ネットワークの耐性とクライアント多様性を向上させる",
-        "Cardanoエコシステムで実績のある確立された信頼できるチームへのサポート",
-        "Cardanoの将来のセキュリティと採用に不可欠な戦略的長期インフラストラクチャ投資",
-        "プラットフォームの有用性を向上させるエコシステムの弱点（流動性、DeFi開発）への対応"
+        "クライアント多様性はネットワークレジリエンスと単一障害点のリスク軽減に不可欠",
+        "Blink Labsは実績のあるトラストされた確立されたチームであり透明性がある",
+        "長期的な採用と競争力向上のための戦略的インフラ投資が本質的に重要",
+        "提案は明確なエコシステム上の弱点に対処し健全な費用対効果を示している"
       ],
       "typicalReasonsNo_en": [
-        "Redundant funding of similar initiatives (multiple node implementations) with limited incremental benefit",
-        "Large lump-sum budget requests without milestone-based disbursement tied to deliverables",
-        "Overpriced development costs and unjustifiable budget allocation during bear market conditions",
-        "Premature funding of unfinished specifications and lack of independent technical validation"
+        "Redundancy concern: similar node diversity already being addressed by Amaru proposal",
+        "Preference for milestone-based funding with staged withdrawals rather than single large lump sum",
+        "Cost concerns: budget appears inflated relative to actual FTE engineering requirements",
+        "Timing issue: premature to fund before existing implementations prove viability and maturity"
       ],
       "typicalReasonsNo_ja": [
-        "類似のイニシアチブ（複数のノード実装）の冗長な資金提供は段階的な利益が限定的",
-        "成果物に紐付けられたマイルストーンベースの支出なしの大規模な一括予算要求",
-        "開発コストの過剰な価格設定と弱気市場条件下での正当化できない予算配分",
-        "未完成の仕様への時期���早な資金調達と独立した技術的検証の欠如"
+        "冗長性の懸念：Amaru提案によって既にノード多様性が対処されている",
+        "一括大型引き出しではなくマイルストーンベースの段階的資金配分を希望",
+        "予算が実際のFTE技術者の必要経費に比べて過度に膨らんでいるという懸念",
+        "既存実装の実行可能性と成熟度が証明される前に資金を提供するのは時��尚早"
       ]
     },
     "InfoAction": {
