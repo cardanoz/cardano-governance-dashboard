@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38494388152931287",
-    "supply_circulating": "37152886162550180",
-    "supply_locked": "501143441024540",
+    "supply_circulating": "37152885843520365",
+    "supply_locked": "501094568102572",
     "supply_treasury": "1654111958490226",
     "supply_reserves": "6505611847068713",
-    "stake_live": "21799155299376868",
+    "stake_live": "21799100424362021",
     "stake_active": "21787927325337212"
   },
   "protocolParams": {
@@ -2471,11 +2471,11 @@
       "drep": {
         "yes_pct": 3.08,
         "no_pct": 96.92,
-        "yes_votes_cast": 17,
+        "yes_votes_cast": 18,
         "no_votes_cast": 6,
         "abstain_votes_cast": 0,
-        "yes_power": "179804589772229",
-        "no_power": "5658004566757140"
+        "yes_power": "179808354674333",
+        "no_power": "5658000801855036"
       },
       "cc": {
         "yes_pct": 0,
@@ -2528,7 +2528,7 @@
         "yes_pct": 9.97,
         "no_pct": 90.03,
         "yes_votes_cast": 25,
-        "no_votes_cast": 15,
+        "no_votes_cast": 16,
         "abstain_votes_cast": 4,
         "yes_power": "580694520036126",
         "no_power": "5245769469922344"
