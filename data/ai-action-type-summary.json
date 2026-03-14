@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-14T15:46:35.366Z",
+  "generatedAt": "2026-03-14T16:54:38.884Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 50,
-      "summary_en": "Treasury Withdrawals for Cardano typically receive mixed support, with votes often split between infrastructure development advocates and fiscal conservatives. Key approval drivers center on technical necessity (like client diversity), team reputation, and long-term network resilience, while opposition frequently cites concerns about funding duplicative efforts, lack of milestone-based payments, and opportunity costs during market downturns.",
-      "summary_ja": "Cardanoトレジャリー引き出し提案は通常、インフラ開発支持者と財政的に慎重な投票者の間で意見が分かれます。承認の主な理由はクライアント多様性などの技術的必要性、チームの評判、長期的なネットワーク耐性にあり、反対理由は重複した取り組みへの資金提供、マイルストーン型支払いの欠如、市場低迷時の機会費用を懸念しています。",
+      "summary_en": "Treasury Withdrawal proposals show strong support for funding strategic infrastructure projects, particularly those enhancing client diversity and long-term network resilience. Key approval drivers include team reputation, project alignment with core Cardano development, and demonstrated progress on critical infrastructure, though concerns about funding structure, cost-efficiency, and redundancy with existing initiatives frequently emerge in opposing votes.",
+      "summary_ja": "Treasury Withdrawal提案は、クライアント多様性の向上とネットワークの長期的なレジリエンス強化に資する戦略的インフラプロジェクトへの資金提供に強い支持を示しています。承認を支持する主な理由はチームの信頼性、Cardano中核開発との整合性、重要インフラの進捗実績であり、一方資金調達方式、費用対効果、既存イニシアティブとの重複に関する懸念が反対票に頻出しています。",
       "typicalReasonsYes_en": [
-        "Supports critical infrastructure like client/node diversity to reduce single points of failure and improve network resilience",
-        "Team has proven track record and strong reputation (e.g., Blink Labs credibility and open-source contributions)",
-        "Low cost relative to treasury size and comparable to historical infrastructure development expenses",
-        "Long-term strategic importance for network security and development sustainability"
+        "Client/node diversity reduces single point of failure risk and improves network resilience",
+        "Trusted team with proven track record and demonstrated contributions to the ecosystem",
+        "Strategic long-term infrastructure investment essential for Cardano's adoption and security",
+        "Well-structured proposals with clear milestones and cost-benefit justification"
       ],
       "typicalReasonsYes_ja": [
-        "ノード実装の多様性など、ネットワークの単一障害点を減らし回復力を向上させる重要インフラへの支持",
-        "チームの実績と高い評判（例：Blink LabsのOSSへの貢献と信頼性）",
-        "トレジャリー規模に対して低コスト、かつ過去のインフラ開発経費に匹敵する妥当性",
-        "ネットワークセキュリティと開発持続性のための長期的戦略的重要性"
+        "クライアント/ノード多様性により単一障害点のリスクを低減しネットワークの耐性を向上",
+        "実績のある信頼できるチームがエコシステムへの貢献を実証している",
+        "Cardanoの採用とセキュリティに必須の戦略的長期インフラ投資",
+        "明確なマイルストーンと費用対効果の正当化を備えた適切に構成された提案"
       ],
       "typicalReasonsNo_en": [
-        "Funding duplicates existing efforts (e.g., multiple node implementations like Amaru already in development)",
-        "Large lump-sum payments without milestone-based fund release or performance validation",
-        "Questionable cost efficiency and overhead (e.g., developer salary assumptions questioned)",
-        "Better timing to wait for existing initiatives to mature before committing additional resources"
+        "Redundancy concerns: funding multiple parallel solutions when existing alternatives (e.g., Amaru) already in development",
+        "Single large lump-sum funding request lacks milestone-based accountability and risk management",
+        "Cost-efficiency questions: salary and budget figures appear inflated or unjustified relative to market rates",
+        "Premature funding of experimental/unvalidated implementations without proven use case or adoption potential"
       ],
       "typicalReasonsNo_ja": [
-        "既に進行中の取り組み（例：Amaruなど複数のノード実装）との重複",
-        "マイルストーン型支払いや成果検証のない一括大型資金請求",
-        "費用対効果の疑問と過度なオーバーヘッド（例：開発者給与の根拠への質疑）",
-        "既存イニシアティブの成熟を待つ方が適切なタイミング"
+        "既に開発中の既存代替案（例：Amaru）がある場合の複数並行ソリューション資金提供の冗長性懸念",
+        "単一の大型一括資金提供は マイルストーンベースの説明責任とリスク管理を欠く",
+        "給与と予算数��が市場レート比較で水増しまたは不十分に見える費用効率上の疑問",
+        "実績のない使用事例または採用可能性なく検証されていない実験的実装の時期尚早な資金提供"
       ]
     },
     "InfoAction": {
