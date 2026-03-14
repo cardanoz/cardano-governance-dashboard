@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-14T11:38:56.135Z",
+  "generatedAt": "2026-03-14T13:18:12.964Z",
   "proposals": {
     "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0": {
       "title": "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0",
@@ -178,10 +178,10 @@
       "type": "TreasuryWithdrawals",
       "submittedEpoch": 0,
       "stats": {
-        "votedWithRationale": 26,
+        "votedWithRationale": 27,
         "votedWithoutRationale": 38,
-        "notVoted": 1531,
-        "notVotedTotalStake": "4979525323060114",
+        "notVoted": 1530,
+        "notVotedTotalStake": "4972317996115895",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -225,11 +225,11 @@
           }
         ],
         "yesBreakdown": {
-          "total": 28,
-          "withRationale": 12,
+          "total": 29,
+          "withRationale": 13,
           "withoutRationale": 16,
-          "totalStake": "389575582591840",
-          "withRationaleStake": "86697462921261",
+          "totalStake": "396782909536059",
+          "withRationaleStake": "93904789865480",
           "withoutRationaleStake": "302878119670579",
           "withoutRationaleDreps": [
             {
@@ -336,9 +336,9 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Client diversity and network resilience - reducing single point of failure risk from relying on a single Haskell node implementation",
-          "reason_ja": "クライアント多様性とネットワーク復元力 - 単一のHaskellノード実装への依存によるシングルポイントオブフェイラーのリスク軽減",
-          "totalStake": "61495507659016",
+          "reason_en": "Client diversity and network resilience - Go implementation reduces single point of failure risk",
+          "reason_ja": "クライアント多様性とネットワーク復元力 - Go実装は単一障害点のリスクを軽減",
+          "totalStake": "58578315444988",
           "dreps": [
             {
               "name": "BWtake(長崎)Japan",
@@ -357,10 +357,6 @@
               "stake": "50482728238"
             },
             {
-              "name": "Varavas",
-              "stake": "2917192214028"
-            },
-            {
               "name": "ThisCrazyLife",
               "stake": "194170899538"
             },
@@ -375,19 +371,15 @@
           ]
         },
         {
-          "reason_en": "Blink Labs has a proven track record and established reputation for delivering quality open-source software",
-          "reason_ja": "Blink Labsは品質の高いオープンソースソフトウェアを提供する実績と確立された評判を持っている",
-          "totalStake": "4467581454275",
+          "reason_en": "Blink Labs has proven track record and credibility in Cardano ecosystem development",
+          "reason_ja": "Blink Labsはカルダノエコシステム開発における実績と信頼性がある",
+          "totalStake": "35003932241242",
           "dreps": [
             {
               "name": "Kevin G Mohr",
               "stake": "28556712542"
             },
             {
-              "name": "drep1yf6xkrz2w4...",
-              "stake": "96364914056"
-            },
-            {
               "name": "Varavas",
               "stake": "2917192214028"
             },
@@ -396,55 +388,78 @@
               "stake": "194170899538"
             },
             {
-              "name": "Kevin_ALBERT",
-              "stake": "1231296714111"
+              "name": "Cerkoryn",
+              "stake": "24656685470915"
+            },
+            {
+              "name": "drep1yfdfs28uwa...",
+              "stake": "7207326944219"
             }
           ]
         },
         {
-          "reason_en": "Cost-effectiveness and reasonable budget - the 6.9M ADA cost is justified given development scope and FTE rates in the market",
-          "reason_ja": "費用対効果と合理的な予算 - 6.9M ADAのコストは開発範囲と市場のFTE レートを考慮すると正当化される",
-          "totalStake": "28315675506671",
+          "reason_en": "Cost-effective investment relative to treasury size and development milestones achieved",
+          "reason_ja": "トレジャリーサイズと達成された開発マイルストーンに相対的に費用対効果が高い",
+          "totalStake": "37077326262234",
           "dreps": [
             {
               "name": "BWtake(長崎)Japan",
               "stake": "3658990035756"
             },
             {
+              "name": "AtlasHub",
+              "stake": "1554323811344"
+            },
+            {
               "name": "Cerkoryn",
               "stake": "24656685470915"
+            },
+            {
+              "name": "drep1yfdfs28uwa...",
+              "stake": "7207326944219"
             }
           ]
         },
         {
-          "reason_en": "Strategic long-term investment in core infrastructure and ecosystem resilience despite current market conditions",
-          "reason_ja": "現在の市場条件にもかかわらず、コアインフラストラクチャとエコシステムの復元力への戦略的な長期投資",
-          "totalStake": "4471516025372",
+          "reason_en": "Strategic priority for core infrastructure development over scattered Catalyst projects",
+          "reason_ja": "散在したCatalystプロジェクトよりもコアインフラ開発を戦略的に優先",
+          "totalStake": "10124519158247",
           "dreps": [
             {
               "name": "Varavas",
               "stake": "2917192214028"
             },
             {
-              "name": "AtlasHub",
-              "stake": "1554323811344"
+              "name": "drep1yfdfs28uwa...",
+              "stake": "7207326944219"
+            }
+          ]
+        },
+        {
+          "reason_en": "Expands developer pool by supporting non-Haskell language implementations",
+          "reason_ja": "非Haskell言語実装をサポートすることで開発者プールを拡大",
+          "totalStake": "8806508456306",
+          "dreps": [
+            {
+              "name": "InputEndorsers",
+              "stake": "7575211742195"
+            },
+            {
+              "name": "Kevin_ALBERT",
+              "stake": "1231296714111"
             }
           ]
         }
       ],
       "noReasons": [
         {
-          "reason_en": "Redundancy concern - Amaru (Rust node) is already in development, making a third implementation at this time premature and unnecessary",
-          "reason_ja": "冗長性への懸念 - Amaru（Rustノード）は既に開発中であり、現時点での第3の実装は時期尚早で不必要",
-          "totalStake": "110714290144637",
+          "reason_en": "Overlapping redundancy with Amaru (Rust) proposal already in progress",
+          "reason_ja": "既に進行中のAmaru（Rust）提案との重複的な冗長性",
+          "totalStake": "102006999876968",
           "dreps": [
             {
               "name": "TriangleForces",
               "stake": "805737707050"
-            },
-            {
-              "name": "KTOP",
-              "stake": "8707290267669"
             },
             {
               "name": "Dr. Navjit Dhaliwal",
@@ -469,9 +484,9 @@
           ]
         },
         {
-          "reason_en": "Funding structure concern - large single lump-sum withdrawal rather than milestone-based fund disbursement increases financial risk",
-          "reason_ja": "資金調達構造への懸念 - マイルストーンベースの資金配分ではなく、大規模な一括引き出しは財務リスクを増加させる",
-          "totalStake": "6767215555791",
+          "reason_en": "Excessive single lump-sum withdrawal instead of milestone-based funding",
+          "reason_ja": "マイルストーンベースの資金調達ではなく過度な一括引き出し",
+          "totalStake": "3160573998123",
           "dreps": [
             {
               "name": "Medusa DRep",
@@ -482,16 +497,20 @@
               "stake": "631827362789"
             },
             {
-              "name": "Mike Rogero (羅邁凱）",
-              "stake": "3606641557668"
+              "name": "Kevin_ALBERT",
+              "stake": "0"
             }
           ]
         },
         {
-          "reason_en": "Excessive personnel costs - $250k per FTE is considered too high and suggests poor capital efficiency",
-          "reason_ja": "過度な人件費 - FTEあたり250,000ドルは高すぎると考えられ、資本効率が低いことを示唆している",
+          "reason_en": "Inflated personnel costs and lack of capital efficiency in budgeting",
+          "reason_ja": "人員コストの過度な設定と予算編成における資本効率の欠如",
           "totalStake": "917791838452",
           "dreps": [
+            {
+              "name": "drep1yf6xkrz2w4...",
+              "stake": "0"
+            },
             {
               "name": "Erasmus",
               "stake": "693094084217"
@@ -503,23 +522,53 @@
           ]
         },
         {
-          "reason_en": "Lack of demonstrated demand and practical use case for a Go-based node implementation",
-          "reason_ja": "Go言語ベースのノード実装に対する実証された需要と実用的なユースケースの欠如",
-          "totalStake": "112376403379",
+          "reason_en": "Premature funding without published specifications or clear justification",
+          "reason_ja": "公開仕様や明確な正当性なしに時期尚早の資金提供",
+          "totalStake": "887723164315",
+          "dreps": [
+            {
+              "name": "TriangleForces",
+              "stake": "805737707050"
+            },
+            {
+              "name": "Victor.Villagomez",
+              "stake": "81985457265"
+            }
+          ]
+        },
+        {
+          "reason_en": "Low practical adoption likelihood compared to Rust implementation",
+          "reason_ja": "Rust実装と比較して実用的な採用の可能性が低い",
+          "totalStake": "85750359369",
           "dreps": [
             {
               "name": "Rich King",
               "stake": "3764902104"
             },
             {
-              "name": "traiectum",
-              "stake": "108611501275"
+              "name": "Victor.Villagomez",
+              "stake": "81985457265"
             }
           ]
         },
         {
-          "reason_en": "Funding a private company rather than non-profit organization raises governance and equity concerns",
-          "reason_ja": "非営利団体ではなく民間企業への資金提供はガバナンスと公平性の懸念を引き起こす",
+          "reason_en": "Not a priority given current market conditions and existing initiatives",
+          "reason_ja": "現在の市場状況と既存イニシアティブを考慮すると優先事項ではない",
+          "totalStake": "12504449756978",
+          "dreps": [
+            {
+              "name": "KTOP",
+              "stake": "8707290267669"
+            },
+            {
+              "name": "Dr. Navjit Dhaliwal",
+              "stake": "3797159489309"
+            }
+          ]
+        },
+        {
+          "reason_en": "Funding private company rather than non-profit for critical infrastructure",
+          "reason_ja": "重要なインフラストラクチャについて非営利ではなく民間企業に資金提供",
           "totalStake": "693094084217",
           "dreps": [
             {
@@ -531,8 +580,8 @@
       ],
       "abstainReasons": [
         {
-          "reason_en": "Support the concept but timing is premature - prefer to observe progress of existing Amaru implementation first before committing additional funds",
-          "reason_ja": "コンセプトは支持するが、タイミングが時期尚早である - 追加資金をコミットする前に、既存のAmaruの実装の進捗を��初に観察することを好む",
+          "reason_en": "Support multi-client concept but prefer to observe Amaru progress before committing additional treasury funds",
+          "reason_ja": "マルチクライアントコンセプトをサポートするが、追加のトレジャリー資金をコミットする前にAmaru進行状況を観察したい",
           "totalStake": "37377962601995",
           "dreps": [
             {

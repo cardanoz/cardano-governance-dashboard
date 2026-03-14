@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-14T11:38:56.824Z",
+  "generatedAt": "2026-03-14T13:18:21.435Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 50,
-      "summary_en": "Treasury Withdrawals are approved when they fund strategic infrastructure development, particularly client diversity initiatives and ecosystem investments with proven teams. Voters support proposals that address clear network vulnerabilities, demonstrate cost-effectiveness, and come from established, transparent organizations, though concerns arise around funding multiple redundant solutions and large upfront allocations without milestone-based releases.",
-      "summary_ja": "Treasury Withdrawalsは、戦略的インフラ開発、特にクライアント多様性イニシアティブとエコシステム投資を資金提供する場合に承認されます。投票者は、明確なネットワーク脆弱性に対応し、費用対効果を実証し、確立された透明性のある組織からの提案を支持しますが、複数の冗長なソリューションへの資金提供とマイルストーンベースのリリースなしの大規模な前払いに関する懸念が生じます。",
+      "summary_en": "Treasury Withdrawals for Cardano typically receive mixed support, with votes often split between infrastructure development advocates and fiscal conservatives. Key approval drivers center on technical necessity (like client diversity), team reputation, and long-term network resilience, while opposition frequently cites concerns about funding duplicative efforts, lack of milestone-based payments, and opportunity costs during market downturns.",
+      "summary_ja": "Cardanoトレジャリー引き出し提案は通常、インフラ開発支持者と財政的に慎重な投票者の間で意見が分かれます。承認の主な理由はクライアント多様性などの技術的必要性、チームの評判、長期的なネットワーク耐性にあり、反対理由は重複した取り組みへの資金提供、マイルストーン型支払いの欠如、市場低迷時の機会費用を懸念しています。",
       "typicalReasonsYes_en": [
-        "Client/node diversity improves network resilience and eliminates single points of failure",
-        "Proposal from established, proven teams with strong track records in open-source development",
-        "Addresses critical long-term strategic needs for Cardano infrastructure security",
-        "Cost-effective compared to historical investment in existing implementations"
+        "Supports critical infrastructure like client/node diversity to reduce single points of failure and improve network resilience",
+        "Team has proven track record and strong reputation (e.g., Blink Labs credibility and open-source contributions)",
+        "Low cost relative to treasury size and comparable to historical infrastructure development expenses",
+        "Long-term strategic importance for network security and development sustainability"
       ],
       "typicalReasonsYes_ja": [
-        "クライアント/ノード多様性はネットワークの耐性を向上させ、単一障害点を排除する",
-        "オープンソース開発において強い実績を持つ確立された実績のあるチームからの提案",
-        "Cardanoインフラストラクチャのセキュリティのための重要な長期戦略的ニーズに対応",
-        "既存の実装への歴史的投資と比較して費用対効果が高い"
+        "ノード実装の多様性など、ネットワークの単一障害点を減らし回復力を向上させる重要インフラへの支持",
+        "チームの実績と高い評判（例：Blink LabsのOSSへの貢献と信頼性）",
+        "トレジャリー規模に対して低コスト、かつ過去のインフラ開発経費に匹敵する妥当性",
+        "ネットワークセキュリティと開発持続性のための長期的戦略的重要性"
       ],
       "typicalReasonsNo_en": [
-        "Funding multiple redundant implementations of the same solution wastes treasury resources",
-        "Large single withdrawals should be split into milestone-based payments to reduce risk",
-        "Lack of clear differentiation when similar proposals (e.g., Amaru) are already in progress",
-        "Insufficient cost justification and transparency in budget breakdown"
+        "Funding duplicates existing efforts (e.g., multiple node implementations like Amaru already in development)",
+        "Large lump-sum payments without milestone-based fund release or performance validation",
+        "Questionable cost efficiency and overhead (e.g., developer salary assumptions questioned)",
+        "Better timing to wait for existing initiatives to mature before committing additional resources"
       ],
       "typicalReasonsNo_ja": [
-        "同じソリューションの複数の冗長な実装への資金提供はトレジャリーリソースを浪費する",
-        "大規模な一括引き出しはリスクを減らすためにマイルストーンベースの支払いに分割すべき",
-        "同様の提案（例：Amaru）が既に進行中の場合、明確な差別化の欠如",
-        "予算内訳における費用正当化と透明性の不足"
+        "既に進行中の取り組み（例：Amaruなど複数のノード実装）との重複",
+        "マイルストーン型支払いや成果検証のない一括大型資金請求",
+        "費用対効果の疑問と過度なオーバーヘッド（例：開発者給与の根拠への質疑）",
+        "既存イニシアティブの成熟を待つ方が適切なタイミング"
       ]
     },
     "InfoAction": {
