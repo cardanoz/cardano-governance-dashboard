@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-14T04:55:01.440Z",
+  "generatedAt": "2026-03-14T06:16:00.676Z",
   "proposals": {
     "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0": {
       "title": "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0",
@@ -796,9 +796,9 @@
       "submittedEpoch": 0,
       "stats": {
         "votedWithRationale": 30,
-        "votedWithoutRationale": 32,
-        "notVoted": 1533,
-        "notVotedTotalStake": "3787114497391920",
+        "votedWithoutRationale": 33,
+        "notVoted": 1532,
+        "notVotedTotalStake": "3784843116248038",
         "notVotedTopDreps": [
           {
             "name": "YUTA",
@@ -842,12 +842,12 @@
           }
         ],
         "yesBreakdown": {
-          "total": 47,
+          "total": 48,
           "withRationale": 19,
-          "withoutRationale": 28,
-          "totalStake": "1880804639097195",
+          "withoutRationale": 29,
+          "totalStake": "1883076020241077",
           "withRationaleStake": "1229036768031420",
-          "withoutRationaleStake": "651767871065775",
+          "withoutRationaleStake": "654039252209657",
           "withoutRationaleDreps": [
             {
               "name": "YOADA",
@@ -929,9 +929,9 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Improves transparency and structure in treasury budgeting through standardized templates, clear procedures, and on-chain documentation of the process",
-          "reason_ja": "標準化されたテンプレート、明確な手続き、プロセスのオンチェーン記録により、トレジャリー予算の透明性と構造を改善",
-          "totalStake": "1049217756237870",
+          "reason_en": "Improves transparency and structure in treasury budgeting process through standardized templates, clear procedures, and on-chain documentation of the budget framework",
+          "reason_ja": "標準化されたテンプレート、明確な手続き、およびオンチェーンの予算フレームワーク文書化を通じて、財務予算策定プロセスの透明性と構造を改善する",
+          "totalStake": "1107751184815116",
           "dreps": [
             {
               "name": "MREDGARCROSS",
@@ -950,46 +950,39 @@
               "stake": "712999629106350"
             },
             {
+              "name": "SASA_nagamaru_ながまる",
+              "stake": "58533428577246"
+            },
+            {
               "name": "EMURGO",
               "stake": "298101924939471"
             }
           ]
         },
         {
-          "reason_en": "Enables iterative improvement of governance processes through experimentation, addressing chaos and difficulties from the 2025 cycle",
-          "reason_ja": "実験を通じたガバナンスプロセスの反復的改善を可能にし、2025年サイクルの混乱と困難に対処",
-          "totalStake": "75268085437167",
+          "reason_en": "Enables iterative improvement and maturation of governance processes while reducing spam and chaos from 2025 cycle through quality filters, anti-spam measures, and structured evaluation criteria",
+          "reason_ja": "品質フィルター、スパム対策、および構造化された評価基準を通じて、2025年のサイクルからのスパムと混乱を軽減しながら、ガバナンスプロセスの反復的な改善と成熟を可能にする",
+          "totalStake": "49617635824322",
           "dreps": [
             {
               "name": "Rodrigo-[CHIL]",
               "stake": "16734656859921"
             },
             {
-              "name": "SASA_nagamaru_ながまる",
-              "stake": "58533428577246"
-            }
-          ]
-        },
-        {
-          "reason_en": "Prevents treasury capture and social engineering by introducing merit-based evaluation, anti-spam measures, and quality filters (minimum proposal size, submission fees, KPI requirements)",
-          "reason_ja": "メリットベースの評価、スパム対策、品質フィルター（最小提案規模、提出手数料、KPI要件）を導入す��ことで、トレジャリー独占と社会工学を防止",
-          "totalStake": "31209330051703",
-          "dreps": [
-            {
               "name": "Rudianos",
               "stake": "50482728238"
             },
             {
-              "name": "Kevin_ALBERT",
-              "stake": "1231296714111"
+              "name": "drep1yf6xkrz2w4...",
+              "stake": "96364914056"
+            },
+            {
+              "name": "Varavas",
+              "stake": "2917192214028"
             },
             {
               "name": "Peter Horsfall",
               "stake": "5162253637164"
-            },
-            {
-              "name": "traiectum",
-              "stake": "108611501275"
             },
             {
               "name": "Cerkoryn",
@@ -998,10 +991,14 @@
           ]
         },
         {
-          "reason_en": "Provides strategic alignment with Cardano Vision 2030, milestone-based payments via smart contracts, and measurable outcomes for better funding decisions",
-          "reason_ja": "Cardano Vision 2030との戦略的整合、スマートコントラクトを通じたマイルストーンベースの支払い、より良い資金配分のための測定可能な成果を提供",
-          "totalStake": "298212889732419",
+          "reason_en": "Establishes strategic alignment with Cardano Vision 2030, KPI-based evaluation, and milestone-based fund release through smart contracts to ensure accountability and measurable outcomes",
+          "reason_ja": "Cardano Vision 2030との戦略的整合、KPIベースの評価、およびスマートコントラクトを通じたマイルストーンベースの資金放出を確立し、説明責任と測定可能な成果を確保する",
+          "totalStake": "1342261507059",
           "dreps": [
+            {
+              "name": "Kevin_ALBERT",
+              "stake": "1231296714111"
+            },
             {
               "name": "Musa Ridwan Itopa",
               "stake": "2353291673"
@@ -1009,38 +1006,45 @@
             {
               "name": "traiectum",
               "stake": "108611501275"
-            },
-            {
-              "name": "EMURGO",
-              "stake": "298101924939471"
             }
           ]
         },
         {
-          "reason_en": "Signals ecosystem maturation and represents meaningful progress toward professional, structured governance compared to previous chaotic processes",
-          "reason_ja": "エコシステムの成熟を示し、以前の混乱したプロセスと比較して、専門的で構造化されたガバナンスへの意味のある進展を示す",
-          "totalStake": "25282452813535",
+          "reason_en": "Provides coordination framework and shared reference that reduces uncertainty, prevents treasury withdrawals from becoming social engineering games, and increases predictability for all participants",
+          "reason_ja": "協調フレームワークと共有参照を提供し、不確実性を軽減し、財務引き出しがソーシャルエンジニアリングゲームになることを防ぎ、すべての参加者の予測可能性を高める",
+          "totalStake": "33135212665426",
           "dreps": [
             {
-              "name": "Varavas",
-              "stake": "2917192214028"
+              "name": "drep1yfdfs28uwa...",
+              "stake": "7207326944219"
             },
             {
-              "name": "drep1yf6xkrz2w4...",
-              "stake": "96364914056"
+              "name": "BWtake(長崎)Japan",
+              "stake": "3658990035756"
             },
             {
               "name": "Blockjock (James Meidinger)",
               "stake": "22268895685451"
             }
           ]
+        },
+        {
+          "reason_en": "Demonstrates ecosystem maturation and evolution of Intersect as administrative arm with structured workflow that ties spending to KPIs and facilitates transparent, strategic budgeting",
+          "reason_ja": "エコシステムの成熟とIntersectの管理的役割の進化を示し、支出をKPIに結び付け、透明で戦略的な予算策定を促進する構造化されたワークフロー",
+          "totalStake": "37190473219497",
+          "dreps": [
+            {
+              "name": "MUEN",
+              "stake": "37190473219497"
+            }
+          ]
         }
       ],
       "noReasons": [
         {
-          "reason_en": "Creates exclusionary barriers through high submission fees (1,000 ADA), minimum proposal size (100,000 ADA), and gatekeeping that disadvantage grassroots developers and small projects",
-          "reason_ja": "提出手数料（1,000 ADA）、最小提案規模（100,000 ADA）、ゲートキーピングを通じた排他的障壁を作成し、草の根開発者と小規模プロジェクトに不利",
-          "totalStake": "97321694600203",
+          "reason_en": "Creates exclusionary 'pay-to-play' system with 1,000 ADA submission fee and 100,000 ADA minimum request size that disadvantages grassroots developers and small projects while favoring large organizations",
+          "reason_ja": "1,000 ADAの投稿料金と100,000 ADAの最小請求額を含む排他的な「ペイ・トゥ・プレイ」システムを作成し、草の根開発者および小規模プロジェクトを不利にしながら大規模組織を優遇する",
+          "totalStake": "721650796759",
           "dreps": [
             {
               "name": "Kevin G Mohr",
@@ -1049,29 +1053,17 @@
             {
               "name": "Erasmus",
               "stake": "693094084217"
-            },
-            {
-              "name": "CardanoYoda (MANDA Pool)",
-              "stake": "96600043803444"
             }
           ]
         },
         {
-          "reason_en": "Centralizes power toward Intersect and organized institutional actors, increasing bureaucracy and risk of capture while reducing natural decentralization friction",
-          "reason_ja": "Intersectと組織的な機関的アクターへの権力を集中させ、官僚化とキャプチャのリスク増加、自然な分散化の摩擦を低減",
-          "totalStake": "61725117207676",
+          "reason_en": "Concentrates power with Intersect and creates centralized bureaucracy that deters builders from obtaining funding while favoring well-connected institutional DReps with informational and procedural advantages",
+          "reason_ja": "Intersectとの権力集中と集中化された官僚制度を作成し、建設者の資金調達を阻止しながら、��報および手続き上の優位性を持つ良く繋がった機関的なDRepを優遇する",
+          "totalStake": "59114385115077",
           "dreps": [
             {
               "name": "InputEndorsers",
               "stake": "7575211742195"
-            },
-            {
-              "name": "Victor.Villagomez",
-              "stake": "81985457265"
-            },
-            {
-              "name": "Medusa DRep",
-              "stake": "2528746635334"
             },
             {
               "name": "Tempo.Vote",
@@ -1080,28 +1072,24 @@
           ]
         },
         {
-          "reason_en": "Relies on off-chain filters and institutional gatekeepers to determine on-chain outcomes, compromising permissionless governance principles",
-          "reason_ja": "オンチェーン結果を決定するためにオフチェーンフィルターと機関的ゲートキーパーに依存し、許可不要なガバナンスの原則を損なう",
-          "totalStake": "722259754533",
+          "reason_en": "Reduces natural friction that protects against capture in decentralized systems and tilts governance power toward organized actors, creating risks of institutional gatekeeping over permissionless governance",
+          "reason_ja": "分散型システムでの捕捉から保護する自然な摩擦を軽減し、ガバナンス権を組織化された行為者に傾け、許可不要のガバナンスに対する機関的な門番制度のリスクを作成する",
+          "totalStake": "81985457265",
           "dreps": [
             {
-              "name": "Erasmus",
-              "stake": "693094084217"
-            },
-            {
-              "name": "Agora | Cardano (by Rodrigo Pacini)",
-              "stake": "29165670316"
+              "name": "Victor.Villagomez",
+              "stake": "81985457265"
             }
           ]
         },
         {
-          "reason_en": "Creates participation and information asymmetries favoring large organized DReps with better deadline awareness and Intersect access over smaller DReps",
-          "reason_ja": "より良いデッドライン認識とIntersectアクセスを持つ大規模な組織的DRepを有利にし、小規模なDRepより参加とコミュニケーションの非対称性を作成",
-          "totalStake": "7799909496430",
+          "reason_en": "Monopolizes budget process with unclear Ekklesia voting procedures, unequal information access for large institutional participants, and risk that majority of funds will flow to IOG-style proposals with poor completion rates",
+          "reason_ja": "不明確なEkklesiaの投票手続き、大規模な機関参加者のための不平等な情報アクセス、および完了率が低いIOGスタイルの提案に資金の大部分が流れるリスクで予算プロセスを独占する",
+          "totalStake": "2753444389569",
           "dreps": [
             {
-              "name": "InputEndorsers",
-              "stake": "7575211742195"
+              "name": "Medusa DRep",
+              "stake": "2528746635334"
             },
             {
               "name": "heo.keo",
@@ -1110,25 +1098,36 @@
           ]
         },
         {
-          "reason_en": "Submission fee structure is inefficient and unfair; should scale proportionally with budget request amount (3-5%) rather than flat rate",
-          "reason_ja": "提出手数料構造は非効率で不公正；定額ではなく予算要求額に比例してスケール（3-5%）すべき",
-          "totalStake": "228462656339",
+          "reason_en": "Framework should address concerns about submission fee scaling, minimum proposal size barriers, and balance off-chain filters with on-chain governance requirements for better inclusivity",
+          "reason_ja": "フレームワークは提出手数料のスケーリング、最小提案サイズの障壁に関する懸念に対処し、より良い包括性のためにオフチェーンフィルターとオンチェーンガバナンス要件のバランスを取る必要がある",
+          "totalStake": "96603808705548",
           "dreps": [
+            {
+              "name": "CardanoYoda (MANDA Pool)",
+              "stake": "96600043803444"
+            },
             {
               "name": "Rich King",
               "stake": "3764902104"
-            },
+            }
+          ]
+        },
+        {
+          "reason_en": "Relies on off-chain institutional processes and voting procedures (Ekklesia) that lack sufficient transparency and advance notice, giving advantages to insiders with Intersect connections",
+          "reason_ja": "十分な透明性と事前通知に欠けるオフチェーン機関プロセスおよび投票手続き（Ekklesia）に依存し、Intersect接続を持つ内部者に利点を与える",
+          "totalStake": "29165670316",
+          "dreps": [
             {
-              "name": "heo.keo",
-              "stake": "224697754235"
+              "name": "Agora | Cardano (by Rodrigo Pacini)",
+              "stake": "29165670316"
             }
           ]
         }
       ],
       "abstainReasons": [
         {
-          "reason_en": "Framework represents problematic path toward centralized bureaucracy contradicting decentralized blockchain principles, but acceptable because participation is entirely opt-in",
-          "reason_ja": "フレームワークは分散ブ���ックチェーン原則に矛盾する中央集約的な官僚制度への問題のある道を示しているが、参加が完全に任意選択であるため許容可能",
+          "reason_en": "Framework represents continued move toward centralized bureaucracy contrary to decentralized blockchain principles, but is acceptable since participation is entirely opt-in",
+          "reason_ja": "フレームワークは分散型ブロックチェーン原則に反する集中化された官僚制度への継続的な動きを表しますが、参加は完全にオプトインであるため許容できます",
           "totalStake": "23522709824303",
           "dreps": [
             {
