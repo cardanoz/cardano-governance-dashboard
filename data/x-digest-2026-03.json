@@ -1809,5 +1809,189 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2026-03-14",
+    "highlights": [
+      {
+        "category": "key_person",
+        "title_en": "Quantumplation Issues $5K Bounty Challenge for Alternative Cardano Node Implementation",
+        "title_ja": "Quantumplationが代替Cardanoノード実装に5000ドルのバウンティを発行",
+        "summary_en": "Developer Quantumplation has issued a $5,000 bounty challenge for anyone to vibe-code an alternative Cardano node from scratch in any language except Haskell, with full git history transparency. The challenge aims to promote node diversity and business adoption on Cardano, though Quantumplation notes AI is not yet capable of meeting the technical conformance requirements.",
+        "summary_ja": "開発者Quantumplationが、Haskell以外の言語でゼロからCardanoノードを実装するための5000ドルのバウンティチャレンジを発行。完全なgit履歴透明性が要件で、ノード多様性とCardanoへの事業導入推進を目指している。Quantumplationは、AIはまだ技術仕様要件を満たす能力がないと指摘。",
+        "importance": 4,
+        "audience": [
+          "Builder",
+          "Developer",
+          "Governance"
+        ],
+        "sources": [
+          "@Quantumplation"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Liqwid Finance Expands Collateral Support to Stableswap LP Tokens",
+        "title_ja": "Liqwid FinanceがStableswap LPトークンの担保対応を拡大",
+        "summary_en": "Liqwid Finance now supports Stableswap LP token markets, allowing users to supply SundaeSwap USDCx/USDM and Minswap USDM/USDA LP tokens as collateral. This integration enhances DeFi composability and liquidity access on Cardano.",
+        "summary_ja": "Liqwid FinanceがStableswap LPトークン市場をサポート開始。SundaeSwapのUSDCx/USDMおよびMinswapのUSDM/USDA LPトークンを担保として供給可能。Cardano DeFiの相互運用性と流動性へのアクセスを強化。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder",
+          "Ecosystem"
+        ],
+        "sources": [
+          "@LiqwidFinance"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Cardano Node 10.7.0 Release Imminent with Governance Updates",
+        "title_ja": "Cardanoノード10.7.0がリリース間近、ガバナンスアップデート予定",
+        "summary_en": "Cardano Node 10.7.0 is scheduled for imminent release with accompanying governance process updates and 2026 budget mechanisms. Intersect Update #102 confirms protocol advancements and voting rule clarifications for DReps.",
+        "summary_ja": "Cardanoノード10.7.0がまもなくリリース予定で、ガバナ���スプロセスと2026年予算メカニズムのアップデートを伴う。Intersect Update #102がプロトコル進展とDRep向け投票ルールの明確化を確認。",
+        "importance": 4,
+        "audience": [
+          "SPO",
+          "DRep",
+          "CC",
+          "Builder"
+        ],
+        "sources": [
+          "@SIPO_Tokyo",
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "institutional",
+        "title_en": "Balance Custody Prepares NIGHT Token Custody Support for Midnight Mainnet",
+        "title_ja": "Balance CustodyがMidnightメインネット向けのNIGHTトークンカストディを準備完了",
+        "summary_en": "Canadian digital asset custodian Balance has completed preparation for NIGHT token custody support ahead of Midnight's mainnet launch. Balance is positioned to become the first institutional custodian supporting NIGHT, signaling tier-1 institutional readiness for Midnight ecosystem.",
+        "summary_ja": "カナダのデジタル資産カストディ企業BalanceがMidnightメインネット前のNIGHTトークンカストディ対応準備を完了。Balanceはカストディ対応初となる見込みで、Midnightエコシステムへの機関投資家対応が進展。",
+        "importance": 4,
+        "audience": [
+          "Institutional",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@SIPO_Tokyo"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "gouroboros v0.160.2 and adder v0.39.1 Released",
+        "title_ja": "gouroboros v0.160.2とadder v0.39.1がリリース",
+        "summary_en": "Blinklabs releases new versions of gouroboros v0.160.2 and adder v0.39.1, providing updated API and indexing tools for Cardano developers.",
+        "summary_ja": "BlinklabsがgourobirosV0.160.2とadder v0.39.1の新バージョンをリリース。Cardano開発者向けAPIとインデキシングツールを提供。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "Developer"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "CIP-0113 (Programmable Tokens) Gains Community Attention Amid Technical Debate",
+        "title_ja": "CIP-0113（プログラム可能なトークン）が技術議論の中でコミュニティの注目を集める",
+        "summary_en": "CIP-0113 for Programmable Tokens continues generating community discussion. Technical concerns about contributor track records and governance process credibility have emerged amid broader token standard implementation conversations.",
+        "summary_ja": "プログラム可能なトークン向けのCIP-0113が継続してコミュニティの議論を生成。貢献者の実績とガバナンスプロセスの信頼性に関する技術的懸念が、トークン標準実装の広い会話の中で浮上。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "DRep",
+          "CC",
+          "Developer"
+        ],
+        "sources": [
+          "@jayedii",
+          "@TrillionsXBT"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Constitutional Committee Member Conduct and Governance Credibility Under Scrutiny",
+        "title_ja": "憲法委員会メンバーの行動とガバナンス信頼性が精査中",
+        "summary_en": "Community members raise concerns about Constitutional Committee member professionalism and track record, including failed audits and interpersonal conduct issues. Debate continues between those supporting alternative constitutional interpretations and those questioning member competency.",
+        "summary_ja": "コミュニティメンバーが憲法委員会メンバーの専門性と実績に懸念を表明。失敗した監査や対人関係上の問題を含む。代替的な憲法解釈を支持する者と、メンバーの能力に疑問を持つ者との間で議論継続。",
+        "importance": 3,
+        "audience": [
+          "DRep",
+          "CC",
+          "Governance"
+        ],
+        "sources": [
+          "@jayedii",
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "USDCx Stablecoin Launches on SundaeSwap with Native Cardano Integration",
+        "title_ja": "USDCxステーブルコインがSundaeSwapでネイティブCardano統合を開始",
+        "summary_en": "USDCx, a 1:1 backed stablecoin with Circle's xReserve infrastructure, is now live on SundaeSwap with swap, LP, and trading functionality. This brings institutional-grade stablecoin liquidity to Cardano DeFi while maintaining reserve transparency.",
+        "summary_ja": "CircleのxReserveインフラストラクチャで1:1担保されたUSDCxがSundaeSwapで稼働開始。スワップ、LP、取引機能が利用可能。機関等級のステーブルコイン流動性をCardano DeFiに持ち込む一方、準備金透明性を維持。",
+        "importance": 4,
+        "audience": [
+          "Holder",
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@SIPO_Tokyo",
+          "@LiqwidFinance"
+        ]
+      },
+      {
+        "category": "network_ops",
+        "title_en": "Weekly Development Activity: 681 Commits Across 80 Repositories",
+        "title_ja": "週間開発活動：80リポジトリにわたり681コミット",
+        "summary_en": "Cardano development shows continued momentum with 681 commits pushed across 80 repositories (March 13). Mithril leads with 77 commits, followed by cardano-node (39), blockfrost-platform (38), cardano-api (36), and cardano-ledger (34), representing significant protocol and infrastructure development.",
+        "summary_ja": "Cardano開発は引き続き勢いを示し、80リポジトリにわたり681コミットが実施（3月13日）。Mithrilが77コミットで先導し、cardano-node（39）、blockfrost-platform（38）、cardano-api（36）、cardano-ledger（34）が続く。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO",
+          "Developer"
+        ],
+        "sources": [
+          "@cardano_updates"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Intersect MBO Hosts Partner Chains Discussion X Space (March 16)",
+        "title_ja": "Intersect MBOがパートナーチェーン議論X Spaceをホスト（3月16日）",
+        "summary_en": "Intersect MBO is hosting an X Space discussion on Partner Chains momentum, exploring their technical structure, team motivations, and value return to the Cardano ecosystem. Session scheduled for Monday, March 16 at 5pm UTC.",
+        "summary_ja": "Intersect MBOがパートナーチェーンの勢いに関するX Spaceディスカッションをホスト。技術構造、チーム動機、Cardanoエコシステムへの価値還元を探索。3月16日月曜日、UTC午後5時予定。",
+        "importance": 2,
+        "audience": [
+          "Builder",
+          "DRep",
+          "Community"
+        ],
+        "sources": [
+          "@Cardano_Power"
+        ]
+      }
+    ],
+    "tweetCount": 81,
+    "generatedAt": "2026-03-14T06:39:29.231Z",
+    "apiUsage": {
+      "input_tokens": 5438,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2881,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]
