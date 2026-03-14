@@ -1,11 +1,11 @@
 {
   "network": {
     "supply_total": "38494388152931287",
-    "supply_circulating": "37152892128082851",
-    "supply_locked": "511415558093719",
+    "supply_circulating": "37152891325967558",
+    "supply_locked": "511634963589412",
     "supply_treasury": "1654111958490226",
     "supply_reserves": "6505611847068713",
-    "stake_live": "21807273709200710",
+    "stake_live": "21807452157818150",
     "stake_active": "21787927325337212"
   },
   "protocolParams": {
@@ -2469,13 +2469,13 @@
     "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0": {
       "proposal_type": "TreasuryWithdrawals",
       "drep": {
-        "yes_pct": 2.11,
-        "no_pct": 97.89,
-        "yes_votes_cast": 11,
-        "no_votes_cast": 3,
+        "yes_pct": 2.18,
+        "no_pct": 97.82,
+        "yes_votes_cast": 13,
+        "no_votes_cast": 4,
         "abstain_votes_cast": 0,
-        "yes_power": "123260811381699",
-        "no_power": "5712276964003788"
+        "yes_power": "127218033784598",
+        "no_power": "5708319741600889"
       },
       "cc": {
         "yes_pct": 0,
@@ -2528,7 +2528,7 @@
         "yes_pct": 9.2,
         "no_pct": 90.8,
         "yes_votes_cast": 21,
-        "no_votes_cast": 14,
+        "no_votes_cast": 15,
         "abstain_votes_cast": 4,
         "yes_power": "536047615266636",
         "no_power": "5288144993547952"
@@ -2553,13 +2553,13 @@
     "e9693ed6b6465b2b46daaf641486a12b4b2946081634b5967b9d98897b0598fa#0": {
       "proposal_type": "InfoAction",
       "drep": {
-        "yes_pct": 30.55,
-        "no_pct": 69.45,
-        "yes_votes_cast": 45,
+        "yes_pct": 32.36,
+        "no_pct": 67.64,
+        "yes_votes_cast": 47,
         "no_votes_cast": 14,
         "abstain_votes_cast": 1,
-        "yes_power": "1775362441983825",
-        "no_power": "4036652623577359"
+        "yes_power": "1880804639097195",
+        "no_power": "3931210426463989"
       },
       "cc": {
         "yes_pct": 0,
