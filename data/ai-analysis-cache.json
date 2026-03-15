@@ -5727,6 +5727,28 @@
       ],
       "votingPattern_en": "Erasmus votes No strategically on expansion/new funding proposals (5 Yes, 8 No votes), carefully evaluating treasury allocation efficiency, project delivery track records, and governance inclusivity before supporting resource commitments.",
       "votingPattern_ja": "Erasmusは拡張/新規資金提案に戦略的にNo投票を行い(5 Yes、8 No投票)、リソース配分の効率性、プロジェクト配信の実績、ガバナンスの包括性を資本承約の前に慎重に評価しています。"
+    },
+    "drep1y2gpgzktn3gcjkj4wem2sn7af44974r66gh2vcsh0u0jlagxu440s": {
+      "lastAnalyzedVoteCount": 1,
+      "lastAnalyzedAt": "2026-03-15T23:46:30.104Z",
+      "tendencySummary_en": "This DRep strongly supports comprehensive governance reforms that enhance decentralization and transparency. They advocate for formal constitutional frameworks that distribute power among multiple stakeholders while maintaining permissionless participation and on-chain accountability.",
+      "tendencySummary_ja": "このDRepは分散化と透明性を強化する包括的なガバナンス改革を強く支持しています。複数のステークホルダー間の権力分散を実現しながら、パーミッションレスな参加とオンチェーンアカウンタビリティを維持する正式な憲法枠組みを主張しています。",
+      "keyPositions_en": [
+        "Supports decentralized governance frameworks with distributed decision-making among DReps, SPOs, and Constitutional Committee",
+        "Advocates for on-chain transparency and reduced corruption risks",
+        "Favors clear financial guardrails including predictable fees and 45B ADA sustainability cap",
+        "Supports permissionless participation recognizing all ADA holders as stakeholders",
+        "Endorses formal constitutional structures as living documents for evolving governance"
+      ],
+      "keyPositions_ja": [
+        "DRep、SPO、および憲法委員会による権力分散を伴う分散ガバナンス枠組みを支持",
+        "オンチェー���透明性と腐敗リスク軽減を提唱",
+        "予測可能な手数料と45B ADAの持続可能性上限を含む明確な財務ガードレールを支持",
+        "すべてのADAホルダーをステークホルダーとして認識するパーミッションレス参加を支持",
+        "進化するガバナンスのための生きた文書としての正式な憲法構造を承認"
+      ],
+      "votingPattern_en": "Strongly pro-governance reform, voting affirmatively on constitutional frameworks that prioritize decentralization, transparency, and inclusive stakeholder participation.",
+      "votingPattern_ja": "ガバナンス改革を強く支持し、分散化、透明性、および包括的なステークホルダー参加を優先する憲法枠組みに肯定的に投票。"
     }
   },
   "proposalCache": {
