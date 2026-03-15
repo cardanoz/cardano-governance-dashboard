@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-14T23:45:23.954Z",
+  "generatedAt": "2026-03-15T03:34:33.886Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 50,
-      "summary_en": "Treasury Withdrawal proposals show strong support for funding strategic infrastructure projects, particularly those enhancing client diversity and long-term network resilience. Key approval drivers include team reputation, project alignment with core Cardano development, and demonstrated progress on critical infrastructure, though concerns about funding structure, cost-efficiency, and redundancy with existing initiatives frequently emerge in opposing votes.",
-      "summary_ja": "Treasury Withdrawal提案は、クライアント多様性の向上とネットワークの長期的なレジリエンス強化に資する戦略的インフラプロジェクトへの資金提供に強い支持を示しています。承認を支持する主な理由はチームの信頼性、Cardano中核開発との整合性、重要インフラの進捗実績であり、一方資金調達方式、費用対効果、既存イニシアティブとの重複に関する懸念が反対票に頻出しています。",
+      "summary_en": "Treasury Withdrawal proposals on Cardano receive mixed support based on project quality, team reputation, and strategic alignment with ecosystem priorities. Yes votes emphasize client diversity, proven team track records, and long-term network resilience, while No votes cite concerns about funding redundancy, large single withdrawals without milestones, cost efficiency, and prioritization conflicts with existing initiatives.",
+      "summary_ja": "Cardanoのトレジャリー引き出し提案は、プロジェクトの質、チームの評判、エコシステム優先度との戦略的整合性に基づいて賛否が分かれています。賛成票はクライアント多様性、実績のあるチームの信頼性、長期的なネットワークレジリエンスを強調し、反対票は冗長性の懸念、マイルストーンなしの大規模単一引き出し、費用対効果、既存イニシアティブとの優先度競合を指摘しています。",
       "typicalReasonsYes_en": [
-        "Client/node diversity reduces single point of failure risk and improves network resilience",
-        "Trusted team with proven track record and demonstrated contributions to the ecosystem",
-        "Strategic long-term infrastructure investment essential for Cardano's adoption and security",
-        "Well-structured proposals with clear milestones and cost-benefit justification"
+        "Team reputation and proven track record in the Cardano ecosystem",
+        "Strategic importance for network resilience and client/language diversity",
+        "Long-term value creation despite market conditions and implementation risks",
+        "Addressing critical infrastructure gaps and single points of failure"
       ],
       "typicalReasonsYes_ja": [
-        "クライアント/ノード多様性により単一障害点のリスクを低減しネットワークの耐性を向上",
-        "実績のある信頼できるチームがエコシステムへの貢献を実証している",
-        "Cardanoの採用とセキュリティに必須の戦略的長期インフラ投資",
-        "明確なマイルストーンと費用対効果の正当化を備えた適切に構成された提案"
+        "Cardanoエコシステムでの実績があり信頼できるチーム",
+        "ネットワークレジリエンスとクライアント/言語多様性の戦略的重要性",
+        "市場環境や実装リスクにもかかわらず長期的価値を創造",
+        "重要なインフラストラクチャギャップと単一障害点の対応"
       ],
       "typicalReasonsNo_en": [
-        "Redundancy concerns: funding multiple parallel solutions when existing alternatives (e.g., Amaru) already in development",
-        "Single large lump-sum funding request lacks milestone-based accountability and risk management",
-        "Cost-efficiency questions: salary and budget figures appear inflated or unjustified relative to market rates",
-        "Premature funding of experimental/unvalidated implementations without proven use case or adoption potential"
+        "Redundancy with existing competing proposals (e.g., Amaru node implementation)",
+        "Large lump-sum funding without milestone-based disbursement requirements",
+        "Cost efficiency concerns and potentially inflated budget estimates",
+        "Premature funding of unproven specifications or experimental approaches"
       ],
       "typicalReasonsNo_ja": [
-        "既に開発中の既存代替案（例：Amaru）がある場合の複数並行ソリューション資金提供の冗長性懸念",
-        "単一の大型一括資金提供は マイルストーンベースの説明責任とリスク管理を欠く",
-        "給与と予算数��が市場レート比較で水増しまたは不十分に見える費用効率上の疑問",
-        "実績のない使用事例または採用可能性なく検証されていない実験的実装の時期尚早な資金提供"
+        "既存の競合提案との冗長性（例：Amaruノード実装）",
+        "マイルストーン基準の支払い要件のない大規模一括資金提供",
+        "費用対効果の懸念と予算見積の過大計上の可能性",
+        "未検証の仕様または実験的アプローチへの時期尚早な資金提供"
       ]
     },
     "InfoAction": {
