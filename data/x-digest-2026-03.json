@@ -1993,5 +1993,153 @@
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
+  },
+  {
+    "date": "2026-03-15",
+    "highlights": [
+      {
+        "category": "key_person",
+        "title_en": "Intersect Leadership Addresses Community Friction Over Midnight Development Communication",
+        "title_ja": "Intersect指導部がMidnight開発コミュニケーションに関するコミュニティ摩擦に対応",
+        "summary_en": "Phillip Pon (Intersect MBO) publicly responded to ItsDave_ADA's concerns about stepping back from Midnight content, acknowledging communication gaps and committing to prioritize improvements. This addresses growing concern about losing vital community voices and preventing another 'Cardano Whale' situation.",
+        "summary_ja": "Phillip Pon（Intersect MBO）がItsDave_ADAのMidnight関連コンテンツからの撤退懸念に公式対応し、コミュニケーション改善を優先することを確約。コミュニティの重要な声を失うことへの懸念に対処。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@phillip_pon",
+          "@Quantumplation"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Yoroi DRep Interface Equality Fix Submitted; Implementation Priority Set",
+        "title_ja": "Yoroi DRep平等インターフェース修正が提出、実装優先度が決定",
+        "summary_en": "Cerkoryn submitted code adjustments to Yoroi wallet to treat all DReps with equal precedence, removing preferential display of Yoroi's own DRep. Intersect leadership flagged this as Monday implementation priority, addressing governance neutrality concerns.",
+        "summary_ja": "CerkorynがYoroi walletにコード修正を提出し、すべてのDRepを等しく扱うようにインターフェースを調整。Intersect指導部がこれを月曜日の実装優先事項として指定。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@Cerkoryn",
+          "@phillip_pon"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Governance Participation Gap Highlighted: Major Exchanges Block Voting Capability",
+        "title_ja": "ガバナンス参加ギャップが露呈：主要取引所が投票機能をブロック",
+        "summary_en": "MinswapIntern flagged that major custodial platforms (Exodus, Binance, Coinbase) holding significant ADA don't enable governance participation, creating structural barriers to inclusive voting. This represents a critical gap in governance accessibility infrastructure.",
+        "summary_ja": "MinswapInternが主要な保管プラットフォーム（Exodus、Binance、Coinbase）がADA保有者のガバナンス参加を許可していないことを指摘。ガバナンスアクセシビリティにおける構造的障壁。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@MinswapIntern"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Alternative Node Implementation Investigation: Gap Analysis Against Specification Proposed",
+        "title_ja": "代替ノード実装調査：仕様に対するギャップ分析提案",
+        "summary_en": "ElderM discussed embedded gap analysis capabilities for Cardano node implementations, enabling comparison against specification both currently and historically. This supports ongoing efforts for alternative node implementations and specification compliance verification.",
+        "summary_ja": "ElderMがCardanoノード実装用の組み込みギャップ分析機能について、現在および歴史的な仕様との比較を可能にすることを提案。代替ノード実装をサポート。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Fluid Tokens DeFi Platform Gains Early User Adoption; First Lending Pools Operational",
+        "title_ja": "Fluid TokensのDeFiプラットフォームが初期ユーザー採用を獲得、最初の貸出プールが稼働",
+        "summary_en": "Early adopters are actively using Fluid Tokens' lending pools with ADA and wrapped assets, indicating smooth onboarding experience. Platform demonstrates practical DeFi usability on Cardano with intuitive interface (easy mode feature).",
+        "summary_ja": "早期採用者がFluid TokensのプールでADAと資産をラップして活用開始。直感的なインターフェース（イージーモード機能）でDeFiの実用的な利用可能性を実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@adamKDean",
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Hard Fork Proposed as Solution to Protocol Constraints; Community Debate Ensues",
+        "title_ja": "プロトコル制約の解決策としてハードフォークが提案；コミュニティ議論が発生",
+        "summary_en": "Discussion emerged regarding hard fork as potential solution to current protocol limitations, with Charles Hoskinson reportedly asking 'what can we do.' This signals potential willingness to explore structural protocol changes to address ecosystem needs.",
+        "summary_ja": "現在のプロトコル制限への解決策としてハードフォークが議論に登場。Charles Hoskinsonが「何ができるのか」と問う。構造的プロトコル変更の可能性を示唆。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@the_iagonaut"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Liqwid Finance Marketing Misstep Creates Reputational Concern Pre-Midnight Launch",
+        "title_ja": "Liqwid Financeのマーケティング失敗がMidnight直前の評判懸念を生成",
+        "summary_en": "Community member flagged Liqwid Finance marketing issue as damaging to Cardano and Midnight reputation ahead of March 26 mainnet launch. Issue described as intentional and requiring immediate remediation to protect ecosystem credibility.",
+        "summary_ja": "コミュニティメンバーがLiqwid FinanceのマーケティングがCardanoとMidnight評判に悪影響を与えていることを指摘。3月26日ローンチ直前の懸念事項。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@tmanfsu"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Intersect Technical Lead Intertree Remains Away from Public Engagement Amid Family Recovery",
+        "title_ja": "Intersect技術リーダーのIntertreeが家族回復期間中は公開活動を継続延期",
+        "summary_en": "Intertree (governance tools contributor) provided update that mother remains in recovery from extended hospitalization. Public spaces participation remains paused while prioritizing family physio recovery and rehabilitation support.",
+        "summary_ja": "Intertreeが母親の長期入院からの回復中であることを報告。家族リハビリ支援を優先し、公開スペース参加は継続延期。",
+        "importance": 2,
+        "audience": [
+          "CC",
+          "Builder"
+        ],
+        "sources": [
+          "@intertreeJK"
+        ]
+      }
+    ],
+    "tweetCount": 64,
+    "generatedAt": "2026-03-15T06:48:44.856Z",
+    "apiUsage": {
+      "input_tokens": 3807,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2063,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
   }
 ]

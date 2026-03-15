@@ -1,5 +1,153 @@
 [
   {
+    "date": "2026-03-15",
+    "highlights": [
+      {
+        "category": "key_person",
+        "title_en": "Intersect Leadership Addresses Community Friction Over Midnight Development Communication",
+        "title_ja": "Intersect指導部がMidnight開発コミュニケーションに関するコミュニティ摩擦に対応",
+        "summary_en": "Phillip Pon (Intersect MBO) publicly responded to ItsDave_ADA's concerns about stepping back from Midnight content, acknowledging communication gaps and committing to prioritize improvements. This addresses growing concern about losing vital community voices and preventing another 'Cardano Whale' situation.",
+        "summary_ja": "Phillip Pon（Intersect MBO）がItsDave_ADAのMidnight関連コンテンツからの撤退懸念に公式対応し、コミュニケーション改善を優先することを確約。コミュニティの重要な声を失うことへの懸念に対処。",
+        "importance": 5,
+        "audience": [
+          "DRep",
+          "CC",
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@phillip_pon",
+          "@Quantumplation"
+        ]
+      },
+      {
+        "category": "governance_tool",
+        "title_en": "Yoroi DRep Interface Equality Fix Submitted; Implementation Priority Set",
+        "title_ja": "Yoroi DRep平等インターフェース修正が提出、実装優先度が決定",
+        "summary_en": "Cerkoryn submitted code adjustments to Yoroi wallet to treat all DReps with equal precedence, removing preferential display of Yoroi's own DRep. Intersect leadership flagged this as Monday implementation priority, addressing governance neutrality concerns.",
+        "summary_ja": "CerkorynがYoroi walletにコード修正を提出し、すべてのDRepを等しく扱うようにインターフェースを調整。Intersect指導部がこれを月曜日の実装優先事項として指定。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "Holder"
+        ],
+        "sources": [
+          "@Cerkoryn",
+          "@phillip_pon"
+        ]
+      },
+      {
+        "category": "governance_action",
+        "title_en": "Governance Participation Gap Highlighted: Major Exchanges Block Voting Capability",
+        "title_ja": "ガバナンス参加ギャップが露呈：主要取引所が投票機能をブロック",
+        "summary_en": "MinswapIntern flagged that major custodial platforms (Exodus, Binance, Coinbase) holding significant ADA don't enable governance participation, creating structural barriers to inclusive voting. This represents a critical gap in governance accessibility infrastructure.",
+        "summary_ja": "MinswapInternが主要な保管プラットフォーム（Exodus、Binance、Coinbase）がADA保有者のガバナンス参加を許可していないことを指摘。ガバナンスアクセシビリティにおける構造的障壁。",
+        "importance": 4,
+        "audience": [
+          "DRep",
+          "CC",
+          "SPO",
+          "Holder"
+        ],
+        "sources": [
+          "@MinswapIntern"
+        ]
+      },
+      {
+        "category": "dev_tools",
+        "title_en": "Alternative Node Implementation Investigation: Gap Analysis Against Specification Proposed",
+        "title_ja": "代替ノード実装調査：仕様に対するギャップ分析提案",
+        "summary_en": "ElderM discussed embedded gap analysis capabilities for Cardano node implementations, enabling comparison against specification both currently and historically. This supports ongoing efforts for alternative node implementations and specification compliance verification.",
+        "summary_ja": "ElderMがCardanoノード実装用の組み込みギャップ分析機能について、現在および歴史的な仕様との比較を可能にすることを提案。代替ノード実装をサポート。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "SPO"
+        ],
+        "sources": [
+          "@ElderM"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Fluid Tokens DeFi Platform Gains Early User Adoption; First Lending Pools Operational",
+        "title_ja": "Fluid TokensのDeFiプラットフォームが初期ユーザー採用を獲得、最初の貸出プールが稼働",
+        "summary_en": "Early adopters are actively using Fluid Tokens' lending pools with ADA and wrapped assets, indicating smooth onboarding experience. Platform demonstrates practical DeFi usability on Cardano with intuitive interface (easy mode feature).",
+        "summary_ja": "早期採用者がFluid TokensのプールでADAと資産をラップして活用開始。直感的なインターフェース（イージーモード機能）でDeFiの実用的な利用可能性を実証。",
+        "importance": 3,
+        "audience": [
+          "Holder",
+          "Builder"
+        ],
+        "sources": [
+          "@adamKDean",
+          "@FluidTokens"
+        ]
+      },
+      {
+        "category": "protocol_parameter",
+        "title_en": "Hard Fork Proposed as Solution to Protocol Constraints; Community Debate Ensues",
+        "title_ja": "プロトコル制約の解決策としてハードフォークが提案；コミュニティ議論が発生",
+        "summary_en": "Discussion emerged regarding hard fork as potential solution to current protocol limitations, with Charles Hoskinson reportedly asking 'what can we do.' This signals potential willingness to explore structural protocol changes to address ecosystem needs.",
+        "summary_ja": "現在のプロトコル制限への解決策としてハードフォークが議論に登場。Charles Hoskinsonが「何ができるのか」と問う。構造的プロトコル変更の可能性を示唆。",
+        "importance": 3,
+        "audience": [
+          "SPO",
+          "Builder",
+          "CC"
+        ],
+        "sources": [
+          "@the_iagonaut"
+        ]
+      },
+      {
+        "category": "ecosystem_adoption",
+        "title_en": "Liqwid Finance Marketing Misstep Creates Reputational Concern Pre-Midnight Launch",
+        "title_ja": "Liqwid Financeのマーケティング失敗がMidnight直前の評判懸念を生成",
+        "summary_en": "Community member flagged Liqwid Finance marketing issue as damaging to Cardano and Midnight reputation ahead of March 26 mainnet launch. Issue described as intentional and requiring immediate remediation to protect ecosystem credibility.",
+        "summary_ja": "コミュニティメンバーがLiqwid FinanceのマーケティングがCardanoとMidnight評判に悪影響を与えていることを指摘。3月26日ローンチ直前の懸念事項。",
+        "importance": 3,
+        "audience": [
+          "Builder",
+          "Holder"
+        ],
+        "sources": [
+          "@tmanfsu"
+        ]
+      },
+      {
+        "category": "key_person",
+        "title_en": "Intersect Technical Lead Intertree Remains Away from Public Engagement Amid Family Recovery",
+        "title_ja": "Intersect技術リーダーのIntertreeが家族回復期間中は公開活動を継続延期",
+        "summary_en": "Intertree (governance tools contributor) provided update that mother remains in recovery from extended hospitalization. Public spaces participation remains paused while prioritizing family physio recovery and rehabilitation support.",
+        "summary_ja": "Intertreeが母親の長期入院からの回復中であることを報告。家族リハビリ支援を優先し、公開スペース参加は継続延期。",
+        "importance": 2,
+        "audience": [
+          "CC",
+          "Builder"
+        ],
+        "sources": [
+          "@intertreeJK"
+        ]
+      }
+    ],
+    "tweetCount": 64,
+    "generatedAt": "2026-03-15T06:48:44.856Z",
+    "apiUsage": {
+      "input_tokens": 3807,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2063,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
     "date": "2026-03-14",
     "highlights": [
       {
@@ -995,150 +1143,6 @@
         "ephemeral_1h_input_tokens": 0
       },
       "output_tokens": 2133,
-      "service_tier": "standard",
-      "inference_geo": "not_available"
-    }
-  },
-  {
-    "date": "2026-03-07",
-    "highlights": [
-      {
-        "category": "protocol_parameter",
-        "title_en": "V11 Hard Fork Details Expected Soon with Leios Protocol Launch",
-        "title_ja": "V11ハードフォーク詳細が近日発表予定、Leiosプロトコル起動へ",
-        "summary_en": "Cardano V11 hard fork specifications are anticipated to be released imminently, supporting the 2026 Leios protocol deployment that promises significant block processing improvements and DApp performance enhancements through a new throughput architecture.",
-        "summary_ja": "Cardanoネットワークのブロック処理方式を革新的に改善するLeiosプロトコルを2026年に実装するV11ハードフォーク詳細が近日発表される見込み。DAppパフォーマンスの大幅向上が期待されている。",
-        "importance": 4,
-        "audience": [
-          "DRep",
-          "CC",
-          "SPO",
-          "Builder"
-        ],
-        "sources": [
-          "@ZcaToKoins",
-          "@USBitcoinServcs"
-        ]
-      },
-      {
-        "category": "constitution_budget",
-        "title_en": "New DeFi Liquidity Budget Draft Submitted for Community Review",
-        "title_ja": "DeFi流動性予算の新規草案が提出、コミュニティレビュー受付中",
-        "summary_en": "A refreshed DeFi Liquidity Budget proposal has been released in draft form with both standard and Google Doc versions available for community feedback before formal submission to governance voting.",
-        "summary_ja": "DeFi流動性予算の新規草案がリリースされ、標準形式およびGoogle Doc版が公開。正式なガバナンス投票前のコミュニティレビューが募集中。",
-        "importance": 3,
-        "audience": [
-          "DRep",
-          "CC",
-          "Holder"
-        ],
-        "sources": [
-          "@ElderM"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "Archax FCA-Regulated Exchange Integrates Cardano for Real-World Asset Tokenization",
-        "title_ja": "英FCA認可取引所Archaxが、実世界資産トークン化でCardanoを統合",
-        "summary_en": "UK FCA-regulated digital asset exchange Archax has integrated Cardano blockchain, enabling tokenization of regulated real-world assets including funds, bonds, and real estate on a compliant platform.",
-        "summary_ja": "英国FCA認可のデジタル資産取引所Archaxがカルダノを統合。ファンド、債券、不動産などの実世界資産をカルダノ上でトークン化可能に。",
-        "importance": 4,
-        "audience": [
-          "Holder",
-          "Builder",
-          "Institutional"
-        ],
-        "sources": [
-          "@Sagespeaks3090"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "BrickTowers and DFX Swiss Deploy Regulated Payment Infrastructure Reducing Merchant Fees 66%",
-        "title_ja": "BrickTowersとDFX SwissがCardano上で規制対応決済インフラを展開、加盟店手数料66%削減",
-        "summary_en": "BrickTowers and DFX Swiss have deployed regulated payment and savings infrastructure on Cardano with compliance-ready rails, significantly reducing merchant transaction fees by approximately 66% and advancing ADA adoption in everyday payments.",
-        "summary_ja": "BrickTowersとDFX Swissがカルダノ上で規制対応の決済・貯蓄インフラを展開。加盟店手数料が約66%削減され、ADAの日常決済での採用が加速。",
-        "importance": 4,
-        "audience": [
-          "Holder",
-          "Builder",
-          "Institutional"
-        ],
-        "sources": [
-          "@Cardano_Power"
-        ]
-      },
-      {
-        "category": "dev_tools",
-        "title_en": "Liqwid V3 Testnet Deployment Complete with USDCx Market and Hose Infrastructure",
-        "title_ja": "Liqwid V3がテストネット展開完了、USDCxマーケットとHoseインフラ稼動",
-        "summary_en": "Liqwid Finance completed Sprint 30 deployment including USDCx market launch, registry inclusion, Hose and offchain components on preprod, plus API integration for indexing inputs in preparation for mainnet release.",
-        "summary_ja": "Liqwid FinanceがSprint 30の展開完了。USDCxマーケット起動、Hoseとオフチェーンコンポーネントのテストネット稼動、インデックスAPI統合を実現。",
-        "importance": 3,
-        "audience": [
-          "Builder",
-          "DRep"
-        ],
-        "sources": [
-          "@LiqwidFinance"
-        ]
-      },
-      {
-        "category": "ecosystem_adoption",
-        "title_en": "BETFI Token Launches on CSWAP DEX with Poker and Bitcoin Mining Reward Mechanics",
-        "title_ja": "BETFIトークンがCSWAP DEXで起動、ポーカーとBTCマイニング報酬メカニクス搭載",
-        "summary_en": "BETFI officially launched on CSWAP DEX with staking mechanisms enabling users to earn shares in poker games and Bitcoin mining operations based on token holdings, expanding Cardano DeFi gaming applications.",
-        "summary_ja": "BETFIトークンがCSWAP DEXで正式起動。ステーキングでポーカーゲームとBTCマイニング事業の利益シェアを獲得できるメカニクスを実装。",
-        "importance": 2,
-        "audience": [
-          "Holder",
-          "Builder"
-        ],
-        "sources": [
-          "@BetFicasino"
-        ]
-      },
-      {
-        "category": "network_ops",
-        "title_en": "Cardano Repository Activity: 740 Commits Across 69 Repos in Latest Development Cycle",
-        "title_ja": "カルダノリポジ���リ活動：最新サイクルで69リポジトリ全体で740コミットを実行",
-        "summary_en": "Cardano ecosystem repositories processed 740 commits across 69 repositories with Mithril, cardano-node, and Acropolis as primary contributors, indicating sustained development velocity across core infrastructure and protocol improvements.",
-        "summary_ja": "カルダノエコシステムで740コミットが69リポジトリ全体に分散。Mithril、cardano-node、Acropolisが主要貢献者。コアインフラと프로토콜改善の継続的な開発を示唆。",
-        "importance": 2,
-        "audience": [
-          "Builder",
-          "SPO"
-        ],
-        "sources": [
-          "@cardano_updates"
-        ]
-      },
-      {
-        "category": "key_person",
-        "title_en": "Charles Hoskinson Explains Wyoming Stem Cell Freedom Act Implications for Regenerative Medicine",
-        "title_ja": "チャールズ・ホスキンソン、ワイオミング州「幹細胞自由法」と再生医療への影響を解説",
-        "summary_en": "Cardano founder Charles Hoskinson released a video explaining the Wyoming Stem Cell Freedom Act's significance for expanding access to regenerative medicine treatments, highlighting policy innovation in US biotech regulation.",
-        "summary_ja": "カルダノ創設者がワイオミング州「幹細胞自由法」について動画で解説。再生医療へのアクセス拡大の重要性を強調し、米国バイオテック規制における政策革新を紹介。",
-        "importance": 1,
-        "audience": [
-          "Holder"
-        ],
-        "sources": [
-          "@SIPO_Tokyo"
-        ]
-      }
-    ],
-    "tweetCount": 51,
-    "generatedAt": "2026-03-07T06:31:40.221Z",
-    "apiUsage": {
-      "input_tokens": 4217,
-      "cache_creation_input_tokens": 0,
-      "cache_read_input_tokens": 0,
-      "cache_creation": {
-        "ephemeral_5m_input_tokens": 0,
-        "ephemeral_1h_input_tokens": 0
-      },
-      "output_tokens": 2078,
       "service_tier": "standard",
       "inference_geo": "not_available"
     }
