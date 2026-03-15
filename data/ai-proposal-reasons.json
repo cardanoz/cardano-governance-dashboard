@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-03-15T13:18:51.757Z",
+  "generatedAt": "2026-03-15T14:54:51.315Z",
   "proposals": {
     "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0": {
       "title": "8807e3cee3be5647742c329c1dea242f0c1c29b8ad050e15169e3b0302fcbfd6#0",
       "type": "TreasuryWithdrawals",
       "submittedEpoch": 0,
       "stats": {
-        "votedWithRationale": 7,
-        "votedWithoutRationale": 18,
-        "notVoted": 1570,
-        "notVotedTotalStake": "5676275780378170",
+        "votedWithRationale": 8,
+        "votedWithoutRationale": 19,
+        "notVoted": 1568,
+        "notVotedTotalStake": "5672234229813655",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -53,11 +53,11 @@
           }
         ],
         "yesBreakdown": {
-          "total": 18,
-          "withRationale": 5,
+          "total": 19,
+          "withRationale": 6,
           "withoutRationale": 13,
-          "totalStake": "179808354674333",
-          "withRationaleStake": "14891232278317",
+          "totalStake": "183467344710089",
+          "withRationaleStake": "18550222314073",
           "withoutRationaleStake": "164917122396016",
           "withoutRationaleDreps": [
             {
@@ -103,12 +103,12 @@
           ]
         },
         "noBreakdown": {
-          "total": 7,
+          "total": 8,
           "withRationale": 2,
-          "withoutRationale": 5,
-          "totalStake": "9475540593319",
+          "withoutRationale": 6,
+          "totalStake": "9858101122078",
           "withRationaleStake": "7799909496430",
-          "withoutRationaleStake": "1675631096889",
+          "withoutRationaleStake": "2058191625648",
           "withoutRationaleDreps": [
             {
               "name": "drep1y26dxtv63a...",
@@ -129,6 +129,10 @@
             {
               "name": "Cardaflow",
               "stake": "110823400074"
+            },
+            {
+              "name": "A$Y",
+              "stake": "382560528759"
             }
           ]
         },
@@ -144,8 +148,8 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Establishes price discovery mechanism for treasury allocation decisions through structured comparison and evaluation",
-          "reason_ja": "構造化された比較と評価を通じて、資金配分決定のための価格発見メカニズムを確立する",
+          "reason_en": "Establishes price discovery and competitive evaluation mechanism for treasury allocation",
+          "reason_ja": "Treasury資金配分に対する価格発見と競争的評価メカニズムの確立",
           "totalStake": "0",
           "dreps": [
             {
@@ -155,32 +159,40 @@
           ]
         },
         {
-          "reason_en": "Supports initiative by Cardano Foundation and Draper University as timely and necessary for ecosystem development",
-          "reason_ja": "Cardano Foundation と Draper University による取り組みは、エコシステム発展に必要かつ時宜を得ている",
-          "totalStake": "2917192214028",
+          "reason_en": "Structured initiative with monitoring framework and tranche-based fund release approach",
+          "reason_ja": "段階的資金提供(トランシェ方式)と継続的監視フレームワークを備えた構造化された提案",
+          "totalStake": "6576182249784",
           "dreps": [
             {
               "name": "Varavas",
               "stake": "2917192214028"
+            },
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3658990035756"
             }
           ]
         },
         {
-          "reason_en": "Balanced risk-reward evaluation shows manageable 3% treasury exposure with multi-year structure and long-term growth potential",
-          "reason_ja": "複数年構造と長期成長の可能性により、3%の管理可能な資金流出とバランスの取れたリスク・リターン評価",
-          "totalStake": "7207326944219",
+          "reason_en": "Strategic value as VC fund within ecosystem to support sustainable growth and reduce external capital dependence",
+          "reason_ja": "エコシステム内部のVC機能によるネットワーク自身の資本による持続的成長戦略",
+          "totalStake": "3658990035756",
+          "dreps": [
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3658990035756"
+            }
+          ]
+        },
+        {
+          "reason_en": "Acceptable treasury impact with reasonable risk-reward ratio requiring ecosystem development",
+          "reason_ja": "許容可能なTreasury影響と妥当なリスク・リワード比で、エコシステム成長に必要",
+          "totalStake": "8363633604517",
           "dreps": [
             {
               "name": "drep1yfdfs28uwa...",
               "stake": "7207326944219"
-            }
-          ]
-        },
-        {
-          "reason_en": "Investment carries acceptable downside risk as part of ecosystem growth strategy requiring action",
-          "reason_ja": "許容可能なリスク範囲内で、エコシステム成長に向けた行動が必要",
-          "totalStake": "1156306660298",
-          "dreps": [
+            },
             {
               "name": "This Corrosion",
               "stake": "1156306660298"
@@ -188,8 +200,8 @@
           ]
         },
         {
-          "reason_en": "Proposal presents sound investment opportunity",
-          "reason_ja": "提案は健全な投資機会を提示している",
+          "reason_en": "Simple support for proposal concept",
+          "reason_ja": "提案概念への単純な支持",
           "totalStake": "3764902104",
           "dreps": [
             {
@@ -201,8 +213,8 @@
       ],
       "noReasons": [
         {
-          "reason_en": "Treasury investments must be clearly defined, independently validated, and structurally simple for community evaluation; proposal lacks sufficient clarity and scope definition",
-          "reason_ja": "資金投資は明確に定義され、独立した検証を受け、コミュニティが評価できるほど構造的にシンプルである必要があり、提案は十分な明確性とスコープ定義に欠ける",
+          "reason_en": "Lack of clear definition, independent validation, and sufficient structural simplicity for community evaluation",
+          "reason_ja": "明確な定義、独立した検証、コミュニティが評価するための十分なシンプルさの欠如",
           "totalStake": "7799909496430",
           "dreps": [
             {
@@ -223,10 +235,10 @@
       "type": "TreasuryWithdrawals",
       "submittedEpoch": 0,
       "stats": {
-        "votedWithRationale": 27,
+        "votedWithRationale": 28,
         "votedWithoutRationale": 42,
-        "notVoted": 1526,
-        "notVotedTotalStake": "4927015266596860",
+        "notVoted": 1525,
+        "notVotedTotalStake": "4926908854369595",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -320,11 +332,11 @@
           ]
         },
         "noBreakdown": {
-          "total": 38,
-          "withRationale": 13,
+          "total": 39,
+          "withRationale": 14,
           "withoutRationale": 25,
-          "totalStake": "463898895835275",
-          "withRationaleStake": "117791953814032",
+          "totalStake": "464005308062540",
+          "withRationaleStake": "117898366041297",
           "withoutRationaleStake": "346106942021243",
           "withoutRationaleDreps": [
             {
@@ -381,9 +393,9 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Client diversity and network resilience - reducing single point of failure risk from relying on one node implementation",
-          "reason_ja": "クライアント多様性とネットワークのレジリエンス向上 - 単一のノード実装への依存による単一障害点のリスク削減",
-          "totalStake": "58384144545450",
+          "reason_en": "Client diversity and network resilience - reducing single point of failure risk by funding a third independent node implementation",
+          "reason_ja": "クライアント多様性とネットワーク耐性 - 第3の独立したノード実装への資金提供により単一障害点のリスクを軽減",
+          "totalStake": "68702834603235",
           "dreps": [
             {
               "name": "BWtake(長崎)Japan",
@@ -402,39 +414,17 @@
               "stake": "50482728238"
             },
             {
-              "name": "Kevin_ALBERT",
-              "stake": "1231296714111"
-            },
-            {
-              "name": "Cerkoryn",
-              "stake": "24656685470915"
-            }
-          ]
-        },
-        {
-          "reason_en": "Blink Labs has a proven track record as a trusted, established team with strong history of open-source contributions to Cardano",
-          "reason_ja": "Blink Labsは信頼できる実績のあるチームであり、Cardanoへのオープンソース貢献の長い履歴がある",
-          "totalStake": "7430054556299",
-          "dreps": [
-            {
-              "name": "Kevin G Mohr",
-              "stake": "28556712542"
+              "name": "Varavas",
+              "stake": "2917192214028"
             },
             {
               "name": "ThisCrazyLife",
               "stake": "194170899538"
             },
             {
-              "name": "drep1yfdfs28uwa...",
-              "stake": "7207326944219"
-            }
-          ]
-        },
-        {
-          "reason_en": "Cost-effectiveness and strategic value - 6.9M ADA is reasonable relative to Cardano's treasury size and the importance of foundational infrastructure",
-          "reason_ja": "費用対効果と戦略的価値 - 6.9M ADAはCardanoの財務規模と基盤的インフラの重要性に対して合理的",
-          "totalStake": "31864012415134",
-          "dreps": [
+              "name": "Kevin_ALBERT",
+              "stake": "1231296714111"
+            },
             {
               "name": "Cerkoryn",
               "stake": "24656685470915"
@@ -446,14 +436,52 @@
           ]
         },
         {
-          "reason_en": "Long-term strategic investment for network security, developer talent retention, and ecosystem growth",
-          "reason_ja": "ネットワークセキュリティ、開発者人材の確保、エコシステム成長のための長期的な戦略的投資",
-          "totalStake": "5702812739483",
+          "reason_en": "Strong team credentials and track record - Blink Labs has demonstrated commitment to open-source development and ecosystem contribution",
+          "reason_ja": "強いチーム実績と信頼性 - Blink Labsはオープンソース開発とエコシステム貢献の実績を示している",
+          "totalStake": "1873416337480",
           "dreps": [
             {
-              "name": "Varavas",
-              "stake": "2917192214028"
+              "name": "Kevin G Mohr",
+              "stake": "28556712542"
             },
+            {
+              "name": "drep1yf6xkrz2w4...",
+              "stake": "96364914056"
+            },
+            {
+              "name": "ThisCrazyLife",
+              "stake": "194170899538"
+            },
+            {
+              "name": "AtlasHub",
+              "stake": "1554323811344"
+            }
+          ]
+        },
+        {
+          "reason_en": "Cost-effectiveness and reasonable budget allocation - 6.9M ADA is a relatively small investment compared to treasury size and development costs of existing node implementations",
+          "reason_ja": "���用対効果と適切な予算配分 - 6.9Mのカルダノは既存ノード実装の開発コストと比較して相対的に小規模な投資",
+          "totalStake": "35523002450890",
+          "dreps": [
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3658990035756"
+            },
+            {
+              "name": "Cerkoryn",
+              "stake": "24656685470915"
+            },
+            {
+              "name": "drep1yfdfs28uwa...",
+              "stake": "7207326944219"
+            }
+          ]
+        },
+        {
+          "reason_en": "Strategic infrastructure investment for long-term adoption and ecosystem growth",
+          "reason_ja": "長期的な採用とエコシステム成長のための戦略的なインフラ投資",
+          "totalStake": "2785620525455",
+          "dreps": [
             {
               "name": "AtlasHub",
               "stake": "1554323811344"
@@ -463,28 +491,21 @@
               "stake": "1231296714111"
             }
           ]
-        },
-        {
-          "reason_en": "Expansion of developer accessibility - Go implementation lowers barriers to entry for new developers and increases talent pool",
-          "reason_ja": "開発者アクセシビリティの拡大 - Go実装は新規開発者への参入障壁を低くし、人材プールを拡大",
-          "totalStake": "7575211742195",
-          "dreps": [
-            {
-              "name": "InputEndorsers",
-              "stake": "7575211742195"
-            }
-          ]
         }
       ],
       "noReasons": [
         {
-          "reason_en": "Unnecessary redundancy and duplication - Amaru (Rust node) is already addressing node diversity needs, making a third implementation premature",
-          "reason_ja": "不要な冗長性と重複 - Amaru (Rustノード)がすでにノード多様性の必要性に対応しており、3番目の実装は時期尚早",
-          "totalStake": "105613641434636",
+          "reason_en": "Redundancy and timing concerns - Amaru (Rust node) is already funded and in development, making a third implementation premature and wasteful",
+          "reason_ja": "冗長性とタイミングの懸念 - Amaru（Rustノード）既に資金提供され開発中であり、第3の実装は時期尚早で無駄",
+          "totalStake": "110820702371902",
           "dreps": [
             {
               "name": "TriangleForces",
               "stake": "805737707050"
+            },
+            {
+              "name": "KTOP",
+              "stake": "8707290267669"
             },
             {
               "name": "Dr. Navjit Dhaliwal",
@@ -507,16 +528,20 @@
               "stake": "108611501275"
             },
             {
-              "name": "Mike Rogero",
-              "stake": "3606641557668"
+              "name": "Cardano Feed",
+              "stake": "106412227265"
             }
           ]
         },
         {
-          "reason_en": "Large single upfront funding withdrawal is fiscally irresponsible - should be split into milestones with incremental funding releases",
-          "reason_ja": "大型の一括資金引き出しは財政的に無責任 - マイルストーン分割と段階的な資金配分に従うべき",
-          "totalStake": "3160573998123",
+          "reason_en": "Funding structure concerns - single large withdrawal without milestone-based disbursement is fiscally irresponsible",
+          "reason_ja": "資金調達構造の懸念 - マイルストーンベースの分割払いなし単一の大型引き出しは財政的に無責任",
+          "totalStake": "3966311705173",
           "dreps": [
+            {
+              "name": "TriangleForces",
+              "stake": "805737707050"
+            },
             {
               "name": "Medusa DRep",
               "stake": "2528746635334"
@@ -528,34 +553,8 @@
           ]
         },
         {
-          "reason_en": "Insufficient justification for use case - Go node implementation lacks clear practical demand or adoption plan from SPOs",
-          "reason_ja": "ユースケースの根拠不足 - Go実装には明確な実用的な需要またはSPOからの採用計画が不足している",
-          "totalStake": "228462656339",
-          "dreps": [
-            {
-              "name": "Rich King",
-              "stake": "3764902104"
-            },
-            {
-              "name": "heo.keo",
-              "stake": "224697754235"
-            }
-          ]
-        },
-        {
-          "reason_en": "Not a priority during current financial constraints - treasury resources should focus on proven implementations rather than experimental redundancy",
-          "reason_ja": "現在の財政的制約下での優先度が低い - 財務リソースは実験的な冗長性よりも実証済み実装に焦点を当てるべき",
-          "totalStake": "8707290267669",
-          "dreps": [
-            {
-              "name": "KTOP",
-              "stake": "8707290267669"
-            }
-          ]
-        },
-        {
-          "reason_en": "Inefficient resource allocation - costs appear inflated, particularly FTE compensation and audit fees compared to market rates",
-          "reason_ja": "資源配分の非効率性 - 特にFTE報酬と監査費用が市場レートと比較して高額に見える",
+          "reason_en": "Excessive personnel costs - $250k per FTE is inflated and unjustified for developer compensation",
+          "reason_ja": "過剰な人件費 - FTE当たり$250kは開発者給与として膨張し正当化されない",
           "totalStake": "917791838452",
           "dreps": [
             {
@@ -567,12 +566,38 @@
               "stake": "224697754235"
             }
           ]
+        },
+        {
+          "reason_en": "Limited practical use case - Go node unlikely to gain adoption with most users preferring Rust implementation",
+          "reason_ja": "実用的な用途の限定 - ほとんどのユーザーがRust実装を好むため、Goノードは採用される可能性が低い",
+          "totalStake": "3764902104",
+          "dreps": [
+            {
+              "name": "Rich King",
+              "stake": "3764902104"
+            }
+          ]
+        },
+        {
+          "reason_en": "Corporate management concerns - private company implementation less preferable than non-profit alternatives for core infrastructure",
+          "reason_ja": "企業管理の懸念 - コアインフラストラクチャについては非営利団体による実装の方が望ましい",
+          "totalStake": "4299735641885",
+          "dreps": [
+            {
+              "name": "Erasmus",
+              "stake": "693094084217"
+            },
+            {
+              "name": "Mike Rogero (羅邁凱）",
+              "stake": "3606641557668"
+            }
+          ]
         }
       ],
       "abstainReasons": [
         {
-          "reason_en": "Support the concept but timing is premature - should observe progress of Amaru implementation first before committing additional treasury funds",
-          "reason_ja": "概念を支持するが時期尚早 - 追加の財務コミットメント前にAmaru実装の進捗を観察すべき",
+          "reason_en": "Wait-and-see approach for Amaru progress - support the concept but prefer to observe existing multi-client efforts before additional treasury commitment",
+          "reason_ja": "Amaruの進行状況を観察する待機的アプローチ - コンセプトを支持するが、追加の財務承認前に既存の複数クライアント努力を監視することを希望",
           "totalStake": "37377962601995",
           "dreps": [
             {
@@ -589,9 +614,9 @@
       "submittedEpoch": 0,
       "stats": {
         "votedWithRationale": 16,
-        "votedWithoutRationale": 31,
-        "notVoted": 1548,
-        "notVotedTotalStake": "5172145488359603",
+        "votedWithoutRationale": 32,
+        "notVoted": 1547,
+        "notVotedTotalStake": "5171762927830844",
         "notVotedTopDreps": [
           {
             "name": "Yoroi W₳llet",
@@ -635,12 +660,12 @@
           }
         ],
         "yesBreakdown": {
-          "total": 25,
+          "total": 26,
           "withRationale": 4,
-          "withoutRationale": 21,
-          "totalStake": "580694520036126",
+          "withoutRationale": 22,
+          "totalStake": "581077080564885",
           "withRationaleStake": "51397097181738",
-          "withoutRationaleStake": "529297422854388",
+          "withoutRationaleStake": "529679983383147",
           "withoutRationaleDreps": [
             {
               "name": "ADA_Labo",
@@ -747,8 +772,8 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Addresses critical ecosystem need for ADA-stablecoin liquidity and improves DeFi usability through transparent, narrowly-scoped treasury use",
-          "reason_ja": "ADA-ステーブルコイン流動性の不足という明確なエコシステムの課題に対処し、透明性が高く範囲が限定された資金管理を通じてDeFiの利便性を改善する",
+          "reason_en": "Addresses ecosystem weakness in ADA-stablecoin liquidity and improves DeFi usability with transparent, narrowly scoped treasury use",
+          "reason_ja": "ADA-ステーブルコイン流動性の不足というエコシステムの弱点に対処し、透明性があり狭く限定された財務使用により DeFi ユーザビリティを向上させる",
           "totalStake": "22268895685451",
           "dreps": [
             {
@@ -758,8 +783,8 @@
           ]
         },
         {
-          "reason_en": "Logical next step to establish legal and technical infrastructure at reasonable cost following prior community support for liquidity initiative",
-          "reason_ja": "流動性促進イニシアティブへのコミュニティ支持を受けて、適切なコストで必要な法的・技術的インフラを構築する論理的な次ステップ",
+          "reason_en": "Reasonable cost for establishing necessary legal and technical infrastructure as logical next step following previous initiative approval",
+          "reason_ja": "前回の取り組み承認後の論理的な次のステップとして、必要な法的・技術的インフラを確立するための妥当なコスト",
           "totalStake": "4471516025372",
           "dreps": [
             {
@@ -773,8 +798,8 @@
           ]
         },
         {
-          "reason_en": "Liquidity boost will stimulate Cardano DeFi and functions as treasury-managed fund with potential for positive returns rather than pure expenditure",
-          "reason_ja": "流動性供給によるCardano DeFiの活性化と、純粋な支出ではなく資金運用の可能性を持つマネージドファンドとしての性質を評価",
+          "reason_en": "Managed fund structure with potential to generate returns for treasury makes it EV-positive; liquidity boost will substantially stimulate Cardano DeFi",
+          "reason_ja": "財務省にリターンをもたらす可能性のある管理基金構造により EV ポジティブであり、流動性向上により Cardano DeFi を大幅に刺激する",
           "totalStake": "24656685470915",
           "dreps": [
             {
@@ -786,8 +811,8 @@
       ],
       "noReasons": [
         {
-          "reason_en": "Excessive budget for legal entity formation; alternative jurisdictions (Marshall Islands, BVI) offer more cost-effective options than Cayman Islands",
-          "reason_ja": "法人設立に高額の予算が計上されている。ケイマン諸島よりマーシャル諸島やBVIなど低コストの選択肢がある",
+          "reason_en": "Budget allocation is excessive for legal entity establishment; Marshall Islands or BVI would be more cost-effective than Cayman Islands",
+          "reason_ja": "法的エンティティ設立には予算が高すぎる。ケイマン諸島よりマーシャル諸島またはBVIの方がコスト効率が高い",
           "totalStake": "3797159489309",
           "dreps": [
             {
@@ -797,23 +822,23 @@
           ]
         },
         {
-          "reason_en": "Majority of budget (664,000 ADA) goes to legal overhead rather than technical infrastructure or ecosystem development; impact unclear before commitment",
-          "reason_ja": "予算の大部分（664,000 ADA）が法的・行政的オーバーヘッドに充てられており、技術インフラやエコシステム開発に比べて不透明。実際の成果が不明なまま資金投入することに疑問",
-          "totalStake": "2753444389569",
+          "reason_en": "Majority of funds (664,000 ADA) allocated to Cayman Islands legal entity overhead rather than technical infrastructure; unclear practical impact and expected outcomes",
+          "reason_ja": "要求資金の大部分（664,000 ADA）が技術インフラではなくケイマン諸島の法的行政オーバーヘッドに充当され、実際の影響と期待される成果が不明確",
+          "totalStake": "4445878031770",
           "dreps": [
             {
               "name": "Medusa DRep",
               "stake": "2528746635334"
             },
             {
-              "name": "heo.keo",
-              "stake": "224697754235"
+              "name": "BankFi",
+              "stake": "1917131396436"
             }
           ]
         },
         {
-          "reason_en": "High overhead costs and concerns about long-term sustainability after first year regulatory oversight; unclear if initiative will achieve organic trading activity goals",
-          "reason_ja": "1年間の規制監督後の長期的な継続可能性への懸念。有機的な取引活動を生み出すという使命を達成できるかどうか確信が持てない",
+          "reason_en": "Cannot justify high overhead costs for legal formation with limited 1-year regulatory oversight; concerns about complications after first year and overall mission success",
+          "reason_ja": "1年限定の規制監督のための法的形成の高いオーバーヘッドコストは正当化できない。初年度後の合併症とミッション全体の成功に懸念がある",
           "totalStake": "1917131396436",
           "dreps": [
             {
@@ -823,17 +848,21 @@
           ]
         },
         {
-          "reason_en": "Insufficient justification for 800,000 ADA legal entity setup cost; proposal lacks clarity and transparency",
-          "reason_ja": "800,000 ADAの法人設立コストの正当性が不十分。提案の内容が曖昧で透明性に欠ける",
-          "totalStake": "1659966219173",
+          "reason_en": "Excessive spending on legal infrastructure; proposal lacks clarity and sufficient justification",
+          "reason_ja": "法的インフラへの過度な支出。提案は不明確で十分な正当化がない",
+          "totalStake": "1285194622086",
           "dreps": [
             {
-              "name": "drep1yfx2476p8s...",
+              "name": "MREDGARCROSS",
+              "stake": "631827362789"
+            },
+            {
+              "name": "drep1yfx2476p8s",
               "stake": "424904602958"
             },
             {
-              "name": "Kevin_ALBERT",
-              "stake": "1231296714111"
+              "name": "heo.keo",
+              "stake": "224697754235"
             },
             {
               "name": "Rich King",
@@ -842,36 +871,36 @@
           ]
         },
         {
-          "reason_en": "Fundamental opposition to treasury direction toward DeFi liquidity programs despite improved governance structures",
-          "reason_ja": "改善されたガバナンス構造にもかかわらず、トレジャリーをDeFi流動性プログラムに向ける方針そのものに反対",
-          "totalStake": "6624265416514",
+          "reason_en": "Fundamental disagreement with treasury direction toward DeFi liquidity program despite improvements in proposal structure",
+          "reason_ja": "提案の構造改善にもかかわらず、DeFi 流動性プログラムに向けた財務方向性に根本的に反対",
+          "totalStake": "1231296714111",
           "dreps": [
             {
-              "name": "drep1ytw5tvdxpe...",
-              "stake": "6624265416514"
+              "name": "Kevin_ALBERT",
+              "stake": "1231296714111"
             }
           ]
         }
       ],
       "abstainReasons": [
         {
-          "reason_en": "Proposal holds strategic significance as precedent for future treasury asset deployment model; requires more careful examination of interim committee authority, legal structure validity, and governance framework beyond standard spending review",
-          "reason_ja": "本提案は将来の資金運用モデルの前例となる戦略的に重要な案件。通常の支出以上に、インターリム委員会の権限責任、法的構造の妥当性、ガバナンス枠組みについてさらに慎重な検討が必要",
+          "reason_en": "Proposal merits pragmatic consideration given proposer's extensive Cardano DeFi experience; requires cautious scrutiny as precedent for future sovereign wealth fund-like treasury operations",
+          "reason_ja": "提案者の広範な Cardano DeFi 経験から実用的な検討が必要。将来の政府系ファンド類似の財務運用の前例となる可能性があり、慎重な精査が必要",
           "totalStake": "11234201777951",
           "dreps": [
             {
-              "name": "BWtake(長崎)Japan",
-              "stake": "3658990035756"
-            },
-            {
               "name": "InputEndorsers",
               "stake": "7575211742195"
+            },
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3658990035756"
             }
           ]
         },
         {
-          "reason_en": "Support DeFi liquidity for emerging markets and real-world adoption; acknowledge necessary legal/technical groundwork but lack full conviction on proposal execution",
-          "reason_ja": "新興市場での実際の採用を実現するためのDeFi流動性を支持。法的・技術的な準備の必要性を認めつつも、提案の実行方法に完全な確信が持てない",
+          "reason_en": "Support strategic intent for DeFi liquidity and emerging market adoption while lacking full conviction on setup and transparency mechanisms",
+          "reason_ja": "DeFi流動性と新興市場採用の戦略的意図を支持するが、セットアップと透明性メカニズムについて完全な確信がない",
           "totalStake": "2353291673",
           "dreps": [
             {
@@ -1229,10 +1258,10 @@
       "type": "TreasuryWithdrawals",
       "submittedEpoch": 0,
       "stats": {
-        "votedWithRationale": 48,
+        "votedWithRationale": 50,
         "votedWithoutRationale": 83,
-        "notVoted": 1464,
-        "notVotedTotalStake": "2108998933280748",
+        "notVoted": 1462,
+        "notVotedTotalStake": "2108127450179317",
         "notVotedTopDreps": [
           {
             "name": "Blockdaemon",
@@ -1276,11 +1305,11 @@
           }
         ],
         "yesBreakdown": {
-          "total": 111,
-          "withRationale": 42,
+          "total": 112,
+          "withRationale": 43,
           "withoutRationale": 69,
-          "totalStake": "3568581010807148",
-          "withRationaleStake": "2226928505349369",
+          "totalStake": "3569436833994000",
+          "withRationaleStake": "2227784328536221",
           "withoutRationaleStake": "1341652505457779",
           "withoutRationaleDreps": [
             {
@@ -1372,11 +1401,11 @@
           ]
         },
         "abstainBreakdown": {
-          "total": 6,
-          "withRationale": 1,
+          "total": 7,
+          "withRationale": 2,
           "withoutRationale": 5,
-          "totalStake": "45074902330553",
-          "withRationaleStake": "37377962601995",
+          "totalStake": "45090562245132",
+          "withRationaleStake": "37393622516574",
           "withoutRationaleStake": "7696939728558",
           "withoutRationaleDreps": [
             {
@@ -1404,21 +1433,13 @@
       },
       "yesReasons": [
         {
-          "reason_en": "Structural security investment - node diversity is critical for Cardano's resilience and decentralization",
-          "reason_ja": "構造的なセキュリティ投資 - ノードの多様性はCardanoのレジリエンスと分散化に不可欠",
-          "totalStake": "473850341653037",
+          "reason_en": "Node diversity is critical infrastructure for Cardano's security and resilience, reducing single-point-of-failure risk from relying solely on Haskell implementation",
+          "reason_ja": "ノード多様性はCardanoのセキュリティと耐障害性に不可欠なインフラであり、Haskell実装への単一依存リスクを軽減する",
+          "totalStake": "469628720783645",
           "dreps": [
             {
               "name": "YUTA",
               "stake": "456592304918084"
-            },
-            {
-              "name": "YOADA",
-              "stake": "5846124586441"
-            },
-            {
-              "name": "Varavas",
-              "stake": "2917192214028"
             },
             {
               "name": "InputEndorsers",
@@ -1429,8 +1450,16 @@
               "stake": "749478080735"
             },
             {
+              "name": "FAIR Pool #01",
+              "stake": "1624503717049"
+            },
+            {
               "name": "MyCNFT DRep",
               "stake": "119547383316"
+            },
+            {
+              "name": "Varavas",
+              "stake": "2917192214028"
             },
             {
               "name": "Rudianos",
@@ -1439,9 +1468,9 @@
           ]
         },
         {
-          "reason_en": "Proven team track record - well-established with technical excellence and fiscal responsibility, including returning unused funds",
-          "reason_ja": "実績のあるチーム - 技術的卓越性と財政的責任を示す確立されたチーム、未使用資金の返納実績あり",
-          "totalStake": "144055095950541",
+          "reason_en": "Team has strong track record of fiscal responsibility, including returning unused funds to treasury in 2025, demonstrating honesty and credibility",
+          "reason_ja": "チームは強い実績があり、2025年に未使用資金をトレジャリーに返却するなど、誠実性と信頼性を実証している",
+          "totalStake": "142380109505254",
           "dreps": [
             {
               "name": "CardanoYoda",
@@ -1452,14 +1481,6 @@
               "stake": "2664555559561"
             },
             {
-              "name": "Talos",
-              "stake": "749478080735"
-            },
-            {
-              "name": "FAIR Pool #01",
-              "stake": "1624503717049"
-            },
-            {
               "name": "Dr. Navjit Dhaliwal",
               "stake": "3797159489309"
             },
@@ -1468,89 +1489,85 @@
               "stake": "38568872572205"
             },
             {
-              "name": "Rudianos",
-              "stake": "50482728238"
-            }
-          ]
-        },
-        {
-          "reason_en": "Reduces single-client dependency risk - Rust-based alternative to Haskell node implementation improves network robustness",
-          "reason_ja": "単一実装への依存リスク低減 - Haskellノード実装の代替となるRustベースの実装でネットワーク堅牢性を向上",
-          "totalStake": "6152519216856",
-          "dreps": [
-            {
-              "name": "BWtake(長崎)Japan",
-              "stake": "3658990035756"
-            },
-            {
-              "name": "FAIR Pool #01",
-              "stake": "1624503717049"
-            },
-            {
               "name": "Talos",
               "stake": "749478080735"
-            },
-            {
-              "name": "MyCNFT DRep",
-              "stake": "119547383316"
             }
           ]
         },
         {
-          "reason_en": "Well-structured proposal with transparent budget, detailed roadmap, concrete milestones and KPIs",
-          "reason_ja": "透明性のある予算、詳細なロードマップ、具体的なマイルストーンとKPIを備えた構成の良い提案",
-          "totalStake": "143621310489051",
+          "reason_en": "Well-structured proposal with detailed budget breakdown, concrete milestones, KPIs, and transparent treasury administration including smart contracts and audits",
+          "reason_ja": "詳細な予算内訳、具体的なマイルストーン、KPI、スマートコントラクト管理や監査を含む透明性のある提案",
+          "totalStake": "160702784217771",
           "dreps": [
             {
               "name": "CardanoYoda",
               "stake": "96600043803444"
             },
             {
-              "name": "MUEN",
-              "stake": "37190473219497"
-            },
-            {
-              "name": "InputEndorsers",
-              "stake": "7575211742195"
-            },
-            {
               "name": "FAIR Pool #01",
               "stake": "1624503717049"
             },
             {
+              "name": "MUEN",
+              "stake": "37190473219497"
+            },
+            {
+              "name": "Cerkoryn",
+              "stake": "24656685470915"
+            },
+            {
+              "name": "CardaFlow",
+              "stake": "436907107328"
+            },
+            {
               "name": "ThisCrazyLife",
               "stake": "194170899538"
+            }
+          ]
+        },
+        {
+          "reason_en": "Rust-based alternative implementation attracts new developer ecosystems and reduces dependency on single programming language, strengthening protocol portability",
+          "reason_ja": "Rustベースの代替実装は新しい開発者エコシステムを引き付け、単一プログラミング言語への依存を減らし、プロトコルの移植性を強化する",
+          "totalStake": "26677363801942",
+          "dreps": [
+            {
+              "name": "Blockjock",
+              "stake": "22268895685451"
+            },
+            {
+              "name": "BWtake(長崎)Japan",
+              "stake": "3658990035756"
+            },
+            {
+              "name": "Talos",
+              "stake": "749478080735"
+            }
+          ]
+        },
+        {
+          "reason_en": "Team is well-established, respected, and proven within Cardano community with track record of technical excellence and transparent communication",
+          "reason_ja": "チームはCardanoコミュニティ内で確立された、尊敬される、実績のある存在であり、技術的卓越性と透明な通信の実績がある",
+          "totalStake": "25144075306481",
+          "dreps": [
+            {
+              "name": "Cerkoryn",
+              "stake": "24656685470915"
+            },
+            {
+              "name": "Rudianos",
+              "stake": "50482728238"
             },
             {
               "name": "CardaFlow",
               "stake": "436907107328"
             }
           ]
-        },
-        {
-          "reason_en": "Critical infrastructure for Cardano's long-term health despite current bearish market conditions",
-          "reason_ja": "現在のベア市場環境にもかかわらず、Cardanoの長期的な健全性のための重要なインフラストラクチャ",
-          "totalStake": "503517886074450",
-          "dreps": [
-            {
-              "name": "YUTA",
-              "stake": "456592304918084"
-            },
-            {
-              "name": "Blockjock (James Meidinger)",
-              "stake": "22268895685451"
-            },
-            {
-              "name": "Cerkoryn",
-              "stake": "24656685470915"
-            }
-          ]
         }
       ],
       "noReasons": [
         {
-          "reason_en": "Duplication of investment - both Acropolis and Amaru target identical technical goals using Rust with similar timelines",
-          "reason_ja": "投資の重複 - AcropolisとAmaruは両方ともRustを使用して同一の技術目標をターゲットにしており、タイムラインも同様",
+          "reason_en": "Duplication of effort: Both Amaru and Acropolis target identical technical goals using Rust with similar timelines, representing wasteful parallel treasury investment",
+          "reason_ja": "努力の重複：AmaruとAcropolisは両方ともRustを使���して同じ技術目標を対象としており、同様のタイムラインで無駄な並列投資となっている",
           "totalStake": "108611501275",
           "dreps": [
             {
@@ -1560,8 +1577,8 @@
           ]
         },
         {
-          "reason_en": "Excessive market contingency buffer - 4M ADA contingency is wasteful and locks up capital that could be used elsewhere",
-          "reason_ja": "過度な市場コンティンジェン���ーバッファ - 400万ADAのコンティンジェンシーは浪費的で、他の用途に使用できる資本を拘束",
+          "reason_en": "Excessive market contingency buffer of 4M ADA locks up community capital unnecessarily; projects should request additional funds if market conditions change rather than over-budgeting",
+          "reason_ja": "4M ADAの過度な市場偶発性バッファはコミュニティ資本を不必要にロックする；プロジェクトは過度な予算編成ではなく市場条件の変化時に追加資金を要請すべき",
           "totalStake": "693094084217",
           "dreps": [
             {
@@ -1571,19 +1588,8 @@
           ]
         },
         {
-          "reason_en": "Redundancy concerns - IOG already funded Rust node development, making a second Rust node unnecessary",
-          "reason_ja": "冗長性への懸念 - IOGはすでにRustノード開発に資金を提供しており、2番目のRustノードは不要",
-          "totalStake": "3764902104",
-          "dreps": [
-            {
-              "name": "Rich King",
-              "stake": "3764902104"
-            }
-          ]
-        },
-        {
-          "reason_en": "Budget structure concerns - unclear conversion basis and security audit costs require further clarification",
-          "reason_ja": "予算構成上の懸念 - 変換基準が不明確で、セキュリティ監査のコストについてさらなる説明が必要",
+          "reason_en": "Budget structure concerns: Effective conversion rate of ₳10.14M for $3.04M (0.3-0.5 range) contradicts stated $0.5/ADA basis; security audit cost of $31k per person-week requires further justification",
+          "reason_ja": "予算構造の懸念：₳10.14M対$3.04Mの実効換算レート（0.3～0.5範囲）は記載の$0.5/ADA基準と矛盾；1人当たり週$31kのセキュリティ監査コストはさらなる正当化が必要",
           "totalStake": "59058555614668",
           "dreps": [
             {
@@ -1591,12 +1597,34 @@
               "stake": "59058555614668"
             }
           ]
+        },
+        {
+          "reason_en": "IOG already funded a Rust node implementation, making a second Rust node redundant and inefficient use of treasury resources",
+          "reason_ja": "IOGはすでにRustノード実装に資金を提供しており、2番目のRustノードは冗長で非効率なトレジャリー利用である",
+          "totalStake": "3764902104",
+          "dreps": [
+            {
+              "name": "Rich King",
+              "stake": "3764902104"
+            }
+          ]
         }
       ],
       "abstainReasons": [
         {
-          "reason_en": "Prefer production-ready delivery first - combining unfinished core work with new scope feels premature before validation",
-          "reason_ja": "最初に本番環境対応の納品を希望 - 検証前に未完成のコア作業を新しいスコープと組み合わせるのは時期尚早",
+          "reason_en": "Proposal bundles too many components together; core security and block-production milestones are fundable, but speculative integrations and price buffering should be separated or staged more tightly",
+          "reason_ja": "提案が多くのコンポーネントを一緒に束ねすぎている；コアセキュリティとブロック生成マイルストーンは資金可能だが、投機的な統合と価格バッファリングはより厳密に分離またはステージングされるべき",
+          "totalStake": "15659914579",
+          "dreps": [
+            {
+              "name": "BEACNpool",
+              "stake": "15659914579"
+            }
+          ]
+        },
+        {
+          "reason_en": "Prefer to see production-ready block-producing node delivered and validated before funding additional expansions or new scope; timing feels premature",
+          "reason_ja": "追加の拡張や新しいスコープへの資金提供前に、本番環境対応のブロック生成ノードが提供・検証されることを好む；時期が早すぎる",
           "totalStake": "37377962601995",
           "dreps": [
             {
