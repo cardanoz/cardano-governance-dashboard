@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-03-15T21:45:18.211Z",
+  "generatedAt": "2026-03-15T22:50:45.023Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 50,
-      "summary_en": "Treasury withdrawals show mixed support with voters divided between backing strategic ecosystem investments (particularly node diversity and VC funding) and concerns about costs, redundancy, and lack of milestone-based funding structures. Key tension exists between supporting innovative infrastructure development and ensuring fiscally responsible use of community treasury resources.",
-      "summary_ja": "トレジャリー引き出し提案は、戦略的なエコシステム投資（特にノード多様性とVC資金調達）を支持する投票者と、費用、冗長性、マイルストーンベースの資金調達構造の欠如に懸念を持つ投票者の間で支持が分かれている。革新的インフラ開発を支援することとコミュニティトレジャリーの責任ある利用を確保することの間に主要な緊張関係が存在する。",
+      "summary_en": "Treasury Withdrawals show strong support for established teams and strategic ecosystem infrastructure, particularly node diversity and ecosystem investment funds, but face scrutiny over funding efficiency, cost justification, and milestone-based accountability. Voters balance innovation needs against fiscal responsibility and concerns about redundancy.",
+      "summary_ja": "Treasury Withdrawalsは確立されたチームと戦略的エコシステムインフラ（特にノード多様性とエコシステム投資ファンド）への強い支持を示していますが、資金効率、コスト正当化、およびマイルストーンベースの説明責任をめぐる精査に直面しています。投票者は革新の必要性と財政的責任および冗長性への懸念のバランスを取っています。",
       "typicalReasonsYes_en": [
-        "Node/client diversity critical for network resilience and security (avoiding single point of failure)",
-        "Established, trusted teams with proven track records in the Cardano ecosystem",
-        "Strategic ecosystem investment and VC funding mechanisms support long-term network growth",
-        "Structured proposals backed by reputable partners (Cardano Foundation, established labs) reduce execution risk"
+        "Critical infrastructure development by trusted teams with proven track records (Blink Labs, Cardano Foundation)",
+        "Strategic importance of client/node diversity for network resilience and decentralization",
+        "Ecosystem investment and long-term growth through structured funding mechanisms",
+        "Technical merit and cost-effectiveness relative to proposed scope and deliverables"
       ],
       "typicalReasonsYes_ja": [
-        "単一障害点を回避するためのネットワーク回復力とセキュリティに不可欠なノード/クライアント多様性",
-        "Cardanoエコシステムで実績のある確立された信頼できるチーム",
-        "戦略的なエコシステム投資とVC資金メカニズムが長期的なネットワーク成長を支援",
-        "評判の良いパートナー（Cardano Foundation、確立されたラボ）が支援する構造化提案は実行リスクを軽減"
+        "実績のある信頼できるチーム（Blink Labs、Cardano Foundation）による重要なインフラストラクチャ開発",
+        "ネットワークの弾力性と分散化のためのクライアント/ノード多様性の戦略的重要性",
+        "構造化された資金メカニズムを通じたエコシステム投資と長期成長",
+        "提案されたスコープと成果物に対する技術的価値とコスト効率性"
       ],
       "typicalReasonsNo_en": [
-        "Large single fund withdrawals without milestone-based funding structure or staged disbursements increase risk",
-        "Redundancy concerns - multiple similar proposals (e.g., Amaru node) create unnecessary duplication of efforts",
-        "Cost concerns - budgets appear inflated for deliverables (e.g., engineer salaries, Go node development costs)",
-        "Lack of clear use cases or unproven demand for proposed solutions (especially alternative node implementations)"
+        "Excessive funding requests without milestone-based disbursement or independent cost validation",
+        "Redundancy concerns with overlapping proposals (multiple node implementations, competing investment vehicles)",
+        "Lack of clearly defined specifications and independent validation of deliverables and outcomes",
+        "Disproportionate cost-per-resource (e.g., salary expectations) or insufficient justification for budget size"
       ],
       "typicalReasonsNo_ja": [
-        "マイルストーンベースの資金調達または段階的配分なしの大規模な一括引き出しはリスクを増加させる",
-        "冗長性への懸念 - 類似の複数提案（例：Amaruノード）は努力の不要な重複を生み出す",
-        "費用懸念 - 予算は成果物に比べて過剰に見える（エンジニア給与やGoノード開発費など）",
-        "提案されたソリューションの明確なユースケースまたは証明された需要の欠如（特に代替ノード実装）"
+        "マイルストーンベースの支給または独立したコスト検証なしの過度な資金要求",
+        "重複する提案（複数のノード実装、競争する投資ビークル）に関する冗長性の懸念",
+        "明確に定義された仕様と成果物および成果の独立した検証の欠如",
+        "リソースあたりの不釣り合いなコスト（例：給与期待値）または予算規模の不十分な正当化"
       ]
     },
     "InfoAction": {
