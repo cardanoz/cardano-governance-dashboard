@@ -1,62 +1,62 @@
 {
-  "generatedAt": "2026-03-15T17:46:34.877Z",
+  "generatedAt": "2026-03-15T19:02:46.595Z",
   "actionTypes": {
     "TreasuryWithdrawals": {
       "count": 50,
-      "summary_en": "Treasury Withdrawals show strong support for strategic ecosystem investments and core infrastructure development, particularly node diversity and VC-backed innovation funds. However, significant concerns emerge around cost-efficiency, funding redundancy, and the need for milestone-based disbursements rather than large lump-sum withdrawals.",
-      "summary_ja": "Treasury Withdrawalは、戦略的なエコシステム投資とコアインフラ開発、特にノード多様性とVC支援の革新ファンドへの強いサポートを示しています。しかし、費用対効果、資金配分の冗長性、および一括引き出しではなくマイルストーンベースの分割払いの必要性について、重大な懸念が生じています。",
+      "summary_en": "Treasury withdrawals show mixed support with voters divided between backing strategic ecosystem investments (particularly node diversity and VC funding) and concerns about costs, redundancy, and lack of milestone-based funding structures. Key tension exists between supporting innovative infrastructure development and ensuring fiscally responsible use of community treasury resources.",
+      "summary_ja": "トレジャリー引き出し提案は、戦略的なエコシステム投資（特にノード多様性とVC資金調達）を支持する投票者と、費用、冗長性、マイルストーンベースの資金調達構造の欠如に懸念を持つ投票者の間で支持が分かれている。革新的インフラ開発を支援することとコミュニティトレジャリーの責任ある利用を確保することの間に主要な緊張関係が存在する。",
       "typicalReasonsYes_en": [
-        "Strategic importance of client/node diversity for network resilience and security",
-        "Support for experienced and trusted teams with proven track records in the ecosystem",
-        "Need for ecosystem investment vehicles and VC funding to drive long-term growth",
-        "Reducing single point of failure risks and improving decentralization"
+        "Node/client diversity critical for network resilience and security (avoiding single point of failure)",
+        "Established, trusted teams with proven track records in the Cardano ecosystem",
+        "Strategic ecosystem investment and VC funding mechanisms support long-term network growth",
+        "Structured proposals backed by reputable partners (Cardano Foundation, established labs) reduce execution risk"
       ],
       "typicalReasonsYes_ja": [
-        "ネットワークの耐性とセキュリティのためのクライアント/ノード多様性の戦略的重要性",
-        "エコシステムでの実績を有する経験豊富で信頼できるチームへのサポート",
-        "長期的な成長を促進するためのエコシステム投資ビークルおよびVC資金の必要性",
-        "単一障害点リスクの軽減と分散化の改善"
+        "単一障害点を回避するためのネットワーク回復力とセキュリティに不可欠なノード/クライアント多様性",
+        "Cardanoエコシステムで実績のある確立された信頼できるチーム",
+        "戦略的なエコシステム投資とVC資金メカニズムが長期的なネットワーク成長を支援",
+        "評判の良いパートナー（Cardano Foundation、確立されたラボ）が支援する構造化提案は実行リスクを軽減"
       ],
       "typicalReasonsNo_en": [
-        "Excessive costs and poor cost-efficiency compared to market rates (e.g., inflated salaries)",
-        "Redundancy concerns with parallel implementations already funded (e.g., Amaru node competing with Dingo)",
-        "Lack of milestone-based disbursements and preference for smaller incremental funding",
-        "Insufficient urgency and concerns about prioritizing core development over experimental projects"
+        "Large single fund withdrawals without milestone-based funding structure or staged disbursements increase risk",
+        "Redundancy concerns - multiple similar proposals (e.g., Amaru node) create unnecessary duplication of efforts",
+        "Cost concerns - budgets appear inflated for deliverables (e.g., engineer salaries, Go node development costs)",
+        "Lack of clear use cases or unproven demand for proposed solutions (especially alternative node implementations)"
       ],
       "typicalReasonsNo_ja": [
-        "市場相場に比べて過剰な費用と悪い費用対効果（例：インフレした給与）",
-        "すでに資金提供されている並行実装との冗長性の懸念（例：Dingoと競合するAmaruノード）",
-        "マイルストーンベースの支払いの欠如と小規模な段階的資金提供への選好",
-        "十分な緊急性の欠如と実験的プロジェクトよりもコア開発を優先することへの懸念"
+        "マイルストーンベースの資金調達または段階的配分なしの大規模な一括引き出しはリスクを増加させる",
+        "冗長性への懸念 - 類似の複数提案（例：Amaruノード）は努力の不要な重複を生み出す",
+        "費用懸念 - 予算は成果物に比べて過剰に見える（エンジニア給与やGoノード開発費など）",
+        "提案されたソリューションの明確なユースケースまたは証明された需要の欠如（特に代替ノード実装）"
       ]
     },
     "InfoAction": {
       "count": 30,
-      "summary_en": "InfoAction proposals on the Cardano Budget Process Framework show strong support for establishing transparent, structured governance processes for treasury management, though concerns exist about centralization and barriers to grassroots participation. Supporters value the coordination, clarity, and maturity signal these frameworks provide, while critics worry about exclusionary mechanisms, Intersect concentration, and insufficient accountability for past spending.",
-      "summary_ja": "CardanoのBudget Process Frameworkに関するInfoActionは、トレジャリー管理における透明性と構造化されたガバナンスプロセスの確立に強い支持がある一方で、中央集権化とグラスルーツ参加への障壁に懸念がある。支持者は調整、明確性、生態系の成熟を価値とし、批評家はIntersectの集中、参加障壁（手数料・最小要件）、過去支出の説明責任不足を懸念している。",
+      "summary_en": "InfoAction proposals on Cardano's Budget Process Framework receive support primarily for establishing transparency, structured processes, and clear coordination mechanisms for treasury management. However, significant opposition exists regarding centralization concerns, high barriers to entry for small projects, and perceived favoritism toward large organizations like Intersect.",
+      "summary_ja": "CardanoのBudget Process Frameworkに関するInfoActionは、財務管理の透明性、構造化されたプロセス、明確な調整メカニズムの確立により支持を受けている。一方、中央集権化の懸念、小規模プロジェクトの参入障壁の高さ、Intersectなどの大型組織への優遇に対する反対意見が存在する。",
       "typicalReasonsYes_en": [
-        "Improves transparency and establishes a clear, structured reference framework for budget proposal processes and treasury management",
-        "Strengthens governance maturity and ecosystem coordination by creating predictable procedures with common evaluation criteria",
-        "Introduces quality filters and professional standards that prevent treasury from becoming purely based on social engineering or big-name advantage",
-        "Provides on-chain documentation enabling informed decision-making and reducing procedural ambiguity seen in previous budget cycles"
+        "Improves transparency and structure in treasury budgeting process through on-chain documentation",
+        "Establishes clear procedures and common reference framework reducing uncertainty and improving predictability",
+        "Protects against arbitrary funding decisions and social engineering by setting objective criteria and vetting stages",
+        "Signals ecosystem maturation and enables better coordination among proposers, DReps, developers and community"
       ],
       "typicalReasonsYes_ja": [
-        "予算提案プロセスとトレジャリー管理に明確で構造化された参照枠組みを確立し、透明性を向上させる",
-        "予測可能な手続きと共通の評価基準を作成し、ガバナンスの成熟度と生態系調整を強化する",
-        "質の高いプロジェクトのみを選別するハードルを設けることで、トレジャリーが社会工学的な影響や著名度に左右されるのを防ぐ",
-        "オンチェーンドキュメント化により情報提供的な意思決定が可能となり、過去の手続きの不明確さを解消する"
+        "オンチェーン記録を通じて財務予算プロセスの透明性と構造を改善する",
+        "明確な手続きと共通の参照枠組みを確立し、不確実性を低減し予測可能性を向上させる",
+        "客観的基準とレビュー段階を設定することで、恣意的な資金配分と社会工学的操作から保護する",
+        "エコシステムの成熟を示し、提案者、DRep、開発者、コミュニティ間の調整を可能にする"
       ],
       "typicalReasonsNo_en": [
-        "Creates exclusionary barriers (1,000 ADA fees, 100,000 ADA minimum) that shut out grassroots developers and favor large organizations",
-        "Excessive centralization of power in Intersect with complex bureaucracy that deters builders while favoring established actors and 'paper pushers'",
-        "Insufficient accountability: past budget spending (2025) lacks transparent reporting and analysis before approving future allocations",
-        "Framework concentrates voting power among large DReps and may result in 90% of funds going to same entities (IOG) with historically low completion rates"
+        "Creates exclusionary 'pay-to-play' system with high barriers (1,000 ADA fee, 100,000 ADA minimum) that favors large organizations over grassroots developers",
+        "Excessive centralization and bureaucratic overhead dependent on Intersect, concentrating power among organized actors",
+        "Lack of transparent reporting and accountability for previous budget cycles before approving new frameworks",
+        "Concerns about Intersect's past budget administration practices and unclear processes during voting stages"
       ],
       "typicalReasonsNo_ja": [
-        "1,000 ADAの手数料と100,000 ADAの最小要件という参加障壁により、グラスルーツ開発者を排除し大規模組織を優遇する",
-        "Intersectへの権力集中と複雑な官僚制度が、建設的な提案者を遠ざけ既得権益層と'ペーパープッシャー'を優遇する",
-        "過去の予算支出（2025年）の透明な報告と分析が不足したまま、将来の配分承認が進められている",
-        "フレームワークが大規模DRep間に投票力を集中させ、資金の90%が同一エンティティ（IOG）に流れ完了率が低い傾向がある"
+        "高い参入障壁（1,000 ADA手数料、100,000 ADA最小要件）を持つ排他的な『参加費用制』システムが大型組織を優遇し、草の根開発者を排除する",
+        "Intersectに依存した過度な中央集権化と官僚的オーバーヘッドが、組織化されたアクターの間に権力を集中させる",
+        "新しい枠組みを承認する前の過去の予算サイクルの透明な報告と説明責任の欠如",
+        "Intersectの過去の予算管理慣行と投票段階での不透明なプロセスに対する懸念"
       ]
     },
     "ParameterChange": {
